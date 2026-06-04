@@ -1,0 +1,59 @@
+---
+import SectionBadge from './SectionBadge.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  pubDate: Date;
+  section?: 'police-policy' | 'public-policy' | 'other';
+  showSection?: boolean;
+  variant?: 'default' | 'feature';
+}
+
+const {
+  href,
+  title,
+  description,
+  pubDate,
+  section,
+  showSection = false,
+  variant = 'default',
+} = Astro.props;
+
+const formattedDate = pubDate.toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const isFeature = variant === 'feature';
+---
+
+<article class={`group ${isFeature ? 'py-10' : 'py-7'} border-b border-ink-200`}>
+  <a href={href} class="block">
+    {showSection && section && (
+      <div class="mb-3">
+        <SectionBadge section={section} size="sm" />
+      </div>
+    )}
+
+    <h2 class={`font-display font-semibold text-ink-900 leading-tight tracking-tight group-hover:text-accent transition-colors ${
+      isFeature ? 'text-3xl md:text-4xl' : 'text-2xl md:text-[1.7rem]'
+    }`}>
+      {title}
+    </h2>
+
+    <p class={`font-serif text-ink-700 leading-relaxed mt-3 ${
+      isFeature ? 'text-lg md:text-xl max-w-2xl' : 'text-base max-w-2xl'
+    }`}>
+      {description}
+    </p>
+
+    <div class="mt-4 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
+      <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+      <span class="mx-2">·</span>
+      <span class="group-hover:text-accent transition-colors">Read article →</span>
+    </div>
+  </a>
+</article>

@@ -1,0 +1,48 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-ink-200 mt-24 py-12 bg-paper-100">
+  <div class="max-w-wide mx-auto px-6 lg:px-10">
+    <div class="grid md:grid-cols-3 gap-8">
+      <div>
+        <p class="font-display text-lg font-semibold text-ink-900">
+          Thinking About Policing
+        </p>
+        <p class="font-sans text-sm text-ink-600 mt-2 leading-relaxed max-w-xs">
+          Writing on evidence-based policing, public policy, and the occasional historical puzzle.
+        </p>
+      </div>
+
+      <div>
+        <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
+          Sections
+        </p>
+        <ul class="space-y-1.5 font-sans text-sm">
+          <li><a href="/police-policy" class="text-ink-700 hover:text-accent">Police Policy</a></li>
+          <li><a href="/public-policy" class="text-ink-700 hover:text-accent">Public Policy</a></li>
+          <li><a href="/other" class="text-ink-700 hover:text-accent">Other</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
+          Elsewhere
+        </p>
+        <ul class="space-y-1.5 font-sans text-sm">
+          <li><a href="/about" class="text-ink-700 hover:text-accent">About</a></li>
+          <li><a href="/rss.xml" class="text-ink-700 hover:text-accent">RSS feed</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-ink-200 mt-10 pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <p class="font-sans text-xs text-ink-500">
+        © {year} Nathan Tracey. Views are personal.
+      </p>
+      <p class="font-sans text-xs text-ink-500">
+        Built with Astro.
+      </p>
+    </div>
+  </div>
+</footer>

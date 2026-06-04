@@ -1,0 +1,26 @@
+---
+interface Props {
+  section: 'police-policy' | 'public-policy' | 'other';
+  size?: 'sm' | 'md';
+}
+
+const { section, size = 'md' } = Astro.props;
+
+const labels = {
+  'police-policy': 'Police Policy',
+  'public-policy': 'Public Policy',
+  'other': 'Other',
+};
+
+const sizeClasses = {
+  sm: 'text-[0.65rem]',
+  md: 'text-[0.7rem]',
+};
+---
+
+<a
+  href={`/${section}`}
+  class={`inline-block font-sans uppercase tracking-[0.2em] text-accent hover:text-accent-dark transition-colors ${sizeClasses[size]}`}
+>
+  {labels[section]}
+</a>

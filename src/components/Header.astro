@@ -1,0 +1,80 @@
+---
+const navLinks = [
+  { href: '/police-policy', label: 'Police Policy' },
+  { href: '/public-policy', label: 'Public Policy' },
+  { href: '/other', label: 'Other' },
+  { href: '/about', label: 'About' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="border-b border-ink-200 bg-paper-100/80 backdrop-blur sticky top-0 z-50">
+  <div class="max-w-wide mx-auto px-6 lg:px-10">
+    <div class="flex items-center justify-between py-5">
+      <a href="/" class="group">
+        <h1 class="font-display text-xl md:text-2xl font-semibold text-ink-900 tracking-tight leading-none">
+          Thinking About <span class="italic text-accent">Policing</span>
+        </h1>
+        <p class="font-sans text-[0.7rem] uppercase tracking-[0.18em] text-ink-500 mt-1">
+          Evidence. Argument. Practice.
+        </p>
+      </a>
+
+      <nav class="hidden md:block">
+        <ul class="flex items-center gap-7">
+          {navLinks.map(link => {
+            const isActive = currentPath.startsWith(link.href) && link.href !== '/';
+            return (
+              <li>
+                <a
+                  href={link.href}
+                  class={`font-sans text-sm tracking-wide transition-colors ${
+                    isActive
+                      ? 'text-accent font-medium'
+                      : 'text-ink-700 hover:text-ink-900'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      <button
+        id="mobile-menu-button"
+        class="md:hidden text-ink-900 p-2 -mr-2"
+        aria-label="Toggle menu"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav id="mobile-menu" class="hidden md:hidden pb-4">
+      <ul class="flex flex-col gap-1">
+        {navLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-button');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+</script>

@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+type Section = 'police-policy' | 'public-policy' | 'other';
+
+// Pull articles from all three collections
+const policeArticles = await getCollection('police-policy', ({ data }) => !data.draft);
+const publicArticles = await getCollection('public-policy', ({ data }) => !data.draft);
+const otherArticles = await getCollection('other', ({ data }) => !data.draft);
+
+type Item = {
+  slug: string;
+  data: typeof policeArticles[number]['data'];
+  section: Section;
+};
+
+const allArticles: Item[] = [
+  ...policeArticles.map(a => ({ slug: a.slug, data: a.data, section: 'police-policy' as Section })),
+  ...publicArticles.map(a => ({ slug: a.slug, data: a.data, section: 'public-policy' as Section })),
+  ...otherArticles.map(a => ({ slug: a.slug, data: a.data, section: 'other' as Section })),
+].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const [feature, ...rest] = allArticles;
+---
+
+<BaseLayout title="Thinking About Policing">
+  {/* Intro */}
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-16 md:py-24">
+      <div class="max-w-3xl">
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">
+          A weblog by Nathan Tracey
+        </p>
+        <h1 class="font-display text-4xl md:text-6xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+          Evidence-based writing on <span class="italic">policing</span>, public policy, and the occasional historical puzzle.
+        </h1>
+        <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-7 max-w-2xl">
+          Aimed at senior leaders, policymakers, and anyone who cares whether what we do in policing actually works.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* Featured article */}
+  {feature && (
+    <section class="border-b border-ink-200">
+      <div class="max-w-wide mx-auto px-6 lg:px-10 py-4">
+        <div class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 pt-8 pb-2">
+          Latest
+        </div>
+        <ArticleCard
+          href={`/${feature.section}/${feature.slug}`}
+          title={feature.data.title}
+          description={feature.data.description}
+          pubDate={feature.data.pubDate}
+          section={feature.section}
+          showSection={true}
+          variant="feature"
+        />
+      </div>
+    </section>
+  )}
+
+  {/* Recent articles */}
+  {rest.length > 0 && (
+    <section>
+      <div class="max-w-wide mx-auto px-6 lg:px-10">
+        <div class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 pt-12 pb-2">
+          More writing
+        </div>
+        <div>
+          {rest.map(article => (
+            <ArticleCard
+              href={`/${article.section}/${article.slug}`}
+              title={article.data.title}
+              description={article.data.description}
+              pubDate={article.data.pubDate}
+              section={article.section}
+              showSection={true}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {allArticles.length === 0 && (
+    <section>
+      <div class="max-w-wide mx-auto px-6 lg:px-10 py-20 text-center">
+        <p class="font-serif text-lg text-ink-600">
+          No articles yet. Add markdown files to <code class="text-sm bg-paper-200 px-2 py-1 rounded">src/content/</code> to get started.
+        </p>
+      </div>
+    </section>
+  )}
+</BaseLayout>
