@@ -1,0 +1,290 @@
+---
+// Combined explorer: overlays all five code lines, lets you toggle each
+// route on/off and animate a chosen "focused" line.
+---
+
+<div class="smce" data-smce-all>
+  <div class="smce-mapwrap">
+    <div class="smce-map"></div>
+
+    <div class="smce-card smce-top">
+      <div class="smce-head">
+        <div>
+          <div class="smce-title">Somerton Man Code Explorer</div>
+          <div class="smce-sub">Overlay all five lines · toggle routes · animate one focused line</div>
+        </div>
+        <div class="smce-actions">
+          <button type="button" class="smce-btn smce-primary" data-act="play">Play</button>
+          <button type="button" class="smce-btn" data-act="step">Step</button>
+          <button type="button" class="smce-btn" data-act="reset">Reset</button>
+          <button type="button" class="smce-btn" data-act="home">Home</button>
+        </div>
+      </div>
+      <div class="smce-controls">
+        <div data-toggles></div>
+        <select class="smce-select" data-focus aria-label="Focused line"></select>
+        <div class="smce-actions">
+          <button type="button" class="smce-btn" data-act="showall">Show all</button>
+          <button type="button" class="smce-btn" data-act="hideall">Hide all</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="smce-card smce-bottom">
+      <div class="smce-kv"><span class="smce-k">Focused</span><span class="smce-v" data-focuslabel>—</span></div>
+      <div class="smce-kv"><span class="smce-k">Now</span><span class="smce-v" data-now>—</span></div>
+      <div class="smce-kv"><span class="smce-k">Next</span><span class="smce-v" data-next>—</span></div>
+      <div class="smce-kv"><span class="smce-k">Leg</span><span class="smce-v" data-leg>—</span></div>
+      <div class="smce-kv"><span class="smce-k">Distance</span><span class="smce-v" data-dist>—</span></div>
+      <div class="smce-progress"><div class="smce-progress-inner" data-prog></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { loadLeaflet } from '../scripts/loadLeaflet';
+  import { ROUTES, resolveNode, routePoints, haversineKm } from '../scripts/somertonNodes';
+
+  function initCombined(L: any, root: HTMLElement) {
+    if (root.dataset.smceReady === '1') return;
+    root.dataset.smceReady = '1';
+
+    const mapEl = root.querySelector('.smce-map') as HTMLElement;
+    const togglesBox = root.querySelector('[data-toggles]') as HTMLElement;
+    const focusSel = root.querySelector('[data-focus]') as HTMLSelectElement;
+    const focusLabel = root.querySelector('[data-focuslabel]') as HTMLElement;
+    const nowEl = root.querySelector('[data-now]') as HTMLElement;
+    const nextEl = root.querySelector('[data-next]') as HTMLElement;
+    const legEl = root.querySelector('[data-leg]') as HTMLElement;
+    const distEl = root.querySelector('[data-dist]') as HTMLElement;
+    const progEl = root.querySelector('[data-prog]') as HTMLElement;
+    const playBtn = root.querySelector('[data-act="play"]') as HTMLButtonElement;
+    const stepBtn = root.querySelector('[data-act="step"]') as HTMLButtonElement;
+    const resetBtn = root.querySelector('[data-act="reset"]') as HTMLButtonElement;
+    const homeBtn = root.querySelector('[data-act="home"]') as HTMLButtonElement;
+    const showAllBtn = root.querySelector('[data-act="showall"]') as HTMLButtonElement;
+    const hideAllBtn = root.querySelector('[data-act="hideall"]') as HTMLButtonElement;
+
+    const byKey: Record<string, (typeof ROUTES)[number]> = {};
+    ROUTES.forEach((r) => (byKey[r.key] = r));
+
+    const allPts: [number, number][] = [];
+    ROUTES.forEach((r) => routePoints(r.code).forEach((p) => allPts.push(p)));
+
+    const map = L.map(mapEl, { zoomControl: false, scrollWheelZoom: false });
+    L.control.zoom({ position: 'topright' }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+    if (allPts.length) map.fitBounds(allPts, { padding: [60, 60] });
+
+    root.querySelectorAll('.smce-card').forEach((c) => {
+      L.DomEvent.disableClickPropagation(c as HTMLElement);
+      L.DomEvent.disableScrollPropagation(c as HTMLElement);
+    });
+
+    // Station pins (one per unique letter across all routes).
+    const pinSeen = new Set<string>();
+    ROUTES.forEach((r) =>
+      r.code.split('').forEach((ch) => {
+        const n = resolveNode(ch);
+        if (!n || pinSeen.has(n.n)) return;
+        pinSeen.add(n.n);
+        L.circleMarker([n.lat, n.lon], { radius: 5, color: '#0b1220', weight: 1.5, fillColor: '#fff', fillOpacity: 0.85 }).addTo(map);
+      })
+    );
+
+    // Route polylines.
+    const routeLayers: Record<string, any> = {};
+    ROUTES.forEach((r) => {
+      routeLayers[r.key] = L.polyline(routePoints(r.code), { color: r.color, weight: 4, opacity: 0.65 });
+    });
+    const visible = new Set(['L1', 'L3', 'L4', 'L5']);
+    visible.forEach((k) => routeLayers[k].addTo(map));
+
+    // Focus animation layers.
+    let focusKey = 'L1';
+    const startPts = routePoints(byKey[focusKey].code);
+    const traveller = L.circleMarker(startPts[0], { radius: 7, color: '#0b1220', weight: 2, fillColor: '#f59e0b', fillOpacity: 1 }).addTo(map);
+    const animTrail = L.polyline([startPts[0]], { color: '#ef4444', weight: 6, opacity: 0.95 }).addTo(map);
+    const focusBase = L.polyline(startPts, { color: '#ef4444', weight: 3, opacity: 0.18 }).addTo(map);
+
+    let i = 0;
+    let t = 0;
+    let playing = false;
+    let last: number | null = null;
+    const SEC_PER_LEG = 1.6;
+
+    const focusNodes = () => byKey[focusKey].code.split('').map((ch) => resolveNode(ch)!);
+
+    function panels() {
+      const nodes = focusNodes();
+      const legs = nodes.length - 1;
+      focusLabel.textContent = byKey[focusKey].name + (byKey[focusKey].crossed ? ' (crossed-out)' : '');
+      if (i >= legs) {
+        nowEl.textContent = nodes[nodes.length - 1].n;
+        nextEl.textContent = '—';
+        legEl.textContent = 'Complete';
+        distEl.textContent = '—';
+        progEl.style.width = '100%';
+        return;
+      }
+      const A = nodes[i];
+      const B = nodes[i + 1];
+      nowEl.textContent = A.n;
+      nextEl.textContent = B.n;
+      legEl.textContent = i + 1 + ' / ' + legs;
+      distEl.textContent = haversineKm(A, B).toFixed(1) + ' km';
+      progEl.style.width = Math.max(0, Math.min(1, (i + t) / legs)) * 100 + '%';
+    }
+
+    function setFocus(key: string, frame = true) {
+      focusKey = key;
+      playing = false;
+      playBtn.textContent = 'Play';
+      i = 0;
+      t = 0;
+      last = null;
+      const pts = routePoints(byKey[focusKey].code);
+      traveller.setLatLng(pts[0]);
+      animTrail.setLatLngs([pts[0]]);
+      focusBase.setLatLngs(pts);
+      // Ensure the focused route is also visible.
+      if (!visible.has(key)) {
+        visible.add(key);
+        routeLayers[key].addTo(map);
+        const cb = togglesBox.querySelector(`input[value="${key}"]`) as HTMLInputElement | null;
+        if (cb) cb.checked = true;
+      }
+      panels();
+      if (frame) map.fitBounds(pts, { padding: [70, 70] });
+    }
+
+    function animate(ts: number) {
+      if (!playing) return;
+      if (last === null) last = ts;
+      const dt = (ts - last) / 1000;
+      last = ts;
+      const nodes = focusNodes();
+      if (i >= nodes.length - 1) {
+        playing = false;
+        playBtn.textContent = 'Play';
+        return;
+      }
+      t += dt / SEC_PER_LEG;
+      if (t > 1) t = 1;
+      const A = nodes[i];
+      const B = nodes[i + 1];
+      const pos: [number, number] = [A.lat + (B.lat - A.lat) * t, A.lon + (B.lon - A.lon) * t];
+      traveller.setLatLng(pos);
+      animTrail.addLatLng(pos);
+      panels();
+      if (t >= 1) {
+        i++;
+        t = 0;
+      }
+      requestAnimationFrame(animate);
+    }
+
+    // Build toggles.
+    ROUTES.forEach((r) => {
+      const label = document.createElement('label');
+      label.className = 'smce-toggle';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.value = r.key;
+      cb.checked = visible.has(r.key);
+      cb.addEventListener('change', () => {
+        if (cb.checked) {
+          visible.add(r.key);
+          routeLayers[r.key].addTo(map);
+        } else {
+          visible.delete(r.key);
+          map.removeLayer(routeLayers[r.key]);
+        }
+      });
+      const sw = document.createElement('span');
+      sw.className = 'smce-swatch';
+      sw.style.background = r.color;
+      const txt = document.createElement('span');
+      txt.textContent = `${r.name} — ${r.code}` + (r.crossed ? ' (crossed-out)' : '');
+      label.append(cb, sw, txt);
+      togglesBox.appendChild(label);
+    });
+
+    // Build focus selector.
+    ROUTES.forEach((r) => {
+      const opt = document.createElement('option');
+      opt.value = r.key;
+      opt.textContent = `${r.name} — ${r.code}` + (r.crossed ? ' (crossed-out)' : '');
+      focusSel.appendChild(opt);
+    });
+    focusSel.value = focusKey;
+    focusSel.addEventListener('change', (e) => setFocus((e.target as HTMLSelectElement).value, true));
+
+    playBtn.addEventListener('click', () => {
+      const nodes = focusNodes();
+      if (i >= nodes.length - 1) setFocus(focusKey, false);
+      playing = !playing;
+      playBtn.textContent = playing ? 'Pause' : 'Play';
+      last = null;
+      if (playing) requestAnimationFrame(animate);
+    });
+    stepBtn.addEventListener('click', () => {
+      playing = false;
+      playBtn.textContent = 'Play';
+      const pts = routePoints(byKey[focusKey].code);
+      if (i < pts.length - 1) {
+        i++;
+        t = 0;
+        traveller.setLatLng(pts[i]);
+        animTrail.addLatLng(pts[i]);
+        panels();
+      }
+    });
+    resetBtn.addEventListener('click', () => setFocus(focusKey, true));
+    homeBtn.addEventListener('click', () => {
+      if (allPts.length) map.fitBounds(allPts, { padding: [70, 70] });
+    });
+    showAllBtn.addEventListener('click', () => {
+      ROUTES.forEach((r) => {
+        visible.add(r.key);
+        routeLayers[r.key].addTo(map);
+        const cb = togglesBox.querySelector(`input[value="${r.key}"]`) as HTMLInputElement | null;
+        if (cb) cb.checked = true;
+      });
+    });
+    hideAllBtn.addEventListener('click', () => {
+      ROUTES.forEach((r) => {
+        const keep = r.key === focusKey;
+        if (keep) {
+          visible.add(r.key);
+        } else {
+          visible.delete(r.key);
+          map.removeLayer(routeLayers[r.key]);
+        }
+        const cb = togglesBox.querySelector(`input[value="${r.key}"]`) as HTMLInputElement | null;
+        if (cb) cb.checked = keep;
+      });
+    });
+
+    setFocus('L1', false);
+    panels();
+    setTimeout(() => map.invalidateSize(), 250);
+  }
+
+  function initAll() {
+    const root = document.querySelector('[data-smce-all]') as HTMLElement | null;
+    if (!root) return;
+    loadLeaflet()
+      .then((L) => initCombined(L, root))
+      .catch((err) => console.error('CodeMapAll: Leaflet failed to load', err));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+</script>

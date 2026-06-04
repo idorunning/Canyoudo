@@ -171,3 +171,144 @@
   background-size: 24px 24px, 32px 32px;
   background-position: 0 0, 12px 16px;
 }
+
+/* ------------------------------------------------------------------ */
+/* Somerton Man Code Explorer — interactive route maps (.smce*)        */
+/* ------------------------------------------------------------------ */
+.smce {
+  --smce-panel: rgba(255, 255, 255, 0.92);
+  --smce-line: #e6eaf2;
+  --smce-text: #0b1220;
+  --smce-muted: #4b5565;
+  --smce-red: #ef4444;
+  --smce-shadow: 0 10px 26px rgba(2, 6, 23, 0.1);
+  --smce-radius: 16px;
+  margin: 2.5rem 0;
+  font-family: theme('fontFamily.sans');
+}
+
+.smce-mapwrap {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  background: #eef2ff;
+  border: 1px solid var(--smce-line);
+  border-radius: var(--smce-radius);
+  overflow: hidden;
+}
+
+.smce-map {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+.smce-card {
+  position: absolute;
+  left: 12px;
+  width: min(360px, calc(100% - 24px));
+  background: var(--smce-panel);
+  border: 1px solid var(--smce-line);
+  border-radius: var(--smce-radius);
+  box-shadow: var(--smce-shadow);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.smce-top { top: 12px; }
+.smce-bottom { bottom: 12px; }
+
+.smce-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.smce-title { font-weight: 800; font-size: 13px; color: var(--smce-text); line-height: 1.15; }
+.smce-sub { font-size: 11px; color: var(--smce-muted); margin-top: 2px; line-height: 1.2; }
+
+.smce-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+.smce-btn {
+  background: #fff;
+  border: 1px solid var(--smce-line);
+  border-radius: 12px;
+  padding: 7px 10px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--smce-text);
+}
+.smce-btn:active { transform: translateY(1px); }
+.smce-btn.smce-primary {
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  color: #fff;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.smce-chips { display: flex; gap: 4px; flex-wrap: wrap; padding: 0 12px 10px; }
+.smce-chip {
+  min-width: 26px;
+  padding: 5px 7px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--smce-line);
+  font-weight: 800;
+  font-size: 11px;
+  text-align: center;
+  color: var(--smce-text);
+}
+.smce-chip.is-active { background: var(--smce-red); color: #fff; border-color: rgba(239, 68, 68, 0.35); }
+.smce-chip.is-done { background: #fee2e2; color: #991b1b; border-color: #fecaca; }
+.smce-chip.is-crossed { text-decoration: line-through; opacity: 0.7; }
+
+.smce-bottom { padding: 10px 12px; }
+.smce-kv { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; margin: 3px 0; }
+.smce-k { color: var(--smce-muted); font-weight: 800; font-size: 12px; }
+.smce-v { color: var(--smce-text); font-weight: 800; font-size: 12px; text-align: right; }
+
+.smce-progress {
+  margin-top: 8px;
+  height: 7px;
+  background: #fff;
+  border: 1px solid var(--smce-line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.smce-progress-inner {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ef4444, #f97316);
+  transition: width 120ms linear;
+}
+
+/* Combined explorer: route toggles + focus selector */
+.smce-controls { display: flex; flex-direction: column; gap: 8px; padding: 0 12px 10px; }
+.smce-toggle { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--smce-text); }
+.smce-toggle input { width: 16px; height: 16px; }
+.smce-swatch { width: 12px; height: 12px; border-radius: 999px; flex: none; }
+.smce-select {
+  width: 100%;
+  border: 1px solid var(--smce-line);
+  border-radius: 12px;
+  padding: 8px 10px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--smce-text);
+}
+
+@media (max-width: 480px) {
+  .smce-card { width: min(320px, calc(100% - 24px)); }
+  .smce-sub { display: none; }
+}
+
+/* The article body sets a narrow measure; let the maps use full width */
+.prose-article .smce { max-width: none; }
