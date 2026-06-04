@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "bash fetch-images.sh && npm run build"
   publish = "dist"
 
 [build.environment]

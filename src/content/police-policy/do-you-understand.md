@@ -1,13 +1,13 @@
 ---
 title: "“Do you understand?”"
-description: "When comprehension, shame, and social pressure hider a fair process"
+description: "When comprehension, shame, and social pressure hinder a fair process"
 pubDate: 2026-01-07
 ---
 ## Why we should stop asking, and start explaining
 
 ![](/images/17678715405872662829070664106378.jpg)
 
-When comprehension, shame, and social pressure hider a fair process
+When comprehension, shame, and social pressure hinder a fair process
 
 Police officers, custody staff, lawyers and magistrates all reach for the same phrase at the same moments: after the caution, during booking-in, before a signature, before a plea, before conditions are explained. “Do you understand?” sounds like fairness. Often it is a ritual instead of a test.
 
@@ -39,7 +39,7 @@ When someone does not understand, the cause is rarely abstract. It is usually on
 
 ⦁ Mental health crisis, trauma, and acute distress: Panic, psychosis, severe depression, dissociation and trauma responses can reduce working memory and attention. People may hear words without integrating meaning, or be so overwhelmed that they just agree and say yes to move the process on.
 
-⦁ Language and cultural factors: Legal English is not everyday English. Even fluent speakers can struggle with formal phrasing when stressed. For those who need interpretation, “Do you understand?” can become theatre unless communication is genuinely supported, or encouraged in a compasionate and supportive enviroment.
+⦁ Language and cultural factors: Legal English is not everyday English. Even fluent speakers can struggle with formal phrasing when stressed. For those who need interpretation, “Do you understand?” can become theatre unless communication is genuinely supported, or encouraged in a compassionate and supportive environment.
 
 ### The framework already assumes understanding needs effort and active clarification
 

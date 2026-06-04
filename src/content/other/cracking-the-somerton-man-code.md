@@ -2,13 +2,13 @@
 title: "Cracking the Somerton Man Code"
 description: "Not my normal type of work, but its Christmas and I need a hobby :)"
 pubDate: 2025-12-19
-tags: ["adelaide", "aderlaide", "codes", "crime", "cryptographer", "cryptography", "daily mail", "mysteries", "news", "somerton man", "tamam shud", "true crime"]
+tags: ["adelaide", "codes", "crime", "cryptographer", "cryptography", "daily mail", "mysteries", "news", "somerton man", "tamam shud", "true crime"]
 ---
 Not my normal type of work, but its Christmas and I need a hobby :)
 
 **A 74-Year-Old Mystery**
 
-Here's something that's bothered people for over seventy years. On the morning of December 1, 1948, a well-dressed man was found dead on Somerton Beach in South Australia. Nobody knew who he was. In his pocket? A scrap of paper with two words: *Tamám Shud*—Persian for 'It is ended.' torn from the pages of an old Persian poetry book the "Rubáiyát of Omar Khayyám" Even more strange the book was no where to be see
+Here's something that's bothered people for over seventy years. On the morning of December 1, 1948, a well-dressed man was found dead on Somerton Beach in South Australia. Nobody knew who he was. In his pocket? A scrap of paper with two words: *Tamám Shud*—Persian for 'It is ended.' torn from the pages of an old Persian poetry book the "Rubáiyát of Omar Khayyám" Even more strange the book was nowhere to be seen
 
 ![](/images/tama.jpg)
 
