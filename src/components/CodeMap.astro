@@ -1,0 +1,214 @@
+---
+// A single animated route map for one line of the Somerton Man code.
+interface Props {
+  id: string;
+  code: string;
+  title: string;
+  subtitle?: string;
+  crossed?: boolean;
+}
+const { id, code, title, subtitle, crossed = false } = Astro.props;
+---
+
+<div class="smce" data-smce data-id={id} data-code={code} data-crossed={crossed ? '1' : '0'}>
+  <div class="smce-mapwrap">
+    <div class="smce-map"></div>
+
+    <div class="smce-card smce-top">
+      <div class="smce-head">
+        <div>
+          <div class="smce-title">{title}</div>
+          {subtitle && <div class="smce-sub">{subtitle}</div>}
+        </div>
+        <div class="smce-actions">
+          <button type="button" class="smce-btn smce-primary" data-act="play">Play</button>
+          <button type="button" class="smce-btn" data-act="step">Step</button>
+          <button type="button" class="smce-btn" data-act="reset">Reset</button>
+        </div>
+      </div>
+      <div class="smce-chips" data-chips></div>
+    </div>
+
+    <div class="smce-card smce-bottom">
+      <div class="smce-kv"><span class="smce-k">Now</span><span class="smce-v" data-now>—</span></div>
+      <div class="smce-kv"><span class="smce-k">Next</span><span class="smce-v" data-next>—</span></div>
+      <div class="smce-kv"><span class="smce-k">Leg</span><span class="smce-v" data-leg>—</span></div>
+      <div class="smce-kv"><span class="smce-k">Distance</span><span class="smce-v" data-dist>—</span></div>
+      <div class="smce-progress"><div class="smce-progress-inner" data-prog></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { loadLeaflet } from '../scripts/loadLeaflet';
+  import { resolveNode, haversineKm } from '../scripts/somertonNodes';
+
+  function initOne(L: any, root: HTMLElement) {
+    if (root.dataset.smceReady === '1') return;
+    root.dataset.smceReady = '1';
+
+    const code = (root.dataset.code || '').split('');
+    const crossed = root.dataset.crossed === '1';
+    const mapEl = root.querySelector('.smce-map') as HTMLElement;
+    const chipsBox = root.querySelector('[data-chips]') as HTMLElement;
+    const nowEl = root.querySelector('[data-now]') as HTMLElement;
+    const nextEl = root.querySelector('[data-next]') as HTMLElement;
+    const legEl = root.querySelector('[data-leg]') as HTMLElement;
+    const distEl = root.querySelector('[data-dist]') as HTMLElement;
+    const progEl = root.querySelector('[data-prog]') as HTMLElement;
+    const playBtn = root.querySelector('[data-act="play"]') as HTMLButtonElement;
+    const stepBtn = root.querySelector('[data-act="step"]') as HTMLButtonElement;
+    const resetBtn = root.querySelector('[data-act="reset"]') as HTMLButtonElement;
+
+    const nodes = code.map((ch) => resolveNode(ch)).filter(Boolean) as any[];
+    if (nodes.length < 2) return;
+    const pts = nodes.map((n) => [n.lat, n.lon]) as [number, number][];
+
+    const map = L.map(mapEl, { zoomControl: false, scrollWheelZoom: false }).fitBounds(pts, { padding: [40, 40] });
+    L.control.zoom({ position: 'topright' }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+
+    // Stop map drag when interacting with the floating cards.
+    root.querySelectorAll('.smce-card').forEach((c) => {
+      L.DomEvent.disableClickPropagation(c as HTMLElement);
+      L.DomEvent.disableScrollPropagation(c as HTMLElement);
+    });
+
+    // Ghost full route + pins.
+    L.polyline(pts, { color: '#ef4444', weight: 3, opacity: 0.22 }).addTo(map);
+    const seen = new Set<string>();
+    code.forEach((ch, idx) => {
+      if (seen.has(ch)) return;
+      seen.add(ch);
+      const n = nodes[idx];
+      if (n) L.circleMarker([n.lat, n.lon], { radius: 6, color: '#7f1d1d', weight: 2, fillColor: '#ef4444', fillOpacity: 0.9 }).addTo(map);
+    });
+
+    const traveller = L.circleMarker(pts[0], { radius: 7, color: '#0b1220', weight: 2, fillColor: '#f59e0b', fillOpacity: 1 }).addTo(map);
+    const trail = L.polyline([pts[0]], { color: '#ef4444', weight: 5, opacity: 0.95 }).addTo(map);
+
+    // Chips.
+    const chips: HTMLElement[] = [];
+    chipsBox.innerHTML = '';
+    code.forEach((c, idx) => {
+      const s = document.createElement('span');
+      s.className = 'smce-chip' + (idx === 0 ? ' is-active' : '') + (crossed ? ' is-crossed' : '');
+      s.textContent = c;
+      chipsBox.appendChild(s);
+      chips.push(s);
+    });
+    const setChips = (active: number) =>
+      chips.forEach((c, idx) => {
+        c.classList.toggle('is-active', idx === active);
+        c.classList.toggle('is-done', idx < active);
+      });
+
+    let i = 0;
+    let t = 0;
+    let playing = false;
+    let last: number | null = null;
+    const SEC_PER_LEG = 1.6;
+
+    function panels() {
+      const legs = code.length - 1;
+      if (i >= legs) {
+        nowEl.textContent = code[code.length - 1] + ' — ' + nodes[nodes.length - 1].n;
+        nextEl.textContent = '—';
+        legEl.textContent = 'Complete';
+        distEl.textContent = '—';
+        progEl.style.width = '100%';
+        return;
+      }
+      const A = nodes[i];
+      const B = nodes[i + 1];
+      nowEl.textContent = code[i] + ' — ' + A.n;
+      nextEl.textContent = code[i + 1] + ' — ' + B.n;
+      legEl.textContent = i + 1 + ' / ' + legs;
+      distEl.textContent = haversineKm(A, B).toFixed(1) + ' km';
+      progEl.style.width = Math.max(0, Math.min(1, (i + t) / legs)) * 100 + '%';
+    }
+
+    function animate(ts: number) {
+      if (!playing) return;
+      if (last === null) last = ts;
+      const dt = (ts - last) / 1000;
+      last = ts;
+      if (i >= code.length - 1) {
+        playing = false;
+        playBtn.textContent = 'Play';
+        return;
+      }
+      t += dt / SEC_PER_LEG;
+      if (t > 1) t = 1;
+      const A = nodes[i];
+      const B = nodes[i + 1];
+      const pos: [number, number] = [A.lat + (B.lat - A.lat) * t, A.lon + (B.lon - A.lon) * t];
+      traveller.setLatLng(pos);
+      trail.addLatLng(pos);
+      panels();
+      setChips(i);
+      if (t >= 1) {
+        i++;
+        t = 0;
+      }
+      requestAnimationFrame(animate);
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (i >= code.length - 1) {
+        i = 0;
+        t = 0;
+        traveller.setLatLng(pts[0]);
+        trail.setLatLngs([pts[0]]);
+      }
+      playing = !playing;
+      playBtn.textContent = playing ? 'Pause' : 'Play';
+      last = null;
+      if (playing) requestAnimationFrame(animate);
+    });
+    stepBtn.addEventListener('click', () => {
+      playing = false;
+      playBtn.textContent = 'Play';
+      if (i < code.length - 1) {
+        i++;
+        t = 0;
+        traveller.setLatLng(pts[i]);
+        trail.addLatLng(pts[i]);
+        panels();
+        setChips(i);
+      }
+    });
+    resetBtn.addEventListener('click', () => {
+      playing = false;
+      playBtn.textContent = 'Play';
+      i = 0;
+      t = 0;
+      last = null;
+      traveller.setLatLng(pts[0]);
+      trail.setLatLngs([pts[0]]);
+      panels();
+      setChips(0);
+      map.fitBounds(pts, { padding: [40, 40] });
+    });
+
+    panels();
+    setTimeout(() => map.invalidateSize(), 250);
+  }
+
+  function initAll() {
+    const roots = Array.from(document.querySelectorAll('[data-smce]')) as HTMLElement[];
+    if (!roots.length) return;
+    loadLeaflet()
+      .then((L) => roots.forEach((r) => initOne(L, r)))
+      .catch((err) => console.error('CodeMap: Leaflet failed to load', err));
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAll);
+  } else {
+    initAll();
+  }
+</script>
