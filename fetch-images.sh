@@ -37,4 +37,10 @@ get "share_62732086914530934196007772124391850255.png" "https://thinkingaboutpol
 get "somerton-man-code-1024x818.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/somerton-man-code-1024x818.jpg"
 get "tama.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/tama.jpg"
 
+# Public-domain Somerton Man case images from Wikimedia Commons (1948 South
+# Australia Police material, public domain by age). Special:FilePath resolves
+# the canonical file name to the underlying upload URL.
+get "somerton-man-1948.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/SomertonMan.jpg"
+get "somerton-man-suitcase.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/SomertonManSuitcase.jpg"
+
 echo "Done. $(ls -1 | wc -l) images in public/images/"
