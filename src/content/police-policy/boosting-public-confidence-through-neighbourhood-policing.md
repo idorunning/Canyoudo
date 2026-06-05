@@ -1,7 +1,8 @@
 ---
 title: "Boosting Public Confidence Through Neighbourhood Policing"
 description: "Neighbourhood policing, when delivered to a high standard, produces “quick, large and sustained increases” in public confidence and demonstrates measurable crime reduction outcomes. The College of…"
-pubDate: 2025-12-10
+pubDate: 2025-02-18
+thumbnail: "/images/neighbourhood-policing-patrol.jpg"
 tags: ["crime", "evidence-based", "evidence-based-policing", "mental-health", "news", "police", "policing", "politics"]
 ---
 **Neighbourhood policing, when delivered to a high standard, produces “quick, large and sustained increases” in public confidence** and demonstrates measurable crime reduction outcomes. The College of Policing’s systematic reviews confirm this, yet implementation across UK forces remains inconsistent, a gap that represents both a challenge and an opportunity for senior leaders. Evidence-based policing is not a departure from British policing traditions but their fulfilment: Sir Robert Peel’s founding principle that “the test of police efficiency is the absence of crime and disorder” directly anticipates modern outcome-focused approaches. This paper synthesises the evidence base, case studies, statutory tools, and partnership models that enable Neighbourhood Policing Teams to deliver on their preventive mission.

@@ -1,7 +1,8 @@
 ---
 title: "Policing the Police: Why the ‘Small Stuff’ Matters"
 description: "When a police officer is finally dismissed or even convicted for gross misconduct, how often do their colleagues quietly nod and say something like, “I saw that coming”? More often than we’d like…"
-pubDate: 2025-12-12
+pubDate: 2025-09-09
+thumbnail: "/images/image_editor_output_image1681454371-17655514280582700668508713128379.png"
 tags: ["crime", "evidence-based", "evidence-based-policing", "law", "leadership", "news", "police", "policing", "politics"]
 ---
 When a police officer is finally dismissed or even convicted for gross misconduct, it is striking how often colleagues quietly nod and say something like, “I saw that coming.” More often than we would like to admit, the signs of serious trouble are visible long before a scandal erupts. Yet in policing we have traditionally focused on the big incidents and tended to wave off the small transgressions. That approach needs to change.

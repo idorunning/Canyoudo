@@ -2,6 +2,7 @@
 title: "Should Britain Drill, Baby, Drill? The North Sea Question in Plain English"
 description: "A 10-minute read on whether ramping up oil and gas extraction would actually fix anything"
 pubDate: 2026-04-29
+thumbnail: "/images/image.png"
 ---
 ![File:Oil platform in the North Sea.jpg](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Oil_platform_in_the_North_Sea.jpg/960px-Oil_platform_in_the_North_Sea.jpg?_=20120420145725)
 

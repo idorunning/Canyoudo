@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import SectionBadge from '../components/SectionBadge.astro';
 import Comments from '../components/Comments.astro';
+import Sidebar from '../components/Sidebar.astro';
 import readingTime from 'reading-time';
 
 interface Props {
@@ -50,67 +51,76 @@ const pageId = `${section}-${slug}`;
   type="article"
   publishedTime={pubDate.toISOString()}
 >
-  <article>
-    {/* Title block */}
-    <header class="border-b border-ink-200">
-      <div class="max-w-3xl mx-auto px-6 lg:px-10 py-14 md:py-20">
-        <div class="mb-6">
-          <SectionBadge section={section} />
-        </div>
+  <div class="max-w-6xl mx-auto px-6 lg:px-10">
+    <div class="lg:flex lg:gap-12 xl:gap-16">
+      <article class="mx-auto w-full max-w-3xl min-w-0 lg:mx-0 lg:flex-1">
+        {/* Title block */}
+        <header class="border-b border-ink-200 py-14 md:py-20">
+          <div class="mb-6">
+            <SectionBadge section={section} />
+          </div>
 
-        <h1 class="font-display text-4xl md:text-5xl lg:text-[3.5rem] font-semibold text-ink-900 leading-[1.05] tracking-tight">
-          {title}
-        </h1>
+          <h1 class="font-display text-4xl md:text-5xl lg:text-[3.5rem] font-semibold text-ink-900 leading-[1.05] tracking-tight">
+            {title}
+          </h1>
 
-        <p class="font-serif text-lg md:text-xl text-ink-700 mt-6 leading-relaxed max-w-2xl">
-          {description}
-        </p>
+          <p class="font-serif text-lg md:text-xl text-ink-700 mt-6 leading-relaxed max-w-2xl">
+            {description}
+          </p>
 
-        <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
-          <span>{author}</span>
-          <span aria-hidden="true">·</span>
-          <time datetime={pubDate.toISOString()}>{formattedPubDate}</time>
-          <span aria-hidden="true">·</span>
-          <span>{minutes} min read</span>
-          {updatedDate && (
-            <>
-              <span aria-hidden="true">·</span>
-              <span>Updated {updatedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-            </>
+          <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
+            <span>{author}</span>
+            <span aria-hidden="true">·</span>
+            <time datetime={pubDate.toISOString()}>{formattedPubDate}</time>
+            <span aria-hidden="true">·</span>
+            <span>{minutes} min read</span>
+            {updatedDate && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>Updated {updatedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+              </>
+            )}
+          </div>
+        </header>
+
+        {/* Hero image */}
+        {heroImage && (
+          <div class="pt-10">
+            <img
+              src={heroImage}
+              alt=""
+              class="w-full max-h-[480px] object-cover rounded-md"
+              loading="eager"
+            />
+          </div>
+        )}
+
+        {/* Body */}
+        <div class="py-12 md:py-16">
+          <div class="prose-article">
+            <slot />
+          </div>
+
+          {tags && tags.length > 0 && (
+            <div class="mt-12 pt-6 border-t border-ink-200 flex flex-wrap gap-2">
+              {tags.map(tag => (
+                <span class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded">
+                  {tag}
+                </span>
+              ))}
+            </div>
           )}
+
+          <Comments pageId={pageId} pageTitle={title} pageUrl={pageUrl} />
         </div>
-      </div>
-    </header>
+      </article>
 
-    {/* Hero image */}
-    {heroImage && (
-      <div class="max-w-wide mx-auto px-6 lg:px-10 pt-10">
-        <img
-          src={heroImage}
-          alt=""
-          class="w-full max-h-[480px] object-cover rounded-md"
-          loading="eager"
-        />
-      </div>
-    )}
-
-    {/* Body */}
-    <div class="max-w-3xl mx-auto px-6 lg:px-10 py-12 md:py-16">
-      <div class="prose-article">
-        <slot />
-      </div>
-
-      {tags && tags.length > 0 && (
-        <div class="mt-12 pt-6 border-t border-ink-200 flex flex-wrap gap-2">
-          {tags.map(tag => (
-            <span class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded">
-              {tag}
-            </span>
-          ))}
+      {/* More articles sidebar */}
+      <aside class="mx-auto w-full max-w-3xl border-t border-ink-200 pt-10 pb-16 lg:mx-0 lg:max-w-none lg:w-64 xl:w-72 lg:shrink-0 lg:border-t-0 lg:border-l lg:pl-12 lg:pt-16">
+        <div class="lg:sticky lg:top-24">
+          <Sidebar currentSlug={slug} section={section} />
         </div>
-      )}
-
-      <Comments pageId={pageId} pageTitle={title} pageUrl={pageUrl} />
+      </aside>
     </div>
-  </article>
+  </div>
 </BaseLayout>

@@ -1,7 +1,8 @@
 ---
 title: "When Seeing Is No Longer Believing: The AI generated content Threat to Criminal Justice"
 description: "All images and video have been generated for the purposes of this article and does not depict real people or events."
-pubDate: 2025-12-10
+pubDate: 2025-03-25
+thumbnail: "/images/screenshot_20251210-1240451896020900775513687-1024x598.png"
 ---
 ![](/images/screenshot_20251210-1240451896020900775513687-1024x598.png)
 

@@ -1,7 +1,8 @@
 ---
 title: "The Officers We’re Losing: Why British Policing Must Rethink Cognitive Diversity"
 description: "British policing faces a talent paradox rarely discussed at command level."
-pubDate: 2025-12-10
+pubDate: 2025-05-06
+thumbnail: "/images/neurodiversity-symbol.svg"
 tags: ["adhd", "ai", "business", "crime", "evidence-based", "evidence-based-policing", "leadership", "mental-health", "neurodiversity", "police", "policing", "technology"]
 ---
 ## A strategic challenge for senior leaders

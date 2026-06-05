@@ -6,6 +6,7 @@ const articleSchema = z.object({
   pubDate: z.coerce.date(),
   updatedDate: z.coerce.date().optional(),
   heroImage: z.string().optional(),
+  thumbnail: z.string().optional(),
   tags: z.array(z.string()).optional(),
   draft: z.boolean().default(false),
   author: z.string().default('Nathan Tracey'),

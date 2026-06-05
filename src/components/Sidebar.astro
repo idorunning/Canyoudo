@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  currentSlug: string;
+  section: 'police-policy' | 'public-policy' | 'other';
+}
+const { currentSlug, section } = Astro.props;
+
+const sections = ['police-policy', 'public-policy', 'other'] as const;
+const labels: Record<string, string> = {
+  'police-policy': 'Police Policy',
+  'public-policy': 'Public Policy',
+  other: 'Other',
+};
+
+type Item = {
+  slug: string;
+  section: (typeof sections)[number];
+  title: string;
+  pubDate: Date;
+  thumbnail: string | null;
+};
+
+let items: Item[] = [];
+for (const s of sections) {
+  const arts = await getCollection(s, ({ data }) => !data.draft);
+  for (const a of arts) {
+    items.push({
+      slug: a.slug,
+      section: s,
+      title: a.data.title,
+      pubDate: a.data.pubDate,
+      thumbnail: a.data.thumbnail ?? a.data.heroImage ?? null,
+    });
+  }
+}
+
+// Drop the article currently being read.
+items = items.filter((i) => !(i.slug === currentSlug && i.section === section));
+
+// Same-section pieces first, then everything else, each newest-first.
+items.sort((a, b) => {
+  const aSame = a.section === section ? 0 : 1;
+  const bSame = b.section === section ? 0 : 1;
+  if (aSame !== bSame) return aSame - bSame;
+  return b.pubDate.getTime() - a.pubDate.getTime();
+});
+
+const list = items.slice(0, 6);
+const fmt = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+---
+
+<h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-6">More articles</h2>
+<ul class="space-y-6">
+  {list.map((a) => (
+    <li>
+      <a href={`/${a.section}/${a.slug}`} class="group flex gap-3 items-start">
+        {a.thumbnail && (
+          <img
+            src={a.thumbnail}
+            alt=""
+            loading="lazy"
+            class="w-16 h-16 object-cover rounded-md shrink-0 bg-paper-200 border border-ink-200"
+          />
+        )}
+        <span class="min-w-0">
+          <span class="block font-display text-sm font-semibold text-ink-900 leading-snug group-hover:text-accent transition-colors">
+            {a.title}
+          </span>
+          <span class="block font-sans text-xs text-ink-500 mt-1">
+            {labels[a.section]} · {fmt(a.pubDate)}
+          </span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>
