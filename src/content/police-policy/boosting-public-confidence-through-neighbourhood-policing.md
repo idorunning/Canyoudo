@@ -6,6 +6,11 @@ tags: ["crime", "evidence-based", "evidence-based-policing", "mental-health", "n
 ---
 **Neighbourhood policing, when delivered to a high standard, produces “quick, large and sustained increases” in public confidence** and demonstrates measurable crime reduction outcomes. The College of Policing’s systematic reviews confirm this, yet implementation across UK forces remains inconsistent, a gap that represents both a challenge and an opportunity for senior leaders. Evidence-based policing is not a departure from British policing traditions but their fulfilment: Sir Robert Peel’s founding principle that “the test of police efficiency is the absence of crime and disorder” directly anticipates modern outcome-focused approaches. This paper synthesises the evidence base, case studies, statutory tools, and partnership models that enable Neighbourhood Policing Teams to deliver on their preventive mission.
 
+<figure>
+  <img src="/images/neighbourhood-policing-patrol.jpg" alt="Police officers on foot patrol in London" loading="lazy" />
+  <figcaption>Officers on foot patrol in London. Photo by Adrian Pingstone, public domain, via Wikimedia Commons.</figcaption>
+</figure>
+
 The research points to one central finding: effective neighbourhood policing requires three components delivered **in combination** — targeted visible presence, community engagement, and problem-solving. Forces that implement these together consistently outperform those that treat them as separate activities. Hot spots policing combined with problem-oriented approaches produces **larger, more sustainable effects** than either alone. The frameworks exist, the evidence is strong, and UK forces have demonstrated what success looks like. The remaining task is systematic adoption rather than isolated excellence.
 
 ### The evidence base for neighbourhood policing

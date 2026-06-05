@@ -6,6 +6,11 @@ tags: ["crime", "evidence-based-policing", "history", "law", "news", "police", "
 ---
 Consider a business that reports a crime with clear CCTV footage, the suspect's vehicle registration and precise timestamps, and then receives a text message hours later saying "case closed, no suspect identified." For Britain's petrol station operators, this is not a hypothetical scenario. It is a routine experience.
 
+<figure>
+  <img src="/images/fuel-filling-station.jpg" alt="A modern filling-station forecourt" loading="lazy" />
+  <figcaption>A filling-station forecourt. Photo by Harrison Keely, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, via Wikimedia Commons.</figcaption>
+</figure>
+
 The figures are striking. Some 99% of fuel theft crimes do not result in prosecution, despite stations providing comprehensive evidence including high-definition CCTV, automatic number plate recognition (ANPR) data and payment transaction records. Across multiple UK police forces, what amounts to systematic non-investigation of these crimes has produced a serious breakdown in the relationship between law enforcement and a significant business sector, with implications that reach well beyond missing fuel payments.
 
 This blog argues that the policy is not simply a matter of resource prioritisation. It also undermines community trust in policing, particularly among the vulnerable groups who staff these 24/7 operations during high-risk overnight hours. The evidence here is not speculative; it is documented policy.
