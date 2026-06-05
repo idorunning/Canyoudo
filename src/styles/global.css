@@ -160,6 +160,18 @@
     text-align: center;
     margin-top: 0.5em;
   }
+
+  /* Width-capped figure for modest-resolution archive images */
+  .prose-article figure.pd-figure {
+    max-width: 26rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .prose-article figure.pd-figure img {
+    width: 100%;
+    margin: 0;
+  }
 }
 
 /* Subtle paper texture for editorial feel */
