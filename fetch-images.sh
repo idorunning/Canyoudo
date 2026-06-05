@@ -42,5 +42,12 @@ get "tama.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/t
 # the canonical file name to the underlying upload URL.
 get "somerton-man-1948.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/SomertonMan.jpg"
 get "somerton-man-suitcase.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/SomertonManSuitcase.jpg"
+get "somerton-code-note.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/SomertonManCode.jpg"
+
+# Openly-licensed article images from Wikimedia Commons (credited in-page).
+get "neighbourhood-policing-patrol.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Police.three.on.patrol.london.arp.jpg"
+get "fuel-filling-station.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/A%20modern%20BP%20gas%20station%20or%20filling%20station%20in%20the%20United%20States%2005.jpg"
+get "neurodiversity-symbol.svg" "https://commons.wikimedia.org/wiki/Special:FilePath/Neurodiversity%20Symbol.svg"
+get "police-officer-on-duty.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Slovak%20police%20car%20and%20police%20officer%20on%20duty%20(cropped).JPG"
 
 echo "Done. $(ls -1 | wc -l) images in public/images/"

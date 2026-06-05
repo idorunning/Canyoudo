@@ -8,6 +8,11 @@ tags: ["adhd", "ai", "business", "crime", "evidence-based", "evidence-based-poli
 
 *British policing faces a talent paradox rarely discussed at command level.*
 
+<figure class="pd-figure">
+  <img src="/images/neurodiversity-symbol.svg" alt="The neurodiversity rainbow infinity symbol" loading="lazy" />
+  <figcaption>The neurodiversity symbol. By Luna Rose, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>, via Wikimedia Commons.</figcaption>
+</figure>
+
 We invest significantly in recruitment, training, and development, yet we systematically lose officers whose cognitive profiles do not match our institutional assumptions about what "good" looks like. I would suggest that we are not only losing difficult-to-manage individuals; we are losing precisely the capabilities our organisations will need most as policing becomes more complex.  
 The issue here is not accommodation or compliance. It is whether senior leaders have the strategic imagination, training and understanding to recognise capability that does not present in conventional ways.
 

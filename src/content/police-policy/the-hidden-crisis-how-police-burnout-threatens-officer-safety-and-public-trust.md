@@ -6,6 +6,11 @@ tags: ["crime", "evidence-based-policing", "mental-health", "neurodiversity", "p
 ---
 ### 
 
+<figure>
+  <img src="/images/police-officer-on-duty.jpg" alt="A police officer on duty beside a patrol car" loading="lazy" />
+  <figcaption>An officer on duty beside a patrol car. Photo by Kiwiev, CC0, via Wikimedia Commons.</figcaption>
+</figure>
+
 Police burnout is more than an occupational hazard. It is a public safety issue, because it raises the risk of excessive force and erodes community trust. According to the 2024 What Cops Want Survey of nearly 3,000 officers, 83% report that their mental health affects their work performance. Research also indicates that burned-out officers hold more positive attitudes toward use of force and resort to violence more often on duty. This is not a question of officers being “weak”; it reflects the cumulative neurological and psychological toll of a profession that demands constant hypervigilance, repeated trauma exposure, and split-second life-or-death decisions. The consequences reach well beyond individual wellness. When 71% of officers report sleep disturbances and 50% experience heightened anger, departments face more citizen complaints, costly lawsuits, community distrust, and preventable tragedies. Treating burnout early is not an optional extra; it is central to officer survival, effective policing, and community safety.
 
 ### Why police burnout looks different from everyday exhaustion
