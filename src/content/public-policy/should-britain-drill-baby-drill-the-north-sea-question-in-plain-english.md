@@ -157,7 +157,7 @@ On those figures, **renewables are now the cheapest new-build power in Britain**
 
 ![Renewable energy in the United Kingdom - Wikipedia](https://upload.wikimedia.org/wikipedia/commons/1/15/Wind_Farm_-_geograph.org.uk_-_150943.jpg)
 
-The honest answer is yes for electricity, and harder for total energy.
+The answer is yes for electricity, and harder for total energy.
 
 Electricity is currently about 20% of total UK final energy use. The other 80% — heating, transport, industrial heat — is mostly fossil-fuelled. The transition the Climate Change Committee maps out does not merely decarbonise electricity. It electrifies everything else: heat pumps replacing gas boilers, EVs replacing petrol cars, hydrogen and electric arc furnaces replacing industrial gas burners.
 
