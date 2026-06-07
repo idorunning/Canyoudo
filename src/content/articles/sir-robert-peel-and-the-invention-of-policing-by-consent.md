@@ -1,0 +1,48 @@
+---
+section: "influential-people"
+title: "Sir Robert Peel and the Invention of Policing by Consent"
+description: "In 1829 a Home Secretary persuaded a suspicious country to accept the first modern police force — unarmed, in plain blue, and answerable to the public rather than the Crown. A profile of Sir Robert Peel and the idea that still underwrites British policing: that the police are only ever the public in uniform."
+pubDate: 2026-06-07
+tags: ["public-confidence", "accountability", "neighbourhood-policing", "law", "leadership", "police", "policing", "history", "legitimacy"]
+---
+
+**For most of human history, the alternative to crime was not the police but the mob, the militia or the gallows.** A standing body of paid officials whose job was to walk the streets and prevent crime before it happened — and who did so with the consent rather than the fear of the people they policed — is a surprisingly modern invention. In England it has a date, 1829, and a name: Sir Robert Peel. The officers London first put on the street were nicknamed "Peelers" and then "Bobbies" after him, and nearly two centuries later British policing still rests on a doctrine that carries his name. This is the story of how that came about, and of how much of it is genuinely his.
+
+### The reforming Home Secretary
+
+Peel was born in 1788 in Lancashire, the son of a fabulously wealthy cotton manufacturer, and entered Parliament at twenty-one on the family money. He was, by temperament, an administrator: clever, cold in public, formidably hard-working, and drawn to the unglamorous business of making institutions function. He served twice as Prime Minister and is remembered by economic historians for repealing the Corn Laws in 1846 — a free-trade conviction that split his own party and ended his career. But his most durable legacy was made earlier, and lower down.
+
+As Chief Secretary for Ireland he had already created an armed gendarmerie, the Peace Preservation Force, whose men were the original "Peelers". Then, as Home Secretary from 1822, he turned to the criminal law itself, which at the time prescribed hanging for a bewildering range of minor offences. Peel consolidated and softened it, cutting the number of capital crimes, and reformed the prisons through the Gaols Act of 1823. He had concluded that a legal system which threatened death for stealing a handkerchief, and then routinely failed to enforce it, produced neither mercy nor deterrence — only a lottery. The instinct that ran through all of this was the same one he would bring to policing: that the credibility of the state depends on its restraint.
+
+### The New Police
+
+London in the 1820s was policed, barely, by a patchwork of parish constables and night watchmen — underpaid, often elderly, easily evaded. Proposals for a professional force had been floated for decades and repeatedly killed, because the English regarded a permanent, centrally directed body of uniformed men as something foreign and sinister: a continental tool of political repression, a standing army by another name. Peel's achievement was as much political as administrative. He had to design a force that the public would tolerate.
+
+The Metropolitan Police Act passed in 1829, and the design choices were deliberate acts of reassurance. The new constables wore blue, not military red. They carried no firearms, only a wooden truncheon concealed beneath the coat. They were given top hats and tail-coats so that they looked like citizens rather than soldiers, and a number on the collar so that any one of them could be identified and complained about. They were instructed to win the public over by manner rather than force. The point, repeated endlessly to the first recruits, was that these men were not an occupying power but Londoners doing a job on London's behalf.
+
+### The principles that may not be his
+
+Here the history needs a note of honesty, because the most famous thing attached to Peel's name is also the most uncertain. British policing reveres a list known as the "Peelian Principles": nine crisp statements about policing by consent. They include the idea that the police must secure public approval rather than court it by pandering; that physical force is a last resort and a confession of failure; that the test of efficiency is the absence of crime, not the visible evidence of police action; and — the line every British officer can half-quote — that "the police are the public and the public are the police", citizens paid to give full-time attention to duties incumbent on every citizen.
+
+Peel almost certainly never wrote them in this form. Scholars who have gone looking — notably the criminologists Susan Lentz and Robert Chamlin — find no contemporary document in which Peel sets out nine numbered principles. The likeliest story is that the ethos was established in practice by the force's first two commissioners, Charles Rowan and Richard Mayne, in their instructions to officers, and that the tidy modern list was distilled and popularised much later, in the twentieth century, by writers such as Charles Reith and then the Home Office. In other words, the principles are partly a retrospective creation: a tradition invented to express what the institution had come to believe about itself.
+
+That does not make them worthless — it makes them interesting. A profession that chooses to trace its values back to a founding charter, even a slightly apocryphal one, is telling you what it aspires to be. And the aspiration is a genuinely radical one: that authority flows upward from the consent of the policed, not downward from the power of the state.
+
+### Why it still matters
+
+Policing by consent remains the official self-understanding of British policing, invoked in every debate about armed officers, public order, facial recognition and stop and search. When a tactic erodes public trust, the objection is almost always framed in Peel's terms — that consent is the asset on which everything else depends, and that it is spent far more easily than it is earned.
+
+There is a straight line, too, from Peel's instinct to the modern, evidence-based study of police legitimacy. The finding from decades of research — that people obey the law more readily when they regard the police as fair, and that perceived fairness matters more than the threat of punishment — is, in effect, Peel's hunch confirmed with data. The [profile of Lawrence Sherman](/influential-people/lawrence-sherman-and-the-invention-of-evidence-based-policing/) and the [profile of Alex Murray](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing/) describe the people who turned that hunch into experiments. Peel supplied the premise they set out to test.
+
+It would be wrong to romanticise him. Consent in 1829 was unevenly distributed; the New Police were used against strikers, demonstrators and the urban poor in ways that looked a good deal less consensual from the receiving end, and that tension has never fully gone away. Peel built an institution, not a utopia. But the institution carried an idea that has proved remarkably hard to kill: that a police force in a free society holds its power on loan from the people, and can be asked to give it back.
+
+Peel died in 1850, thrown from his horse on Constitution Hill. By then the model he had built in London was being copied across England and, eventually, much of the world. Not bad for a cold administrator who simply wanted the machinery of the state to work — and understood, better than most, that it only works when the public lets it.
+
+---
+
+### Sources and further reading
+
+- Metropolitan Police, ["Sir Robert Peel and the New Police"](https://www.met.police.uk/police-forces/metropolitan-police/areas/about-us/about-the-met/structure/peelian-principles/) and the "Definition of policing by consent", Home Office.
+- Susan A. Lentz and Robert H. Chamlin, "The Invention of Peel's Principles: A Study of Policing 'Textbook' History", *Journal of Criminal Justice*, 2007.
+- Charles Reith, *A New Study of Police History* (1956).
+- Douglas Hurd, *Robert Peel: A Biography* (2007).
