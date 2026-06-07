@@ -17,6 +17,8 @@ tags:
   - policing
   - police
   - policy
+redirectFrom:
+  - /public-policy/joining-the-dots-what-palantir-means-for-british-policing
 ---
 In June 2026 the contract to run the database that holds every firearms and shotgun certificate in England and Wales — together with Home Office records of explosives, explosive precursors and poisons — was awarded to Palantir Technologies. The value, £9m across all 43 forces, was modest by government-IT standards. The significance was not the money. It was that a company co-founded by Peter Thiel and seeded in its early years by the CIA's venture arm, In-Q-Tel, will now hold the national record of who in this country is licensed to own a gun.
 
