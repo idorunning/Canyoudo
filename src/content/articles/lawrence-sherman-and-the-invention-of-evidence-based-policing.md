@@ -1,16 +1,17 @@
 ---
-section: "police-policy"
+section: "influential-people"
 title: "Lawrence Sherman and the Invention of Evidence-Based Policing"
 description: "In 1981 Lawrence Sherman ran a domestic violence call as a scientific experiment, and policing was never quite the same. A profile of the American criminologist who argued that the police should be tested like medicine — and who taught the officers, Alex Murray among them, who carried the idea into British policing."
 pubDate: 2026-06-07
 heroImage: "/images/sherman-ebp-hero.svg"
 thumbnail: "/images/sherman-ebp-hero.svg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "criminology", "experiments", "leadership"]
+redirectFrom: ["/police-policy/lawrence-sherman-and-the-invention-of-evidence-based-policing"]
 ---
 
 **In 1981 a criminologist talked the Minneapolis police into running their domestic violence calls as a scientific experiment.** When officers reached a misdemeanour assault with both parties still on the scene, a pad of colour-coded report forms told them, at random, which of three responses to use: arrest the suspect, send one party away for the night, or give advice and leave. The aim was to find out, rather than guess, which response did most to stop the violence happening again.
 
-The man behind the pad of random assignments was Lawrence W. Sherman, and the study — the Minneapolis Domestic Violence Experiment — was the first randomised controlled trial ever run on the effect of arrest. Readers of the [profile of Alex Murray](/police-policy/alex-murray-and-the-rise-of-evidence-based-policing/) will know the name already: Sherman is the American academic who taught Murray at Cambridge and whose framework Murray carried back into British policing. This is the story of the scientist himself, and of the idea he spent fifty years pressing on a profession that did not, at first, want to hear it: that the police should be tested like medicine.
+The man behind the pad of random assignments was Lawrence W. Sherman, and the study — the Minneapolis Domestic Violence Experiment — was the first randomised controlled trial ever run on the effect of arrest. Readers of the [profile of Alex Murray](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing/) will know the name already: Sherman is the American academic who taught Murray at Cambridge and whose framework Murray carried back into British policing. This is the story of the scientist himself, and of the idea he spent fifty years pressing on a profession that did not, at first, want to hear it: that the police should be tested like medicine.
 
 ### The making of an experimentalist
 
@@ -45,7 +46,7 @@ By 1998 Sherman had a body of experiments and a conviction about what they meant
   <img src="/images/sherman-evidence-quote.svg" alt="Quote from Lawrence Sherman: Police practices should be based on scientific evidence about what works best." loading="lazy" />
 </figure>
 
-He later sharpened the framework into a slogan that British readers may recognise from the Murray profile. For most of its history, Sherman argued, policing had run on three Rs — random patrol, rapid response and reactive investigation — none of which had much evidence behind it. In their place he proposed the Triple-T: targeting the few places, times and people that cause most harm; testing responses through controlled trials; and tracking whether the effect lasts. The framework is set out in full, with a diagram, in the [Murray piece](/police-policy/alex-murray-and-the-rise-of-evidence-based-policing/); the point worth making here is whose framework it was. Murray built the institution. Sherman built the idea it was founded to spread.
+He later sharpened the framework into a slogan that British readers may recognise from the Murray profile. For most of its history, Sherman argued, policing had run on three Rs — random patrol, rapid response and reactive investigation — none of which had much evidence behind it. In their place he proposed the Triple-T: targeting the few places, times and people that cause most harm; testing responses through controlled trials; and tracking whether the effect lasts. The framework is set out in full, with a diagram, in the [Murray piece](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing/); the point worth making here is whose framework it was. Murray built the institution. Sherman built the idea it was founded to spread.
 
 ### Cambridge, and a school of officers
 
