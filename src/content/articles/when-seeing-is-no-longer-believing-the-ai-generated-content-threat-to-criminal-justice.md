@@ -17,13 +17,13 @@ That assumption is now outdated. Generative artificial intelligence has reached 
 
 Consider an image like the one below, the kind of footage that might form the centrepiece of a prosecution case: a figure caught on camera, weapon in hand. It appears compelling and, on first viewing, difficult to dispute.
 
-![](/images/screenshot_20251210-1240455544298525220360975-1024x598.png)
+![](/images/ai-cctv-knife.png)
 
 [IMAGE 1: CCTV-style footage showing a figure holding a knife]
 
 Now suppose that image is submitted for the court's consideration. Below is the same image after AI manipulation, created in under one minute.
 
-![](/images/17653714008195351195832712231149-1024x590.jpg)
+![](/images/ai-cctv-flowers.jpg)
 
 [IMAGE 2: The same scene, but the knife has been replaced with flowers]
 

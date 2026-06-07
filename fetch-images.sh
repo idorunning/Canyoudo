@@ -19,7 +19,6 @@ get() {
 }
 
 get "17653712411483451853423865393856.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/17653712411483451853423865393856.jpg"
-get "17653714008195351195832712231149-1024x590.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/17653714008195351195832712231149-1024x590.jpg"
 get "1766502332432420459162184927612.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/1766502332432420459162184927612.jpg"
 get "17665023356217569033943607914549.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/17665023356217569033943607914549.jpg"
 get "17665023390687019426064417612503.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/17665023390687019426064417612503.jpg"
@@ -31,7 +30,6 @@ get "17678715405872662829070664106378.jpg" "https://thinkingaboutpolicing.co.uk/
 get "image.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2026/04/image.png"
 get "image_editor_output_image1681454371-17655514280582700668508713128379.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/image_editor_output_image1681454371-17655514280582700668508713128379.png"
 get "screenshot_20251210-1240451896020900775513687-1024x598.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/screenshot_20251210-1240451896020900775513687-1024x598.png"
-get "screenshot_20251210-1240455544298525220360975-1024x598.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/screenshot_20251210-1240455544298525220360975-1024x598.png"
 get "screenshot_20251212-1507118259648032391736812.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/screenshot_20251212-1507118259648032391736812.png"
 get "share_62732086914530934196007772124391850255.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/share_62732086914530934196007772124391850255.png"
 # Note: the Somerton cipher (somerton-man-code.jpg) and Tamám Shud scrap
