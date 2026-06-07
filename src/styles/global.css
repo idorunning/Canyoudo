@@ -172,6 +172,103 @@
     width: 100%;
     margin: 0;
   }
+
+  /* Data tables — readable on desktop, collapse to labelled cards on mobile.
+     Markup is prepared by the rehype-responsive-tables plugin: every table is
+     wrapped in .table-wrap and each body cell carries a data-label of its
+     column header. */
+  .prose-article .table-wrap {
+    margin: 1.75em 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .prose-article table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: theme('fontFamily.sans');
+    font-size: 0.9rem;
+    line-height: 1.45;
+  }
+
+  .prose-article table.data-table th,
+  .prose-article table.data-table td {
+    padding: 0.5em 0.8em;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid theme('colors.ink.200');
+  }
+
+  .prose-article table.data-table thead th {
+    font-weight: 600;
+    color: theme('colors.ink.700');
+    white-space: nowrap;
+    border-bottom: 2px solid theme('colors.ink.300');
+  }
+
+  /* Below the phone breakpoint each row becomes a self-labelled card. */
+  @media (max-width: 640px) {
+    .prose-article .table-wrap {
+      overflow-x: visible;
+    }
+
+    .prose-article table.data-table,
+    .prose-article table.data-table tbody,
+    .prose-article table.data-table tr,
+    .prose-article table.data-table td {
+      display: block;
+      width: 100%;
+    }
+
+    /* Visually hide the header row; each cell carries its own label instead. */
+    .prose-article table.data-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .prose-article table.data-table tr {
+      margin: 0 0 1em;
+      padding: 0.35em 0.85em;
+      border: 1px solid theme('colors.ink.200');
+      border-radius: 6px;
+      background-color: theme('colors.paper.50');
+    }
+
+    .prose-article table.data-table td {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1.5em;
+      padding: 0.3em 0;
+      border-bottom: 1px solid theme('colors.ink.200');
+      text-align: right;
+    }
+
+    .prose-article table.data-table td:last-child {
+      border-bottom: 0;
+    }
+
+    .prose-article table.data-table td::before {
+      content: attr(data-label);
+      flex: 0 0 auto;
+      font-family: theme('fontFamily.sans');
+      font-weight: 600;
+      color: theme('colors.ink.600');
+      text-align: left;
+    }
+
+    /* A cell with no label (shouldn't happen) keeps its natural width. */
+    .prose-article table.data-table td:not([data-label])::before {
+      content: '';
+    }
+  }
 }
 
 /* Subtle paper texture for editorial feel */
