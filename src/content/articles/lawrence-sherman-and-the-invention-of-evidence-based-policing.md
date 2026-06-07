@@ -13,6 +13,11 @@ redirectFrom: ["/police-policy/lawrence-sherman-and-the-invention-of-evidence-ba
 
 The man behind the pad of random assignments was Lawrence W. Sherman, and the study — the Minneapolis Domestic Violence Experiment — was the first randomised controlled trial ever run on the effect of arrest. Readers of the [profile of Alex Murray](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing/) will know the name already: Sherman is the American academic who taught Murray at Cambridge and whose framework Murray carried back into British policing. This is the story of the scientist himself, and of the idea he spent fifty years pressing on a profession that did not, at first, want to hear it: that the police should be tested like medicine.
 
+<figure>
+  <img src="/images/sherman-lawrence-portrait.jpg" alt="Lawrence Sherman, Wolfson Professor of Criminology, speaking at a conference" loading="lazy" />
+  <figcaption>Lawrence Sherman, founder of evidence-based policing, at the Stockholm Criminology Symposium. Photo via <a href="https://commons.wikimedia.org/wiki/Category:Lawrence_W._Sherman">Wikimedia Commons</a> (Creative Commons).</figcaption>
+</figure>
+
 ### The making of an experimentalist
 
 Sherman was born in 1949 and educated on both sides of the Atlantic. He took a degree in political science at Denison University in Ohio, a master's at the University of Chicago, a diploma in criminology at Cambridge in 1973, and finally a doctorate in sociology at Yale in 1976. The Cambridge year mattered: it gave an American sociologist a lasting tie to the English institution he would eventually lead, and to a tradition of careful, quantitative criminology.
@@ -37,6 +42,11 @@ Sherman's second great contribution was to ask not what works but where. Analysi
 </figure>
 
 Just **3.5% of the city's addresses produced half of all the calls to police**. The finding has been reproduced in city after city since, and it is the empirical foundation of what became known as hot-spots policing. If most harm comes from a few places, then patrol aimed at those places should do more good than patrol spread thin everywhere. Sherman and David Weisburd tested exactly that in the Minneapolis Hot Spots Experiment, randomly assigning extra patrol to some high-crime corners and not others, and found that the targeted corners saw less crime and disorder. A later Kansas City study showed that concentrated patrol and gun seizures in a single violent neighbourhood cut gun crime there. Place, it turned out, was something the police could act on with evidence behind them.
+
+<figure>
+  <img src="/images/police-officer-on-duty.jpg" alt="A police officer on duty beside a patrol car" loading="lazy" />
+  <figcaption>Ordinary patrol was the first thing Sherman's experiments put to the test — and where it was sent turned out to matter as much as how much of it there was. Photo by Kiwiev, CC0, via Wikimedia Commons.</figcaption>
+</figure>
 
 ### Naming the idea
 

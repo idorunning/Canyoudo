@@ -50,4 +50,12 @@ get "fuel-filling-station.jpg" "https://commons.wikimedia.org/wiki/Special:FileP
 get "neurodiversity-symbol.svg" "https://commons.wikimedia.org/wiki/Special:FilePath/Neurodiversity%20Symbol.svg"
 get "police-officer-on-duty.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Slovak%20police%20car%20and%20police%20officer%20on%20duty%20(cropped).JPG"
 
+# Lawrence Sherman portrait from Wikimedia Commons (Stockholm Criminology
+# Symposium, 2023; credited in-page). The canonical Commons file name contains
+# a typo ("Confernce"), so try that spelling first and fall back to the
+# corrected one. Either way the surviving file is the same photo.
+curl -fsSL -A "$UA" -o "sherman-lawrence-portrait.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Lawrence%20Sherman%20Stockholm%20Confernce%202023.jpg" \
+  || curl -fsSL -A "$UA" -o "sherman-lawrence-portrait.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Lawrence%20Sherman%20Stockholm%20Conference%202023.jpg" \
+  && echo "  got sherman-lawrence-portrait.jpg" || echo "  FAILED sherman-lawrence-portrait.jpg"
+
 echo "Done. $(ls -1 | wc -l) images in public/images/"

@@ -48,6 +48,11 @@ The Society did not stay small. It grew into a registered charity with thousands
 
 The risk with a figure like Murray is that the advocacy floats free of practice. It did not. In partnership with Cambridge he ran a randomised controlled trial in Birmingham that set up dedicated teams to manage repeat victims of anti-social behaviour, the sort of low-level but relentless harm that wears communities down and that traditional policing has always struggled to take seriously. The point of doing it as a trial, rather than simply rolling it out because it sounded sensible, was to find out whether it worked rather than to assume it. That is the discipline Murray has spent his career trying to make ordinary.
 
+<figure>
+  <img src="/images/neighbourhood-policing-patrol.jpg" alt="Police officers on foot patrol in London" loading="lazy" />
+  <figcaption>The front line Murray came from and kept arguing for: the test of any tactic, he held, is whether it measurably cuts harm. Photo by Adrian Pingstone, public domain, via Wikimedia Commons.</figcaption>
+</figure>
+
 He carried the same instinct upward as he was promoted. He served three years as temporary Assistant Chief Constable for crime in the West Midlands, with responsibility for investigations, forensics, criminal justice and intelligence. He moved to the Metropolitan Police as a Commander, leading specialist crime teams working on cyber, human trafficking, child abuse and economic crime, and later took the Met's brief for serious violence. He spent time attached to the Home Office. In each role the question he brought to the table was the same one he had brought back from Cambridge: how do we know this works, and how would we find out if it did not?
 
 ### The AI lead, and the National Crime Agency
