@@ -13,6 +13,11 @@ redirectFrom: ["/police-policy/alex-murray-and-the-rise-of-evidence-based-polici
 
 That institution is the Society of Evidence-Based Policing, which Murray founded in 2010. It was the first organisation of its kind anywhere in the world. What follows is the story of the man behind it: a homicide detective and counter-terrorism commander who came to believe that the craft of policing had to be married to the scientific method, and who has spent fifteen years making that argument from inside the service rather than from a university common room.
 
+<figure>
+  <img src="/images/alex-murray-portrait.jpg" alt="Alex Murray in West Midlands Police uniform" loading="lazy" />
+  <figcaption>Alex Murray, founder of the Society of Evidence-Based Policing and British policing's first national lead for artificial intelligence.</figcaption>
+</figure>
+
 ### From army child to homicide detective
 
 Murray grew up around the world as the child of an army family, an upbringing that tends to produce either restlessness or adaptability, and in his case seems to have produced both. He read for a degree in criminology and geography at the University of Birmingham, graduating in 1996, and then joined West Midlands Police.
