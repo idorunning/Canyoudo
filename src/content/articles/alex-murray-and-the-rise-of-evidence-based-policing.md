@@ -1,11 +1,12 @@
 ---
-section: "police-policy"
+section: "influential-people"
 title: "Alex Murray and the Society That Asked Policing to Prove What Works"
 description: "Alex Murray spent a career investigating murders and running counter-terrorism operations, then built the institution that asked British policing a harder question: does any of this actually work? A profile of the founder of the Society of Evidence-Based Policing."
 pubDate: 2026-06-07
 heroImage: "/images/murray-ebp-hero.svg"
 thumbnail: "/images/murray-ebp-hero.svg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "leadership", "criminology", "artificial-intelligence"]
+redirectFrom: ["/police-policy/alex-murray-and-the-rise-of-evidence-based-policing"]
 ---
 
 **For most of its history, policing has rarely tested whether what it does actually works.** Officers patrolled because patrolling felt like policing, responded fast because responding fast felt urgent, and investigated after the fact because that was the job. Whether any of it reduced crime was a question almost nobody asked, and fewer still tried to answer with anything resembling a controlled experiment. Alex Murray is the British officer who decided that was no longer good enough, and who built the institution to change it.
@@ -35,13 +36,13 @@ In 2010 Murray and a small group of like-minded officers founded the Society of 
 
 What is striking, looking back, is how unfashionable this was at the time. The prevailing culture treated experience as the only credential that mattered, and academic research as something done to the police rather than with them. Surveys of officers in this period found that the overwhelming majority had never spoken to a university researcher, and that many line managers regarded engagement with research as a poor use of time. Into that culture Murray proposed something close to heresy: that an officer's instinct, however hard-won, was a hypothesis to be tested rather than a fact to be acted on.
 
-He has been candid about what that means in practice, including the discomfort of it. "Some things will work, some will backfire and some are simply ineffective," he has said of evidence-based practice. "Failure is a good thing — including trying to evaluate something but seeing that you can't." That is not the language of a service that prizes never being wrong. It is the language of a scientist, and Murray's insistence that policing adopt it is the through-line of his whole public career. For him the case rests on something more than efficiency. "The heart of evidence-based policing is about integrity," he has put it: a claim that doing what works, and being willing to find out that you were not, is finally a question of honesty with the public you serve.
+He has been candid about what that means in practice, including the discomfort of it. "Some things will work, some will backfire and some are simply ineffective," he has said of evidence-based practice. "Failure is a good thing — including trying to evaluate something but seeing that you can't." That is not the language of a service that prizes never being wrong. It is the language of a scientist, and Murray's insistence that policing adopt it is the through-line of his whole public career. For him the case rests on something more than efficiency. "The heart of evidence-based policing is about integrity," he has put it: a claim that doing what works, and being willing to find out that you were not, is finally a question of being straight with the public you serve.
 
 <figure>
   <img src="/images/murray-integrity-quote.svg" alt="Quote from Alex Murray: The heart of evidence-based policing is about integrity." loading="lazy" />
 </figure>
 
-The Society did not stay small. It grew into a registered charity with thousands of members, and it stopped being uniquely British. Sister organisations now operate in the United States, Canada, Australia and New Zealand, the Netherlands, Denmark and Sweden, most of them modelled on the body Murray started. The annual Cambridge conference on evidence-based policing, where Murray has briefed everyone from the Home Secretary to the Indian National Police Academy at Hyderabad, has become the field's main gathering. In 2017 he was inducted into the Hall of Fame of the Center for Evidence-Based Crime Policy at George Mason University in Virginia, the discipline's closest thing to formal recognition. Sherman, not a man given to loose praise, has described him as a "tireless advocate of evidence-based policing".
+The Society did not stay small. It grew into a registered charity with thousands of members, and it stopped being uniquely British. Sister organisations now operate in the United States, Canada, Australia and New Zealand, the Netherlands, Denmark and Sweden, most of them modelled on the body Murray started. The annual Cambridge conference on evidence-based policing, where Murray has briefed everyone from the Home Secretary to the Indian National Police Academy at Hyderabad, has become the field's main gathering. The Society has not been above a stunt to make the point: it once ran a 24-hour evidence-based policing conference, a relay of talks handed around the globe through every time zone so an officer anywhere could always find a session running — research as something the police do together, rather than something done to them. In 2013 he was elected to the Hall of Fame of the Center for Evidence-Based Crime Policy at George Mason University in Virginia, the discipline's closest thing to formal recognition. Sherman, not a man given to loose praise, has described him as a "tireless advocate of evidence-based policing".
 
 ### What it looked like on the ground
 
@@ -57,7 +58,7 @@ He set out three priorities for the role — improving productivity, making poli
 
 Later in 2024 Murray left West Mercia to become Director of Threat Leadership at the National Crime Agency, the body that leads Britain's response to serious and organised crime. He had been awarded the OBE in 2017, by then already a decade into the work for which he is best known.
 
-### The influence, weighed honestly
+### The influence, in proportion
 
 It would be easy to overclaim here, and the subject of this profile would be the first to object. Murray did not invent evidence-based policing; Sherman and a generation of experimental criminologists did. The Society he founded does not run British forces, and plenty of policing still proceeds on hunch and habit, as anyone who has read an inspectorate report knows. The culture he set out to change in 2010 has shifted, but it has not been remade.
 
@@ -73,6 +74,7 @@ That is the quieter kind of influence, and the more lasting. The detective who o
 - Society of Evidence-Based Policing, [About us](https://www.sebp.police.uk/about) and [Our people](https://www.sebp.police.uk/about/people).
 - Alex Murray, Katrin Mueller-Johnson and Lawrence W. Sherman, ["Evidence-Based Policing of U.K. Muslim Communities"](https://journals.sagepub.com/doi/abs/10.1177/1057567715574384), *International Criminal Justice Review*, 2015.
 - The Behavioural Insights Team, ["Innovation in Policing: a guest blog from Chief Superintendent Alex Murray"](https://www.bi.team/blogs/innovation-in-policing-a-guest-blog-from-chief-superintendent-alex-murray/).
+- Police Professional, ["Global first as leading police thinkers gather for 24-hour evidence-based policing conference"](https://www.policeprofessional.com/news/global-first-as-leading-police-thinkers-gather-for-24-hour-evidence-based-policing-conference/).
 - Police Science Dr, [Alex Murray on Evidence-Based Policing](https://www.policesciencedr.com/alex-murray-on-evidence-based-policing).
 - The Police Foundation, [Evidence-based policing: leadership insights](https://www.police-foundation.org.uk/news/evidence-based-policing-leadership-insights/).
 - Regional Organised Crime Unit, ["NPCC welcomes first-ever lead for Artificial Intelligence"](https://www.rocu.police.uk/news/2024/march/npcc-welcomes-first-ever-lead-for-artificial-intelligence-ai/), March 2024.
