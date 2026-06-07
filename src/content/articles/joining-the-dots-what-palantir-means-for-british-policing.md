@@ -1,5 +1,5 @@
 ---
-title: "Joining the Dots: What Palantir's Advance Means for British Policing"
+title: What Palantir's Advance Means for British Policing - and should we trust them.
 section: public-policy
 description: A CIA-seeded American data firm has moved from the edge of UK
   public-sector IT to a structural position inside defence, health and,
