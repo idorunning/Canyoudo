@@ -3,11 +3,14 @@ section: "public-policy"
 title: "When Seeing Is No Longer Believing: The AI generated content Threat to Criminal Justice"
 description: "All images and video have been generated for the purposes of this article and does not depict real people or events."
 pubDate: 2025-03-25
-thumbnail: "/images/screenshot_20251210-1240451896020900775513687-1024x598.png"
+thumbnail: "/images/ai-cctv-hero.jpg"
 ---
-![](/images/screenshot_20251210-1240451896020900775513687-1024x598.png)
+<figure>
+  <img src="/images/ai-cctv-hero.jpg" alt="A grainy green night-vision CCTV still of a figure advancing along a corridor" loading="lazy" />
+  <figcaption><strong>AI-generated — not real footage or evidence.</strong></figcaption>
+</figure>
 
-All images and video have been generated for the purposes of this article and does not depict real people or events.
+All images and video in this article have been generated for the purposes of illustration. They depict no real person or event. Each is labelled individually below.
 
 ### The technology to fabricate convincing digital evidence is now widely available, and policing and the courts are not yet prepared for it
 
@@ -17,35 +20,40 @@ That assumption is now outdated. Generative artificial intelligence has reached 
 
 Consider an image like the one below, the kind of footage that might form the centrepiece of a prosecution case: a figure caught on camera, weapon in hand. It appears compelling and, on first viewing, difficult to dispute.
 
-![](/images/ai-cctv-knife.png)
-
-[IMAGE 1: CCTV-style footage showing a figure holding a knife]
+<figure>
+  <img src="/images/ai-cctv-knife.png" alt="A green night-vision CCTV still of a figure holding a knife in a room" loading="lazy" />
+  <figcaption><strong>AI-generated — not real footage or evidence.</strong> Image 1: CCTV-style footage of a figure with a knife — the kind of still that might anchor a prosecution.</figcaption>
+</figure>
 
 Now suppose that image is submitted for the court's consideration. Below is the same image after AI manipulation, created in under one minute.
 
-![](/images/ai-cctv-flowers.jpg)
-
-[IMAGE 2: The same scene, but the knife has been replaced with flowers]
+<figure>
+  <img src="/images/ai-cctv-flowers.jpg" alt="The same green night-vision CCTV still, but the figure now holds flowers instead of a knife" loading="lazy" />
+  <figcaption><strong>AI-generated — not real footage or evidence.</strong> Image 2: the same scene after under a minute of manipulation — the knife has become a bouquet.</figcaption>
+</figure>
 
 Consider how quickly the evidence can be undermined. Using freely available AI tools, the weapon becomes a bouquet of flowers. The lighting remains consistent, the figure's posture is natural, and the manipulation is, to the untrained eye, invisible. On its own, this image does little to introduce doubt.
 
 The defence then produces a further image.
 
-![](/images/17653712411483451853423865393856.jpg)
+<figure>
+  <img src="/images/ai-cctv-angle2.jpg" alt="A green night-vision CCTV still of the same figure advancing down a hallway, captured from a second camera" loading="lazy" />
+  <figcaption><strong>AI-generated — not real footage or evidence.</strong> Image 3: the same figure apparently picked up by a second camera elsewhere in the property.</figcaption>
+</figure>
 
-[IMAGE 3: An alternative camera angle of the same scene]
-
-A second camera angle. Corroborating footage. Evidence that appears to multiply and reinforce itself, all of it synthetic.
+A second camera, a second angle: the same figure, apparently caught elsewhere in the building. Corroborating footage. Evidence that appears to multiply and reinforce itself, all of it synthetic.
 
 In under two minutes, and with minimal technical knowledge, we have two images that contradict the first. Doubt is now beginning to accumulate. Which is real, and which is fake?
 
-To add further doubt, this video is produced, created from a single image using a two-line prompt:
+And it is no longer limited to stills. From the same source imagery and a short text prompt, a few minutes of processing produces moving footage — complete with sound — of the figure crossing a room with the knife and advancing along a hallway, switching between camera labels as a multi-camera CCTV system would. It is exactly the kind of clip a jury would find hard to disbelieve, and it is entirely synthetic.
 
-"*2-3 second video of this image of the man entering the room and putting the flowers on the table and leaving, keep the camera fixed as a CCTV camera would be*"
-
-https://videopress.com/v/9nJoAbm0?resizeToParent=true&cover=true&preloadContent=metadata&useAverageColor=true
-
-[VIDEO: Generated footage with audio showing the figure entering, placing flowers, leaving]
+<figure>
+  <video controls playsinline preload="metadata" poster="/images/ai-cctv-knife.png" style="width:100%;height:auto;border-radius:4px;">
+    <source src="/media/ai-cctv-demo.mp4" type="video/mp4" />
+    Your browser does not support embedded video.
+  </video>
+  <figcaption><strong>AI-generated — not real footage or evidence.</strong> A ten-second synthetic CCTV clip, with audio, generated from a single still image.</figcaption>
+</figure>
 
 These examples illustrate a capability that prosecutors, defence lawyers, judges, and juries must now contend with in every case involving digital evidence.
 

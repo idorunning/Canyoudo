@@ -18,7 +18,6 @@ get() {
   curl -fsSL -A "$UA" -o "$1" "$2" && echo "  got $1" || echo "  FAILED $1"
 }
 
-get "17653712411483451853423865393856.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/17653712411483451853423865393856.jpg"
 get "1766502332432420459162184927612.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/1766502332432420459162184927612.jpg"
 get "17665023356217569033943607914549.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/17665023356217569033943607914549.jpg"
 get "17665023390687019426064417612503.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/17665023390687019426064417612503.jpg"
@@ -29,7 +28,6 @@ get "17665027398266744301230980938455.jpg" "https://thinkingaboutpolicing.co.uk/
 get "17678715405872662829070664106378.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2026/01/17678715405872662829070664106378.jpg"
 get "image.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2026/04/image.png"
 get "image_editor_output_image1681454371-17655514280582700668508713128379.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/image_editor_output_image1681454371-17655514280582700668508713128379.png"
-get "screenshot_20251210-1240451896020900775513687-1024x598.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/screenshot_20251210-1240451896020900775513687-1024x598.png"
 get "screenshot_20251212-1507118259648032391736812.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/screenshot_20251212-1507118259648032391736812.png"
 get "share_62732086914530934196007772124391850255.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/share_62732086914530934196007772124391850255.png"
 # Note: the Somerton cipher (somerton-man-code.jpg) and Tamám Shud scrap
