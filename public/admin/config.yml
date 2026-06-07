@@ -1,0 +1,144 @@
+# Decap CMS configuration for Thinking About Policing.
+#
+# Auth: "Sign in with GitHub" via Netlify's built-in OAuth provider. One-time
+# setup (see README "Writing in the browser"):
+#   1. Register a GitHub OAuth App with callback https://api.netlify.com/auth/done
+#   2. Install that app under the Netlify site's authentication providers.
+# No password to store, and no extra server to run.
+
+backend:
+  name: github
+  repo: idorunning/thinkingaboutpolicing
+  branch: main
+  commit_messages:
+    create: 'Create {{collection}} "{{slug}}"'
+    update: 'Update {{collection}} "{{slug}}"'
+    delete: 'Delete {{collection}} "{{slug}}"'
+    openAuthoring: '{{message}}'
+
+# Drafts live on their own branch and open a pull request. Nothing reaches the
+# live site until you hit Publish, which merges it. This is the "hold ready,
+# then publish with a click" board (Drafts / In review / Ready).
+publish_mode: editorial_workflow
+
+# Run the editor locally with `npx decap-server` + `npm run dev`, then visit
+# http://localhost:4321/admin/ — edits write to your working copy, no login.
+local_backend: true
+
+site_url: https://thinkingaboutpolicing.org
+display_url: https://thinkingaboutpolicing.org
+logo_url: https://thinkingaboutpolicing.org/favicon.svg
+
+# Images chosen in the editor are committed here and referenced as /images/...,
+# matching how the existing articles link their charts and photos.
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "police-policy"
+    label: "Police Policy"
+    label_singular: "Police policy article"
+    description: "The operational and organisational side of policing."
+    folder: "src/content/police-policy"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    preview_path: "police-policy/{{slug}}"
+    sortable_fields: ["pubDate", "title"]
+    # The shared field set is defined here and reused by the other sections
+    # below via a YAML anchor (&article_fields / *article_fields).
+    fields: &article_fields
+      - { name: "title", label: "Title", widget: "string" }
+      - {
+          name: "description",
+          label: "Description — the standfirst, and the search/social summary",
+          widget: "text",
+        }
+      - {
+          name: "pubDate",
+          label: "Publish date",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: false,
+          format: "YYYY-MM-DD",
+          picker_utc: true,
+        }
+      - {
+          name: "updatedDate",
+          label: "Updated date (optional)",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: false,
+          format: "YYYY-MM-DD",
+          picker_utc: true,
+          required: false,
+        }
+      - {
+          name: "author",
+          label: "Author",
+          widget: "string",
+          default: "Nathan Tracey",
+          required: false,
+        }
+      - {
+          name: "thumbnail",
+          label: "Thumbnail / card image (optional)",
+          widget: "image",
+          required: false,
+          choose_url: true,
+        }
+      - {
+          name: "heroImage",
+          label: "Hero image (optional)",
+          widget: "image",
+          required: false,
+          choose_url: true,
+        }
+      - {
+          name: "tags",
+          label: "Tags",
+          widget: "list",
+          required: false,
+          hint: "One per entry, e.g. policing, policy, evidence-based-policing.",
+        }
+      - {
+          name: "draft",
+          label: "Keep hidden on the live site even after publishing",
+          widget: "boolean",
+          default: false,
+          required: false,
+          hint: "A second safety net. Leave off for a normal publish.",
+        }
+      - {
+          name: "body",
+          label: "Body",
+          widget: "markdown",
+          hint: "Footnotes use [^1] in the text and [^1]: ... at the foot, as in the existing pieces.",
+        }
+
+  - name: "public-policy"
+    label: "Public Policy"
+    label_singular: "Public policy article"
+    description: "Policy beyond policing — energy, justice, technology."
+    folder: "src/content/public-policy"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    preview_path: "public-policy/{{slug}}"
+    sortable_fields: ["pubDate", "title"]
+    fields: *article_fields
+
+  - name: "other"
+    label: "Other"
+    label_singular: "Other piece"
+    description: "Everything that doesn't sit under policing or public policy."
+    folder: "src/content/other"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    preview_path: "other/{{slug}}"
+    sortable_fields: ["pubDate", "title"]
+    fields: *article_fields

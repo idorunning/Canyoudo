@@ -1,6 +1,6 @@
 # Thinking About Policing
 
-The new home of thinkingaboutpolicing.co.uk. Built with Astro, deployed on Netlify, edited in markdown.
+The home of thinkingaboutpolicing.org (formerly .co.uk, which now redirects here). Built with Astro, deployed on Netlify, edited in markdown.
 
 ## What you've got
 
@@ -28,7 +28,7 @@ The site uses **Cusdis** for comments. It's a lightweight, free, no-login commen
 To switch it on:
 
 1. Sign up at [cusdis.com](https://cusdis.com)
-2. Create a new site for thinkingaboutpolicing.co.uk
+2. Create a new site for thinkingaboutpolicing.org
 3. Copy the App ID it gives you
 4. In the project root, copy `.env.example` to `.env`
 5. Paste the App ID after `PUBLIC_CUSDIS_APP_ID=`
@@ -119,6 +119,41 @@ For big hero images, use the `heroImage` field in frontmatter. For images inside
 
 ---
 
+## Writing in the browser (the `/admin` editor)
+
+You don't have to touch the files at all. The site ships with [Decap CMS](https://decapcms.org), a writing studio at **`/admin`** that lets you draft, edit, preview and publish from a browser — desktop or phone. It commits Markdown into `src/content/` exactly like the hand-written articles, so everything above still applies; the editor just fills in the frontmatter and body for you.
+
+**Drafts and publishing.** The editor runs an editorial workflow with a board: **Drafts → In review → Ready**. A piece you're working on lives on its own branch and never touches the live site until you hit **Publish**, which merges it. That is your "hold a finished piece ready, then publish with one click." (The separate *"Keep hidden on the live site"* toggle is a second safety net — it publishes the file but keeps the `draft` flag on so the page stays hidden.)
+
+### One-time login setup (do this once)
+
+Login is **"Sign in with GitHub"** through Netlify's built-in OAuth — no password to store, no extra server.
+
+1. **Register a GitHub OAuth app.** On GitHub: *Settings → Developer settings → OAuth Apps → New OAuth App*.
+   - **Application name:** anything, e.g. `Thinking About Policing CMS`
+   - **Homepage URL:** `https://thinkingaboutpolicing.org`
+   - **Authorization callback URL:** `https://api.netlify.com/auth/done`
+   - Register it, then **generate a client secret**. Keep the **Client ID** and **Client Secret**.
+2. **Install the provider on Netlify.** In your Netlify site: *Site configuration → Access & security → OAuth* (older dashboards: *Access control → OAuth*) → **Install provider → GitHub**, and paste the Client ID and Secret.
+3. Visit **`https://thinkingaboutpolicing.org/admin/`**, click **Login with GitHub**, authorise once, and you're in.
+
+Only accounts with push access to the repo (i.e. you) can get in — that is the access control.
+
+> If your Netlify dashboard no longer offers the OAuth provider install, the fallback is a tiny OAuth handler (a Netlify Function or the [`sveltia-cms-auth`](https://github.com/sveltia/sveltia-cms-auth) Cloudflare Worker) with its URL set as `backend.base_url` in `public/admin/config.yml`. Ask and it can be wired up.
+
+### Editing locally without logging in
+
+To try the editor on your own machine against your working copy (no GitHub, no login):
+
+```bash
+npx decap-server      # in one terminal
+npm run dev           # in another
+```
+
+Then open `http://localhost:4321/admin/`. The `local_backend: true` line in the config enables this.
+
+---
+
 ## Deploying
 
 ### One-time setup with Netlify
@@ -150,7 +185,7 @@ Redeploy once for the env var to take effect.
 
 Once the site builds successfully on a `*.netlify.app` URL, point your domain at it:
 
-1. Netlify → Domain settings → Add custom domain → `thinkingaboutpolicing.co.uk`
+1. Netlify → Domain settings → Add custom domain → `thinkingaboutpolicing.org` (set as primary; add `thinkingaboutpolicing.co.uk` as a redirect to it)
 2. Netlify will give you DNS records to add at your registrar
 3. Either change the nameservers to Netlify's, or add an A record + CNAME pointing at Netlify
 4. Wait for DNS to propagate (usually under an hour)
