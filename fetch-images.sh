@@ -34,8 +34,9 @@ get "screenshot_20251210-1240451896020900775513687-1024x598.png" "https://thinki
 get "screenshot_20251210-1240455544298525220360975-1024x598.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/screenshot_20251210-1240455544298525220360975-1024x598.png"
 get "screenshot_20251212-1507118259648032391736812.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/screenshot_20251212-1507118259648032391736812.png"
 get "share_62732086914530934196007772124391850255.png" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/share_62732086914530934196007772124391850255.png"
-get "somerton-man-code-1024x818.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/somerton-man-code-1024x818.jpg"
-get "tama.jpg" "https://thinkingaboutpolicing.co.uk/wp-content/uploads/2025/12/tama.jpg"
+# Note: the Somerton cipher (somerton-man-code.jpg) and Tamám Shud scrap
+# (somerton-tamam-shud.jpg) are now committed directly in public/images, so
+# they no longer need to be fetched from WordPress.
 
 # Public-domain Somerton Man case images from Wikimedia Commons (1948 South
 # Australia Police material, public domain by age). Special:FilePath resolves
