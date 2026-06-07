@@ -4,6 +4,10 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Public, build-time config (these values are exposed in the page source by
+  # design — they are not secrets).
+  # Analytics — GoatCounter (privacy-friendly, no cookie banner).
+  PUBLIC_GOATCOUNTER_URL = "https://thinkingaboutpolicing.goatcounter.com/count"
 
 [[headers]]
   for = "/*"
