@@ -1,4 +1,5 @@
 ---
+section: "police-policy"
 title: "The Officers We’re Losing: Why British Policing Must Rethink Cognitive Diversity"
 description: "British policing faces a talent paradox rarely discussed at command level."
 pubDate: 2025-05-06

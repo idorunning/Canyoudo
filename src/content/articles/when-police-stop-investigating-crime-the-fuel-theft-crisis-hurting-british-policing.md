@@ -1,4 +1,5 @@
 ---
+section: "police-policy"
 title: "When Police Stop Investigating Crime: The Fuel Theft Crisis hurting British Policing"
 description: "Imagine reporting a crime with crystal-clear CCTV footage, the suspects vehicle registration, and precise timestamps—only to receive a text message hours later saying \"case closed, no suspect…"
 pubDate: 2025-06-17

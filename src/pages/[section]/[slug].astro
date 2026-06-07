@@ -3,16 +3,19 @@ import ArticleLayout from '../../layouts/ArticleLayout.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 
+// One route for every article in every section. The URL is built from the
+// article's own `section` field, so changing that field in the editor moves
+// the article between areas without touching any files.
 export async function getStaticPaths() {
-  const articles = await getCollection('police-policy', ({ data }) => !data.draft);
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
   return articles.map(article => ({
-    params: { slug: article.slug },
+    params: { section: article.data.section, slug: article.slug },
     props: { article },
   }));
 }
 
 interface Props {
-  article: CollectionEntry<'police-policy'>;
+  article: CollectionEntry<'articles'>;
 }
 
 const { article } = Astro.props;
@@ -27,7 +30,7 @@ const { Content } = await article.render();
   heroImage={article.data.heroImage}
   tags={article.data.tags}
   author={article.data.author}
-  section="police-policy"
+  section={article.data.section}
   slug={article.slug}
   rawContent={article.body}
 >

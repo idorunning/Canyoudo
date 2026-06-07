@@ -35,21 +35,34 @@ media_folder: "public/images"
 public_folder: "/images"
 
 collections:
-  - name: "police-policy"
-    label: "Police Policy"
-    label_singular: "Police policy article"
-    description: "The operational and organisational side of policing."
-    folder: "src/content/police-policy"
+  - name: "articles"
+    label: "Articles"
+    label_singular: "Article"
+    description: "Every article. The Section field decides which area it appears in — change it to move a piece between areas."
+    folder: "src/content/articles"
     create: true
     extension: "md"
     format: "frontmatter"
     slug: "{{slug}}"
-    preview_path: "police-policy/{{slug}}"
-    sortable_fields: ["pubDate", "title"]
-    # The shared field set is defined here and reused by the other sections
-    # below via a YAML anchor (&article_fields / *article_fields).
-    fields: &article_fields
+    preview_path: "{{section}}/{{slug}}"
+    sortable_fields: ["pubDate", "title", "section"]
+    # Group the board/list by section so each area is easy to find.
+    view_groups:
+      - { label: "Section", field: "section" }
+    fields:
       - { name: "title", label: "Title", widget: "string" }
+      - {
+          name: "section",
+          label: "Section — change this to move the article between areas",
+          widget: "select",
+          default: "police-policy",
+          options:
+            [
+              { label: "Police Policy", value: "police-policy" },
+              { label: "Public Policy", value: "public-policy" },
+              { label: "Other", value: "other" },
+            ],
+        }
       - {
           name: "description",
           label: "Description — the standfirst, and the search/social summary",
@@ -103,6 +116,13 @@ collections:
           hint: "One per entry, e.g. policing, policy, evidence-based-policing.",
         }
       - {
+          name: "redirectFrom",
+          label: "Redirect from (old paths)",
+          widget: "list",
+          required: false,
+          hint: "If you move this article to a different section, paste its old path here (e.g. /police-policy/the-old-slug) so the old link keeps working.",
+        }
+      - {
           name: "draft",
           label: "Keep hidden on the live site even after publishing",
           widget: "boolean",
@@ -116,29 +136,3 @@ collections:
           widget: "markdown",
           hint: "Footnotes use [^1] in the text and [^1]: ... at the foot, as in the existing pieces.",
         }
-
-  - name: "public-policy"
-    label: "Public Policy"
-    label_singular: "Public policy article"
-    description: "Policy beyond policing — energy, justice, technology."
-    folder: "src/content/public-policy"
-    create: true
-    extension: "md"
-    format: "frontmatter"
-    slug: "{{slug}}"
-    preview_path: "public-policy/{{slug}}"
-    sortable_fields: ["pubDate", "title"]
-    fields: *article_fields
-
-  - name: "other"
-    label: "Other"
-    label_singular: "Other piece"
-    description: "Everything that doesn't sit under policing or public policy."
-    folder: "src/content/other"
-    create: true
-    extension: "md"
-    format: "frontmatter"
-    slug: "{{slug}}"
-    preview_path: "other/{{slug}}"
-    sortable_fields: ["pubDate", "title"]
-    fields: *article_fields

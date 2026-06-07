@@ -1,4 +1,5 @@
 ---
+section: "public-policy"
 title: "Should Britain Drill, Baby, Drill? The North Sea Question in Plain English"
 description: "A 10-minute read on whether ramping up oil and gas extraction would actually fix anything"
 pubDate: 2026-04-29

@@ -3,24 +3,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import { getCollection } from 'astro:content';
 
-type Section = 'police-policy' | 'public-policy' | 'other';
+import type { Section } from '../content/config';
 
-// Pull articles from all three collections
-const policeArticles = await getCollection('police-policy', ({ data }) => !data.draft);
-const publicArticles = await getCollection('public-policy', ({ data }) => !data.draft);
-const otherArticles = await getCollection('other', ({ data }) => !data.draft);
+// Every article lives in one collection; its `section` field decides where it
+// shows and what its URL is.
+const articles = await getCollection('articles', ({ data }) => !data.draft);
 
 type Item = {
   slug: string;
-  data: typeof policeArticles[number]['data'];
+  data: typeof articles[number]['data'];
   section: Section;
 };
 
-const allArticles: Item[] = [
-  ...policeArticles.map(a => ({ slug: a.slug, data: a.data, section: 'police-policy' as Section })),
-  ...publicArticles.map(a => ({ slug: a.slug, data: a.data, section: 'public-policy' as Section })),
-  ...otherArticles.map(a => ({ slug: a.slug, data: a.data, section: 'other' as Section })),
-].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const allArticles: Item[] = articles
+  .map(a => ({ slug: a.slug, data: a.data, section: a.data.section }))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const [feature, ...rest] = allArticles;
 ---

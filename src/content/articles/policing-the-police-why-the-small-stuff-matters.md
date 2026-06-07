@@ -1,4 +1,5 @@
 ---
+section: "police-policy"
 title: "Policing the Police: Why the ‘Small Stuff’ Matters"
 description: "When a police officer is finally dismissed or even convicted for gross misconduct, how often do their colleagues quietly nod and say something like, “I saw that coming”? More often than we’d like…"
 pubDate: 2025-09-09

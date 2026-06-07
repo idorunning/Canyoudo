@@ -1,4 +1,5 @@
 ---
+section: "police-policy"
 title: "Probabilities Over p-Values: The Statistic That Answers the Wrong Question"
 description: "Policing trials report p-values and statistical significance. But a p-value cannot tell a chief how likely an intervention is to work, or whether it is worth the money. The case for reporting probabilities instead — explained in plain English, with the evidence."
 pubDate: 2026-06-07

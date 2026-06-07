@@ -2,15 +2,11 @@ import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 
 export async function GET(context) {
-  const police = await getCollection('police-policy', ({ data }) => !data.draft);
-  const publicCol = await getCollection('public-policy', ({ data }) => !data.draft);
-  const other = await getCollection('other', ({ data }) => !data.draft);
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
 
-  const items = [
-    ...police.map(a => ({ ...a, section: 'police-policy' })),
-    ...publicCol.map(a => ({ ...a, section: 'public-policy' })),
-    ...other.map(a => ({ ...a, section: 'other' })),
-  ].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  const items = articles
+    .map(a => ({ ...a, section: a.data.section }))
+    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
   return rss({
     title: 'Thinking About Policing',

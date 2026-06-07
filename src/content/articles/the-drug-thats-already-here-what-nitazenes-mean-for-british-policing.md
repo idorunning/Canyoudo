@@ -1,4 +1,5 @@
 ---
+section: "police-policy"
 title: "The Drug That's Already Here: What Nitazenes Mean for British Policing"
 description: "Synthetic opioids have landed in the UK. What nitazenes are, why they are more dangerous than the heroin they are displacing, and the strategic, tactical and operational picture for policing."
 pubDate: 2026-06-05

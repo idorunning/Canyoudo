@@ -22,19 +22,14 @@ type Item = {
   thumbnail: string | null;
 };
 
-let items: Item[] = [];
-for (const s of sections) {
-  const arts = await getCollection(s, ({ data }) => !data.draft);
-  for (const a of arts) {
-    items.push({
-      slug: a.slug,
-      section: s,
-      title: a.data.title,
-      pubDate: a.data.pubDate,
-      thumbnail: a.data.thumbnail ?? a.data.heroImage ?? null,
-    });
-  }
-}
+const arts = await getCollection('articles', ({ data }) => !data.draft);
+let items: Item[] = arts.map((a) => ({
+  slug: a.slug,
+  section: a.data.section,
+  title: a.data.title,
+  pubDate: a.data.pubDate,
+  thumbnail: a.data.thumbnail ?? a.data.heroImage ?? null,
+}));
 
 // Drop the article currently being read.
 items = items.filter((i) => !(i.slug === currentSlug && i.section === section));

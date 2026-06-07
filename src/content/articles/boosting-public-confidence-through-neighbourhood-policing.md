@@ -1,4 +1,5 @@
 ---
+section: "police-policy"
 title: "Boosting Public Confidence Through Neighbourhood Policing"
 description: "Neighbourhood policing, when delivered to a high standard, produces “quick, large and sustained increases” in public confidence and demonstrates measurable crime reduction outcomes. The College of…"
 pubDate: 2025-02-18

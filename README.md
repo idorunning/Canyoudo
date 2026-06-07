@@ -56,16 +56,14 @@ npm run preview
 
 ## Writing an article
 
-Articles live in `src/content/` under one of three folders. The folder decides which section the article appears in.
+All articles live in one folder, `src/content/articles/`. Which **section** an article appears in (and its URL) is set by a `section` field in the frontmatter, not by the folder. So moving a piece between areas is a one-line change — flip `section` — rather than moving a file.
 
 ```
 src/content/
-├── police-policy/
-├── public-policy/
-└── other/
+└── articles/        # every article, with a `section` field in each
 ```
 
-To add an article, create a new `.md` file in the appropriate folder. The filename becomes the URL slug — `early-intervention.md` becomes `/police-policy/early-intervention/`. Keep it lowercase, hyphens between words, no spaces.
+To add an article, create a new `.md` file in `src/content/articles/`. The filename becomes the URL slug — `early-intervention.md` with `section: "police-policy"` becomes `/police-policy/early-intervention/`. Keep filenames lowercase, hyphens between words, no spaces.
 
 ### Frontmatter
 
@@ -74,6 +72,7 @@ Every article starts with a YAML block. Like this:
 ```yaml
 ---
 title: "The piece's title"
+section: "police-policy"   # police-policy | public-policy | other
 description: "One-line summary. Shows on the homepage and as the meta description for social sharing."
 pubDate: 2026-05-27
 tags: ["misconduct", "early intervention"]
@@ -83,11 +82,14 @@ tags: ["misconduct", "early intervention"]
 That's the minimum. Optional fields:
 
 ```yaml
-updatedDate: 2026-06-01            # if you've revised it
-heroImage: /images/something.jpg   # top image for the article
-draft: true                        # hides it from build until you remove this
-author: "Nathan Tracey"            # defaults to your name if omitted
+updatedDate: 2026-06-01                 # if you've revised it
+heroImage: /images/something.jpg        # top image for the article
+draft: true                             # hides it from the live site until removed
+author: "Nathan Tracey"                 # defaults to your name if omitted
+redirectFrom: ["/old-section/old-slug"] # if you moved it, 301 the old URL here
 ```
+
+**Moving an article between sections.** Change `section`. The URL changes with it, so add the previous path to `redirectFrom` (a list) and the old link will 301 to the new one. In the `/admin` editor this is the **Section** dropdown plus the **Redirect from** field — no files to touch.
 
 ### The body
 
@@ -197,7 +199,7 @@ Until you flip DNS, the WordPress site keeps running. Zero-downtime cutover.
 
 After initial setup, the workflow for new articles is:
 
-1. Create the markdown file in the right folder
+1. Create the markdown file in `src/content/articles/` and set its `section`
 2. Write it
 3. `git add . && git commit -m "New article: title" && git push`
 4. Netlify rebuilds and deploys. Done.
@@ -215,8 +217,8 @@ For each existing post:
 1. Open it in WordPress
 2. Switch to the text/code view
 3. Copy the body
-4. Create a new `.md` file in the right section folder
-5. Add frontmatter at the top with the title, description, original pubDate
+4. Create a new `.md` file in `src/content/articles/`
+5. Add frontmatter at the top with the title, `section`, description, original pubDate
 6. Paste the body and clean up any leftover WordPress shortcodes or HTML
 
 If a piece has images, download them, put them in `public/images/`, and update the references.
@@ -235,11 +237,9 @@ thinkingaboutpolicing/
 │   ├── favicon.svg
 │   └── robots.txt
 └── src/
-    ├── content/           # Articles — one folder per section
-    │   ├── config.ts      # Frontmatter schema
-    │   ├── police-policy/
-    │   ├── public-policy/
-    │   └── other/
+    ├── content/           # Articles — one collection, section set per file
+    │   ├── config.ts      # Frontmatter schema (incl. the `section` field)
+    │   └── articles/      # every article; `section` decides its area + URL
     ├── layouts/
     │   ├── BaseLayout.astro     # Page shell (head, nav, footer)
     │   └── ArticleLayout.astro  # Article page template

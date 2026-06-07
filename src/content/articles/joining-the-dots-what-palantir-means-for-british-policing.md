@@ -1,4 +1,5 @@
 ---
+section: "police-policy"
 title: "Joining the Dots: What Palantir's Advance Means for British Policing"
 description: "A CIA-seeded American data firm has moved from the edge of UK public-sector IT to a structural position inside defence, health and, increasingly, policing. What has actually been bought, what the software does, and why it is contested."
 pubDate: 2026-06-05
