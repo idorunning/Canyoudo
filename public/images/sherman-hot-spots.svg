@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 540" width="1200" height="540" role="img" aria-label="Sherman's hot-spots finding: 3.5 percent of a city's street addresses produced 50 percent of all calls to the police">
+  <rect width="1200" height="540" fill="#f7f3eb"/>
+  <text x="600" y="78" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="46" font-weight="600" text-anchor="middle">Crime hides in a few places</text>
+  <text x="600" y="120" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="24" font-style="italic" text-anchor="middle">the finding that reshaped where the police go</text>
+
+  <!-- Card 1: addresses -->
+  <rect x="90" y="180" width="430" height="250" rx="14" fill="#fbf8f1" stroke="#ddd6c8" stroke-width="1.5"/>
+  <rect x="90" y="180" width="430" height="8" rx="4" fill="#7c2828"/>
+  <text x="305" y="320" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="96" font-weight="700" text-anchor="middle">3.5%</text>
+  <text x="305" y="382" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23" text-anchor="middle"><tspan x="305">of a city&#8217;s street</tspan><tspan x="305" dy="30">addresses&#8230;</tspan></text>
+
+  <!-- connector -->
+  <text x="600" y="312" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="26" font-weight="700" text-anchor="middle">produced</text>
+
+  <!-- Card 2: calls -->
+  <rect x="680" y="180" width="430" height="250" rx="14" fill="#fbf8f1" stroke="#ddd6c8" stroke-width="1.5"/>
+  <rect x="680" y="180" width="430" height="8" rx="4" fill="#7c2828"/>
+  <text x="895" y="320" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="96" font-weight="700" text-anchor="middle">50%</text>
+  <text x="895" y="382" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23" text-anchor="middle"><tspan x="895">of all the calls</tspan><tspan x="895" dy="30">to the police.</tspan></text>
+
+  <text x="600" y="500" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-style="italic" text-anchor="middle">After Sherman, Gartin &amp; Buerger (1989), from a year of Minneapolis police calls.</text>
+</svg>

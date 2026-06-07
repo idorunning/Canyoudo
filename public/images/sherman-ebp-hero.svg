@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 560" width="1600" height="560" role="img" aria-label="Lawrence Sherman career timeline: 1981 Minneapolis Domestic Violence Experiment, 1989 hot spots of crime, 1998 coins evidence-based policing, 2007 Cambridge professor, 2008 Police Executive Programme, 2016 Cambridge Crime Harm Index">
+  <rect width="1600" height="560" fill="#1a1817"/>
+  <rect x="110" y="86" width="64" height="4" fill="#7c2828"/>
+  <text x="110" y="128" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="25" font-weight="600" letter-spacing="6">PROFILE — EVIDENCE-BASED POLICING</text>
+  <text x="106" y="240" fill="#fbf8f1" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="104" font-weight="600">Lawrence Sherman</text>
+  <text x="110" y="305" fill="#c4bcae" font-family="'Source Serif 4', Georgia, serif" font-size="37" font-style="italic">The criminologist who made policing test itself</text>
+
+  <line x1="170" y1="420" x2="1430" y2="420" stroke="#3d3936" stroke-width="2"/>
+
+  <!-- 1981 -->
+  <text x="170" y="396" fill="#f7f3eb" font-family="'DM Sans', system-ui, sans-serif" font-size="30" font-weight="700" text-anchor="middle">1981</text>
+  <circle cx="170" cy="420" r="9" fill="#a14545" stroke="#1a1817" stroke-width="3"/>
+  <text x="170" y="462" fill="#9c9389" font-family="'DM Sans', system-ui, sans-serif" font-size="21" text-anchor="middle"><tspan x="170">Minneapolis</tspan><tspan x="170" dy="26">experiment</tspan></text>
+  <!-- 1989 -->
+  <text x="422" y="396" fill="#f7f3eb" font-family="'DM Sans', system-ui, sans-serif" font-size="30" font-weight="700" text-anchor="middle">1989</text>
+  <circle cx="422" cy="420" r="9" fill="#a14545" stroke="#1a1817" stroke-width="3"/>
+  <text x="422" y="462" fill="#9c9389" font-family="'DM Sans', system-ui, sans-serif" font-size="21" text-anchor="middle"><tspan x="422">Hot spots</tspan><tspan x="422" dy="26">of crime</tspan></text>
+  <!-- 1998 -->
+  <text x="674" y="396" fill="#f7f3eb" font-family="'DM Sans', system-ui, sans-serif" font-size="30" font-weight="700" text-anchor="middle">1998</text>
+  <circle cx="674" cy="420" r="11" fill="#7c2828" stroke="#1a1817" stroke-width="3"/>
+  <text x="674" y="462" fill="#c4bcae" font-family="'DM Sans', system-ui, sans-serif" font-size="21" font-weight="600" text-anchor="middle"><tspan x="674">Coins &#8220;evidence-</tspan><tspan x="674" dy="26">based policing&#8221;</tspan></text>
+  <!-- 2007 -->
+  <text x="926" y="396" fill="#f7f3eb" font-family="'DM Sans', system-ui, sans-serif" font-size="30" font-weight="700" text-anchor="middle">2007</text>
+  <circle cx="926" cy="420" r="9" fill="#a14545" stroke="#1a1817" stroke-width="3"/>
+  <text x="926" y="462" fill="#9c9389" font-family="'DM Sans', system-ui, sans-serif" font-size="21" text-anchor="middle"><tspan x="926">Cambridge</tspan><tspan x="926" dy="26">professor</tspan></text>
+  <!-- 2008 -->
+  <text x="1178" y="396" fill="#f7f3eb" font-family="'DM Sans', system-ui, sans-serif" font-size="30" font-weight="700" text-anchor="middle">2008</text>
+  <circle cx="1178" cy="420" r="9" fill="#a14545" stroke="#1a1817" stroke-width="3"/>
+  <text x="1178" y="462" fill="#9c9389" font-family="'DM Sans', system-ui, sans-serif" font-size="21" text-anchor="middle"><tspan x="1178">Police Exec.</tspan><tspan x="1178" dy="26">Programme</tspan></text>
+  <!-- 2016 -->
+  <text x="1430" y="396" fill="#f7f3eb" font-family="'DM Sans', system-ui, sans-serif" font-size="30" font-weight="700" text-anchor="middle">2016</text>
+  <circle cx="1430" cy="420" r="9" fill="#a14545" stroke="#1a1817" stroke-width="3"/>
+  <text x="1430" y="462" fill="#9c9389" font-family="'DM Sans', system-ui, sans-serif" font-size="21" text-anchor="middle"><tspan x="1430">Crime Harm</tspan><tspan x="1430" dy="26">Index</tspan></text>
+</svg>
