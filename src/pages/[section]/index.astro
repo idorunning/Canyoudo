@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import ExplorePanel from '../../components/ExplorePanel.astro';
+import { getCollection } from 'astro:content';
+import { SECTIONS, SECTION_LABELS, type Section } from '../../content/config';
+
+// One route per section. Adding a section to SECTIONS adds its listing page
+// automatically — no new file to write.
+export async function getStaticPaths() {
+  return SECTIONS.map((section) => ({ params: { section } }));
+}
+
+const section = Astro.params.section as Section;
+
+const descriptions: Record<Section, string> = {
+  'police-policy':
+    'The operational and organisational side of policing — misconduct prevention, officer wellbeing, use of force, neighbourhood policing, and evidence-based practice.',
+  'public-policy':
+    'Where policing meets the wider world — drugs, the economy, criminal justice, and the policy choices that shape public safety.',
+  'influential-people':
+    'Profiles of the people whose ideas and work have shaped modern policing — the researchers, reformers and practitioners worth knowing.',
+  other:
+    'Essays that do not fit a neat box — historical puzzles, methods, and the occasional digression.',
+};
+
+const articles = (
+  await getCollection('articles', ({ data }) => !data.draft && data.section === section)
+).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<BaseLayout title={SECTION_LABELS[section]} description={descriptions[section]}>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Section</p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+        {SECTION_LABELS[section]}
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        {descriptions[section]}
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-wide mx-auto px-6 lg:px-10">
+    <div class="lg:flex lg:gap-12 xl:gap-16">
+      <div class="min-w-0 lg:flex-1">
+        {articles.length > 0 ? (
+          articles.map((article) => (
+            <ArticleCard
+              href={`/${section}/${article.slug}`}
+              title={article.data.title}
+              description={article.data.description}
+              pubDate={article.data.pubDate}
+            />
+          ))
+        ) : (
+          <p class="font-serif text-ink-600 py-16">
+            No articles in this section yet.
+          </p>
+        )}
+      </div>
+
+      <aside class="mt-10 border-t border-ink-200 pt-10 pb-16 lg:mt-0 lg:w-64 xl:w-72 lg:shrink-0 lg:border-t-0 lg:border-l lg:pl-12 lg:pt-16">
+        <div class="lg:sticky lg:top-24">
+          <ExplorePanel />
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

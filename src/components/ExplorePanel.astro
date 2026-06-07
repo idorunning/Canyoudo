@@ -1,0 +1,96 @@
+---
+// Site-wide "explore" rail for the homepage and section listing pages: search,
+// sections, top topics, recent articles, a subscribe nudge and further reading.
+// Article pages keep their own "More articles" sidebar instead.
+import { getCollection } from 'astro:content';
+import { getTopics, buildEntries, articleMatchesEntry } from '../lib/topics';
+import { SECTIONS, SECTION_LABELS } from '../content/config';
+import ResourcesBlock from './ResourcesBlock.astro';
+
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+const recent = [...articles]
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 4);
+
+const topics = await getTopics();
+const entries = buildEntries(topics);
+const topTopics = entries
+  .map((entry) => {
+    const topic = topics.find((t) => t.slug === entry.slug);
+    const count = articles.filter((a) => articleMatchesEntry(a.body, a.data.tags, entry)).length;
+    return { label: topic.label, slug: topic.slug, count };
+  })
+  .filter((t) => t.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 8);
+
+const fmt = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+---
+
+<div class="space-y-10">
+  <div>
+    <button
+      type="button"
+      data-search-open
+      class="w-full flex items-center gap-2 border border-ink-200 rounded-md px-3 py-2 text-ink-500 hover:text-ink-800 hover:border-ink-300 transition-colors font-sans text-sm"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+      Search the site
+    </button>
+  </div>
+
+  <div>
+    <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-4">Sections</h2>
+    <ul class="space-y-2">
+      {SECTIONS.map((s) => (
+        <li>
+          <a href={`/${s}`} class="font-sans text-sm text-ink-700 hover:text-accent transition-colors">
+            {SECTION_LABELS[s]}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {topTopics.length > 0 && (
+    <div>
+      <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-4">Topics</h2>
+      <div class="flex flex-wrap gap-2">
+        {topTopics.map((t) => (
+          <a
+            href={`/topics/${t.slug}`}
+            class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+          >
+            {t.label}
+          </a>
+        ))}
+      </div>
+      <a href="/topics" class="inline-block mt-4 font-sans text-xs uppercase tracking-[0.15em] text-accent hover:text-accent-dark">
+        All topics →
+      </a>
+    </div>
+  )}
+
+  <div>
+    <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-4">Recent</h2>
+    <ul class="space-y-4">
+      {recent.map((a) => (
+        <li>
+          <a href={`/${a.data.section}/${a.slug}`} class="group block">
+            <span class="block font-display text-sm font-semibold text-ink-900 leading-snug group-hover:text-accent transition-colors">
+              {a.data.title}
+            </span>
+            <span class="block font-sans text-xs text-ink-500 mt-1">
+              {SECTION_LABELS[a.data.section]} · {fmt(a.data.pubDate)}
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <ResourcesBlock limit={5} />
+</div>

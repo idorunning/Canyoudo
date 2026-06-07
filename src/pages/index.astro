@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
+import ExplorePanel from '../components/ExplorePanel.astro';
 import { getCollection } from 'astro:content';
 
 import type { Section } from '../content/config';
@@ -60,24 +61,34 @@ const [feature, ...rest] = allArticles;
     </section>
   )}
 
-  {/* Recent articles */}
+  {/* Recent articles + Explore rail */}
   {rest.length > 0 && (
     <section>
       <div class="max-w-wide mx-auto px-6 lg:px-10">
-        <div class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 pt-12 pb-2">
-          More writing
-        </div>
-        <div>
-          {rest.map(article => (
-            <ArticleCard
-              href={`/${article.section}/${article.slug}`}
-              title={article.data.title}
-              description={article.data.description}
-              pubDate={article.data.pubDate}
-              section={article.section}
-              showSection={true}
-            />
-          ))}
+        <div class="lg:flex lg:gap-12 xl:gap-16">
+          <div class="min-w-0 lg:flex-1">
+            <div class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 pt-12 pb-2">
+              More writing
+            </div>
+            <div>
+              {rest.map(article => (
+                <ArticleCard
+                  href={`/${article.section}/${article.slug}`}
+                  title={article.data.title}
+                  description={article.data.description}
+                  pubDate={article.data.pubDate}
+                  section={article.section}
+                  showSection={true}
+                />
+              ))}
+            </div>
+          </div>
+
+          <aside class="mt-10 border-t border-ink-200 pt-10 pb-16 lg:mt-0 lg:w-64 xl:w-72 lg:shrink-0 lg:border-t-0 lg:border-l lg:pl-12 lg:pt-16">
+            <div class="lg:sticky lg:top-24">
+              <ExplorePanel />
+            </div>
+          </aside>
         </div>
       </div>
     </section>

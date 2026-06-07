@@ -78,6 +78,17 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
         true
       );
     </script>
+
+    {/* Analytics — GoatCounter (privacy-friendly, no cookie banner). Loads only
+        when PUBLIC_GOATCOUNTER_URL is set, so it stays off until configured. */}
+    {import.meta.env.PUBLIC_GOATCOUNTER_URL && (
+      <script
+        is:inline
+        data-goatcounter={import.meta.env.PUBLIC_GOATCOUNTER_URL}
+        async
+        src="//gc.zgo.at/count.js"
+      ></script>
+    )}
   </head>
   <body class="paper-grain text-ink-900 antialiased min-h-screen flex flex-col">
     <Header />

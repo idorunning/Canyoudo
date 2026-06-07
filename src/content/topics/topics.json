@@ -1,0 +1,112 @@
+{
+  "topics": [
+    {
+      "label": "Evidence-based policing",
+      "slug": "evidence-based-policing",
+      "aliases": ["evidence-based policing", "evidence based policing", "evidence-based", "what works", "what-works"],
+      "description": "Using the best available evidence to decide what policing actually does — and testing whether it works."
+    },
+    {
+      "label": "Neighbourhood policing",
+      "slug": "neighbourhood-policing",
+      "aliases": ["neighbourhood policing", "neighborhood policing", "community policing"],
+      "description": "Visible, local, relationship-based policing and the evidence on what it delivers."
+    },
+    {
+      "label": "Public confidence and legitimacy",
+      "slug": "public-confidence",
+      "aliases": ["public confidence", "public-confidence", "police legitimacy", "procedural justice"],
+      "description": "Why trust in the police matters, and how it is won or lost."
+    },
+    {
+      "label": "Misconduct and standards",
+      "slug": "misconduct",
+      "aliases": ["gross misconduct", "professional standards", "police misconduct", "vetting"],
+      "description": "Professional standards, the handling of misconduct, and what the warning signs reveal."
+    },
+    {
+      "label": "Accountability and oversight",
+      "slug": "accountability",
+      "aliases": ["accountability", "IOPC", "Independent Office for Police Conduct", "police watchdog"],
+      "description": "The bodies and processes that hold policing to account."
+    },
+    {
+      "label": "Mental health",
+      "slug": "mental-health",
+      "aliases": ["mental health", "mental-health", "mental illness", "mental ill-health"],
+      "description": "Policing's growing role at the intersection of mental health and public safety."
+    },
+    {
+      "label": "Neurodiversity",
+      "slug": "neurodiversity",
+      "aliases": ["neurodiversity", "neurodivergent", "ADHD", "autism", "autistic", "cognitive diversity"],
+      "description": "Cognitive difference among officers and the people the police meet."
+    },
+    {
+      "label": "Drugs and harm reduction",
+      "slug": "drugs",
+      "aliases": ["harm reduction", "harm-reduction", "nitazenes", "synthetic opioids", "fentanyl", "drug supply"],
+      "description": "Drug markets, synthetic opioids, and the case for harm reduction."
+    },
+    {
+      "label": "County lines",
+      "slug": "county-lines",
+      "aliases": ["county lines", "county-lines"],
+      "description": "Cross-border drug supply and the exploitation that drives it."
+    },
+    {
+      "label": "Stop and search",
+      "slug": "stop-and-search",
+      "aliases": ["stop and search", "stop-and-search", "stop & search"],
+      "description": "One of policing's most contested powers, and what the evidence says about it."
+    },
+    {
+      "label": "Use of force",
+      "slug": "use-of-force",
+      "aliases": ["use of force", "use-of-force"],
+      "description": "When and how force is used, and how it is scrutinised."
+    },
+    {
+      "label": "Surveillance and privacy",
+      "slug": "surveillance",
+      "aliases": ["surveillance", "facial recognition", "civil liberties", "civil-liberties", "privacy"],
+      "description": "The expanding reach of policing technology and its civil-liberties costs."
+    },
+    {
+      "label": "Predictive policing and AI",
+      "slug": "predictive-policing",
+      "aliases": ["predictive policing", "predictive-policing", "artificial intelligence", "machine learning", "Palantir", "algorithmic"],
+      "description": "Data, algorithms and artificial intelligence in operational policing."
+    },
+    {
+      "label": "Hotspot policing",
+      "slug": "hotspot-policing",
+      "aliases": ["hotspot policing", "hot spot policing", "hotspots"],
+      "description": "Concentrating resources where harm clusters."
+    },
+    {
+      "label": "Safeguarding and missing persons",
+      "slug": "safeguarding",
+      "aliases": ["safeguarding", "missing persons", "missing-persons", "missing people", "vulnerable people"],
+      "description": "Protecting people at risk, including the missing."
+    },
+    {
+      "label": "Leadership",
+      "slug": "leadership",
+      "aliases": ["police leadership", "senior leaders"],
+      "description": "How policing is led, and how culture is set from the top."
+    },
+    {
+      "label": "Law and courts",
+      "slug": "law",
+      "aliases": ["legal aid", "sentencing remarks", "PACE", "criminal justice"],
+      "description": "The legal framework around policing, from PACE to the courts."
+    },
+    {
+      "label": "Officer wellbeing",
+      "slug": "wellbeing",
+      "aliases": ["officer wellbeing", "burnout", "police burnout", "officer safety"],
+      "description": "The toll the job takes, and what sustains the people who do it."
+    }
+  ]
+}

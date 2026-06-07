@@ -1,0 +1,107 @@
+---
+// Site search overlay, powered by Pagefind. The index is built into
+// /pagefind/ at deploy time (see the "postbuild" script) and loaded lazily the
+// first time the modal opens. Any element with [data-search-open] triggers it
+// (the header icon, the mobile menu link, the Explore panel, …).
+//
+// Pagefind assets only exist in a built site, so in `astro dev` the modal shows
+// a graceful "available on the built site" message instead.
+---
+
+<div
+  id="tap-search-modal"
+  class="hidden fixed inset-0 z-[60] bg-ink-900/40 px-4 pt-20 md:pt-28"
+  aria-hidden="true"
+>
+  <div
+    class="mx-auto w-full max-w-2xl bg-paper-50 border border-ink-200 rounded-md overflow-hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Search"
+  >
+    <div class="flex items-center justify-between px-4 py-3 border-b border-ink-200">
+      <span class="font-sans text-xs uppercase tracking-[0.2em] text-accent">Search</span>
+      <button
+        type="button"
+        data-search-close
+        class="text-ink-500 hover:text-ink-900 p-1 -mr-1"
+        aria-label="Close search"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="6" y1="6" x2="18" y2="18" />
+          <line x1="18" y1="6" x2="6" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="p-4">
+      <div id="tap-search" class="tap-search"></div>
+      <p id="tap-search-fallback" class="hidden font-sans text-sm text-ink-600">
+        Search is available on the published site (the index is built at deploy time).
+      </p>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    const modal = document.getElementById('tap-search-modal');
+    if (!modal) return;
+    let loaded = false;
+
+    function loadPagefind() {
+      return new Promise(function (resolve, reject) {
+        if (window.__pagefindUILoaded) return resolve();
+        var css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(css);
+        var s = document.createElement('script');
+        s.src = '/pagefind/pagefind-ui.js';
+        s.onload = function () { window.__pagefindUILoaded = true; resolve(); };
+        s.onerror = function () { reject(new Error('pagefind missing')); };
+        document.head.appendChild(s);
+      });
+    }
+
+    function open() {
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (!loaded) {
+        loadPagefind()
+          .then(function () {
+            loaded = true;
+            new window.PagefindUI({ element: '#tap-search', showSubResults: true, showImages: false });
+            var input = modal.querySelector('input');
+            if (input) input.focus();
+          })
+          .catch(function () {
+            document.getElementById('tap-search-fallback').classList.remove('hidden');
+          });
+      } else {
+        var input = modal.querySelector('input');
+        if (input) input.focus();
+      }
+    }
+
+    function close() {
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('[data-search-open]').forEach(function (el) {
+      el.addEventListener('click', function (e) { e.preventDefault(); open(); });
+    });
+    modal.addEventListener('click', function (e) {
+      if (e.target === modal || e.target.closest('[data-search-close]')) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) close();
+      if ((e.key === '/' || (e.key === 'k' && (e.metaKey || e.ctrlKey))) && modal.classList.contains('hidden')) {
+        var tag = (document.activeElement && document.activeElement.tagName) || '';
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA') { e.preventDefault(); open(); }
+      }
+    });
+  })();
+</script>

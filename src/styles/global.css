@@ -324,3 +324,35 @@
 
 /* The article body sets a narrow measure; let the maps use full width */
 .prose-article .smce { max-width: none; }
+
+/* ------------------------------------------------------------------ */
+/* Auto-linked topic terms in article bodies (rehype-topic-links)      */
+/* Subtler than authored citations: ink-coloured with a dotted accent  */
+/* underline, so the prose stays readable but topics are discoverable. */
+/* ------------------------------------------------------------------ */
+.prose-article a.topic-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-decoration-color: theme('colors.ink.300');
+  text-underline-offset: 3px;
+}
+.prose-article a.topic-link:hover {
+  color: theme('colors.accent.DEFAULT');
+  text-decoration-color: theme('colors.accent.light');
+}
+
+/* ------------------------------------------------------------------ */
+/* Pagefind search UI — themed to the site's palette and type          */
+/* ------------------------------------------------------------------ */
+.tap-search {
+  --pagefind-ui-primary: theme('colors.accent.DEFAULT');
+  --pagefind-ui-text: theme('colors.ink.900');
+  --pagefind-ui-background: theme('colors.paper.50');
+  --pagefind-ui-border: theme('colors.ink.200');
+  --pagefind-ui-tag: theme('colors.paper.200');
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 6px;
+  --pagefind-ui-font: theme('fontFamily.sans');
+}

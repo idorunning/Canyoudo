@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const entry = await getEntry('books', 'books');
+const books = entry?.data.books ?? [];
+---
+
+<BaseLayout
+  title="Books"
+  description="Longer-form writing on policing and public policy by Nathan Tracey, available to buy."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Books</p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+        Books &amp; ebooks
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        Longer-form arguments that need more room than an article — the same evidence-led approach, at book length.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      {books.length > 0 ? (
+        <div class="space-y-12">
+          {books.map((book) => (
+            <article class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start border-b border-ink-200 pb-12 last:border-b-0">
+              {book.cover && (
+                <img
+                  src={book.cover}
+                  alt={`Cover of ${book.title}`}
+                  loading="lazy"
+                  class="w-40 shrink-0 rounded-md border border-ink-200 bg-paper-200"
+                />
+              )}
+              <div class="min-w-0">
+                <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900 leading-tight">
+                  {book.title}
+                </h2>
+                <p class="font-serif text-ink-700 leading-relaxed mt-3 max-w-2xl">
+                  {book.blurb}
+                </p>
+                <a
+                  href={book.buyUrl}
+                  rel="noopener"
+                  target="_blank"
+                  class="inline-block mt-5 font-sans text-sm font-medium bg-accent text-paper-50 px-5 py-2.5 rounded hover:bg-accent-dark transition-colors"
+                >
+                  {book.buyLabel ?? 'Get the book'}{book.price ? ` · ${book.price}` : ''} →
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="font-serif text-ink-600 max-w-2xl">
+          <p>No books listed yet. Add one in the <a href="/admin/" class="text-accent underline">editor</a> under <em>Books</em> — title, cover, a short blurb, and the link to wherever it's sold.</p>
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,59 @@
+---
+// Email signup, powered by MailerLite's embedded form (no server code).
+// Gated like the comments widget: it only renders the real form when both
+// PUBLIC_MAILERLITE_ACCOUNT_ID and PUBLIC_MAILERLITE_FORM_ID are set; otherwise
+// it shows a quiet "not configured" note. New-article emails are set up as an
+// RSS campaign in the MailerLite dashboard against /rss.xml — no code needed.
+interface Props {
+  variant?: 'inline' | 'compact' | 'page';
+}
+const { variant = 'inline' } = Astro.props;
+
+const ACCOUNT = import.meta.env.PUBLIC_MAILERLITE_ACCOUNT_ID;
+const FORM = import.meta.env.PUBLIC_MAILERLITE_FORM_ID;
+const configured = Boolean(ACCOUNT && FORM);
+
+const compact = variant === 'compact';
+const wrapper = compact
+  ? ''
+  : 'border border-ink-200 bg-paper-100 rounded-md p-6 md:p-8';
+const blurb =
+  'Occasional emails when something new goes up — evidence-based writing on policing and public policy. No spam, unsubscribe anytime.';
+---
+
+<section class={wrapper}>
+  <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-2">Newsletter</p>
+  <h2 class={`font-display font-semibold text-ink-900 ${compact ? 'text-lg' : 'text-2xl'}`}>
+    Get new articles by email
+  </h2>
+  <p class={`font-serif text-ink-700 leading-relaxed mt-2 ${compact ? 'text-sm max-w-xs' : 'text-base max-w-md'}`}>
+    {blurb}
+  </p>
+
+  <div class="mt-4">
+    {configured ? (
+      <div class="ml-embedded" data-form={FORM}></div>
+    ) : (
+      <div class="bg-paper-200 border border-ink-200 rounded-md p-4 font-sans text-sm text-ink-700">
+        <p class="font-medium text-ink-900 mb-1">Newsletter not configured.</p>
+        <p>
+          Create a free form at <a href="https://www.mailerlite.com" class="text-accent underline">mailerlite.com</a>
+          and set <code class="bg-paper-100 px-1.5 py-0.5 rounded text-xs">PUBLIC_MAILERLITE_ACCOUNT_ID</code> and
+          <code class="bg-paper-100 px-1.5 py-0.5 rounded text-xs">PUBLIC_MAILERLITE_FORM_ID</code>.
+        </p>
+      </div>
+    )}
+  </div>
+</section>
+
+{configured && (
+  <script is:inline define:vars={{ ACCOUNT }}>
+    (function (w, d, e, u, f, l, n) {
+      w['MailerLiteObject'] = f;
+      w[f] = w[f] || function () { (w[f].q = w[f].q || []).push(arguments); };
+      l = d.createElement(e); l.async = 1; l.src = u;
+      n = d.getElementsByTagName(e)[0]; n.parentNode.insertBefore(l, n);
+    })(window, document, 'script', 'https://assets.mailerlite.com/js/universal.js', 'ml');
+    ml('account', ACCOUNT);
+  </script>
+)}

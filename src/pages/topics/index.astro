@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { getTopics, buildEntries, articleMatchesEntry } from '../../lib/topics';
+
+const topics = await getTopics();
+const entries = buildEntries(topics);
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+
+// Count matching articles per topic so the cloud can scale by weight.
+const counts = entries.map((entry) => {
+  const topic = topics.find((t) => t.slug === entry.slug);
+  const count = articles.filter((a) => articleMatchesEntry(a.body, a.data.tags, entry)).length;
+  return { label: topic.label, slug: topic.slug, description: topic.description, count };
+});
+
+const withArticles = counts.filter((t) => t.count > 0).sort((a, b) => b.count - a.count);
+const max = Math.max(1, ...withArticles.map((t) => t.count));
+
+// Map a count to a Tailwind text size for a gentle tag-cloud effect.
+function sizeClass(count: number) {
+  const r = count / max;
+  if (r > 0.75) return 'text-2xl md:text-3xl';
+  if (r > 0.5) return 'text-xl md:text-2xl';
+  if (r > 0.25) return 'text-lg md:text-xl';
+  return 'text-base md:text-lg';
+}
+---
+
+<BaseLayout
+  title="Topics"
+  description="Browse Thinking About Policing by subject — from evidence-based policing and neighbourhood policing to drugs, surveillance and accountability."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Explore</p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+        Topics
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        Every subject the writing returns to. Pick one to see the pieces that touch it.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <div class="flex flex-wrap items-baseline gap-x-6 gap-y-4 font-display">
+        {withArticles.map((t) => (
+          <a
+            href={`/topics/${t.slug}`}
+            class={`${sizeClass(t.count)} font-semibold text-ink-800 hover:text-accent transition-colors leading-none`}
+          >
+            {t.label}
+            <span class="font-sans text-xs text-ink-400 align-super ml-1">{t.count}</span>
+          </a>
+        ))}
+      </div>
+      {withArticles.length === 0 && (
+        <p class="font-serif text-ink-600 py-10">No topics with articles yet.</p>
+      )}
+    </div>
+  </section>
+</BaseLayout>

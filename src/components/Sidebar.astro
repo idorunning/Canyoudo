@@ -3,14 +3,15 @@ import { getCollection } from 'astro:content';
 
 interface Props {
   currentSlug: string;
-  section: 'police-policy' | 'public-policy' | 'other';
+  section: 'police-policy' | 'public-policy' | 'influential-people' | 'other';
 }
 const { currentSlug, section } = Astro.props;
 
-const sections = ['police-policy', 'public-policy', 'other'] as const;
+const sections = ['police-policy', 'public-policy', 'influential-people', 'other'] as const;
 const labels: Record<string, string> = {
   'police-policy': 'Police Policy',
   'public-policy': 'Public Policy',
+  'influential-people': 'Influential People',
   other: 'Other',
 };
 

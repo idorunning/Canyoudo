@@ -1,6 +1,6 @@
 ---
 interface Props {
-  section: 'police-policy' | 'public-policy' | 'other';
+  section: 'police-policy' | 'public-policy' | 'influential-people' | 'other';
   size?: 'sm' | 'md';
 }
 
@@ -9,6 +9,7 @@ const { section, size = 'md' } = Astro.props;
 const labels = {
   'police-policy': 'Police Policy',
   'public-policy': 'Public Policy',
+  'influential-people': 'Influential People',
   'other': 'Other',
 };
 

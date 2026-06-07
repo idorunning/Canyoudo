@@ -1,0 +1,46 @@
+{
+  "resources": [
+    {
+      "label": "Society of Evidence Based Policing (SEBP)",
+      "url": "https://www.sebp.police.uk/",
+      "note": "Practitioner network promoting the use and generation of research evidence in policing.",
+      "category": "Evidence and research"
+    },
+    {
+      "label": "College of Policing — What Works",
+      "url": "https://www.college.police.uk/research/what-works-centre-crime-reduction",
+      "note": "The What Works Centre for Crime Reduction: reviews and toolkits on what reduces crime.",
+      "category": "Evidence and research"
+    },
+    {
+      "label": "College of Policing — Authorised Professional Practice (APP)",
+      "url": "https://www.college.police.uk/app",
+      "note": "The official national guidance for policing in England and Wales.",
+      "category": "Guidance and standards"
+    },
+    {
+      "label": "Cambridge Centre for Evidence-Based Policing",
+      "url": "https://www.crim.cam.ac.uk/global-policing/cebp",
+      "note": "Research and the annual Evidence-Based Policing conference.",
+      "category": "Evidence and research"
+    },
+    {
+      "label": "Independent Office for Police Conduct (IOPC)",
+      "url": "https://www.policeconduct.gov.uk/",
+      "note": "The independent body that oversees the police complaints system in England and Wales.",
+      "category": "Accountability"
+    },
+    {
+      "label": "His Majesty's Inspectorate of Constabulary (HMICFRS)",
+      "url": "https://hmicfrs.justiceinspectorates.gov.uk/",
+      "note": "Independent inspection reports on forces and thematic issues.",
+      "category": "Accountability"
+    },
+    {
+      "label": "Office for National Statistics — Crime in England and Wales",
+      "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice",
+      "note": "The headline national crime statistics.",
+      "category": "Data and statistics"
+    }
+  ]
+}

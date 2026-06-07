@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const entry = await getEntry('resources', 'resources');
+const resources = entry?.data.resources ?? [];
+
+// Group by category, preserving first-seen order.
+const groups: { category: string; items: typeof resources }[] = [];
+for (const r of resources) {
+  const category = r.category || 'Other';
+  let g = groups.find((x) => x.category === category);
+  if (!g) {
+    g = { category, items: [] };
+    groups.push(g);
+  }
+  g.items.push(r);
+}
+---
+
+<BaseLayout
+  title="Further reading"
+  description="Places to go deeper on evidence-based policing — research centres, guidance, oversight bodies and data."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Further reading</p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+        Further reading
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        A short, opinionated shelf of places worth your time — the bodies, research centres and data behind a lot of the writing here.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      {groups.length > 0 ? (
+        <div class="space-y-12 max-w-3xl">
+          {groups.map((g) => (
+            <div>
+              <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-5">{g.category}</h2>
+              <ul class="space-y-6">
+                {g.items.map((r) => (
+                  <li class="border-b border-ink-200 pb-6 last:border-b-0">
+                    <a
+                      href={r.url}
+                      rel="noopener"
+                      target="_blank"
+                      class="font-display text-lg font-semibold text-ink-900 hover:text-accent transition-colors"
+                    >
+                      {r.label} →
+                    </a>
+                    {r.note && (
+                      <p class="font-serif text-ink-700 leading-relaxed mt-1.5">{r.note}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="font-serif text-ink-600">
+          No links yet. Add some in the <a href="/admin/" class="text-accent underline">editor</a> under <em>Further reading</em>.
+        </p>
+      )}
+    </div>
+  </section>
+</BaseLayout>

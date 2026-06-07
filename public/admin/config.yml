@@ -62,6 +62,7 @@ collections:
             [
               { label: "Police Policy", value: "police-policy" },
               { label: "Public Policy", value: "public-policy" },
+              { label: "Influential People", value: "influential-people" },
               { label: "Other", value: "other" },
             ],
         }
@@ -138,3 +139,60 @@ collections:
           widget: "markdown",
           hint: "Footnotes use [^1] in the text and [^1]: ... at the foot, as in the existing pieces.",
         }
+
+  # Topics dictionary — the single source of truth behind tag suggestions, the
+  # in-body auto-links, and the /topics pages. Add a topic, list the phrasings
+  # it should match, and it starts linking and grouping articles automatically.
+  - name: "topics"
+    label: "Topics dictionary"
+    description: "Subjects the site links and groups by. Each topic auto-links the first time one of its terms appears in an article."
+    files:
+      - name: "topics"
+        label: "Topics"
+        file: "src/content/topics/topics.json"
+        fields:
+          - name: "topics"
+            label: "Topics"
+            widget: "list"
+            fields:
+              - { name: "label", label: "Display label", widget: "string" }
+              - { name: "slug", label: "URL slug", widget: "string", hint: "lowercase-hyphenated, e.g. stop-and-search" }
+              - { name: "aliases", label: "Aliases / other phrasings", widget: "list", required: false, hint: "Other ways the term appears in articles, e.g. 'stop & search'." }
+              - { name: "description", label: "Short description", widget: "text", required: false }
+
+  # Books / ebooks. The site links out to wherever each is sold.
+  - name: "books"
+    label: "Books"
+    files:
+      - name: "books"
+        label: "Books"
+        file: "src/content/books/books.json"
+        fields:
+          - name: "books"
+            label: "Books"
+            widget: "list"
+            fields:
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "cover", label: "Cover image", widget: "image", required: false, choose_url: true }
+              - { name: "blurb", label: "Blurb", widget: "text" }
+              - { name: "buyUrl", label: "Buy link (full URL)", widget: "string", hint: "Where it's sold, e.g. https://www.amazon.co.uk/..." }
+              - { name: "buyLabel", label: "Button label", widget: "string", required: false, default: "Get the book" }
+              - { name: "price", label: "Price (optional)", widget: "string", required: false }
+              - { name: "tags", label: "Related tags", widget: "list", required: false, hint: "If one of these matches an article's tag, the book is promoted at the foot of that article." }
+
+  # External "further reading" links (SEBP, College of Policing, …).
+  - name: "resources"
+    label: "Further reading"
+    files:
+      - name: "resources"
+        label: "Further reading links"
+        file: "src/content/resources/resources.json"
+        fields:
+          - name: "resources"
+            label: "Links"
+            widget: "list"
+            fields:
+              - { name: "label", label: "Title", widget: "string" }
+              - { name: "url", label: "URL (full)", widget: "string", hint: "Include https://" }
+              - { name: "note", label: "Note (optional)", widget: "text", required: false }
+              - { name: "category", label: "Category (optional)", widget: "string", required: false, hint: "Groups links on the page, e.g. 'Evidence and research'." }

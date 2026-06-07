@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Search" description="Search Thinking About Policing.">
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Search</p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight mb-8">
+        Search
+      </h1>
+      <div class="max-w-2xl">
+        <div id="search-page" class="tap-search"></div>
+        <p id="search-page-fallback" class="hidden font-sans text-sm text-ink-600">
+          Search is available on the published site (the index is built at deploy time).
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  (function () {
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = '/pagefind/pagefind-ui.css';
+    document.head.appendChild(css);
+    var s = document.createElement('script');
+    s.src = '/pagefind/pagefind-ui.js';
+    s.onload = function () {
+      new window.PagefindUI({ element: '#search-page', showSubResults: true, showImages: false });
+    };
+    s.onerror = function () {
+      document.getElementById('search-page-fallback').classList.remove('hidden');
+    };
+    document.head.appendChild(s);
+  })();
+</script>

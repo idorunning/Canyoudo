@@ -1,10 +1,11 @@
 ---
+import NewsletterForm from './NewsletterForm.astro';
 const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-ink-200 mt-24 py-12 bg-paper-100">
   <div class="max-w-wide mx-auto px-6 lg:px-10">
-    <div class="grid md:grid-cols-3 gap-8">
+    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
       <div>
         <p class="font-display text-lg font-semibold text-ink-900">
           Thinking About Policing
@@ -21,19 +22,27 @@ const year = new Date().getFullYear();
         <ul class="space-y-1.5 font-sans text-sm">
           <li><a href="/police-policy" class="text-ink-700 hover:text-accent">Police Policy</a></li>
           <li><a href="/public-policy" class="text-ink-700 hover:text-accent">Public Policy</a></li>
+          <li><a href="/influential-people" class="text-ink-700 hover:text-accent">Influential People</a></li>
           <li><a href="/other" class="text-ink-700 hover:text-accent">Other</a></li>
         </ul>
       </div>
 
       <div>
         <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
-          Elsewhere
+          Browse
         </p>
         <ul class="space-y-1.5 font-sans text-sm">
+          <li><a href="/topics" class="text-ink-700 hover:text-accent">Topics</a></li>
+          <li><a href="/books" class="text-ink-700 hover:text-accent">Books</a></li>
+          <li><a href="/resources" class="text-ink-700 hover:text-accent">Further reading</a></li>
           <li><a href="/about" class="text-ink-700 hover:text-accent">About</a></li>
           <li><a href="/rss.xml" class="text-ink-700 hover:text-accent">RSS feed</a></li>
           <li><a href="/admin/" class="text-ink-400 hover:text-accent">Editor</a></li>
         </ul>
+      </div>
+
+      <div>
+        <NewsletterForm variant="compact" />
       </div>
     </div>
 

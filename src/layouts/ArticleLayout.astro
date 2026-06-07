@@ -3,6 +3,9 @@ import BaseLayout from './BaseLayout.astro';
 import SectionBadge from '../components/SectionBadge.astro';
 import Comments from '../components/Comments.astro';
 import Sidebar from '../components/Sidebar.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import BookCTA from '../components/BookCTA.astro';
+import { getTopics, topicForTag } from '../lib/topics';
 import readingTime from 'reading-time';
 
 interface Props {
@@ -13,7 +16,7 @@ interface Props {
   heroImage?: string;
   tags?: string[];
   author: string;
-  section: 'police-policy' | 'public-policy' | 'other';
+  section: 'police-policy' | 'public-policy' | 'influential-people' | 'other';
   slug: string;
   rawContent: string;
 }
@@ -42,6 +45,9 @@ const minutes = Math.max(1, Math.ceil(stats.minutes));
 
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const pageId = `${section}-${slug}`;
+
+// Topics let the tag badges link through to their archive pages.
+const topics = await getTopics();
 ---
 
 <BaseLayout
@@ -53,7 +59,7 @@ const pageId = `${section}-${slug}`;
 >
   <div class="max-w-6xl mx-auto px-6 lg:px-10">
     <div class="lg:flex lg:gap-12 xl:gap-16">
-      <article class="mx-auto w-full max-w-3xl min-w-0 lg:mx-0 lg:flex-1">
+      <article class="mx-auto w-full max-w-3xl min-w-0 lg:mx-0 lg:flex-1" data-pagefind-body>
         {/* Title block */}
         <header class="border-b border-ink-200 py-14 md:py-20">
           <div class="mb-6">
@@ -102,16 +108,32 @@ const pageId = `${section}-${slug}`;
           </div>
 
           {tags && tags.length > 0 && (
-            <div class="mt-12 pt-6 border-t border-ink-200 flex flex-wrap gap-2">
-              {tags.map(tag => (
-                <span class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded">
-                  {tag}
-                </span>
-              ))}
+            <div data-pagefind-ignore class="mt-12 pt-6 border-t border-ink-200 flex flex-wrap gap-2">
+              {tags.map(tag => {
+                const topic = topicForTag(topics, tag);
+                return topic ? (
+                  <a
+                    href={`/topics/${topic.slug}`}
+                    class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+                  >
+                    {tag}
+                  </a>
+                ) : (
+                  <span class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded">
+                    {tag}
+                  </span>
+                );
+              })}
             </div>
           )}
 
-          <Comments pageId={pageId} pageTitle={title} pageUrl={pageUrl} />
+          <div data-pagefind-ignore>
+            <BookCTA tags={tags} />
+            <div class="mt-12">
+              <NewsletterForm variant="inline" />
+            </div>
+            <Comments pageId={pageId} pageTitle={title} pageUrl={pageUrl} />
+          </div>
         </div>
       </article>
 
