@@ -16,10 +16,12 @@ backend:
     delete: 'Delete {{collection}} "{{slug}}"'
     openAuthoring: '{{message}}'
 
-# Drafts live on their own branch and open a pull request. Nothing reaches the
-# live site until you hit Publish, which merges it. This is the "hold ready,
-# then publish with a click" board (Drafts / In review / Ready).
-publish_mode: editorial_workflow
+# Direct publishing: each Save commits straight to `main`, so the change goes
+# live on the next build (a minute or two) — no separate "Publish"/merge step.
+# To hold a piece back, switch on "Keep hidden on the live site" (the draft
+# flag); to take a published piece down, delete it or switch that flag on.
+# (Removed: publish_mode: editorial_workflow, which staged every change as a
+# pull request that only went live once merged.)
 
 # Run the editor locally with `npx decap-server` + `npm run dev`, then visit
 # http://localhost:4321/admin/ — edits write to your working copy, no login.
@@ -124,11 +126,11 @@ collections:
         }
       - {
           name: "draft",
-          label: "Keep hidden on the live site even after publishing",
+          label: "Keep hidden on the live site",
           widget: "boolean",
           default: false,
           required: false,
-          hint: "A second safety net. Leave off for a normal publish.",
+          hint: "On = saved but not shown on the site (your way to hold a draft or take a piece down). Off = live on the next build.",
         }
       - {
           name: "body",
