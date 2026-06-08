@@ -56,6 +56,8 @@ const [feature, ...rest] = allArticles;
           section={feature.section}
           showSection={true}
           variant="feature"
+          portrait={feature.data.portrait}
+          heroImage={feature.data.heroImage}
         />
       </div>
     </section>
@@ -79,6 +81,8 @@ const [feature, ...rest] = allArticles;
                   pubDate={article.data.pubDate}
                   section={article.section}
                   showSection={true}
+                  portrait={article.data.portrait}
+                  heroImage={article.data.heroImage}
                 />
               ))}
             </div>

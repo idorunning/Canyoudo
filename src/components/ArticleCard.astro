@@ -1,5 +1,6 @@
 ---
 import SectionBadge from './SectionBadge.astro';
+import { SECTION_LABELS } from '../content/config';
 
 interface Props {
   href: string;
@@ -9,9 +10,11 @@ interface Props {
   section?: 'police-policy' | 'public-policy' | 'influential-people' | 'other';
   showSection?: boolean;
   variant?: 'default' | 'feature';
-  // Optional head-and-shoulders portrait, shown beside the text (used on the
-  // Influential People cards).
+  // A portrait (Influential People) takes priority for the card thumbnail;
+  // otherwise the article's hero image is used. When neither is a committed
+  // image, the card shows a generated initial tile so every card has a visual.
   portrait?: string;
+  heroImage?: string;
 }
 
 const {
@@ -23,6 +26,7 @@ const {
   showSection = false,
   variant = 'default',
   portrait,
+  heroImage,
 } = Astro.props;
 
 const formattedDate = pubDate.toLocaleDateString('en-GB', {
@@ -32,17 +36,30 @@ const formattedDate = pubDate.toLocaleDateString('en-GB', {
 });
 
 const isFeature = variant === 'feature';
+const cardImage = portrait ?? heroImage;
+const initial = (title.match(/[A-Za-z0-9]/)?.[0] ?? '·').toUpperCase();
+const thumbSize = isFeature ? 'h-28 w-28 md:h-36 md:w-36' : 'h-20 w-20 md:h-24 md:w-24';
 ---
 
 <article class={`group ${isFeature ? 'py-10' : 'py-7'} border-b border-ink-200`}>
-  <a href={href} class={`block ${portrait ? 'sm:flex sm:gap-6 sm:items-start' : ''}`}>
-    {portrait && (
+  <a href={href} class="block sm:flex sm:gap-6 sm:items-start">
+    {cardImage ? (
       <img
-        src={portrait}
+        src={cardImage}
         alt=""
         loading="lazy"
-        class="mb-4 sm:mb-0 h-24 w-24 md:h-28 md:w-28 shrink-0 rounded-md object-cover bg-paper-200 ring-1 ring-ink-200"
+        class={`mb-4 sm:mb-0 shrink-0 rounded-md object-cover bg-paper-200 ring-1 ring-ink-200 ${thumbSize}`}
       />
+    ) : (
+      <div
+        class={`mb-4 sm:mb-0 shrink-0 rounded-md bg-ink-900 ring-1 ring-ink-200 flex flex-col items-center justify-center text-center overflow-hidden px-1 ${thumbSize}`}
+        aria-hidden="true"
+      >
+        <span class={`font-display font-semibold text-paper-100 leading-none ${isFeature ? 'text-5xl' : 'text-3xl md:text-4xl'}`}>{initial}</span>
+        {section && (
+          <span class="mt-1.5 font-sans text-[0.5rem] uppercase tracking-[0.15em] text-accent leading-tight">{SECTION_LABELS[section]}</span>
+        )}
+      </div>
     )}
 
     <div class="min-w-0">
