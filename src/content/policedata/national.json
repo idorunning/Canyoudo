@@ -1,0 +1,38 @@
+{
+  "kind": "national",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2025-01",
+    "fetchedAt": "2025-03-01T00:00:00.000Z",
+    "sample": true
+  },
+  "forcesCount": 44,
+  "forcesMissing": ["police-scotland", "northern-ireland"],
+  "stopSearch": {
+    "total": 41230,
+    "findRate": 0.23,
+    "byOutcome": [
+      { "label": "A no further action disposal", "count": 28110 },
+      { "label": "Arrest", "count": 5980 },
+      { "label": "Community resolution", "count": 2440 },
+      { "label": "Penalty Notice for Disorder", "count": 980 },
+      { "label": "Summons / charged by post", "count": 720 },
+      { "label": "Khat or Cannabis warning", "count": 3000 }
+    ],
+    "byOfficerEthnicity": [
+      { "label": "White", "count": 22100 },
+      { "label": "Black", "count": 9800 },
+      { "label": "Asian", "count": 5400 },
+      { "label": "Other", "count": 1530 },
+      { "label": "Not stated", "count": 2400 }
+    ],
+    "byObjectOfSearch": [
+      { "label": "Controlled drugs", "count": 24900 },
+      { "label": "Offensive weapons", "count": 4600 },
+      { "label": "Stolen goods", "count": 4100 },
+      { "label": "Article for use in theft", "count": 2200 },
+      { "label": "Anything to threaten or harm", "count": 1300 }
+    ]
+  }
+}

@@ -74,9 +74,61 @@ const resourcesSchema = z.object({
   ),
 });
 
+// --- Police data snapshot ---------------------------------------------------
+// A monthly, version-controlled snapshot of data.police.uk, written by
+// scripts/fetch-police-data.mjs (run on a schedule by .github/workflows/
+// police-data.yml) and read at build time by the /data explorer. Stop & search
+// is the only dataset the API exposes force-wide, so it is what the snapshot
+// carries; crime is inherently geographic and lives in the client-side lookup.
+//
+// Every file ships a `provenance` block — dataset month, fetch time, source and
+// licence — so each figure on the page can state exactly where it came from and
+// how old it is. `sample: true` marks placeholder data committed before the
+// first real fetch, so pages can flag it as illustrative.
+const provenanceSchema = z.object({
+  source: z.string().default('https://data.police.uk'),
+  licence: z.string().default('Open Government Licence v3.0'),
+  datasetMonth: z.string(), // 'YYYY-MM' — the month the data describes
+  fetchedAt: z.string(), // ISO timestamp of the fetch
+  sample: z.boolean().default(false),
+});
+
+const countSchema = z.object({ label: z.string(), count: z.number() });
+
+const stopSearchSchema = z.object({
+  total: z.number(),
+  byOutcome: z.array(countSchema).default([]),
+  byOfficerEthnicity: z.array(countSchema).default([]),
+  byObjectOfSearch: z.array(countSchema).default([]),
+  // Share of searches that found the object sought — the "find rate".
+  findRate: z.number().nullable().default(null),
+});
+
+const nationalSnapshot = z.object({
+  kind: z.literal('national'),
+  provenance: provenanceSchema,
+  forcesCount: z.number(),
+  // Forces that returned no stop & search for the dataset month, so coverage
+  // gaps are visible rather than silently flattening the national total.
+  forcesMissing: z.array(z.string()).default([]),
+  stopSearch: stopSearchSchema,
+});
+
+const forceSnapshot = z.object({
+  kind: z.literal('force'),
+  provenance: provenanceSchema,
+  id: z.string(),
+  name: z.string(),
+  url: z.string().optional(),
+  stopSearch: stopSearchSchema.nullable().default(null),
+});
+
+const policeDataSchema = z.discriminatedUnion('kind', [nationalSnapshot, forceSnapshot]);
+
 export const collections = {
   articles: defineCollection({ type: 'content', schema: articleSchema }),
   topics: defineCollection({ type: 'data', schema: topicsSchema }),
   books: defineCollection({ type: 'data', schema: booksSchema }),
   resources: defineCollection({ type: 'data', schema: resourcesSchema }),
+  policedata: defineCollection({ type: 'data', schema: policeDataSchema }),
 };

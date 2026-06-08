@@ -1,0 +1,37 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2025-01",
+    "fetchedAt": "2025-03-01T00:00:00.000Z",
+    "sample": true
+  },
+  "id": "metropolitan",
+  "name": "Metropolitan Police Service",
+  "url": "https://www.met.police.uk/",
+  "stopSearch": {
+    "total": 16800,
+    "findRate": 0.21,
+    "byOutcome": [
+      { "label": "A no further action disposal", "count": 11900 },
+      { "label": "Arrest", "count": 2520 },
+      { "label": "Community resolution", "count": 980 },
+      { "label": "Khat or Cannabis warning", "count": 1100 },
+      { "label": "Penalty Notice for Disorder", "count": 300 }
+    ],
+    "byOfficerEthnicity": [
+      { "label": "White", "count": 6900 },
+      { "label": "Black", "count": 5800 },
+      { "label": "Asian", "count": 2700 },
+      { "label": "Other", "count": 900 },
+      { "label": "Not stated", "count": 500 }
+    ],
+    "byObjectOfSearch": [
+      { "label": "Controlled drugs", "count": 9800 },
+      { "label": "Offensive weapons", "count": 2600 },
+      { "label": "Stolen goods", "count": 1900 },
+      { "label": "Article for use in theft", "count": 1100 }
+    ]
+  }
+}

@@ -1,6 +1,12 @@
 {
   "topics": [
     {
+      "label": "More or Less Policing",
+      "slug": "reading-the-data",
+      "aliases": ["more or less policing", "reading the data"],
+      "description": "Reading police statistics without being fooled by them — a strand inspired by Radio 4's More or Less, paired with the live data explorer."
+    },
+    {
       "label": "Evidence-based policing",
       "slug": "evidence-based-policing",
       "aliases": ["evidence-based policing", "evidence based policing", "evidence-based", "what works", "what-works"],

@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaveatBanner from '../../components/data/CaveatBanner.astro';
+import ProvenanceStamp from '../../components/data/ProvenanceStamp.astro';
+import BarChart from '../../components/data/BarChart.astro';
+import { getCollection } from 'astro:content';
+
+const entries = await getCollection('policedata');
+const national = entries.find((e) => e.data.kind === 'national')?.data as
+  | Extract<(typeof entries)[number]['data'], { kind: 'national' }>
+  | undefined;
+
+const forces = entries
+  .filter((e) => e.data.kind === 'force')
+  .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'force' }>)
+  .sort((a, b) => (b.stopSearch?.total ?? 0) - (a.stopSearch?.total ?? 0));
+
+const fmt = new Intl.NumberFormat('en-GB');
+const ss = national?.stopSearch;
+---
+<BaseLayout
+  title="The Data"
+  description="A monthly, plainly-labelled snapshot of stop & search across England & Wales — and how to read it without being fooled. In the spirit of Radio 4's More or Less."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">The Data · More or Less Policing</p>
+        <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+          Police data, read carefully.
+        </h1>
+        <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-7">
+          Start national, drill into any force, then look up your own street. Every figure comes
+          straight from <a href="https://data.police.uk" class="text-accent hover:text-accent-dark">data.police.uk</a>,
+          stamped with the month it describes and the day it was fetched — because, as Radio 4's
+          <em>More or Less</em> has spent twenty years showing, a number without its context can mislead
+          as easily as inform.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 space-y-12">
+      <CaveatBanner />
+
+      {ss && national ? (
+        <div class="space-y-12">
+          <div>
+            <div class="flex items-baseline justify-between flex-wrap gap-2 border-b border-ink-200 pb-3 mb-6">
+              <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900">Stop &amp; search, nationally</h2>
+              <span class="font-sans text-sm text-ink-500">
+                {fmt.format(ss.total)} searches · {national.forcesCount - national.forcesMissing.length} forces reporting
+              </span>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+              <div>
+                <BarChart caption="Who gets searched (officer-defined ethnicity)" data={ss.byOfficerEthnicity} asPercent />
+                <p class="font-serif text-sm text-ink-600 leading-relaxed mt-3">
+                  These are raw shares, not rates. To judge whether a group is searched
+                  <em>disproportionately</em> you need the local population as the denominator — the trap the
+                  <a href="/other/reading-the-data" class="text-accent hover:text-accent-dark">explainer</a> pulls apart.
+                </p>
+              </div>
+              <div>
+                <BarChart caption="What officers were looking for" data={ss.byObjectOfSearch} asPercent />
+              </div>
+              <div>
+                <BarChart caption="What happened next (outcome)" data={ss.byOutcome} asPercent />
+              </div>
+              <div class="flex flex-col justify-center">
+                <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Find rate</p>
+                <p class="font-display text-5xl font-semibold text-ink-900">
+                  {ss.findRate == null ? '—' : `${Math.round(ss.findRate * 100)}%`}
+                </p>
+                <p class="font-serif text-sm text-ink-600 leading-relaxed mt-2 max-w-xs">
+                  The share of searches that actually found what was being looked for. The other
+                  {ss.findRate == null ? '' : ` ${100 - Math.round(ss.findRate * 100)}%`} found nothing.
+                </p>
+              </div>
+            </div>
+
+            {national.forcesMissing.length > 0 && (
+              <p class="font-sans text-xs text-ink-500 mt-6">
+                No data for this month from: {national.forcesMissing.join(', ')}.
+              </p>
+            )}
+            <div class="mt-6">
+              <ProvenanceStamp datasetMonth={national.provenance.datasetMonth} fetchedAt={national.provenance.fetchedAt} sample={national.provenance.sample} />
+            </div>
+          </div>
+
+          <div>
+            <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900 border-b border-ink-200 pb-3 mb-6">By force</h2>
+            <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-1">
+              {forces.map((f) => (
+                <li class="flex items-baseline justify-between gap-3 py-2 border-b border-ink-200/60">
+                  <a href={`/data/force/${f.id}`} class="font-sans text-sm text-ink-700 hover:text-accent transition-colors truncate">
+                    {f.name}
+                  </a>
+                  <span class="font-sans text-xs tabular-nums text-ink-500 shrink-0">
+                    {f.stopSearch ? fmt.format(f.stopSearch.total) : '—'}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="border-t border-ink-200 pt-10">
+            <h2 class="font-display text-2xl font-semibold text-ink-900 mb-2">Look up your street</h2>
+            <p class="font-serif text-ink-700 leading-relaxed max-w-2xl mb-4">
+              The national and force figures above are stop &amp; search — the one thing the API reports
+              force-wide. Crime is reported by location, so to see it you point at a place.
+            </p>
+            <a href="/data/lookup" class="inline-block font-sans text-sm uppercase tracking-[0.15em] text-accent hover:text-accent-dark">
+              Open the area lookup →
+            </a>
+          </div>
+        </div>
+      ) : (
+        <p class="font-serif text-lg text-ink-600">
+          No snapshot found. Run <code class="text-sm bg-paper-200 px-2 py-1 rounded">node scripts/fetch-police-data.mjs</code> to populate it.
+        </p>
+      )}
+    </div>
+  </section>
+</BaseLayout>

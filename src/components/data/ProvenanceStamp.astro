@@ -1,0 +1,27 @@
+---
+// A small, honest footer for any figure: which month the data describes, when it
+// was fetched, the source and licence. If the snapshot is still the committed
+// placeholder, say so plainly rather than implying it is real.
+interface Props {
+  datasetMonth: string; // 'YYYY-MM'
+  fetchedAt: string; // ISO
+  sample?: boolean;
+}
+const { datasetMonth, fetchedAt, sample = false } = Astro.props;
+
+const monthLabel = (() => {
+  const [y, m] = datasetMonth.split('-').map(Number);
+  if (!y || !m) return datasetMonth;
+  return new Date(y, m - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+})();
+const fetchedLabel = new Date(fetchedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+<p class="font-sans text-xs text-ink-500 leading-relaxed">
+  {sample && (
+    <span class="inline-block mb-1 text-accent font-medium">Illustrative sample data — awaiting first live fetch.</span>
+  )}
+  {sample && <br />}
+  Data for <strong class="font-medium text-ink-700">{monthLabel}</strong>, fetched {fetchedLabel}.
+  Source: <a href="https://data.police.uk" class="hover:text-accent underline underline-offset-2">data.police.uk</a>,
+  <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" class="hover:text-accent underline underline-offset-2">Open Government Licence v3.0</a>.
+</p>

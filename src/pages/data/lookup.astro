@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaveatBanner from '../../components/data/CaveatBanner.astro';
+---
+<BaseLayout
+  title="Look up your area — The Data"
+  description="Enter a postcode to see recent street-level crime and your neighbourhood policing team, live from data.police.uk."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <div class="max-w-3xl">
+        <a href="/data" class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 hover:text-accent">← The Data</a>
+        <h1 class="font-display text-3xl md:text-5xl font-semibold text-ink-900 leading-tight tracking-tight mt-4">
+          Look up your area
+        </h1>
+        <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
+          A postcode is enough. This fetches the most recent month of street-level crime within about a
+          mile, and the neighbourhood team that polices it — live, the moment you ask.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 space-y-10">
+      <form id="lookup-form" class="flex flex-wrap gap-3 items-stretch max-w-xl">
+        <label for="postcode" class="sr-only">Postcode</label>
+        <input
+          id="postcode"
+          name="postcode"
+          type="text"
+          autocomplete="postal-code"
+          placeholder="e.g. SW1A 1AA"
+          class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
+        />
+        <button type="submit" class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors">
+          Look up
+        </button>
+      </form>
+
+      <p id="lookup-status" class="font-sans text-sm text-ink-500" role="status" aria-live="polite"></p>
+
+      <div id="lookup-results" class="hidden space-y-12"></div>
+
+      <CaveatBanner />
+    </div>
+  </section>
+
+  <script>
+    // Deep, on-demand layer.
+    //   • postcodes.io — postcode → lat/lng (CORS-open, called directly).
+    //   • data.police.uk — street crime + neighbourhood, fetched through our
+    //     same-origin Netlify proxy (netlify/functions/police.mjs) so we never
+    //     depend on the upstream's CORS headers. Swap back to the direct
+    //     'https://data.police.uk/api' for a quick test if needed.
+    const POLICE_BASE = '/api/police';
+
+    const form = document.getElementById('lookup-form');
+    const status = document.getElementById('lookup-status');
+    const results = document.getElementById('lookup-results');
+
+    const fmt = new Intl.NumberFormat('en-GB');
+    const titleCase = (s) => s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+    async function getJSON(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`${url} → ${res.status}`);
+      return res.json();
+    }
+
+    function bars(rows, total) {
+      const max = Math.max(...rows.map((r) => r.count), 1);
+      return rows
+        .map((r) => {
+          const pct = Math.round((r.count / total) * 100);
+          const w = Math.max((r.count / max) * 100, 0.5);
+          return `<tr>
+            <th scope="row" class="py-1.5 pr-3 text-left font-normal text-ink-700 whitespace-nowrap">${r.label}</th>
+            <td class="py-1.5 w-2/3"><div class="flex items-center gap-2">
+              <div class="flex-1 bg-paper-200 rounded-sm overflow-hidden h-3.5"><div class="h-full bg-accent/80 rounded-sm" style="width:${w}%"></div></div>
+              <span class="tabular-nums text-ink-600 w-12 text-right shrink-0">${pct}%</span>
+            </div></td></tr>`;
+        })
+        .join('');
+    }
+
+    async function lookup(postcode) {
+      status.textContent = 'Finding that postcode…';
+      results.classList.add('hidden');
+      results.innerHTML = '';
+
+      let loc;
+      try {
+        const pc = await getJSON(`https://api.postcodes.io/postcodes/${encodeURIComponent(postcode.trim())}`);
+        loc = { lat: pc.result.latitude, lng: pc.result.longitude, name: pc.result.postcode, area: pc.result.admin_district };
+      } catch {
+        status.textContent = `Couldn't find the postcode "${postcode}". Check it and try again.`;
+        return;
+      }
+
+      status.textContent = `Fetching crime near ${loc.name}…`;
+
+      let crimes = [];
+      let hood = null;
+      try {
+        [crimes, hood] = await Promise.all([
+          getJSON(`${POLICE_BASE}/crimes-street/all-crime?lat=${loc.lat}&lng=${loc.lng}`),
+          getJSON(`${POLICE_BASE}/locate-neighbourhood?q=${loc.lat},${loc.lng}`).catch(() => null),
+        ]);
+      } catch (err) {
+        status.textContent =
+          'The police data service is not responding just now — it has occasional outages and refreshes monthly. Please try again shortly. (' +
+          err.message + ')';
+        return;
+      }
+
+      // Tally crimes by category for the month the API returned.
+      const counts = new Map();
+      let month = '';
+      for (const c of crimes) {
+        month = c.month || month;
+        const label = titleCase(c.category || 'other');
+        counts.set(label, (counts.get(label) ?? 0) + 1);
+      }
+      const rows = [...counts.entries()].map(([label, count]) => ({ label, count })).sort((a, b) => b.count - a.count);
+      const total = crimes.length;
+
+      let team = null;
+      if (hood && hood.force && hood.neighbourhood) {
+        team = await getJSON(`${POLICE_BASE}/${hood.force}/${hood.neighbourhood}`).catch(() => null);
+      }
+
+      const monthLabel = month
+        ? new Date(`${month}-01`).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+        : 'the latest available month';
+
+      status.textContent = '';
+      results.innerHTML = `
+        <div>
+          <div class="flex items-baseline justify-between flex-wrap gap-2 border-b border-ink-200 pb-3 mb-6">
+            <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900">Crime near ${loc.name}</h2>
+            <span class="font-sans text-sm text-ink-500">${fmt.format(total)} crimes · ${monthLabel}</span>
+          </div>
+          ${total === 0
+            ? '<p class="font-serif text-ink-600">No street-level crimes recorded within about a mile that month. Remember the locations are anonymised and snapped, so this is approximate.</p>'
+            : `<table class="w-full border-collapse font-sans text-sm max-w-2xl">${bars(rows, total)}</table>`}
+          <p class="font-sans text-xs text-ink-500 mt-4">
+            Within ~1 mile of ${loc.name} (${loc.area}). Source: data.police.uk, Open Government Licence v3.0.
+            Locations are anonymised — treat as approximate.
+          </p>
+        </div>
+        ${team
+          ? `<div class="border-t border-ink-200 pt-8">
+              <h2 class="font-display text-2xl font-semibold text-ink-900 mb-3">Your neighbourhood team</h2>
+              <p class="font-serif text-ink-700 leading-relaxed max-w-2xl">${(team.name || '').trim()}</p>
+              ${team.contact_details && team.contact_details.email ? `<p class="font-sans text-sm text-ink-600 mt-2">${team.contact_details.email}</p>` : ''}
+              ${team.url_force ? `<a href="${team.url_force}" class="inline-block mt-3 font-sans text-sm text-accent hover:text-accent-dark">Local team page ↗</a>` : ''}
+            </div>`
+          : ''}
+      `;
+      results.classList.remove('hidden');
+    }
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const pc = new FormData(form).get('postcode');
+      if (pc) lookup(String(pc));
+    });
+  </script>
+</BaseLayout>

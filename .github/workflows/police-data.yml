@@ -1,0 +1,38 @@
+name: Refresh police data snapshot
+
+# data.police.uk publishes monthly, a couple of months in arrears. We check on
+# the 5th of each month (and on demand) and commit the snapshot if it changed.
+# Netlify's GitHub integration redeploys the site on the resulting push.
+on:
+  schedule:
+    - cron: '0 6 5 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch snapshot
+        run: node scripts/fetch-police-data.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "police-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if [ -n "$(git status --porcelain src/content/policedata)" ]; then
+            git add src/content/policedata
+            month=$(node -p "require('./src/content/policedata/national.json').provenance.datasetMonth")
+            git commit -m "Refresh police data snapshot ($month)"
+            git push
+          else
+            echo "No change in snapshot."
+          fi

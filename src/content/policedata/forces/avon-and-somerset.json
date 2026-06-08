@@ -1,0 +1,35 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2025-01",
+    "fetchedAt": "2025-03-01T00:00:00.000Z",
+    "sample": true
+  },
+  "id": "avon-and-somerset",
+  "name": "Avon and Somerset Constabulary",
+  "url": "https://www.avonandsomerset.police.uk/",
+  "stopSearch": {
+    "total": 1240,
+    "findRate": 0.27,
+    "byOutcome": [
+      { "label": "A no further action disposal", "count": 820 },
+      { "label": "Arrest", "count": 210 },
+      { "label": "Community resolution", "count": 120 },
+      { "label": "Khat or Cannabis warning", "count": 90 }
+    ],
+    "byOfficerEthnicity": [
+      { "label": "White", "count": 940 },
+      { "label": "Black", "count": 150 },
+      { "label": "Asian", "count": 80 },
+      { "label": "Other", "count": 40 },
+      { "label": "Not stated", "count": 30 }
+    ],
+    "byObjectOfSearch": [
+      { "label": "Controlled drugs", "count": 860 },
+      { "label": "Offensive weapons", "count": 150 },
+      { "label": "Stolen goods", "count": 130 }
+    ]
+  }
+}
