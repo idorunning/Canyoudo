@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 560" width="1600" height="560" role="img" aria-label="The Fuel Theft Crisis">
+  <rect width="1600" height="560" fill="#1a1817"/>
+  <rect x="110" y="92" width="64" height="4" fill="#7c2828"/>
+  <text x="110" y="134" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="24" font-weight="600" letter-spacing="6">POLICE POLICY</text>
+  <text x="106" y="266" fill="#fbf8f1" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="78" font-weight="600">The Fuel Theft Crisis</text>
+  <text x="110" y="326" fill="#c4bcae" font-family="'Source Serif 4', Georgia, serif" font-size="33" font-style="italic">When police stop investigating</text>
+  <g transform="translate(1180,128) scale(0.92)" fill="none" stroke="#e7dccb" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="46" y="50" width="116" height="170" rx="10"/>
+    <rect x="64" y="70" width="80" height="54" rx="5"/>
+    <line x1="64" y1="150" x2="144" y2="150"/><line x1="64" y1="172" x2="144" y2="172"/>
+    <path d="M162 96 h26 a14 14 0 0 1 14 14 v74 a16 16 0 0 0 16 16 h4"/>
+    <rect x="218" y="150" width="44" height="22" rx="6"/>
+  </g>
+</svg>

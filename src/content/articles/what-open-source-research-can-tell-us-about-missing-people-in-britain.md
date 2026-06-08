@@ -3,6 +3,8 @@ section: "police-policy"
 title: "The Quiet Data of the Missing: What Open-Source Research Can and Cannot Tell Us About Missing People in Britain"
 description: "Around 170,000 people are reported missing in the UK each year, yet most of what the public sees is a thin, skewed sliver of that total. This piece assesses what open-source research can actually offer—and where it misleads."
 pubDate: 2026-06-05
+heroImage: "/images/missing-people-hero.svg"
+thumbnail: "/images/missing-people-hero.svg"
 tags: ["missing-persons", "osint", "open-source", "data", "policing", "safeguarding", "county-lines", "ethics", "policy"]
 ---
 Every ninety seconds or so, someone in the United Kingdom is reported missing. The figure most often quoted by the National Crime Agency and the charity Missing People is around 170,000 people each year, generating something closer to 330,000 separate incidents. The gap between those two numbers is itself the first useful fact about missing people: a great many of them go missing more than once.

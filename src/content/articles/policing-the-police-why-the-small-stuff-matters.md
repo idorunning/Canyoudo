@@ -5,7 +5,8 @@ description: When a police officer is finally dismissed or even convicted for
   gross misconduct, how often do their colleagues quietly nod and say something
   like, “I saw that coming”? More often than we’d like…
 pubDate: 2025-09-09
-thumbnail: /images/image_editor_output_image1681454371-17655514280582700668508713128379.png
+heroImage: "/images/misconduct-hero.svg"
+thumbnail: "/images/misconduct-hero.svg"
 tags:
   - crime
   - evidence-based

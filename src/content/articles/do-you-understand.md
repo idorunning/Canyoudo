@@ -3,7 +3,8 @@ section: "police-policy"
 title: "“Do you understand?”"
 description: "When comprehension, shame, and social pressure hinder a fair process"
 pubDate: 2026-01-07
-thumbnail: "/images/17678715405872662829070664106378.jpg"
+heroImage: "/images/understand-hero.svg"
+thumbnail: "/images/understand-hero.svg"
 ---
 ## Why we should stop asking, and start explaining
 
