@@ -1,0 +1,1897 @@
+{
+  "source": "Home Office — Police recorded crime open data (Open Government Licence v3.0)",
+  "period": "2025/26",
+  "fetchedAt": "2026-06-08T04:00:42.234Z",
+  "file": "Police recorded crime open data Police Force Area tables, year ending March 2013 onwards",
+  "national": {
+    "total": 3992353,
+    "byOffenceGroup": [
+      {
+        "label": "Violence against the person",
+        "count": 1495462
+      },
+      {
+        "label": "Theft offences",
+        "count": 1246838
+      },
+      {
+        "label": "Criminal damage and arson",
+        "count": 350750
+      },
+      {
+        "label": "Public order offences",
+        "count": 349502
+      },
+      {
+        "label": "Drug offences",
+        "count": 175256
+      },
+      {
+        "label": "Sexual offences",
+        "count": 163479
+      },
+      {
+        "label": "Miscellaneous crimes against society",
+        "count": 97340
+      },
+      {
+        "label": "Robbery",
+        "count": 66740
+      },
+      {
+        "label": "Possession of weapons offences",
+        "count": 46986
+      }
+    ]
+  },
+  "forces": {
+    "avon-and-somerset": {
+      "name": "Avon and Somerset",
+      "total": 134356,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 53255
+        },
+        {
+          "label": "Theft offences",
+          "count": 38872
+        },
+        {
+          "label": "Public order offences",
+          "count": 16366
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 11315
+        },
+        {
+          "label": "Sexual offences",
+          "count": 5890
+        },
+        {
+          "label": "Drug offences",
+          "count": 3000
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2671
+        },
+        {
+          "label": "Robbery",
+          "count": 2163
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 824
+        }
+      ]
+    },
+    "bedfordshire": {
+      "name": "Bedfordshire",
+      "total": 39707,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 14597
+        },
+        {
+          "label": "Theft offences",
+          "count": 12965
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 3309
+        },
+        {
+          "label": "Public order offences",
+          "count": 3232
+        },
+        {
+          "label": "Drug offences",
+          "count": 1813
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1720
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 960
+        },
+        {
+          "label": "Robbery",
+          "count": 622
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 489
+        }
+      ]
+    },
+    "british-transport-police": {
+      "name": "British Transport Police",
+      "total": 68479,
+      "byOffenceGroup": [
+        {
+          "label": "Theft offences",
+          "count": 26331
+        },
+        {
+          "label": "Public order offences",
+          "count": 14160
+        },
+        {
+          "label": "Violence against the person",
+          "count": 12716
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 8310
+        },
+        {
+          "label": "Drug offences",
+          "count": 2736
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1754
+        },
+        {
+          "label": "Robbery",
+          "count": 1341
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 612
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 519
+        }
+      ]
+    },
+    "cambridgeshire": {
+      "name": "Cambridgeshire",
+      "total": 53106,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 20247
+        },
+        {
+          "label": "Theft offences",
+          "count": 16430
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 5030
+        },
+        {
+          "label": "Public order offences",
+          "count": 3610
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2369
+        },
+        {
+          "label": "Drug offences",
+          "count": 2363
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1724
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 871
+        },
+        {
+          "label": "Robbery",
+          "count": 462
+        }
+      ]
+    },
+    "cheshire": {
+      "name": "Cheshire",
+      "total": 58384,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 26139
+        },
+        {
+          "label": "Theft offences",
+          "count": 12041
+        },
+        {
+          "label": "Public order offences",
+          "count": 7263
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 4208
+        },
+        {
+          "label": "Sexual offences",
+          "count": 3099
+        },
+        {
+          "label": "Drug offences",
+          "count": 3029
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1582
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 652
+        },
+        {
+          "label": "Robbery",
+          "count": 371
+        }
+      ]
+    },
+    "cleveland": {
+      "name": "Cleveland",
+      "total": 55100,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 19760
+        },
+        {
+          "label": "Theft offences",
+          "count": 15854
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 6823
+        },
+        {
+          "label": "Public order offences",
+          "count": 4571
+        },
+        {
+          "label": "Drug offences",
+          "count": 2247
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2232
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2015
+        },
+        {
+          "label": "Robbery",
+          "count": 1046
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 552
+        }
+      ]
+    },
+    "cumbria": {
+      "name": "Cumbria",
+      "total": 27488,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 12230
+        },
+        {
+          "label": "Theft offences",
+          "count": 5218
+        },
+        {
+          "label": "Public order offences",
+          "count": 3012
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 2989
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1372
+        },
+        {
+          "label": "Drug offences",
+          "count": 1347
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 799
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 417
+        },
+        {
+          "label": "Robbery",
+          "count": 104
+        }
+      ]
+    },
+    "derbyshire": {
+      "name": "Derbyshire",
+      "total": 64990,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 27982
+        },
+        {
+          "label": "Theft offences",
+          "count": 15699
+        },
+        {
+          "label": "Public order offences",
+          "count": 7336
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 5685
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2862
+        },
+        {
+          "label": "Drug offences",
+          "count": 2564
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1419
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 838
+        },
+        {
+          "label": "Robbery",
+          "count": 605
+        }
+      ]
+    },
+    "devon-and-cornwall": {
+      "name": "Devon and Cornwall",
+      "total": 93239,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 43085
+        },
+        {
+          "label": "Theft offences",
+          "count": 21384
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 10049
+        },
+        {
+          "label": "Public order offences",
+          "count": 6881
+        },
+        {
+          "label": "Sexual offences",
+          "count": 4960
+        },
+        {
+          "label": "Drug offences",
+          "count": 2771
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2183
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1278
+        },
+        {
+          "label": "Robbery",
+          "count": 648
+        }
+      ]
+    },
+    "dorset": {
+      "name": "Dorset",
+      "total": 35878,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 14024
+        },
+        {
+          "label": "Theft offences",
+          "count": 11943
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 3600
+        },
+        {
+          "label": "Public order offences",
+          "count": 2417
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1723
+        },
+        {
+          "label": "Drug offences",
+          "count": 1071
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 481
+        },
+        {
+          "label": "Robbery",
+          "count": 320
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 299
+        }
+      ]
+    },
+    "durham": {
+      "name": "Durham",
+      "total": 44983,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 17443
+        },
+        {
+          "label": "Theft offences",
+          "count": 12096
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 6583
+        },
+        {
+          "label": "Public order offences",
+          "count": 3647
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1865
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1568
+        },
+        {
+          "label": "Drug offences",
+          "count": 1086
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 412
+        },
+        {
+          "label": "Robbery",
+          "count": 283
+        }
+      ]
+    },
+    "dyfed-powys": {
+      "name": "Dyfed-Powys",
+      "total": 27467,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 12896
+        },
+        {
+          "label": "Theft offences",
+          "count": 4817
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 3092
+        },
+        {
+          "label": "Public order offences",
+          "count": 2739
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1519
+        },
+        {
+          "label": "Drug offences",
+          "count": 1269
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 753
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 312
+        },
+        {
+          "label": "Robbery",
+          "count": 70
+        }
+      ]
+    },
+    "essex": {
+      "name": "Essex",
+      "total": 109052,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 44872
+        },
+        {
+          "label": "Theft offences",
+          "count": 31220
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 9730
+        },
+        {
+          "label": "Public order offences",
+          "count": 8473
+        },
+        {
+          "label": "Drug offences",
+          "count": 5115
+        },
+        {
+          "label": "Sexual offences",
+          "count": 4673
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2523
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1331
+        },
+        {
+          "label": "Robbery",
+          "count": 1115
+        }
+      ]
+    },
+    "gloucestershire": {
+      "name": "Gloucestershire",
+      "total": 34531,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 14258
+        },
+        {
+          "label": "Theft offences",
+          "count": 9987
+        },
+        {
+          "label": "Public order offences",
+          "count": 3012
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 2831
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1687
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1032
+        },
+        {
+          "label": "Drug offences",
+          "count": 882
+        },
+        {
+          "label": "Robbery",
+          "count": 462
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 380
+        }
+      ]
+    },
+    "greater-manchester": {
+      "name": "Greater Manchester",
+      "total": 238420,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 95505
+        },
+        {
+          "label": "Theft offences",
+          "count": 58457
+        },
+        {
+          "label": "Public order offences",
+          "count": 25756
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 19295
+        },
+        {
+          "label": "Drug offences",
+          "count": 15334
+        },
+        {
+          "label": "Sexual offences",
+          "count": 9377
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 7188
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 3943
+        },
+        {
+          "label": "Robbery",
+          "count": 3565
+        }
+      ]
+    },
+    "gwent": {
+      "name": "Gwent",
+      "total": 43249,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 16881
+        },
+        {
+          "label": "Theft offences",
+          "count": 9997
+        },
+        {
+          "label": "Public order offences",
+          "count": 5582
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 5419
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1707
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1576
+        },
+        {
+          "label": "Drug offences",
+          "count": 1363
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 393
+        },
+        {
+          "label": "Robbery",
+          "count": 331
+        }
+      ]
+    },
+    "hampshire": {
+      "name": "Hampshire",
+      "total": 115821,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 47607
+        },
+        {
+          "label": "Theft offences",
+          "count": 31432
+        },
+        {
+          "label": "Public order offences",
+          "count": 11336
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 9714
+        },
+        {
+          "label": "Sexual offences",
+          "count": 5342
+        },
+        {
+          "label": "Drug offences",
+          "count": 4927
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2523
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1629
+        },
+        {
+          "label": "Robbery",
+          "count": 1311
+        }
+      ]
+    },
+    "hertfordshire": {
+      "name": "Hertfordshire",
+      "total": 64139,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 25154
+        },
+        {
+          "label": "Theft offences",
+          "count": 21753
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 5338
+        },
+        {
+          "label": "Public order offences",
+          "count": 4324
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2378
+        },
+        {
+          "label": "Drug offences",
+          "count": 2341
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1415
+        },
+        {
+          "label": "Robbery",
+          "count": 803
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 633
+        }
+      ]
+    },
+    "humberside": {
+      "name": "Humberside",
+      "total": 70743,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 29021
+        },
+        {
+          "label": "Theft offences",
+          "count": 19044
+        },
+        {
+          "label": "Public order offences",
+          "count": 7339
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 6890
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2565
+        },
+        {
+          "label": "Drug offences",
+          "count": 2194
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2187
+        },
+        {
+          "label": "Robbery",
+          "count": 812
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 691
+        }
+      ]
+    },
+    "kent": {
+      "name": "Kent",
+      "total": 118163,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 48954
+        },
+        {
+          "label": "Theft offences",
+          "count": 32600
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 13181
+        },
+        {
+          "label": "Public order offences",
+          "count": 6224
+        },
+        {
+          "label": "Drug offences",
+          "count": 5309
+        },
+        {
+          "label": "Sexual offences",
+          "count": 5102
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 4195
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1444
+        },
+        {
+          "label": "Robbery",
+          "count": 1154
+        }
+      ]
+    },
+    "lancashire": {
+      "name": "Lancashire",
+      "total": 97208,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 42422
+        },
+        {
+          "label": "Theft offences",
+          "count": 25242
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 9849
+        },
+        {
+          "label": "Public order offences",
+          "count": 6593
+        },
+        {
+          "label": "Sexual offences",
+          "count": 4373
+        },
+        {
+          "label": "Drug offences",
+          "count": 3215
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 3171
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1370
+        },
+        {
+          "label": "Robbery",
+          "count": 973
+        }
+      ]
+    },
+    "leicestershire": {
+      "name": "Leicestershire",
+      "total": 68325,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 25420
+        },
+        {
+          "label": "Theft offences",
+          "count": 20393
+        },
+        {
+          "label": "Public order offences",
+          "count": 7375
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 7165
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2933
+        },
+        {
+          "label": "Drug offences",
+          "count": 2205
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1656
+        },
+        {
+          "label": "Robbery",
+          "count": 679
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 499
+        }
+      ]
+    },
+    "lincolnshire": {
+      "name": "Lincolnshire",
+      "total": 40682,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 16682
+        },
+        {
+          "label": "Theft offences",
+          "count": 11660
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 4194
+        },
+        {
+          "label": "Public order offences",
+          "count": 3106
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2132
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1321
+        },
+        {
+          "label": "Drug offences",
+          "count": 863
+        },
+        {
+          "label": "Robbery",
+          "count": 390
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 334
+        }
+      ]
+    },
+    "city-of-london": {
+      "name": "London, City of",
+      "total": 6650,
+      "byOffenceGroup": [
+        {
+          "label": "Theft offences",
+          "count": 4041
+        },
+        {
+          "label": "Violence against the person",
+          "count": 1072
+        },
+        {
+          "label": "Public order offences",
+          "count": 480
+        },
+        {
+          "label": "Drug offences",
+          "count": 356
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 241
+        },
+        {
+          "label": "Robbery",
+          "count": 198
+        },
+        {
+          "label": "Sexual offences",
+          "count": 120
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 99
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 43
+        }
+      ]
+    },
+    "merseyside": {
+      "name": "Merseyside",
+      "total": 105471,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 42346
+        },
+        {
+          "label": "Theft offences",
+          "count": 22342
+        },
+        {
+          "label": "Public order offences",
+          "count": 11994
+        },
+        {
+          "label": "Drug offences",
+          "count": 10509
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 9703
+        },
+        {
+          "label": "Sexual offences",
+          "count": 3650
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2739
+        },
+        {
+          "label": "Robbery",
+          "count": 1164
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1024
+        }
+      ]
+    },
+    "metropolitan": {
+      "name": "Metropolitan Police",
+      "total": 700897,
+      "byOffenceGroup": [
+        {
+          "label": "Theft offences",
+          "count": 322846
+        },
+        {
+          "label": "Violence against the person",
+          "count": 188692
+        },
+        {
+          "label": "Public order offences",
+          "count": 43995
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 42633
+        },
+        {
+          "label": "Drug offences",
+          "count": 41926
+        },
+        {
+          "label": "Robbery",
+          "count": 24741
+        },
+        {
+          "label": "Sexual offences",
+          "count": 21196
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 9705
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 5163
+        }
+      ]
+    },
+    "norfolk": {
+      "name": "Norfolk",
+      "total": 44237,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 18877
+        },
+        {
+          "label": "Theft offences",
+          "count": 10836
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 4580
+        },
+        {
+          "label": "Public order offences",
+          "count": 3627
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2528
+        },
+        {
+          "label": "Drug offences",
+          "count": 1425
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1416
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 613
+        },
+        {
+          "label": "Robbery",
+          "count": 335
+        }
+      ]
+    },
+    "north-wales": {
+      "name": "North Wales",
+      "total": 40604,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 18478
+        },
+        {
+          "label": "Theft offences",
+          "count": 8895
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 4205
+        },
+        {
+          "label": "Public order offences",
+          "count": 3650
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2024
+        },
+        {
+          "label": "Drug offences",
+          "count": 1639
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1117
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 457
+        },
+        {
+          "label": "Robbery",
+          "count": 139
+        }
+      ]
+    },
+    "north-yorkshire": {
+      "name": "North Yorkshire",
+      "total": 33904,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 13631
+        },
+        {
+          "label": "Theft offences",
+          "count": 9853
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 3565
+        },
+        {
+          "label": "Public order offences",
+          "count": 2402
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1682
+        },
+        {
+          "label": "Drug offences",
+          "count": 1299
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 769
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 379
+        },
+        {
+          "label": "Robbery",
+          "count": 324
+        }
+      ]
+    },
+    "northamptonshire": {
+      "name": "Northamptonshire",
+      "total": 44000,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 17252
+        },
+        {
+          "label": "Theft offences",
+          "count": 13107
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 3493
+        },
+        {
+          "label": "Public order offences",
+          "count": 3196
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2346
+        },
+        {
+          "label": "Drug offences",
+          "count": 1963
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1034
+        },
+        {
+          "label": "Robbery",
+          "count": 843
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 766
+        }
+      ]
+    },
+    "northumbria": {
+      "name": "Northumbria",
+      "total": 104539,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 37495
+        },
+        {
+          "label": "Theft offences",
+          "count": 31668
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 11622
+        },
+        {
+          "label": "Public order offences",
+          "count": 9921
+        },
+        {
+          "label": "Sexual offences",
+          "count": 4548
+        },
+        {
+          "label": "Drug offences",
+          "count": 3416
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 3073
+        },
+        {
+          "label": "Robbery",
+          "count": 1605
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1191
+        }
+      ]
+    },
+    "nottinghamshire": {
+      "name": "Nottinghamshire",
+      "total": 76125,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 26617
+        },
+        {
+          "label": "Theft offences",
+          "count": 24883
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 7918
+        },
+        {
+          "label": "Public order offences",
+          "count": 5564
+        },
+        {
+          "label": "Sexual offences",
+          "count": 3284
+        },
+        {
+          "label": "Drug offences",
+          "count": 2878
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2372
+        },
+        {
+          "label": "Robbery",
+          "count": 1330
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1279
+        }
+      ]
+    },
+    "south-wales": {
+      "name": "South Wales",
+      "total": 81989,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 31996
+        },
+        {
+          "label": "Theft offences",
+          "count": 21790
+        },
+        {
+          "label": "Public order offences",
+          "count": 10484
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 7272
+        },
+        {
+          "label": "Sexual offences",
+          "count": 3540
+        },
+        {
+          "label": "Drug offences",
+          "count": 2904
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2312
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 882
+        },
+        {
+          "label": "Robbery",
+          "count": 809
+        }
+      ]
+    },
+    "south-yorkshire": {
+      "name": "South Yorkshire",
+      "total": 110107,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 40824
+        },
+        {
+          "label": "Theft offences",
+          "count": 32629
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 10756
+        },
+        {
+          "label": "Public order offences",
+          "count": 9988
+        },
+        {
+          "label": "Drug offences",
+          "count": 4313
+        },
+        {
+          "label": "Sexual offences",
+          "count": 4207
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 4105
+        },
+        {
+          "label": "Robbery",
+          "count": 1719
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1566
+        }
+      ]
+    },
+    "staffordshire": {
+      "name": "Staffordshire",
+      "total": 66488,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 28403
+        },
+        {
+          "label": "Theft offences",
+          "count": 16709
+        },
+        {
+          "label": "Public order offences",
+          "count": 6577
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 5559
+        },
+        {
+          "label": "Sexual offences",
+          "count": 3194
+        },
+        {
+          "label": "Drug offences",
+          "count": 2509
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1724
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 949
+        },
+        {
+          "label": "Robbery",
+          "count": 864
+        }
+      ]
+    },
+    "suffolk": {
+      "name": "Suffolk",
+      "total": 33224,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 13816
+        },
+        {
+          "label": "Theft offences",
+          "count": 8789
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 3430
+        },
+        {
+          "label": "Public order offences",
+          "count": 2375
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1944
+        },
+        {
+          "label": "Drug offences",
+          "count": 1103
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1059
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 517
+        },
+        {
+          "label": "Robbery",
+          "count": 191
+        }
+      ]
+    },
+    "surrey": {
+      "name": "Surrey",
+      "total": 57020,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 22064
+        },
+        {
+          "label": "Theft offences",
+          "count": 15744
+        },
+        {
+          "label": "Public order offences",
+          "count": 6429
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 5290
+        },
+        {
+          "label": "Drug offences",
+          "count": 2480
+        },
+        {
+          "label": "Sexual offences",
+          "count": 2100
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1761
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 625
+        },
+        {
+          "label": "Robbery",
+          "count": 527
+        }
+      ]
+    },
+    "sussex": {
+      "name": "Sussex",
+      "total": 100074,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 35921
+        },
+        {
+          "label": "Theft offences",
+          "count": 31359
+        },
+        {
+          "label": "Public order offences",
+          "count": 9675
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 8827
+        },
+        {
+          "label": "Sexual offences",
+          "count": 4436
+        },
+        {
+          "label": "Drug offences",
+          "count": 3911
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2566
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1897
+        },
+        {
+          "label": "Robbery",
+          "count": 1482
+        }
+      ]
+    },
+    "thames-valley": {
+      "name": "Thames Valley",
+      "total": 128767,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 48351
+        },
+        {
+          "label": "Theft offences",
+          "count": 41775
+        },
+        {
+          "label": "Public order offences",
+          "count": 11809
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 10633
+        },
+        {
+          "label": "Sexual offences",
+          "count": 5618
+        },
+        {
+          "label": "Drug offences",
+          "count": 5547
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 2371
+        },
+        {
+          "label": "Robbery",
+          "count": 1607
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1056
+        }
+      ]
+    },
+    "warwickshire": {
+      "name": "Warwickshire",
+      "total": 30308,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 11341
+        },
+        {
+          "label": "Theft offences",
+          "count": 9660
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 2683
+        },
+        {
+          "label": "Public order offences",
+          "count": 2675
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1516
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 872
+        },
+        {
+          "label": "Drug offences",
+          "count": 745
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 435
+        },
+        {
+          "label": "Robbery",
+          "count": 381
+        }
+      ]
+    },
+    "west-mercia": {
+      "name": "West Mercia",
+      "total": 61467,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 25372
+        },
+        {
+          "label": "Theft offences",
+          "count": 17531
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 5686
+        },
+        {
+          "label": "Public order offences",
+          "count": 4966
+        },
+        {
+          "label": "Sexual offences",
+          "count": 3056
+        },
+        {
+          "label": "Drug offences",
+          "count": 1821
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 1604
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 775
+        },
+        {
+          "label": "Robbery",
+          "count": 656
+        }
+      ]
+    },
+    "west-midlands": {
+      "name": "West Midlands",
+      "total": 227918,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 91088
+        },
+        {
+          "label": "Theft offences",
+          "count": 73339
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 18968
+        },
+        {
+          "label": "Public order offences",
+          "count": 13525
+        },
+        {
+          "label": "Sexual offences",
+          "count": 8922
+        },
+        {
+          "label": "Drug offences",
+          "count": 7019
+        },
+        {
+          "label": "Robbery",
+          "count": 5248
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 5110
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 4699
+        }
+      ]
+    },
+    "west-yorkshire": {
+      "name": "West Yorkshire",
+      "total": 202335,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 87126
+        },
+        {
+          "label": "Theft offences",
+          "count": 55308
+        },
+        {
+          "label": "Public order offences",
+          "count": 18654
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 15741
+        },
+        {
+          "label": "Sexual offences",
+          "count": 8111
+        },
+        {
+          "label": "Drug offences",
+          "count": 7378
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 5562
+        },
+        {
+          "label": "Robbery",
+          "count": 2732
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 1723
+        }
+      ]
+    },
+    "wiltshire": {
+      "name": "Wiltshire",
+      "total": 32719,
+      "byOffenceGroup": [
+        {
+          "label": "Violence against the person",
+          "count": 13550
+        },
+        {
+          "label": "Theft offences",
+          "count": 8299
+        },
+        {
+          "label": "Criminal damage and arson",
+          "count": 3346
+        },
+        {
+          "label": "Public order offences",
+          "count": 3162
+        },
+        {
+          "label": "Sexual offences",
+          "count": 1823
+        },
+        {
+          "label": "Drug offences",
+          "count": 1071
+        },
+        {
+          "label": "Miscellaneous crimes against society",
+          "count": 920
+        },
+        {
+          "label": "Possession of weapons offences",
+          "count": 333
+        },
+        {
+          "label": "Robbery",
+          "count": 215
+        }
+      ]
+    }
+  }
+}

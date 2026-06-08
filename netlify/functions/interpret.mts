@@ -61,6 +61,7 @@ async function buildDigest(scope: string, id: string, postcode: string) {
         forcesReporting: bundle.national.forcesCount - bundle.national.forcesMissing.length,
         forcesMissingLatestMonth: bundle.national.forcesMissing,
         stopSearch: bundle.national.stopSearch,
+        recordedCrime: bundle.national.recordedCrime,
       },
     };
   }
@@ -70,7 +71,7 @@ async function buildDigest(scope: string, id: string, postcode: string) {
     return {
       cacheId: `force:${id}`,
       dataMonth: bundle.datasetMonth,
-      digest: { force: f.name, datasetMonth: bundle.datasetMonth, windowMonths: bundle.windowMonths, stopSearch: f.stopSearch },
+      digest: { force: f.name, datasetMonth: bundle.datasetMonth, windowMonths: bundle.windowMonths, stopSearch: f.stopSearch, recordedCrime: f.recordedCrime },
     };
   }
   if (scope === 'area') {

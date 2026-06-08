@@ -7,6 +7,11 @@ import Sparkline from '../../components/data/Sparkline.astro';
 import PersonaInterpreter from '../../components/data/PersonaInterpreter.astro';
 import DataChat from '../../components/data/DataChat.astro';
 import { getCollection } from 'astro:content';
+import { readFileSync } from 'node:fs';
+
+let recordedCrime: any = null;
+try { recordedCrime = JSON.parse(readFileSync('src/data/recorded-crime.json', 'utf8')); } catch {}
+const rcNat = recordedCrime?.national;
 
 const entries = await getCollection('policedata');
 const national = entries.find((e) => e.data.kind === 'national')?.data as
@@ -78,6 +83,16 @@ const monthLabel = (m: string) => {
                 <span class="transition-transform group-open:rotate-90">▸</span> See the figures
               </summary>
               <div class="mt-8 space-y-10">
+                {rcNat && (
+                  <div>
+                    <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+                      <h3 class="font-display text-lg font-semibold text-ink-900">Recorded crime · {recordedCrime.period}</h3>
+                      <span class="font-sans text-sm text-ink-500">{fmt.format(rcNat.total)} offences</span>
+                    </div>
+                    <BarChart caption="By offence group (Home Office annual, England & Wales)" data={rcNat.byOffenceGroup} asPercent />
+                  </div>
+                )}
+
                 <div class="flex items-center gap-4">
                   <div>
                     <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">12-month searches</p>

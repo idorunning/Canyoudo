@@ -6,6 +6,11 @@ import Sparkline from '../../../components/data/Sparkline.astro';
 import PersonaInterpreter from '../../../components/data/PersonaInterpreter.astro';
 import DataChat from '../../../components/data/DataChat.astro';
 import { getCollection } from 'astro:content';
+import { readFileSync } from 'node:fs';
+
+// Home Office annual recorded crime (optional — present after the first fetch).
+let recordedCrime: any = null;
+try { recordedCrime = JSON.parse(readFileSync('src/data/recorded-crime.json', 'utf8')); } catch {}
 
 export async function getStaticPaths() {
   const entries = await getCollection('policedata');
@@ -20,6 +25,7 @@ export async function getStaticPaths() {
 const { force } = Astro.props;
 const ss = force.stopSearch;
 const win = ss.window;
+const rc = recordedCrime?.forces?.[force.id];
 const fmt = new Intl.NumberFormat('en-GB');
 const monthLabel = (m: string) => {
   const [y, mo] = m.split('-').map(Number);
@@ -56,6 +62,16 @@ const monthLabel = (m: string) => {
             </summary>
 
             <div class="mt-8 space-y-10">
+              {rc && (
+                <div>
+                  <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+                    <h3 class="font-display text-lg font-semibold text-ink-900">Recorded crime · {recordedCrime.period}</h3>
+                    <span class="font-sans text-sm text-ink-500">{fmt.format(rc.total)} offences</span>
+                  </div>
+                  <BarChart caption="By offence group (Home Office annual)" data={rc.byOffenceGroup} asPercent />
+                </div>
+              )}
+
               <div class="grid sm:grid-cols-3 gap-8 items-start">
                 <div>
                   <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">12-month searches</p>

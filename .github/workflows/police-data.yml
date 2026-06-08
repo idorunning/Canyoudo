@@ -33,14 +33,21 @@ jobs:
       - name: Fetch snapshot
         run: node scripts/fetch-police-data.mjs
 
+      - name: Install SheetJS
+        run: npm install --no-save xlsx
+
+      - name: Fetch recorded crime
+        continue-on-error: true
+        run: node scripts/fetch-recorded-crime.mjs
+
       - name: Commit if changed
         run: |
           git config user.name "police-data-bot"
           git config user.email "actions@users.noreply.github.com"
-          if [ -z "$(git status --porcelain src/content/policedata)" ]; then
+          if [ -z "$(git status --porcelain src/content/policedata src/data)" ]; then
             echo "No change in snapshot."; exit 0
           fi
-          git add src/content/policedata
+          git add src/content/policedata src/data
           month=$(node -p "require('./src/content/policedata/national.json').provenance.datasetMonth")
           git commit -m "Refresh police data snapshot ($month)"
           # main may have advanced (concurrent merges) while this ran — rebase
