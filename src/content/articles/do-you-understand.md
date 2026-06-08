@@ -3,12 +3,20 @@ section: "police-policy"
 title: "“Do you understand?”"
 description: "When comprehension, shame, and social pressure hinder a fair process"
 pubDate: 2026-01-07
-heroImage: "/images/understand-hero.svg"
-thumbnail: "/images/understand-hero.svg"
+heroImage: "/images/custody-appropriate-adult.jpg"
+thumbnail: "/images/custody-appropriate-adult.jpg"
 ---
 ## Why we should stop asking, and start explaining
 
-![](/images/17678715405872662829070664106378.jpg)
+<figure>
+  <img src="/images/custody-booking-desk.jpg" alt="The booking-in desk of a police custody suite" loading="lazy" />
+  <figcaption>Booking-in at a custody suite — one of the moments where staff reach for the phrase "Do you understand?"</figcaption>
+</figure>
+
+<figure>
+  <img src="/images/custody-fingerprints.jpg" alt="A detainee's fingerprints being taken during booking-in" loading="lazy" />
+  <figcaption>Fingerprints taken during processing: procedural, fast, and easy to comply with without fully following what is happening.</figcaption>
+</figure>
 
 When comprehension, shame, and social pressure hinder a fair process
 
