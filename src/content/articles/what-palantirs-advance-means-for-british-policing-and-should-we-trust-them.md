@@ -6,6 +6,8 @@ description: A CIA-seeded American data firm has moved from the edge of UK
   increasingly, policing. What has actually been bought, what the software does,
   and why it is contested.
 pubDate: 2026-06-05
+heroImage: "/images/palantir-logo.webp"
+thumbnail: "/images/palantir-logo.webp"
 tags:
   - palantir
   - surveillance
@@ -21,6 +23,11 @@ redirectFrom:
   - /public-policy/joining-the-dots-what-palantir-means-for-british-policing
 ---
 In June 2026 the contract to run the database that holds every firearms and shotgun certificate in England and Wales — together with Home Office records of explosives, explosive precursors and poisons — was awarded to Palantir Technologies. The value, £9m across all 43 forces, was modest by government-IT standards. The significance was not the money. It was that a company co-founded by Peter Thiel and seeded in its early years by the CIA's venture arm, In-Q-Tel, will now hold the national record of who in this country is licensed to own a gun.
+
+<figure>
+  <img src="/images/palantir-alex-karp.jpg" alt="Alex Karp, chief executive of Palantir Technologies" loading="lazy" />
+  <figcaption>Alex Karp, co-founder and chief executive of Palantir Technologies, the firm now moving from the edges of UK public-sector IT into defence, health and policing.</figcaption>
+</figure>
 
 That contract is one data point in a larger pattern. Over roughly five years Palantir has moved from the periphery of UK public-sector technology to a structural position inside British defence, the NHS, financial regulation and, increasingly, policing. The reporting outlets that have tracked this most closely — The Nerve, openDemocracy, Liberty Investigates and The Register among them — put cumulative UK public-sector commitments well above £900m once the September 2025 Ministry of Defence "Strategic Partnership" (up to £750m) and a £240.6m direct-award defence contract signed that December are counted.
 

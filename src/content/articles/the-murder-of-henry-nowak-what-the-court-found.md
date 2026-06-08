@@ -3,6 +3,8 @@ section: "police-policy"
 title: "The Murder of Henry Nowak: What the Sentencing Remarks Reveal"
 description: "On 1 June 2026, a judge sentenced Vickrum Digwa to life for the murder of 18-year-old Henry Nowak. Working from the judge's own sentencing remarks rather than the headlines, this is a careful, evidence-based account of what the court actually found — including what it found about the police response."
 pubDate: 2026-06-07
+heroImage: "/images/henry-nowak.jpg"
+thumbnail: "/images/henry-nowak.jpg"
 tags: ["crime", "courts", "evidence-based-policing", "law", "news", "police", "policing", "accountability"]
 draft: false
 ---

@@ -3,9 +3,9 @@ section: "public-policy"
 title: "Should Britain Drill, Baby, Drill? The North Sea Question in Plain English"
 description: "A 10-minute read on whether ramping up oil and gas extraction would actually fix anything"
 pubDate: 2026-04-29
-thumbnail: "/images/image.png"
+thumbnail: "/images/north-sea-oil-rig.jpg"
+heroImage: "/images/north-sea-oil-rig.jpg"
 ---
-![File:Oil platform in the North Sea.jpg](https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Oil_platform_in_the_North_Sea.jpg/960px-Oil_platform_in_the_North_Sea.jpg?_=20120420145725)
 
 *A 10-minute read on whether ramping up oil and gas extraction would actually fix anything*
 
@@ -143,8 +143,6 @@ Here is what the data says about how the UK is actually managing it:
 - **Interconnectors to France, Norway, Belgium, Netherlands, Denmark, Ireland: about 9-10 GW of two-way capacity**
 - **Pumped hydro: 2.8 GW** (Dinorwig in Wales does 0-1.7 GW in 16 seconds)
 - **The last coal plant, Ratcliffe-on-Soar, closed on 30 September 2024**
-
-![](/images/image.png)
 
 Gas is still essential as a backup, and will be for years; nobody serious disputes that. The question is whether gas should be the foundation of the system or the safety net for it.
 
