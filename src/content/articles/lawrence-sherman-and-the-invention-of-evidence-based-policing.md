@@ -5,7 +5,7 @@ description: "In 1981 Lawrence Sherman ran a domestic violence call as a scienti
 pubDate: 2026-06-07
 heroImage: "/images/sherman-ebp-hero.svg"
 thumbnail: "/images/sherman-ebp-hero.svg"
-portrait: "/images/sherman-portrait.svg"
+portrait: "/images/sherman-portrait.jpg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "criminology", "experiments", "leadership"]
 redirectFrom: ["/police-policy/lawrence-sherman-and-the-invention-of-evidence-based-policing"]
 ---
@@ -15,8 +15,8 @@ redirectFrom: ["/police-policy/lawrence-sherman-and-the-invention-of-evidence-ba
 The man behind the pad of random assignments was Lawrence W. Sherman, and the study — the Minneapolis Domestic Violence Experiment — was the first randomised controlled trial ever run on the effect of arrest. Readers of the [profile of Alex Murray](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing/) will know the name already: Sherman is the American academic who taught Murray at Cambridge and whose framework Murray carried back into British policing. This is the story of the scientist himself, and of the idea he spent fifty years pressing on a profession that did not, at first, want to hear it: that the police should be tested like medicine.
 
 <figure>
-  <img src="/images/sherman-lawrence-portrait.jpg" alt="Lawrence Sherman, Wolfson Professor of Criminology, speaking at a conference" loading="lazy" />
-  <figcaption>Lawrence Sherman, founder of evidence-based policing, at the Stockholm Criminology Symposium. Photo via <a href="https://commons.wikimedia.org/wiki/Category:Lawrence_W._Sherman">Wikimedia Commons</a> (Creative Commons).</figcaption>
+  <img src="/images/sherman-portrait.jpg" alt="Lawrence Sherman" loading="lazy" />
+  <figcaption>Lawrence Sherman, the criminologist who founded evidence-based policing.</figcaption>
 </figure>
 
 ### The making of an experimentalist

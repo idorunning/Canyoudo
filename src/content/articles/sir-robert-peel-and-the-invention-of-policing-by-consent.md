@@ -3,11 +3,16 @@ section: "influential-people"
 title: "Sir Robert Peel and the Invention of Policing by Consent"
 description: "In 1829 a Home Secretary persuaded a suspicious country to accept the first modern police force — unarmed, in plain blue, and answerable to the public rather than the Crown. A profile of Sir Robert Peel and the idea that still underwrites British policing: that the police are only ever the public in uniform."
 pubDate: 2026-06-07
-portrait: "/images/peel-portrait.svg"
+portrait: "/images/peel-portrait.jpg"
 tags: ["public-confidence", "accountability", "neighbourhood-policing", "law", "leadership", "police", "policing", "history", "legitimacy"]
 ---
 
 **For most of human history, the alternative to crime was not the police but the mob, the militia or the gallows.** A standing body of paid officials whose job was to walk the streets and prevent crime before it happened — and who did so with the consent rather than the fear of the people they policed — is a surprisingly modern invention. In England it has a date, 1829, and a name: Sir Robert Peel. The officers London first put on the street were nicknamed "Peelers" and then "Bobbies" after him, and nearly two centuries later British policing still rests on a doctrine that carries his name. This is the story of how that came about, and of how much of it is genuinely his.
+
+<figure>
+  <img src="/images/peel-portrait.jpg" alt="Portrait of Sir Robert Peel as a young man" loading="lazy" />
+  <figcaption>Sir Robert Peel, the Home Secretary who created the Metropolitan Police in 1829. Public domain.</figcaption>
+</figure>
 
 ### The reforming Home Secretary
 
