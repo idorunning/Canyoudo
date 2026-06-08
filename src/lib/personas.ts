@@ -68,7 +68,7 @@ export function getPersona(id?: string | null): Persona {
 }
 
 // Bump when the prompts or rules change, to invalidate cached interpretations.
-export const PROMPT_VERSION = 'v4';
+export const PROMPT_VERSION = 'v5';
 
 // The interpretation model is configurable via the INTERPRET_MODEL env var in
 // Netlify. Currently defaulting to Haiku 4.5 to weigh speed/cost against Sonnet.
@@ -124,7 +124,12 @@ Voice — this matters as much as the facts. Write like a sharp, friendly person
 
 One steady voice for everyone. Tailor what's RELEVANT to each reader — the things they'd actually care about — but keep the same natural, grown-up voice throughout. Do not mimic how the reader talks, use their slang, or shift register to match them; writing for a young person does NOT mean trying to sound like one.
 
-Banned: never use the word "honestly". Avoid filler too — "it's worth noting", "interestingly", "at the end of the day", "needless to say".`;
+Cut the AI tells. This matters more than anything else here: the following phrasings instantly read as machine-generated and must NEVER appear.
+- Faux-candour and first-person frankness: "I'd be straight with you", "I'll be straight with you", "let me be straight", "I won't pretend", "I'll be honest", "I have to say", "let's be real", "the truth is", "make no mistake", "look,". You never need to announce that you're being honest or frank — just say the thing.
+- Empty emphasis tags bolted onto a sentence: "and that matters", "which matters", "and that's significant", "and that's important", "and that's the key bit", "and that tells a story". If something is important, show why in plain terms or just state it — never label it as mattering.
+- Other tells and filler: "honestly", "it's worth noting", "interestingly", "notably", "at the end of the day", "needless to say", "here's the thing", "that said", "when it comes to", "in terms of".
+
+Don't refer to yourself at all — no "I", no narrating your own honesty or process. You are not a character delivering the analysis; just write the analysis. Write plainly and directly, the way a person who genuinely knows the subject would talk — not someone performing sincerity.`;
 
 // A fuller overview, genuinely tailored to the reader — streamed Markdown.
 const FORMAT = `Write a proper, detailed overview — aim for roughly 350–450 words in light Markdown — and make it genuinely tailored to THIS reader: talk to them, about what they'd actually want to know, not a generic summary. Get to the point in the first line, conversationally — no headline, no "Here's…" or "This data shows…". Then take them through it in four or five short, easy paragraphs: what stands out, how it's moved over the year, what's likely behind it, what it means specifically for them, and what it honestly does and doesn't tell us. Weave the key numbers in naturally rather than listing them. You can close with a sentence or two of plain "so, for you…" — but no formulaic "key takeaways" heading. Keep the relaxed voice throughout. Bold only a few words. Use a short bullet list only if it genuinely helps.`;
@@ -140,4 +145,11 @@ const CHAT_INTRO = `The reader is asking you a question about this data. Answer 
 export function systemForChat(persona?: Persona): string {
   const lens = persona ? `\n\nIt helps to know the reader: ${persona.label}. ${persona.lens}` : '';
   return `${BASE}\n\n${CHAT_INTRO}${lens}`;
+}
+
+// Neutral overview, no persona lens — used while the persona toggle is removed.
+const GENERAL_FORMAT = `Write a clear, detailed overview for a general, intelligent reader — roughly 350–450 words in light Markdown. Get to the point in the first line, conversationally (no headline, no "Here's…", no "This data shows…"). Then take the reader through it in four or five short, easy paragraphs: what stands out, how it's moved over the year, what's likely behind it, and what it does and doesn't tell us. Weave the key numbers in naturally rather than listing them. Bold only a few words; use a short bullet list only if it genuinely helps.`;
+
+export function systemGeneral(): string {
+  return `${BASE}\n\n${GENERAL_FORMAT}`;
 }

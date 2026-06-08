@@ -6,6 +6,7 @@ import {
   getPersona,
   systemFor,
   systemForChat,
+  systemGeneral,
   PROMPT_VERSION,
   resolveModel,
   modelParams,
@@ -160,7 +161,10 @@ export default async (req: Request) => {
     } catch {}
   }
 
-  const persona = getPersona(personaId);
+  // Persona is optional now (the toggle is removed) — fall back to a neutral
+  // overview when none is supplied.
+  const persona = personaId ? getPersona(personaId) : null;
+  const personaKey = persona?.id ?? 'general';
   const isChat = question.length > 0;
 
   if (!process.env.ANTHROPIC_API_KEY) {
@@ -195,14 +199,14 @@ export default async (req: Request) => {
       model,
       max_tokens: 1500,
       ...modelParams(model),
-      system: `${systemForChat(persona)}\n\nThe only data you may use (aggregate figures):\n${JSON.stringify(digest)}`,
+      system: `${systemForChat(persona ?? undefined)}\n\nThe only data you may use (aggregate figures):\n${JSON.stringify(digest)}`,
       messages: [...history, { role: 'user', content: question }],
     });
     return streamResponse(aiStream, null, null, dataMonth, modelLabel);
   }
 
   // Overview: cache per scope+id+persona+month+model+prompt-version.
-  const key = `${cacheId}:${persona.id}:${dataMonth || 'na'}:${model}:${PROMPT_VERSION}`;
+  const key = `${cacheId}:${personaKey}:${dataMonth || 'na'}:${model}:${PROMPT_VERSION}`;
   let store: ReturnType<typeof getStore> | null = null;
   try {
     store = getStore('interpretations');
@@ -220,9 +224,9 @@ export default async (req: Request) => {
     model,
     max_tokens: 3000,
     ...modelParams(model),
-    system: systemFor(persona),
+    system: persona ? systemFor(persona) : systemGeneral(),
     messages: [
-      { role: 'user', content: `Interpret this police data for the reader described. Aggregate figures only:\n\n${JSON.stringify(digest, null, 2)}` },
+      { role: 'user', content: `Interpret this police data${persona ? ' for the reader described' : ''}. Aggregate figures only:\n\n${JSON.stringify(digest, null, 2)}` },
     ],
   });
   return streamResponse(aiStream, store, key, dataMonth, modelLabel);
