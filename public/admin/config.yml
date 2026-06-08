@@ -64,6 +64,7 @@ collections:
               { label: "Public Policy", value: "public-policy" },
               { label: "Influential People", value: "influential-people" },
               { label: "Other", value: "other" },
+              { label: "The Data Tells a Story", value: "data-stories" },
             ],
         }
       - {

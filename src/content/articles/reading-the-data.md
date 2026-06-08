@@ -1,10 +1,11 @@
 ---
 title: "More or Less Policing: how to read the numbers without being fooled"
-section: "other"
+section: "data-stories"
 description: "A new strand, in the spirit of Radio 4's More or Less: police statistics are everywhere, and most of them are easy to misread. Here's how to read them — starting with the trap inside every stop-and-search figure."
 pubDate: 2026-06-07
 heroImage: "/images/prob-over-pvalues-chart1-decision-bands.png"
 tags: ["More or Less Policing", "stop and search", "statistics", "transparency"]
+redirectFrom: ["/other/reading-the-data"]
 ---
 
 For more than twenty years, Radio 4's *More or Less* has done something quietly radical: it takes a number that everyone is repeating — in a headline, a manifesto, a select committee — and asks the boring, devastating question. *Where did that come from, and does it mean what they say it means?* Tim Harford and the team have made a national pastime of the polite teardown, and along the way they have taught a generation of listeners — me included — that a statistic is not a fact. It's a claim, with a method behind it, and the method is where the truth lives.
@@ -39,4 +40,4 @@ Future pieces will take the same scalpel to other favourites: why "recorded crim
 
 A statistic is a claim. Let's read the claims carefully.
 
-*Explore the figures behind this piece in [The Data →](/data)*
+*Explore the figures behind this piece in the [Crime Dashboard →](/data)*

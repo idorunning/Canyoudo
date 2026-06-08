@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 
-export const SECTIONS = ['police-policy', 'public-policy', 'influential-people', 'other'] as const;
+export const SECTIONS = ['police-policy', 'public-policy', 'influential-people', 'other', 'data-stories'] as const;
 export type Section = (typeof SECTIONS)[number];
 
 export const SECTION_LABELS: Record<Section, string> = {
@@ -8,6 +8,7 @@ export const SECTION_LABELS: Record<Section, string> = {
   'public-policy': 'Public Policy',
   'influential-people': 'Influential People',
   other: 'Other',
+  'data-stories': 'The Data Tells a Story',
 };
 
 const articleSchema = z.object({
