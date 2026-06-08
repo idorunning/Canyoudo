@@ -4,8 +4,8 @@ title: "Susanne Knabe-Nicol and the Last Mile of Evidence-Based Policing"
 description: "A profile of Dr Susanne Knabe-Nicol — the 'Police Science Dr' — who left a decade inside policing to fix the problem that holds evidence-based practice back: the research that could change how officers work, but that almost no officer ever reads."
 pubDate: 2026-06-08
 heroImage: "/images/knabe-nicol-hero.svg"
-thumbnail: "/images/knabe-nicol-portrait.svg"
-portrait: "/images/knabe-nicol-portrait.svg"
+thumbnail: "/images/knabe-nicol-portrait.jpg"
+portrait: "/images/knabe-nicol-portrait.jpg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "criminology", "investigative-psychology", "professional-development", "research"]
 ---
 
@@ -14,7 +14,7 @@ tags: ["evidence-based-policing", "evidence-based", "policing", "police", "crimi
 She is better known by the name she gives the work — the Police Science Dr.
 
 <figure>
-  <img src="/images/knabe-nicol-portrait.svg" alt="Dr Susanne Knabe-Nicol, the Police Science Dr" loading="lazy" />
+  <img src="/images/knabe-nicol-portrait.jpg" alt="Dr Susanne Knabe-Nicol, the Police Science Dr" loading="lazy" />
   <figcaption>Dr Susanne Knabe-Nicol, founder of Police Science Dr and a lecturer in criminology, policing and investigations at Middlesex University.</figcaption>
 </figure>
 
