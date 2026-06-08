@@ -8,60 +8,60 @@
     "windowMonths": 12,
     "sample": false
   },
-  "id": "metropolitan",
-  "name": "Metropolitan Police Service",
+  "id": "gloucestershire",
+  "name": "Gloucestershire Constabulary",
   "stopSearch": {
     "latest": null,
     "series": [
       {
         "month": "2025-05",
-        "total": 10688,
-        "findRate": 0
+        "total": 145,
+        "findRate": 0.572
       },
       {
         "month": "2025-06",
-        "total": 10663,
-        "findRate": 0
+        "total": 230,
+        "findRate": 0.557
       },
       {
         "month": "2025-07",
-        "total": 11254,
-        "findRate": 0
+        "total": 200,
+        "findRate": 0.57
       },
       {
         "month": "2025-08",
-        "total": 14899,
-        "findRate": 0
+        "total": 181,
+        "findRate": 0.536
       },
       {
         "month": "2025-09",
-        "total": 11151,
-        "findRate": 0
+        "total": 159,
+        "findRate": 0.516
       },
       {
         "month": "2025-10",
-        "total": 11749,
-        "findRate": 0
+        "total": 170,
+        "findRate": 0.582
       },
       {
         "month": "2025-11",
-        "total": 12355,
-        "findRate": 0
+        "total": 248,
+        "findRate": 0.569
       },
       {
         "month": "2025-12",
-        "total": 11861,
-        "findRate": 0
+        "total": 149,
+        "findRate": 0.577
       },
       {
         "month": "2026-01",
-        "total": 12295,
-        "findRate": 0
+        "total": 231,
+        "findRate": 0.524
       },
       {
         "month": "2026-02",
-        "total": 11734,
-        "findRate": 0
+        "total": 0,
+        "findRate": null
       },
       {
         "month": "2026-03",
@@ -75,95 +75,91 @@
       }
     ],
     "window": {
-      "total": 118649,
+      "total": 1713,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 78946
+          "count": 1109
         },
         {
           "label": "Arrest",
-          "count": 20817
+          "count": 353
         },
         {
           "label": "Community Resolution",
-          "count": 13439
+          "count": 213
         },
         {
-          "label": "Penalty Notice For Disorder",
-          "count": 2940
+          "label": "Khat Or Cannabis Warning",
+          "count": 14
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 1438
+          "count": 12
         },
         {
           "label": "Caution (Simple Or Conditional)",
-          "count": 1047
+          "count": 11
         },
         {
           "label": "Not stated",
-          "count": 22
+          "count": 1
         }
       ],
       "byOfficerEthnicity": [
         {
-          "label": "Black",
-          "count": 48243
-        },
-        {
           "label": "White",
-          "count": 41215
-        },
-        {
-          "label": "Asian",
-          "count": 16923
+          "count": 1193
         },
         {
           "label": "Other",
-          "count": 6823
+          "count": 267
         },
         {
           "label": "Not stated",
-          "count": 5445
+          "count": 110
+        },
+        {
+          "label": "Black",
+          "count": 99
+        },
+        {
+          "label": "Asian",
+          "count": 44
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 69177
+          "count": 985
         },
         {
           "label": "Stolen Goods",
-          "count": 24399
+          "count": 283
         },
         {
           "label": "Offensive Weapons",
-          "count": 15646
+          "count": 283
         },
         {
-          "label": "Evidence Of Offences Under The Act",
-          "count": 4325
-        },
-        {
-          "label": "Anything To Threaten Or Harm Anyone",
-          "count": 2768
-        },
-        {
-          "label": "Not stated",
-          "count": 728
+          "label": "Article For Use In Theft",
+          "count": 111
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 554
-        },
-        {
-          "label": "Fireworks",
-          "count": 543
+          "count": 30
         },
         {
           "label": "Firearms",
-          "count": 509
+          "count": 9
+        },
+        {
+          "label": "Not stated",
+          "count": 9
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 3
         }
       ]
     }

@@ -1,0 +1,284 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "thames-valley",
+  "name": "Thames Valley Police",
+  "stopSearch": {
+    "latest": {
+      "total": 1430,
+      "findRate": 1,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 963
+        },
+        {
+          "label": "Community Resolution",
+          "count": 278
+        },
+        {
+          "label": "Arrest",
+          "count": 150
+        },
+        {
+          "label": "Not stated",
+          "count": 13
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 11
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 7
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 4
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 4
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 875
+        },
+        {
+          "label": "Asian",
+          "count": 265
+        },
+        {
+          "label": "Black",
+          "count": 251
+        },
+        {
+          "label": "Other",
+          "count": 26
+        },
+        {
+          "label": "Not stated",
+          "count": 13
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 960
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 182
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 179
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 87
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 10
+        },
+        {
+          "label": "Firearms",
+          "count": 6
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 4
+        },
+        {
+          "label": "Fireworks",
+          "count": 1
+        },
+        {
+          "label": "Evidence Of Wildlife Offences",
+          "count": 1
+        }
+      ]
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 1418,
+        "findRate": 1
+      },
+      {
+        "month": "2025-06",
+        "total": 1281,
+        "findRate": 1
+      },
+      {
+        "month": "2025-07",
+        "total": 1402,
+        "findRate": 1
+      },
+      {
+        "month": "2025-08",
+        "total": 1414,
+        "findRate": 1
+      },
+      {
+        "month": "2025-09",
+        "total": 1231,
+        "findRate": 1
+      },
+      {
+        "month": "2025-10",
+        "total": 1485,
+        "findRate": 1
+      },
+      {
+        "month": "2025-11",
+        "total": 1278,
+        "findRate": 1
+      },
+      {
+        "month": "2025-12",
+        "total": 1100,
+        "findRate": 1
+      },
+      {
+        "month": "2026-01",
+        "total": 1302,
+        "findRate": 1
+      },
+      {
+        "month": "2026-02",
+        "total": 1210,
+        "findRate": 1
+      },
+      {
+        "month": "2026-03",
+        "total": 1604,
+        "findRate": 1
+      },
+      {
+        "month": "2026-04",
+        "total": 1430,
+        "findRate": 1
+      }
+    ],
+    "window": {
+      "total": 16155,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 11471
+        },
+        {
+          "label": "Community Resolution",
+          "count": 2663
+        },
+        {
+          "label": "Arrest",
+          "count": 1529
+        },
+        {
+          "label": "Not stated",
+          "count": 192
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 98
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 97
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 68
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 37
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 10515
+        },
+        {
+          "label": "Asian",
+          "count": 2666
+        },
+        {
+          "label": "Black",
+          "count": 2505
+        },
+        {
+          "label": "Other",
+          "count": 277
+        },
+        {
+          "label": "Not stated",
+          "count": 192
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 10433
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 2398
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 2048
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 825
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 290
+        },
+        {
+          "label": "Firearms",
+          "count": 91
+        },
+        {
+          "label": "Fireworks",
+          "count": 38
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 24
+        },
+        {
+          "label": "Psychoactive Substances",
+          "count": 3
+        },
+        {
+          "label": "Goods On Which Duty Has Not Been Paid Etc.",
+          "count": 3
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 1
+        },
+        {
+          "label": "Evidence Of Wildlife Offences",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

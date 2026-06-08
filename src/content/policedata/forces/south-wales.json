@@ -8,283 +8,255 @@
     "windowMonths": 12,
     "sample": false
   },
-  "id": "avon-and-somerset",
-  "name": "Avon and Somerset Constabulary",
+  "id": "south-wales",
+  "name": "South Wales Police",
   "stopSearch": {
     "latest": {
-      "total": 669,
-      "findRate": 0.833,
+      "total": 664,
+      "findRate": 0.291,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 279
-        },
-        {
-          "label": "Not stated",
-          "count": 157
+          "count": 522
         },
         {
           "label": "Arrest",
-          "count": 124
-        },
-        {
-          "label": "Khat Or Cannabis Warning",
-          "count": 43
+          "count": 94
         },
         {
           "label": "Community Resolution",
-          "count": 41
-        },
-        {
-          "label": "Caution (Simple Or Conditional)",
-          "count": 13
+          "count": 24
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 11
+          "count": 18
         },
         {
-          "label": "Penalty Notice For Disorder",
-          "count": 1
+          "label": "Caution (Simple Or Conditional)",
+          "count": 4
+        },
+        {
+          "label": "Not stated",
+          "count": 2
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 393
-        },
-        {
-          "label": "Not stated",
-          "count": 144
+          "count": 565
         },
         {
           "label": "Black",
-          "count": 83
-        },
-        {
-          "label": "Mixed",
-          "count": 22
+          "count": 42
         },
         {
           "label": "Asian",
-          "count": 17
+          "count": 23
+        },
+        {
+          "label": "Not stated",
+          "count": 22
         },
         {
           "label": "Other",
-          "count": 10
+          "count": 12
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 274
-        },
-        {
-          "label": "Stolen Goods",
-          "count": 98
-        },
-        {
-          "label": "Not stated",
-          "count": 96
+          "count": 408
         },
         {
           "label": "Offensive Weapons",
-          "count": 82
+          "count": 89
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 81
         },
         {
           "label": "Article For Use In Theft",
-          "count": 54
+          "count": 30
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 22
+          "count": 25
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 19
+          "count": 23
         },
         {
-          "label": "Firearms",
-          "count": 12
-        },
-        {
-          "label": "Anything To Threaten Or Harm Anyone",
-          "count": 12
+          "label": "Not stated",
+          "count": 8
         }
       ]
     },
     "series": [
       {
         "month": "2025-05",
-        "total": 468,
-        "findRate": 0.894
+        "total": 483,
+        "findRate": 0.271
       },
       {
         "month": "2025-06",
-        "total": 587,
-        "findRate": 0.806
+        "total": 411,
+        "findRate": 0.27
       },
       {
         "month": "2025-07",
-        "total": 544,
-        "findRate": 0.841
+        "total": 497,
+        "findRate": 0.292
       },
       {
         "month": "2025-08",
-        "total": 530,
-        "findRate": 0.867
+        "total": 522,
+        "findRate": 0.272
       },
       {
         "month": "2025-09",
-        "total": 465,
-        "findRate": 0.823
+        "total": 502,
+        "findRate": 0.285
       },
       {
         "month": "2025-10",
-        "total": 602,
-        "findRate": 0.839
+        "total": 572,
+        "findRate": 0.25
       },
       {
         "month": "2025-11",
-        "total": 480,
-        "findRate": 0.827
+        "total": 541,
+        "findRate": 0.281
       },
       {
         "month": "2025-12",
-        "total": 502,
-        "findRate": 0.841
+        "total": 454,
+        "findRate": 0.289
       },
       {
         "month": "2026-01",
-        "total": 504,
-        "findRate": 0.847
+        "total": 578,
+        "findRate": 0.292
       },
       {
         "month": "2026-02",
-        "total": 587,
-        "findRate": 0.843
+        "total": 354,
+        "findRate": 0.291
       },
       {
         "month": "2026-03",
-        "total": 622,
-        "findRate": 0.79
+        "total": 695,
+        "findRate": 0.306
       },
       {
         "month": "2026-04",
-        "total": 669,
-        "findRate": 0.833
+        "total": 664,
+        "findRate": 0.291
       }
     ],
     "window": {
-      "total": 6560,
+      "total": 6273,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 3533
+          "count": 4552
         },
         {
           "label": "Arrest",
-          "count": 1395
-        },
-        {
-          "label": "Not stated",
-          "count": 894
+          "count": 906
         },
         {
           "label": "Community Resolution",
-          "count": 340
-        },
-        {
-          "label": "Khat Or Cannabis Warning",
-          "count": 243
+          "count": 466
         },
         {
           "label": "Summons / Charged By Post",
+          "count": 196
+        },
+        {
+          "label": "Not stated",
           "count": 90
         },
         {
-          "label": "Caution (Simple Or Conditional)",
-          "count": 60
+          "label": "Khat Or Cannabis Warning",
+          "count": 36
         },
         {
-          "label": "Penalty Notice For Disorder",
-          "count": 5
+          "label": "Caution (Simple Or Conditional)",
+          "count": 27
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 4068
+          "count": 3769
         },
         {
           "label": "Not stated",
-          "count": 1221
+          "count": 1835
         },
         {
           "label": "Black",
-          "count": 698
-        },
-        {
-          "label": "Mixed",
-          "count": 264
+          "count": 333
         },
         {
           "label": "Asian",
-          "count": 244
+          "count": 210
         },
         {
           "label": "Other",
-          "count": 65
+          "count": 126
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 3049
+          "count": 3899
         },
         {
           "label": "Offensive Weapons",
-          "count": 993
+          "count": 809
         },
         {
           "label": "Stolen Goods",
-          "count": 744
-        },
-        {
-          "label": "Not stated",
-          "count": 625
+          "count": 524
         },
         {
           "label": "Article For Use In Theft",
-          "count": 586
+          "count": 395
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 215
+          "count": 261
         },
         {
-          "label": "Anything To Threaten Or Harm Anyone",
-          "count": 117
+          "label": "Not stated",
+          "count": 136
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 107
+          "count": 101
+        },
+        {
+          "label": "Anything To Threaten Or Harm Anyone",
+          "count": 96
         },
         {
           "label": "Firearms",
-          "count": 79
+          "count": 18
         },
         {
           "label": "Fireworks",
-          "count": 23
+          "count": 18
         },
         {
           "label": "Goods On Which Duty Has Not Been Paid Etc.",
-          "count": 12
+          "count": 11
         },
         {
           "label": "Psychoactive Substances",
-          "count": 10
+          "count": 5
         }
       ]
     }

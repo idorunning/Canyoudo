@@ -1,0 +1,204 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "essex",
+  "name": "Essex Police",
+  "stopSearch": {
+    "latest": {
+      "total": 1156,
+      "findRate": null,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 821
+        },
+        {
+          "label": "Arrest",
+          "count": 171
+        },
+        {
+          "label": "Community Resolution",
+          "count": 155
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 4
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 3
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 2
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 817
+        },
+        {
+          "label": "Black",
+          "count": 102
+        },
+        {
+          "label": "Asian",
+          "count": 83
+        },
+        {
+          "label": "Not stated",
+          "count": 75
+        },
+        {
+          "label": "Mixed",
+          "count": 50
+        },
+        {
+          "label": "Other",
+          "count": 29
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Not stated",
+          "count": 1156
+        }
+      ]
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2025-06",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2025-07",
+        "total": 1136,
+        "findRate": null
+      },
+      {
+        "month": "2025-08",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2025-09",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2025-10",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2025-11",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2025-12",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2026-01",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2026-02",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2026-03",
+        "total": 1156,
+        "findRate": null
+      },
+      {
+        "month": "2026-04",
+        "total": 1156,
+        "findRate": null
+      }
+    ],
+    "window": {
+      "total": 13852,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 9568
+        },
+        {
+          "label": "Community Resolution",
+          "count": 2106
+        },
+        {
+          "label": "Arrest",
+          "count": 2066
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 55
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 48
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 8
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 1
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 9520
+        },
+        {
+          "label": "Black",
+          "count": 1414
+        },
+        {
+          "label": "Not stated",
+          "count": 1137
+        },
+        {
+          "label": "Asian",
+          "count": 754
+        },
+        {
+          "label": "Mixed",
+          "count": 669
+        },
+        {
+          "label": "Other",
+          "count": 358
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Not stated",
+          "count": 13852
+        }
+      ]
+    }
+  }
+}

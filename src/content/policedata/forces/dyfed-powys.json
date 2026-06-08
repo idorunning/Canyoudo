@@ -1,0 +1,183 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "dyfed-powys",
+  "name": "Dyfed-Powys Police",
+  "stopSearch": {
+    "latest": null,
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 275,
+        "findRate": 0.229
+      },
+      {
+        "month": "2025-06",
+        "total": 241,
+        "findRate": 0.224
+      },
+      {
+        "month": "2025-07",
+        "total": 301,
+        "findRate": 0.279
+      },
+      {
+        "month": "2025-08",
+        "total": 338,
+        "findRate": 0.311
+      },
+      {
+        "month": "2025-09",
+        "total": 271,
+        "findRate": 0.24
+      },
+      {
+        "month": "2025-10",
+        "total": 294,
+        "findRate": 0.214
+      },
+      {
+        "month": "2025-11",
+        "total": 300,
+        "findRate": 0.237
+      },
+      {
+        "month": "2025-12",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-01",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-02",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-03",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-04",
+        "total": 0,
+        "findRate": null
+      }
+    ],
+    "window": {
+      "total": 2020,
+      "byOutcome": [
+        {
+          "label": "Not stated",
+          "count": 1600
+        },
+        {
+          "label": "A No Further Action Disposal",
+          "count": 133
+        },
+        {
+          "label": "Community Resolution",
+          "count": 132
+        },
+        {
+          "label": "Arrest",
+          "count": 129
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 23
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 2
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 1
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 1927
+        },
+        {
+          "label": "Not stated",
+          "count": 36
+        },
+        {
+          "label": "Asian",
+          "count": 31
+        },
+        {
+          "label": "Black",
+          "count": 17
+        },
+        {
+          "label": "Other",
+          "count": 9
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 666
+        },
+        {
+          "label": "Not stated",
+          "count": 629
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 304
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 150
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 108
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 76
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 39
+        },
+        {
+          "label": "Crossbows",
+          "count": 14
+        },
+        {
+          "label": "Firearms",
+          "count": 13
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 10
+        },
+        {
+          "label": "Anything To Threaten Or Harm Anyone",
+          "count": 6
+        },
+        {
+          "label": "Evidence Of Wildlife Offences",
+          "count": 5
+        }
+      ]
+    }
+  }
+}

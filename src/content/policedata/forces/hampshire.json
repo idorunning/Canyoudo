@@ -1,0 +1,196 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "hampshire",
+  "name": "Hampshire Constabulary",
+  "stopSearch": {
+    "latest": {
+      "total": 1565,
+      "findRate": 0.339,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 939
+        },
+        {
+          "label": "Community Resolution",
+          "count": 289
+        },
+        {
+          "label": "Arrest",
+          "count": 273
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 35
+        },
+        {
+          "label": "Not stated",
+          "count": 29
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 1274
+        },
+        {
+          "label": "Black",
+          "count": 143
+        },
+        {
+          "label": "Asian",
+          "count": 89
+        },
+        {
+          "label": "Other",
+          "count": 59
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Not stated",
+          "count": 1563
+        },
+        {
+          "label": "Firearms",
+          "count": 1
+        },
+        {
+          "label": "Psychoactive Substances",
+          "count": 1
+        }
+      ]
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 1246,
+        "findRate": 0.32
+      },
+      {
+        "month": "2025-06",
+        "total": 1274,
+        "findRate": 0.317
+      },
+      {
+        "month": "2025-07",
+        "total": 1148,
+        "findRate": 0.319
+      },
+      {
+        "month": "2025-08",
+        "total": 1240,
+        "findRate": 0.29
+      },
+      {
+        "month": "2025-09",
+        "total": 1066,
+        "findRate": 0.295
+      },
+      {
+        "month": "2025-10",
+        "total": 1393,
+        "findRate": 0.281
+      },
+      {
+        "month": "2025-11",
+        "total": 1215,
+        "findRate": 0.324
+      },
+      {
+        "month": "2025-12",
+        "total": 1317,
+        "findRate": 0.308
+      },
+      {
+        "month": "2026-01",
+        "total": 1245,
+        "findRate": 0.328
+      },
+      {
+        "month": "2026-02",
+        "total": 1164,
+        "findRate": 0.325
+      },
+      {
+        "month": "2026-03",
+        "total": 1621,
+        "findRate": 0.31
+      },
+      {
+        "month": "2026-04",
+        "total": 1565,
+        "findRate": 0.339
+      }
+    ],
+    "window": {
+      "total": 15494,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 9590
+        },
+        {
+          "label": "Arrest",
+          "count": 2831
+        },
+        {
+          "label": "Community Resolution",
+          "count": 2591
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 303
+        },
+        {
+          "label": "Not stated",
+          "count": 179
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 12458
+        },
+        {
+          "label": "Black",
+          "count": 1469
+        },
+        {
+          "label": "Asian",
+          "count": 959
+        },
+        {
+          "label": "Other",
+          "count": 608
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Not stated",
+          "count": 15452
+        },
+        {
+          "label": "Firearms",
+          "count": 39
+        },
+        {
+          "label": "Psychoactive Substances",
+          "count": 2
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 1
+        }
+      ]
+    }
+  }
+}

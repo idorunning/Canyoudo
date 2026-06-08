@@ -1,0 +1,244 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "dorset",
+  "name": "Dorset Police",
+  "stopSearch": {
+    "latest": {
+      "total": 184,
+      "findRate": 1,
+      "byOutcome": [
+        {
+          "label": "Not stated",
+          "count": 96
+        },
+        {
+          "label": "A No Further Action Disposal",
+          "count": 40
+        },
+        {
+          "label": "Arrest",
+          "count": 28
+        },
+        {
+          "label": "Community Resolution",
+          "count": 13
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 7
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 136
+        },
+        {
+          "label": "Not stated",
+          "count": 35
+        },
+        {
+          "label": "Black",
+          "count": 7
+        },
+        {
+          "label": "Asian",
+          "count": 4
+        },
+        {
+          "label": "Other",
+          "count": 2
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 108
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 31
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 26
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 12
+        },
+        {
+          "label": "Not stated",
+          "count": 3
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 3
+        },
+        {
+          "label": "Firearms",
+          "count": 1
+        }
+      ]
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 120,
+        "findRate": 1
+      },
+      {
+        "month": "2025-06",
+        "total": 143,
+        "findRate": 1
+      },
+      {
+        "month": "2025-07",
+        "total": 165,
+        "findRate": 1
+      },
+      {
+        "month": "2025-08",
+        "total": 149,
+        "findRate": 1
+      },
+      {
+        "month": "2025-09",
+        "total": 111,
+        "findRate": 1
+      },
+      {
+        "month": "2025-10",
+        "total": 114,
+        "findRate": 1
+      },
+      {
+        "month": "2025-11",
+        "total": 151,
+        "findRate": 1
+      },
+      {
+        "month": "2025-12",
+        "total": 115,
+        "findRate": 1
+      },
+      {
+        "month": "2026-01",
+        "total": 134,
+        "findRate": 1
+      },
+      {
+        "month": "2026-02",
+        "total": 105,
+        "findRate": 1
+      },
+      {
+        "month": "2026-03",
+        "total": 156,
+        "findRate": 1
+      },
+      {
+        "month": "2026-04",
+        "total": 184,
+        "findRate": 1
+      }
+    ],
+    "window": {
+      "total": 1647,
+      "byOutcome": [
+        {
+          "label": "Not stated",
+          "count": 822
+        },
+        {
+          "label": "A No Further Action Disposal",
+          "count": 348
+        },
+        {
+          "label": "Arrest",
+          "count": 216
+        },
+        {
+          "label": "Community Resolution",
+          "count": 207
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 47
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 7
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 1083
+        },
+        {
+          "label": "Not stated",
+          "count": 412
+        },
+        {
+          "label": "Black",
+          "count": 94
+        },
+        {
+          "label": "Other",
+          "count": 32
+        },
+        {
+          "label": "Asian",
+          "count": 26
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 1065
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 228
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 221
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 67
+        },
+        {
+          "label": "Not stated",
+          "count": 21
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 17
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 16
+        },
+        {
+          "label": "Firearms",
+          "count": 6
+        },
+        {
+          "label": "Fireworks",
+          "count": 6
+        }
+      ]
+    }
+  }
+}

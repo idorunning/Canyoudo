@@ -3,36 +3,243 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2025-01",
-    "fetchedAt": "2025-03-01T00:00:00.000Z",
-    "sample": true
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
   },
   "forcesCount": 44,
-  "forcesMissing": ["police-scotland", "northern-ireland"],
+  "forcesMissing": [
+    "bedfordshire",
+    "gloucestershire",
+    "greater-manchester",
+    "gwent",
+    "dyfed-powys",
+    "humberside",
+    "lincolnshire",
+    "metropolitan",
+    "norfolk",
+    "north-yorkshire",
+    "nottinghamshire",
+    "northern-ireland",
+    "suffolk",
+    "west-midlands"
+  ],
   "stopSearch": {
-    "total": 41230,
-    "findRate": 0.23,
-    "byOutcome": [
-      { "label": "A no further action disposal", "count": 28110 },
-      { "label": "Arrest", "count": 5980 },
-      { "label": "Community resolution", "count": 2440 },
-      { "label": "Penalty Notice for Disorder", "count": 980 },
-      { "label": "Summons / charged by post", "count": 720 },
-      { "label": "Khat or Cannabis warning", "count": 3000 }
+    "latest": {
+      "total": 29588,
+      "findRate": 0.515
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 40600,
+        "findRate": 0.305
+      },
+      {
+        "month": "2025-06",
+        "total": 38807,
+        "findRate": 0.29
+      },
+      {
+        "month": "2025-07",
+        "total": 39250,
+        "findRate": 0.289
+      },
+      {
+        "month": "2025-08",
+        "total": 44513,
+        "findRate": 0.254
+      },
+      {
+        "month": "2025-09",
+        "total": 37608,
+        "findRate": 0.277
+      },
+      {
+        "month": "2025-10",
+        "total": 42768,
+        "findRate": 0.29
+      },
+      {
+        "month": "2025-11",
+        "total": 41201,
+        "findRate": 0.297
+      },
+      {
+        "month": "2025-12",
+        "total": 38912,
+        "findRate": 0.297
+      },
+      {
+        "month": "2026-01",
+        "total": 40915,
+        "findRate": 0.304
+      },
+      {
+        "month": "2026-02",
+        "total": 37688,
+        "findRate": 0.278
+      },
+      {
+        "month": "2026-03",
+        "total": 29690,
+        "findRate": 0.507
+      },
+      {
+        "month": "2026-04",
+        "total": 29588,
+        "findRate": 0.515
+      }
     ],
-    "byOfficerEthnicity": [
-      { "label": "White", "count": 22100 },
-      { "label": "Black", "count": 9800 },
-      { "label": "Asian", "count": 5400 },
-      { "label": "Other", "count": 1530 },
-      { "label": "Not stated", "count": 2400 }
-    ],
-    "byObjectOfSearch": [
-      { "label": "Controlled drugs", "count": 24900 },
-      { "label": "Offensive weapons", "count": 4600 },
-      { "label": "Stolen goods", "count": 4100 },
-      { "label": "Article for use in theft", "count": 2200 },
-      { "label": "Anything to threaten or harm", "count": 1300 }
-    ]
+    "window": {
+      "total": 461540,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 290231
+        },
+        {
+          "label": "Arrest",
+          "count": 67867
+        },
+        {
+          "label": "Community Resolution",
+          "count": 47022
+        },
+        {
+          "label": "Not stated",
+          "count": 42012
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 7565
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 3722
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 2179
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 942
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 280518
+        },
+        {
+          "label": "Black",
+          "count": 74998
+        },
+        {
+          "label": "Asian",
+          "count": 51093
+        },
+        {
+          "label": "Not stated",
+          "count": 36427
+        },
+        {
+          "label": "Other",
+          "count": 16498
+        },
+        {
+          "label": "Mixed",
+          "count": 2006
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 245734
+        },
+        {
+          "label": "Not stated",
+          "count": 67779
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 52129
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 47048
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 22886
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 8521
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 5257
+        },
+        {
+          "label": "Anything To Threaten Or Harm Anyone",
+          "count": 4199
+        },
+        {
+          "label": "Firearms",
+          "count": 3085
+        },
+        {
+          "label": "Detailed Object Of Search Unavailable",
+          "count": 2284
+        },
+        {
+          "label": "Fireworks",
+          "count": 1792
+        },
+        {
+          "label": "Psychoactive Substances",
+          "count": 370
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 191
+        },
+        {
+          "label": "Goods On Which Duty Has Not Been Paid Etc.",
+          "count": 121
+        },
+        {
+          "label": "Evidence Of Wildlife Offences",
+          "count": 62
+        },
+        {
+          "label": "Cash",
+          "count": 47
+        },
+        {
+          "label": "Crossbows",
+          "count": 22
+        },
+        {
+          "label": "Items Related To Protests",
+          "count": 4
+        },
+        {
+          "label": "Evidence Of Hunting Any Wild Mammal With A Dog",
+          "count": 4
+        },
+        {
+          "label": "Seals Or Hunting Equipment",
+          "count": 4
+        },
+        {
+          "label": "Drones Or Unmanned Aircraft",
+          "count": 1
+        }
+      ]
+    }
   }
 }

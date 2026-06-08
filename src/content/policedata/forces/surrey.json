@@ -1,0 +1,260 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "surrey",
+  "name": "Surrey Police",
+  "stopSearch": {
+    "latest": {
+      "total": 386,
+      "findRate": 0.347,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 225
+        },
+        {
+          "label": "Arrest",
+          "count": 81
+        },
+        {
+          "label": "Community Resolution",
+          "count": 57
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 19
+        },
+        {
+          "label": "Not stated",
+          "count": 2
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 1
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 1
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 306
+        },
+        {
+          "label": "Black",
+          "count": 38
+        },
+        {
+          "label": "Asian",
+          "count": 31
+        },
+        {
+          "label": "Not stated",
+          "count": 6
+        },
+        {
+          "label": "Other",
+          "count": 5
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 204
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 65
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 59
+        },
+        {
+          "label": "Not stated",
+          "count": 35
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 15
+        },
+        {
+          "label": "Firearms",
+          "count": 6
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 2
+        }
+      ]
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 301,
+        "findRate": 0.282
+      },
+      {
+        "month": "2025-06",
+        "total": 432,
+        "findRate": 0.329
+      },
+      {
+        "month": "2025-07",
+        "total": 345,
+        "findRate": 0.371
+      },
+      {
+        "month": "2025-08",
+        "total": 754,
+        "findRate": 0.395
+      },
+      {
+        "month": "2025-09",
+        "total": 327,
+        "findRate": 0.373
+      },
+      {
+        "month": "2025-10",
+        "total": 904,
+        "findRate": 0.233
+      },
+      {
+        "month": "2025-11",
+        "total": 435,
+        "findRate": 0.345
+      },
+      {
+        "month": "2025-12",
+        "total": 371,
+        "findRate": 0.418
+      },
+      {
+        "month": "2026-01",
+        "total": 808,
+        "findRate": 0.384
+      },
+      {
+        "month": "2026-02",
+        "total": 445,
+        "findRate": 0.335
+      },
+      {
+        "month": "2026-03",
+        "total": 458,
+        "findRate": 0.439
+      },
+      {
+        "month": "2026-04",
+        "total": 386,
+        "findRate": 0.347
+      }
+    ],
+    "window": {
+      "total": 5966,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 3683
+        },
+        {
+          "label": "Arrest",
+          "count": 1142
+        },
+        {
+          "label": "Community Resolution",
+          "count": 886
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 182
+        },
+        {
+          "label": "Not stated",
+          "count": 41
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 18
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 8
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 6
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 4432
+        },
+        {
+          "label": "Black",
+          "count": 743
+        },
+        {
+          "label": "Asian",
+          "count": 579
+        },
+        {
+          "label": "Other",
+          "count": 112
+        },
+        {
+          "label": "Not stated",
+          "count": 100
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 3285
+        },
+        {
+          "label": "Not stated",
+          "count": 801
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 771
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 763
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 194
+        },
+        {
+          "label": "Firearms",
+          "count": 76
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 44
+        },
+        {
+          "label": "Fireworks",
+          "count": 28
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 4
+        }
+      ]
+    }
+  }
+}

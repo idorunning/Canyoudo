@@ -3,6 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import CaveatBanner from '../../../components/data/CaveatBanner.astro';
 import ProvenanceStamp from '../../../components/data/ProvenanceStamp.astro';
 import BarChart from '../../../components/data/BarChart.astro';
+import Sparkline from '../../../components/data/Sparkline.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -17,11 +18,16 @@ export async function getStaticPaths() {
 
 const { force } = Astro.props;
 const ss = force.stopSearch;
+const win = ss.window;
 const fmt = new Intl.NumberFormat('en-GB');
+const monthLabel = (m: string) => {
+  const [y, mo] = m.split('-').map(Number);
+  return new Date(y, mo - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+};
 ---
 <BaseLayout
   title={`${force.name} — Crime Dashboard`}
-  description={`Stop & search for ${force.name}, straight from data.police.uk and stamped with its date.`}
+  description={`Stop & search for ${force.name} over the last 12 months, straight from data.police.uk and stamped with its date.`}
 >
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
@@ -30,9 +36,6 @@ const fmt = new Intl.NumberFormat('en-GB');
         <h1 class="font-display text-3xl md:text-5xl font-semibold text-ink-900 leading-tight tracking-tight mt-4">
           {force.name}
         </h1>
-        {force.url && (
-          <a href={force.url} class="inline-block mt-3 font-sans text-sm text-accent hover:text-accent-dark">{force.url} ↗</a>
-        )}
       </div>
     </div>
   </section>
@@ -41,36 +44,36 @@ const fmt = new Intl.NumberFormat('en-GB');
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 space-y-12">
       <CaveatBanner />
 
-      {ss ? (
-        <div>
-          <div class="flex items-baseline justify-between flex-wrap gap-2 border-b border-ink-200 pb-3 mb-6">
-            <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900">Stop &amp; search</h2>
-            <span class="font-sans text-sm text-ink-500">{fmt.format(ss.total)} searches this month</span>
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
-            <BarChart caption="Who gets searched (officer-defined ethnicity)" data={ss.byOfficerEthnicity} asPercent />
-            <BarChart caption="What officers were looking for" data={ss.byObjectOfSearch} asPercent />
-            <BarChart caption="What happened next (outcome)" data={ss.byOutcome} asPercent />
-            <div class="flex flex-col justify-center">
-              <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Find rate</p>
-              <p class="font-display text-5xl font-semibold text-ink-900">
-                {ss.findRate == null ? '—' : `${Math.round(ss.findRate * 100)}%`}
-              </p>
-              <p class="font-serif text-sm text-ink-600 leading-relaxed mt-2 max-w-xs">
-                Share of searches that found what was sought.
-              </p>
+      {win ? (
+        <div class="space-y-12">
+          <div class="grid sm:grid-cols-3 gap-8 items-start">
+            <div>
+              <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">12-month searches</p>
+              <p class="font-display text-4xl font-semibold text-ink-900">{fmt.format(win.total)}</p>
+            </div>
+            <div>
+              <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Latest month ({monthLabel(force.provenance.datasetMonth)})</p>
+              <p class="font-display text-4xl font-semibold text-ink-900">{ss.latest ? fmt.format(ss.latest.total) : '—'}</p>
+              {!ss.latest && <p class="font-serif text-xs text-ink-500 mt-1">Not yet filed for this month.</p>}
+            </div>
+            <div>
+              <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Monthly trend</p>
+              <div class="text-accent mt-2"><Sparkline points={ss.series} width={180} /></div>
             </div>
           </div>
 
-          <div class="mt-8">
-            <ProvenanceStamp datasetMonth={force.provenance.datasetMonth} fetchedAt={force.provenance.fetchedAt} sample={force.provenance.sample} />
+          <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+            <BarChart caption="Who gets searched (officer-defined ethnicity, 12 mo)" data={win.byOfficerEthnicity} asPercent />
+            <BarChart caption="What officers were looking for (12 mo)" data={win.byObjectOfSearch} asPercent />
+            <BarChart caption="What happened next (outcome, 12 mo)" data={win.byOutcome} asPercent />
           </div>
+
+          <ProvenanceStamp datasetMonth={force.provenance.datasetMonth} fetchedAt={force.provenance.fetchedAt} sample={force.provenance.sample} />
         </div>
       ) : (
         <p class="font-serif text-lg text-ink-600">
-          {force.name} reported no stop &amp; search data for the latest month. That can mean a genuine
-          zero, a processing backlog, or a force that records manually — not necessarily no activity.
+          {force.name} reported no stop &amp; search data in the last 12 months. That can mean a genuine
+          absence, a processing backlog, or a force that records manually — not necessarily no activity.
         </p>
       )}
 

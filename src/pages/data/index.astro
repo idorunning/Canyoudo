@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaveatBanner from '../../components/data/CaveatBanner.astro';
 import ProvenanceStamp from '../../components/data/ProvenanceStamp.astro';
 import BarChart from '../../components/data/BarChart.astro';
+import Sparkline from '../../components/data/Sparkline.astro';
 import { getCollection } from 'astro:content';
 
 const entries = await getCollection('policedata');
@@ -13,10 +14,14 @@ const national = entries.find((e) => e.data.kind === 'national')?.data as
 const forces = entries
   .filter((e) => e.data.kind === 'force')
   .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'force' }>)
-  .sort((a, b) => (b.stopSearch?.total ?? 0) - (a.stopSearch?.total ?? 0));
+  .sort((a, b) => (b.stopSearch.window?.total ?? 0) - (a.stopSearch.window?.total ?? 0));
 
 const fmt = new Intl.NumberFormat('en-GB');
 const ss = national?.stopSearch;
+const monthLabel = (m: string) => {
+  const [y, mo] = m.split('-').map(Number);
+  return new Date(y, mo - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+};
 ---
 <BaseLayout
   title="Crime Dashboard"
@@ -30,11 +35,10 @@ const ss = national?.stopSearch;
           Police data, read carefully.
         </h1>
         <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-7">
-          Start national, drill into any force, then look up your own street. Every figure comes
-          straight from <a href="https://data.police.uk" class="text-accent hover:text-accent-dark">data.police.uk</a>,
-          stamped with the month it describes and the day it was fetched — because, as Radio 4's
-          <em>More or Less</em> has spent twenty years showing, a number without its context can mislead
-          as easily as inform.
+          Real figures from <a href="https://data.police.uk" class="text-accent hover:text-accent-dark">data.police.uk</a>,
+          stamped with the month they describe and the day they were fetched. Start national, drill into any
+          force, read the <a href="/data/findings" class="text-accent hover:text-accent-dark">findings</a>, or
+          look up your own street.
         </p>
       </div>
     </div>
@@ -45,54 +49,67 @@ const ss = national?.stopSearch;
       <CaveatBanner />
 
       {ss && national ? (
-        <div class="space-y-12">
+        <div class="space-y-14">
+          {/* The headline + the incomplete-month warning, which is itself the lesson */}
+          <div class="grid md:grid-cols-2 gap-8 items-start">
+            <div>
+              <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">
+                Stop &amp; search · {monthLabel(national.provenance.datasetMonth)}
+              </p>
+              <p class="font-display text-5xl font-semibold text-ink-900">{fmt.format(ss.latest.total)}</p>
+              <p class="font-serif text-sm text-ink-600 leading-relaxed mt-2 max-w-sm">
+                searches recorded in the latest month — but read that number with care.
+              </p>
+              <div class="mt-4 flex items-center gap-3 text-accent">
+                <Sparkline points={ss.series} label="Monthly searches over the trend window" />
+                <span class="font-sans text-xs text-ink-500">12-month trend</span>
+              </div>
+            </div>
+            {national.forcesMissing.length > 0 && (
+              <div class="border border-accent/30 bg-accent/5 rounded-md p-5">
+                <p class="font-sans text-xs uppercase tracking-[0.18em] text-accent mb-2">Why that number misleads</p>
+                <p class="font-serif text-ink-700 leading-relaxed text-sm">
+                  <strong>{national.forcesMissing.length} of {national.forcesCount} forces</strong> hadn't filed
+                  {' '}{monthLabel(national.provenance.datasetMonth)} yet — so the latest-month total is an
+                  undercount, not a fall. Missing this month:
+                </p>
+                <p class="font-sans text-xs text-ink-500 mt-2 leading-relaxed">
+                  {national.forcesMissing.map((f) => f.replace(/-/g, ' ')).join(' · ')}.
+                </p>
+                <p class="font-serif text-ink-700 leading-relaxed text-sm mt-3">
+                  This is why the breakdowns below use a <strong>rolling 12 months</strong> instead — a fuller,
+                  steadier picture.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* 12-month window breakdowns */}
           <div>
             <div class="flex items-baseline justify-between flex-wrap gap-2 border-b border-ink-200 pb-3 mb-6">
-              <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900">Stop &amp; search, nationally</h2>
-              <span class="font-sans text-sm text-ink-500">
-                {fmt.format(ss.total)} searches · {national.forcesCount - national.forcesMissing.length} forces reporting
-              </span>
+              <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900">Over the last 12 months</h2>
+              <span class="font-sans text-sm text-ink-500">{fmt.format(ss.window.total)} searches</span>
             </div>
-
             <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
               <div>
-                <BarChart caption="Who gets searched (officer-defined ethnicity)" data={ss.byOfficerEthnicity} asPercent />
+                <BarChart caption="Who gets searched (officer-defined ethnicity)" data={ss.window.byOfficerEthnicity} asPercent />
                 <p class="font-serif text-sm text-ink-600 leading-relaxed mt-3">
-                  These are raw shares, not rates. To judge whether a group is searched
-                  <em>disproportionately</em> you need the local population as the denominator — the trap the
-                  <a href="/other/reading-the-data" class="text-accent hover:text-accent-dark">explainer</a> pulls apart.
+                  Raw shares, not rates. Whether a group is searched <em>disproportionately</em> needs the
+                  population as a denominator — the trap the
+                  <a href="/other/reading-the-data" class="text-accent hover:text-accent-dark"> explainer</a> pulls apart.
                 </p>
               </div>
-              <div>
-                <BarChart caption="What officers were looking for" data={ss.byObjectOfSearch} asPercent />
-              </div>
-              <div>
-                <BarChart caption="What happened next (outcome)" data={ss.byOutcome} asPercent />
-              </div>
-              <div class="flex flex-col justify-center">
-                <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Find rate</p>
-                <p class="font-display text-5xl font-semibold text-ink-900">
-                  {ss.findRate == null ? '—' : `${Math.round(ss.findRate * 100)}%`}
-                </p>
-                <p class="font-serif text-sm text-ink-600 leading-relaxed mt-2 max-w-xs">
-                  The share of searches that actually found what was being looked for. The other
-                  {ss.findRate == null ? '' : ` ${100 - Math.round(ss.findRate * 100)}%`} found nothing.
-                </p>
-              </div>
+              <BarChart caption="What officers were looking for" data={ss.window.byObjectOfSearch} asPercent />
+              <BarChart caption="What happened next (outcome)" data={ss.window.byOutcome} asPercent />
             </div>
-
-            {national.forcesMissing.length > 0 && (
-              <p class="font-sans text-xs text-ink-500 mt-6">
-                No data for this month from: {national.forcesMissing.join(', ')}.
-              </p>
-            )}
             <div class="mt-6">
               <ProvenanceStamp datasetMonth={national.provenance.datasetMonth} fetchedAt={national.provenance.fetchedAt} sample={national.provenance.sample} />
             </div>
           </div>
 
+          {/* Force directory */}
           <div>
-            <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900 border-b border-ink-200 pb-3 mb-6">By force</h2>
+            <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900 border-b border-ink-200 pb-3 mb-6">By force (12-month total)</h2>
             <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-1">
               {forces.map((f) => (
                 <li class="flex items-baseline justify-between gap-3 py-2 border-b border-ink-200/60">
@@ -100,21 +117,26 @@ const ss = national?.stopSearch;
                     {f.name}
                   </a>
                   <span class="font-sans text-xs tabular-nums text-ink-500 shrink-0">
-                    {f.stopSearch ? fmt.format(f.stopSearch.total) : '—'}
+                    {f.stopSearch.window ? fmt.format(f.stopSearch.window.total) : '—'}
                   </span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div class="border-t border-ink-200 pt-10">
-            <h2 class="font-display text-2xl font-semibold text-ink-900 mb-2">Look up your street</h2>
-            <p class="font-serif text-ink-700 leading-relaxed max-w-2xl mb-4">
-              The national and force figures above are stop &amp; search — the one thing the API reports
-              force-wide. Crime is reported by location, so to see it you point at a place.
-            </p>
-            <a href="/data/lookup" class="inline-block font-sans text-sm uppercase tracking-[0.15em] text-accent hover:text-accent-dark">
-              Open the area lookup →
+          {/* Pointers onward */}
+          <div class="border-t border-ink-200 pt-10 grid sm:grid-cols-3 gap-6">
+            <a href="/data/findings" class="group block">
+              <h3 class="font-display text-lg font-semibold text-ink-900 group-hover:text-accent">Findings →</h3>
+              <p class="font-serif text-sm text-ink-600 mt-1">What the data shows this month, read carefully.</p>
+            </a>
+            <a href="/data/crime" class="group block">
+              <h3 class="font-display text-lg font-semibold text-ink-900 group-hover:text-accent">City crime →</h3>
+              <p class="font-serif text-sm text-ink-600 mt-1">Crime type and outcomes for major city centres.</p>
+            </a>
+            <a href="/data/lookup" class="group block">
+              <h3 class="font-display text-lg font-semibold text-ink-900 group-hover:text-accent">Your street →</h3>
+              <p class="font-serif text-sm text-ink-600 mt-1">Live crime and your neighbourhood team by postcode.</p>
             </a>
           </div>
         </div>

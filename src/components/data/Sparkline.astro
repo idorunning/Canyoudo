@@ -1,0 +1,37 @@
+---
+// A tiny, dependency-free inline-SVG trend line for a 12-month series. Decorative
+// by design (the real numbers live in the table/labels beside it), so it's hidden
+// from assistive tech and summarised in the aria-label.
+interface Props {
+  points: { month: string; total: number }[];
+  label?: string;
+  width?: number;
+  height?: number;
+}
+const { points, label, width = 160, height = 36 } = Astro.props;
+
+const vals = points.map((p) => p.total);
+const max = Math.max(...vals, 1);
+const min = Math.min(...vals, 0);
+const span = max - min || 1;
+const n = points.length;
+const x = (i: number) => (n <= 1 ? 0 : (i / (n - 1)) * (width - 2) + 1);
+const y = (v: number) => height - 2 - ((v - min) / span) * (height - 4);
+const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(p.total).toFixed(1)}`).join(' ');
+const last = points[n - 1];
+const first = points[0];
+const dir = last && first ? (last.total > first.total ? 'up' : last.total < first.total ? 'down' : 'flat') : 'flat';
+const aria = label ?? `Trend over ${n} months, ${dir}`;
+---
+<svg
+  width={width}
+  height={height}
+  viewBox={`0 0 ${width} ${height}`}
+  fill="none"
+  role="img"
+  aria-label={aria}
+  class="overflow-visible"
+>
+  <path d={d} stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent/70" />
+  {last && <circle cx={x(n - 1)} cy={y(last.total)} r="2.5" class="fill-accent" />}
+</svg>

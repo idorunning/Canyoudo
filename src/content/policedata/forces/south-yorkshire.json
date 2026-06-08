@@ -1,0 +1,244 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "south-yorkshire",
+  "name": "South Yorkshire Police",
+  "stopSearch": {
+    "latest": {
+      "total": 904,
+      "findRate": 0.25,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 630
+        },
+        {
+          "label": "Arrest",
+          "count": 117
+        },
+        {
+          "label": "Community Resolution",
+          "count": 97
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 50
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 9
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 1
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 530
+        },
+        {
+          "label": "Not stated",
+          "count": 156
+        },
+        {
+          "label": "Asian",
+          "count": 121
+        },
+        {
+          "label": "Black",
+          "count": 80
+        },
+        {
+          "label": "Other",
+          "count": 17
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 628
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 106
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 66
+        },
+        {
+          "label": "Not stated",
+          "count": 55
+        },
+        {
+          "label": "Firearms",
+          "count": 25
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 19
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 5
+        }
+      ]
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 948,
+        "findRate": 0.292
+      },
+      {
+        "month": "2025-06",
+        "total": 932,
+        "findRate": 0.279
+      },
+      {
+        "month": "2025-07",
+        "total": 965,
+        "findRate": 0.302
+      },
+      {
+        "month": "2025-08",
+        "total": 1014,
+        "findRate": 0.275
+      },
+      {
+        "month": "2025-09",
+        "total": 967,
+        "findRate": 0.294
+      },
+      {
+        "month": "2025-10",
+        "total": 1209,
+        "findRate": 0.232
+      },
+      {
+        "month": "2025-11",
+        "total": 1023,
+        "findRate": 0.285
+      },
+      {
+        "month": "2025-12",
+        "total": 1017,
+        "findRate": 0.269
+      },
+      {
+        "month": "2026-01",
+        "total": 1109,
+        "findRate": 0.283
+      },
+      {
+        "month": "2026-02",
+        "total": 941,
+        "findRate": 0.251
+      },
+      {
+        "month": "2026-03",
+        "total": 1123,
+        "findRate": 0.251
+      },
+      {
+        "month": "2026-04",
+        "total": 904,
+        "findRate": 0.25
+      }
+    ],
+    "window": {
+      "total": 12152,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 8328
+        },
+        {
+          "label": "Arrest",
+          "count": 1721
+        },
+        {
+          "label": "Community Resolution",
+          "count": 1294
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 605
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 124
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 50
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 30
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 7400
+        },
+        {
+          "label": "Not stated",
+          "count": 2076
+        },
+        {
+          "label": "Asian",
+          "count": 1274
+        },
+        {
+          "label": "Black",
+          "count": 1091
+        },
+        {
+          "label": "Other",
+          "count": 311
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 8074
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 1418
+        },
+        {
+          "label": "Not stated",
+          "count": 969
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 896
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 482
+        },
+        {
+          "label": "Firearms",
+          "count": 235
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 78
+        }
+      ]
+    }
+  }
+}

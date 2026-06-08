@@ -1,0 +1,296 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "kent",
+  "name": "Kent Police",
+  "stopSearch": {
+    "latest": {
+      "total": 1479,
+      "findRate": 0.493,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 869
+        },
+        {
+          "label": "Community Resolution",
+          "count": 335
+        },
+        {
+          "label": "Arrest",
+          "count": 264
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 6
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 4
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 1
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 1094
+        },
+        {
+          "label": "Black",
+          "count": 124
+        },
+        {
+          "label": "Asian",
+          "count": 90
+        },
+        {
+          "label": "Other",
+          "count": 74
+        },
+        {
+          "label": "Mixed",
+          "count": 73
+        },
+        {
+          "label": "Not stated",
+          "count": 24
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 749
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 227
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 190
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 189
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 90
+        },
+        {
+          "label": "Firearms",
+          "count": 12
+        },
+        {
+          "label": "Evidence Of Wildlife Offences",
+          "count": 8
+        },
+        {
+          "label": "Goods On Which Duty Has Not Been Paid Etc.",
+          "count": 7
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 5
+        },
+        {
+          "label": "Fireworks",
+          "count": 1
+        },
+        {
+          "label": "Anything To Threaten Or Harm Anyone",
+          "count": 1
+        }
+      ]
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 1623,
+        "findRate": 0.516
+      },
+      {
+        "month": "2025-06",
+        "total": 1445,
+        "findRate": 0.507
+      },
+      {
+        "month": "2025-07",
+        "total": 1390,
+        "findRate": 0.529
+      },
+      {
+        "month": "2025-08",
+        "total": 1529,
+        "findRate": 0.478
+      },
+      {
+        "month": "2025-09",
+        "total": 1498,
+        "findRate": 0.533
+      },
+      {
+        "month": "2025-10",
+        "total": 1895,
+        "findRate": 0.51
+      },
+      {
+        "month": "2025-11",
+        "total": 1699,
+        "findRate": 0.494
+      },
+      {
+        "month": "2025-12",
+        "total": 1453,
+        "findRate": 0.515
+      },
+      {
+        "month": "2026-01",
+        "total": 1578,
+        "findRate": 0.482
+      },
+      {
+        "month": "2026-02",
+        "total": 1647,
+        "findRate": 0.495
+      },
+      {
+        "month": "2026-03",
+        "total": 1611,
+        "findRate": 0.516
+      },
+      {
+        "month": "2026-04",
+        "total": 1479,
+        "findRate": 0.493
+      }
+    ],
+    "window": {
+      "total": 18847,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 12026
+        },
+        {
+          "label": "Arrest",
+          "count": 3386
+        },
+        {
+          "label": "Community Resolution",
+          "count": 3038
+        },
+        {
+          "label": "Not stated",
+          "count": 284
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 70
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 27
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 15
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 1
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 13163
+        },
+        {
+          "label": "Black",
+          "count": 1440
+        },
+        {
+          "label": "Not stated",
+          "count": 1412
+        },
+        {
+          "label": "Other",
+          "count": 997
+        },
+        {
+          "label": "Asian",
+          "count": 959
+        },
+        {
+          "label": "Mixed",
+          "count": 876
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 10739
+        },
+        {
+          "label": "Detailed Object Of Search Unavailable",
+          "count": 2144
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 1898
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 1565
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 1551
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 667
+        },
+        {
+          "label": "Firearms",
+          "count": 174
+        },
+        {
+          "label": "Goods On Which Duty Has Not Been Paid Etc.",
+          "count": 45
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 26
+        },
+        {
+          "label": "Evidence Of Wildlife Offences",
+          "count": 22
+        },
+        {
+          "label": "Anything To Threaten Or Harm Anyone",
+          "count": 10
+        },
+        {
+          "label": "Fireworks",
+          "count": 4
+        },
+        {
+          "label": "Crossbows",
+          "count": 2
+        }
+      ]
+    }
+  }
+}

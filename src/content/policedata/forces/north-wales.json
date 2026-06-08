@@ -1,0 +1,244 @@
+{
+  "kind": "force",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "id": "north-wales",
+  "name": "North Wales Police",
+  "stopSearch": {
+    "latest": {
+      "total": 302,
+      "findRate": 0.228,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 212
+        },
+        {
+          "label": "Arrest",
+          "count": 39
+        },
+        {
+          "label": "Community Resolution",
+          "count": 34
+        },
+        {
+          "label": "Not stated",
+          "count": 13
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 4
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 155
+        },
+        {
+          "label": "Other",
+          "count": 142
+        },
+        {
+          "label": "Black",
+          "count": 4
+        },
+        {
+          "label": "Asian",
+          "count": 1
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 175
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 49
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 31
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 15
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 14
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 12
+        },
+        {
+          "label": "Detailed Object Of Search Unavailable",
+          "count": 6
+        }
+      ]
+    },
+    "series": [
+      {
+        "month": "2025-05",
+        "total": 303,
+        "findRate": 0.231
+      },
+      {
+        "month": "2025-06",
+        "total": 383,
+        "findRate": 0.198
+      },
+      {
+        "month": "2025-07",
+        "total": 337,
+        "findRate": 0.226
+      },
+      {
+        "month": "2025-08",
+        "total": 340,
+        "findRate": 0.194
+      },
+      {
+        "month": "2025-09",
+        "total": 348,
+        "findRate": 0.158
+      },
+      {
+        "month": "2025-10",
+        "total": 445,
+        "findRate": 0.16
+      },
+      {
+        "month": "2025-11",
+        "total": 391,
+        "findRate": 0.23
+      },
+      {
+        "month": "2025-12",
+        "total": 418,
+        "findRate": 0.158
+      },
+      {
+        "month": "2026-01",
+        "total": 339,
+        "findRate": 0.192
+      },
+      {
+        "month": "2026-02",
+        "total": 334,
+        "findRate": 0.156
+      },
+      {
+        "month": "2026-03",
+        "total": 304,
+        "findRate": 0.158
+      },
+      {
+        "month": "2026-04",
+        "total": 302,
+        "findRate": 0.228
+      }
+    ],
+    "window": {
+      "total": 4244,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 3051
+        },
+        {
+          "label": "Arrest",
+          "count": 637
+        },
+        {
+          "label": "Community Resolution",
+          "count": 300
+        },
+        {
+          "label": "Not stated",
+          "count": 178
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 73
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 5
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 2159
+        },
+        {
+          "label": "Other",
+          "count": 2024
+        },
+        {
+          "label": "Black",
+          "count": 41
+        },
+        {
+          "label": "Asian",
+          "count": 20
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 1997
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 906
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 518
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 372
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 183
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 181
+        },
+        {
+          "label": "Detailed Object Of Search Unavailable",
+          "count": 55
+        },
+        {
+          "label": "Firearms",
+          "count": 19
+        },
+        {
+          "label": "Not stated",
+          "count": 6
+        },
+        {
+          "label": "Anything To Threaten Or Harm Anyone",
+          "count": 5
+        },
+        {
+          "label": "Fireworks",
+          "count": 2
+        }
+      ]
+    }
+  }
+}

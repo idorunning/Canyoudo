@@ -11,9 +11,17 @@ on:
 permissions:
   contents: write
 
+# A new run supersedes an in-flight one rather than racing it on git push.
+concurrency:
+  group: police-data
+  cancel-in-progress: true
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -24,6 +32,23 @@ jobs:
       - name: Fetch snapshot
         run: node scripts/fetch-police-data.mjs
 
+      # Interpret the snapshot into /data/findings. The script self-skips when
+      # ANTHROPIC_API_KEY is absent, so the job stays green before the secret is
+      # configured. We always install the SDK rather than gate on the key in an
+      # `if:` (which proved fragile) — a few seconds, and it can't silently skip.
+      - name: Install Claude SDK
+        run: npm install --no-save @anthropic-ai/sdk
+
+      - name: Generate findings
+        continue-on-error: true
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY is empty in this run — findings will be skipped."
+          else
+            echo "ANTHROPIC_API_KEY is present (length ${#ANTHROPIC_API_KEY})."
+          fi
+          node scripts/interpret-data.mjs
+
       - name: Commit if changed
         run: |
           git config user.name "police-data-bot"
@@ -32,7 +57,7 @@ jobs:
             git add src/content/policedata
             month=$(node -p "require('./src/content/policedata/national.json').provenance.datasetMonth")
             git commit -m "Refresh police data snapshot ($month)"
-            git push
+            git push origin HEAD:${{ github.ref_name }}
           else
             echo "No change in snapshot."
           fi

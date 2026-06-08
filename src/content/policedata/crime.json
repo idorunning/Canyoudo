@@ -1,0 +1,1493 @@
+{
+  "kind": "crime",
+  "provenance": {
+    "source": "https://data.police.uk",
+    "licence": "Open Government Licence v3.0",
+    "datasetMonth": "2026-04",
+    "fetchedAt": "2026-06-08T01:22:02.008Z",
+    "windowMonths": 12,
+    "sample": false
+  },
+  "places": [
+    {
+      "name": "London",
+      "lat": 51.5074,
+      "lng": -0.1278,
+      "latestMonth": "2026-04",
+      "latestTotal": 4487,
+      "byCategory": [
+        {
+          "label": "Theft From The Person",
+          "count": 1035
+        },
+        {
+          "label": "Other Theft",
+          "count": 875
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 601
+        },
+        {
+          "label": "Violent Crime",
+          "count": 591
+        },
+        {
+          "label": "Shoplifting",
+          "count": 553
+        },
+        {
+          "label": "Public Order",
+          "count": 214
+        },
+        {
+          "label": "Robbery",
+          "count": 160
+        },
+        {
+          "label": "Drugs",
+          "count": 136
+        },
+        {
+          "label": "Burglary",
+          "count": 90
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 77
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 49
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 44
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 35
+        },
+        {
+          "label": "Other Crime",
+          "count": 27
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 1801
+        },
+        {
+          "label": "Under Investigation",
+          "count": 1788
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 601
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 177
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 94
+        },
+        {
+          "label": "Local Resolution",
+          "count": 17
+        },
+        {
+          "label": "Action To Be Taken By Another Organisation",
+          "count": 5
+        },
+        {
+          "label": "Offender Given Penalty Notice",
+          "count": 2
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 1
+        },
+        {
+          "label": "Formal Action Is Not In The Public Interest",
+          "count": 1
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 6233
+        },
+        {
+          "month": "2025-12",
+          "total": 6305
+        },
+        {
+          "month": "2026-01",
+          "total": 4871
+        },
+        {
+          "month": "2026-02",
+          "total": 4496
+        },
+        {
+          "month": "2026-03",
+          "total": 4361
+        },
+        {
+          "month": "2026-04",
+          "total": 4487
+        }
+      ]
+    },
+    {
+      "name": "Birmingham",
+      "lat": 52.4796,
+      "lng": -1.9026,
+      "latestMonth": "2026-04",
+      "latestTotal": 1688,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 647
+        },
+        {
+          "label": "Shoplifting",
+          "count": 244
+        },
+        {
+          "label": "Other Theft",
+          "count": 156
+        },
+        {
+          "label": "Public Order",
+          "count": 131
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 110
+        },
+        {
+          "label": "Drugs",
+          "count": 90
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 90
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 55
+        },
+        {
+          "label": "Robbery",
+          "count": 44
+        },
+        {
+          "label": "Burglary",
+          "count": 42
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 32
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 31
+        },
+        {
+          "label": "Other Crime",
+          "count": 10
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 6
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 828
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 332
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 324
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 85
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 55
+        },
+        {
+          "label": "Local Resolution",
+          "count": 53
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 8
+        },
+        {
+          "label": "Action To Be Taken By Another Organisation",
+          "count": 3
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 1832
+        },
+        {
+          "month": "2025-12",
+          "total": 1659
+        },
+        {
+          "month": "2026-01",
+          "total": 1583
+        },
+        {
+          "month": "2026-02",
+          "total": 1591
+        },
+        {
+          "month": "2026-03",
+          "total": 1741
+        },
+        {
+          "month": "2026-04",
+          "total": 1688
+        }
+      ]
+    },
+    {
+      "name": "Manchester",
+      "lat": 53.4808,
+      "lng": -2.2426,
+      "latestMonth": "2026-04",
+      "latestTotal": 4,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 2
+        },
+        {
+          "label": "Other Theft",
+          "count": 1
+        },
+        {
+          "label": "Other Crime",
+          "count": 1
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 3
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 1
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 4
+        },
+        {
+          "month": "2025-12",
+          "total": 3
+        },
+        {
+          "month": "2026-01",
+          "total": 6
+        },
+        {
+          "month": "2026-02",
+          "total": 7
+        },
+        {
+          "month": "2026-03",
+          "total": 11
+        },
+        {
+          "month": "2026-04",
+          "total": 4
+        }
+      ]
+    },
+    {
+      "name": "Leeds",
+      "lat": 53.8008,
+      "lng": -1.5491,
+      "latestMonth": "2026-04",
+      "latestTotal": 1527,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 390
+        },
+        {
+          "label": "Shoplifting",
+          "count": 275
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 147
+        },
+        {
+          "label": "Public Order",
+          "count": 139
+        },
+        {
+          "label": "Other Theft",
+          "count": 116
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 79
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 77
+        },
+        {
+          "label": "Drugs",
+          "count": 70
+        },
+        {
+          "label": "Burglary",
+          "count": 65
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 55
+        },
+        {
+          "label": "Other Crime",
+          "count": 38
+        },
+        {
+          "label": "Robbery",
+          "count": 36
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 25
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 15
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 721
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 427
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 147
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 119
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 76
+        },
+        {
+          "label": "Local Resolution",
+          "count": 32
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 2
+        },
+        {
+          "label": "Offender Given Penalty Notice",
+          "count": 1
+        },
+        {
+          "label": "Further Investigation Is Not In The Public Interest",
+          "count": 1
+        },
+        {
+          "label": "Action To Be Taken By Another Organisation",
+          "count": 1
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 1561
+        },
+        {
+          "month": "2025-12",
+          "total": 1412
+        },
+        {
+          "month": "2026-01",
+          "total": 1347
+        },
+        {
+          "month": "2026-02",
+          "total": 1308
+        },
+        {
+          "month": "2026-03",
+          "total": 1577
+        },
+        {
+          "month": "2026-04",
+          "total": 1527
+        }
+      ]
+    },
+    {
+      "name": "Liverpool",
+      "lat": 53.4084,
+      "lng": -2.9916,
+      "latestMonth": "2026-04",
+      "latestTotal": 1549,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 445
+        },
+        {
+          "label": "Drugs",
+          "count": 308
+        },
+        {
+          "label": "Shoplifting",
+          "count": 183
+        },
+        {
+          "label": "Public Order",
+          "count": 149
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 133
+        },
+        {
+          "label": "Other Theft",
+          "count": 85
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 67
+        },
+        {
+          "label": "Burglary",
+          "count": 52
+        },
+        {
+          "label": "Other Crime",
+          "count": 33
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 31
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 25
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 17
+        },
+        {
+          "label": "Robbery",
+          "count": 11
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 10
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 821
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 212
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 201
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 133
+        },
+        {
+          "label": "Local Resolution",
+          "count": 103
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 70
+        },
+        {
+          "label": "Further Investigation Is Not In The Public Interest",
+          "count": 7
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 2
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 1799
+        },
+        {
+          "month": "2025-12",
+          "total": 1623
+        },
+        {
+          "month": "2026-01",
+          "total": 1389
+        },
+        {
+          "month": "2026-02",
+          "total": 1327
+        },
+        {
+          "month": "2026-03",
+          "total": 1758
+        },
+        {
+          "month": "2026-04",
+          "total": 1549
+        }
+      ]
+    },
+    {
+      "name": "Sheffield",
+      "lat": 53.3811,
+      "lng": -1.4701,
+      "latestMonth": "2026-04",
+      "latestTotal": 1120,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 347
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 184
+        },
+        {
+          "label": "Shoplifting",
+          "count": 155
+        },
+        {
+          "label": "Public Order",
+          "count": 102
+        },
+        {
+          "label": "Other Theft",
+          "count": 61
+        },
+        {
+          "label": "Drugs",
+          "count": 43
+        },
+        {
+          "label": "Burglary",
+          "count": 39
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 37
+        },
+        {
+          "label": "Other Crime",
+          "count": 37
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 33
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 30
+        },
+        {
+          "label": "Robbery",
+          "count": 27
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 19
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 6
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 448
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 231
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 184
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 184
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 49
+        },
+        {
+          "label": "Local Resolution",
+          "count": 21
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 1
+        },
+        {
+          "label": "Further Action Is Not In The Public Interest",
+          "count": 1
+        },
+        {
+          "label": "Further Investigation Is Not In The Public Interest",
+          "count": 1
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 1252
+        },
+        {
+          "month": "2025-12",
+          "total": 1163
+        },
+        {
+          "month": "2026-01",
+          "total": 1138
+        },
+        {
+          "month": "2026-02",
+          "total": 1132
+        },
+        {
+          "month": "2026-03",
+          "total": 1185
+        },
+        {
+          "month": "2026-04",
+          "total": 1120
+        }
+      ]
+    },
+    {
+      "name": "Bristol",
+      "lat": 51.4545,
+      "lng": -2.5879,
+      "latestMonth": "2026-04",
+      "latestTotal": 1942,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 563
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 345
+        },
+        {
+          "label": "Shoplifting",
+          "count": 184
+        },
+        {
+          "label": "Public Order",
+          "count": 174
+        },
+        {
+          "label": "Other Theft",
+          "count": 165
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 113
+        },
+        {
+          "label": "Burglary",
+          "count": 97
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 77
+        },
+        {
+          "label": "Robbery",
+          "count": 69
+        },
+        {
+          "label": "Drugs",
+          "count": 56
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 38
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 37
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 12
+        },
+        {
+          "label": "Other Crime",
+          "count": 12
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 597
+        },
+        {
+          "label": "Under Investigation",
+          "count": 586
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 345
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 326
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 49
+        },
+        {
+          "label": "Further Investigation Is Not In The Public Interest",
+          "count": 18
+        },
+        {
+          "label": "Local Resolution",
+          "count": 11
+        },
+        {
+          "label": "Further Action Is Not In The Public Interest",
+          "count": 3
+        },
+        {
+          "label": "Action To Be Taken By Another Organisation",
+          "count": 3
+        },
+        {
+          "label": "Formal Action Is Not In The Public Interest",
+          "count": 2
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 2
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 2018
+        },
+        {
+          "month": "2025-12",
+          "total": 1867
+        },
+        {
+          "month": "2026-01",
+          "total": 1862
+        },
+        {
+          "month": "2026-02",
+          "total": 1730
+        },
+        {
+          "month": "2026-03",
+          "total": 1977
+        },
+        {
+          "month": "2026-04",
+          "total": 1942
+        }
+      ]
+    },
+    {
+      "name": "Newcastle",
+      "lat": 54.9783,
+      "lng": -1.6178,
+      "latestMonth": "2026-04",
+      "latestTotal": 1011,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 254
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 227
+        },
+        {
+          "label": "Shoplifting",
+          "count": 199
+        },
+        {
+          "label": "Other Theft",
+          "count": 60
+        },
+        {
+          "label": "Public Order",
+          "count": 56
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 48
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 30
+        },
+        {
+          "label": "Burglary",
+          "count": 26
+        },
+        {
+          "label": "Robbery",
+          "count": 26
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 23
+        },
+        {
+          "label": "Drugs",
+          "count": 22
+        },
+        {
+          "label": "Other Crime",
+          "count": 16
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 15
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 9
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 600
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 227
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 158
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 19
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 5
+        },
+        {
+          "label": "Action To Be Taken By Another Organisation",
+          "count": 1
+        },
+        {
+          "label": "Local Resolution",
+          "count": 1
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 1247
+        },
+        {
+          "month": "2025-12",
+          "total": 1163
+        },
+        {
+          "month": "2026-01",
+          "total": 456
+        },
+        {
+          "month": "2026-02",
+          "total": 817
+        },
+        {
+          "month": "2026-03",
+          "total": 987
+        },
+        {
+          "month": "2026-04",
+          "total": 1011
+        }
+      ]
+    },
+    {
+      "name": "Nottingham",
+      "lat": 52.9548,
+      "lng": -1.1581,
+      "latestMonth": "2026-04",
+      "latestTotal": 1699,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 415
+        },
+        {
+          "label": "Shoplifting",
+          "count": 332
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 275
+        },
+        {
+          "label": "Other Theft",
+          "count": 130
+        },
+        {
+          "label": "Public Order",
+          "count": 128
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 102
+        },
+        {
+          "label": "Drugs",
+          "count": 70
+        },
+        {
+          "label": "Burglary",
+          "count": 61
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 60
+        },
+        {
+          "label": "Robbery",
+          "count": 48
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 31
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 22
+        },
+        {
+          "label": "Other Crime",
+          "count": 15
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 10
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 713
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 373
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 275
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 187
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 120
+        },
+        {
+          "label": "Local Resolution",
+          "count": 21
+        },
+        {
+          "label": "Formal Action Is Not In The Public Interest",
+          "count": 5
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 3
+        },
+        {
+          "label": "Action To Be Taken By Another Organisation",
+          "count": 2
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 1792
+        },
+        {
+          "month": "2025-12",
+          "total": 1638
+        },
+        {
+          "month": "2026-01",
+          "total": 1665
+        },
+        {
+          "month": "2026-02",
+          "total": 1601
+        },
+        {
+          "month": "2026-03",
+          "total": 1834
+        },
+        {
+          "month": "2026-04",
+          "total": 1699
+        }
+      ]
+    },
+    {
+      "name": "Leicester",
+      "lat": 52.6369,
+      "lng": -1.1398,
+      "latestMonth": "2026-04",
+      "latestTotal": 1496,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 472
+        },
+        {
+          "label": "Public Order",
+          "count": 201
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 180
+        },
+        {
+          "label": "Shoplifting",
+          "count": 180
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 114
+        },
+        {
+          "label": "Other Theft",
+          "count": 112
+        },
+        {
+          "label": "Drugs",
+          "count": 63
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 45
+        },
+        {
+          "label": "Burglary",
+          "count": 40
+        },
+        {
+          "label": "Other Crime",
+          "count": 24
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 21
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 16
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 14
+        },
+        {
+          "label": "Robbery",
+          "count": 14
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 622
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 380
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 180
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 161
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 96
+        },
+        {
+          "label": "Local Resolution",
+          "count": 42
+        },
+        {
+          "label": "Formal Action Is Not In The Public Interest",
+          "count": 4
+        },
+        {
+          "label": "Further Investigation Is Not In The Public Interest",
+          "count": 4
+        },
+        {
+          "label": "Action To Be Taken By Another Organisation",
+          "count": 3
+        },
+        {
+          "label": "Further Action Is Not In The Public Interest",
+          "count": 3
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 1
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 1427
+        },
+        {
+          "month": "2025-12",
+          "total": 1457
+        },
+        {
+          "month": "2026-01",
+          "total": 1513
+        },
+        {
+          "month": "2026-02",
+          "total": 1366
+        },
+        {
+          "month": "2026-03",
+          "total": 1596
+        },
+        {
+          "month": "2026-04",
+          "total": 1496
+        }
+      ]
+    },
+    {
+      "name": "Cardiff",
+      "lat": 51.4816,
+      "lng": -3.1791,
+      "latestMonth": "2026-04",
+      "latestTotal": 1249,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 345
+        },
+        {
+          "label": "Shoplifting",
+          "count": 220
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 143
+        },
+        {
+          "label": "Public Order",
+          "count": 110
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 108
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 76
+        },
+        {
+          "label": "Other Theft",
+          "count": 72
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 34
+        },
+        {
+          "label": "Drugs",
+          "count": 30
+        },
+        {
+          "label": "Other Crime",
+          "count": 29
+        },
+        {
+          "label": "Burglary",
+          "count": 26
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 21
+        },
+        {
+          "label": "Robbery",
+          "count": 20
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 15
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 588
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 331
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 143
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 111
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 61
+        },
+        {
+          "label": "Local Resolution",
+          "count": 6
+        },
+        {
+          "label": "Further Investigation Is Not In The Public Interest",
+          "count": 4
+        },
+        {
+          "label": "Action To Be Taken By Another Organisation",
+          "count": 3
+        },
+        {
+          "label": "Formal Action Is Not In The Public Interest",
+          "count": 1
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 1
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 1412
+        },
+        {
+          "month": "2025-12",
+          "total": 1183
+        },
+        {
+          "month": "2026-01",
+          "total": 1034
+        },
+        {
+          "month": "2026-02",
+          "total": 1131
+        },
+        {
+          "month": "2026-03",
+          "total": 1155
+        },
+        {
+          "month": "2026-04",
+          "total": 1249
+        }
+      ]
+    },
+    {
+      "name": "Coventry",
+      "lat": 52.4068,
+      "lng": -1.5197,
+      "latestMonth": "2026-04",
+      "latestTotal": 792,
+      "byCategory": [
+        {
+          "label": "Violent Crime",
+          "count": 292
+        },
+        {
+          "label": "Shoplifting",
+          "count": 121
+        },
+        {
+          "label": "Public Order",
+          "count": 68
+        },
+        {
+          "label": "Other Theft",
+          "count": 59
+        },
+        {
+          "label": "Criminal Damage Arson",
+          "count": 48
+        },
+        {
+          "label": "Anti Social Behaviour",
+          "count": 37
+        },
+        {
+          "label": "Burglary",
+          "count": 35
+        },
+        {
+          "label": "Vehicle Crime",
+          "count": 30
+        },
+        {
+          "label": "Drugs",
+          "count": 26
+        },
+        {
+          "label": "Robbery",
+          "count": 23
+        },
+        {
+          "label": "Possession Of Weapons",
+          "count": 19
+        },
+        {
+          "label": "Bicycle Theft",
+          "count": 15
+        },
+        {
+          "label": "Theft From The Person",
+          "count": 11
+        },
+        {
+          "label": "Other Crime",
+          "count": 8
+        }
+      ],
+      "byOutcome": [
+        {
+          "label": "Under Investigation",
+          "count": 386
+        },
+        {
+          "label": "Investigation Complete; No Suspect Identified",
+          "count": 161
+        },
+        {
+          "label": "Unable To Prosecute Suspect",
+          "count": 130
+        },
+        {
+          "label": "Awaiting Court Outcome",
+          "count": 52
+        },
+        {
+          "label": "Awaiting / Under Investigation",
+          "count": 37
+        },
+        {
+          "label": "Local Resolution",
+          "count": 24
+        },
+        {
+          "label": "Offender Given A Caution",
+          "count": 2
+        }
+      ],
+      "series": [
+        {
+          "month": "2025-11",
+          "total": 798
+        },
+        {
+          "month": "2025-12",
+          "total": 723
+        },
+        {
+          "month": "2026-01",
+          "total": 715
+        },
+        {
+          "month": "2026-02",
+          "total": 745
+        },
+        {
+          "month": "2026-03",
+          "total": 707
+        },
+        {
+          "month": "2026-04",
+          "total": 792
+        }
+      ]
+    }
+  ]
+}

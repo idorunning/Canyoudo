@@ -8,60 +8,60 @@
     "windowMonths": 12,
     "sample": false
   },
-  "id": "metropolitan",
-  "name": "Metropolitan Police Service",
+  "id": "lincolnshire",
+  "name": "Lincolnshire Police",
   "stopSearch": {
     "latest": null,
     "series": [
       {
         "month": "2025-05",
-        "total": 10688,
-        "findRate": 0
+        "total": 219,
+        "findRate": 0.219
       },
       {
         "month": "2025-06",
-        "total": 10663,
-        "findRate": 0
+        "total": 212,
+        "findRate": 0.203
       },
       {
         "month": "2025-07",
-        "total": 11254,
-        "findRate": 0
+        "total": 219,
+        "findRate": 0.196
       },
       {
         "month": "2025-08",
-        "total": 14899,
-        "findRate": 0
+        "total": 202,
+        "findRate": 0.208
       },
       {
         "month": "2025-09",
-        "total": 11151,
-        "findRate": 0
+        "total": 158,
+        "findRate": 0.171
       },
       {
         "month": "2025-10",
-        "total": 11749,
-        "findRate": 0
+        "total": 185,
+        "findRate": 0.168
       },
       {
         "month": "2025-11",
-        "total": 12355,
-        "findRate": 0
+        "total": 140,
+        "findRate": 0.229
       },
       {
         "month": "2025-12",
-        "total": 11861,
-        "findRate": 0
+        "total": 153,
+        "findRate": 0.209
       },
       {
         "month": "2026-01",
-        "total": 12295,
-        "findRate": 0
+        "total": 146,
+        "findRate": 0.151
       },
       {
         "month": "2026-02",
-        "total": 11734,
-        "findRate": 0
+        "total": 0,
+        "findRate": null
       },
       {
         "month": "2026-03",
@@ -75,95 +75,107 @@
       }
     ],
     "window": {
-      "total": 118649,
+      "total": 1634,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 78946
+          "count": 1484
         },
         {
           "label": "Arrest",
-          "count": 20817
+          "count": 114
         },
         {
           "label": "Community Resolution",
-          "count": 13439
-        },
-        {
-          "label": "Penalty Notice For Disorder",
-          "count": 2940
+          "count": 22
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 1438
+          "count": 9
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 4
         },
         {
           "label": "Caution (Simple Or Conditional)",
-          "count": 1047
-        },
-        {
-          "label": "Not stated",
-          "count": 22
+          "count": 1
         }
       ],
       "byOfficerEthnicity": [
         {
-          "label": "Black",
-          "count": 48243
-        },
-        {
           "label": "White",
-          "count": 41215
-        },
-        {
-          "label": "Asian",
-          "count": 16923
-        },
-        {
-          "label": "Other",
-          "count": 6823
+          "count": 1435
         },
         {
           "label": "Not stated",
-          "count": 5445
+          "count": 78
+        },
+        {
+          "label": "Black",
+          "count": 60
+        },
+        {
+          "label": "Asian",
+          "count": 44
+        },
+        {
+          "label": "Other",
+          "count": 17
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 69177
-        },
-        {
-          "label": "Stolen Goods",
-          "count": 24399
+          "count": 904
         },
         {
           "label": "Offensive Weapons",
-          "count": 15646
+          "count": 396
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 185
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 73
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 4325
+          "count": 22
         },
         {
           "label": "Anything To Threaten Or Harm Anyone",
-          "count": 2768
-        },
-        {
-          "label": "Not stated",
-          "count": 728
-        },
-        {
-          "label": "Articles For Use In Criminal Damage",
-          "count": 554
-        },
-        {
-          "label": "Fireworks",
-          "count": 543
+          "count": 22
         },
         {
           "label": "Firearms",
-          "count": 509
+          "count": 13
+        },
+        {
+          "label": "Goods On Which Duty Has Not Been Paid Etc.",
+          "count": 5
+        },
+        {
+          "label": "Evidence Of Wildlife Offences",
+          "count": 5
+        },
+        {
+          "label": "Seals Or Hunting Equipment",
+          "count": 4
+        },
+        {
+          "label": "Fireworks",
+          "count": 3
+        },
+        {
+          "label": "Not stated",
+          "count": 1
+        },
+        {
+          "label": "Psychoactive Substances",
+          "count": 1
         }
       ]
     }
