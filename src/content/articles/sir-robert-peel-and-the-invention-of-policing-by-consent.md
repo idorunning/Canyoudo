@@ -3,6 +3,7 @@ section: "influential-people"
 title: "Sir Robert Peel and the Invention of Policing by Consent"
 description: "In 1829 a Home Secretary persuaded a suspicious country to accept the first modern police force — unarmed, in plain blue, and answerable to the public rather than the Crown. A profile of Sir Robert Peel and the idea that still underwrites British policing: that the police are only ever the public in uniform."
 pubDate: 2026-06-07
+portrait: "/images/peel-portrait.svg"
 tags: ["public-confidence", "accountability", "neighbourhood-policing", "law", "leadership", "police", "policing", "history", "legitimacy"]
 ---
 

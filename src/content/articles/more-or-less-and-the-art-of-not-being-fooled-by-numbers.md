@@ -3,6 +3,7 @@ section: "other"
 title: "More or Less, and the Art of Not Being Fooled by Numbers"
 description: "Every week a cheerful BBC radio programme takes a number that has been confidently waved around in the news and asks the rude question: is that actually true? A fond appreciation of More or Less and its host Tim Harford — and of the surprisingly useful habits it teaches anyone who has to think about statistics, policing ones included."
 pubDate: 2026-06-07
+heroImage: "/images/prob-over-pvalues-chart2-framing-survey.png"
 tags: ["public-confidence", "evidence-based-policing", "statistics", "numbers", "media", "data"]
 ---
 

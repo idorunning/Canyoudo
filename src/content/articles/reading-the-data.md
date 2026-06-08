@@ -3,6 +3,7 @@ title: "More or Less Policing: how to read the numbers without being fooled"
 section: "other"
 description: "A new strand, in the spirit of Radio 4's More or Less: police statistics are everywhere, and most of them are easy to misread. Here's how to read them — starting with the trap inside every stop-and-search figure."
 pubDate: 2026-06-07
+heroImage: "/images/prob-over-pvalues-chart1-decision-bands.png"
 tags: ["More or Less Policing", "stop and search", "statistics", "transparency"]
 ---
 

@@ -6,6 +6,7 @@ description: When a police officer is finally dismissed or even convicted for
   like, “I saw that coming”? More often than we’d like…
 pubDate: 2025-09-09
 thumbnail: /images/image_editor_output_image1681454371-17655514280582700668508713128379.png
+heroImage: "/images/image_editor_output_image1681454371-17655514280582700668508713128379.png"
 tags:
   - crime
   - evidence-based

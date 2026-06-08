@@ -4,6 +4,7 @@ title: "The Neighbourhood Policing Guarantee: Confidence or Crime?"
 description: "The Guarantee borrows the language of evidence — data-guided presence, hotspot patrolling. But it folds together two different jobs. A named officer per ward builds confidence. Hotspot patrolling cuts crime. The evidence for each is strong and specific, and the design honours it in some places and departs from it in others."
 pubDate: 2026-06-06
 thumbnail: "/images/neighbourhood-guarantee-chart2-koper-curve.png"
+heroImage: "/images/neighbourhood-guarantee-chart2-koper-curve.png"
 tags: ["neighbourhood-policing", "hotspot-policing", "public-confidence", "evidence-based-policing", "white-paper", "what-works", "policy", "police"]
 ---
 

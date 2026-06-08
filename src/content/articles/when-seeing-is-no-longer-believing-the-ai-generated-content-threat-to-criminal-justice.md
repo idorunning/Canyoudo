@@ -4,6 +4,7 @@ title: "When Seeing Is No Longer Believing: The AI generated content Threat to C
 description: "All images and video have been generated for the purposes of this article and does not depict real people or events."
 pubDate: 2025-03-25
 thumbnail: "/images/ai-cctv-hero.jpg"
+heroImage: "/images/ai-cctv-hero.jpg"
 ---
 <figure>
   <img src="/images/ai-cctv-hero.jpg" alt="A grainy green night-vision CCTV still of a figure advancing along a corridor" loading="lazy" />

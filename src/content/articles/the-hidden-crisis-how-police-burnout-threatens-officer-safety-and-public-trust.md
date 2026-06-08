@@ -4,6 +4,7 @@ title: "The Hidden Crisis: How Police Burnout Threatens Officer Safety and Publi
 description: "Police burnout isn’t just an occupational hazard — it’s a critical public safety issue that directly increases the risk of excessive force and threatens community trust. 83% of officers report…"
 pubDate: 2025-07-29
 thumbnail: "/images/police-officer-on-duty.jpg"
+heroImage: "/images/police-officer-on-duty.jpg"
 tags: ["crime", "evidence-based-policing", "mental-health", "neurodiversity", "police", "policing"]
 ---
 ### 

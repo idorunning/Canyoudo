@@ -3,6 +3,7 @@ section: "influential-people"
 title: "Jerry Ratcliffe and the Case for Intelligence-Led Policing"
 description: "A London beat officer turned Philadelphia professor, Jerry Ratcliffe spent a career arguing that policing should aim its scarce resources at the few places, times and people that produce most of the harm — and then test whether it worked. A profile of the criminologist behind intelligence-led policing and the Reducing Crime podcast."
 pubDate: 2026-06-07
+portrait: "/images/ratcliffe-portrait.svg"
 tags: ["evidence-based-policing", "predictive-policing", "hotspot-policing", "leadership", "police", "policing", "criminology"]
 ---
 
