@@ -112,6 +112,13 @@ collections:
           choose_url: true,
         }
       - {
+          name: "portrait",
+          label: "Portrait (optional) — head-and-shoulders photo for Influential People cards",
+          widget: "image",
+          required: false,
+          choose_url: true,
+        }
+      - {
           name: "tags",
           label: "Tags",
           widget: "list",

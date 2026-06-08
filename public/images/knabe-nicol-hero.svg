@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 560" width="1600" height="560" role="img" aria-label="Profile of Susanne Knabe-Nicol, the Police Science Dr: turning police research into videos, podcasts, transcripts and courses that reach the frontline.">
+  <rect width="1600" height="560" fill="#1a1817"/>
+  <rect x="110" y="86" width="64" height="4" fill="#7c2828"/>
+  <text x="110" y="128" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="25" font-weight="600" letter-spacing="6">PROFILE — EVIDENCE-BASED POLICING</text>
+  <text x="106" y="232" fill="#fbf8f1" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="92" font-weight="600">Susanne Knabe-Nicol</text>
+  <text x="110" y="296" fill="#c4bcae" font-family="'Source Serif 4', Georgia, serif" font-size="35" font-style="italic">The practitioner who makes the research usable</text>
+
+  <!-- research -> translation -> practice pipeline -->
+  <g font-family="'DM Sans', system-ui, sans-serif">
+    <!-- node: research -->
+    <rect x="150" y="392" width="300" height="118" rx="10" fill="#221f1d" stroke="#3d3936" stroke-width="2"/>
+    <text x="300" y="438" text-anchor="middle" fill="#7e766b" font-size="20" letter-spacing="3">THE ACADEMY</text>
+    <text x="300" y="478" text-anchor="middle" fill="#f7f3eb" font-size="30" font-weight="700">Research</text>
+
+    <!-- arrow 1 -->
+    <line x1="470" y1="451" x2="630" y2="451" stroke="#a14545" stroke-width="3"/>
+    <path d="M630 451 l-16 -9 v18 z" fill="#a14545"/>
+
+    <!-- node: translation (highlighted) -->
+    <rect x="650" y="380" width="300" height="142" rx="10" fill="#2a1414" stroke="#7c2828" stroke-width="2.5"/>
+    <text x="800" y="430" text-anchor="middle" fill="#c98a8a" font-size="20" letter-spacing="3">POLICE SCIENCE DR</text>
+    <text x="800" y="470" text-anchor="middle" fill="#fbf8f1" font-size="30" font-weight="700">Translation</text>
+    <text x="800" y="500" text-anchor="middle" fill="#c4bcae" font-size="19" font-style="italic" font-family="'Source Serif 4', Georgia, serif">video · podcast · transcript · course</text>
+
+    <!-- arrow 2 -->
+    <line x1="970" y1="451" x2="1130" y2="451" stroke="#a14545" stroke-width="3"/>
+    <path d="M1130 451 l-16 -9 v18 z" fill="#a14545"/>
+
+    <!-- node: practice -->
+    <rect x="1150" y="392" width="300" height="118" rx="10" fill="#221f1d" stroke="#3d3936" stroke-width="2"/>
+    <text x="1300" y="438" text-anchor="middle" fill="#7e766b" font-size="20" letter-spacing="3">THE FRONTLINE</text>
+    <text x="1300" y="478" text-anchor="middle" fill="#f7f3eb" font-size="30" font-weight="700">Practice</text>
+  </g>
+
+  <text x="110" y="348" fill="#7e766b" font-family="'DM Sans', system-ui, sans-serif" font-size="22" letter-spacing="2">WHERE POLICE RESEARCH MEETS POLICE PRACTICE</text>
+</svg>

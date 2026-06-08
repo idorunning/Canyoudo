@@ -9,6 +9,9 @@ interface Props {
   section?: 'police-policy' | 'public-policy' | 'influential-people' | 'other';
   showSection?: boolean;
   variant?: 'default' | 'feature';
+  // Optional head-and-shoulders portrait, shown beside the text (used on the
+  // Influential People cards).
+  portrait?: string;
 }
 
 const {
@@ -19,6 +22,7 @@ const {
   section,
   showSection = false,
   variant = 'default',
+  portrait,
 } = Astro.props;
 
 const formattedDate = pubDate.toLocaleDateString('en-GB', {
@@ -31,29 +35,40 @@ const isFeature = variant === 'feature';
 ---
 
 <article class={`group ${isFeature ? 'py-10' : 'py-7'} border-b border-ink-200`}>
-  <a href={href} class="block">
-    {showSection && section && (
-      <div class="mb-3">
-        <SectionBadge section={section} size="sm" />
-      </div>
+  <a href={href} class={`block ${portrait ? 'sm:flex sm:gap-6 sm:items-start' : ''}`}>
+    {portrait && (
+      <img
+        src={portrait}
+        alt=""
+        loading="lazy"
+        class="mb-4 sm:mb-0 h-24 w-24 md:h-28 md:w-28 shrink-0 rounded-md object-cover bg-paper-200 ring-1 ring-ink-200"
+      />
     )}
 
-    <h2 class={`font-display font-semibold text-ink-900 leading-tight tracking-tight group-hover:text-accent transition-colors ${
-      isFeature ? 'text-3xl md:text-4xl' : 'text-2xl md:text-[1.7rem]'
-    }`}>
-      {title}
-    </h2>
+    <div class="min-w-0">
+      {showSection && section && (
+        <div class="mb-3">
+          <SectionBadge section={section} size="sm" />
+        </div>
+      )}
 
-    <p class={`font-serif text-ink-700 leading-relaxed mt-3 ${
-      isFeature ? 'text-lg md:text-xl max-w-2xl' : 'text-base max-w-2xl'
-    }`}>
-      {description}
-    </p>
+      <h2 class={`font-display font-semibold text-ink-900 leading-tight tracking-tight group-hover:text-accent transition-colors ${
+        isFeature ? 'text-3xl md:text-4xl' : 'text-2xl md:text-[1.7rem]'
+      }`}>
+        {title}
+      </h2>
 
-    <div class="mt-4 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
-      <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-      <span class="mx-2">·</span>
-      <span class="group-hover:text-accent transition-colors">Read article →</span>
+      <p class={`font-serif text-ink-700 leading-relaxed mt-3 ${
+        isFeature ? 'text-lg md:text-xl max-w-2xl' : 'text-base max-w-2xl'
+      }`}>
+        {description}
+      </p>
+
+      <div class="mt-4 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
+        <time datetime={pubDate.toISOString()}>{formattedDate}</time>
+        <span class="mx-2">·</span>
+        <span class="group-hover:text-accent transition-colors">Read article →</span>
+      </div>
     </div>
   </a>
 </article>

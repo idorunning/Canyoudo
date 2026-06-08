@@ -20,6 +20,9 @@ const articleSchema = z.object({
   updatedDate: z.coerce.date().optional(),
   heroImage: z.string().optional(),
   thumbnail: z.string().optional(),
+  // A head-and-shoulders portrait, shown on the Influential People cards so
+  // each person is presented by their face rather than text alone.
+  portrait: z.string().optional(),
   tags: z.array(z.string()).optional(),
   // Old paths to 301-redirect to this article — fill in when you move an
   // article between sections so the previous URL doesn't break.

@@ -5,6 +5,7 @@ description: "Alex Murray spent a career investigating murders and running count
 pubDate: 2026-06-07
 heroImage: "/images/murray-ebp-hero.svg"
 thumbnail: "/images/murray-ebp-hero.svg"
+portrait: "/images/alex-murray-portrait.jpg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "leadership", "criminology", "artificial-intelligence"]
 redirectFrom: ["/police-policy/alex-murray-and-the-rise-of-evidence-based-policing"]
 ---

@@ -5,6 +5,7 @@ description: "In 1981 Lawrence Sherman ran a domestic violence call as a scienti
 pubDate: 2026-06-07
 heroImage: "/images/sherman-ebp-hero.svg"
 thumbnail: "/images/sherman-ebp-hero.svg"
+portrait: "/images/sherman-lawrence-portrait.jpg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "criminology", "experiments", "leadership"]
 redirectFrom: ["/police-policy/lawrence-sherman-and-the-invention-of-evidence-based-policing"]
 ---
