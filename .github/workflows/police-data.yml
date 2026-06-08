@@ -3,6 +3,9 @@ name: Refresh police data snapshot
 # data.police.uk publishes monthly, a couple of months in arrears. We check on
 # the 5th of each month (and on demand) and commit the snapshot if it changed.
 # Netlify's GitHub integration redeploys the site on the resulting push.
+#
+# This job only refreshes raw stop & search data — no API key needed. The AI
+# interpretation runs at request time in netlify/functions/interpret.mts.
 on:
   schedule:
     - cron: '0 6 5 * *'
@@ -19,9 +22,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -32,32 +33,23 @@ jobs:
       - name: Fetch snapshot
         run: node scripts/fetch-police-data.mjs
 
-      # Interpret the snapshot into /data/findings. The script self-skips when
-      # ANTHROPIC_API_KEY is absent, so the job stays green before the secret is
-      # configured. We always install the SDK rather than gate on the key in an
-      # `if:` (which proved fragile) — a few seconds, and it can't silently skip.
-      - name: Install Claude SDK
-        run: npm install --no-save @anthropic-ai/sdk
-
-      - name: Generate findings
-        continue-on-error: true
-        run: |
-          if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "ANTHROPIC_API_KEY is empty in this run — findings will be skipped."
-          else
-            echo "ANTHROPIC_API_KEY is present (length ${#ANTHROPIC_API_KEY})."
-          fi
-          node scripts/interpret-data.mjs
-
       - name: Commit if changed
         run: |
           git config user.name "police-data-bot"
           git config user.email "actions@users.noreply.github.com"
-          if [ -n "$(git status --porcelain src/content/policedata)" ]; then
-            git add src/content/policedata
-            month=$(node -p "require('./src/content/policedata/national.json').provenance.datasetMonth")
-            git commit -m "Refresh police data snapshot ($month)"
-            git push origin HEAD:${{ github.ref_name }}
-          else
-            echo "No change in snapshot."
+          if [ -z "$(git status --porcelain src/content/policedata)" ]; then
+            echo "No change in snapshot."; exit 0
           fi
+          git add src/content/policedata
+          month=$(node -p "require('./src/content/policedata/national.json').provenance.datasetMonth")
+          git commit -m "Refresh police data snapshot ($month)"
+          # main may have advanced (concurrent merges) while this ran — rebase
+          # onto the latest ref before pushing, and retry. Only this workflow
+          # touches the data files, so the rebase is conflict-free.
+          for attempt in 1 2 3; do
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}" || git rebase --abort
+            if git push origin "HEAD:${{ github.ref_name }}"; then echo "Pushed on attempt $attempt."; exit 0; fi
+            echo "Push attempt $attempt failed; retrying."; sleep 4
+          done
+          echo "Could not push after retries."; exit 1

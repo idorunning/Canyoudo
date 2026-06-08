@@ -23,24 +23,7 @@ const API = 'https://data.police.uk/api';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'src/content/policedata');
 const MONTHS = 12; // stop & search window (small per-request, all forces)
-const CITY_MONTHS = 6; // crime window per city (large downloads — keep it lighter)
 const DELAY_MS = 110;
-
-// England & Wales city-centre points (Scotland and NI don't publish here).
-const CITIES = [
-  { name: 'London', lat: 51.5074, lng: -0.1278 },
-  { name: 'Birmingham', lat: 52.4796, lng: -1.9026 },
-  { name: 'Manchester', lat: 53.4808, lng: -2.2426 },
-  { name: 'Leeds', lat: 53.8008, lng: -1.5491 },
-  { name: 'Liverpool', lat: 53.4084, lng: -2.9916 },
-  { name: 'Sheffield', lat: 53.3811, lng: -1.4701 },
-  { name: 'Bristol', lat: 51.4545, lng: -2.5879 },
-  { name: 'Newcastle', lat: 54.9783, lng: -1.6178 },
-  { name: 'Nottingham', lat: 52.9548, lng: -1.1581 },
-  { name: 'Leicester', lat: 52.6369, lng: -1.1398 },
-  { name: 'Cardiff', lat: 51.4816, lng: -3.1791 },
-  { name: 'Coventry', lat: 52.4068, lng: -1.5197 },
-];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -220,29 +203,9 @@ async function main() {
   };
   await writeFile(join(OUT, 'national.json'), JSON.stringify(national, null, 2) + '\n');
 
-  // --- Crime & outcomes, per city, recent months -------------------------
-  const cityMonths = months.slice(-CITY_MONTHS);
-  const places = [];
-  for (const city of CITIES) {
-    const series = [];
-    let latestByCategory = [];
-    let latestByOutcome = [];
-    let latestTotal = 0;
-    for (const month of cityMonths) {
-      const crimes = (await safeApi(`/crimes-street/all-crime?lat=${city.lat}&lng=${city.lng}&date=${month}`)) || [];
-      await sleep(DELAY_MS);
-      series.push({ month, total: crimes.length });
-      if (month === latest) {
-        latestTotal = crimes.length;
-        latestByCategory = tally(crimes, (c) => c.category);
-        latestByOutcome = tally(crimes, (c) => (c.outcome_status ? c.outcome_status.category : 'Awaiting / under investigation'));
-      }
-    }
-    places.push({ name: city.name, lat: city.lat, lng: city.lng, latestMonth: latest, latestTotal, byCategory: latestByCategory, byOutcome: latestByOutcome, series });
-    console.log(`  ${city.name}: latest ${latestTotal} crimes`);
-  }
-  await writeFile(join(OUT, 'crime.json'), JSON.stringify({ kind: 'crime', provenance, places }, null, 2) + '\n');
-
+  // Crime is no longer pre-fetched here — area/postcode crime is interpreted live
+  // by netlify/functions/interpret.mts. This keeps the monthly job to ~600 small
+  // stop & search requests.
   console.log(`\nDone. National latest ${national.stopSearch.latest.total}, 12mo ${national.stopSearch.window.total}. Missing latest: ${forcesMissingLatest.length} forces.`);
 }
 

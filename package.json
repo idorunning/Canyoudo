@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "prebuild": "node scripts/bundle-policedata.mjs",
     "build": "astro build",
     "postbuild": "node scripts/generate-redirects.mjs && pagefind --site dist",
     "preview": "astro preview",
@@ -13,10 +14,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.102.0",
     "@astrojs/mdx": "^3.1.9",
     "@astrojs/rss": "^4.0.7",
     "@astrojs/sitemap": "3.2.1",
     "@astrojs/tailwind": "^5.1.2",
+    "@netlify/blobs": "^10.7.9",
     "astro": "^4.16.16",
     "reading-time": "^1.5.0",
     "tailwindcss": "^3.4.15"

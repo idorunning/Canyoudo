@@ -1,0 +1,231 @@
+import type { Config } from '@netlify/functions';
+import { getStore } from '@netlify/blobs';
+import Anthropic from '@anthropic-ai/sdk';
+import bundle from '../../src/lib/policedata-bundle.json';
+import {
+  getPersona,
+  systemFor,
+  systemForChat,
+  PROMPT_VERSION,
+  resolveModel,
+  modelParams,
+  CACHED_MODEL_DEFAULT,
+  LIVE_MODEL_DEFAULT,
+} from '../../src/lib/personas';
+
+// Runtime, persona-aware interpretation of police data, streamed as Markdown.
+//   GET  /api/interpret?scope=national|force|area&id=&postcode=&persona=
+//   POST /api/interpret  { scope, id, postcode, persona, question, history }  → chat
+//
+// Overviews: national/force read the committed snapshot and are cached per data
+// month (so they're "pre-generated" after first view) — generated with the more
+// careful CACHED model. Postcode is interpreted live, and the chat answers live —
+// both with the fast LIVE model. Models are overridable via env.
+
+const POLICE = 'https://data.police.uk/api';
+const UA = 'thinkingaboutpolicing.org (+https://thinkingaboutpolicing.org)';
+
+const json = (status: number, body: unknown) =>
+  new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+
+const titleCase = (s: string) =>
+  String(s).replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+
+async function api(path: string) {
+  const res = await fetch(`${POLICE}${path}`, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(12000) });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+function tally(rows: any[], pick: (r: any) => string) {
+  const m = new Map<string, number>();
+  for (const r of rows) {
+    const raw = pick(r);
+    const label = raw == null || raw === '' ? 'Not stated' : titleCase(raw);
+    m.set(label, (m.get(label) ?? 0) + 1);
+  }
+  return [...m.entries()].map(([label, count]) => ({ label, count })).sort((a, b) => b.count - a.count).slice(0, 10);
+}
+
+// Assemble the aggregate-only digest the model reasons from, plus the cache id.
+async function buildDigest(scope: string, id: string, postcode: string) {
+  if (scope === 'national') {
+    return {
+      cacheId: 'national',
+      dataMonth: bundle.datasetMonth,
+      digest: {
+        coverage: 'England & Wales + British Transport Police',
+        datasetMonth: bundle.datasetMonth,
+        windowMonths: bundle.windowMonths,
+        forcesReporting: bundle.national.forcesCount - bundle.national.forcesMissing.length,
+        forcesMissingLatestMonth: bundle.national.forcesMissing,
+        stopSearch: bundle.national.stopSearch,
+      },
+    };
+  }
+  if (scope === 'force') {
+    const f = (bundle.forces as Record<string, any>)[id];
+    if (!f) return null;
+    return {
+      cacheId: `force:${id}`,
+      dataMonth: bundle.datasetMonth,
+      digest: { force: f.name, datasetMonth: bundle.datasetMonth, windowMonths: bundle.windowMonths, stopSearch: f.stopSearch },
+    };
+  }
+  if (scope === 'area') {
+    const pc = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(postcode.trim())}`, {
+      signal: AbortSignal.timeout(8000),
+    }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    if (!pc?.result) return { error: `Couldn't find the postcode "${postcode}".` };
+    const { latitude: lat, longitude: lng, admin_district: area, postcode: clean } = pc.result;
+
+    const [crimes, hood] = await Promise.all([
+      api(`/crimes-street/all-crime?lat=${lat}&lng=${lng}`),
+      api(`/locate-neighbourhood?q=${lat},${lng}`),
+    ]);
+    const list: any[] = Array.isArray(crimes) ? crimes : [];
+    const month = list[0]?.month ?? '';
+    return {
+      cacheId: `area:${clean.replace(/\s+/g, '')}`,
+      dataMonth: month,
+      digest: {
+        place: clean,
+        district: area,
+        radiusMiles: 1,
+        crimeMonth: month,
+        totalCrimes: list.length,
+        byCategory: tally(list, (c) => c.category),
+        byOutcome: tally(list, (c) => (c.outcome_status ? c.outcome_status.category : 'Awaiting / under investigation')),
+        neighbourhood: hood?.force ? `${hood.force}/${hood.neighbourhood}` : null,
+      },
+    };
+  }
+  return null;
+}
+
+// Stream a Claude message stream to the client as Markdown, optionally caching
+// the final text when (store, key) are given.
+function streamResponse(aiStream: any, store: any, key: string | null, dataMonth: string, modelLabel: string) {
+  const enc = new TextEncoder();
+  let full = '';
+  const body = new ReadableStream({
+    async start(controller) {
+      try {
+        for await (const event of aiStream) {
+          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+            full += event.delta.text;
+            controller.enqueue(enc.encode(event.delta.text));
+          }
+        }
+        if (store && key && full.trim()) await store.set(key, full);
+      } catch {
+        controller.enqueue(enc.encode('\n\n_Interrupted — please try again._'));
+      } finally {
+        controller.close();
+      }
+    },
+  });
+  return new Response(body, {
+    headers: {
+      'content-type': 'text/markdown; charset=utf-8',
+      'x-cache': key ? 'MISS' : 'LIVE',
+      'x-data-month': dataMonth,
+      'x-model': modelLabel,
+    },
+  });
+}
+
+export default async (req: Request) => {
+  const url = new URL(req.url);
+  let scope = url.searchParams.get('scope') ?? 'national';
+  let id = url.searchParams.get('id') ?? '';
+  let postcode = url.searchParams.get('postcode') ?? '';
+  let personaId: string | null = url.searchParams.get('persona');
+  let question = (url.searchParams.get('question') ?? '').trim();
+  let history: { role: 'user' | 'assistant'; content: string }[] = [];
+
+  if (req.method === 'POST') {
+    try {
+      const b = await req.json();
+      scope = b.scope ?? scope;
+      id = b.id ?? id;
+      postcode = b.postcode ?? postcode;
+      personaId = b.persona ?? personaId;
+      question = (b.question ?? question).trim();
+      if (Array.isArray(b.history)) {
+        history = b.history
+          .filter((h: any) => (h?.role === 'user' || h?.role === 'assistant') && typeof h.content === 'string')
+          .slice(-8);
+      }
+    } catch {}
+  }
+
+  const persona = getPersona(personaId);
+  const isChat = question.length > 0;
+
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return json(503, { error: 'Interpretation is not configured yet (no API key).' });
+  }
+
+  let built;
+  try {
+    built = await buildDigest(scope, id, postcode);
+  } catch (err) {
+    return json(502, { error: 'Could not gather the data to interpret.', detail: String(err) });
+  }
+  if (!built) return json(404, { error: 'Nothing to interpret for that request.' });
+  if ('error' in built && built.error) return json(400, { error: built.error });
+
+  const { cacheId, dataMonth, digest } = built as { cacheId: string; dataMonth: string; digest: unknown };
+
+  // Pick the model: live (fast) for the chat and for postcode; cached (careful)
+  // for the national/force overviews. Env overrides at each tier.
+  const live = isChat || scope === 'area';
+  const envOverride = live ? process.env.INTERPRET_MODEL_LIVE : process.env.INTERPRET_MODEL_CACHED;
+  const { id: model, label: modelLabel } = resolveModel(
+    envOverride ?? process.env.INTERPRET_MODEL,
+    live ? LIVE_MODEL_DEFAULT : CACHED_MODEL_DEFAULT
+  );
+
+  const client = new Anthropic();
+
+  // Chat: answer the reader's question, grounded in the digest. Not cached.
+  if (isChat) {
+    const aiStream = client.messages.stream({
+      model,
+      max_tokens: 1500,
+      ...modelParams(model),
+      system: `${systemForChat(persona)}\n\nThe only data you may use (aggregate figures):\n${JSON.stringify(digest)}`,
+      messages: [...history, { role: 'user', content: question }],
+    });
+    return streamResponse(aiStream, null, null, dataMonth, modelLabel);
+  }
+
+  // Overview: cache per scope+id+persona+month+model+prompt-version.
+  const key = `${cacheId}:${persona.id}:${dataMonth || 'na'}:${model}:${PROMPT_VERSION}`;
+  let store: ReturnType<typeof getStore> | null = null;
+  try {
+    store = getStore('interpretations');
+    const cached = await store.get(key);
+    if (cached) {
+      return new Response(cached, {
+        headers: { 'content-type': 'text/markdown; charset=utf-8', 'x-cache': 'HIT', 'x-data-month': dataMonth, 'x-model': modelLabel },
+      });
+    }
+  } catch {
+    store = null;
+  }
+
+  const aiStream = client.messages.stream({
+    model,
+    max_tokens: 3000,
+    ...modelParams(model),
+    system: systemFor(persona),
+    messages: [
+      { role: 'user', content: `Interpret this police data for the reader described. Aggregate figures only:\n\n${JSON.stringify(digest, null, 2)}` },
+    ],
+  });
+  return streamResponse(aiStream, store, key, dataMonth, modelLabel);
+};
+
+export const config: Config = { path: '/api/interpret' };

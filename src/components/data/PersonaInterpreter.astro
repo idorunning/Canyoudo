@@ -1,0 +1,150 @@
+---
+// The heart of the reworked dashboard: a persona toggle over a live, streamed,
+// evidence-based interpretation. It calls /api/interpret and renders the Markdown
+// as it streams in. No tables — interpretation is the surface.
+//
+// scope="national" | "force" (id=…) interpret the committed snapshot.
+// scope="area" shows a postcode form and interprets that area's crime live.
+import { PERSONAS, DEFAULT_PERSONA } from '../../lib/personas';
+
+interface Props {
+  scope: 'national' | 'force' | 'area';
+  id?: string; // force id
+  postcode?: string; // optional initial postcode for area
+  eyebrow?: string;
+}
+const { scope, id = '', postcode = '', eyebrow } = Astro.props;
+---
+<div class="persona-interpreter not-prose" data-scope={scope} data-id={id} data-postcode={postcode}>
+  {eyebrow && (
+    <p class="font-sans text-xs uppercase tracking-[0.18em] text-accent mb-3">{eyebrow}</p>
+  )}
+
+  {scope === 'area' && (
+    <form data-postcode-form class="flex flex-wrap gap-3 items-stretch max-w-xl mb-7">
+      <label for="pi-postcode" class="sr-only">Postcode</label>
+      <input
+        id="pi-postcode"
+        data-postcode-input
+        name="postcode"
+        type="text"
+        autocomplete="postal-code"
+        value={postcode}
+        placeholder="e.g. SW1A 1AA"
+        class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
+      />
+      <button type="submit" class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors">
+        Interpret
+      </button>
+    </form>
+  )}
+
+  <div class="flex flex-wrap gap-2 mb-6" role="tablist" aria-label="Read this as…">
+    <span class="w-full font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-1">Read this as…</span>
+    {PERSONAS.map((p) => (
+      <button
+        type="button"
+        role="tab"
+        data-persona={p.id}
+        aria-selected={p.id === DEFAULT_PERSONA ? 'true' : 'false'}
+        title={p.blurb}
+        class="persona-tab font-sans text-sm px-3 py-1.5 rounded-full border border-ink-200 text-ink-700 hover:border-accent hover:text-accent transition-colors aria-selected:bg-accent aria-selected:text-paper-50 aria-selected:border-accent"
+      >
+        {p.label}
+      </button>
+    ))}
+  </div>
+
+  <div class="interpretation prose-article min-h-[8rem]" data-interpretation aria-live="polite">
+    <p class="text-ink-400 font-serif italic">{scope === 'area' ? 'Enter a postcode above to begin.' : 'Reading the data…'}</p>
+  </div>
+
+  <p class="mt-5 font-sans text-xs text-ink-500 leading-relaxed">
+    Interpreted by <strong class="font-medium text-ink-600" data-model>Claude</strong> from
+    <a href="https://data.police.uk" class="hover:text-accent underline underline-offset-2">data.police.uk</a>
+    (Open Government Licence v3.0) — AI-generated, not yet reviewed by a human editor; read with care.
+    <span data-month></span>
+  </p>
+</div>
+
+<script>
+  import { renderMarkdown } from '../../lib/md';
+
+  document.querySelectorAll<HTMLElement>('.persona-interpreter').forEach((root) => {
+    const scope = root.dataset.scope!;
+    const id = root.dataset.id || '';
+    const out = root.querySelector<HTMLElement>('[data-interpretation]')!;
+    const monthEl = root.querySelector<HTMLElement>('[data-month]')!;
+    const modelEl = root.querySelector<HTMLElement>('[data-model]')!;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.persona-tab')];
+    const form = root.querySelector<HTMLFormElement>('[data-postcode-form]');
+    const input = root.querySelector<HTMLInputElement>('[data-postcode-input]');
+    const cache = new Map<string, string>();
+    let active = tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.persona || tabs[0].dataset.persona!;
+    let postcode = (root.dataset.postcode || '').trim();
+
+    async function load(persona: string) {
+      active = persona;
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.persona === persona)));
+
+      if (scope === 'area' && !postcode) {
+        out.innerHTML = '<p class="text-ink-400 font-serif italic">Enter a postcode above to begin.</p>';
+        return;
+      }
+
+      const reqPostcode = postcode;
+      const cacheKey = scope === 'area' ? `${persona}::${reqPostcode}` : persona;
+      if (cache.has(cacheKey)) {
+        out.innerHTML = renderMarkdown(cache.get(cacheKey)!);
+        return;
+      }
+      out.innerHTML = '<p class="text-ink-400 font-serif italic">Reading the data…</p>';
+
+      const params = new URLSearchParams({ scope, persona });
+      if (id) params.set('id', id);
+      if (reqPostcode) params.set('postcode', reqPostcode);
+
+      let res: Response;
+      try {
+        res = await fetch(`/api/interpret?${params}`);
+      } catch {
+        out.innerHTML = '<p class="text-accent">Couldn’t reach the interpreter. Please try again.</p>';
+        return;
+      }
+      const month = res.headers.get('x-data-month');
+      if (month) monthEl.textContent = `Data to ${month}.`;
+      const model = res.headers.get('x-model');
+      if (model) modelEl.textContent = model;
+
+      if (!res.ok || !res.body) {
+        let msg = 'The interpretation is unavailable right now.';
+        try { msg = (await res.json()).error || msg; } catch {}
+        out.innerHTML = `<p class="text-accent">${msg}</p>`;
+        return;
+      }
+
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let acc = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        acc += dec.decode(value, { stream: true });
+        if (active === persona && reqPostcode === postcode) out.innerHTML = renderMarkdown(acc);
+      }
+      if (acc.trim()) cache.set(cacheKey, acc);
+    }
+
+    tabs.forEach((t) => t.addEventListener('click', () => load(t.dataset.persona!)));
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = (input?.value || '').trim();
+      if (!v) return;
+      postcode = v;
+      load(active);
+    });
+
+    if (scope !== 'area') load(active);
+    else if (postcode) load(active);
+  });
+</script>

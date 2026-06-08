@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import CaveatBanner from '../../../components/data/CaveatBanner.astro';
 import ProvenanceStamp from '../../../components/data/ProvenanceStamp.astro';
 import BarChart from '../../../components/data/BarChart.astro';
 import Sparkline from '../../../components/data/Sparkline.astro';
+import PersonaInterpreter from '../../../components/data/PersonaInterpreter.astro';
+import DataChat from '../../../components/data/DataChat.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -27,7 +28,7 @@ const monthLabel = (m: string) => {
 ---
 <BaseLayout
   title={`${force.name} — Crime Dashboard`}
-  description={`Stop & search for ${force.name} over the last 12 months, straight from data.police.uk and stamped with its date.`}
+  description={`What the stop & search data says about ${force.name}, interpreted for you — from data.police.uk.`}
 >
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
@@ -36,51 +37,59 @@ const monthLabel = (m: string) => {
         <h1 class="font-display text-3xl md:text-5xl font-semibold text-ink-900 leading-tight tracking-tight mt-4">
           {force.name}
         </h1>
+        <p class="font-serif text-lg text-ink-700 mt-3">Stop &amp; search over the last 12 months — what the figures actually say.</p>
       </div>
     </div>
   </section>
 
   <section>
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 space-y-12">
-      <CaveatBanner />
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
+      <div class="max-w-3xl space-y-10">
+        {/* Interpretation leads */}
+        <PersonaInterpreter scope="force" id={force.id} />
 
-      {win ? (
-        <div class="space-y-12">
-          <div class="grid sm:grid-cols-3 gap-8 items-start">
-            <div>
-              <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">12-month searches</p>
-              <p class="font-display text-4xl font-semibold text-ink-900">{fmt.format(win.total)}</p>
-            </div>
-            <div>
-              <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Latest month ({monthLabel(force.provenance.datasetMonth)})</p>
-              <p class="font-display text-4xl font-semibold text-ink-900">{ss.latest ? fmt.format(ss.latest.total) : '—'}</p>
-              {!ss.latest && <p class="font-serif text-xs text-ink-500 mt-1">Not yet filed for this month.</p>}
-            </div>
-            <div>
-              <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Monthly trend</p>
-              <div class="text-accent mt-2"><Sparkline points={ss.series} width={180} /></div>
-            </div>
-          </div>
+        {/* Figures, for those who want to check the working */}
+        {win && (
+          <details class="group border-t border-ink-200 pt-6">
+            <summary class="cursor-pointer list-none font-sans text-sm uppercase tracking-[0.15em] text-accent hover:text-accent-dark flex items-center gap-2">
+              <span class="transition-transform group-open:rotate-90">▸</span> See the figures
+            </summary>
 
-          <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
-            <BarChart caption="Who gets searched (officer-defined ethnicity, 12 mo)" data={win.byOfficerEthnicity} asPercent />
-            <BarChart caption="What officers were looking for (12 mo)" data={win.byObjectOfSearch} asPercent />
-            <BarChart caption="What happened next (outcome, 12 mo)" data={win.byOutcome} asPercent />
-          </div>
+            <div class="mt-8 space-y-10">
+              <div class="grid sm:grid-cols-3 gap-8 items-start">
+                <div>
+                  <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">12-month searches</p>
+                  <p class="font-display text-3xl font-semibold text-ink-900">{fmt.format(win.total)}</p>
+                </div>
+                <div>
+                  <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Latest ({monthLabel(force.provenance.datasetMonth)})</p>
+                  <p class="font-display text-3xl font-semibold text-ink-900">{ss.latest ? fmt.format(ss.latest.total) : '—'}</p>
+                  {!ss.latest && <p class="font-serif text-xs text-ink-500 mt-1">Not yet filed.</p>}
+                </div>
+                <div>
+                  <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">Monthly trend</p>
+                  <div class="text-accent mt-2"><Sparkline points={ss.series} width={180} /></div>
+                </div>
+              </div>
 
-          <ProvenanceStamp datasetMonth={force.provenance.datasetMonth} fetchedAt={force.provenance.fetchedAt} sample={force.provenance.sample} />
+              <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+                <BarChart caption="Who gets searched (officer-defined ethnicity, 12 mo)" data={win.byOfficerEthnicity} asPercent />
+                <BarChart caption="What officers were looking for (12 mo)" data={win.byObjectOfSearch} asPercent />
+                <BarChart caption="What happened next (outcome, 12 mo)" data={win.byOutcome} asPercent />
+              </div>
+
+              <ProvenanceStamp datasetMonth={force.provenance.datasetMonth} fetchedAt={force.provenance.fetchedAt} sample={force.provenance.sample} />
+            </div>
+          </details>
+        )}
+
+        <DataChat scope="force" id={force.id} />
+
+        <div class="border-t border-ink-200 pt-8">
+          <a href="/data/lookup" class="inline-block font-sans text-sm uppercase tracking-[0.15em] text-accent hover:text-accent-dark">
+            Look up a specific postcode →
+          </a>
         </div>
-      ) : (
-        <p class="font-serif text-lg text-ink-600">
-          {force.name} reported no stop &amp; search data in the last 12 months. That can mean a genuine
-          absence, a processing backlog, or a force that records manually — not necessarily no activity.
-        </p>
-      )}
-
-      <div class="border-t border-ink-200 pt-10">
-        <a href="/data/lookup" class="inline-block font-sans text-sm uppercase tracking-[0.15em] text-accent hover:text-accent-dark">
-          Look up crime in a specific area →
-        </a>
       </div>
     </div>
   </section>
