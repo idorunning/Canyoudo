@@ -1,14 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
 
 // Quick-start queries practitioners actually run.
 const examples = [
+  'evidence-based policing',
   'hot spots policing',
   'body-worn cameras',
   'stop and search disproportionality',
   'domestic abuse risk assessment',
   'problem-oriented policing',
+  'procedural justice',
+  'police legitimacy',
+  'focused deterrence',
+  'neighbourhood policing',
+  'predictive policing',
 ];
+
+// Curated evidence databases, maintained in the resources collection so the
+// CMS stays the single source of truth (also rendered on /resources).
+const resourcesEntry = await getEntry('resources', 'resources');
+const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
+  (r) => r.category === 'Evidence databases'
+);
 ---
 
 <BaseLayout
@@ -123,6 +137,38 @@ const examples = [
       </div>
     </div>
   </section>
+
+  {evidenceDatabases.length > 0 && (
+    <section class="border-t border-ink-200 bg-paper-50">
+      <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+        <div class="max-w-3xl">
+          <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-2">Evidence databases</h2>
+          <p class="font-serif text-ink-700 leading-relaxed mb-8">
+            Curated and rated collections — slower than a search, but someone has already
+            weighed the studies for you. Most have no machine interface, so they live here
+            as links rather than in the search above.
+          </p>
+          <ul class="grid sm:grid-cols-2 gap-x-10 gap-y-7">
+            {evidenceDatabases.map((r) => (
+              <li>
+                <a
+                  href={r.url}
+                  rel="noopener"
+                  target="_blank"
+                  class="font-display text-base font-semibold text-ink-900 hover:text-accent transition-colors"
+                >
+                  {r.label} →
+                </a>
+                {r.note && (
+                  <p class="font-sans text-sm text-ink-600 leading-relaxed mt-1">{r.note}</p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  )}
 </BaseLayout>
 
 <script>
