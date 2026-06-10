@@ -41,6 +41,30 @@
       "url": "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice",
       "note": "The headline national crime statistics.",
       "category": "Data and statistics"
+    },
+    {
+      "label": "College of Policing — Crime Reduction Toolkit",
+      "url": "https://www.college.police.uk/research/crime-reduction-toolkit",
+      "note": "Summaries of the best available evidence on what works to reduce crime, rated for effect, mechanism, context and cost.",
+      "category": "Evidence databases"
+    },
+    {
+      "label": "Global Policing Database",
+      "url": "https://gpd.uq.edu.au/",
+      "note": "Searchable database of experimental and quasi-experimental evaluations of policing interventions, worldwide, since 1950.",
+      "category": "Evidence databases"
+    },
+    {
+      "label": "Campbell Collaboration — Crime and Justice",
+      "url": "https://www.campbellcollaboration.org/crime/",
+      "note": "Open-access systematic reviews of what works in crime and justice.",
+      "category": "Evidence databases"
+    },
+    {
+      "label": "CrimeSolutions (US National Institute of Justice)",
+      "url": "https://crimesolutions.ojp.gov/",
+      "note": "American ratings of programmes and practices — effective, promising or no effects — with the evidence behind each rating.",
+      "category": "Evidence databases"
     }
   ]
 }

@@ -49,6 +49,20 @@ const pageId = `${section}-${slug}`;
 
 // Topics let the tag badges link through to their archive pages.
 const topics = await getTopics();
+
+// schema.org Article markup for rich results in search.
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+  ...(heroImage ? { image: new URL(heroImage, Astro.site).toString() } : {}),
+  author: { '@type': 'Person', name: author },
+  publisher: { '@type': 'Organization', name: 'Thinking About Policing', url: Astro.site?.toString() },
+  mainEntityOfPage: pageUrl,
+});
 ---
 
 <BaseLayout
@@ -58,6 +72,7 @@ const topics = await getTopics();
   type="article"
   publishedTime={pubDate.toISOString()}
 >
+  <script type="application/ld+json" set:html={jsonLd} />
   <div class="max-w-6xl mx-auto px-6 lg:px-10">
     <div class="lg:flex lg:gap-12 xl:gap-16">
       <article class="mx-auto w-full max-w-3xl min-w-0 lg:mx-0 lg:flex-1" data-pagefind-body>
@@ -98,7 +113,7 @@ const topics = await getTopics();
           {heroImage && (
             <img
               src={heroImage}
-              alt=""
+              alt={`Illustration for “${title}”`}
               class="w-full max-h-[480px] object-cover rounded-md"
               loading="eager"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"

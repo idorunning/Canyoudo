@@ -88,7 +88,11 @@ const { scope, id = '', postcode = '', eyebrow } = Astro.props;
       if (!res.ok || !res.body) {
         let msg = 'The interpretation is unavailable right now.';
         try { msg = (await res.json()).error || msg; } catch {}
-        out.innerHTML = `<p class="text-accent">${msg}</p>`;
+        // textContent, not innerHTML: the message comes from the server response.
+        const p = document.createElement('p');
+        p.className = 'text-accent';
+        p.textContent = msg;
+        out.replaceChildren(p);
         return;
       }
 

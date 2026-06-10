@@ -19,7 +19,7 @@ const match = books.find((b) => (b.tags ?? []).some((t) => tagSet.has(t.toLowerC
     {match.cover && (
       <img
         src={match.cover}
-        alt=""
+        alt={`Cover of ${match.title}`}
         loading="lazy"
         class="w-20 shrink-0 rounded-md border border-ink-200 bg-paper-200"
       />
@@ -32,6 +32,7 @@ const match = books.find((b) => (b.tags ?? []).some((t) => tagSet.has(t.toLowerC
         href={match.buyUrl}
         rel="noopener"
         target="_blank"
+        aria-label={`${match.buyLabel ?? 'Get the book'} — ${match.title} (opens in a new tab)`}
         class="inline-block mt-3 font-sans text-sm font-medium bg-accent text-paper-50 px-4 py-2 rounded hover:bg-accent-dark transition-colors"
       >
         {match.buyLabel ?? 'Get the book'}{match.price ? ` · ${match.price}` : ''} →

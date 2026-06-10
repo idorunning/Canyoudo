@@ -1,7 +1,7 @@
 ---
 section: "police-policy"
 title: "The Legal Aid Paradox"
-description: "The suspects who most need legal advice in police custody are the least likely to request it. This uncomfortable truth undermines one of PACE 1984's core protective mechanisms. Current data shows…"
+description: "The suspects who most need legal advice in police custody are the least likely to ask for it — and that undermines one of PACE 1984's core protections."
 pubDate: 2025-10-21
 heroImage: "/images/legal-aid-advice.jpg"
 thumbnail: "/images/legal-aid-advice.jpg"

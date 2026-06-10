@@ -85,7 +85,11 @@ const { scope, id = '', postcode = '' } = Astro.props;
       if (!res.ok || !res.body) {
         let msg = 'Sorry — I couldn’t answer that just now.';
         try { msg = (await res.json()).error || msg; } catch {}
-        a.innerHTML = `<p class="text-accent">${msg}</p>`;
+        // textContent, not innerHTML: the message comes from the server response.
+        const p = document.createElement('p');
+        p.className = 'text-accent';
+        p.textContent = msg;
+        a.replaceChildren(p);
         send.disabled = false;
         return;
       }

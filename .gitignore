@@ -5,6 +5,9 @@ dist/
 # generated types
 .astro/
 
+# netlify-cli local state
+.netlify/
+
 # dependencies
 node_modules/
 package-lock.json

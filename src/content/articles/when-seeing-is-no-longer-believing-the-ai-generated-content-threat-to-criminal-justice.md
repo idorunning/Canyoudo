@@ -22,7 +22,7 @@ That assumption is now outdated. Generative artificial intelligence has reached 
 Consider an image like the one below, the kind of footage that might form the centrepiece of a prosecution case: a figure caught on camera, weapon in hand. It appears compelling and, on first viewing, difficult to dispute.
 
 <figure>
-  <img src="/images/ai-cctv-knife.png" alt="A green night-vision CCTV still of a figure holding a knife in a room" loading="lazy" />
+  <img src="/images/ai-cctv-knife.jpg" alt="A green night-vision CCTV still of a figure holding a knife in a room" loading="lazy" />
   <figcaption><strong>AI-generated — not real footage or evidence.</strong> Image 1: CCTV-style footage of a figure with a knife — the kind of still that might anchor a prosecution.</figcaption>
 </figure>
 
@@ -49,7 +49,7 @@ In under two minutes, and with minimal technical knowledge, we have two images t
 And it is no longer limited to stills. From the same source imagery and a short text prompt, a few minutes of processing produces moving footage — complete with sound — of the figure crossing a room with the knife and advancing along a hallway, switching between camera labels as a multi-camera CCTV system would. It is exactly the kind of clip a jury would find hard to disbelieve, and it is entirely synthetic.
 
 <figure>
-  <video controls playsinline preload="metadata" poster="/images/ai-cctv-knife.png" style="width:100%;height:auto;border-radius:4px;">
+  <video controls playsinline preload="metadata" poster="/images/ai-cctv-knife.jpg" style="width:100%;height:auto;border-radius:4px;">
     <source src="/media/ai-cctv-demo.mp4" type="video/mp4" />
     Your browser does not support embedded video.
   </video>

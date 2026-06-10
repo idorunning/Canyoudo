@@ -1,7 +1,7 @@
 ---
 section: "police-policy"
 title: "The Hidden Crisis: How Police Burnout Threatens Officer Safety and Public Trust"
-description: "Police burnout isn’t just an occupational hazard — it’s a critical public safety issue that directly increases the risk of excessive force and threatens community trust. 83% of officers report…"
+description: "Burnout raises the risk of excessive force and corrodes public trust. What the evidence says about exhausted officers, and what forces can do about it."
 pubDate: 2025-07-29
 heroImage: "/images/burnout-hero.svg"
 thumbnail: "/images/burnout-hero.svg"
@@ -80,7 +80,7 @@ The FBI Law Enforcement Bulletin’s Behavioral Health Training (BHT) programme 
 
 The POWER (Peace Officer Wellness, Empathy & Resilience) Training Program, certified by California POST and IADLEST, provides intensive three-month cohort-based training covering mindfulness practices, compassion-based communication exercises, and stress management. The evidence of effectiveness is substantial: statistically significant improvements in mindfulness, emotion regulation, empathy, perceived stress, and anger, with anecdotal improvements including reduced headaches and stomach aches, better sleep, and improved family relations. Biometric measurements showed improvements in Heart Rate Variability, a physiological indicator of stress resilience.
 
-The Fraternal Order of Police’s two-hour Officer Wellness Training focuses on individual and family resiliency. It reviews early red-flag indicators and sets out how to respond before and after crises occur. The training acknowledges that law enforcement loses more officers to personal crisis than to duty-related tragedy, which underscores the importance of peer vigilance.
+The Fraternal Order of Police’s two-hour Officer Wellness Training focuses on individual and family resiliency. It reviews early red-flag indicators and sets out how to respond before and after crises occur. The training acknowledges that law enforcement loses more officers to personal crisis than to duty-related tragedy, which shows the importance of peer vigilance.
 
 Critical Incident Stress Management (CISM) training from the International Critical Incident Stress Foundation is a three-day course in peer support crisis intervention skills, in effect a form of “psychological first aid” for coworkers and others affected by critical incidents. The curriculum covers post-traumatic stress, the long-term effects of cumulative stress, individual crisis intervention fundamentals, and group crisis intervention protocols.
 

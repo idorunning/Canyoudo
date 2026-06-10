@@ -14,6 +14,7 @@ const navLinks = [
 // Secondary destinations, surfaced in the mobile menu (and the footer / Explore
 // panel on desktop) to keep the top bar uncluttered.
 const moreLinks = [
+  { href: '/research', label: 'Find the research' },
   { href: '/topics', label: 'Topics' },
   { href: '/books', label: 'Books' },
   { href: '/resources', label: 'Further reading' },
@@ -63,7 +64,7 @@ const currentPath = Astro.url.pathname;
           class="hidden md:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
           aria-label="Search"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
@@ -74,7 +75,7 @@ const currentPath = Astro.url.pathname;
           class="md:hidden text-ink-900 p-2 -mr-2"
           aria-label="Toggle menu"
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <line x1="3" y1="6" x2="21" y2="6"/>
             <line x1="3" y1="12" x2="21" y2="12"/>
             <line x1="3" y1="18" x2="21" y2="18"/>

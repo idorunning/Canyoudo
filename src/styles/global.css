@@ -20,6 +20,16 @@
     background-color: theme('colors.accent.DEFAULT');
     color: theme('colors.paper.50');
   }
+
+  /* Visible keyboard focus on links and buttons. Inputs keep their own
+     focus:border-accent treatment (the Tailwind utility outranks this rule). */
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid theme('colors.accent.DEFAULT');
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 }
 
 @layer components {
