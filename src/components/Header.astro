@@ -7,6 +7,7 @@ const navLinks = [
   { href: '/influential-people', label: 'Influential People' },
   { href: '/data-stories', label: 'Data Stories' },
   { href: '/data', label: 'Crime Dashboard' },
+  { href: '/research', label: 'Research' },
   { href: '/other', label: 'Interesting Digressions' },
   { href: '/about', label: 'About' },
 ];
@@ -14,7 +15,6 @@ const navLinks = [
 // Secondary destinations, surfaced in the mobile menu (and the footer / Explore
 // panel on desktop) to keep the top bar uncluttered.
 const moreLinks = [
-  { href: '/research', label: 'Find the research' },
   { href: '/topics', label: 'Topics' },
   { href: '/books', label: 'Books' },
   { href: '/resources', label: 'Further reading' },
@@ -36,8 +36,8 @@ const currentPath = Astro.url.pathname;
       </a>
 
       <div class="flex items-center gap-5">
-        <nav class="hidden md:block">
-          <ul class="flex items-center gap-6">
+        <nav class="hidden lg:block">
+          <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1">
             {navLinks.map(link => {
               const isActive = currentPath.startsWith(link.href) && link.href !== '/';
               return (
@@ -61,7 +61,7 @@ const currentPath = Astro.url.pathname;
         <button
           type="button"
           data-search-open
-          class="hidden md:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
+          class="hidden lg:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
           aria-label="Search"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -72,7 +72,7 @@ const currentPath = Astro.url.pathname;
 
         <button
           id="mobile-menu-button"
-          class="md:hidden text-ink-900 p-2 -mr-2"
+          class="lg:hidden text-ink-900 p-2 -mr-2"
           aria-label="Toggle menu"
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -84,7 +84,7 @@ const currentPath = Astro.url.pathname;
       </div>
     </div>
 
-    <nav id="mobile-menu" class="hidden md:hidden pb-4">
+    <nav id="mobile-menu" class="hidden lg:hidden pb-4">
       <ul class="flex flex-col gap-1">
         {navLinks.map(link => (
           <li>
