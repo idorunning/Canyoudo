@@ -7,7 +7,7 @@ export const SECTION_LABELS: Record<Section, string> = {
   'police-policy': 'Police Policy',
   'public-policy': 'Public Policy',
   'influential-people': 'Influential People',
-  other: 'Interesting Digressions',
+  other: 'Interesting Distractions',
   'data-stories': 'The Data Tells a Story',
 };
 

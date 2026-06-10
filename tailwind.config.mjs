@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+        display: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         serif: ['"Source Serif 4"', 'ui-serif', 'Georgia', 'serif'],
         sans: ['"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },

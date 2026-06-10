@@ -1,16 +1,23 @@
 ---
 import SearchModal from './SearchModal.astro';
 
-const navLinks = [
+// Desktop nav is two rows: the writing sections on top, the tools and
+// about underneath. The mobile menu flattens both into one list.
+const primaryLinks = [
   { href: '/police-policy', label: 'Police Policy' },
   { href: '/public-policy', label: 'Public Policy' },
   { href: '/influential-people', label: 'Influential People' },
   { href: '/data-stories', label: 'Data Stories' },
-  { href: '/data', label: 'Crime Dashboard' },
+  { href: '/other', label: 'Interesting Distractions' },
+];
+
+const secondaryLinks = [
   { href: '/research', label: 'Research' },
-  { href: '/other', label: 'Interesting Digressions' },
+  { href: '/data', label: 'Crime Dashboard' },
   { href: '/about', label: 'About' },
 ];
+
+const navLinks = [...primaryLinks, ...secondaryLinks];
 
 // Secondary destinations, surfaced in the mobile menu (and the footer / Explore
 // panel on desktop) to keep the top bar uncluttered.
@@ -31,14 +38,33 @@ const currentPath = Astro.url.pathname;
           Thinking About <span class="italic text-accent">Policing</span>
         </h1>
         <p class="font-sans text-[0.7rem] uppercase tracking-[0.18em] text-ink-500 mt-1">
-          Evidence. Argument. Practice.
+          Evidence. Clues. Interpretation.
         </p>
       </a>
 
       <div class="flex items-center gap-5">
-        <nav class="hidden lg:block">
+        <nav class="hidden md:block">
           <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1">
-            {navLinks.map(link => {
+            {primaryLinks.map(link => {
+              const isActive = currentPath.startsWith(link.href) && link.href !== '/';
+              return (
+                <li>
+                  <a
+                    href={link.href}
+                    class={`font-sans text-sm tracking-wide transition-colors ${
+                      isActive
+                        ? 'text-accent font-medium'
+                        : 'text-ink-700 hover:text-ink-900'
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1 mt-1.5">
+            {secondaryLinks.map(link => {
               const isActive = currentPath.startsWith(link.href) && link.href !== '/';
               return (
                 <li>
@@ -61,7 +87,7 @@ const currentPath = Astro.url.pathname;
         <button
           type="button"
           data-search-open
-          class="hidden lg:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
+          class="hidden md:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
           aria-label="Search"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -72,7 +98,7 @@ const currentPath = Astro.url.pathname;
 
         <button
           id="mobile-menu-button"
-          class="lg:hidden text-ink-900 p-2 -mr-2"
+          class="md:hidden text-ink-900 p-2 -mr-2"
           aria-label="Toggle menu"
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -84,7 +110,7 @@ const currentPath = Astro.url.pathname;
       </div>
     </div>
 
-    <nav id="mobile-menu" class="hidden lg:hidden pb-4">
+    <nav id="mobile-menu" class="hidden md:hidden pb-4">
       <ul class="flex flex-col gap-1">
         {navLinks.map(link => (
           <li>

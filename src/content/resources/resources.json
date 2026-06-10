@@ -1,12 +1,6 @@
 {
   "resources": [
     {
-      "label": "Society of Evidence Based Policing (SEBP)",
-      "url": "https://www.sebp.police.uk/",
-      "note": "Practitioner network promoting the use and generation of research evidence in policing.",
-      "category": "Evidence and research"
-    },
-    {
       "label": "College of Policing — What Works",
       "url": "https://www.college.police.uk/research/what-works-centre-crime-reduction",
       "note": "The What Works Centre for Crime Reduction: reviews and toolkits on what reduces crime.",
@@ -64,6 +58,36 @@
       "label": "CrimeSolutions (US National Institute of Justice)",
       "url": "https://crimesolutions.ojp.gov/",
       "note": "American ratings of programmes and practices — effective, promising or no effects — with the evidence behind each rating.",
+      "category": "Evidence databases"
+    },
+    {
+      "label": "College of Policing — Research",
+      "url": "https://www.college.police.uk/research",
+      "note": "The College's research programme: evidence gap maps, the What Works Centre and current projects.",
+      "category": "Evidence databases"
+    },
+    {
+      "label": "Society of Evidence Based Policing (SEBP)",
+      "url": "https://www.sebp.police.uk/",
+      "note": "UK practitioner network for evidence-based policing — guides, training and events, much of it in the members' hub.",
+      "category": "Evidence databases"
+    },
+    {
+      "label": "American Society of Evidence-Based Policing",
+      "url": "https://americansebp.org/",
+      "note": "SEBP's US counterpart — practitioner-led resources, conferences and research translation.",
+      "category": "Evidence databases"
+    },
+    {
+      "label": "Center for Evidence-Based Crime Policy (George Mason)",
+      "url": "https://cebcp.org/",
+      "note": "Home of the Evidence-Based Policing Matrix — field experiments mapped by what they tested and found.",
+      "category": "Evidence databases"
+    },
+    {
+      "label": "CrimRxiv",
+      "url": "https://www.crimrxiv.com/",
+      "note": "Open criminology preprints and papers, free to read. Also indexed by the search on this site's research page.",
       "category": "Evidence databases"
     }
   ]
