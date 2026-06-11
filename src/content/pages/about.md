@@ -34,6 +34,10 @@ Founder & Editor
 
 I am a serving Police Inspector with Sussex Police, specializing in neighbourhood policing and data-led operational strategy. My approach to law enforcement is defined by an unconventional trajectory into the service: entering policing at age thirty-one following a career managing commercial operations within a major corporate environment, and a subsequent adult diagnosis of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven.
 
+![](/images/nathan-tracey.jpg)
+
+
+
 This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organizational design, and institutional assumptions regarding human behavior versus empirical reality.
 
 My operational interests focus heavily on data application—specifically the predictive analysis of officer assaults, use-of-force proportionality, and misconduct trends—with a strong structural bias toward early intervention frameworks. My methodology has been fundamentally shaped by statistical communication theory, Jerry Ratcliffe’s frameworks for intelligence-led policing, and the foundational principles of evidence-based practice championed by the Society of Evidence-Based Policing (SEBP).
