@@ -1,6 +1,7 @@
 import type { Config } from '@netlify/functions';
 import { getStore } from '@netlify/blobs';
 import Anthropic from '@anthropic-ai/sdk';
+import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-budget';
 import bundle from '../../src/lib/policedata-bundle.json';
 import {
   getPersona,
@@ -106,15 +107,22 @@ async function buildDigest(scope: string, id: string, postcode: string) {
 }
 
 // Stream a Claude message stream to the client as Markdown, optionally caching
-// the final text when (store, key) are given.
-function streamResponse(aiStream: any, store: any, key: string | null, dataMonth: string, modelLabel: string) {
+// the final text when (store, key) are given. Actual token usage is read off
+// the stream events and counted against the monthly AI budget.
+function streamResponse(aiStream: any, store: any, key: string | null, dataMonth: string, modelLabel: string, model: string) {
   const enc = new TextEncoder();
   let full = '';
+  let inputTokens = 0;
+  let outputTokens = 0;
   const body = new ReadableStream({
     async start(controller) {
       try {
         for await (const event of aiStream) {
-          if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
+          if (event.type === 'message_start') {
+            inputTokens = event.message?.usage?.input_tokens ?? 0;
+          } else if (event.type === 'message_delta' && event.usage) {
+            outputTokens = event.usage.output_tokens ?? outputTokens;
+          } else if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
             full += event.delta.text;
             controller.enqueue(enc.encode(event.delta.text));
           }
@@ -123,6 +131,7 @@ function streamResponse(aiStream: any, store: any, key: string | null, dataMonth
       } catch {
         controller.enqueue(enc.encode('\n\n_Interrupted — please try again._'));
       } finally {
+        await recordUsage(model, inputTokens, outputTokens);
         controller.close();
       }
     },
@@ -194,8 +203,10 @@ export default async (req: Request) => {
 
   const client = new Anthropic();
 
-  // Chat: answer the reader's question, grounded in the digest. Not cached.
+  // Chat: answer the reader's question, grounded in the digest. Not cached,
+  // so it always counts against the monthly budget.
   if (isChat) {
+    if (await budgetExceeded()) return json(503, { error: BUDGET_MESSAGE });
     const aiStream = client.messages.stream({
       model,
       max_tokens: 1500,
@@ -203,7 +214,7 @@ export default async (req: Request) => {
       system: `${systemForChat(persona ?? undefined)}\n\nThe only data you may use (aggregate figures):\n${JSON.stringify(digest)}`,
       messages: [...history, { role: 'user', content: question }],
     });
-    return streamResponse(aiStream, null, null, dataMonth, modelLabel);
+    return streamResponse(aiStream, null, null, dataMonth, modelLabel, model);
   }
 
   // Overview: cache per scope+id+persona+month+model+prompt-version.
@@ -221,6 +232,10 @@ export default async (req: Request) => {
     store = null;
   }
 
+  // Cache miss → a real model call; the budget guard sits between them so
+  // cached overviews keep serving even when the month's budget is spent.
+  if (await budgetExceeded()) return json(503, { error: BUDGET_MESSAGE });
+
   const aiStream = client.messages.stream({
     model,
     max_tokens: 3000,
@@ -230,7 +245,7 @@ export default async (req: Request) => {
       { role: 'user', content: `Interpret this police data${persona ? ' for the reader described' : ''}. Aggregate figures only:\n\n${JSON.stringify(digest, null, 2)}` },
     ],
   });
-  return streamResponse(aiStream, store, key, dataMonth, modelLabel);
+  return streamResponse(aiStream, store, key, dataMonth, modelLabel, model);
 };
 
 export const config: Config = { path: '/api/interpret' };

@@ -3,8 +3,6 @@ title: Jason Roach and the Art of Catching Criminals by Their Small Mistakes
 section: influential-people
 description: "A former Home Office crime analyst who became one of British policing's most practically useful academics: Professor Jason Roach gave the service self-selection policing, a psychologist's eye for offender decision-making, and a career-long insistence that research should help the officer on shift. A profile."
 pubDate: 2026-06-11
-updatedDate: ''
-author: ''
 thumbnail: /images/roach.webp
 heroImage: /images/roach.webp
 portrait: /images/roach.webp

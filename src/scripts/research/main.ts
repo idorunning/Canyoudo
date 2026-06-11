@@ -6,7 +6,7 @@
 import { SOURCE_CAPS } from '../../lib/research-sources.mjs';
 import { card, el, type Work, type CardHooks } from './cards';
 import { readStateFromUrl, writeStateToUrl, type SearchState } from './state';
-import { translateQuestion, renderOverview, clearOverview } from './assist';
+import { translateQuestion, renderOverview, renderAnswer, clearOverview } from './assist';
 import type { SavedStore } from './saved';
 
 interface PageConfig {
@@ -42,6 +42,9 @@ export async function initResearch() {
 
   let page = 1;
   let lastQuery = '';
+  // The reader's original plain-English question when the current search came
+  // from one — drives the cited evidence answer instead of the overview.
+  let lastQuestion: string | null = null;
   let shown = 0;
   let total = 0;
   let activeTab: 'results' | 'saved' = 'results';
@@ -210,10 +213,15 @@ export async function initResearch() {
     writeStateToUrl(s);
 
     if (!append && config.hasAi && overviewPanel && data.results.length > 0) {
-      renderOverview(overviewPanel, q, data.results, (refined) => {
-        input.value = refined;
-        startSearch();
-      });
+      if (lastQuestion) {
+        // A question search gets a synthesized, cited answer.
+        renderAnswer(overviewPanel, lastQuestion, data.results);
+      } else {
+        renderOverview(overviewPanel, q, data.results, (refined) => {
+          input.value = refined;
+          startSearch();
+        });
+      }
     }
   }
 
@@ -222,10 +230,11 @@ export async function initResearch() {
     more.disabled = false;
   }
 
-  function startSearch() {
+  function startSearch(question: string | null = null) {
     const q = input.value.trim();
     if (!q) return;
     lastQuery = q;
+    lastQuestion = question;
     page = 1;
     search(false);
   }
@@ -275,7 +284,9 @@ export async function initResearch() {
     }
     showInterpreted(t.query, t.filters, t.note);
     unlock();
-    startSearch();
+    // Only a genuine question earns the cited answer — a keyword search
+    // routed here by the "suggested" sort keeps the lighter overview.
+    startSearch(looksLikeQuestion(raw) ? raw : null);
   }
 
   function showInterpreted(query: string, t: { review: boolean; from: number | null; sort: string | null }, note: string | null) {

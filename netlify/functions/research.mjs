@@ -125,9 +125,15 @@ export default async (req) => {
   return json(
     { count, page: p.page, perPage: PER_PAGE, source, results: onTopic },
     200,
-    // Slow-moving corpus → cache hard at the edge, briefly in the browser.
+    // Slow-moving corpus → cache briefly in the browser, hard at the edge.
     // This is also the main shield on Semantic Scholar's 1 req/s key.
-    'public, max-age=300, s-maxage=86400'
+    'public, max-age=300',
+    {
+      // Netlify's durable cache: repeat queries are served edge-side for a
+      // day, and stale copies keep serving for a week while revalidating.
+      'Netlify-CDN-Cache-Control':
+        'public, durable, s-maxage=86400, stale-while-revalidate=604800',
+    }
   );
 };
 

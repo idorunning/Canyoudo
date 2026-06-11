@@ -11,6 +11,11 @@ export const SECTION_LABELS: Record<Section, string> = {
   'data-stories': 'The Data Tells a Story',
 };
 
+// The browser editor serialises a cleared optional field as '' rather than
+// omitting it — and '' coerces to Invalid Date, which fails the build. Treat
+// blank as absent everywhere an optional/defaulted field could receive one.
+const blankAsUndefined = (v: unknown) => (v === '' || v == null ? undefined : v);
+
 const articleSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -18,7 +23,7 @@ const articleSchema = z.object({
   // "moves" an article between areas; it drives the /{section}/{slug} URL.
   section: z.enum(SECTIONS).default('police-policy'),
   pubDate: z.coerce.date(),
-  updatedDate: z.coerce.date().optional(),
+  updatedDate: z.preprocess(blankAsUndefined, z.coerce.date().optional()),
   heroImage: z.string().optional(),
   thumbnail: z.string().optional(),
   // A head-and-shoulders portrait, shown on the Influential People cards so
@@ -29,7 +34,7 @@ const articleSchema = z.object({
   // article between sections so the previous URL doesn't break.
   redirectFrom: z.array(z.string()).optional(),
   draft: z.boolean().default(false),
-  author: z.string().default('Nathan Tracey'),
+  author: z.preprocess(blankAsUndefined, z.string().default('Nathan Tracey')),
 });
 
 // --- Site data, all editable in the CMS as single-file "data" collections. ---

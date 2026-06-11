@@ -1,8 +1,11 @@
 // AI assistance on /research: plain-English question translation (Sonnet,
-// server-side) and the evidence-overview panel + refinement chips (Haiku).
+// server-side), the evidence-overview panel + refinement chips (Haiku), and
+// the cited evidence answer for question searches (Sonnet; references built
+// here from the real retrieved works, never by the model).
 // All rendered via textContent; failures suppress the panel, never the search.
 
 import { el, type Work } from './cards';
+import { formatReference } from '../../lib/reference-format.mjs';
 
 export interface Translation {
   query: string;
@@ -95,4 +98,134 @@ export function clearOverview(panel: HTMLElement) {
   overviewSeq++;
   panel.replaceChildren();
   panel.hidden = true;
+}
+
+// ---- cited evidence answers ------------------------------------------------
+
+interface Answer {
+  answer: string;
+  used: number[];
+  caveat: string;
+  confidence: 'strong' | 'mixed' | 'thin';
+}
+
+const CONFIDENCE_LABELS: Record<Answer['confidence'], string> = {
+  strong: 'Evidence: converging',
+  mixed: 'Evidence: mixed',
+  thin: 'Evidence: thin',
+};
+
+/** Render one answer paragraph, turning [n] markers into superscript links to
+ *  the matching reference line below. Everything else is plain textContent. */
+function answerParagraph(text: string, valid: Set<number>) {
+  const p = el('p', 'font-serif text-sm text-ink-800 leading-relaxed mt-2 first:mt-0');
+  for (const part of text.split(/(\[\d{1,3}\])/)) {
+    const m = part.match(/^\[(\d{1,3})\]$/);
+    const n = m ? Number(m[1]) : 0;
+    if (n && valid.has(n)) {
+      const sup = document.createElement('sup');
+      const a = document.createElement('a');
+      a.href = `#research-ref-${n}`;
+      a.className = 'text-accent font-sans font-medium hover:text-accent-dark no-underline px-0.5';
+      a.textContent = `[${n}]`;
+      sup.appendChild(a);
+      p.appendChild(sup);
+    } else if (part) {
+      p.appendChild(document.createTextNode(part));
+    }
+  }
+  return p;
+}
+
+/**
+ * Fetch and render the cited evidence answer for a question search. The
+ * numbered reference list is built locally from the retrieved Work objects —
+ * the model only ever points at them by index. Failures hide the panel
+ * (except an explicit server message, e.g. the monthly budget pause, which
+ * is shown quietly); the result list is never affected.
+ */
+export async function renderAnswer(
+  panel: HTMLElement,
+  question: string,
+  results: Work[]
+) {
+  const seq = ++overviewSeq;
+  panel.replaceChildren();
+  panel.hidden = true;
+
+  const works = results.slice(0, 10);
+  const items = works.map((w) => ({
+    title: w.title,
+    authors: w.authors,
+    year: w.year,
+    venue: w.venue,
+    abstract: w.tldr || w.abstract || '',
+  }));
+  if (items.length === 0) return;
+
+  panel.hidden = false;
+  panel.appendChild(el('p', 'font-sans text-xs text-ink-500 italic', 'Synthesising an evidence answer…'));
+
+  let data: Answer | null = null;
+  let serverMessage: string | null = null;
+  try {
+    const res = await fetch('/api/research-assist', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ mode: 'answer', question, items }),
+    });
+    const body = await res.json().catch(() => null);
+    if (res.ok && typeof body?.answer === 'string' && body.answer && Array.isArray(body?.used)) {
+      data = body as Answer;
+    } else if (res.status === 503 && typeof body?.error === 'string') {
+      serverMessage = body.error; // e.g. the monthly budget pause
+    }
+  } catch {}
+  if (seq !== overviewSeq) return; // a newer search superseded us
+  if (!data) {
+    panel.replaceChildren();
+    if (serverMessage) {
+      panel.appendChild(el('p', 'font-serif text-xs italic text-ink-600', serverMessage));
+    } else {
+      panel.hidden = true;
+    }
+    return;
+  }
+
+  const valid = new Set(data.used.filter((n) => Number.isInteger(n) && n >= 1 && n <= works.length));
+  panel.replaceChildren();
+
+  const box = el('div', 'bg-paper-100 border-l-2 border-accent rounded-r-md px-5 py-4');
+  const kicker = el('div', 'flex flex-wrap items-baseline justify-between gap-2 mb-2');
+  kicker.appendChild(
+    el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500', 'Evidence answer — every claim cites a study below')
+  );
+  kicker.appendChild(
+    el('span', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-500 border border-ink-200 rounded px-1.5 py-0.5', CONFIDENCE_LABELS[data.confidence] ?? CONFIDENCE_LABELS.mixed)
+  );
+  box.appendChild(kicker);
+
+  for (const para of data.answer.split(/\n{2,}/)) {
+    if (para.trim()) box.appendChild(answerParagraph(para.trim(), valid));
+  }
+  box.appendChild(el('p', 'font-serif text-xs italic text-ink-600 mt-3', data.caveat));
+
+  // References: built from the actual retrieved works, numbered to match the
+  // markers. Each line links nothing the model wrote — only real records.
+  if (valid.size) {
+    const refHead = el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500 mt-4 mb-1', 'References (from the results below)');
+    box.appendChild(refHead);
+    const list = el('ol', 'space-y-1');
+    for (const n of [...valid].sort((a, b) => a - b)) {
+      const li = el('li', 'font-serif text-xs text-ink-700 leading-relaxed');
+      li.id = `research-ref-${n}`;
+      li.appendChild(el('span', 'font-sans font-medium text-ink-500 mr-1', `[${n}]`));
+      li.appendChild(document.createTextNode(formatReference(works[n - 1])));
+      list.appendChild(li);
+    }
+    box.appendChild(list);
+  }
+
+  panel.appendChild(box);
+  panel.hidden = false;
 }
