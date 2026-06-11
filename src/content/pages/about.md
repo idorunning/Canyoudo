@@ -1,34 +1,50 @@
 ---
-title: About this site, and the person writing it.
-description: What Thinking About Policing is — evidence-based writing, a live crime dashboard and a free research search — and the Sussex Police Inspector behind it.
+title: Purpose and Editorial Scope
+description: Evidence-based writing,  live crime dashboard and a free research search
 ---
+*Thinking About Policing* is an independent analytical platform dedicated to evidence-based policing (EBP), public policy, and institutional reform. It is written specifically for those who shape, study, and execute modern policing strategy: senior executives, operational leaders, policymakers, and academic researchers.
 
-## What this site is
+Rather than offering passive literature reviews or broad surveys of the field, every analysis published here takes a definitive, data-led position. The editorial ethos is grounded in empirical rigor: where robust empirical evidence exists, it forms the foundation of the argument; where data is sparse, fragmented, or structurally contested, that limitation is explicitly stated and evaluated.
 
-Thinking About Policing is evidence-based writing on policing and public policy, written for the people who shape and deliver it: senior leaders, policymakers, academics, and serving officers. Each piece starts from data or research where it exists, states plainly where the evidence is thin or contested, and argues a position rather than surveying the field.
+The publication operates across five primary thematic streams:
 
-It is no longer only writing. Two working tools now sit alongside the articles.
+* Police Policy: Critical examinations of internal operational mechanics, including systemic misconduct prevention, organizational wellbeing metrics, the proportionality of use-of-force frameworks, and the efficacy of localized neighbourhood policing models.
+* Public Policy: A broader structural look at the intersection of criminal justice, legislative mandates, and the socio-political environments that dictate the demands placed upon the police service.
+* Influential People: Analytical profiles of the theoretical architects and researchers whose work has fundamentally shifted the paradigm of modern law enforcement.
+* Data Stories: Brief, targeted empirical analyses where quantitative datasets drive the hypothesis and carry the core argument.
+* Interesting Distractions: A dedicated space for analytical curiosity outside of standard public policy—spanning historical cryptanalysis (such as the 1948 Somerton Man cipher) to critical reviews of statistical communication.
 
-The [Crime Dashboard](/data) draws live street-level data from data.police.uk and the Home Office's recorded-crime series. It lets you examine what is actually happening in a force area, and put questions to the figures, without building a spreadsheet.
+## Applied Analytics: Integrated Tools
 
-The [Research Assistant](/research) is a free search of the open scholarly record. Most policing research sits behind paywalls a serving officer will never cross. Ask a question in plain English and it searches more than 250 million works, summarises what the evidence says, and links directly to a free, legal copy where one exists. No library card required.
+To move beyond theoretical commentary and actively support the democratization of evidence and data, the platform hosts two live, functional resources designed to bridge the gap between academic research and operational application.
 
-## What's here to read
+### The Crime Dashboard
 
-**Police Policy** covers the operational and organisational side of the job: misconduct prevention, officer wellbeing, use of force, neighbourhood policing, and evidence-based practice. **Public Policy** takes a wider view — criminal justice, social policy, and the political context that shapes what police are asked to do. **Influential People** profiles the thinkers whose work changed how I understand policing. **Data Stories** lets the numbers carry the argument. And **Interesting Distractions** is for whatever else the mind wanders into — the Somerton Man cipher, an appreciation of *More or Less*, and the rest.
+An automated, accessible interface that ingests live, granular, street-level data from open-source repositories (including data.police.uk and Home Office recorded-crime indices). It is engineered to allow practitioners and analysts to query localized longitudinal trends, examine force-wide outcomes, and interrogate raw figures directly without the administrative friction of bespoke spreadsheet synthesis.
 
-## The person writing it
+### The Research Assistant
 
-![Nathan Tracey](/images/nathan-tracey.jpg)
+A semantic, natural-language search layer operating over the global open-source scholarly record (comprising over 250 million academic works). Recognizing that a vast proportion of empirical policing literature is locked behind institutional paywalls inaccessible to front-line practitioners, this tool extracts, synthesizes, and outputs relevant evidence summaries alongside direct links to legal, open-access versions of peer-reviewed papers.
 
-I am Nathan Tracey, a Police Inspector with Sussex Police, based in Hampshire. I came to the job by an indirect route: years running a department at Tesco, joining the police at thirty-one, and a diagnosis of ADHD at thirty-seven. That diagnosis reframed a great deal, and much of what I write returns to the same theme — the gap between how people are assumed to function and how they actually do.
+## Author Profile
 
-I work in neighbourhood policing, with a particular interest in data — officer assaults, use of force, misconduct trends — and a bias towards early intervention. None of it began with a background in statistics. It started with Tim Harford's [More or Less](/other/more-or-less-and-the-art-of-not-being-fooled-by-numbers/), developed through [Jerry Ratcliffe's](/influential-people/jerry-ratcliffe-and-the-case-for-intelligence-led-policing/) work on intelligence-led policing, and owes a considerable debt to [Alex Murray](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing/), founder of the Society of Evidence-Based Policing. The principle underneath it is straightforward: an officer's instinct is a hypothesis, not a verdict, and testing it is the part that matters. (The [Somerton Man's coded note](/other/cracking-the-somerton-man-code/) is the long-running puzzle on the side.)
+### Nathan Tracey
 
-## A note on views
+Founder & Editor
 
-Everything here is written in a personal capacity. The views are mine alone and do not represent Sussex Police, any other employer, or any organisation I am associated with. Where I draw on research, I cite it. Where I am offering a personal reading, I say so.
+I am a serving Police Inspector with Sussex Police, specializing in neighbourhood policing and data-led operational strategy. My approach to law enforcement is defined by an unconventional trajectory into the service: entering policing at age thirty-one following a career managing commercial operations within a major corporate environment, and a subsequent adult diagnosis of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven.
 
-## Get in touch
+This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organizational design, and institutional assumptions regarding human behavior versus empirical reality.
 
-Comments on each article are open and need no login, so please join the conversation — questions, challenges, and different perspectives are all welcome. To reach me directly, email [hello@thinkingaboutpolicing.org](mailto:hello@thinkingaboutpolicing.org).
+My operational interests focus heavily on data application—specifically the predictive analysis of officer assaults, use-of-force proportionality, and misconduct trends—with a strong structural bias toward early intervention frameworks. My methodology has been fundamentally shaped by statistical communication theory, Jerry Ratcliffe’s frameworks for intelligence-led policing, and the foundational principles of evidence-based practice championed by the Society of Evidence-Based Policing (SEBP).
+
+The underlying thesis of this platform is straightforward: an operational officer's instinct or institutional intuition is a hypothesis to be rigorously tested, not a verdict to be blindly actioned.
+
+## Disclaimers and Integrity
+
+All content, commentary, and analysis published on this site are compiled and articulated purely in a personal capacity. The views expressed herein belong solely to the author and do not represent the official policy, strategic position, or endorsement of Sussex Police, the Home Office, or any associated professional bodies or academic institutions.
+
+* Academic Integrity: Where external research, datasets, or literature are referenced, full citations are provided. Where arguments rely on qualitative interpretation or experiential deduction, this distinction is explicitly demarcated.
+* Peer Review & Engagement: An open-access comment architecture is maintained across all articles to encourage scholarly dissent, methodological critique, and operational peer review.
+
+For direct academic correspondence, collaboration inquiries, or data queries, contact: hello@thinkingaboutpolicing.org
