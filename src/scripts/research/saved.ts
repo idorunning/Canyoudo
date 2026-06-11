@@ -88,13 +88,17 @@ export async function initSaved(
       authSlot.appendChild(wrap);
     } else {
       // A soft pill, not a buried text link — visible without competing
-      // with the Search button. Google-only here for one-click speed; the
-      // Saved tab nudge offers the email option too.
+      // with the Search button. Clicking it opens the Saved-tab pitch
+      // rather than launching any one provider directly.
       const pill = el('div', 'inline-flex items-center gap-1.5 font-sans text-xs text-ink-600 bg-paper-200 rounded-full px-3 py-1.5');
       pill.appendChild(el('span', '', 'Save papers as you go — '));
       const btn = el('button', 'text-accent font-medium hover:text-accent-dark transition-colors', 'Sign in') as HTMLButtonElement;
       btn.type = 'button';
-      btn.addEventListener('click', signInWithGoogle);
+      btn.addEventListener('click', () => {
+        // main.ts listens for this and switches to the Saved tab pitch,
+        // where both sign-in routes (Google and email link) are offered.
+        authSlot.dispatchEvent(new CustomEvent('research:show-signin', { bubbles: true }));
+      });
       pill.appendChild(btn);
       authSlot.appendChild(pill);
     }

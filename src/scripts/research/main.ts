@@ -67,6 +67,8 @@ export async function initResearch() {
           else savedStore!.renderSignedOutView(savedView);
         }
       });
+      // The signed-out pill asks us to show the sign-in pitch (Saved tab).
+      root.addEventListener('research:show-signin', () => showTab('saved'));
       updateTabs();
     } catch {
       // Auth never blocks the search.
