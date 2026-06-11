@@ -16,13 +16,15 @@ way below ~10,000 pageviews a month.)
 
 ## 1 — Donation link (10 min)
 
-1. Create a free page at [ko-fi.com](https://ko-fi.com) (or Buy Me a Coffee —
-   both take card payments with no account needed from the supporter; Ko-fi
-   takes 0% of donations on the free plan).
-2. Copy your page URL, e.g. `https://ko-fi.com/thinkingaboutpolicing`.
+1. Create a free page at [buymeacoffee.com](https://buymeacoffee.com) (or
+   Ko-fi — both take card payments with no account needed from the supporter).
+2. Copy your page URL, e.g. `https://buymeacoffee.com/thinkingaboutpolicing`.
 3. In Netlify, set `PUBLIC_SUPPORT_URL` to that URL and redeploy.
 
-A quiet "Support this work →" link appears in the footer on every page.
+That single var switches on two asks on every page (both invisible until it's
+set): a slim "buy me a coffee" banner at the top, and a fuller thank-you block
+in the footer. Both say plainly that donations cover only the LLM API bills
+and the time spent building the site.
 
 ## 2 — Amazon affiliate tags (30 min)
 

@@ -1,0 +1,50 @@
+---
+// "Buy me a coffee" support ask, shown at the top (banner) and bottom (footer
+// block) of every page. Renders nothing until PUBLIC_SUPPORT_URL is set — the
+// same off-until-configured pattern as analytics and comments — so the site
+// carries no donation markup at all before the page exists.
+//
+// Tone: grateful, and explicit that donations cover only the LLM API bills
+// and the time spent building the site.
+interface Props {
+  variant: 'banner' | 'footer';
+}
+const { variant } = Astro.props;
+const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
+---
+
+{supportUrl && variant === 'banner' && (
+  <a
+    href={supportUrl}
+    rel="noopener"
+    target="_blank"
+    class="block bg-paper-200 border-b border-ink-200 hover:bg-paper-100 transition-colors"
+  >
+    <p class="max-w-wide mx-auto px-6 lg:px-10 py-2.5 font-sans text-xs sm:text-sm text-ink-700 text-center">
+      <span aria-hidden="true">☕</span>
+      Enjoying the site? <span class="font-medium text-accent underline underline-offset-2">Buy me a coffee</span>
+      — every donation goes to the LLM API bills and the time spent building it. Thank you!
+    </p>
+  </a>
+)}
+
+{supportUrl && variant === 'footer' && (
+  <div class="mt-6">
+    <p class="font-sans text-xs font-semibold uppercase tracking-[0.15em] text-ink-900 mb-4">
+      Support this site
+    </p>
+    <p class="font-serif text-sm text-ink-700 leading-relaxed max-w-xs">
+      If the writing, the research assistant or the crime dashboard have been useful,
+      you can buy me a coffee. Donations cover the LLM API costs and the time spent
+      building the site — nothing more. Thank you for reading.
+    </p>
+    <a
+      href={supportUrl}
+      rel="noopener"
+      target="_blank"
+      class="inline-block mt-4 font-sans text-sm font-medium bg-accent text-paper-50 px-4 py-2 rounded hover:bg-accent-dark transition-colors"
+    >
+      <span aria-hidden="true">☕</span> Buy me a coffee →
+    </a>
+  </div>
+)}
