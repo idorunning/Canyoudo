@@ -85,32 +85,32 @@ export async function initSaved(
   function renderAuth() {
     authSlot.replaceChildren();
     if (user) {
-      const wrap = el('span', 'inline-flex items-center gap-2 font-sans text-xs text-ink-600');
+      const wrap = el('div', 'flex justify-end');
+      const inner = el('span', 'inline-flex items-center gap-2 font-sans text-xs text-ink-600');
       const initial = (user.user_metadata?.name || user.email || '?').trim().charAt(0).toUpperCase();
       const dot = el('span', 'inline-flex items-center justify-center w-6 h-6 rounded-full bg-accent text-paper-50 font-medium', initial);
-      wrap.appendChild(dot);
+      inner.appendChild(dot);
       const out = el('button', 'underline underline-offset-2 hover:text-accent', 'Sign out') as HTMLButtonElement;
       out.type = 'button';
       out.addEventListener('click', async () => {
         await supabase.auth.signOut();
       });
-      wrap.appendChild(out);
+      inner.appendChild(out);
+      wrap.appendChild(inner);
       authSlot.appendChild(wrap);
     } else {
-      // A soft pill, not a buried text link — visible without competing
-      // with the Search button. Clicking it opens the Saved-tab pitch
-      // rather than launching any one provider directly.
-      const pill = el('div', 'inline-flex items-center gap-1.5 font-sans text-xs text-ink-600 bg-paper-200 rounded-full px-3 py-1.5');
-      pill.appendChild(el('span', '', 'Save papers as you go — '));
-      const btn = el('button', 'text-accent font-medium underline underline-offset-2 cursor-pointer hover:text-accent-dark transition-colors', 'Sign in') as HTMLButtonElement;
-      btn.type = 'button';
-      btn.addEventListener('click', () => {
-        // main.ts listens for this and switches to the Saved tab pitch,
-        // where both sign-in routes (Google and email link) are offered.
-        promptSignIn();
-      });
-      pill.appendChild(btn);
-      authSlot.appendChild(pill);
+      // A quiet bar above the search box: the benefit, then both sign-in
+      // routes right there (email link primary, Google secondary) — no
+      // teaser that sends the reader hunting elsewhere.
+      const bar = el('div', 'flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between rounded-lg bg-paper-200 px-5 py-4');
+      const blurb = el('div', 'max-w-sm');
+      blurb.appendChild(el('p', 'font-sans text-sm font-medium text-ink-900', 'Save papers, notes and reference lists as you go'));
+      blurb.appendChild(el('p', 'font-sans text-xs text-ink-600 mt-0.5', 'Free and optional — searching works without an account.'));
+      bar.appendChild(blurb);
+      const opts = el('div', 'shrink-0');
+      renderSignInOptions(opts);
+      bar.appendChild(opts);
+      authSlot.appendChild(bar);
     }
   }
 
@@ -128,6 +128,72 @@ export async function initSaved(
       email,
       options: { emailRedirectTo: location.origin + '/research' },
     });
+  }
+
+  // The two sign-in routes, shown wherever we offer sign-in (the bar above
+  // the search box and the Saved-tab pitch). Email link is the primary,
+  // password-free route; Google is the alternative. Clicking email expands
+  // an inline form in place; submitting shows a "check your inbox" message.
+  function renderSignInOptions(container: HTMLElement) {
+    const primary = 'font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50';
+    const secondary = 'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors';
+    const textLink = 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent';
+
+    function showButtons() {
+      container.replaceChildren();
+      const row = el('div', 'flex flex-col sm:flex-row gap-3');
+      const email = el('button', primary, 'Email me a sign-in link') as HTMLButtonElement;
+      email.type = 'button';
+      email.addEventListener('click', showEmailForm);
+      row.appendChild(email);
+      const google = el('button', secondary, 'Or use Google') as HTMLButtonElement;
+      google.type = 'button';
+      google.addEventListener('click', signInWithGoogle);
+      row.appendChild(google);
+      container.appendChild(row);
+      container.appendChild(
+        el('p', 'font-sans text-xs text-ink-500 mt-2', 'The email link is password-free and works with any address, including a work one (e.g. police.gov.uk).')
+      );
+    }
+
+    function showEmailForm() {
+      container.replaceChildren();
+      const form = el('form', 'flex flex-col sm:flex-row gap-3 max-w-md') as HTMLFormElement;
+      const input = el('input', 'flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent') as HTMLInputElement;
+      input.type = 'email';
+      input.autocomplete = 'email';
+      input.placeholder = 'you@example.com';
+      input.required = true;
+      form.appendChild(input);
+      const send = el('button', primary, 'Send link') as HTMLButtonElement;
+      send.type = 'submit';
+      form.appendChild(send);
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const address = input.value.trim();
+        if (!address) return;
+        send.disabled = true;
+        const { error } = await signInWithEmail(address);
+        container.replaceChildren();
+        container.appendChild(
+          error
+            ? el('p', 'font-sans text-sm text-ink-700', 'That didn’t send — check the address and try again in a minute.')
+            : el('p', 'font-sans text-sm text-ink-700', `Sign-in link sent to ${address}. Check your inbox — it expires after one hour.`)
+        );
+        const again = el('button', `mt-2 ${textLink}`, error ? 'Try again' : 'Use a different email') as HTMLButtonElement;
+        again.type = 'button';
+        again.addEventListener('click', showEmailForm);
+        container.appendChild(again);
+      });
+      container.appendChild(form);
+      const cancel = el('button', `mt-2 ${textLink}`, 'Use Google instead') as HTMLButtonElement;
+      cancel.type = 'button';
+      cancel.addEventListener('click', showButtons);
+      container.appendChild(cancel);
+      input.focus();
+    }
+
+    showButtons();
   }
 
   async function toggleSave(w: Work, btn: HTMLButtonElement) {
@@ -432,65 +498,9 @@ export async function initSaved(
     }
     box.appendChild(ul);
 
-    // Sign-in options: Google (primary) + email (expands to an inline form).
+    // Both sign-in routes, shared with the bar above the search box.
     const options = el('div', 'mt-6');
-    function showButtons() {
-      options.replaceChildren();
-      const row = el('div', 'flex flex-col sm:flex-row gap-3');
-      const google = el('button', 'font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors', 'Sign in with Google') as HTMLButtonElement;
-      google.type = 'button';
-      google.addEventListener('click', signInWithGoogle);
-      row.appendChild(google);
-      const email = el('button', 'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors', 'Sign in with email') as HTMLButtonElement;
-      email.type = 'button';
-      email.addEventListener('click', showEmailForm);
-      row.appendChild(email);
-      options.appendChild(row);
-      options.appendChild(
-        el('p', 'font-sans text-xs text-ink-500 mt-3', 'No Google account? Use any email address — including a work address. We’ll send a one-click sign-in link, no password needed.')
-      );
-    }
-
-    function showEmailForm() {
-      options.replaceChildren();
-      const form = el('form', 'flex flex-col sm:flex-row gap-3') as HTMLFormElement;
-      const input = el('input', 'flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent') as HTMLInputElement;
-      input.type = 'email';
-      input.autocomplete = 'email';
-      input.placeholder = 'you@example.com';
-      input.required = true;
-      form.appendChild(input);
-      const send = el('button', 'font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50', 'Send sign-in link') as HTMLButtonElement;
-      send.type = 'submit';
-      form.appendChild(send);
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const address = input.value.trim();
-        if (!address) return;
-        send.disabled = true;
-        const { error } = await signInWithEmail(address);
-        options.replaceChildren();
-        options.appendChild(
-          error
-            ? el('p', 'font-sans text-sm text-ink-700', 'That didn’t send — check the address and try again in a minute.')
-            : el('p', 'font-sans text-sm text-ink-700', `Sign-in link sent to ${address}. Check your inbox — it expires after one hour.`)
-        );
-        if (error) {
-          const retry = el('button', 'mt-2 font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent', 'Try again') as HTMLButtonElement;
-          retry.type = 'button';
-          retry.addEventListener('click', showEmailForm);
-          options.appendChild(retry);
-        }
-      });
-      options.appendChild(form);
-      const cancel = el('button', 'mt-3 font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent', 'Cancel') as HTMLButtonElement;
-      cancel.type = 'button';
-      cancel.addEventListener('click', showButtons);
-      options.appendChild(cancel);
-      input.focus();
-    }
-
-    showButtons();
+    renderSignInOptions(options);
     box.appendChild(options);
     container.appendChild(box);
   }

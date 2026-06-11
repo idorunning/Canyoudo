@@ -48,7 +48,6 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
         repository deposits, open-access journals. Ask a question here and the assistant
         searches the open scholarly record, sketches what the studies say, and links you
         straight to the free copy where one exists. No library card needed.
-        {hasAuth && ' Sign in to save papers, add notes, and export reference lists as you go.'}
       </p>
     </div>
   </section>
@@ -59,7 +58,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
         <script is:inline type="application/json" id="research-config" set:html={JSON.stringify(pageConfig)}></script>
 
         {hasAuth && (
-          <div class="mb-5 flex justify-end" data-auth-slot></div>
+          <div class="mb-6" data-auth-slot></div>
         )}
 
         <form data-research-form class="flex flex-wrap gap-3 items-stretch">
