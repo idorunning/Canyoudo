@@ -1,10 +1,20 @@
 ---
-section: "influential-people"
-title: "Jerry Ratcliffe and the Case for Intelligence-Led Policing"
-description: "A London beat officer turned Philadelphia professor, Jerry Ratcliffe spent a career arguing that policing should aim its scarce resources at the few places, times and people that produce most of the harm — and then test whether it worked. A profile of the criminologist behind intelligence-led policing and the Reducing Crime podcast."
+title: Jerry Ratcliffe and the Case for Intelligence-Led Policing
+section: influential-people
+description: A London beat officer turned Philadelphia professor, Jerry Ratcliffe spent a career arguing that policing should aim its scarce resources at the few places, times and people that produce most of the harm — and then test whether it worked. A profile of the criminologist behind intelligence-led policing and the Reducing Crime podcast.
 pubDate: 2026-06-07
-portrait: "/images/ratcliffe-portrait.jpg"
-tags: ["evidence-based-policing", "predictive-policing", "hotspot-policing", "leadership", "police", "policing", "criminology"]
+updatedDate: ''
+author: ''
+thumbnail: /images/ratcliffe-portrait.jpg
+portrait: /images/ratcliffe-portrait.jpg
+tags:
+  - evidence-based-policing
+  - predictive-policing
+  - hotspot-policing
+  - leadership
+  - police
+  - policing
+  - criminology
 ---
 
 **Most policing, left to its own devices, spreads itself thin.** Patrols drift across whole districts, investigations chase whatever lands on the desk, and effort is distributed roughly evenly across a city — which sounds fair until you notice that crime is not distributed evenly at all. A small number of places, a small number of offenders and a small number of moments account for most of the harm. Jerry Ratcliffe has spent a career insisting that policing should be organised around that fact: find the concentrations, aim at them deliberately, and check whether you made a difference. He calls it intelligence-led policing, and he is its most readable advocate.
