@@ -2,6 +2,7 @@
 // "Related book" promo shown at the foot of an article when a book shares a tag
 // with it. Books are CMS-editable and link out to wherever they're sold.
 import { getEntry } from 'astro:content';
+import { withAffiliateTag } from '../lib/affiliate.mjs';
 
 interface Props {
   tags?: string[];
@@ -12,6 +13,9 @@ const entry = await getEntry('books', 'books');
 const books = entry?.data.books ?? [];
 const tagSet = new Set(tags.map((t) => t.toLowerCase()));
 const match = books.find((b) => (b.tags ?? []).some((t) => tagSet.has(t.toLowerCase())));
+const buyUrl = match
+  ? withAffiliateTag(match.buyUrl, import.meta.env.PUBLIC_AMAZON_ASSOCIATES_TAG ?? '')
+  : '';
 ---
 
 {match && (
@@ -29,8 +33,8 @@ const match = books.find((b) => (b.tags ?? []).some((t) => tagSet.has(t.toLowerC
       <p class="font-display text-lg font-semibold text-ink-900 leading-snug">{match.title}</p>
       <p class="font-serif text-sm text-ink-700 mt-1.5 leading-relaxed">{match.blurb}</p>
       <a
-        href={match.buyUrl}
-        rel="noopener"
+        href={buyUrl}
+        rel="noopener sponsored"
         target="_blank"
         aria-label={`${match.buyLabel ?? 'Get the book'} — ${match.title} (opens in a new tab)`}
         class="inline-block mt-3 font-sans text-sm font-medium bg-accent text-paper-50 px-4 py-2 rounded hover:bg-accent-dark transition-colors"

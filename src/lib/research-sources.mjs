@@ -12,6 +12,13 @@
 
 export const PER_PAGE = 10;
 
+// A keyword can return anything the upstream catalogue holds — including medical
+// or genetics papers with no policing bearing. When we don't trust the source to
+// be on-topic (everything except the ISSN-locked "policing" journals facet), we
+// over-fetch a wider block so the relevance guard below can prune the strays and
+// still leave a useful page behind.
+export const GUARDED_PER_PAGE = 25;
+
 // ---------------------------------------------------------------------------
 // The policing-journals facet. [name, ISSN] — edit this list to change which
 // journals the "Policing journals" source searches. OpenAlex filter syntax:
@@ -36,6 +43,91 @@ export const SOURCE_CAPS = {
   scholar: { oa: true, review: true, from: true, sort: false },
   core: { oa: false, review: false, from: true, sort: false }, // CORE is all-OA
 };
+
+// ---------------------------------------------------------------------------
+// Policing-relevance guard. The site searches the whole open scholarly record,
+// so an ambiguous keyword ("stress", "genes", "networks") can surface medical,
+// biology or economics papers that have nothing to do with policing. This guard
+// keeps results on-topic: a work counts as relevant if its title, venue or
+// abstract mentions an established policing / criminal-justice term.
+//
+// Tuned to admit criminology broadly while excluding look-alikes — a
+// behavioural-genetics paper that actually discusses offending stays (it says
+// "crime"/"offending"); a pure medical-genetics paper drops. Terms prone to
+// false positives in other fields ("surveillance" → disease surveillance,
+// "trafficking" → protein trafficking, "deterrence" → nuclear deterrence) are
+// deliberately scoped (e.g. "drug trafficking", "human trafficking") or omitted.
+const RELEVANCE_TERMS = [
+  'polic(?:e|ing|ed)\\b', // police / policing / policed — not "policy"
+  'constab(?:le|ulary)',
+  'law enforcement',
+  'criminolog',
+  '\\bcrimes?\\b',
+  'criminal',
+  'offend(?:er|ers|ing)?\\b',
+  'reoffend',
+  'recidivis',
+  'desistance',
+  'delinquen',
+  'incarcerat',
+  'imprison',
+  '\\bprison',
+  '\\bparole\\b',
+  '\\bprobation\\b',
+  'sentenc(?:e|ed|ing)',
+  'prosecut',
+  'magistrat',
+  '\\bjudiciary\\b',
+  'criminal justice',
+  'juvenile justice',
+  'restorative justice',
+  'procedural justice',
+  'victimi[sz]ation',
+  '\\bvictims?\\b',
+  'burglary',
+  'robbery',
+  'homicide',
+  '\\bmurder',
+  'shoplifting',
+  '\\btheft\\b',
+  '\\bgangs?\\b',
+  'knife crime',
+  'gun (?:crime|violence)',
+  'firearm',
+  'domestic (?:abuse|violence)',
+  'sexual (?:assault|offen)',
+  '\\brape\\b',
+  'stop[\\s-]and[\\s-](?:search|frisk)',
+  'use of force',
+  'body[\\s-]worn',
+  '\\btaser\\b',
+  '\\bcctv\\b',
+  'forensic',
+  'terroris',
+  'extremis',
+  'radicali[sz]',
+  'counter[\\s-]terror',
+  'cybercrime',
+  '\\bfraud\\b',
+  'organi[sz]ed crime',
+  'human trafficking',
+  'drug traffick',
+  'antisocial behaviour',
+  'anti-social behaviour',
+  'police legitimacy',
+  'hot spots policing',
+  'crime prevention',
+  'crime reduction',
+  '\\bsafeguarding\\b',
+];
+const RELEVANCE_RE = new RegExp(RELEVANCE_TERMS.join('|'), 'i');
+
+// True if a mapped work reads as policing / criminal-justice relevant.
+export function isPolicingRelevant(work) {
+  if (!work) return false;
+  const hay = `${work.title ?? ''} ${work.venue ?? ''} ${work.abstract ?? ''}`;
+  return RELEVANCE_RE.test(hay);
+}
 
 // ---------------------------------------------------------------------------
 // Shared parsing of the page's query params (q, page, oa, review, from, sort).
@@ -100,7 +192,7 @@ export function mapOpenAlexWork(w) {
   };
 }
 
-export function buildOpenAlexUrl(p, { policingOnly = false, mailto = '' } = {}) {
+export function buildOpenAlexUrl(p, { policingOnly = false, mailto = '', perPage = PER_PAGE } = {}) {
   const filters = [];
   if (p.oa) filters.push('is_oa:true');
   if (p.review) filters.push('type:review');
@@ -118,7 +210,7 @@ export function buildOpenAlexUrl(p, { policingOnly = false, mailto = '' } = {}) 
   if (filters.length) u.searchParams.set('filter', filters.join(','));
   if (sort) u.searchParams.set('sort', sort);
   u.searchParams.set('page', String(p.page));
-  u.searchParams.set('per-page', String(PER_PAGE));
+  u.searchParams.set('per-page', String(perPage));
   if (mailto) u.searchParams.set('mailto', mailto);
   return u;
 }

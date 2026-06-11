@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
+import { withAffiliateTag } from '../lib/affiliate.mjs';
 
 const entry = await getEntry('books', 'books');
 const books = entry?.data.books ?? [];
+const affiliateTag = import.meta.env.PUBLIC_AMAZON_ASSOCIATES_TAG ?? '';
 ---
 
 <BaseLayout
@@ -44,8 +46,8 @@ const books = entry?.data.books ?? [];
                   {book.blurb}
                 </p>
                 <a
-                  href={book.buyUrl}
-                  rel="noopener"
+                  href={withAffiliateTag(book.buyUrl, affiliateTag)}
+                  rel="noopener sponsored"
                   target="_blank"
                   class="inline-block mt-5 font-sans text-sm font-medium bg-accent text-paper-50 px-5 py-2.5 rounded hover:bg-accent-dark transition-colors"
                 >

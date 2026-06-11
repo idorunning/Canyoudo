@@ -11,9 +11,11 @@ import {
   buildOpenAlexUrl,
   buildScholarUrl,
   buildCoreRequest,
+  isPolicingRelevant,
   POLICING_JOURNAL_ISSNS,
   SOURCE_CAPS,
   PER_PAGE,
+  GUARDED_PER_PAGE,
 } from '../src/lib/research-sources.mjs';
 
 const WORK_KEYS = [
@@ -172,6 +174,45 @@ test('buildCoreRequest folds the year floor into q', () => {
   assert.equal(r.url, 'https://api.core.ac.uk/v3/search/works');
   assert.deepEqual(r.body, { q: 'stop and search AND yearPublished>=2015', limit: PER_PAGE, offset: PER_PAGE });
   assert.deepEqual(buildCoreRequest(params({ q: 'x' })).body, { q: 'x', limit: PER_PAGE, offset: 0 });
+});
+
+// ---------------------------------------------------------------------------
+test('buildOpenAlexUrl honours a custom per-page (the guarded over-fetch)', () => {
+  const u = buildOpenAlexUrl(params({ q: 'hot spots' }), { perPage: GUARDED_PER_PAGE });
+  assert.equal(u.searchParams.get('per-page'), String(GUARDED_PER_PAGE));
+  // Default is unchanged when no perPage is passed.
+  const d = buildOpenAlexUrl(params({ q: 'hot spots' }));
+  assert.equal(d.searchParams.get('per-page'), String(PER_PAGE));
+  assert.ok(GUARDED_PER_PAGE > PER_PAGE);
+});
+
+test('isPolicingRelevant keeps on-topic work', () => {
+  const keep = [
+    { title: 'Hot spots policing of small geographic areas' },
+    { title: 'Does extra patrol cut burglary?', abstract: 'A randomised trial.' },
+    { title: 'Genetic influences on antisocial behaviour and crime' }, // criminology
+    { title: 'Procedural justice and police legitimacy' },
+    { venue: 'Policing and Society', title: 'Neighbourhood teams in austerity' },
+    { title: 'Stop and search in London' },
+    { title: 'Body-worn cameras and use of force' },
+    { title: 'Recidivism among released prisoners' },
+    { title: 'Knife crime among young people' },
+  ];
+  for (const w of keep) assert.equal(isPolicingRelevant(w), true, w.title ?? w.venue);
+});
+
+test('isPolicingRelevant drops off-topic work', () => {
+  const drop = [
+    { title: 'Gene expression in human cardiac tissue' },
+    { title: 'A randomised trial of a new diabetes drug' },
+    { title: 'Protein trafficking across the cell membrane' },
+    { title: 'Monetary policy and inflation expectations' }, // "policy" must not match
+    { title: 'Disease surveillance during an influenza outbreak' }, // "surveillance" alone must not match
+    { title: 'Photosynthesis in marine phytoplankton' },
+  ];
+  for (const w of drop) assert.equal(isPolicingRelevant(w), false, w.title);
+  assert.equal(isPolicingRelevant(null), false);
+  assert.equal(isPolicingRelevant({}), false);
 });
 
 test('SOURCE_CAPS covers every source', () => {

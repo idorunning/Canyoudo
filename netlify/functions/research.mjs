@@ -22,7 +22,9 @@ import {
   buildOpenAlexUrl,
   buildScholarUrl,
   buildCoreRequest,
+  isPolicingRelevant,
   PER_PAGE,
+  GUARDED_PER_PAGE,
 } from '../../src/lib/research-sources.mjs';
 
 const UA = 'thinkingaboutpolicing.org (+https://thinkingaboutpolicing.org)';
@@ -87,6 +89,10 @@ export default async (req) => {
       url: buildOpenAlexUrl(p, {
         policingOnly: source === 'policing',
         mailto: process.env.OPENALEX_MAILTO ?? '',
+        // The "policing" facet is already ISSN-locked to policing journals, so
+        // its page is trusted; the open "All research" facet is over-fetched so
+        // the relevance guard can prune strays and still leave a full page.
+        perPage: source === 'policing' ? PER_PAGE : GUARDED_PER_PAGE,
       }),
       init: { headers: { 'User-Agent': UA, Accept: 'application/json' } },
       map: (data) => ({ count: data.meta?.count ?? 0, results: (data.results ?? []).map(mapOpenAlexWork) }),
@@ -112,8 +118,12 @@ export default async (req) => {
   }
 
   const { count, results } = request.map(data);
+  // Keep results on-topic. The ISSN-locked "policing" facet is trusted as-is;
+  // every other source searches the whole record, so prune anything that reads
+  // as off-topic (medical, genetics, economics) before it reaches the page.
+  const onTopic = source === 'policing' ? results : results.filter(isPolicingRelevant);
   return json(
-    { count, page: p.page, perPage: PER_PAGE, source, results },
+    { count, page: p.page, perPage: PER_PAGE, source, results: onTopic },
     200,
     // Slow-moving corpus → cache hard at the edge, briefly in the browser.
     // This is also the main shield on Semantic Scholar's 1 req/s key.

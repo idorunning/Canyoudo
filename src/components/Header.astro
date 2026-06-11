@@ -1,8 +1,9 @@
 ---
 import SearchModal from './SearchModal.astro';
 
-// Desktop nav is two rows: the writing sections on top, the tools and
-// about underneath. The mobile menu flattens both into one list.
+// Desktop nav is three rows: the writing sections on top, the two interactive
+// tools in the middle (highlighted, since they're the things to try), and the
+// about/contact pages underneath. The mobile menu flattens them into one list.
 const primaryLinks = [
   { href: '/police-policy', label: 'Police Policy' },
   { href: '/public-policy', label: 'Public Policy' },
@@ -11,14 +12,18 @@ const primaryLinks = [
   { href: '/other', label: 'Interesting Distractions' },
 ];
 
-const secondaryLinks = [
+// The interactive tools — given a standout accent colour so they catch the eye.
+const toolLinks = [
   { href: '/research', label: 'Research Assistant' },
   { href: '/data', label: 'Crime Dashboard' },
+];
+
+const metaLinks = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ];
 
-const navLinks = [...primaryLinks, ...secondaryLinks];
+const navLinks = [...primaryLinks, ...toolLinks, ...metaLinks];
 
 // Secondary destinations, surfaced in the mobile menu (and the footer / Explore
 // panel on desktop) to keep the top bar uncluttered.
@@ -65,16 +70,35 @@ const currentPath = Astro.url.pathname;
             })}
           </ul>
           <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1 mt-1.5">
-            {secondaryLinks.map(link => {
+            {toolLinks.map(link => {
               const isActive = currentPath.startsWith(link.href) && link.href !== '/';
               return (
                 <li>
                   <a
                     href={link.href}
-                    class={`font-sans text-sm tracking-wide transition-colors ${
+                    class={`font-sans text-sm font-medium tracking-wide transition-colors ${
+                      isActive
+                        ? 'text-accent-dark underline underline-offset-4'
+                        : 'text-accent hover:text-accent-dark'
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1 mt-1.5">
+            {metaLinks.map(link => {
+              const isActive = currentPath.startsWith(link.href) && link.href !== '/';
+              return (
+                <li>
+                  <a
+                    href={link.href}
+                    class={`font-sans text-xs tracking-wide transition-colors ${
                       isActive
                         ? 'text-accent font-medium'
-                        : 'text-ink-700 hover:text-ink-900'
+                        : 'text-ink-600 hover:text-ink-900'
                     }`}
                   >
                     {link.label}
@@ -113,7 +137,27 @@ const currentPath = Astro.url.pathname;
 
     <nav id="mobile-menu" class="hidden md:hidden pb-4">
       <ul class="flex flex-col gap-1">
-        {navLinks.map(link => (
+        {primaryLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+        {toolLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              class="block py-2 font-sans text-sm font-medium text-accent hover:text-accent-dark"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+        {metaLinks.map(link => (
           <li>
             <a
               href={link.href}

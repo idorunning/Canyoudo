@@ -1,6 +1,9 @@
 ---
 import NewsletterForm from './NewsletterForm.astro';
 const year = new Date().getFullYear();
+// Optional "support this work" link (Ko-fi / Buy Me a Coffee / similar) —
+// renders only when PUBLIC_SUPPORT_URL is set. See docs/monetisation.md.
+const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
 ---
 
 <footer class="border-t border-ink-200 mt-24 py-12 bg-paper-100">
@@ -13,6 +16,13 @@ const year = new Date().getFullYear();
         <p class="font-sans text-sm text-ink-600 mt-2 leading-relaxed max-w-xs">
           Writing on evidence-based policing, public policy, and the occasional historical puzzle.
         </p>
+        {supportUrl && (
+          <p class="font-sans text-sm mt-3">
+            <a href={supportUrl} rel="noopener" target="_blank" class="text-accent hover:text-accent-dark underline underline-offset-2">
+              Support this work →
+            </a>
+          </p>
+        )}
       </div>
 
       <div>
