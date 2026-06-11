@@ -1,4 +1,7 @@
-# Decap CMS configuration for Thinking About Policing.
+# Sveltia CMS configuration for Thinking About Policing.
+# (Sveltia reads the same config format as Decap CMS, so swapping the editor
+# back is a one-line change in index.html — nothing here is Sveltia-only
+# except `media_libraries`, which Decap simply ignores.)
 #
 # Auth: "Sign in with GitHub" via Netlify's built-in OAuth provider. One-time
 # setup (see README "Writing in the browser"):
@@ -23,8 +26,10 @@ backend:
 # (Removed: publish_mode: editorial_workflow, which staged every change as a
 # pull request that only went live once merged.)
 
-# Run the editor locally with `npx decap-server` + `npm run dev`, then visit
-# http://localhost:4321/admin/ — edits write to your working copy, no login.
+# Local editing: run `npm run dev`, open http://localhost:4321/admin/ and pick
+# "Work with Local Repository" (Chrome/Edge) — edits write straight to your
+# working copy, no login and no proxy server needed. The key below is kept so
+# a rollback to Decap (`npx decap-server` flow) still works.
 local_backend: true
 
 site_url: https://thinkingaboutpolicing.org
@@ -35,6 +40,20 @@ logo_url: https://thinkingaboutpolicing.org/favicon.svg
 # matching how the existing articles link their charts and photos.
 media_folder: "public/images"
 public_folder: "/images"
+
+# Sveltia's asset handling: cap uploads at 10 MB and auto-convert big raster
+# images to WebP (max 2048px) so phone photos don't land in the repo as 4 MB
+# JPEGs. SVGs and small images pass through untouched. (Decap ignores this.)
+media_libraries:
+  default:
+    config:
+      max_file_size: 10485760
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2048
+          height: 2048
 
 collections:
   - name: "articles"
@@ -47,6 +66,8 @@ collections:
     format: "frontmatter"
     slug: "{{slug}}"
     preview_path: "{{section}}/{{slug}}"
+    # Show each article's card image in the editor's content list (Sveltia).
+    thumbnail: "thumbnail"
     sortable_fields: ["pubDate", "title", "section"]
     # Group the board/list by section so each area is easy to find.
     view_groups:

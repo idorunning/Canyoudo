@@ -11,7 +11,7 @@ tags: ["evidence-based-policing", "evidence-based", "policing", "police", "crimi
 
 **Evidence-based policing has a problem its founders rarely dwell on: most of the evidence never reaches the people who are supposed to use it.** The studies get done and the papers get published, and then they sit behind journal paywalls, written in a language — regression tables, confidence intervals, effect sizes — that a busy response officer has neither the time nor the training to decode. Lawrence Sherman built the science; Alex Murray built the institutions. But a randomised controlled trial is only as useful as the number of officers who ever hear about it. Dr Susanne Knabe-Nicol has spent the better part of a decade on that last problem: not producing the evidence, but carrying it the final mile, from the journal to the frontline.
 
-She is better known by the name she gives the work — the Police Science Dr.
+She is better known by the name she gives the work — the [Police Science Dr](https://www.policesciencedr.com/) — and her website is one of the most genuinely useful and interesting things in British policing right now: a place where a busy officer can wander in between jobs and come out twenty minutes later knowing what the research actually says.
 
 <figure>
   <img src="/images/knabe-nicol-portrait.jpg" alt="Dr Susanne Knabe-Nicol, the Police Science Dr" loading="lazy" />
@@ -34,7 +34,7 @@ Knabe-Nicol's insight was to treat that as the real bottleneck. The frontline do
 
 ### What Police Science Dr actually does
 
-Police Science Dr — tagline, *where police research meets police practice* — is the platform she built to do this at scale. It turns research into media the frontline can actually consume:
+[Police Science Dr](https://www.policesciencedr.com/) — tagline, *where police research meets police practice* — is the platform she built to do this at scale. It is hard to overstate how well it does the job: the site is generous, browsable and genuinely interesting even when you arrive with no particular study in mind. It turns research into media the frontline can actually consume:
 
 - **Short, research-based videos** that summarise a study or a topic in plain English, with the practical "so what" made explicit.
 - **The Police Science Dr Podcast**, subtitled *making research accessible to the police practitioner* — interviews and explainers with the researchers themselves.
@@ -55,4 +55,4 @@ The story of evidence-based policing is usually told through two kinds of people
 
 If Sherman's claim was that policing should be tested like medicine, the unglamorous corollary is that medicine only helps the patient if the doctor has read the journal. Knabe-Nicol's wager is that the fastest way to improve practice is not another study but a better delivery system for the studies we already have. That is why the Police Science Dr matters, and why, in a series about the people who shaped evidence-based policing, the translator earns her place beside the experimenters.
 
-Her work lives at [policesciencedr.com](https://www.policesciencedr.com/).
+Her work lives at [policesciencedr.com](https://www.policesciencedr.com/) — and if you take one practical thing from this profile, make it a visit. It is the rare policing website that repays browsing: useful when you need an answer, interesting when you don't, and free either way. It has earned a permanent place in this site's [further reading](/resources) list.

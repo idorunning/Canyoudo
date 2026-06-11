@@ -123,9 +123,11 @@ For big hero images, use the `heroImage` field in frontmatter. For images inside
 
 ## Writing in the browser (the `/admin` editor)
 
-You don't have to touch the files at all. The site ships with [Decap CMS](https://decapcms.org), a writing studio at **`/admin`** that lets you draft, edit, preview and publish from a browser — desktop or phone. It commits Markdown into `src/content/` exactly like the hand-written articles, so everything above still applies; the editor just fills in the frontmatter and body for you.
+You don't have to touch the files at all. The site ships with [Sveltia CMS](https://github.com/sveltia/sveltia-cms), a fast Git-based writing studio at **`/admin`** that lets you draft, edit and publish from a browser — desktop or phone. It commits Markdown into `src/content/` exactly like the hand-written articles, so everything above still applies; the editor just fills in the frontmatter and body for you. (It reads the same config as the Decap CMS it replaced — rollback is one line in `public/admin/index.html`.)
 
-**Drafts and publishing.** The editor runs an editorial workflow with a board: **Drafts → In review → Ready**. A piece you're working on lives on its own branch and never touches the live site until you hit **Publish**, which merges it. That is your "hold a finished piece ready, then publish with one click." (The separate *"Keep hidden on the live site"* toggle is a second safety net — it publishes the file but keeps the `draft` flag on so the page stays hidden.)
+**Drafts and publishing.** Each **Save** commits straight to `main`, so the change goes live on the next build (a minute or two). To hold a piece back, switch on *"Keep hidden on the live site"* (the `draft` flag) — the file is saved but the page stays off the live site until you switch it off.
+
+**Images — the smooth way.** The editor has a proper **Asset Library** (top of the left menu): every image in `public/images` is browsable and searchable, and you can drag-and-drop files straight in — from a phone camera roll too. Big photos are converted to WebP and resized automatically on upload, so they never bloat the repository. In an article, the **Thumbnail / Hero image / Portrait** fields open the same library — pick an existing image or drop in a new one — and inserting an image into the body prompts for alt text as you go.
 
 ### One-time login setup (do this once)
 
@@ -141,18 +143,11 @@ Login is **"Sign in with GitHub"** through Netlify's built-in OAuth — no passw
 
 Only accounts with push access to the repo (i.e. you) can get in — that is the access control.
 
-> If your Netlify dashboard no longer offers the OAuth provider install, the fallback is a tiny OAuth handler (a Netlify Function or the [`sveltia-cms-auth`](https://github.com/sveltia/sveltia-cms-auth) Cloudflare Worker) with its URL set as `backend.base_url` in `public/admin/config.yml`. Ask and it can be wired up.
+> If your Netlify dashboard no longer offers the OAuth provider install, the fallback is the [`sveltia-cms-auth`](https://github.com/sveltia/sveltia-cms-auth) Cloudflare Worker (Sveltia's own supported handler) with its URL set as `backend.base_url` in `public/admin/config.yml`. Ask and it can be wired up.
 
 ### Editing locally without logging in
 
-To try the editor on your own machine against your working copy (no GitHub, no login):
-
-```bash
-npx decap-server      # in one terminal
-npm run dev           # in another
-```
-
-Then open `http://localhost:4321/admin/`. The `local_backend: true` line in the config enables this.
+To try the editor on your own machine against your working copy (no GitHub, no login): run `npm run dev`, open `http://localhost:4321/admin/`, and choose **Work with Local Repository** (Chrome or Edge — it uses the browser's File System Access API; no proxy server needed). Edits write directly to your working copy.
 
 ---
 

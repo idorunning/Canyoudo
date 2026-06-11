@@ -8,9 +8,15 @@
     <title>Content manager · Thinking About Policing</title>
   </head>
   <body>
-    <!-- Decap CMS: a Git-based editor. It commits Markdown straight into the
-         repository, so the articles it writes are read by Astro's content
-         collections exactly like the hand-written ones. -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <!-- Sveltia CMS: a Git-based editor (Decap-compatible, same config.yml).
+         It commits Markdown straight into the repository, so the articles it
+         writes are read by Astro's content collections exactly like the
+         hand-written ones. Compared with Decap it adds a proper asset library
+         for /images, drag-and-drop uploads, automatic WebP conversion, and a
+         much faster UI. -->
+    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
+    <!-- Rollback: if Sveltia ever misbehaves, comment it out above and restore
+         the Decap line below — the config needs no changes either way. -->
+    <!-- <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script> -->
   </body>
 </html>
