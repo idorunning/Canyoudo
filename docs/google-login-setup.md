@@ -70,12 +70,20 @@ developer console — it's free and doesn't need a credit card.
      `https://*--thinkingaboutpolicing.netlify.app/**` — replace with your
      actual Netlify site name.)*
 
-## Part 4 — Create the saved-papers table (2 min)
+## Part 4 — Create the saved-papers tables (2 min)
 
 1. In Supabase, open the **SQL Editor** (left sidebar) → **New query**.
 2. Paste ALL of this in, then click **Run**:
 
 ```sql
+-- Folders: the reader's "research aims" — each saved paper can sit in one.
+create table public.folders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  name text not null,
+  created_at timestamptz not null default now()
+);
+
 create table public.saved_papers (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
@@ -85,6 +93,8 @@ create table public.saved_papers (
   source text,
   year int,
   venue text,
+  note text,
+  folder_id uuid references public.folders(id) on delete set null,
   metadata jsonb not null default '{}'::jsonb,
   created_at timestamptz not null default now()
 );
@@ -93,15 +103,27 @@ create table public.saved_papers (
 create unique index saved_papers_user_doi
   on public.saved_papers (user_id, doi) where doi is not null;
 
--- Row-level security: each signed-in user can only ever see, add and
--- remove their OWN saved papers. This is enforced by the database itself.
+-- Row-level security: each signed-in user can only ever see, add, edit and
+-- remove their OWN saved papers and folders. Enforced by the database itself.
 alter table public.saved_papers enable row level security;
+alter table public.folders enable row level security;
 
 create policy "read own"   on public.saved_papers
   for select using (auth.uid() = user_id);
 create policy "insert own" on public.saved_papers
   for insert with check (auth.uid() = user_id);
+create policy "update own" on public.saved_papers
+  for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "delete own" on public.saved_papers
+  for delete using (auth.uid() = user_id);
+
+create policy "read own folders"   on public.folders
+  for select using (auth.uid() = user_id);
+create policy "insert own folders" on public.folders
+  for insert with check (auth.uid() = user_id);
+create policy "update own folders" on public.folders
+  for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "delete own folders" on public.folders
   for delete using (auth.uid() = user_id);
 ```
 
@@ -125,8 +147,10 @@ create policy "delete own" on public.saved_papers
 ## Try it
 
 Open `/research`, click **Sign in with Google to save papers**, approve the
-popup, and star a result. The **Saved** tab appears with your papers — and
-they'll be there on any device you sign in on.
+popup, and star a result. Open the **Saved** tab: your papers are there — and
+on any device you sign in on. From there you can sort papers into folders
+(one per research aim), add a note to each, and export the lot as a copyable
+reference list or a `.ris` file for Zotero/EndNote/Mendeley.
 
 ## If something doesn't work
 

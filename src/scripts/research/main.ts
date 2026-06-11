@@ -62,7 +62,10 @@ export async function initResearch() {
       cardHooks = savedStore.hooks;
       savedStore.onChange(() => {
         updateTabs();
-        if (activeTab === 'saved' && savedView) savedStore!.renderSavedView(savedView);
+        if (activeTab === 'saved' && savedView) {
+          if (savedStore!.signedIn()) savedStore!.renderSavedView(savedView);
+          else savedStore!.renderSignedOutView(savedView);
+        }
       });
       updateTabs();
     } catch {
@@ -72,7 +75,8 @@ export async function initResearch() {
 
   function updateTabs() {
     if (!tabs || !savedStore) return;
-    tabs.hidden = !savedStore.signedIn();
+    // The tab bar shows even signed out — the Saved tab is the nudge.
+    tabs.hidden = false;
     const count = tabs.querySelector('[data-saved-count]');
     if (count) count.textContent = String(savedStore.count());
   }
@@ -83,7 +87,10 @@ export async function initResearch() {
     resultsPane.hidden = tab !== 'results';
     if (savedView) {
       savedView.hidden = tab !== 'saved';
-      if (tab === 'saved' && savedStore) savedStore.renderSavedView(savedView);
+      if (tab === 'saved' && savedStore) {
+        if (savedStore.signedIn()) savedStore.renderSavedView(savedView);
+        else savedStore.renderSignedOutView(savedView);
+      }
     }
     tabs?.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((b) => {
       const active = b.dataset.tab === tab;

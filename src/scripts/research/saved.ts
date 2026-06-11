@@ -1,18 +1,34 @@
-// Google sign-in + saved papers, backed by Supabase. Loaded only when the
-// PUBLIC_SUPABASE_* env vars were present at build time; supabase-js itself is
-// imported dynamically so readers who never sign in don't download it.
+// Google sign-in + the saved-research workspace, backed by Supabase. Loaded
+// only when the PUBLIC_SUPABASE_* env vars were present at build time;
+// supabase-js itself is imported dynamically so readers who never sign in
+// don't download it.
 //
-// The saved_papers table is owner-only via row-level security (see
-// docs/google-login-setup.md). metadata holds the full Work object so saved
-// cards render identically without re-querying any catalogue.
+// The saved_papers and folders tables are owner-only via row-level security
+// (see docs/google-login-setup.md). metadata holds the full Work object so
+// saved cards render identically without re-querying any catalogue. Folders
+// are the reader's "research aims": each saved paper sits in at most one.
 
 import { card, el, setStar, workKey, type Work, type CardHooks } from './cards';
+import { formatReferenceList, toRis } from '../../lib/reference-format.mjs';
 
 type SupabaseClient = any;
+
+interface SavedRow {
+  id: string;
+  work: Work;
+  note: string | null;
+  folderId: string | null;
+}
+
+interface Folder {
+  id: string;
+  name: string;
+}
 
 export interface SavedStore {
   hooks: CardHooks;
   renderSavedView: (container: HTMLElement) => void;
+  renderSignedOutView: (container: HTMLElement) => void;
   count: () => number;
   signedIn: () => boolean;
   onChange: (fn: () => void) => void;
@@ -27,22 +43,32 @@ export async function initSaved(
   const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey);
 
   let user: any = null;
-  const saved = new Map<string, { id: string; work: Work }>(); // workKey → row
+  const saved = new Map<string, SavedRow>(); // workKey → row
+  let folders: Folder[] = [];
+  // The folder filter the Saved view is showing: 'all', 'none' (unsorted), or a folder id.
+  let activeFolder = 'all';
   const listeners: (() => void)[] = [];
   const notify = () => listeners.forEach((fn) => fn());
 
   async function loadSaved() {
     saved.clear();
+    folders = [];
     if (!user) return notify();
-    const { data } = await supabase
-      .from('saved_papers')
-      .select('id, doi, url, metadata')
-      .order('created_at', { ascending: false });
-    for (const row of data ?? []) {
+    const [papers, dirs] = await Promise.all([
+      supabase
+        .from('saved_papers')
+        .select('id, doi, url, note, folder_id, metadata')
+        .order('created_at', { ascending: false }),
+      supabase.from('folders').select('id, name').order('created_at', { ascending: true }),
+    ]);
+    for (const row of papers.data ?? []) {
       const work = row.metadata as Work;
       const key = row.doi || row.url || workKey(work);
-      if (key && work?.title) saved.set(key, { id: row.id, work });
+      if (key && work?.title) {
+        saved.set(key, { id: row.id, work, note: row.note ?? null, folderId: row.folder_id ?? null });
+      }
     }
+    folders = (dirs.data ?? []).filter((f: any) => f?.id && f?.name);
     notify();
   }
 
@@ -100,7 +126,7 @@ export async function initSaved(
         })
         .select('id')
         .single();
-      if (data?.id) saved.set(key, { id: data.id, work: w });
+      if (data?.id) saved.set(key, { id: data.id, work: w, note: null, folderId: null });
       notify();
     }
   }
@@ -110,6 +136,189 @@ export async function initSaved(
     onToggleSave: toggleSave,
   };
 
+  // ---- folders --------------------------------------------------------------
+  async function createFolder(name: string) {
+    const trimmed = name.trim().slice(0, 80);
+    if (!trimmed || !user) return;
+    const { data } = await supabase
+      .from('folders')
+      .insert({ user_id: user.id, name: trimmed })
+      .select('id, name')
+      .single();
+    if (data?.id) {
+      folders.push(data);
+      activeFolder = data.id;
+      notify();
+    }
+  }
+
+  async function deleteFolder(id: string) {
+    folders = folders.filter((f) => f.id !== id);
+    for (const row of saved.values()) if (row.folderId === id) row.folderId = null;
+    if (activeFolder === id) activeFolder = 'all';
+    notify();
+    // folder_id on papers clears itself via ON DELETE SET NULL.
+    await supabase.from('folders').delete().eq('id', id);
+  }
+
+  async function setFolder(row: SavedRow, folderId: string | null) {
+    row.folderId = folderId;
+    notify();
+    await supabase.from('saved_papers').update({ folder_id: folderId }).eq('id', row.id);
+  }
+
+  async function setNote(row: SavedRow, note: string) {
+    const trimmed = note.trim().slice(0, 2000);
+    row.note = trimmed || null;
+    notify();
+    await supabase.from('saved_papers').update({ note: row.note }).eq('id', row.id);
+  }
+
+  function visibleRows(): SavedRow[] {
+    const all = [...saved.values()];
+    if (activeFolder === 'all') return all;
+    if (activeFolder === 'none') return all.filter((r) => !r.folderId);
+    return all.filter((r) => r.folderId === activeFolder);
+  }
+
+  // ---- export ----------------------------------------------------------------
+  function exportButtons() {
+    const wrap = el('div', 'flex gap-3 items-center ml-auto');
+    const copy = el('button', 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent', 'Copy references') as HTMLButtonElement;
+    copy.type = 'button';
+    copy.addEventListener('click', async () => {
+      const works = visibleRows().map((r) => r.work);
+      if (!works.length) return;
+      try {
+        await navigator.clipboard.writeText(formatReferenceList(works));
+        copy.textContent = 'Copied ✓';
+        setTimeout(() => (copy.textContent = 'Copy references'), 1500);
+      } catch {
+        copy.textContent = 'Copy failed';
+      }
+    });
+    const ris = el('button', 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent', 'Download .ris') as HTMLButtonElement;
+    ris.type = 'button';
+    ris.title = 'Opens in Zotero, EndNote or Mendeley';
+    ris.addEventListener('click', () => {
+      const works = visibleRows().map((r) => r.work);
+      if (!works.length) return;
+      const blob = new Blob([toRis(works)], { type: 'application/x-research-info-systems' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'saved-papers.ris';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    wrap.appendChild(copy);
+    wrap.appendChild(ris);
+    return wrap;
+  }
+
+  // ---- the Saved view ----------------------------------------------------------
+  function folderChip(label: string, value: string, count: number, container: HTMLElement) {
+    const active = activeFolder === value;
+    const b = el(
+      'button',
+      `font-sans text-xs px-2.5 py-1 rounded border transition-colors ${
+        active
+          ? 'bg-ink-900 text-paper-50 border-ink-900'
+          : 'bg-paper-200 text-ink-700 border-transparent hover:text-accent'
+      }`,
+      `${label} (${count})`
+    ) as HTMLButtonElement;
+    b.type = 'button';
+    b.addEventListener('click', () => {
+      activeFolder = value;
+      renderSavedView(container);
+    });
+    return b;
+  }
+
+  function newFolderControl(container: HTMLElement) {
+    const wrap = el('span', 'inline-flex items-center');
+    const btn = el('button', 'font-sans text-xs px-2.5 py-1 text-ink-600 underline underline-offset-2 hover:text-accent', '+ New folder') as HTMLButtonElement;
+    btn.type = 'button';
+    btn.addEventListener('click', () => {
+      wrap.replaceChildren();
+      const input = el('input', 'font-sans text-xs border border-ink-300 rounded px-2 py-1 bg-paper-50 focus:outline-none focus:border-accent') as HTMLInputElement;
+      input.placeholder = 'e.g. Hot spots evidence';
+      input.maxLength = 80;
+      input.addEventListener('keydown', async (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          await createFolder(input.value);
+          renderSavedView(container);
+        }
+        if (e.key === 'Escape') renderSavedView(container);
+      });
+      input.addEventListener('blur', () => {
+        if (!input.value.trim()) renderSavedView(container);
+      });
+      wrap.appendChild(input);
+      input.focus();
+    });
+    wrap.appendChild(btn);
+    return wrap;
+  }
+
+  function cardControls(row: SavedRow, container: HTMLElement) {
+    const wrap = el('div', 'mt-3 flex flex-wrap gap-x-5 gap-y-2 items-start font-sans text-xs text-ink-600');
+
+    // Folder assignment.
+    const select = el('select', 'border border-ink-300 rounded px-1.5 py-1 bg-paper-50 focus:outline-none focus:border-accent') as HTMLSelectElement;
+    const none = el('option', '', 'No folder') as HTMLOptionElement;
+    none.value = '';
+    select.appendChild(none);
+    for (const f of folders) {
+      const o = el('option', '', f.name) as HTMLOptionElement;
+      o.value = f.id;
+      select.appendChild(o);
+    }
+    select.value = row.folderId ?? '';
+    select.addEventListener('change', async () => {
+      await setFolder(row, select.value || null);
+      renderSavedView(container);
+    });
+    const folderLabel = el('label', 'flex items-center gap-1.5');
+    folderLabel.appendChild(document.createTextNode('Folder'));
+    folderLabel.appendChild(select);
+    wrap.appendChild(folderLabel);
+
+    // Note.
+    const noteArea = el('div', 'flex-1 min-w-[12rem]');
+    function showNote() {
+      noteArea.replaceChildren();
+      if (row.note) {
+        const p = el('p', 'font-serif text-sm italic text-ink-700 leading-relaxed', row.note);
+        noteArea.appendChild(p);
+      }
+      const edit = el('button', 'underline underline-offset-2 hover:text-accent', row.note ? 'Edit note' : 'Add note') as HTMLButtonElement;
+      edit.type = 'button';
+      edit.addEventListener('click', () => {
+        noteArea.replaceChildren();
+        const ta = el('textarea', 'w-full border border-ink-300 rounded px-2 py-1.5 font-serif text-sm bg-paper-50 focus:outline-none focus:border-accent') as HTMLTextAreaElement;
+        ta.rows = 2;
+        ta.maxLength = 2000;
+        ta.placeholder = 'Why you saved this — what it answers, what to check…';
+        ta.value = row.note ?? '';
+        ta.addEventListener('blur', async () => {
+          await setNote(row, ta.value);
+          showNote();
+        });
+        ta.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') showNote();
+        });
+        noteArea.appendChild(ta);
+        ta.focus();
+      });
+      noteArea.appendChild(edit);
+    }
+    showNote();
+    wrap.appendChild(noteArea);
+    return wrap;
+  }
+
   function renderSavedView(container: HTMLElement) {
     container.replaceChildren();
     if (saved.size === 0) {
@@ -118,7 +327,57 @@ export async function initSaved(
       );
       return;
     }
-    for (const { work } of saved.values()) container.appendChild(card(work, hooks));
+
+    // Folder chips + export controls.
+    const bar = el('div', 'flex flex-wrap gap-2 items-center py-4 border-b border-ink-200');
+    const all = [...saved.values()];
+    bar.appendChild(folderChip('All', 'all', all.length, container));
+    for (const f of folders) {
+      const chip = folderChip(f.name, f.id, all.filter((r) => r.folderId === f.id).length, container);
+      bar.appendChild(chip);
+      if (activeFolder === f.id) {
+        const x = el('button', 'font-sans text-xs text-ink-500 hover:text-accent -ml-1', '×') as HTMLButtonElement;
+        x.type = 'button';
+        x.title = `Delete folder "${f.name}" (papers stay saved)`;
+        x.addEventListener('click', async () => {
+          if (confirm(`Delete the folder "${f.name}"? The papers stay saved, just unsorted.`)) {
+            await deleteFolder(f.id);
+            renderSavedView(container);
+          }
+        });
+        bar.appendChild(x);
+      }
+    }
+    const unsorted = all.filter((r) => !r.folderId).length;
+    if (folders.length && unsorted) bar.appendChild(folderChip('Unsorted', 'none', unsorted, container));
+    bar.appendChild(newFolderControl(container));
+    bar.appendChild(exportButtons());
+    container.appendChild(bar);
+
+    const rows = visibleRows();
+    if (rows.length === 0) {
+      container.appendChild(el('p', 'font-sans text-sm text-ink-600 py-6', 'Nothing in this folder yet — move a paper here with its "Folder" control.'));
+      return;
+    }
+    for (const row of rows) {
+      const c = card(row.work, hooks);
+      c.appendChild(cardControls(row, container));
+      container.appendChild(c);
+    }
+  }
+
+  // Shown when the Saved tab is opened signed out — the nudge.
+  function renderSignedOutView(container: HTMLElement) {
+    container.replaceChildren();
+    const box = el('div', 'py-8 max-w-xl');
+    box.appendChild(
+      el('p', 'font-serif text-ink-700 leading-relaxed', 'Star any result and it keeps here — sorted into folders for each piece of research, with your notes, on any device. Export the lot as a reference list when you write up.')
+    );
+    const btn = el('button', 'mt-4 font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors', 'Sign in with Google') as HTMLButtonElement;
+    btn.type = 'button';
+    btn.addEventListener('click', signIn);
+    box.appendChild(btn);
+    container.appendChild(box);
   }
 
   // Track auth state (covers the OAuth redirect landing back here too).
@@ -138,6 +397,7 @@ export async function initSaved(
   return {
     hooks,
     renderSavedView,
+    renderSignedOutView,
     count: () => saved.size,
     signedIn: () => Boolean(user),
     onChange: (fn) => listeners.push(fn),
