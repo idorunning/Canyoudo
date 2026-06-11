@@ -216,7 +216,7 @@ test('isPolicingRelevant drops off-topic work', () => {
 });
 
 test('SOURCE_CAPS covers every source', () => {
-  assert.deepEqual(Object.keys(SOURCE_CAPS).sort(), ['core', 'openalex', 'policing', 'scholar']);
+  assert.deepEqual(Object.keys(SOURCE_CAPS).sort(), ['all', 'core', 'openalex', 'policing', 'scholar']);
   for (const caps of Object.values(SOURCE_CAPS)) {
     assert.deepEqual(Object.keys(caps).sort(), ['from', 'oa', 'review', 'sort']);
   }

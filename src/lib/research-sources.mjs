@@ -38,6 +38,10 @@ export const POLICING_JOURNAL_ISSNS = [
 // Which filter controls make sense per source — the page reads this (inlined
 // at build time) to enable/disable controls, and the builders honour it.
 export const SOURCE_CAPS = {
+  // "all" fans out to every configured catalogue and merges (research-merge.mjs).
+  // Sort can't be honoured across differently-ranked upstreams; oa/review/from
+  // apply per-source where supported (CORE sits out reviews-only searches).
+  all: { oa: true, review: true, from: true, sort: false },
   openalex: { oa: true, review: true, from: true, sort: true },
   policing: { oa: true, review: true, from: true, sort: true },
   scholar: { oa: true, review: true, from: true, sort: false },

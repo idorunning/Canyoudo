@@ -4,6 +4,7 @@
 // features. All network data renders via createElement/textContent.
 
 import { SOURCE_CAPS } from '../../lib/research-sources.mjs';
+import { workMergeKey } from '../../lib/research-merge.mjs';
 import { card, el, type Work, type CardHooks } from './cards';
 import { readStateFromUrl, writeStateToUrl, type SearchState } from './state';
 import { translateQuestion, renderOverview, renderAnswer, clearOverview } from './assist';
@@ -47,6 +48,10 @@ export async function initResearch() {
   let lastQuestion: string | null = null;
   let shown = 0;
   let total = 0;
+  let totalApproximate = false;
+  // Works already on the page (by merge key) — "More results" from the merged
+  // "All sources" search can resurface a paper page 1 already showed.
+  const seenKeys = new Set<string>();
   let activeTab: 'results' | 'saved' = 'results';
   // What the AI picked when the sort select is on "suggested" (set per search).
   let aiSort: 'cited' | 'recent' | null = null;
@@ -170,7 +175,7 @@ export async function initResearch() {
       return;
     }
 
-    let data: { error?: string; count?: number; results?: Work[] } = {};
+    let data: { error?: string; count?: number; approximate?: boolean; results?: Work[] } = {};
     try {
       data = await res.json();
     } catch {}
@@ -183,21 +188,32 @@ export async function initResearch() {
     if (!append) {
       list.replaceChildren();
       shown = 0;
+      seenKeys.clear();
       topics.hidden = true;
       showTab('results');
     }
     total = data.count ?? 0;
-    for (const w of data.results) list.appendChild(card(w, cardHooks));
-    shown += data.results.length;
+    totalApproximate = Boolean(data.approximate);
+    // Drop anything a previous page of this search already showed — the merged
+    // "All sources" pages aren't disjoint across catalogues.
+    const fresh = data.results.filter((w) => {
+      const key = workMergeKey(w);
+      if (key && seenKeys.has(key)) return false;
+      if (key) seenKeys.add(key);
+      return true;
+    });
+    for (const w of fresh) list.appendChild(card(w, cardHooks));
+    shown += fresh.length;
 
     status.replaceChildren();
     if (total === 0) {
       status.textContent = 'Nothing found. Try fewer words, or untick “free-to-read only”.';
     } else {
+      const totalText = totalApproximate
+        ? `about ${total.toLocaleString('en-GB')} across sources`
+        : total.toLocaleString('en-GB');
       status.appendChild(
-        document.createTextNode(
-          `Showing ${shown.toLocaleString('en-GB')} of ${total.toLocaleString('en-GB')} results. `
-        )
+        document.createTextNode(`Showing ${shown.toLocaleString('en-GB')} of ${totalText} results. `)
       );
     }
     const back = el('button', 'underline underline-offset-2 hover:text-accent', 'Browse topics') as HTMLButtonElement;

@@ -15,7 +15,10 @@ const hasAuth = Boolean(
   import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
 
+// With a second catalogue configured, the merged "All sources" search leads
+// (and is the default); with OpenAlex alone it would add nothing, so it hides.
 const sources = [
+  ...(hasScholar || hasCore ? [{ id: 'all', label: 'All sources (merged)' }] : []),
   { id: 'openalex', label: 'All research' },
   { id: 'policing', label: 'Policing journals' },
   ...(hasScholar ? [{ id: 'scholar', label: 'Semantic Scholar' }] : []),
