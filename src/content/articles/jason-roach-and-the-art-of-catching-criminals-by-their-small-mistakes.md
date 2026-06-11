@@ -6,6 +6,7 @@ pubDate: 2026-06-11
 updatedDate: ''
 author: ''
 thumbnail: /images/roach.webp
+heroImage: /images/roach.webp
 portrait: /images/roach.webp
 tags:
   - self-selection-policing
