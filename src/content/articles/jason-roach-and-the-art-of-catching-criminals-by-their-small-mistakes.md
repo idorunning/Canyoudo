@@ -1,9 +1,20 @@
 ---
-section: "influential-people"
-title: "Jason Roach and the Art of Catching Criminals by Their Small Mistakes"
+title: Jason Roach and the Art of Catching Criminals by Their Small Mistakes
+section: influential-people
 description: "A former Home Office crime analyst who became one of British policing's most practically useful academics: Professor Jason Roach gave the service self-selection policing, a psychologist's eye for offender decision-making, and a career-long insistence that research should help the officer on shift. A profile."
 pubDate: 2026-06-11
-tags: ["self-selection-policing", "evidence-based-policing", "criminology", "psychology", "policing", "police", "research"]
+updatedDate: ''
+author: ''
+thumbnail: /images/roach.webp
+portrait: /images/roach.webp
+tags:
+  - self-selection-policing
+  - evidence-based-policing
+  - criminology
+  - psychology
+  - policing
+  - police
+  - research
 ---
 
 **Some academics influence policing by building institutions; some by running experiments. Jason Roach's influence is of a rarer kind: he gave officers a genuinely new way of looking at things they were already seeing.** The disabled bay parker. The driver who turns out to be disqualified. The small, irritating infractions that fill an officer's shift and have always been treated as the job's background noise. Roach's work reframed that noise as signal — the place where serious offenders quietly give themselves away — and in doing so handed the service one of the few detection ideas that costs almost nothing to use.
