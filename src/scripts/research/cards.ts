@@ -16,6 +16,8 @@ export type Work = {
   abstract: string | null;
   source: string;
   tldr?: string;
+  /** Provenance when the "All sources" search merged catalogues. */
+  sources?: string[];
 };
 
 export const SOURCE_LABELS: Record<string, string> = {
@@ -24,6 +26,21 @@ export const SOURCE_LABELS: Record<string, string> = {
   scholar: 'Semantic Scholar',
   core: 'CORE',
 };
+
+// Compact per-catalogue labels for merged-result provenance badges.
+const SHORT_SOURCE_LABELS: Record<string, string> = {
+  openalex: 'OpenAlex',
+  scholar: 'S2',
+  core: 'CORE',
+};
+
+/** "OpenAlex · S2" provenance text for a work, falling back to its source. */
+export function sourceBadge(w: Work): string | null {
+  if (w.sources && w.sources.length > 0) {
+    return w.sources.map((s) => SHORT_SOURCE_LABELS[s] ?? s).join(' · ');
+  }
+  return SOURCE_LABELS[w.source] ?? null;
+}
 
 /** A stable identity for saving/starring: DOI when present, else best URL. */
 export function workKey(w: Work): string | null {
@@ -90,7 +107,7 @@ export function card(w: Work, hooks: CardHooks = {}) {
     w.venue,
     w.year ? String(w.year) : null,
     w.citedBy ? `cited ${w.citedBy.toLocaleString('en-GB')} times` : null,
-    SOURCE_LABELS[w.source] ?? null,
+    sourceBadge(w),
   ].filter(Boolean);
   art.appendChild(el('p', 'font-sans text-xs text-ink-600 mt-2', metaBits.join(' · ')));
 
