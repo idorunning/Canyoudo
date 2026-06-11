@@ -129,6 +129,20 @@ create policy "delete own folders" on public.folders
 
 3. It should say "Success. No rows returned". Done.
 
+## Part 4½ — Email sign-in (1 min, optional but recommended)
+
+Besides Google, the site offers "Sign in with email" — a one-click link sent
+to any address, with no password. This covers people on work computers
+(police.gov.uk and the like) who can't use a personal Google account there.
+
+1. In Supabase: **Authentication** → **Sign In / Providers** → **Email**.
+2. Make sure it's **enabled** (it is by default) → Save.
+3. *(Optional)* **Authentication** → **Email Templates** → edit the
+   **Magic Link** subject to `Your sign-in link for Thinking About Policing`.
+
+Supabase sends these emails itself on the free plan (capped at a handful per
+hour, which is plenty). Nothing else to configure.
+
 ## Part 5 — Tell Netlify about it (3 min)
 
 1. In Netlify: **Site configuration** → **Environment variables** →
