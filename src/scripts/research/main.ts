@@ -67,8 +67,12 @@ export async function initResearch() {
           else savedStore!.renderSignedOutView(savedView);
         }
       });
-      // The signed-out pill asks us to show the sign-in pitch (Saved tab).
-      root.addEventListener('research:show-signin', () => showTab('saved'));
+      // The signed-out pill (or a star click) asks us to show the sign-in
+      // pitch on the Saved tab. Scroll it into view so the click visibly acts.
+      root.addEventListener('research:show-signin', () => {
+        showTab('saved');
+        (tabs ?? savedView)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
       updateTabs();
     } catch {
       // Auth never blocks the search.

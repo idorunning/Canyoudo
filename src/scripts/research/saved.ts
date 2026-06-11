@@ -50,6 +50,16 @@ export async function initSaved(
   const listeners: (() => void)[] = [];
   const notify = () => listeners.forEach((fn) => fn());
 
+  // When set, the signed-out pitch shows this contextual reason at the top
+  // (e.g. the reader tried to star a paper). Cleared once shown.
+  let signInPrompt: string | null = null;
+
+  // Ask main.ts to switch to the Saved tab and show the sign-in pitch.
+  function promptSignIn(reason?: string) {
+    signInPrompt = reason ?? null;
+    authSlot.dispatchEvent(new CustomEvent('research:show-signin', { bubbles: true }));
+  }
+
   async function loadSaved() {
     saved.clear();
     folders = [];
@@ -92,12 +102,12 @@ export async function initSaved(
       // rather than launching any one provider directly.
       const pill = el('div', 'inline-flex items-center gap-1.5 font-sans text-xs text-ink-600 bg-paper-200 rounded-full px-3 py-1.5');
       pill.appendChild(el('span', '', 'Save papers as you go — '));
-      const btn = el('button', 'text-accent font-medium hover:text-accent-dark transition-colors', 'Sign in') as HTMLButtonElement;
+      const btn = el('button', 'text-accent font-medium underline underline-offset-2 cursor-pointer hover:text-accent-dark transition-colors', 'Sign in') as HTMLButtonElement;
       btn.type = 'button';
       btn.addEventListener('click', () => {
         // main.ts listens for this and switches to the Saved tab pitch,
         // where both sign-in routes (Google and email link) are offered.
-        authSlot.dispatchEvent(new CustomEvent('research:show-signin', { bubbles: true }));
+        promptSignIn();
       });
       pill.appendChild(btn);
       authSlot.appendChild(pill);
@@ -121,7 +131,11 @@ export async function initSaved(
   }
 
   async function toggleSave(w: Work, btn: HTMLButtonElement) {
-    if (!user) return signInWithGoogle();
+    if (!user) {
+      // Don't silently launch a provider — show the pitch so the reader
+      // knows why, and can choose Google or email.
+      return promptSignIn('Sign in to save papers — it’s free. Star results and they keep here, sorted into folders with your notes, on any device.');
+    }
     const key = workKey(w) || w.title;
     const existing = saved.get(key);
     if (existing) {
@@ -391,6 +405,14 @@ export async function initSaved(
   function renderSignedOutView(container: HTMLElement) {
     container.replaceChildren();
     const box = el('div', 'py-8 max-w-xl');
+
+    // A contextual banner when the reader arrived here by trying to save.
+    if (signInPrompt) {
+      box.appendChild(
+        el('p', 'mb-5 px-4 py-3 rounded-md bg-paper-200 border-l-2 border-accent font-sans text-sm text-ink-800', signInPrompt)
+      );
+      signInPrompt = null;
+    }
 
     box.appendChild(el('h2', 'font-sans font-medium text-lg text-ink-900', 'Sign in to save your research'));
     box.appendChild(
