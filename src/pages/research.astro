@@ -1,21 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
+import { TOPIC_GROUPS } from '../lib/research-topics';
 
-// Quick-start queries practitioners actually run.
-const examples = [
-  'evidence-based policing',
-  'hot spots policing',
-  'body-worn cameras',
-  'stop and search disproportionality',
-  'domestic abuse risk assessment',
-  'problem-oriented policing',
-  'procedural justice',
-  'police legitimacy',
-  'focused deterrence',
-  'neighbourhood policing',
-  'predictive policing',
+// Feature flags, baked in at build time. The page degrades gracefully:
+// without keys there's no AI, no sign-in, and only the OpenAlex sources —
+// exactly the search that shipped first. Enabling a feature means setting the
+// env var in Netlify and redeploying (documented in docs/google-login-setup.md
+// and .env.example).
+const hasScholar = Boolean(process.env.SEMANTIC_SCHOLAR_API_KEY);
+const hasCore = Boolean(process.env.CORE_API_KEY);
+const hasAi = Boolean(process.env.ANTHROPIC_API_KEY);
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+
+const sources = [
+  { id: 'openalex', label: 'All research' },
+  { id: 'policing', label: 'Policing journals' },
+  ...(hasScholar ? [{ id: 'scholar', label: 'Semantic Scholar' }] : []),
+  ...(hasCore ? [{ id: 'core', label: 'CORE (full text)' }] : []),
 ];
+
+const pageConfig = { hasAi, hasAuth, sources: sources.map((s) => s.id) };
 
 // Curated evidence databases, maintained in the resources collection so the
 // CMS stays the single source of truth (also rendered on /resources).
@@ -26,25 +33,22 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 ---
 
 <BaseLayout
-  title="Find the research"
-  description="Free search of open policing and crime research — evaluations, systematic reviews and papers, with direct links to free copies where they exist."
+  title="Research assistant"
+  description="Ask a question about policing in plain English — the research assistant searches the open scholarly record, sketches what the evidence says, and links straight to free copies."
 >
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
       <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Evidence</p>
       <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
-        Find the research
+        Research assistant
       </h1>
       <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
         Most policing research sits behind paywalls a working officer will never cross.
         A surprising amount of it also exists in free, legal copies — author manuscripts,
-        repository deposits, open-access journals. This page searches the open scholarly
-        record and links you straight to the free copy where one exists. No login, no library card.
-      </p>
-      <p class="font-sans text-sm text-ink-600 mt-4 max-w-2xl">
-        For curated starting points — the Crime Reduction Toolkit, the Global Policing
-        Database and the rest — see the
-        <a href="/resources" class="text-accent underline underline-offset-2 hover:text-accent-dark">evidence databases on the further reading page</a>.
+        repository deposits, open-access journals. Ask a question here and the assistant
+        searches the open scholarly record, sketches what the studies say, and links you
+        straight to the free copy where one exists. No library card needed.
+        {hasAuth && ' Sign in with Google to save papers as you go.'}
       </p>
     </div>
   </section>
@@ -52,14 +56,20 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-3xl" data-research>
+        <script is:inline type="application/json" id="research-config" set:html={JSON.stringify(pageConfig)}></script>
+
+        {hasAuth && (
+          <p class="mb-4 text-right" data-auth-slot></p>
+        )}
+
         <form data-research-form class="flex flex-wrap gap-3 items-stretch">
-          <label for="research-q" class="sr-only">Search the research</label>
+          <label for="research-q" class="sr-only">Ask the research assistant</label>
           <input
             id="research-q"
             data-research-input
             type="search"
             autocomplete="off"
-            placeholder="e.g. hot spots policing"
+            placeholder={hasAi ? 'e.g. does extra patrol cut burglary?' : 'e.g. hot spots policing'}
             class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
           />
           <button
@@ -70,6 +80,38 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             Search
           </button>
         </form>
+
+        <p class="mt-2 font-sans text-xs text-ink-600 max-w-2xl leading-relaxed">
+          {hasAi
+            ? 'Ask it like a question — what works, what are you trying to achieve, what does the evidence say? The assistant turns it into a proper scholarly search, then reviews what came back. Plain keywords work too.'
+            : 'Search by keywords — e.g. hot spots policing, body-worn cameras, procedural justice.'}
+        </p>
+
+        {hasAi && (
+          <p
+            data-research-interpreted
+            hidden
+            class="mt-3 font-sans text-xs text-ink-700 bg-paper-200 rounded px-3 py-2"
+            aria-live="polite"
+          ></p>
+        )}
+
+        <div class="mt-5 flex flex-wrap gap-2" role="radiogroup" aria-label="Search source">
+          {sources.map((s, i) => (
+            <label class="cursor-pointer">
+              <input
+                type="radio"
+                name="research-source"
+                value={s.id}
+                checked={i === 0}
+                class="peer sr-only"
+              />
+              <span class="inline-block font-sans text-xs px-3 py-1.5 rounded-full border border-ink-300 text-ink-700 peer-checked:bg-ink-900 peer-checked:text-paper-50 peer-checked:border-ink-900 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-accent transition-colors hover:border-ink-500">
+                {s.label}
+              </span>
+            </label>
+          ))}
+        </div>
 
         <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-ink-700 items-center">
           <label class="flex items-center gap-2 cursor-pointer">
@@ -93,46 +135,81 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
           <label class="flex items-center gap-2">
             Sort by
             <select data-filter-sort class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
-              <option value="relevance">relevance</option>
-              <option value="cited">most cited</option>
+              <option value="relevance">most relevant</option>
               <option value="recent">newest</option>
+              <option value="cited">most popular (cited)</option>
+              {hasAi && <option value="suggested">suggested (AI picks)</option>}
             </select>
           </label>
         </div>
 
-        <div data-research-examples class="mt-6">
-          <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">Try a search</p>
-          <div class="flex flex-wrap gap-2">
-            {examples.map((ex) => (
-              <button
-                type="button"
-                data-example={ex}
-                class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
-              >
-                {ex}
-              </button>
-            ))}
+        <div data-research-topics class="mt-8">
+          <details class="group">
+            <summary class="md:hidden font-sans text-xs uppercase tracking-[0.15em] text-ink-500 cursor-pointer list-none mb-3">
+              Browse topics <span class="group-open:hidden">+</span><span class="hidden group-open:inline">−</span>
+            </summary>
+            <div class="space-y-5">
+              {TOPIC_GROUPS.map((g) => (
+                <div>
+                  <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">{g.group}</p>
+                  <div class="flex flex-wrap gap-2">
+                    {g.chips.map((c) => (
+                      <button
+                        type="button"
+                        data-topic-q={c.q}
+                        data-topic-review={c.filters?.review ? '1' : undefined}
+                        data-topic-from={c.filters?.from ? String(c.filters.from) : undefined}
+                        class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </details>
+        </div>
+
+        {hasAuth && (
+          <nav data-research-tabs hidden class="mt-8 flex gap-6 border-b border-ink-200 font-sans text-sm">
+            <button type="button" data-tab="results" class="pb-2 -mb-px border-b-2 border-accent text-accent">
+              Results
+            </button>
+            <button type="button" data-tab="saved" class="pb-2 -mb-px border-b-2 border-transparent text-ink-600 hover:text-ink-900">
+              Saved (<span data-saved-count>0</span>)
+            </button>
+          </nav>
+        )}
+
+        <p data-research-status class="font-sans text-sm text-ink-600 mt-8" aria-live="polite"></p>
+
+        <div data-results-pane>
+          {hasAi && <div data-research-overview hidden class="mt-4"></div>}
+          <div data-research-results class="mt-2"></div>
+          <div class="mt-8">
+            <button
+              type="button"
+              data-research-more
+              hidden
+              class="font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50"
+            >
+              More results
+            </button>
           </div>
         </div>
 
-        <p data-research-status class="font-sans text-sm text-ink-600 mt-8" aria-live="polite"></p>
-        <div data-research-results class="mt-2"></div>
-        <div class="mt-8">
-          <button
-            type="button"
-            data-research-more
-            hidden
-            class="font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50"
-          >
-            More results
-          </button>
-        </div>
+        {hasAuth && <div data-research-saved hidden class="mt-2"></div>}
 
         <p class="font-sans text-xs text-ink-600 mt-12 pt-6 border-t border-ink-200 max-w-2xl leading-relaxed">
-          Results come from <a href="https://openalex.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">OpenAlex</a>,
-          an open catalogue of the scholarly record. "Free copy" links go to publisher or
+          Results come from
+          <a href="https://openalex.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">OpenAlex</a>{hasScholar && (
+            <Fragment>, <a href="https://www.semanticscholar.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Semantic Scholar</a></Fragment>
+          )}{hasCore && (
+            <Fragment> and <a href="https://core.ac.uk" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">CORE</a></Fragment>
+          )} — open catalogues of the scholarly record. "Free copy" links go to publisher or
           repository versions; quality varies and inclusion here is not endorsement. Weigh
-          the study, not the headline.
+          the study, not the headline.{hasAi && ' AI summaries are sketches, not verdicts.'}
         </p>
       </div>
     </div>
@@ -172,193 +249,6 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 </BaseLayout>
 
 <script>
-  // All API data is rendered via createElement/textContent — nothing from the
-  // network is ever interpolated into HTML.
-  type Work = {
-    title: string;
-    authors: string[];
-    moreAuthors: number;
-    year: number | null;
-    venue: string | null;
-    doi: string | null;
-    pdfUrl: string | null;
-    oaUrl: string | null;
-    isOa: boolean;
-    citedBy: number;
-    abstract: string | null;
-  };
-
-  const root = document.querySelector<HTMLElement>('[data-research]');
-  if (root) {
-    const form = root.querySelector<HTMLFormElement>('[data-research-form]')!;
-    const input = root.querySelector<HTMLInputElement>('[data-research-input]')!;
-    const send = root.querySelector<HTMLButtonElement>('[data-research-send]')!;
-    const status = root.querySelector<HTMLElement>('[data-research-status]')!;
-    const list = root.querySelector<HTMLElement>('[data-research-results]')!;
-    const more = root.querySelector<HTMLButtonElement>('[data-research-more]')!;
-    const examplesBox = root.querySelector<HTMLElement>('[data-research-examples]')!;
-    const oaBox = root.querySelector<HTMLInputElement>('[data-filter-oa]')!;
-    const reviewBox = root.querySelector<HTMLInputElement>('[data-filter-review]')!;
-    const fromSel = root.querySelector<HTMLSelectElement>('[data-filter-from]')!;
-    const sortSel = root.querySelector<HTMLSelectElement>('[data-filter-sort]')!;
-
-    let page = 1;
-    let lastQuery = '';
-    let shown = 0;
-    let total = 0;
-
-    function el(tag: string, className: string, text?: string) {
-      const e = document.createElement(tag);
-      e.className = className;
-      if (text != null) e.textContent = text;
-      return e;
-    }
-
-    function card(w: Work) {
-      const art = el('article', 'py-6 border-b border-ink-200');
-
-      const h = el('h2', 'font-display text-xl font-semibold text-ink-900 leading-snug');
-      const href = w.oaUrl || w.doi;
-      if (href) {
-        const a = document.createElement('a');
-        a.href = href;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.className = 'hover:text-accent transition-colors';
-        a.textContent = w.title;
-        h.appendChild(a);
-      } else {
-        h.textContent = w.title;
-      }
-      art.appendChild(h);
-
-      const metaBits = [
-        w.authors.join(', ') + (w.moreAuthors > 0 ? ` and ${w.moreAuthors} others` : ''),
-        w.venue,
-        w.year ? String(w.year) : null,
-        w.citedBy ? `cited ${w.citedBy.toLocaleString('en-GB')} times` : null,
-      ].filter(Boolean);
-      art.appendChild(el('p', 'font-sans text-xs text-ink-600 mt-2', metaBits.join(' · ')));
-
-      if (w.abstract) {
-        art.appendChild(el('p', 'font-serif text-sm text-ink-700 leading-relaxed mt-3 max-w-2xl', w.abstract));
-      }
-
-      const links = el('p', 'font-sans text-xs mt-3 flex flex-wrap gap-x-4 gap-y-1');
-      if (w.pdfUrl) {
-        const a = document.createElement('a');
-        a.href = w.pdfUrl;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.className = 'text-accent font-medium hover:text-accent-dark';
-        a.textContent = 'Free PDF →';
-        links.appendChild(a);
-      } else if (w.oaUrl) {
-        const a = document.createElement('a');
-        a.href = w.oaUrl;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.className = 'text-accent font-medium hover:text-accent-dark';
-        a.textContent = 'Free copy →';
-        links.appendChild(a);
-      }
-      if (w.doi) {
-        const a = document.createElement('a');
-        a.href = w.doi;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        a.className = 'text-ink-600 hover:text-accent';
-        a.textContent = 'DOI';
-        links.appendChild(a);
-      }
-      if (links.childNodes.length) art.appendChild(links);
-      return art;
-    }
-
-    async function search(append: boolean) {
-      const q = lastQuery;
-      if (!q) return;
-      send.disabled = true;
-      more.disabled = true;
-      status.textContent = append ? 'Loading more…' : 'Searching…';
-
-      const params = new URLSearchParams({ q, page: String(page) });
-      if (oaBox.checked) params.set('oa', '1');
-      if (reviewBox.checked) params.set('review', '1');
-      if (fromSel.value) params.set('from', fromSel.value);
-      if (sortSel.value !== 'relevance') params.set('sort', sortSel.value);
-
-      let res: Response;
-      try {
-        res = await fetch(`/api/research?${params}`);
-      } catch {
-        status.textContent = 'Couldn’t reach the search. Try again.';
-        send.disabled = false;
-        more.disabled = false;
-        return;
-      }
-
-      let data: { error?: string; count?: number; results?: Work[] } = {};
-      try {
-        data = await res.json();
-      } catch {}
-      if (!res.ok || !Array.isArray(data.results)) {
-        status.textContent = data.error || 'Search is unavailable right now. Try again in a moment.';
-        send.disabled = false;
-        more.disabled = false;
-        return;
-      }
-
-      if (!append) {
-        list.replaceChildren();
-        shown = 0;
-        examplesBox.hidden = true;
-      }
-      total = data.count ?? 0;
-      for (const w of data.results) list.appendChild(card(w));
-      shown += data.results.length;
-
-      status.textContent =
-        total === 0
-          ? 'Nothing found. Try fewer words, or untick “free-to-read only”.'
-          : `Showing ${shown.toLocaleString('en-GB')} of ${total.toLocaleString('en-GB')} results.`;
-      more.hidden = shown >= total || data.results.length === 0;
-      send.disabled = false;
-      more.disabled = false;
-    }
-
-    function startSearch() {
-      const q = input.value.trim();
-      if (!q) return;
-      lastQuery = q;
-      page = 1;
-      search(false);
-    }
-
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      startSearch();
-    });
-
-    [oaBox, reviewBox, fromSel, sortSel].forEach((c) =>
-      c.addEventListener('change', () => {
-        if (lastQuery) {
-          page = 1;
-          search(false);
-        }
-      })
-    );
-
-    more.addEventListener('click', () => {
-      page += 1;
-      search(true);
-    });
-
-    root.querySelectorAll<HTMLButtonElement>('[data-example]').forEach((b) =>
-      b.addEventListener('click', () => {
-        input.value = b.dataset.example || '';
-        startSearch();
-      })
-    );
-  }
+  import { initResearch } from '../scripts/research/main';
+  initResearch();
 </script>

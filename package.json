@@ -11,6 +11,7 @@
     "postbuild": "node scripts/generate-redirects.mjs && pagefind --site dist",
     "preview": "astro preview",
     "suggest-tags": "node scripts/suggest-tags.mjs",
+    "test": "node --test tests/*.test.mjs",
     "astro": "astro"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "@astrojs/sitemap": "3.2.1",
     "@astrojs/tailwind": "^5.1.2",
     "@netlify/blobs": "^10.7.9",
+    "@supabase/supabase-js": "^2.108.1",
     "astro": "^4.16.16",
     "reading-time": "^1.5.0",
     "tailwindcss": "^3.4.15"
