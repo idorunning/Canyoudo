@@ -148,6 +148,37 @@ collections:
           hint: "Footnotes use [^1] in the text and [^1]: ... at the foot, as in the existing pieces.",
         }
 
+  # Static pages — About and Contact. Editable prose; the page template handles
+  # structural elements (header, email display) so the editor only touches copy.
+  - name: "pages"
+    label: "Pages"
+    description: "The About and Contact pages. Edit the copy here; the layout is handled by the site templates."
+    files:
+      - name: "about"
+        label: "About"
+        file: "src/content/pages/about.md"
+        fields:
+          - { name: "title", label: "Page heading", widget: "string" }
+          - { name: "description", label: "Meta description (search/social summary)", widget: "text" }
+          - {
+              name: "body",
+              label: "Content",
+              widget: "markdown",
+              hint: "The photo is a standard markdown image — use the image button in the toolbar to update it.",
+            }
+      - name: "contact"
+        label: "Contact"
+        file: "src/content/pages/contact.md"
+        fields:
+          - { name: "title", label: "Page heading", widget: "string" }
+          - { name: "description", label: "Meta description (search/social summary)", widget: "text" }
+          - {
+              name: "body",
+              label: "Content",
+              widget: "markdown",
+              hint: "The email address display at the top of the page is managed by the site template, not here.",
+            }
+
   # Topics dictionary — the single source of truth behind tag suggestions, the
   # in-body auto-links, and the /topics pages. Add a topic, list the phrasings
   # it should match, and it starts linking and grouping articles automatically.

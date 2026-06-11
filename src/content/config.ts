@@ -150,8 +150,15 @@ const forceSnapshot = z.object({
 // force-wide stop & search data the explorer reads at build time.
 const policeDataSchema = z.discriminatedUnion('kind', [nationalSnapshot, forceSnapshot]);
 
+// Static pages (About, Contact) — editable in the CMS under Pages.
+const pagesSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+});
+
 export const collections = {
   articles: defineCollection({ type: 'content', schema: articleSchema }),
+  pages: defineCollection({ type: 'content', schema: pagesSchema }),
   topics: defineCollection({ type: 'data', schema: topicsSchema }),
   books: defineCollection({ type: 'data', schema: booksSchema }),
   resources: defineCollection({ type: 'data', schema: resourcesSchema }),

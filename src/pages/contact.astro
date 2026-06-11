@@ -1,11 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const page = await getEntry('pages', 'contact');
+const { Content } = await page!.render();
 ---
 
-<BaseLayout
-  title="Contact"
-  description="Get in touch with Thinking About Policing — questions, challenges, corrections and ideas are all welcome."
->
+<BaseLayout title="Contact" description={page!.data.description}>
   <article>
     <header class="border-b border-ink-200">
       <div class="max-w-3xl mx-auto px-6 lg:px-10 py-14 md:py-20">
@@ -13,7 +14,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           Contact
         </p>
         <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
-          Get in touch.
+          {page!.data.title}
         </h1>
       </div>
     </header>
@@ -23,24 +24,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p>
           The best way to reach me is by email:
         </p>
-
         <p>
           <a href="mailto:hello@thinkingaboutpolicing.org" class="font-display text-2xl font-semibold">hello@thinkingaboutpolicing.org</a>
         </p>
-
-        <p>
-          Questions, challenges, corrections, and different perspectives are all welcome — disagreement done well is how the writing gets better. If you have spotted an error, say so plainly and I will fix it and note the correction.
-        </p>
-
-        <p>
-          Comments on each article are also open and need no login, so if your point belongs in public, leave it there and others can join in.
-        </p>
-
-        <h2>A note on views</h2>
-
-        <p>
-          Everything on this site is written in a personal capacity. The views are mine alone and do not represent Sussex Police, any other employer, or any organisation I am associated with. Anything operational or concerning a live policing matter should go through official channels, not this site.
-        </p>
+        <Content />
       </div>
     </div>
   </article>
