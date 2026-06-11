@@ -3,13 +3,16 @@
 // supabase-js itself is imported dynamically so readers who never sign in
 // don't download it.
 //
-// The saved_papers and folders tables are owner-only via row-level security
-// (see docs/google-login-setup.md). metadata holds the full Work object so
-// saved cards render identically without re-querying any catalogue. Folders
-// are the reader's "research aims": each saved paper sits in at most one.
+// The saved_papers, folders and paper_folders tables are owner-only via
+// row-level security (see docs/google-login-setup.md). metadata holds the
+// full Work object so saved cards render identically without re-querying any
+// catalogue. Folders are the reader's "research aims": membership lives in
+// the paper_folders junction table, so one paper can sit in several. Until
+// that table's migration has been run, the code quietly falls back to the
+// legacy single-folder column so nothing breaks mid-upgrade.
 
 import { card, el, setStar, workKey, type Work, type CardHooks } from './cards';
-import { formatReferenceList, toRis } from '../../lib/reference-format.mjs';
+import { formatReferenceList, formatReference, toRis } from '../../lib/reference-format.mjs';
 
 type SupabaseClient = any;
 
@@ -17,7 +20,7 @@ interface SavedRow {
   id: string;
   work: Work;
   note: string | null;
-  folderId: string | null;
+  folderIds: string[];
 }
 
 interface Folder {
@@ -47,6 +50,11 @@ export async function initSaved(
   let folders: Folder[] = [];
   // The folder filter the Saved view is showing: 'all', 'none' (unsorted), or a folder id.
   let activeFolder = 'all';
+  // Free-text filter over the saved set (title/authors/venue/year/note).
+  let savedQuery = '';
+  // True once the paper_folders junction table answered a query — false means
+  // the migration hasn't run yet and we use the legacy folder_id column.
+  let hasJunction = false;
   const listeners: (() => void)[] = [];
   const notify = () => listeners.forEach((fn) => fn());
 
@@ -64,18 +72,34 @@ export async function initSaved(
     saved.clear();
     folders = [];
     if (!user) return notify();
-    const [papers, dirs] = await Promise.all([
+    const [papers, dirs, links] = await Promise.all([
       supabase
         .from('saved_papers')
         .select('id, doi, url, note, folder_id, metadata')
         .order('created_at', { ascending: false }),
       supabase.from('folders').select('id, name').order('created_at', { ascending: true }),
+      supabase.from('paper_folders').select('paper_id, folder_id'),
     ]);
+    // Multi-folder membership from the junction table; if its migration
+    // hasn't run yet the query errors and the legacy column stands in.
+    hasJunction = !links.error;
+    const memberships = new Map<string, string[]>();
+    for (const l of links.data ?? []) {
+      if (!l?.paper_id || !l?.folder_id) continue;
+      const list = memberships.get(l.paper_id) ?? [];
+      list.push(l.folder_id);
+      memberships.set(l.paper_id, list);
+    }
     for (const row of papers.data ?? []) {
       const work = row.metadata as Work;
       const key = row.doi || row.url || workKey(work);
       if (key && work?.title) {
-        saved.set(key, { id: row.id, work, note: row.note ?? null, folderId: row.folder_id ?? null });
+        const folderIds = hasJunction
+          ? memberships.get(row.id) ?? []
+          : row.folder_id
+            ? [row.folder_id]
+            : [];
+        saved.set(key, { id: row.id, work, note: row.note ?? null, folderIds });
       }
     }
     folders = (dirs.data ?? []).filter((f: any) => f?.id && f?.name);
@@ -225,7 +249,7 @@ export async function initSaved(
         })
         .select('id')
         .single();
-      if (data?.id) saved.set(key, { id: data.id, work: w, note: null, folderId: null });
+      if (data?.id) saved.set(key, { id: data.id, work: w, note: null, folderIds: [] });
       notify();
     }
   }
@@ -253,17 +277,38 @@ export async function initSaved(
 
   async function deleteFolder(id: string) {
     folders = folders.filter((f) => f.id !== id);
-    for (const row of saved.values()) if (row.folderId === id) row.folderId = null;
+    for (const row of saved.values()) row.folderIds = row.folderIds.filter((f) => f !== id);
     if (activeFolder === id) activeFolder = 'all';
     notify();
-    // folder_id on papers clears itself via ON DELETE SET NULL.
+    // Junction rows cascade with the folder; the legacy folder_id column
+    // clears itself via ON DELETE SET NULL.
     await supabase.from('folders').delete().eq('id', id);
   }
 
-  async function setFolder(row: SavedRow, folderId: string | null) {
-    row.folderId = folderId;
+  // Membership toggles. With the junction table a paper can sit in several
+  // folders; pre-migration the legacy column gives single-folder semantics
+  // (adding to one folder moves it there).
+  async function addToFolder(row: SavedRow, folderId: string) {
+    if (row.folderIds.includes(folderId)) return;
+    row.folderIds = hasJunction ? [...row.folderIds, folderId] : [folderId];
     notify();
-    await supabase.from('saved_papers').update({ folder_id: folderId }).eq('id', row.id);
+    if (hasJunction) {
+      await supabase
+        .from('paper_folders')
+        .insert({ paper_id: row.id, folder_id: folderId, user_id: user.id });
+    } else {
+      await supabase.from('saved_papers').update({ folder_id: folderId }).eq('id', row.id);
+    }
+  }
+
+  async function removeFromFolder(row: SavedRow, folderId: string) {
+    row.folderIds = row.folderIds.filter((f) => f !== folderId);
+    notify();
+    if (hasJunction) {
+      await supabase.from('paper_folders').delete().eq('paper_id', row.id).eq('folder_id', folderId);
+    } else {
+      await supabase.from('saved_papers').update({ folder_id: null }).eq('id', row.id);
+    }
   }
 
   async function setNote(row: SavedRow, note: string) {
@@ -274,15 +319,89 @@ export async function initSaved(
   }
 
   function visibleRows(): SavedRow[] {
-    const all = [...saved.values()];
-    if (activeFolder === 'all') return all;
-    if (activeFolder === 'none') return all.filter((r) => !r.folderId);
-    return all.filter((r) => r.folderId === activeFolder);
+    let rows = [...saved.values()];
+    if (activeFolder === 'none') rows = rows.filter((r) => r.folderIds.length === 0);
+    else if (activeFolder !== 'all') rows = rows.filter((r) => r.folderIds.includes(activeFolder));
+    const q = savedQuery.trim().toLowerCase();
+    if (q) {
+      rows = rows.filter((r) => {
+        const hay = `${r.work.title} ${(r.work.authors ?? []).join(' ')} ${r.work.venue ?? ''} ${r.work.year ?? ''} ${r.note ?? ''}`;
+        return hay.toLowerCase().includes(q);
+      });
+    }
+    return rows;
   }
 
   // ---- export ----------------------------------------------------------------
+
+  // "Evidence brief": the assistant turns the visible papers (≤15) into a
+  // structured, citation-marked brief; the reference list is assembled HERE
+  // from the real saved records, never by the model, and the result downloads
+  // as Markdown. Failures reset the button — never the saved view.
+  const BRIEF_MAX = 15;
+  function briefButton() {
+    const btn = el('button', 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent', 'Evidence brief') as HTMLButtonElement;
+    btn.type = 'button';
+    btn.title = 'Synthesise the papers shown into a short cited brief (Markdown download)';
+    btn.addEventListener('click', async () => {
+      const rows = visibleRows().slice(0, BRIEF_MAX);
+      if (!rows.length || btn.disabled) return;
+      const topic = folders.find((f) => f.id === activeFolder)?.name ?? 'Saved papers';
+      btn.disabled = true;
+      btn.textContent = 'Writing brief…';
+      const reset = (label: string) => {
+        btn.textContent = label;
+        setTimeout(() => {
+          btn.textContent = 'Evidence brief';
+          btn.disabled = false;
+        }, 2500);
+      };
+      let data: { brief: string; used: number[]; caveat: string } | null = null;
+      let serverMessage: string | null = null;
+      try {
+        const res = await fetch('/api/research-assist', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            mode: 'brief',
+            topic,
+            items: rows.map((r) => ({
+              title: r.work.title,
+              authors: r.work.authors,
+              year: r.work.year,
+              venue: r.work.venue,
+              abstract: r.work.tldr || r.work.abstract || '',
+              note: r.note,
+            })),
+          }),
+        });
+        const body = await res.json().catch(() => null);
+        if (res.ok && typeof body?.brief === 'string' && Array.isArray(body?.used)) data = body;
+        else if (res.status === 503 && typeof body?.error === 'string') serverMessage = body.error;
+      } catch {}
+      if (!data) {
+        return reset(serverMessage ? 'Over budget this month' : 'Brief failed — try again');
+      }
+      const refs = data.used
+        .filter((n) => Number.isInteger(n) && n >= 1 && n <= rows.length)
+        .sort((a, b) => a - b)
+        .map((n) => `[${n}] ${formatReference(rows[n - 1].work)}`)
+        .join('\n\n');
+      const md = `# Evidence brief — ${topic}\n\n${data.brief}\n\n> ${data.caveat}\n\n## References\n\n${refs}\n`;
+      const blob = new Blob([md], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `evidence-brief-${topic.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'saved'}.md`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      reset('Downloaded ✓');
+    });
+    return btn;
+  }
+
   function exportButtons() {
     const wrap = el('div', 'flex gap-3 items-center ml-auto');
+    wrap.appendChild(briefButton());
     const copy = el('button', 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent', 'Copy references') as HTMLButtonElement;
     copy.type = 'button';
     copy.addEventListener('click', async () => {
@@ -364,25 +483,41 @@ export async function initSaved(
   function cardControls(row: SavedRow, container: HTMLElement) {
     const wrap = el('div', 'mt-3 flex flex-wrap gap-x-5 gap-y-2 items-start font-sans text-xs text-ink-600');
 
-    // Folder assignment.
-    const select = el('select', 'border border-ink-300 rounded px-1.5 py-1 bg-paper-50 focus:outline-none focus:border-accent') as HTMLSelectElement;
-    const none = el('option', '', 'No folder') as HTMLOptionElement;
-    none.value = '';
-    select.appendChild(none);
-    for (const f of folders) {
-      const o = el('option', '', f.name) as HTMLOptionElement;
-      o.value = f.id;
-      select.appendChild(o);
+    // Folder membership: a checkbox popover, since a paper can sit in several
+    // folders at once. The summary shows current membership at a glance.
+    const details = el('details', 'relative') as HTMLDetailsElement;
+    const summaryLabel = () => {
+      const names = folders.filter((f) => row.folderIds.includes(f.id)).map((f) => f.name);
+      if (names.length === 0) return 'Folders ▾';
+      if (names.length <= 2) return `${names.join(', ')} ▾`;
+      return `${names[0]} +${names.length - 1} ▾`;
+    };
+    const summary = el('summary', 'cursor-pointer list-none border border-ink-300 rounded px-2 py-1 bg-paper-50 hover:border-ink-500 select-none', summaryLabel());
+    details.appendChild(summary);
+    const panel = el('div', 'absolute z-10 mt-1 min-w-[12rem] max-w-xs rounded-md border border-ink-200 bg-paper-50 shadow-lg p-2 space-y-1');
+    if (folders.length === 0) {
+      panel.appendChild(el('p', 'text-ink-500 px-1 py-0.5', 'No folders yet — create one below the chips.'));
     }
-    select.value = row.folderId ?? '';
-    select.addEventListener('change', async () => {
-      await setFolder(row, select.value || null);
-      renderSavedView(container);
-    });
-    const folderLabel = el('label', 'flex items-center gap-1.5');
-    folderLabel.appendChild(document.createTextNode('Folder'));
-    folderLabel.appendChild(select);
-    wrap.appendChild(folderLabel);
+    for (const f of folders) {
+      const label = el('label', 'flex items-center gap-2 px-1 py-0.5 rounded cursor-pointer hover:bg-paper-200');
+      const box = el('input', 'accent-[#7c2828]') as HTMLInputElement;
+      box.type = 'checkbox';
+      box.checked = row.folderIds.includes(f.id);
+      box.addEventListener('change', async () => {
+        if (box.checked) await addToFolder(row, f.id);
+        else await removeFromFolder(row, f.id);
+        summary.textContent = summaryLabel();
+        // Membership changed under a folder filter → the row may leave the
+        // view; re-render then. Under "All" the popover can stay open for
+        // ticking several folders in one go.
+        if (activeFolder !== 'all') renderSavedView(container);
+      });
+      label.appendChild(box);
+      label.appendChild(el('span', 'truncate', f.name));
+      panel.appendChild(label);
+    }
+    details.appendChild(panel);
+    wrap.appendChild(details);
 
     // Note.
     const noteArea = el('div', 'flex-1 min-w-[12rem]');
@@ -432,7 +567,7 @@ export async function initSaved(
     const all = [...saved.values()];
     bar.appendChild(folderChip('All', 'all', all.length, container));
     for (const f of folders) {
-      const chip = folderChip(f.name, f.id, all.filter((r) => r.folderId === f.id).length, container);
+      const chip = folderChip(f.name, f.id, all.filter((r) => r.folderIds.includes(f.id)).length, container);
       bar.appendChild(chip);
       if (activeFolder === f.id) {
         const x = el('button', 'font-sans text-xs text-ink-500 hover:text-accent -ml-1', '×') as HTMLButtonElement;
@@ -447,22 +582,51 @@ export async function initSaved(
         bar.appendChild(x);
       }
     }
-    const unsorted = all.filter((r) => !r.folderId).length;
+    const unsorted = all.filter((r) => r.folderIds.length === 0).length;
     if (folders.length && unsorted) bar.appendChild(folderChip('Unsorted', 'none', unsorted, container));
     bar.appendChild(newFolderControl(container));
     bar.appendChild(exportButtons());
     container.appendChild(bar);
 
-    const rows = visibleRows();
-    if (rows.length === 0) {
-      container.appendChild(el('p', 'font-sans text-sm text-ink-600 py-6', 'Nothing in this folder yet — move a paper here with its "Folder" control.'));
-      return;
+    // Search within saved — pure client-side filter; only the rows re-render
+    // per keystroke, so the input keeps focus.
+    const searchWrap = el('div', 'pt-3');
+    const searchInput = el('input', 'w-full max-w-xs border border-ink-300 rounded px-3 py-1.5 font-sans text-sm bg-paper-50 focus:outline-none focus:border-accent') as HTMLInputElement;
+    searchInput.type = 'search';
+    searchInput.placeholder = 'Search your saved papers…';
+    searchInput.value = savedQuery;
+    searchWrap.appendChild(searchInput);
+    container.appendChild(searchWrap);
+
+    const rowsBox = el('div', '');
+    container.appendChild(rowsBox);
+
+    function renderRows() {
+      rowsBox.replaceChildren();
+      const rows = visibleRows();
+      if (rows.length === 0) {
+        rowsBox.appendChild(
+          el(
+            'p',
+            'font-sans text-sm text-ink-600 py-6',
+            savedQuery.trim()
+              ? 'No saved papers match that search.'
+              : 'Nothing in this folder yet — tick it in a paper’s "Folders" control.'
+          )
+        );
+        return;
+      }
+      for (const row of rows) {
+        const c = card(row.work, hooks);
+        c.appendChild(cardControls(row, container));
+        rowsBox.appendChild(c);
+      }
     }
-    for (const row of rows) {
-      const c = card(row.work, hooks);
-      c.appendChild(cardControls(row, container));
-      container.appendChild(c);
-    }
+    searchInput.addEventListener('input', () => {
+      savedQuery = searchInput.value;
+      renderRows();
+    });
+    renderRows();
   }
 
   // Shown when the Saved tab is opened signed out — the nudge. Inviting,
@@ -488,7 +652,8 @@ export async function initSaved(
     const ul = el('ul', 'mt-4 space-y-2 font-sans text-sm text-ink-700');
     for (const line of [
       'Your saved papers on any device you sign in on',
-      'Folders to organise by research aim or report',
+      'Folders to organise by research aim — papers can sit in several',
+      'One-click evidence brief: a cited synthesis of a folder, as Markdown',
       'Export as formatted references or .ris for Zotero / EndNote',
     ]) {
       const li = el('li', 'flex gap-2');

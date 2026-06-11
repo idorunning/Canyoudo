@@ -7,6 +7,7 @@ import {
   TRANSLATE_SYSTEM,
   OVERVIEW_SYSTEM,
   ANSWER_SYSTEM,
+  BRIEF_SYSTEM,
 } from '../../src/lib/research-assist-prompts';
 import { sanitizeCitations } from '../../src/lib/citations.mjs';
 import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-budget';
@@ -16,6 +17,7 @@ import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-bu
 //     { mode: 'translate', question }                  → { query, filters, note }
 //     { mode: 'overview', query, filters, items[≤8] }  → { overview, caveat, refinements }
 //     { mode: 'answer', question, items[≤10] }         → { answer, used, caveat, confidence }
+//     { mode: 'brief', topic, items[≤15] }             → { brief, used, caveat }
 //
 // translate uses Sonnet (better inference from a vague question to the
 // literature's vocabulary); overview uses Haiku (fast, cheap synthesis of the
@@ -30,6 +32,7 @@ import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-bu
 const TRANSLATE_MODEL: ModelId = 'claude-sonnet-4-6';
 const OVERVIEW_MODEL: ModelId = 'claude-haiku-4-5';
 const ANSWER_MODEL: ModelId = 'claude-sonnet-4-6';
+const BRIEF_MODEL: ModelId = 'claude-sonnet-4-6';
 
 const json = (status: number, body: unknown, cache: 'HIT' | 'MISS' | 'NONE' = 'NONE') =>
   new Response(JSON.stringify(body), {
@@ -82,11 +85,34 @@ export default async (req: Request) => {
 
   const mode = body?.mode;
   let model: ModelId, system: string, user: string, maxTokens: number, input: Record<string, unknown>;
-  // How many studies the answer mode was actually given — the upper bound for
-  // its citation indices.
-  let answerItemCount = 0;
+  // How many studies a citing mode (answer/brief) was actually given — the
+  // upper bound for its citation indices.
+  let citedItemCount = 0;
 
-  if (mode === 'answer') {
+  if (mode === 'brief') {
+    const topic = clipStr(body.topic, 100) || 'Saved papers';
+    const items = Array.isArray(body.items)
+      ? body.items.slice(0, 15).map((it: any) => ({
+          title: clipStr(it?.title, 300),
+          authors: Array.isArray(it?.authors)
+            ? it.authors.slice(0, 4).map((a: unknown) => clipStr(a, 100)).filter(Boolean)
+            : [],
+          year: Number.isInteger(it?.year) ? it.year : null,
+          venue: clipStr(it?.venue, 150) || null,
+          abstract: clipStr(it?.abstract, 600),
+          ...(clipStr(it?.note, 300) ? { note: clipStr(it?.note, 300) } : {}),
+        })).filter((it: any) => it.title)
+      : [];
+    if (items.length === 0) return json(400, { error: 'Nothing to brief from.' });
+    citedItemCount = items.length;
+    model = BRIEF_MODEL;
+    system = BRIEF_SYSTEM;
+    user = `Topic: ${topic}\n\nStudies:\n${items
+      .map((it: any, i: number) => `[${i + 1}] ${JSON.stringify(it)}`)
+      .join('\n')}`;
+    maxTokens = 2000;
+    input = { t: topic.toLowerCase(), items };
+  } else if (mode === 'answer') {
     const question = clipStr(body.question, 400);
     const items = Array.isArray(body.items)
       ? body.items.slice(0, 10).map((it: any) => ({
@@ -100,7 +126,7 @@ export default async (req: Request) => {
         })).filter((it: any) => it.title)
       : [];
     if (!question || items.length === 0) return json(400, { error: 'Nothing to answer from.' });
-    answerItemCount = items.length;
+    citedItemCount = items.length;
     model = ANSWER_MODEL;
     system = ANSWER_SYSTEM;
     user = `Question: ${question}\n\nStudies:\n${items
@@ -160,10 +186,24 @@ export default async (req: Request) => {
   // Validate the model's JSON to the contract the page expects; reject shapes
   // we don't recognise rather than passing anything through.
   let result: Record<string, unknown>;
-  if (mode === 'answer') {
+  if (mode === 'brief') {
+    // Same citation discipline as answer: strip out-of-range markers, reject
+    // a brief left with nothing cited.
+    const { text: brief, used } = sanitizeCitations(clipStr(out?.brief, 6000), citedItemCount);
+    if (!brief || used.length === 0) {
+      return json(502, { error: 'The assistant gave an unusable reply. Try again.' });
+    }
+    result = {
+      brief,
+      used,
+      caveat:
+        clipStr(out?.caveat, 300) ||
+        'Synthesised from the abstracts of the saved papers, not the full texts — read the studies before relying on this.',
+    };
+  } else if (mode === 'answer') {
     // Strip citation markers pointing outside the studies we sent; an answer
     // with no valid citations left is unusable by definition.
-    const { text: answer, used } = sanitizeCitations(clipStr(out?.answer, 2500), answerItemCount);
+    const { text: answer, used } = sanitizeCitations(clipStr(out?.answer, 2500), citedItemCount);
     if (!answer || used.length === 0) {
       return json(502, { error: 'The assistant gave an unusable reply. Try rephrasing.' });
     }

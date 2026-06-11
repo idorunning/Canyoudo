@@ -129,6 +129,40 @@ create policy "delete own folders" on public.folders
 
 3. It should say "Success. No rows returned". Done.
 
+## Part 4¾ — Multi-folder upgrade (1 min, run once)
+
+Research Assistant v2 lets one paper sit in several folders. That needs one
+more table — run this in the SQL Editor the same way (it also copies your
+existing folder assignments across, so nothing is lost). Until it's run, the
+site quietly falls back to the old one-folder-per-paper behaviour.
+
+```sql
+-- A paper can belong to many folders (and vice versa).
+create table public.paper_folders (
+  paper_id  uuid not null references public.saved_papers(id) on delete cascade,
+  folder_id uuid not null references public.folders(id) on delete cascade,
+  user_id   uuid not null references auth.users(id) on delete cascade,
+  primary key (paper_id, folder_id)
+);
+
+alter table public.paper_folders enable row level security;
+create policy "read own links"   on public.paper_folders
+  for select using (auth.uid() = user_id);
+create policy "insert own links" on public.paper_folders
+  for insert with check (auth.uid() = user_id);
+create policy "delete own links" on public.paper_folders
+  for delete using (auth.uid() = user_id);
+
+-- Carry existing single-folder assignments across.
+insert into public.paper_folders (paper_id, folder_id, user_id)
+  select id, folder_id, user_id from public.saved_papers
+  where folder_id is not null
+  on conflict do nothing;
+```
+
+(The old `folder_id` column on `saved_papers` stays for now as a safety net —
+it just stops being written to.)
+
 ## Part 4½ — Email sign-in (1 min, optional but recommended)
 
 Besides Google, the site offers "Sign in with email" — a one-click link sent

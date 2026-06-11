@@ -1,11 +1,11 @@
 # Research Assistant v2 — design
 
-Status: **phase 1 built** (June 2026) — cited evidence answers, the monthly
-budget guard (`AI_BUDGET_LIMIT_USD`, default $110) and the durable edge cache
-are live; one manual step remains: set the ~$120 workspace spend limit in the
-Anthropic Console. Phases 2–3 are still proposals. The design covers the next
-generation of /research, shaped by four priorities: real answers to plain-English
-questions, smarter search, better saved papers, and a hard cost ceiling.
+Status: **all three phases built** (June 2026). Two manual steps: set the
+~$120 workspace spend limit in the Anthropic Console, and run the
+multi-folder migration in the Supabase SQL editor (Part 4¾ of
+docs/google-login-setup.md — until then, saved papers fall back to
+one-folder-per-paper). The design below is kept as the record of what was
+built and why.
 The governing principle throughout: **sources and evidence are king** — the
 assistant never gets to say anything it cannot pin to a retrieved paper.
 
