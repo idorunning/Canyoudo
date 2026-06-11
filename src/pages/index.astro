@@ -41,6 +41,30 @@ const [feature, ...rest] = allArticles;
     </div>
   </section>
 
+  {/* Pull quotes — framing the site's editorial mission */}
+  <section class="border-b border-ink-200 bg-paper-100">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
+      <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+        <blockquote class="border-l-2 border-accent pl-6">
+          <p class="font-serif text-base md:text-lg text-ink-800 leading-relaxed italic">
+            "The basic premise of evidence-based practice is that we are all entitled to our own opinions, but not to our own facts."
+          </p>
+          <footer class="mt-3 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
+            Lawrence Sherman — <a href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent transition-colors">Ideas in American Policing, 1998</a>
+          </footer>
+        </blockquote>
+        <blockquote class="border-l-2 border-accent pl-6">
+          <p class="font-serif text-base md:text-lg text-ink-800 leading-relaxed italic">
+            "The core of evidence-based policing is to move away from ideology and politics and focus solely on what is proven to be effective."
+          </p>
+          <footer class="mt-3 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
+            <a href="/influential-people/alex-murray-and-the-rise-of-evidence-based-policing" class="underline underline-offset-2 hover:text-accent transition-colors">Alex Murray</a> — Founder, Society of Evidence-Based Policing
+          </footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
   {/* Featured article */}
   {feature && (
     <section class="border-b border-ink-200">
