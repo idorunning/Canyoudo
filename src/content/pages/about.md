@@ -34,9 +34,7 @@ Founder & Editor
 
 I am a serving Police Inspector with Sussex Police, specializing in neighbourhood policing and data-led operational strategy. My approach to law enforcement is defined by an unconventional trajectory into the service: entering policing at age thirty-one following a career managing commercial operations within a major corporate environment, and a subsequent adult diagnosis of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven.
 
-![](/images/nathan-tracey.jpg)
-
-
+![]()
 
 This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organizational design, and institutional assumptions regarding human behavior versus empirical reality.
 
