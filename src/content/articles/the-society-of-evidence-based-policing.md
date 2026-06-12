@@ -1,37 +1,65 @@
 ---
 section: "influential-people"
-title: "The Society of Evidence-Based Policing: An Institution That Behaves Like a Person"
-description: "Not a person this time, but the organisation that did a person's work: the SEBP made 'what does the evidence say?' a question ordinary officers could ask out loud. What it is, what it does, why it matters — and how to join for free."
+title: "The Society of Evidence-Based Policing: Nurturing the Idea That Every Officer Can Test What Works"
+description: "The SEBP's real value isn't lobbying or publishing — it's lowering the bar so that any officer with a good idea can test it, get support to do so properly, and share what they find. Here is what it is, what it actually does, and why that matters."
 pubDate: 2026-06-11
-tags: ["evidence-based-policing", "evidence-based", "policing", "police", "professional-development", "research"]
+tags: ["evidence-based-policing", "evidence-based", "policing", "police", "professional-development", "research", "leadership"]
 ---
 
-**This series profiles the people who shaped evidence-based policing — and one of its most influential figures is not a person at all.** The Society of Evidence-Based Policing has no warrant card, no laboratory and no budget worth the name, yet it has arguably done as much as any individual to change what British officers think their job is. It belongs in this series because it does a person's work: it persuades, it teaches, it nags, and it keeps a promise alive between the handful of individuals — [Sherman](/influential-people/lawrence-sherman-and-the-invention-of-evidence-based-policing), [Murray](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing), [Knabe-Nicol](/influential-people/susanne-knabe-nicol-and-the-last-mile-of-evidence-based-policing) — who could never have kept it alive alone.
+**The most important thing the Society of Evidence-Based Policing does is not what appears in its mission statement — it is making ordinary officers feel entitled to ask whether what they are doing actually works.** That might sound like a modest ambition. In the culture of British policing for most of its history, it was genuinely radical. Fifteen years on, the SEBP has not solved the problem. But it has built the infrastructure that makes solving it possible — and the infrastructure is more interesting than it first appears.
 
 ### What it is
 
-The SEBP was [founded in 2010 by Alex Murray](https://cebcp.org/hall-of-fame/alex-murray/) and a small group of like-minded officers — the [first organisation of its kind in the world](https://en.wikipedia.org/wiki/Evidence-based_policing). Lawrence Sherman, whose Cambridge programme had supplied the intellectual framework, was elected honorary president. Within five years it had [grown to more than 2,800 members](https://en.wikipedia.org/wiki/Evidence-based_policing); today it operates as [a registered charity](https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/5049812/contact-information), run by serving and former practitioners alongside academics.
+The SEBP was [founded in 2010 by Alex Murray](https://cebcp.org/hall-of-fame/alex-murray/) — a Detective Superintendent, not an academic — alongside a group of like-minded practitioners frustrated that the research existed but the culture to use it did not. Lawrence Sherman, whose [Cambridge programme](/influential-people/lawrence-sherman-and-the-invention-of-evidence-based-policing) had built the intellectual case, became honorary president. It is now a [registered charity](https://register-of-charities.charitycommission.gov.uk/en/charity-search/-/charity-details/5049812/contact-information), run by serving and former officers alongside academics, and it operates the [first and most-copied model of its kind](https://www.anzsebp.com/global-collaboration-societies-of-evidence-based-policing/): sister societies now run in Australia and New Zealand, Canada, the US and the Netherlands, most of them modelled directly on the UK original.
 
-Its stated mission has barely needed updating since the founding, which is a mark of how well it was chosen. The Society exists to promote three things: the **use** of the best available research evidence to solve policing problems; the **production** of new research evidence by police practitioners and researchers; and the **communication** of that evidence — [the three aims it still states today](https://www.sebp.police.uk/about/mission). Use, produce, communicate: a complete supply chain for knowledge, in six words.
+Its stated aims are use, produce and [communicate evidence](https://www.sebp.police.uk/about/mission) — a three-word supply chain for knowledge. Those three verbs are fine as far as they go. What they don't quite capture is the specific gap the SEBP was built for.
 
-### What it actually does
+### The gap: from senior leaders to the constable with an idea
 
-The practical offer is straightforward and deliberately accessible:
+Evidence-based policing had, by 2010, plenty of academic champions. What it did not have was a mechanism to reach the officer on the ground — the inspector who suspected that the way the shift was allocated was producing worse outcomes than the data would suggest, the detective who had noticed a pattern in the crimes her team were not solving, the PCSO who wondered whether the walk route that had been used for years was actually reaching the people it was supposed to reach.
 
-- **Free membership, open to anyone.** [Joining costs nothing](https://www.sebp.police.uk/join), and membership is open not just to serving officers but to researchers, policymakers and interested members of the public. For a movement that began as heresy inside a closed occupational culture, the openness is the point.
-- **The annual conference** — the field's main gathering, periodically expanded into the [Global Societies of Evidence-Based Policing Conference at Cambridge](https://www.sebp.police.uk/event-details/global-societies-of-evidence-based-policing-conference), where practitioners and researchers from the UK, US, Australia, Europe and beyond meet on equal terms.
-- **A publishing presence** — practitioner-facing guides, talks and resources, including [an open collection on CrimRxiv](https://www.crimrxiv.com/sebp), so the evidence the Society champions is not locked behind paywalls.
-- **The occasional stunt with a serious purpose** — most famously the [24-hour evidence-based policing conference](https://www.policeprofessional.com/news/global-first-as-leading-police-thinkers-gather-for-24-hour-evidence-based-policing-conference/), a relay of talks handed around the globe through every time zone, so that an officer anywhere could always find a session running.
+Those people did not need a journal article. They needed permission to act on the question they already had, the language to frame it, someone to point them at existing evidence and — crucially — someone to support them if they wanted to find out for themselves.
 
-### Why it mattered
+That is the gap the SEBP is most usefully understood as filling. It is not primarily a publishing house or a lobbying body. It is a community of practice built around the idea that evidence-based policing belongs to every officer, not just the ones with PhDs.
 
-The cultural problem the SEBP was built to solve is described in this site's [profile of its founder](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing): a service in which experience was the only credential and research was something done *to* the police rather than *with* them. What the Society supplied was infrastructure for dissent from that culture — a place where a constable curious about the evidence could find peers, language and permission. Before 2010 no such place existed anywhere. After 2010 it existed in Britain, and the model travelled: sister societies now operate in [Australia and New Zealand (founded April 2013), Canada (launched April 2015), the United States and the Netherlands](https://www.anzsebp.com/global-collaboration-societies-of-evidence-based-policing/), most modelled directly on the UK original.
+### Not every idea needs a randomised controlled trial
 
-The honest accounting, as ever: the SEBP does not run forces, sets no policy, and plenty of policing still proceeds on habit. Its power is entirely soft — convening, publishing, legitimising. But soft power, applied for fifteen years, is how occupational cultures actually move, and the normalisation of the question *"how do we know this works?"* inside British policing owes more to this small charity than to any directive ever issued.
+This is the part of the SEBP's mission that most deserves saying plainly, because the alternative reading does real damage: the belief that "evidence-based" means "you need an RCT", which in practice means "you need a university, a budget and three years". That reading turns evidence-based policing from a habit of mind into a credential held by a small elite.
 
-### If you want in
+The [evidence-based policing movement's own framework](https://www.sebp.police.uk/about/mission) does not require that. RCTs occupy the top of the evidence hierarchy because they are the most reliable tool for establishing whether something *causes* an outcome. But a systematic review of existing literature that finds your force's approach is at odds with the best current evidence is also evidence-based policing. A force reviewing its own custody data to see whether a recent procedural change made any difference is being more evidence-based than it was before. A team that reads the [What Works Centre for Crime Reduction](https://whatworks.college.police.uk/) summaries before trialling a new tactic and then records what happened is doing something genuinely valuable — even if the only output is a two-page note at the next team meeting.
 
-[Membership is free and the joining form takes minutes](https://www.sebp.police.uk/join). For a serving officer it is the single cheapest piece of professional development available; pair it with the practitioner-friendly research feeds described in our [Police Science Dr profile](/influential-people/susanne-knabe-nicol-and-the-last-mile-of-evidence-based-policing) and the [further reading list](/resources), and the evidence base of an entire discipline is open to you for the price of an email address.
+The shift from "nothing to evidence" is bigger than the shift from "good study to RCT." The SEBP's potential is greatest, and its need is greatest, at the first step — normalising the habit of looking before doing and writing down what you found.
+
+### Mentorship, leadership and the support to test an idea
+
+A curious officer with a hypothesis and no institutional support will usually find that the hypothesis dies. The hypothesis needs time that operational pressures do not naturally create. It needs someone who has done it before to help translate a felt sense that something works — or doesn't — into a question precise enough to answer. It needs a supervisor who treats the investigation as legitimate professional development rather than an indulgence.
+
+The SEBP's [conference](https://www.sebp.police.uk/about/events), its [CrimRxiv publishing collection](https://www.crimrxiv.com/sebp) and its informal networks are the infrastructure that makes this support available to practitioners who would otherwise have no access to it. The 2024 [Global Societies of Evidence-Based Policing Conference at Cambridge](https://www.sebp.police.uk/event-details/global-societies-of-evidence-based-policing-conference) put serving officers in rooms with researchers from several countries, talking in shared language about what works. That is a genuinely unusual resource for a detective constable who has never published anything and does not plan to, but wants to understand whether their force's knife crime tactic has any evidence behind it.
+
+The leadership dimension matters too. Forces that have embedded EBP most deeply — [Susanne Knabe-Nicol's work at South Yorkshire](/influential-people/susanne-knabe-nicol-and-the-last-mile-of-evidence-based-policing) is the sharpest example on this site — have leaders who created the conditions: time, legitimacy and a clear message that testing and reporting back was part of the job, not a distraction from it. The SEBP is best understood as the vehicle that can carry that message to forces whose leaders have not yet sent it.
+
+### Write it up. Share it.
+
+There is a failure mode in policing that evidence-based practice should in principle defeat, but in practice often perpetuates: the pilot that works, that everyone on the team knows works, that then quietly disappears when the team moves on or the sergeant who drove it is promoted. The knowledge never leaves the room it was produced in.
+
+The obligation to write findings up and share them is not bureaucracy. It is the difference between individual learning and organisational learning — and organisational learning is what changes cultures rather than projects. The SEBP's publishing platform, its conference programme and its connections to [Police Science Dr](https://www.policesciencedr.com/) and the wider practitioner-research community exist precisely to close this loop. A pilot that produced interesting results and then went into a drawer served the people involved; a pilot whose findings reached officers in other forces served the profession.
+
+This is also where the SEBP's role as a celebrant matters. Sharing negative results — tactics that did not work, approaches that did not replicate — is as professionally valuable as sharing successes, and considerably rarer. Creating cultural space in which reporting "we tried this and it did not improve outcomes" is treated as useful and honest rather than as failure is one of the harder and more important things the Society can do.
+
+### What it is and what it offers
+
+Practically, the SEBP's offer is simple:
+
+- **[Free membership, open to anyone](https://www.sebp.police.uk/join)** — officers, researchers, policymakers, civilians with an interest. No membership fee, no seniority requirement.
+- **The annual conference and global events** — the field's main practitioner gathering, where a constable and a Cambridge professor can present on the same afternoon.
+- **A publishing route** via [CrimRxiv](https://www.crimrxiv.com/sebp) that is open-access, practitioner-legible and does not require affiliation with a university to submit.
+- **Informal mentorship** through the network — people who have navigated the question of how to run a study inside a force, who have written up results, who know where to find existing evidence, and who are generally willing to help.
+
+### Where the honest limits are
+
+The SEBP is a small charity and its influence is entirely soft. It does not run forces, set policy or compel any officer to read anything. Its reach depends on whether force culture permits or encourages engagement — and many forces still do not. The 24-month wait between a good practitioner idea and any kind of tested finding, inside the demands of operational policing, is a structural problem the Society cannot solve alone.
+
+What it can do is keep the door open and put the right people on either side of it. That has, over fifteen years, turned out to be more than nothing. It has contributed to a generation of British police officers for whom the question *"what does the evidence say?"* is at least a recognisable one — and for the most engaged, a professional habit. The goal now should be driving that habit deeper, spreading it wider, and making sure the layer of officers doing the asking includes the frontline as well as the leadership tier.
 
 ---
 
@@ -42,5 +70,6 @@ The honest accounting, as ever: the SEBP does not run forces, sets no policy, an
 - Wikipedia, [Evidence-based policing](https://en.wikipedia.org/wiki/Evidence-based_policing) — founding and early membership figures.
 - Center for Evidence-Based Crime Policy, [Hall of Fame: Alex Murray](https://cebcp.org/hall-of-fame/alex-murray/), George Mason University.
 - ANZSEBP, [Global Collaboration: Societies of Evidence Based Policing](https://www.anzsebp.com/global-collaboration-societies-of-evidence-based-policing/).
-- Police Professional, ["Global first as leading police thinkers gather for 24-hour evidence-based policing conference"](https://www.policeprofessional.com/news/global-first-as-leading-police-thinkers-gather-for-24-hour-evidence-based-policing-conference/).
+- What Works Centre for Crime Reduction, [whatworks.college.police.uk](https://whatworks.college.police.uk/).
 - Society of Evidence Based Policing, [collection on CrimRxiv](https://www.crimrxiv.com/sebp).
+- Police Science Dr, [policesciencedr.com](https://www.policesciencedr.com/) — practitioner-facing research summaries and digests.
