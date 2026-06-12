@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560" role="img" aria-label="Timeline of Martyn's Law: from the Manchester Arena attack in 2017 to duties expected in force in spring 2027">
+  <rect width="1200" height="560" fill="#f7f3eb"/>
+  <text x="600" y="70" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="42" font-weight="600" text-anchor="middle">From campaign to commencement</text>
+  <text x="600" y="110" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="22" font-style="italic" text-anchor="middle">a decade between the attack and the duty it created</text>
+
+  <!-- spine -->
+  <line x1="90" y1="300" x2="1110" y2="300" stroke="#ddd6c8" stroke-width="6" stroke-linecap="round"/>
+  <line x1="90" y1="300" x2="868" y2="300" stroke="#7c2828" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- nodes: alternate label above/below -->
+  <!-- 1. Attack -->
+  <circle cx="120" cy="300" r="13" fill="#1a1817"/>
+  <text x="120" y="245" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle">22 May 2017</text>
+  <text x="120" y="200" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20" text-anchor="middle"><tspan x="120">Manchester Arena attack:</tspan><tspan x="120" dy="-26"></tspan></text>
+  <text x="120" y="174" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20" text-anchor="middle">22 people murdered</text>
+
+  <!-- 2. Campaign -->
+  <circle cx="330" cy="300" r="13" fill="#7c2828"/>
+  <text x="330" y="360" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle">2018 &#8211; 2024</text>
+  <text x="330" y="392" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20" text-anchor="middle"><tspan x="330">Figen Murray&#8217;s campaign,</tspan><tspan x="330" dy="26">ending with a 200-mile walk</tspan><tspan x="330" dy="26">to Downing Street</tspan></text>
+
+  <!-- 3. Royal Assent -->
+  <circle cx="560" cy="300" r="13" fill="#7c2828"/>
+  <text x="560" y="245" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle">3 April 2025</text>
+  <text x="560" y="200" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20" text-anchor="middle"><tspan x="560">Royal Assent &#8212; Martyn&#8217;s Law</tspan></text>
+  <text x="560" y="174" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20" text-anchor="middle">becomes an Act of Parliament</text>
+
+  <!-- 4. Guidance -->
+  <circle cx="790" cy="300" r="13" fill="#7c2828"/>
+  <text x="790" y="360" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle">April &#8211; June 2026</text>
+  <text x="790" y="392" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20" text-anchor="middle"><tspan x="790">Statutory guidance published;</tspan><tspan x="790" dy="26">SIA consults on how it</tspan><tspan x="790" dy="26">will enforce</tspan></text>
+  <!-- you are here -->
+  <g>
+    <rect x="700" y="430" width="180" height="40" rx="20" fill="#7c2828"/>
+    <text x="790" y="457" fill="#f5f1e8" font-family="'DM Sans', system-ui, sans-serif" font-size="20" font-weight="600" text-anchor="middle">you are here</text>
+    <path d="M 790 430 l -10 -18 h 20 z" fill="#7c2828"/>
+  </g>
+
+  <!-- 5. In force -->
+  <circle cx="1080" cy="300" r="13" fill="none" stroke="#7c2828" stroke-width="4"/>
+  <text x="1080" y="245" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle">~ Spring 2027</text>
+  <text x="1080" y="200" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20" text-anchor="middle"><tspan x="1080">Duties expected to come</tspan></text>
+  <text x="1080" y="174" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20" text-anchor="middle">into force</text>
+
+  <text x="600" y="530" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-style="italic" text-anchor="middle">The Act allowed at least 24 months between Royal Assent and commencement, for venues and the regulator to prepare.</text>
+</svg>

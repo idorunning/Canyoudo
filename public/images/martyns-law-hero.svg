@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 840" width="1600" height="840" role="img" aria-label="Martyn's Law — the Terrorism (Protection of Premises) Act 2025">
+  <rect width="1600" height="840" fill="#1a1817"/>
+  <!-- faint arena-arc motif -->
+  <g fill="none" stroke="#2e2a28" stroke-width="3">
+    <path d="M 200 840 a 600 600 0 0 1 1200 0"/>
+    <path d="M 330 840 a 470 470 0 0 1 940 0"/>
+    <path d="M 460 840 a 340 340 0 0 1 680 0"/>
+    <path d="M 590 840 a 210 210 0 0 1 420 0"/>
+  </g>
+  <rect x="120" y="170" width="64" height="10" fill="#a14545"/>
+  <text x="120" y="240" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="30" letter-spacing="8" font-weight="500">PUBLIC POLICY</text>
+  <text x="120" y="360" fill="#f5f1e8" font-family="Fraunces, Georgia, serif" font-size="104" font-weight="600">Martyn&#8217;s Law</text>
+  <text x="120" y="448" fill="#bdb4a8" font-family="'Source Serif 4', Georgia, serif" font-size="40" font-style="italic">The Terrorism (Protection of Premises) Act 2025</text>
+  <text x="120" y="600" fill="#8a8175" font-family="'DM Sans', system-ui, sans-serif" font-size="30">A bereaved mother&#8217;s six-year campaign, now the law of the land &#8212;</text>
+  <text x="120" y="648" fill="#8a8175" font-family="'DM Sans', system-ui, sans-serif" font-size="30">and a new duty for every sizeable venue in the United Kingdom.</text>
+  <g font-family="'DM Sans', system-ui, sans-serif" font-size="28" fill="#a14545">
+    <text x="120" y="760" font-weight="600">22 May 2017</text>
+    <text x="318" y="760" fill="#5a544e">&#8212;&#8212;&#8212;&#8212;&#8212;&#8594;</text>
+    <text x="510" y="760" font-weight="600">spring 2027</text>
+  </g>
+</svg>

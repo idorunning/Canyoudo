@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" role="img" aria-label="Martyn's Law two tiers compared: standard tier for 200 to 799 capacity, enhanced tier for 800 plus">
+  <rect width="1200" height="760" fill="#f7f3eb"/>
+  <text x="600" y="70" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="42" font-weight="600" text-anchor="middle">The two tiers</text>
+  <text x="600" y="110" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="22" font-style="italic" text-anchor="middle">capacity decides the tier; the tier decides the duty</text>
+
+  <!-- Standard tier card -->
+  <rect x="70" y="150" width="510" height="470" rx="14" fill="#fbf8f1" stroke="#ddd6c8" stroke-width="1.5"/>
+  <rect x="70" y="150" width="510" height="10" rx="5" fill="#a14545"/>
+  <text x="325" y="225" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="36" font-weight="600" text-anchor="middle">Standard tier</text>
+  <text x="325" y="265" fill="#5a544e" font-family="'DM Sans', system-ui, sans-serif" font-size="24" font-weight="500" text-anchor="middle">200 &#8211; 799 people</text>
+  <g font-family="'Source Serif 4', Georgia, serif" font-size="21" fill="#3d3936">
+    <text x="110" y="330">&#8226; Notify the regulator (SIA)</text>
+    <text x="110" y="372">&#8226; Public protection <tspan font-style="italic">procedures</tspan>:</text>
+    <text x="135" y="404">evacuation, invacuation, lockdown,</text>
+    <text x="135" y="436">communicating with people on site</text>
+    <text x="110" y="478">&#8226; Staff know the plan and the signs</text>
+    <text x="110" y="520">&#8226; No physical security required</text>
+  </g>
+  <rect x="110" y="552" width="430" height="2" fill="#ddd6c8"/>
+  <text x="325" y="595" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle">Max penalty: &#163;10,000</text>
+
+  <!-- Enhanced tier card -->
+  <rect x="620" y="150" width="510" height="470" rx="14" fill="#fbf8f1" stroke="#ddd6c8" stroke-width="1.5"/>
+  <rect x="620" y="150" width="510" height="10" rx="5" fill="#7c2828"/>
+  <text x="875" y="225" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="36" font-weight="600" text-anchor="middle">Enhanced tier</text>
+  <text x="875" y="265" fill="#5a544e" font-family="'DM Sans', system-ui, sans-serif" font-size="24" font-weight="500" text-anchor="middle">800+ people (incl. qualifying events)</text>
+  <g font-family="'Source Serif 4', Georgia, serif" font-size="21" fill="#3d3936">
+    <text x="660" y="330">&#8226; Everything in the standard tier, plus&#8230;</text>
+    <text x="660" y="372">&#8226; Protective <tspan font-style="italic">measures</tspan>: monitoring,</text>
+    <text x="685" y="404">physical security, information security</text>
+    <text x="660" y="446">&#8226; A documented assessment of how</text>
+    <text x="685" y="478">the requirements are met, sent to the SIA</text>
+    <text x="660" y="520">&#8226; A named senior individual accountable</text>
+  </g>
+  <rect x="660" y="552" width="430" height="2" fill="#ddd6c8"/>
+  <text x="875" y="595" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle">Max penalty: &#163;18m or 5% of revenue</text>
+
+  <text x="600" y="680" fill="#3d3936" font-family="'DM Sans', system-ui, sans-serif" font-size="21" text-anchor="middle" font-weight="500">Places of worship and schools stay in the standard tier whatever their size.</text>
+  <text x="600" y="722" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-style="italic" text-anchor="middle">Everything is qualified by &#8220;so far as reasonably practicable&#8221; &#8212; the duty scales with the venue, not against it.</text>
+</svg>
