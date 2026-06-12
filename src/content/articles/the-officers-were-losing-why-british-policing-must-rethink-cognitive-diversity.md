@@ -1,12 +1,27 @@
 ---
-section: "police-policy"
-title: "The Officers We’re Losing: Why British Policing Must Rethink Cognitive Diversity"
-description: "British policing faces a talent paradox rarely discussed at command level."
+title: 'The Officers We’re Losing: Why British Policing Must Rethink Cognitive Diversity'
+section: police-policy
+description: British policing faces a talent paradox rarely discussed at command level.
 pubDate: 2025-05-06
-heroImage: "/images/neurodiversity-hero.svg"
-thumbnail: "/images/neurodiversity-hero.svg"
-tags: ["adhd", "ai", "business", "crime", "evidence-based", "evidence-based-policing", "leadership", "mental-health", "neurodiversity", "police", "policing", "technology"]
+updatedDate: ''
+author: ''
+thumbnail: /images/pexels-tima-miroshnichenko-6010927.webp
+heroImage: /images/pexels-tara-winstead-8378733.webp
+tags:
+  - adhd
+  - ai
+  - business
+  - crime
+  - evidence-based
+  - evidence-based-policing
+  - leadership
+  - mental-health
+  - neurodiversity
+  - police
+  - policing
+  - technology
 ---
+
 ## A strategic challenge for senior leaders
 
 *British policing faces a talent paradox rarely discussed at command level.*
