@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Somerton Lab — RPFA, Routes &amp; Evidence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#F4F7F6;
+  --surface:#FFFFFF;
+  --ink:#14201E;
+  --muted:#5E6E6A;
+  --line:#E3EAE8;
+  --teal:#0E7A6C;
+  --teal-tint:#E2F1EE;
+  --coral:#E4572E;
+  --coral-tint:#FCEAE3;
+  --amber:#B45309;
+  --foot:#8A948F;
+  --sea:#E9F1EF;
+  --grat:#ECF1F0;
+  --display:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --r:12px;
+  --shadow:0 1px 2px rgba(20,32,30,.05), 0 8px 24px -16px rgba(20,32,30,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* ---------- app bar ---------- */
+.appbar{
+  position:sticky;top:0;z-index:60;background:rgba(244,247,246,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.appbar .inner{max-width:1180px;margin:0 auto;padding:14px 20px 0;display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.wordmark{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.02em}
+.wordmark .dot{color:var(--teal)}
+.appbar .sub{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:2px;margin-left:auto}
+.tabs button{
+  font-family:var(--display);font-weight:500;font-size:13.5px;letter-spacing:.01em;
+  background:transparent;border:none;color:var(--muted);padding:10px 14px 12px;cursor:pointer;
+  border-bottom:2px solid transparent;
+}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--teal)}
+@media (max-width:760px){ .appbar .sub{display:none} .tabs{margin-left:0;width:100%;overflow-x:auto} }
+
+main{max-width:1180px;margin:0 auto;padding:26px 20px 60px}
+.panel{display:none}
+.panel.active{display:block}
+
+h1.pagetitle{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.01em;margin-bottom:6px}
+p.pagelede{color:var(--muted);max-width:780px;margin-bottom:22px;font-size:15px}
+.badge{
+  display:inline-block;font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 9px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+}
+.badge.teal{background:var(--teal-tint);border-color:transparent;color:var(--teal)}
+.badge.coral{background:var(--coral-tint);border-color:transparent;color:var(--coral)}
+.badge.amber{background:#FBEEDC;border-color:transparent;color:var(--amber)}
+.badgerow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+
+/* ---------- evidence ---------- */
+.ladder{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:30px}
+.ladder .card{padding:18px}
+.ladder .lvl{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em}
+.ladder h3{font-family:var(--display);font-weight:600;font-size:16px;margin:6px 0 6px}
+.ladder p{font-size:13.5px;color:var(--muted)}
+.ladder .card{border-top:3px solid var(--line)}
+.ladder .card.l1{border-top-color:var(--teal)}
+.ladder .card.l2{border-top-color:#3E8E7E}
+.ladder .card.l3{border-top-color:var(--amber)}
+.ladder .card.l4{border-top-color:var(--coral)}
+
+.evgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.evgrid .card{padding:18px}
+.kicker{font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.kicker.caveat{color:var(--coral)}
+.kicker.rival{color:var(--amber)}
+.evgrid h3{font-family:var(--display);font-weight:600;font-size:16.5px;margin:6px 0 7px}
+.evgrid p{font-size:13.5px;color:var(--muted)}
+.evgrid p+p{margin-top:7px}
+.evgrid .mono{font-family:var(--mono);font-size:12.5px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:9px;color:var(--ink);overflow-x:auto;white-space:pre}
+
+/* ---------- map lab ---------- */
+.lab{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+@media (max-width:920px){ .lab{grid-template-columns:1fr} }
+.toolswitch{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:14px;width:max-content}
+.toolswitch button{
+  font-family:var(--display);font-weight:600;font-size:13px;border:none;background:transparent;color:var(--muted);
+  padding:8px 16px;border-radius:999px;cursor:pointer;
+}
+.toolswitch button[aria-selected="true"]{background:var(--ink);color:#fff}
+
+.side .card{padding:16px;margin-bottom:14px}
+.side h3{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.02em;margin-bottom:10px}
+.side .hint{font-size:12.5px;color:var(--muted)}
+
+.sliderrow{display:flex;align-items:center;gap:12px}
+input[type=range]{flex:1;accent-color:var(--coral);height:4px}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.kpi{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .k{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;font-family:var(--display);font-weight:600}
+.kpi .v{font-family:var(--mono);font-weight:600;font-size:18px;margin-top:2px}
+.kpi .v.coral{color:var(--coral)}
+.kpi .v.teal{color:var(--teal)}
+
+.lchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.lchip{
+  width:32px;height:32px;border-radius:9px;border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:600;font-size:14px;color:var(--muted);background:var(--surface);
+  position:relative;
+}
+.lchip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.lchip.bind::after{content:"";position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:var(--coral)}
+.lchip.on.bind::after{background:#fff}
+.legendnote{font-size:11.5px;color:var(--muted);margin-top:8px}
+.legendnote .b{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--coral);margin-right:4px}
+
+.btn{
+  font-family:var(--display);font-weight:600;font-size:13px;border-radius:9px;cursor:pointer;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;
+}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.primary:hover{background:#23332f}
+.btn.coral{background:var(--coral);border-color:var(--coral);color:#fff}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.toggle{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);margin-top:10px;cursor:pointer}
+.toggle input{accent-color:var(--teal)}
+
+/* exhibit (routes tool) */
+.codelines{display:flex;flex-direction:column;gap:6px}
+.codeline{display:flex;align-items:center;gap:8px}
+.codeline .lno{font-family:var(--display);font-weight:600;font-size:11px;color:var(--muted);width:24px;flex:none}
+.letters{display:flex;flex-wrap:wrap;gap:2px}
+.letters button{
+  font-family:var(--mono);font-weight:600;font-size:15px;width:24px;height:28px;border-radius:6px;
+  background:transparent;border:none;color:var(--muted);cursor:pointer;position:relative;padding:0;
+}
+.letters button:hover{background:var(--bg);color:var(--ink)}
+.letters button.visited{color:var(--ink)}
+.letters button.active{background:var(--coral);color:#fff}
+.letters button.disputed::after{content:"†";position:absolute;top:-3px;right:0;font-size:9px;color:var(--coral)}
+.codeline.struck .letters button{text-decoration:line-through;opacity:.45}
+.codeline .pick{
+  margin-left:auto;flex:none;font-family:var(--display);font-weight:600;font-size:11px;
+  border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:3px 10px;border-radius:999px;cursor:pointer;
+}
+.codeline .pick[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.exfoot{font-size:11.5px;color:var(--muted);border-top:1px solid var(--line);margin-top:12px;padding-top:9px}
+
+.readout{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.readout .kpi .v{font-size:13.5px;font-weight:500}
+.modechip{display:inline-block;font-family:var(--display);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;color:#fff;vertical-align:1px}
+.modechip.rail{background:var(--ink)} .modechip.tram{background:var(--teal)} .modechip.bus{background:var(--amber)} .modechip.foot{background:var(--foot)}
+
+/* map card */
+.mapcard{position:relative;overflow:hidden}
+.mapcard svg{display:block;width:100%;height:auto;touch-action:none}
+.maphead{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.maphead .t{font-family:var(--display);font-weight:600;font-size:14px}
+.maphead .s{font-size:12px;color:var(--muted)}
+.maplegend{display:flex;flex-wrap:wrap;gap:14px;padding:10px 16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+.maplegend .li{display:flex;align-items:center;gap:6px}
+.maplegend .sw{width:20px;height:0;border-top:3px solid var(--ink)}
+.maplegend .sw.tram{border-top-color:var(--teal)}
+.maplegend .sw.bus{border-top:3px dashed var(--amber)}
+.maplegend .sw.ctx{border-top:1.5px solid #C9D4D1}
+.maplegend .sw.lens{border-top:3px solid var(--coral)}
+.maplegend .sw.req{border-top:2px dashed var(--coral)}
+.stn-label{font-family:var(--display);font-weight:500;font-size:10px;fill:var(--muted)}
+.stn-label.major{fill:var(--ink);font-weight:600;font-size:11px}
+.anchor-label{font-family:var(--display);font-weight:600;font-size:10.5px;fill:var(--coral)}
+.grat-label{font-family:var(--mono);font-size:8.5px;fill:#A9B5B1}
+.sea-label{font-family:var(--display);font-weight:500;font-size:12px;fill:#9DB3AD;letter-spacing:.3em}
+.scale-label{font-family:var(--mono);font-size:9px;fill:var(--muted)}
+
+/* popover */
+.pop{
+  position:absolute;z-index:20;background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  box-shadow:var(--shadow);padding:10px 12px;max-width:230px;display:none;
+}
+.pop h4{font-family:var(--display);font-weight:600;font-size:13.5px}
+.pop .meta{font-size:11.5px;color:var(--muted);margin:3px 0 7px}
+.pop .src{font-family:var(--mono);font-size:11px;color:var(--teal)}
+.pop button{margin-top:7px}
+
+/* ---------- timeline ---------- */
+.tl{position:relative;margin:8px 0 0;padding-left:24px;max-width:800px}
+.tl::before{content:"";position:absolute;left:7px;top:4px;bottom:4px;width:2px;background:var(--line)}
+.tl-item{position:relative;padding:0 0 20px 16px}
+.tl-item::before{content:"";position:absolute;left:-22px;top:5px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--teal)}
+.tl-item.key::before{background:var(--coral);border-color:var(--coral)}
+.tl-item .date{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.tl-item .date b{color:var(--ink);font-weight:600}
+.tl-item h3{font-family:var(--display);font-weight:600;font-size:16px;margin:2px 0 3px}
+.tl-item p{font-size:13.5px;color:var(--muted);max-width:680px}
+.tl-item .src{font-family:var(--mono);font-size:11px;color:var(--teal);margin-top:4px}
+.tl-void{
+  position:relative;margin:0 0 20px -4px;padding:14px 16px;max-width:700px;border-radius:10px;
+  border:1px dashed var(--coral);
+  background:repeating-linear-gradient(-45deg, rgba(228,87,46,.05) 0 8px, transparent 8px 16px);
+}
+.tl-void .date{font-family:var(--mono);font-size:12px;color:var(--coral);font-weight:600}
+.tl-void h3{font-family:var(--display);font-weight:600;font-size:16px;margin:2px 0 3px}
+.tl-void p{font-size:13.5px;color:var(--muted)}
+.daystrip{margin-top:26px;overflow-x:auto}
+.daystrip svg{display:block;min-width:880px;width:100%;height:auto}
+.strip-label{font-family:var(--display);font-weight:600;font-size:10px;letter-spacing:.04em;fill:var(--ink)}
+.strip-label.soft{fill:var(--coral)}
+.strip-time{font-family:var(--mono);font-size:9px;fill:var(--muted)}
+
+/* ---------- sources ---------- */
+.srcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:14px}
+.srccard{padding:14px}
+.srccard .id{font-family:var(--mono);font-size:11px;color:var(--teal)}
+.srccard h4{font-family:var(--display);font-weight:600;font-size:14px;margin:4px 0 4px}
+.srccard .fn{font-family:var(--mono);font-size:10.5px;color:var(--muted);word-break:break-all}
+.srccard .row{display:flex;align-items:center;gap:8px;margin-top:10px}
+.pill{font-family:var(--display);font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px}
+.pill.ok{background:var(--teal-tint);color:var(--teal)}
+.pill.miss{background:#F1F4F3;color:var(--muted)}
+.pill.ver{background:var(--coral-tint);color:var(--coral)}
+.dropzone{
+  margin-top:18px;border:2px dashed var(--line);border-radius:var(--r);padding:28px 20px;text-align:center;color:var(--muted);
+  background:var(--surface);transition:border-color .15s, background .15s;
+}
+.dropzone.over{border-color:var(--teal);background:var(--teal-tint)}
+.dropzone .big{font-family:var(--display);font-weight:600;font-size:15px;color:var(--ink)}
+.dropzone input{display:none}
+.storagenote{margin-top:10px;font-size:12px;color:var(--coral);display:none}
+.datatools{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.addloc{margin-top:18px;padding:16px}
+.addloc h3{font-family:var(--display);font-weight:600;font-size:14px;margin-bottom:10px}
+.addloc .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.addloc label{font-size:11.5px;color:var(--muted);display:block;margin-bottom:3px;font-family:var(--display);font-weight:600}
+.addloc input,.addloc select{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:13px;background:var(--surface);color:var(--ink)}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:100;background:rgba(20,32,30,.55);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.modal .box{background:var(--surface);border-radius:var(--r);max-width:min(960px,94vw);max-height:90vh;overflow:auto;box-shadow:var(--shadow)}
+.modal .head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.modal .head h4{font-family:var(--display);font-weight:600;font-size:15px}
+.modal .head .id{font-family:var(--mono);font-size:11px;color:var(--teal)}
+.modal .head button{margin-left:auto}
+.modal img{display:block;max-width:100%;height:auto}
+.modal .empty{padding:40px;color:var(--muted);text-align:center;font-size:14px}
+</style>
+</head>
+<body>
+
+<!-- Work-in-progress notice: the lab is being built in the open. -->
+<div style="background:#FBEEDC;border-bottom:1px solid #E3EAE8;padding:9px 20px;font-family:'Space Grotesk',system-ui,sans-serif;font-size:13px;color:#B45309;text-align:center">
+  <strong>Work in progress</strong> — this lab is being built in the open. Data layers are incomplete and everything here is provisional.
+  <a href="/other/cracking-the-somerton-man-code" style="color:#0E7A6C;font-weight:600">Read the essay it accompanies →</a>
+</div>
+
+<div class="appbar">
+  <div class="inner">
+    <div>
+      <div class="wordmark">SOMERTON<span class="dot">·</span>LAB</div>
+      <div class="sub">RPFA, route itineraries &amp; evidence — companion to thinkingaboutpolicing.org</div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="false" data-tab="evidence">Evidence</button>
+      <button role="tab" aria-selected="true"  data-tab="maplab">Map Lab</button>
+      <button role="tab" aria-selected="false" data-tab="timeline">Timeline</button>
+      <button role="tab" aria-selected="false" data-tab="sources">Sources &amp; Data</button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ================= EVIDENCE ================= -->
+<section class="panel" id="panel-evidence">
+  <h1 class="pagetitle">The evidence, layer by layer</h1>
+  <p class="pagelede">One established fact sits at the bottom; everything above it is held at a stated confidence. The cards below separate what is documented from what is finding, caveat, or rival reading.</p>
+
+  <div class="ladder">
+    <div class="card l1"><div class="lvl">LAYER 1 · ESTABLISHED</div><h3>The Somerton Man is Carl Webb</h3><p>2022 DNA identification via rootless-hair genome data and a 4,000-person family tree (Abbott &amp; Fitzpatrick). Formal coronial confirmation outstanding.</p></div>
+    <div class="card l2"><div class="lvl">LAYER 2 · INFERENCE</div><h3>Webb was searching for a woman</h3><p>The documented thread points to Glenelg: her number on the book, his death 400 m from her door. The rival Dorothy-in-Bute claim has no 1948 record behind it and a 1949 Melbourne electoral roll against it.</p></div>
+    <div class="card l3"><div class="lvl">LAYER 3 · SPECULATION</div><h3>A paternity belief drove the search</h3><p>DNA excludes Webb as Robin Thomson's father. The motive survives only as something Webb may have believed — never as fact.</p></div>
+    <div class="card l4"><div class="lvl">LAYER 4 · PENDING FALSIFICATION</div><h3>The code is a travel record</h3><p>Consistent with the evidence, modestly supported by frequency analysis, untested by sequence-and-connectivity. The Map Lab shows both the support and the warning.</p></div>
+  </div>
+
+  <div class="evgrid">
+    <div class="card"><div class="kicker">Documented</div><h3>The body and the scene</h3><p>Found 6:30 am, 1 December 1948, against the seawall at Somerton, opposite the Crippled Children's Home, legs extended, half-smoked cigarette on the collar. Seen motionless the previous evening.</p><p>Autopsy: acute gastric haemorrhage, spleen about three times normal size, last meal a pasty 3–4 hours before death. Poison suspected; none identified.</p></div>
+    <div class="card"><div class="kicker">Documented</div><h3>The pockets</h3><p>An unused second-class rail ticket for the 10:50 am to Henley Beach. A used bus ticket toward Glenelg from North Terrace. Juicy Fruit, an American comb, Army Club packet holding Kensitas cigarettes. No wallet, no papers; clothing labels removed.</p></div>
+    <div class="card"><div class="kicker">Documented</div><h3>The suitcase</h3><p>Checked at Adelaide Railway Station 11:00–11:15 am, 30 November; recovered 14 January 1949. Tied to the body by orange waxed thread matching a trouser repair. Garments marked T. Keane — the name of Webb's brother-in-law.</p></div>
+    <div class="card"><div class="kicker">Documented</div><h3>The slip and the book</h3><p>"Tamám Shud" — ended — rolled in a fob pocket, torn from a Rubáiyát that surfaced from a car parked near Glenelg. On the inside back cover: the pencilled letters, a telephone number, and by some accounts a second number never identified.</p></div>
+    <div class="card"><div class="kicker">Documented</div><h3>The number and the address</h3><p>X3239 reached Jessica Thomson at 90A Moseley Street, Glenelg — about 400 m from the body. The number was semi-public: Prosper Thomson's car classifieds printed it from July 1947, the one paper-trailed route by which Webb could have held it.</p><p>52 Moseley Street, given in some secondary sources, is wrong; 90A is the 1948 electoral-roll address.</p></div>
+    <div class="card"><div class="kicker caveat">Caveat</div><h3>The code is a copy of a copy</h3><p>Faint pencil indentations, photographed and reportedly over-written. First letters of lines 1, 3 and 4 are disputed between W and M. Any reading that hangs on a single letter hangs on a seventy-five-year-old rubbing.</p><div class="mono">WRGOABABD
+MLIAOI        (struck out)
+WTBIMPANETP
+MLIABOAIAQC
+ITTMTSAMSTGAB</div></div>
+    <div class="card"><div class="kicker">Finding</div><h3>Initials, not cipher</h3><p>1949 naval cryptographers: letter frequencies sit closer to the initial letters of English words than to any cipher table. University of Adelaide work later eliminated 20+ cipher types and reached the same conclusion. The question becomes: initials of what?</p></div>
+    <div class="card"><div class="kicker caveat">Caveat</div><h3>The test that cannot fail</h3><p>All 17 distinct letters have at least one Adelaide-reachable candidate. With 575 verified stations plus tram and bus stops, set-membership matching always succeeds — for the code, or for any random string. RPFA exists to replace that broken test with a constrained one.</p></div>
+    <div class="card"><div class="kicker rival">Rival</div><h3>Horse-betting initials</h3><p>Webb bet on horses; Abbott favours a betting-list reading; and it benefits from the same initialism finding. Co-equal with the itinerary reading on current evidence. The itinerary's edge: the coastal G–A–B ending, and a searcher's obvious reason to keep a record.</p></div>
+    <div class="card"><div class="kicker rival">Rival</div><h3>Espionage and suicide</h3><p>The spy reading is badly weakened by the Webb identification: a Melbourne instrument maker with a failed marriage and no intelligence trace. The suicide reading is strong and compatible — the letters concern how he spent his last days, not how they ended.</p></div>
+  </div>
+</section>
+
+<!-- ================= MAP LAB ================= -->
+<section class="panel active" id="panel-maplab">
+  <h1 class="pagetitle">Map Lab</h1>
+  <p class="pagelede">Two instruments on one 1948 map. The <b>RPFA lens</b> tests where a compact search base could sit: drag the circle, set its radius, and watch which code letters it can satisfy from plate-verified locations. The <b>route tracer</b> walks the five lines of the published itinerary reading.</p>
+
+  <div class="toolswitch" role="tablist" aria-label="Map tool">
+    <button role="tab" aria-selected="true" data-tool="rpfa">RPFA lens</button>
+    <button role="tab" aria-selected="false" data-tool="routes">Route tracer</button>
+  </div>
+
+  <div class="lab">
+    <div class="side">
+
+      <!-- RPFA side -->
+      <div id="side-rpfa">
+        <div class="card">
+          <h3>Lens radius</h3>
+          <div class="sliderrow">
+            <input type="range" id="radius" min="2" max="30" step="0.5" value="8" aria-label="Lens radius in kilometres">
+            <span class="kpi" style="padding:6px 10px"><span class="v coral" id="radVal" style="font-size:15px">8.0 km</span></span>
+          </div>
+          <p class="hint" style="margin-top:8px">Drag the coral circle on the map. The dashed ring shows the smallest radius that would cover all 17 letters from the current centre.</p>
+          <div class="kpis">
+            <div class="kpi"><div class="k">Letters covered</div><div class="v teal" id="covVal">—</div></div>
+            <div class="kpi"><div class="k">Required here</div><div class="v coral" id="reqVal">—</div></div>
+          </div>
+          <div class="btnrow">
+            <button class="btn primary" id="btnTight">Find tightest lens</button>
+          </div>
+          <label class="toggle"><input type="checkbox" id="zoneToggle"> Show qualifying zone at this radius</label>
+          <label class="toggle"><input type="checkbox" id="labelToggle"> Show all station names</label>
+        </div>
+        <div class="card">
+          <h3>Letter coverage</h3>
+          <div class="lchips" id="lchips"></div>
+          <div class="legendnote"><span class="b"></span>binding letter — a single candidate location (Q Queenstown, I Islington) or a peripheral pair (L). These force the lens north-west and set the floor on its size.</div>
+        </div>
+        <div class="card">
+          <h3>What this shows — and what it cannot</h3>
+          <p class="hint">At small radii almost nowhere qualifies; full coverage opens up only in a narrow inner north-western band, with Q the binding constraint. That bounds where a compact search base could sit. It does not prove the letters are places: that requires the sequence-and-connectivity test, which this lens deliberately does not perform.</p>
+        </div>
+      </div>
+
+      <!-- Routes side -->
+      <div id="side-routes" style="display:none">
+        <div class="card">
+          <h3>The five lines</h3>
+          <div class="codelines" id="codelines"></div>
+          <div class="exfoot">† W/M disputed on the police photograph. The route interpretation requires the M-reading (M = Marino). Torrens/Thebarton and Darlington follow the author's published tables and are not plate-verified.</div>
+        </div>
+        <div class="card">
+          <h3>Playback</h3>
+          <div class="btnrow" style="margin-top:0">
+            <button class="btn primary" id="btnPlay">Play</button>
+            <button class="btn" id="btnBack" aria-label="Step back">&#9664;</button>
+            <button class="btn" id="btnStep" aria-label="Step forward">&#9654;</button>
+            <button class="btn" id="btnReset">Reset</button>
+            <select id="speed" class="btn" aria-label="Speed">
+              <option value="220">Slow</option><option value="120" selected>Normal</option><option value="55">Fast</option>
+            </select>
+          </div>
+          <div class="readout">
+            <div class="kpi"><div class="k">Now at</div><div class="v" id="roNow">—</div></div>
+            <div class="kpi"><div class="k">Next</div><div class="v" id="roNext">—</div></div>
+            <div class="kpi"><div class="k">Leg</div><div class="v" id="roLeg">—</div></div>
+            <div class="kpi"><div class="k">Cumulative</div><div class="v" id="roCum">—</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card mapcard">
+      <div class="maphead">
+        <div>
+          <div class="t">Adelaide &amp; suburbs, 1948</div>
+          <div class="s">Schematic from the 1938 Railways Commissioner's map (PP No. 47) · click any station for its source plate</div>
+        </div>
+      </div>
+      <svg id="map" viewBox="0 0 640 1080" role="img" aria-label="Schematic map of Adelaide's 1948 transport network with RPFA lens and route overlays"></svg>
+      <div class="maplegend">
+        <span class="li"><span class="sw ctx"></span>1948 rail (context)</span>
+        <span class="li"><span class="sw tram" style="border-top-style:dashed"></span>Glenelg tram</span>
+        <span class="li"><span class="sw bus"></span>Bus (date unverified)</span>
+        <span class="li"><span class="sw lens"></span>RPFA lens</span>
+        <span class="li"><span class="sw req"></span>Required radius</span>
+        <span class="li"><span class="sw"></span>Route leg</span>
+      </div>
+      <div class="pop" id="pop"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TIMELINE ================= -->
+<section class="panel" id="panel-timeline">
+  <h1 class="pagetitle">The case in time</h1>
+  <p class="pagelede">Documented events with their record types. The hatched block is the nineteen-month documentary void; the itinerary hypothesis treats the code as potentially recording movements inside it.</p>
+  <div class="tl" id="tlMacro"></div>
+
+  <h1 class="pagetitle" style="font-size:22px;margin-top:30px">The final day, hour by hour</h1>
+  <p class="pagelede">Solid flags are documented; hatched bands are gaps or inferences.</p>
+  <div class="card daystrip" style="padding:10px"><svg id="strip" viewBox="0 0 1000 190" role="img" aria-label="Hour-by-hour timeline of 30 November to 1 December 1948"></svg></div>
+</section>
+
+<!-- ================= SOURCES ================= -->
+<section class="panel" id="panel-sources">
+  <h1 class="pagetitle">Sources &amp; data</h1>
+  <p class="pagelede">The primary cartographic source is the 1938 South Australian Railways Commissioner's map, PP No. 47 (Schedule of Railways, 30 June 1938, signed R. H. Chapman, Chief Engineer for Railways). Every gazetteer location cites a plate below. Drag scans in to attach them; they persist in this browser and each station's plate becomes viewable in place.</p>
+
+  <div class="dropzone" id="dropzone">
+    <div class="big">Drop map scans here, or click to browse</div>
+    <div>Images are matched to the registry by filename; unmatched files are added as unassigned scans for labelling. New plates extend the registry — the gazetteer and registry export as JSON for the long term.</div>
+    <input type="file" id="fileInput" accept="image/*" multiple>
+    <div class="storagenote" id="storageNote">Persistent storage is unavailable in this preview — attachments will last for this session only. Open the file in a normal browser tab for full persistence.</div>
+  </div>
+
+  <div class="datatools">
+    <button class="btn" id="btnExport">Export gazetteer + registry (JSON)</button>
+    <button class="btn" id="btnImport">Import JSON</button>
+    <input type="file" id="importInput" accept="application/json" style="display:none">
+    <span class="badge" id="gazCount"></span>
+  </div>
+
+  <div class="card addloc">
+    <h3>Add a location (cites a plate, exports with the gazetteer)</h3>
+    <div class="grid">
+      <div><label for="alName">Name</label><input id="alName" placeholder="e.g. WINGFIELD"></div>
+      <div><label for="alLat">Latitude</label><input id="alLat" placeholder="-34.8500"></div>
+      <div><label for="alLon">Longitude</label><input id="alLon" placeholder="138.5400"></div>
+      <div><label for="alMode">Mode</label><select id="alMode"><option>rail</option><option>tram</option><option>bus</option><option>foot</option></select></div>
+      <div><label for="alSrc">Source plate</label><select id="alSrc"></select></div>
+      <div style="display:flex;align-items:flex-end"><button class="btn primary" id="btnAddLoc" style="width:100%">Add to gazetteer</button></div>
+    </div>
+  </div>
+
+  <div class="srcgrid" id="srcgrid"></div>
+</section>
+
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Source plate viewer">
+  <div class="box">
+    <div class="head"><span class="id" id="modalId"></span><h4 id="modalTitle"></h4><button class="btn" id="modalClose">Close</button></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ===================================================================
+   SOMERTON LAB
+   Data model: SOURCES (map plates) + GAZ (era gazetteer, plate-cited)
+   + LINES (author's published route reading). RPFA operates on GAZ.
+   =================================================================== */
+
+/* ---------- source registry ---------- */
+const SOURCES = [
+  {id:"PP47-EN-S", title:"Enlargement Showing Railways Near Adelaide — southern sheet", file:"PXL_20250913_090419827.jpg", verified:true,  note:"Brighton–Marino coastal line, Reynella–Willunga, hills lines"},
+  {id:"PP47-EN-C", title:"Adelaide enlargement — central sheet", file:"PXL_20250913_090415164.jpg", verified:true,  note:"City, Henley Beach line, coastal line, Mitcham line"},
+  {id:"PP47-MET",  title:"Metropolitan inset — Port Adelaide &amp; Outer Harbour", file:"PXL_20250913_090410593.jpg", verified:true,  note:"Port lines, Outer Harbour, northern lines to Salisbury"},
+  {id:"PP47-TTL",  title:"Title plate — Lines of Railways in South Australia, PP No. 47", file:"PXL_20250913_090316927.jpg", verified:false, note:"Signed R. H. Chapman; scale and reference"},
+  {id:"PP47-SCH",  title:"Schedule of Railways, 30 June 1938", file:"PXL_20250913_090426569.jpg", verified:false, note:"Gauge schedules and mileages"},
+  {id:"PP47-S01", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090247806.jpg", verified:false, note:""},
+  {id:"PP47-S02", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090241639.jpg", verified:false, note:""},
+  {id:"PP47-S03", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090254215.jpg", verified:false, note:""},
+  {id:"PP47-S04", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090344353.jpg", verified:false, note:""},
+  {id:"PP47-S05", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090304479.jpg", verified:false, note:""},
+  {id:"PP47-S06", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090431519.jpg", verified:false, note:""},
+  {id:"PP47-S07", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090310881.jpg", verified:false, note:""},
+  {id:"PP47-S08", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090404586.jpg", verified:false, note:""},
+  {id:"PP47-S09", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090440202.jpg", verified:false, note:""},
+  {id:"PP47-S10", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090227294.jpg", verified:false, note:""},
+  {id:"PP47-S11", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090235356.jpg", verified:false, note:""},
+  {id:"PP47-S12", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090435586.jpg", verified:false, note:""},
+  {id:"PP47-S13", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090331044.jpg", verified:false, note:""},
+  {id:"PP47-S14", title:"PP No. 47 sheet — to confirm on attach", file:"PXL_20250913_090351039.jpg", verified:false, note:""},
+  {id:"AUS-RWY",  title:"Principal Railway Systems of Australia (book plate)", file:"PXL_20250913_094411475.jpg", verified:false, note:"Continental overview; context only"},
+  {id:"TRAM", title:"MTT Glenelg tramway (1929 conversion)", file:null, verified:false, note:"Tram terminus; not on the rail plates"},
+  {id:"BUS",  title:"Queenstown motor bus access", file:null, verified:false, note:"Sept 1941 service date UNVERIFIED against a primary source"},
+  {id:"TBL",  title:"Author's published route tables", file:null, verified:false, note:"Interpretive entries, not plate-verified"}
+];
+
+/* ---------- gazetteer (era locations, plate-cited) ---------- */
+let GAZ = [
+  {n:"ADELAIDE", lat:-34.9211, lon:138.5960, m:"rail", src:"PP47-MET", major:true, lx:8, ly:-6},
+  {n:"NORTH TERRACE", lat:-34.9205, lon:138.5905, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"MILE END", lat:-34.9230, lon:138.5750, m:"rail", src:"PP47-EN-C"},
+  {n:"NORTH ADELAIDE", lat:-34.9090, lon:138.5930, m:"rail", src:"PP47-MET", lx:8, ly:-4},
+  {n:"OVINGHAM", lat:-34.9010, lon:138.5870, m:"rail", src:"PP47-MET"},
+  {n:"BOWDEN", lat:-34.9030, lon:138.5760, m:"rail", src:"PP47-EN-C", lx:-52, ly:-5},
+  {n:"CROYDON", lat:-34.8960, lon:138.5650, m:"rail", src:"PP47-EN-C", lx:-58, ly:-4},
+  {n:"WEST CROYDON", lat:-34.8930, lon:138.5560, m:"rail", src:"PP47-EN-C", lx:-86, ly:4},
+  {n:"KILKENNY", lat:-34.8830, lon:138.5500, m:"rail", src:"PP47-EN-C", lx:-60, ly:-4},
+  {n:"WOODVILLE", lat:-34.8800, lon:138.5400, m:"rail", src:"PP47-EN-C", lx:8, ly:10},
+  {n:"WOODVILLE PARK", lat:-34.8770, lon:138.5460, m:"rail", src:"PP47-MET", hide:true},
+  {n:"CHELTENHAM", lat:-34.8670, lon:138.5260, m:"rail", src:"PP47-MET", lx:8, ly:10},
+  {n:"ALBERTON", lat:-34.8580, lon:138.5200, m:"rail", src:"PP47-MET", lx:8, ly:8},
+  {n:"ROSEWATER", lat:-34.8550, lon:138.5300, m:"rail", src:"PP47-MET", lx:8, ly:-2},
+  {n:"WINGFIELD", lat:-34.8520, lon:138.5450, m:"rail", src:"PP47-MET"},
+  {n:"PORT ADELAIDE", lat:-34.8466, lon:138.5036, m:"rail", src:"PP47-MET", major:true, lx:9, ly:-6},
+  {n:"GLANVILLE", lat:-34.8430, lon:138.4950, m:"rail", src:"PP47-MET", lx:-62, ly:-3},
+  {n:"ETHELTON", lat:-34.8470, lon:138.4900, m:"rail", src:"PP47-MET", hide:true},
+  {n:"EXETER", lat:-34.8420, lon:138.4880, m:"rail", src:"PP47-MET", lx:-46, ly:-3},
+  {n:"SEMAPHORE", lat:-34.8390, lon:138.4830, m:"rail", src:"PP47-MET", lx:-70, ly:-5},
+  {n:"PETERHEAD", lat:-34.8370, lon:138.4920, m:"rail", src:"PP47-MET", hide:true},
+  {n:"LARGS", lat:-34.8253, lon:138.4886, m:"rail", src:"PP47-MET", lx:-44, ly:-4},
+  {n:"TAPEROO", lat:-34.8120, lon:138.4940, m:"rail", src:"PP47-MET", lx:8, ly:3},
+  {n:"DRAPER", lat:-34.8060, lon:138.4950, m:"rail", src:"PP47-MET", hide:true},
+  {n:"MIDLUNGA", lat:-34.7950, lon:138.4960, m:"rail", src:"PP47-MET", hide:true},
+  {n:"OSBORNE", lat:-34.7890, lon:138.4970, m:"rail", src:"PP47-MET", lx:8, ly:3},
+  {n:"OUTER HARBOUR", lat:-34.7760, lon:138.4870, m:"rail", src:"PP47-MET", lx:8, ly:-4},
+  {n:"QUEENSTOWN", lat:-34.8620, lon:138.5086, m:"bus", src:"BUS", lx:-82, ly:4, flag:"bus date unverified"},
+  {n:"ISLINGTON", lat:-34.8696, lon:138.5856, m:"rail", src:"PP47-MET", lx:8, ly:4},
+  {n:"DUDLEY PARK", lat:-34.8850, lon:138.5800, m:"rail", src:"PP47-MET", hide:true},
+  {n:"KILBURN", lat:-34.8650, lon:138.5830, m:"rail", src:"PP47-MET", hide:true},
+  {n:"DRY CREEK", lat:-34.8380, lon:138.5900, m:"rail", src:"PP47-MET", lx:8, ly:-3},
+  {n:"CAVAN", lat:-34.8330, lon:138.5960, m:"rail", src:"PP47-MET", hide:true},
+  {n:"ABATTOIRS", lat:-34.8450, lon:138.6100, m:"rail", src:"PP47-MET", hide:true},
+  {n:"NORTHFIELD", lat:-34.8520, lon:138.6250, m:"rail", src:"PP47-MET", lx:-2, ly:-8},
+  {n:"STOCKADE", lat:-34.8560, lon:138.6350, m:"rail", src:"PP47-MET", hide:true},
+  {n:"SALISBURY", lat:-34.7600, lon:138.6420, m:"rail", src:"PP47-MET", offMap:true},
+  {n:"HENLEY BEACH", lat:-34.9200, lon:138.4940, m:"rail", src:"PP47-EN-C", lx:-92, ly:-4},
+  {n:"MARLBOROUGH ST", lat:-34.9150, lon:138.4905, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"KIRKCALDY", lat:-34.9080, lon:138.4900, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"GRANGE", lat:-34.9020, lon:138.4900, m:"rail", src:"PP47-EN-C", lx:-52, ly:-4},
+  {n:"GOLF LINKS", lat:-34.8980, lon:138.5010, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"SEATON PARK", lat:-34.8936, lon:138.5056, m:"rail", src:"PP47-EN-C", lx:8, ly:9},
+  {n:"ALBERT PARK", lat:-34.8870, lon:138.5230, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"KESWICK", lat:-34.9450, lon:138.5800, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"GOODWOOD", lat:-34.9510, lon:138.5830, m:"rail", src:"PP47-EN-C", lx:8, ly:4},
+  {n:"MILLSWOOD", lat:-34.9560, lon:138.5790, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"CLARENCE PARK", lat:-34.9620, lon:138.5760, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"EMERSON", lat:-34.9650, lon:138.5740, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"EDWARDSTOWN", lat:-34.9800, lon:138.5700, m:"rail", src:"PP47-EN-C", lx:8, ly:4},
+  {n:"WOODLANDS PARK", lat:-34.9860, lon:138.5660, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"ASCOT PARK", lat:-34.9890, lon:138.5560, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"UNLEY PARK", lat:-34.9640, lon:138.5980, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"HAWTHORN", lat:-34.9680, lon:138.6010, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"MITCHAM", lat:-34.9720, lon:138.6060, m:"rail", src:"PP47-EN-C", lx:8, ly:4},
+  {n:"TORRENS PARK", lat:-34.9760, lon:138.6100, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"CLAPHAM", lat:-34.9800, lon:138.6120, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"SLEEP'S HILL", lat:-34.9900, lon:138.6140, m:"rail", src:"PP47-EN-S", hide:true},
+  {n:"EDEN", lat:-35.0140, lon:138.6090, m:"rail", src:"PP47-EN-S", hide:true},
+  {n:"BLACKWOOD", lat:-35.0190, lon:138.6160, m:"rail", src:"PP47-EN-S", lx:8, ly:4},
+  {n:"BELAIR", lat:-35.0010, lon:138.6210, m:"rail", src:"PP47-EN-S", lx:8, ly:4},
+  {n:"LONG GULLY", lat:-35.0080, lon:138.6480, m:"rail", src:"PP47-EN-S", lx:8, ly:4},
+  {n:"OAKLANDS", lat:-35.0006, lon:138.5446, m:"rail", src:"PP47-EN-C", lx:8, ly:4},
+  {n:"HOVE", lat:-35.0080, lon:138.5320, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"BRIGHTON", lat:-35.0175, lon:138.5256, m:"rail", src:"PP47-EN-C", major:true, lx:9, ly:4},
+  {n:"SOUTH BRIGHTON", lat:-35.0260, lon:138.5230, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"SEACLIFF", lat:-35.0330, lon:138.5180, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"MARINO", lat:-35.0446, lon:138.5096, m:"rail", src:"PP47-EN-C", lx:9, ly:4},
+  {n:"MARINO ROCKS", lat:-35.0490, lon:138.5070, m:"rail", src:"PP47-EN-C", hide:true},
+  {n:"HALLETT'S COVE", lat:-35.0760, lon:138.4990, m:"rail", src:"PP47-EN-S", lx:9, ly:4},
+  {n:"REYNELLA", lat:-35.0960, lon:138.5360, m:"rail", src:"PP47-EN-S", lx:9, ly:4},
+  {n:"MORPHETT VALE", lat:-35.1180, lon:138.5230, m:"rail", src:"PP47-EN-S", offMap:true},
+  {n:"GLENELG", lat:-34.9803, lon:138.5146, m:"tram", src:"TRAM", major:true, lx:-62, ly:-6},
+  {n:"DARLINGTON", lat:-35.0300, lon:138.5560, m:"rail", src:"TBL", lx:8, ly:4, flag:"author's table; not plate-verified"}
+];
+
+/* ---------- anchors ---------- */
+const ANCHORS = [
+  {id:"MOSELEY", n:"90A Moseley St", lat:-34.9856, lon:138.5152, kind:"home"},
+  {id:"BODY", n:"Body · 1 Dec", lat:-34.9893, lon:138.5126, kind:"body"},
+  {id:"CASE", n:"Suitcase · 30 Nov", lat:-34.9211, lon:138.5960, kind:"case"}
+];
+
+/* ---------- the code & routes (author's published reading) ---------- */
+const CODE_SET = ["A","B","C","D","E","G","I","L","M","N","O","P","Q","R","S","T","W"];
+const RPTS = { /* route points; some interpretive (flagged in UI) */
+  MARINO:[-35.0446,138.5096], REYNELLA:[-35.0960,138.5360], GLENELG:[-34.9803,138.5146],
+  OAKLANDS:[-35.0006,138.5446], ADELAIDE:[-34.9211,138.5960], BRIGHTON:[-35.0175,138.5256],
+  DARLINGTON:[-35.0300,138.5560], LARGS:[-34.8253,138.4886], ISLINGTON:[-34.8696,138.5856],
+  PORTADEL:[-34.8466,138.5036], NORTHFIELD:[-34.8520,138.6250], ENFIELD:[-34.8560,138.6040],
+  TORRENS:[-34.9156,138.5666], SEATON:[-34.8936,138.5056], CHELTENHAM:[-34.8670,138.5260],
+  QUEENSTOWN:[-34.8620,138.5086]
+};
+const RNAMES = {MARINO:"Marino",REYNELLA:"Reynella",GLENELG:"Glenelg",OAKLANDS:"Oaklands",ADELAIDE:"Adelaide",BRIGHTON:"Brighton",DARLINGTON:"Darlington",LARGS:"Largs Bay",ISLINGTON:"Islington",PORTADEL:"Port Adelaide",NORTHFIELD:"Northfield",ENFIELD:"Enfield",TORRENS:"Torrens / Thebarton",SEATON:"Seaton",CHELTENHAM:"Cheltenham",QUEENSTOWN:"Queenstown"};
+const LINES = [
+  {id:1,label:"Line 1",code:"MRGOABABD",struck:false,disputed:[0],
+   st:["MARINO","REYNELLA","GLENELG","OAKLANDS","ADELAIDE","BRIGHTON","ADELAIDE","BRIGHTON","DARLINGTON"],
+   km:[8.5,12,11,8,10,10,10,8], modes:["rail","rail","tram","rail","rail","rail","rail","rail"]},
+  {id:2,label:"Line 2",code:"MLIAOI",struck:true,disputed:[],
+   st:["MARINO","LARGS","ISLINGTON","ADELAIDE","OAKLANDS","ISLINGTON"],
+   km:[15,8,4,8,10], modes:["rail","rail","rail","rail","rail"]},
+  {id:3,label:"Line 3",code:"MTBIMPANETP",struck:false,disputed:[0],
+   st:["MARINO","TORRENS","BRIGHTON","ISLINGTON","MARINO","PORTADEL","ADELAIDE","NORTHFIELD","ENFIELD","TORRENS","PORTADEL"],
+   km:[9,8,12,15,18,12,8,4,8,10], modes:["rail","rail","rail","rail","rail","rail","rail","rail","rail","rail"]},
+  {id:4,label:"Line 4",code:"MLIABOAIAQC",struck:false,disputed:[0],
+   st:["MARINO","LARGS","ISLINGTON","ADELAIDE","BRIGHTON","OAKLANDS","ADELAIDE","ISLINGTON","ADELAIDE","QUEENSTOWN","CHELTENHAM"],
+   km:[15,8,4,10,12,8,6,4,15,18], modes:["rail","rail","rail","rail","rail","rail","rail","rail","bus","rail"]},
+  {id:5,label:"Line 5",code:"ITTMTSAMSTGAB",struck:false,disputed:[],
+   st:["ISLINGTON","TORRENS","TORRENS","MARINO","TORRENS","SEATON","ADELAIDE","MARINO","SEATON","TORRENS","GLENELG","ADELAIDE","BRIGHTON"],
+   km:[5,5,12,10,8,10,12,15,6,8,11,10], modes:["rail","rail","rail","rail","rail","rail","rail","rail","rail","tram","tram","rail"]}
+];
+
+/* ===================== geometry ===================== */
+const B = {latMax:-34.770, latMin:-35.105, lonMin:138.445, lonMax:138.665};
+const W = 640, H = 1080;
+const px = (lon,lat)=>[ (lon-B.lonMin)/(B.lonMax-B.lonMin)*W, (B.latMax-lat)/(B.latMax-B.latMin)*H ];
+const inv = (x,y)=>[ B.lonMin + x/W*(B.lonMax-B.lonMin), B.latMax - y/H*(B.latMax-B.latMin) ];
+const KMLAT = 110.57, KMLON = 111.32*Math.cos(34.94*Math.PI/180);
+const distKm = (a,b)=>Math.hypot((a.lat-b.lat)*KMLAT,(a.lon-b.lon)*KMLON);
+const kmToPx = km => km/( (B.lonMax-B.lonMin)*KMLON ) * W; /* horizontal scale */
+
+const COAST = [
+  [138.470,-34.770],[138.466,-34.790],[138.470,-34.815],[138.476,-34.840],
+  [138.482,-34.866],[138.487,-34.892],[138.491,-34.915],[138.497,-34.942],
+  [138.505,-34.970],[138.511,-34.992],[138.517,-35.010],[138.523,-35.023],
+  [138.516,-35.037],[138.507,-35.049],[138.499,-35.066],[138.494,-35.090],[138.492,-35.105]
+];
+const NETWORK = [
+  {m:"rail",p:[[138.596,-34.9211],[138.583,-34.943],[138.572,-34.978],[138.5446,-35.0006],[138.532,-35.008],[138.5256,-35.0175],[138.518,-35.033],[138.5096,-35.0446],[138.507,-35.049],[138.499,-35.076],[138.536,-35.096]]},
+  {m:"rail",p:[[138.596,-34.9211],[138.587,-34.935],[138.583,-34.951],[138.598,-34.964],[138.606,-34.972],[138.610,-34.976],[138.612,-34.980],[138.616,-34.990],[138.621,-35.001],[138.616,-35.019]]},
+  {m:"rail",p:[[138.596,-34.9211],[138.585,-34.905],[138.576,-34.903],[138.565,-34.896],[138.556,-34.893],[138.550,-34.883],[138.540,-34.880],[138.5260,-34.8670],[138.520,-34.858],[138.5036,-34.8466],[138.495,-34.843],[138.483,-34.839],[138.4886,-34.8253],[138.494,-34.812],[138.495,-34.795],[138.497,-34.789],[138.487,-34.776]]},
+  {m:"rail",p:[[138.596,-34.9211],[138.593,-34.909],[138.587,-34.901],[138.5856,-34.8696],[138.583,-34.865],[138.590,-34.838],[138.596,-34.833],[138.642,-34.760]]},
+  {m:"rail",p:[[138.590,-34.838],[138.596,-34.833],[138.610,-34.845],[138.625,-34.852],[138.635,-34.856]]},
+  {m:"rail",p:[[138.596,-34.9211],[138.575,-34.923],[138.5750,-34.9230],[138.546,-34.920],[138.5056,-34.8936],[138.5010,-34.8980],[138.4900,-34.9020],[138.4905,-34.9150],[138.4940,-34.9200]]},
+  {m:"rail",p:[[138.5036,-34.8466],[138.4950,-34.8430],[138.4900,-34.8470]]},
+  {m:"tram",p:[[138.600,-34.928],[138.578,-34.944],[138.548,-34.962],[138.5146,-34.9803]]},
+  {m:"bus", p:[[138.540,-34.903],[138.522,-34.884],[138.5086,-34.8620]]}
+];
+/* note: Henley line context approximated via Grange loop */
+
+/* ===================== svg helpers ===================== */
+const SVGNS="http://www.w3.org/2000/svg";
+const map=document.getElementById("map");
+function el(tag,attrs,parent){const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);(parent||map).appendChild(e);return e;}
+const pathFrom=pts=>pts.map((p,i)=>(i?"L":"M")+px(p[0],p[1]).map(v=>v.toFixed(1)).join(" ")).join(" ");
+
+/* sea + coast */
+(function(){
+  const c=COAST.map(p=>px(p[0],p[1]));
+  let d="M 0 0 L "+c[0][0].toFixed(1)+" 0 ";
+  c.forEach(p=>d+="L "+p[0].toFixed(1)+" "+p[1].toFixed(1)+" ");
+  d+="L "+c[c.length-1][0].toFixed(1)+" "+H+" L 0 "+H+" Z";
+  el("path",{d,fill:"var(--sea)"});
+  el("path",{d:pathFrom(COAST),fill:"none",stroke:"#BFD2CC","stroke-width":1.4});
+  const sl=el("text",{x:52,y:470,class:"sea-label",transform:"rotate(-74 52 470)"});sl.textContent="GULF ST VINCENT";
+})();
+/* graticule */
+(function(){
+  for(let lon=138.45;lon<=138.66;lon+=0.05){const[x]=px(lon,-34.9);
+    el("line",{x1:x,y1:0,x2:x,y2:H,stroke:"var(--grat)","stroke-width":1});
+    const t=el("text",{x:x+3,y:12,class:"grat-label"});t.textContent=lon.toFixed(2)+"°";}
+  for(let lat=-35.10;lat<=-34.78;lat+=0.05){const[,y]=px(138.5,lat);
+    el("line",{x1:0,y1:y,x2:W,y2:y,stroke:"var(--grat)","stroke-width":1});
+    const t=el("text",{x:W-40,y:y-3,class:"grat-label"});t.textContent=lat.toFixed(2)+"°";}
+})();
+/* context network */
+NETWORK.forEach(s=>{
+  const st=s.m==="tram"?{stroke:"var(--teal)","stroke-width":1.6,"stroke-dasharray":"5 4",opacity:.7}
+        :s.m==="bus"?{stroke:"var(--amber)","stroke-width":1.6,"stroke-dasharray":"5 4",opacity:.7}
+        :{stroke:"#C9D4D1","stroke-width":1.6,opacity:.9};
+  el("path",Object.assign({d:pathFrom(s.p),fill:"none","stroke-linecap":"round"},st));
+});
+/* layers (order matters) */
+const gZone=el("g",{id:"gZone"});
+const gRoute=el("g",{id:"gRoute"});
+const gLens=el("g",{id:"gLens"});
+const gStations=el("g",{id:"gStations"});
+const gAnchors=el("g",{id:"gAnchors"});
+/* scale bar */
+(function(){
+  const x0=20,y0=H-26,k5=kmToPx(5);
+  el("line",{x1:x0,y1:y0,x2:x0+2*k5,y2:y0,stroke:"var(--ink)","stroke-width":2});
+  [0,1,2].forEach(i=>el("line",{x1:x0+i*k5,y1:y0-4,x2:x0+i*k5,y2:y0+4,stroke:"var(--ink)","stroke-width":2}));
+  const t=el("text",{x:x0,y:y0-8,class:"scale-label"});t.textContent="0        5        10 km";
+})();
+
+/* stations */
+function drawStations(){
+  gStations.innerHTML="";
+  GAZ.forEach((s,i)=>{
+    if(s.offMap)return;
+    const[x,y]=px(s.lon,s.lat);
+    const dot=el("circle",{cx:x,cy:y,r:s.major?4:2.8,fill:"#fff",stroke:s.m==="tram"?"var(--teal)":s.m==="bus"?"var(--amber)":"var(--ink)","stroke-width":s.major?2:1.6,style:"cursor:pointer"},gStations);
+    dot.dataset.i=i;
+    dot.addEventListener("click",ev=>{ev.stopPropagation();showPop(s,x,y);});
+    if(!s.hide||state.labels){
+      const t=el("text",{x:x+(s.lx!==undefined?s.lx:7),y:y+(s.ly!==undefined?s.ly:4),class:"stn-label"+(s.major?" major":"")},gStations);
+      t.textContent=s.n;
+    }
+  });
+}
+/* anchors */
+ANCHORS.forEach(a=>{
+  const[x,y]=px(a.lon,a.lat);
+  if(a.kind==="body"){
+    el("line",{x1:x-5,y1:y-5,x2:x+5,y2:y+5,stroke:"var(--coral)","stroke-width":2.4},gAnchors);
+    el("line",{x1:x-5,y1:y+5,x2:x+5,y2:y-5,stroke:"var(--coral)","stroke-width":2.4},gAnchors);
+    const t=el("text",{x:x-8,y:y+18,class:"anchor-label","text-anchor":"end"},gAnchors);t.textContent=a.n;
+  }else if(a.kind==="home"){
+    el("circle",{cx:x,cy:y,r:5,fill:"none",stroke:"var(--coral)","stroke-width":2.4},gAnchors);
+    el("circle",{cx:x,cy:y,r:1.7,fill:"var(--coral)"},gAnchors);
+    const t=el("text",{x:x-9,y:y-7,class:"anchor-label","text-anchor":"end"},gAnchors);t.textContent=a.n;
+  }else{
+    el("rect",{x:x-4.5,y:y-4.5,width:9,height:9,fill:"none",stroke:"var(--coral)","stroke-width":2.4,transform:"rotate(45 "+x+" "+y+")"},gAnchors);
+    const t=el("text",{x:x+10,y:y+17,class:"anchor-label"},gAnchors);t.textContent=a.n;
+  }
+});
+/* marker (routes) */
+const marker=el("g",{id:"marker",style:"display:none"});
+el("circle",{cx:0,cy:0,r:8,fill:"var(--coral)",opacity:.22},marker);
+el("circle",{cx:0,cy:0,r:3.8,fill:"var(--coral)",stroke:"#fff","stroke-width":1.4},marker);
+
+/* popover */
+const pop=document.getElementById("pop");
+function showPop(s,x,y){
+  const card=map.closest(".mapcard");
+  const r=map.getBoundingClientRect();
+  const cx=x/ W * r.width, cy=y/ H * r.height + (map.getBoundingClientRect().top - card.getBoundingClientRect().top);
+  const srcObj=SOURCES.find(o=>o.id===s.src)||{};
+  pop.innerHTML='<h4>'+s.n+'</h4><div class="meta">'+s.m+(s.flag?' · <span style="color:var(--coral)">'+s.flag+'</span>':'')+'</div>'+
+    '<div class="src">'+s.src+' — '+(srcObj.title||'')+'</div>'+
+    '<button class="btn" data-src="'+s.src+'">View plate</button>';
+  pop.style.left=Math.min(cx+10, card.clientWidth-240)+"px";
+  pop.style.top=Math.max(cy-10,52)+"px";
+  pop.style.display="block";
+  pop.querySelector("button").addEventListener("click",()=>{openModal(s.src);});
+}
+document.addEventListener("click",e=>{ if(!pop.contains(e.target)) pop.style.display="none"; });
+
+/* ===================== state ===================== */
+const state={
+  tool:"rpfa",
+  labels:false,
+  lens:{lat:-34.905, lon:138.560, r:8},
+  zone:false,
+  line:LINES[0], pos:0, playing:false, raf:null, legProgress:0,
+  scans:new Map() /* filename -> blob (mirrored to IDB when available) */
+};
+
+/* letter index from gazetteer */
+let LIDX={};
+function buildIndex(){
+  LIDX={}; CODE_SET.forEach(L=>LIDX[L]=[]);
+  GAZ.forEach(s=>{const L=s.n[0]; if(LIDX[L]) LIDX[L].push(s);});
+}
+buildIndex();
+const BINDING = ()=>CODE_SET.filter(L=>LIDX[L].length<=1 || (LIDX[L].length<=2 && L==="L"));
+
+/* ===================== RPFA ===================== */
+const radius=document.getElementById("radius"), radVal=document.getElementById("radVal"),
+      covVal=document.getElementById("covVal"), reqVal=document.getElementById("reqVal"),
+      lchips=document.getElementById("lchips");
+
+function buildChips(){
+  lchips.innerHTML="";
+  const binding=BINDING();
+  CODE_SET.forEach(L=>{
+    const d=document.createElement("div");
+    d.className="lchip"+(binding.includes(L)?" bind":"");
+    d.id="chip-"+L; d.textContent=L;
+    d.title=LIDX[L].length+" candidate location(s)";
+    lchips.appendChild(d);
+  });
+}
+function coverage(centre,r){
+  const cov={}, miss=[];
+  let req=0;
+  CODE_SET.forEach(L=>{
+    let dmin=Infinity;
+    LIDX[L].forEach(s=>{const d=distKm(centre,s); if(d<dmin)dmin=d;});
+    cov[L]=dmin<=r;
+    if(!cov[L])miss.push(L);
+    if(dmin>req)req=dmin;
+  });
+  return {cov,miss,req};
+}
+function drawLens(){
+  gLens.innerHTML="";
+  if(state.tool!=="rpfa")return;
+  const c=state.lens, [x,y]=px(c.lon,c.lat);
+  const res=coverage(c,c.r);
+  /* required ring */
+  el("circle",{cx:x,cy:y,r:kmToPx(res.req),fill:"none",stroke:"var(--coral)","stroke-width":1.4,"stroke-dasharray":"6 5",opacity:.7},gLens);
+  /* lens */
+  el("circle",{cx:x,cy:y,r:kmToPx(c.r),fill:"rgba(228,87,46,.08)",stroke:"var(--coral)","stroke-width":2.4},gLens);
+  const grip=el("g",{style:"cursor:grab"},gLens);
+  el("circle",{cx:x,cy:y,r:11,fill:"rgba(228,87,46,.15)"},grip);
+  el("circle",{cx:x,cy:y,r:5,fill:"var(--coral)",stroke:"#fff","stroke-width":1.6},grip);
+  grip.addEventListener("pointerdown",startDrag);
+  /* readouts */
+  radVal.textContent=c.r.toFixed(1)+" km";
+  covVal.textContent=(CODE_SET.length-res.miss.length)+" / 17";
+  reqVal.textContent=res.req.toFixed(1)+" km";
+  CODE_SET.forEach(L=>{
+    const chip=document.getElementById("chip-"+L);
+    if(chip)chip.classList.toggle("on",res.cov[L]);
+  });
+}
+let dragging=false;
+function startDrag(ev){
+  dragging=true; ev.preventDefault();
+  window.addEventListener("pointermove",onDrag);
+  window.addEventListener("pointerup",endDrag,{once:true});
+}
+function svgPoint(ev){
+  const pt=map.createSVGPoint(); pt.x=ev.clientX; pt.y=ev.clientY;
+  const p=pt.matrixTransform(map.getScreenCTM().inverse());
+  return inv(p.x,p.y);
+}
+function onDrag(ev){
+  if(!dragging)return;
+  const [lon,lat]=svgPoint(ev);
+  state.lens.lon=Math.max(B.lonMin,Math.min(B.lonMax,lon));
+  state.lens.lat=Math.max(B.latMin,Math.min(B.latMax,lat));
+  drawLens(); if(state.zone)drawZone();
+}
+function endDrag(){dragging=false;window.removeEventListener("pointermove",onDrag);}
+
+function drawZone(){
+  gZone.innerHTML="";
+  if(!state.zone||state.tool!=="rpfa")return;
+  const r=state.lens.r;
+  const dLat=0.0045,dLon=0.0055;
+  for(let lat=B.latMin;lat<=B.latMax;lat+=dLat){
+    for(let lon=B.lonMin;lon<=B.lonMax;lon+=dLon){
+      const res=coverage({lat,lon},r);
+      if(res.miss.length===0){
+        const[x,y]=px(lon,lat);
+        el("circle",{cx:x,cy:y,r:2.4,fill:"var(--teal)",opacity:.4},gZone);
+      }
+    }
+  }
+}
+function findTightest(){
+  let best={req:Infinity,lat:0,lon:0};
+  const dLat=0.004,dLon=0.005;
+  for(let lat=B.latMin;lat<=B.latMax;lat+=dLat){
+    for(let lon=B.lonMin;lon<=B.lonMax;lon+=dLon){
+      const res=coverage({lat,lon},999);
+      if(res.req<best.req)best={req:res.req,lat,lon};
+    }
+  }
+  /* refine */
+  for(let lat=best.lat-0.004;lat<=best.lat+0.004;lat+=0.001){
+    for(let lon=best.lon-0.005;lon<=best.lon+0.005;lon+=0.001){
+      const res=coverage({lat,lon},999);
+      if(res.req<best.req)best={req:res.req,lat,lon};
+    }
+  }
+  state.lens.lat=best.lat; state.lens.lon=best.lon;
+  state.lens.r=Math.ceil(best.req*2)/2;
+  radius.value=state.lens.r;
+  drawLens(); if(state.zone)drawZone();
+}
+radius.addEventListener("input",()=>{state.lens.r=parseFloat(radius.value);drawLens();if(state.zone)drawZone();});
+document.getElementById("btnTight").addEventListener("click",findTightest);
+document.getElementById("zoneToggle").addEventListener("change",e=>{state.zone=e.target.checked;drawZone();});
+document.getElementById("labelToggle").addEventListener("change",e=>{state.labels=e.target.checked;drawStations();});
+
+/* ===================== routes tool ===================== */
+const MODESTYLE={rail:{s:"var(--ink)",d:"none",w:2.8},tram:{s:"var(--teal)",d:"none",w:2.8},bus:{s:"var(--amber)",d:"6 5",w:2.8},foot:{s:"var(--foot)",d:"2 4",w:2.4}};
+const rpx=k=>px(RPTS[k][1],RPTS[k][0]);
+function legPts(line,i){return[rpx(line.st[i]),rpx(line.st[i+1])];}
+function drawRoute(){
+  gRoute.innerHTML="";
+  if(state.tool!=="routes"){marker.style.display="none";return;}
+  const line=state.line;
+  for(let i=0;i<state.pos;i++){
+    const[[x1,y1],[x2,y2]]=legPts(line,i),m=MODESTYLE[line.modes[i]];
+    el("line",{x1,y1,x2,y2,stroke:m.s,"stroke-width":m.w,"stroke-dasharray":m.d,opacity:line.struck?.45:.92,"stroke-linecap":"round"},gRoute);
+  }
+  if(state.playing&&state.pos<line.st.length-1&&state.legProgress>0){
+    const[[x1,y1],[x2,y2]]=legPts(line,state.pos),t=state.legProgress,m=MODESTYLE[line.modes[state.pos]];
+    el("line",{x1,y1,x2:x1+(x2-x1)*t,y2:y1+(y2-y1)*t,stroke:m.s,"stroke-width":m.w,"stroke-dasharray":m.d,opacity:.92,"stroke-linecap":"round"},gRoute);
+  }
+  let mx,my;
+  if(state.playing&&state.pos<line.st.length-1){
+    const[[x1,y1],[x2,y2]]=legPts(line,state.pos);
+    mx=x1+(x2-x1)*state.legProgress;my=y1+(y2-y1)*state.legProgress;
+  }else{
+    [mx,my]=rpx(line.st[Math.min(state.pos,line.st.length-1)]);
+  }
+  marker.style.display="";
+  marker.setAttribute("transform","translate("+mx.toFixed(1)+" "+my.toFixed(1)+")");
+}
+const codelinesBox=document.getElementById("codelines");
+function buildExhibit(){
+  codelinesBox.innerHTML="";
+  LINES.forEach(line=>{
+    const row=document.createElement("div");
+    row.className="codeline"+(line.struck?" struck":"");
+    row.innerHTML='<span class="lno">L'+line.id+'</span>';
+    const letters=document.createElement("div");letters.className="letters";
+    [...line.code].forEach((ch,idx)=>{
+      const b=document.createElement("button");
+      b.textContent=ch;
+      if(line.disputed.includes(idx))b.classList.add("disputed");
+      b.setAttribute("aria-label",line.label+" letter "+(idx+1)+": "+ch+" — "+RNAMES[line.st[idx]]);
+      b.addEventListener("click",()=>{selectLine(line);setPos(idx);});
+      letters.appendChild(b);
+    });
+    row.appendChild(letters);
+    const pick=document.createElement("button");
+    pick.className="pick";pick.textContent="Trace";
+    pick.setAttribute("aria-pressed",line===state.line?"true":"false");
+    pick.addEventListener("click",()=>selectLine(line));
+    row.appendChild(pick);
+    codelinesBox.appendChild(row);
+  });
+}
+function refreshExhibit(){
+  document.querySelectorAll("#codelines .codeline").forEach((row,ri)=>{
+    const line=LINES[ri];
+    row.querySelector(".pick").setAttribute("aria-pressed",line===state.line?"true":"false");
+    row.querySelectorAll(".letters button").forEach((b,idx)=>{
+      b.classList.toggle("visited",line===state.line&&idx<state.pos);
+      b.classList.toggle("active",line===state.line&&idx===state.pos);
+    });
+  });
+}
+const roNow=document.getElementById("roNow"),roNext=document.getElementById("roNext"),roLeg=document.getElementById("roLeg"),roCum=document.getElementById("roCum");
+const modeChip=m=>'<span class="modechip '+m+'">'+m+(m==="bus"?" *":"")+'</span>';
+function refreshReadout(){
+  const line=state.line,last=line.st.length-1;
+  roNow.innerHTML=line.code[Math.min(state.pos,last)]+" · "+RNAMES[line.st[Math.min(state.pos,last)]];
+  if(state.pos<last){
+    roNext.innerHTML=line.code[state.pos+1]+" · "+RNAMES[line.st[state.pos+1]];
+    roLeg.innerHTML=line.km[state.pos]+" km "+modeChip(line.modes[state.pos]);
+  }else{roNext.textContent="end of line";roLeg.textContent="—";}
+  let c=0;for(let i=0;i<state.pos;i++)c+=line.km[i];
+  roCum.textContent=c.toFixed(1).replace(/\.0$/,"")+" / "+line.km.reduce((a,b)=>a+b,0).toFixed(1).replace(/\.0$/,"")+" km";
+}
+const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const btnPlay=document.getElementById("btnPlay");
+function selectLine(line){stopPlay();state.line=line;state.pos=0;state.legProgress=0;drawRoute();refreshExhibit();refreshReadout();}
+function setPos(p){stopPlay();state.pos=Math.max(0,Math.min(p,state.line.st.length-1));state.legProgress=0;drawRoute();refreshExhibit();refreshReadout();}
+function stopPlay(){state.playing=false;if(state.raf)cancelAnimationFrame(state.raf);state.raf=null;state.legProgress=0;btnPlay.textContent="Play";}
+function play(){
+  if(state.playing){stopPlay();drawRoute();return;}
+  if(state.pos>=state.line.st.length-1)state.pos=0;
+  state.playing=true;btnPlay.textContent="Pause";
+  if(reduceMotion){
+    const tick=()=>{if(!state.playing)return;
+      if(state.pos<state.line.st.length-1){state.pos++;drawRoute();refreshExhibit();refreshReadout();setTimeout(tick,700);}
+      else stopPlay();};
+    setTimeout(tick,400);return;
+  }
+  let lastT=null;
+  const msPerKm=()=>parseFloat(document.getElementById("speed").value);
+  const frame=t=>{
+    if(!state.playing)return;
+    if(lastT===null)lastT=t;
+    const dt=t-lastT;lastT=t;
+    const line=state.line;
+    if(state.pos>=line.st.length-1){stopPlay();drawRoute();refreshExhibit();refreshReadout();return;}
+    state.legProgress+=dt/(line.km[state.pos]*msPerKm());
+    if(state.legProgress>=1){state.pos++;state.legProgress=0;refreshExhibit();refreshReadout();}
+    drawRoute();
+    state.raf=requestAnimationFrame(frame);
+  };
+  state.raf=requestAnimationFrame(frame);
+}
+btnPlay.addEventListener("click",play);
+document.getElementById("btnStep").addEventListener("click",()=>setPos(state.pos+1));
+document.getElementById("btnBack").addEventListener("click",()=>setPos(state.pos-1));
+document.getElementById("btnReset").addEventListener("click",()=>setPos(0));
+document.addEventListener("keydown",e=>{
+  if(["SELECT","INPUT","BUTTON","TEXTAREA"].includes(e.target.tagName))return;
+  if(state.tool!=="routes")return;
+  if(e.code==="Space"){e.preventDefault();play();}
+  if(e.code==="ArrowRight")setPos(state.pos+1);
+  if(e.code==="ArrowLeft")setPos(state.pos-1);
+});
+
+/* ===================== tool & tab switching ===================== */
+document.querySelectorAll(".toolswitch button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".toolswitch button").forEach(x=>x.setAttribute("aria-selected","false"));
+    b.setAttribute("aria-selected","true");
+    state.tool=b.dataset.tool;
+    document.getElementById("side-rpfa").style.display=state.tool==="rpfa"?"":"none";
+    document.getElementById("side-routes").style.display=state.tool==="routes"?"":"none";
+    stopPlay();drawRoute();drawLens();drawZone();
+  });
+});
+document.querySelectorAll(".tabs button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected","false"));
+    b.setAttribute("aria-selected","true");
+    document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+    document.getElementById("panel-"+b.dataset.tab).classList.add("active");
+  });
+});
+
+/* ===================== timeline ===================== */
+const MACRO=[
+ {d:"16 Nov 1905",t:"Carl Webb born, Footscray",p:"Youngest of six in a Melbourne baking family; trains as an electrical instrument maker.",src:"Birth record",key:false},
+ {d:"4 Oct 1941",t:"Marries Dorothy Robertson",p:"The couple live in Bromby Street, South Yarra. No children.",src:"Marriage record · divorce file",key:false},
+ {d:"Mar 1946",t:"Suicide attempt described",p:"The divorce file records an ether overdose and verse on the subject of death.",src:"Webb v Webb divorce file",key:false},
+ {d:"Late 1946",t:"Jessica Harkness in Melbourne",p:"At Mentone before moving to Adelaide early 1947. Webb across town in South Yarra: overlap of city, not of documented contact.",src:"Family accounts",key:false},
+ {d:"Apr 1947",t:"Webb deserts Dorothy",p:"His last documented presence anywhere. The void begins.",src:"Divorce affidavit",key:true},
+ {d:"Jul 1947",t:"Robin born; X3239 in print",p:"Jessica's son born at Glenelg. Prosper Thomson's car classifieds carry the Moseley Street number from this month.",src:"Birth record · classifieds",key:false},
+ {void:true,d:"Apr 1947 — Nov 1948",t:"The nineteen-month documentary void",p:"No known record of Webb anywhere. Nothing places him in, or out of, South Australia."},
+ {d:"30 Nov 1948",t:"The final day",p:"Overnight train (believed), the unused Henley Beach ticket, the suitcase, the bus toward Glenelg, evening sightings on the beach.",src:"Police investigation · inquest",key:true},
+ {d:"1 Dec 1948",t:"Body found at Somerton",p:"About 6:30 am, roughly 400 m from 90A Moseley Street. Poison suspected; none identified.",src:"Police record · autopsy",key:true},
+ {d:"14 Jan 1949",t:"Suitcase recovered",p:"Cloakroom, Adelaide Railway Station; orange waxed thread ties it to the body. Garments marked T. Keane.",src:"Police record",key:false},
+ {d:"Mid 1949",t:"Slip, book, code, nurse",p:"The slip found in the fob pocket; the book surfaces from a Glenelg car; letters and number revealed; Jessica, shown the bust, appears about to faint but denies knowing him.",src:"Inquest · police accounts",key:true},
+ {d:"Jun–Oct 1951",t:"Dorothy files from Bute",p:"Her first documented presence in South Australia — almost three years after Webb's death. The 1949 Victorian roll had her in Elsternwick, Melbourne.",src:"Divorce file · electoral rolls",key:false},
+ {d:"2007",t:"Jessica Thomson dies",p:"Her daughter later says she admitted knowing more than she told police.",src:"Family interviews",key:false},
+ {d:"19 May 2021",t:"Exhumation",p:"West Terrace Cemetery, under SA Police Operation Persevere.",src:"SA Police · FSSA",key:false},
+ {d:"26 Jul 2022",t:"Identified as Carl Webb",p:"Rootless-hair DNA and a 4,000-person tree. The same work shows no link to the Thomson line: the paternity theory dies.",src:"Abbott & Fitzpatrick",key:true},
+ {d:"2026",t:"Coronial confirmation outstanding",p:"The academic identification stands; the formal determination has not been delivered.",src:"Status at publication",key:false}
+];
+(function(){
+  const box=document.getElementById("tlMacro");
+  MACRO.forEach(ev=>{
+    const d=document.createElement("div");
+    if(ev.void){d.className="tl-void";d.innerHTML='<div class="date">'+ev.d+'</div><h3>'+ev.t+'</h3><p>'+ev.p+'</p>';}
+    else{d.className="tl-item"+(ev.key?" key":"");d.innerHTML='<div class="date"><b>'+ev.d+'</b></div><h3>'+ev.t+'</h3><p>'+ev.p+'</p><div class="src">'+ev.src+'</div>';}
+    box.appendChild(d);
+  });
+})();
+(function(){
+  const svg=document.getElementById("strip");
+  const x0=50,x1=970,midY=95,t0=6,t1=34;
+  const X=h=>x0+(h-t0)/(t1-t0)*(x1-x0);
+  const se=(t,a,p)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e;};
+  se("line",{x1:x0,y1:midY,x2:x1,y2:midY,stroke:"var(--line)","stroke-width":2});
+  for(let h=t0;h<=t1;h+=2){const x=X(h);
+    se("line",{x1:x,y1:midY-4,x2:x,y2:midY+4,stroke:"var(--muted)","stroke-width":1});
+    const lab=se("text",{x,y:midY+18,class:"strip-time","text-anchor":"middle"});
+    lab.textContent=String(((h%24)+24)%24).padStart(2,"0")+":00";}
+  se("text",{x:x0,y:24,class:"strip-label"}).textContent="TUE 30 NOVEMBER 1948";
+  se("text",{x:X(24)+6,y:24,class:"strip-label"}).textContent="WED 1 DECEMBER";
+  se("line",{x1:X(24),y1:30,x2:X(24),y2:176,stroke:"var(--line)","stroke-width":1,"stroke-dasharray":"3 4"});
+  const defs=se("defs",{});
+  const pat=se("pattern",{id:"hatch",width:8,height:8,patternUnits:"userSpaceOnUse",patternTransform:"rotate(-45)"},defs);
+  se("line",{x1:0,y1:0,x2:0,y2:8,stroke:"rgba(228,87,46,.3)","stroke-width":3},pat);
+  function band(a,b2,label,yLab){
+    se("rect",{x:X(a),y:midY-26,width:X(b2)-X(a),height:52,fill:"url(#hatch)",stroke:"var(--coral)","stroke-width":1,"stroke-dasharray":"4 4",rx:6});
+    se("text",{x:(X(a)+X(b2))/2,y:yLab,class:"strip-label soft","text-anchor":"middle"}).textContent=label;
+  }
+  band(12,18.5,"AFTERNOON UNACCOUNTED FOR",52);
+  band(22,30,"DEATH — TIME UNCERTAIN",162);
+  [
+   {h:7,a:1,l:"ARRIVAL BY OVERNIGHT TRAIN",s:"believed"},
+   {h:10.83,a:0,l:"HENLEY BEACH TICKET 10:50",s:"bought, never used"},
+   {h:11.1,a:1,l:"SUITCASE 11:00–11:15",s:"station cloakroom"},
+   {h:11.6,a:0,l:"BUS TOWARD GLENELG",s:"from North Terrace"},
+   {h:19,a:1,l:"SIGHTING ~7 PM",s:"raises right arm"},
+   {h:19.8,a:0,l:"SIGHTING 7:30–8 PM",s:"motionless, same spot"},
+   {h:30.5,a:1,l:"BODY FOUND ~6:30 AM",s:"against the seawall"}
+  ].forEach(ev=>{
+    const x=X(ev.h),yEnd=ev.a?midY-26:midY+26,yT=ev.a?midY-34:midY+40;
+    se("line",{x1:x,y1:midY,x2:x,y2:yEnd,stroke:"var(--muted)","stroke-width":1.2});
+    se("circle",{cx:x,cy:midY,r:3.4,fill:"var(--coral)",stroke:"#fff","stroke-width":1.2});
+    se("text",{x,y:yT,class:"strip-label","text-anchor":"middle"}).textContent=ev.l;
+    se("text",{x,y:yT+(ev.a?-11:12),class:"strip-time","text-anchor":"middle"}).textContent=ev.s;
+  });
+})();
+
+/* ===================== sources & data ===================== */
+const srcgrid=document.getElementById("srcgrid"),storageNote=document.getElementById("storageNote");
+let DB=null;
+function idbOpen(){
+  return new Promise(res=>{
+    try{
+      const req=indexedDB.open("somerton-lab",1);
+      req.onupgradeneeded=()=>req.result.createObjectStore("scans");
+      req.onsuccess=()=>res(req.result);
+      req.onerror=()=>res(null);
+    }catch(e){res(null);}
+  });
+}
+function idbPut(name,blob){
+  if(!DB)return Promise.resolve(false);
+  return new Promise(res=>{try{
+    const tx=DB.transaction("scans","readwrite");
+    tx.objectStore("scans").put(blob,name);
+    tx.oncomplete=()=>res(true);tx.onerror=()=>res(false);
+  }catch(e){res(false);}});
+}
+function idbAll(){
+  if(!DB)return Promise.resolve([]);
+  return new Promise(res=>{try{
+    const tx=DB.transaction("scans","readonly"),st=tx.objectStore("scans");
+    const out=[],cur=st.openCursor();
+    cur.onsuccess=()=>{const c=cur.result;if(c){out.push({name:c.key,blob:c.value});c.continue();}else res(out);};
+    cur.onerror=()=>res([]);
+  }catch(e){res([]);}});
+}
+function renderSources(){
+  srcgrid.innerHTML="";
+  SOURCES.forEach(s=>{
+    const attached=s.file&&state.scans.has(s.file);
+    const card=document.createElement("div");
+    card.className="card srccard";
+    card.innerHTML='<div class="id">'+s.id+'</div><h4>'+s.title+'</h4>'+
+      (s.note?'<div class="fn" style="color:var(--muted);font-family:var(--body);font-size:12px">'+s.note+'</div>':'')+
+      (s.file?'<div class="fn">'+s.file+'</div>':'<div class="fn">no scan expected</div>')+
+      '<div class="row">'+
+      (s.verified?'<span class="pill ver">verified plate</span>':'')+
+      '<span class="pill '+(attached?'ok':'miss')+'">'+(attached?'attached':'not attached')+'</span>'+
+      (s.file?'<button class="btn" style="margin-left:auto" data-id="'+s.id+'">View</button>':'')+
+      '</div>';
+    const vb=card.querySelector("button");
+    if(vb)vb.addEventListener("click",()=>openModal(s.id));
+    srcgrid.appendChild(card);
+  });
+  /* gazetteer count + source select */
+  document.getElementById("gazCount").textContent=GAZ.length+" gazetteer locations · "+SOURCES.length+" sources";
+  const sel=document.getElementById("alSrc");
+  sel.innerHTML=SOURCES.map(s=>'<option value="'+s.id+'">'+s.id+'</option>').join("");
+}
+const modal=document.getElementById("modal");
+function openModal(srcId){
+  const s=SOURCES.find(o=>o.id===srcId);
+  document.getElementById("modalId").textContent=s?s.id:srcId;
+  document.getElementById("modalTitle").textContent=s?s.title.replace(/&amp;/g,"&"):"";
+  const body=document.getElementById("modalBody");
+  body.innerHTML="";
+  if(s&&s.file&&state.scans.has(s.file)){
+    const img=document.createElement("img");
+    img.src=URL.createObjectURL(state.scans.get(s.file));
+    img.alt=s.title;
+    body.appendChild(img);
+  }else{
+    body.innerHTML='<div class="empty">Scan not attached. Drop <b>'+(s&&s.file?s.file:"the image")+'</b> onto the Sources tab to view it here.</div>';
+  }
+  modal.classList.add("open");
+}
+document.getElementById("modalClose").addEventListener("click",()=>modal.classList.remove("open"));
+modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("open");});
+
+/* drag & drop */
+const dz=document.getElementById("dropzone"),fi=document.getElementById("fileInput");
+dz.addEventListener("click",()=>fi.click());
+["dragenter","dragover"].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.add("over");}));
+["dragleave","drop"].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.remove("over");}));
+dz.addEventListener("drop",e=>handleFiles(e.dataTransfer.files));
+fi.addEventListener("change",()=>handleFiles(fi.files));
+async function handleFiles(files){
+  for(const f of files){
+    if(!f.type.startsWith("image/"))continue;
+    state.scans.set(f.name,f);
+    const ok=await idbPut(f.name,f);
+    if(!ok)storageNote.style.display="block";
+    if(!SOURCES.some(s=>s.file===f.name)){
+      SOURCES.push({id:"NEW-"+(SOURCES.length+1),title:"Unassigned scan — label me",file:f.name,verified:false,note:"added "+new Date().toISOString().slice(0,10)});
+    }
+  }
+  renderSources();
+}
+
+/* export / import */
+document.getElementById("btnExport").addEventListener("click",()=>{
+  const payload={exported:new Date().toISOString(),project:"somerton-lab",sources:SOURCES,gazetteer:GAZ};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download="somerton-gazetteer.json";a.click();
+});
+const importInput=document.getElementById("importInput");
+document.getElementById("btnImport").addEventListener("click",()=>importInput.click());
+importInput.addEventListener("change",()=>{
+  const f=importInput.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{try{
+    const data=JSON.parse(r.result);
+    if(Array.isArray(data.gazetteer)){GAZ=data.gazetteer;buildIndex();buildChips();drawStations();drawLens();if(state.zone)drawZone();}
+    if(Array.isArray(data.sources)){data.sources.forEach(s=>{if(!SOURCES.some(o=>o.id===s.id))SOURCES.push(s);});}
+    renderSources();
+  }catch(e){alert("Could not parse that JSON file.");}};
+  r.readAsText(f);
+});
+/* add location */
+document.getElementById("btnAddLoc").addEventListener("click",()=>{
+  const n=document.getElementById("alName").value.trim().toUpperCase();
+  const lat=parseFloat(document.getElementById("alLat").value);
+  const lon=parseFloat(document.getElementById("alLon").value);
+  if(!n||isNaN(lat)||isNaN(lon)){alert("Name, latitude and longitude are required.");return;}
+  GAZ.push({n,lat,lon,m:document.getElementById("alMode").value,src:document.getElementById("alSrc").value});
+  buildIndex();buildChips();drawStations();drawLens();if(state.zone)drawZone();renderSources();
+  document.getElementById("alName").value="";document.getElementById("alLat").value="";document.getElementById("alLon").value="";
+});
+
+/* ===================== boot ===================== */
+buildChips();
+drawStations();
+drawLens();
+buildExhibit();
+selectLine(LINES[0]);
+renderSources();
+idbOpen().then(db=>{
+  DB=db;
+  if(!DB){storageNote.style.display="block";return;}
+  idbAll().then(rows=>{rows.forEach(r=>state.scans.set(r.name,r.blob));renderSources();});
+});
+</script>
+</body>
+</html>
