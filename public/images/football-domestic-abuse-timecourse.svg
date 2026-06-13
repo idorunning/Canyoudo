@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560" role="img" aria-label="The shape of the effect across a match day: reported alcohol-related domestic abuse stays flat through the day, climbs during the three-hour match window, peaks in the three hours after full-time, then gradually falls back. The rise tracks the game and the drinking around it.">
+  <rect width="1200" height="560" fill="#f7f3eb"/>
+  <text x="600" y="64" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="42" font-weight="600" text-anchor="middle">The fingerprint of a real effect</text>
+  <text x="600" y="104" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="23" font-style="italic" text-anchor="middle">reported alcohol-related domestic abuse, hour by hour, on an England match day</text>
+
+  <!-- y-axis label -->
+  <text x="92" y="300" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="18" text-anchor="middle" transform="rotate(-90 92 300)">reported incidents &#8594;</text>
+
+  <!-- baseline / x-axis -->
+  <line x1="150" y1="448" x2="1110" y2="448" stroke="#ddd6c8" stroke-width="2"/>
+
+  <!-- match window shading -->
+  <rect x="400" y="150" width="220" height="298" fill="#a14545" opacity="0.07"/>
+
+  <!-- area under the curve -->
+  <path d="M 150,448 L 150,408 L 280,406 L 400,398 L 540,338 L 640,228 L 760,168 L 880,250 L 1000,330 L 1110,382 L 1110,448 Z" fill="#7c2828" opacity="0.12"/>
+  <!-- the curve -->
+  <polyline points="150,408 280,406 400,398 540,338 640,228 760,168 880,250 1000,330 1110,382" fill="none" stroke="#7c2828" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- kick-off marker -->
+  <line x1="400" y1="150" x2="400" y2="448" stroke="#a14545" stroke-width="2" stroke-dasharray="5 6"/>
+  <text x="400" y="138" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="20" font-weight="600" text-anchor="middle">kick-off</text>
+
+  <!-- full-time marker -->
+  <line x1="620" y1="150" x2="620" y2="448" stroke="#a14545" stroke-width="2" stroke-dasharray="5 6"/>
+  <text x="620" y="138" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="20" font-weight="600" text-anchor="middle">full-time</text>
+
+  <!-- peak annotation -->
+  <circle cx="760" cy="168" r="6" fill="#7c2828"/>
+  <text x="760" y="148" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="20" font-weight="600" text-anchor="middle">the hours after</text>
+
+  <!-- x-axis time labels -->
+  <g font-family="'DM Sans', system-ui, sans-serif" font-size="18" fill="#7a7268" text-anchor="middle">
+    <text x="150" y="478">midday</text>
+    <text x="400" y="478">5pm</text>
+    <text x="620" y="478">7pm</text>
+    <text x="880" y="478">10pm</text>
+    <text x="1110" y="478">late</text>
+  </g>
+
+  <text x="600" y="524" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-style="italic" text-anchor="middle">Schematic of the pattern found in West Midlands Police data, 2010&#8211;2019 (Trendl, Stewart &amp; Mullett).</text>
+</svg>

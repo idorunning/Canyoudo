@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560" role="img" aria-label="The famous finding: domestic abuse reports rose 26 percent when England won or drew, and 38 percent when England lost, compared with days England did not play">
+  <rect width="1200" height="560" fill="#f7f3eb"/>
+  <text x="600" y="78" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="46" font-weight="600" text-anchor="middle">The number everyone repeats</text>
+  <text x="600" y="120" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="24" font-style="italic" text-anchor="middle">domestic abuse reports, against days England did not play</text>
+
+  <!-- Card 1: won or drew -->
+  <rect x="90" y="180" width="430" height="250" rx="14" fill="#fbf8f1" stroke="#ddd6c8" stroke-width="1.5"/>
+  <rect x="90" y="180" width="430" height="8" rx="4" fill="#a14545"/>
+  <text x="305" y="322" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="92" font-weight="700" text-anchor="middle">+26%</text>
+  <text x="305" y="384" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23" text-anchor="middle"><tspan x="305">when England</tspan><tspan x="305" dy="30">won or drew</tspan></text>
+
+  <!-- Card 2: lost -->
+  <rect x="680" y="180" width="430" height="250" rx="14" fill="#fbf8f1" stroke="#ddd6c8" stroke-width="1.5"/>
+  <rect x="680" y="180" width="430" height="8" rx="4" fill="#7c2828"/>
+  <text x="895" y="322" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="92" font-weight="700" text-anchor="middle">+38%</text>
+  <text x="895" y="384" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23" text-anchor="middle"><tspan x="895">when England</tspan><tspan x="895" dy="30">lost</tspan></text>
+
+  <text x="600" y="500" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-style="italic" text-anchor="middle">One force (Lancashire), three World Cups, 2002&#8211;2010. Kirby, Francis &amp; O&#8217;Flaherty (2014).</text>
+</svg>

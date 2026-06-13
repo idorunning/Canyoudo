@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 840" width="1600" height="840" role="img" aria-label="When England play: what the data really says about football and domestic abuse">
+  <rect width="1600" height="840" fill="#1a1817"/>
+  <!-- faint pitch motif: halfway line and centre circle -->
+  <g fill="none" stroke="#2c2825" stroke-width="3">
+    <line x1="1180" y1="0" x2="1180" y2="840"/>
+    <circle cx="1180" cy="420" r="150"/>
+    <circle cx="1180" cy="420" r="6" fill="#2c2825" stroke="none"/>
+  </g>
+  <rect x="120" y="170" width="64" height="10" fill="#a14545"/>
+  <text x="120" y="240" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="30" letter-spacing="8" font-weight="500">THE DATA TELLS A STORY</text>
+  <text x="120" y="360" fill="#f5f1e8" font-family="Fraunces, Georgia, serif" font-size="104" font-weight="600">When England play</text>
+  <text x="120" y="448" fill="#bdb4a8" font-family="'Source Serif 4', Georgia, serif" font-size="40" font-style="italic">What the data really says about football and domestic abuse</text>
+  <text x="120" y="600" fill="#8a8175" font-family="'DM Sans', system-ui, sans-serif" font-size="30">A famous statistic, a careful look, and the people behind the percentages &#8212;</text>
+  <text x="120" y="648" fill="#8a8175" font-family="'DM Sans', system-ui, sans-serif" font-size="30">how to read the claim honestly, and what it does and doesn&#8217;t support.</text>
+  <g font-family="'DM Sans', system-ui, sans-serif" font-size="28">
+    <text x="120" y="760" fill="#a14545" font-weight="600">+26%</text>
+    <text x="235" y="760" fill="#5a544e">when England won or drew</text>
+    <text x="615" y="760" fill="#7a7268">&#183;</text>
+    <text x="650" y="760" fill="#a14545" font-weight="600">+38%</text>
+    <text x="765" y="760" fill="#5a544e">when England lost</text>
+  </g>
+</svg>
