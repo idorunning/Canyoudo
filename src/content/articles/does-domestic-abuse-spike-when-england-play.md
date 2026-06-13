@@ -6,7 +6,7 @@ pubDate: 2026-06-13
 updatedDate: ''
 author: ''
 thumbnail: /images/pexels-omar-ramadan-24821683.webp
-heroImage: /images/pexels-jonathan-shembere-21974369.webp
+heroImage: /images/pexels-pixabay-54308.webp
 tags:
   - More or Less Policing
   - safeguarding
