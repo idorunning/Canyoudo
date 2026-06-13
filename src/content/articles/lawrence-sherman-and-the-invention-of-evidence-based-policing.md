@@ -1,13 +1,23 @@
 ---
-section: "influential-people"
-title: "Lawrence Sherman and the Invention of Evidence-Based Policing"
-description: "In 1981 Lawrence Sherman ran a domestic violence call as a scientific experiment, and policing was never quite the same. A profile of the American criminologist who argued that the police should be tested like medicine — and who taught the officers, Alex Murray among them, who carried the idea into British policing."
+title: Lawrence Sherman and the Invention of Evidence-Based Policing
+section: influential-people
+description: In 1981 Lawrence Sherman ran a domestic violence call as a scientific experiment, and policing was never quite the same. A profile of the American criminologist who argued that the police should be tested like medicine — and who taught the officers, Alex Murray among them, who carried the idea into British policing.
 pubDate: 2026-06-07
-heroImage: "/images/sherman-ebp-hero.svg"
-thumbnail: "/images/sherman-ebp-hero.svg"
-portrait: "/images/sherman-portrait.jpg"
-tags: ["evidence-based-policing", "evidence-based", "policing", "police", "criminology", "experiments", "leadership"]
-redirectFrom: ["/police-policy/lawrence-sherman-and-the-invention-of-evidence-based-policing"]
+updatedDate: ''
+author: ''
+thumbnail: /images/sherman-ebp-hero.svg
+heroImage: /images/sherman-ebp-hero.svg
+portrait: /images/sherman-portrait.jpg
+tags:
+  - evidence-based-policing
+  - evidence-based
+  - policing
+  - police
+  - criminology
+  - experiments
+  - leadership
+redirectFrom:
+  - /police-policy/lawrence-sherman-and-the-invention-of-evidence-based-policing
 ---
 
 **In 1981 a criminologist talked the Minneapolis police into running their domestic violence calls as a scientific experiment.** When officers reached a misdemeanour assault with both parties still on the scene, a pad of colour-coded report forms told them, at random, which of three responses to use: arrest the suspect, send one party away for the night, or give advice and leave. The aim was to find out, rather than guess, which response did most to stop the violence happening again.
