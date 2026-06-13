@@ -1,11 +1,19 @@
 ---
-title: "Does Domestic Abuse Spike When England Play? Reading the Evidence Honestly"
-section: "data-stories"
-description: "You have seen the headline: domestic abuse rises 38% when England lose. It comes from a real study — but the real story is more careful, more troubling, and more useful than the number that travels. A More or Less Policing look at what the evidence actually supports."
+title: Does Domestic Abuse Spike When England Play? Reading the Evidence Honestly
+section: data-stories
+description: 'You have seen the headline: domestic abuse rises 38% when England lose. It comes from a real study — but the real story is more careful, more troubling, and more useful than the number that travels. A More or Less Policing look at what the evidence actually supports.'
 pubDate: 2026-06-13
-heroImage: "/images/football-domestic-abuse-hero.svg"
-thumbnail: "/images/football-domestic-abuse-hero.svg"
-tags: ["More or Less Policing", "safeguarding", "violence against women", "domestic abuse", "statistics", "alcohol"]
+updatedDate: ''
+author: ''
+thumbnail: /images/pexels-omar-ramadan-24821683.webp
+heroImage: /images/pexels-jonathan-shembere-21974369.webp
+tags:
+  - More or Less Policing
+  - safeguarding
+  - violence against women
+  - domestic abuse
+  - statistics
+  - alcohol
 ---
 
 **Before any of the numbers, hold on to the thing the numbers are about: for a great many women in this country, the day England play is a day they have learned to be frightened of.** That is the fact underneath every percentage in this piece, and no amount of careful statistical hedging should be allowed to soften it. The question here is not whether the danger is real — survivors and the services that support them have never needed a study to tell them it is. The question is narrower and, I think, worth answering honestly: *what does the evidence actually show, how should we read it, and what does the famous statistic get right and wrong?*
