@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 840" width="1600" height="840" role="img" aria-label="Martyn's Law: where a business starts — what to consider, what guidance exists, and the first steps to take, while the duties are not yet in force">
+  <rect width="1600" height="840" fill="#1a1817"/>
+  <!-- faint open-door / threshold motif -->
+  <g fill="none" stroke="#2e2a28" stroke-width="3">
+    <rect x="1150" y="150" width="300" height="560" rx="6"/>
+    <rect x="1210" y="210" width="180" height="500" rx="4"/>
+    <circle cx="1370" cy="470" r="7" fill="#2e2a28" stroke="none"/>
+  </g>
+  <rect x="120" y="170" width="64" height="10" fill="#a14545"/>
+  <text x="120" y="240" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="30" letter-spacing="6" font-weight="500">PUBLIC POLICY &#183; MARTYN&#8217;S LAW</text>
+  <text x="120" y="362" fill="#f5f1e8" font-family="Fraunces, Georgia, serif" font-size="100" font-weight="600">Where a business starts</text>
+  <text x="120" y="448" fill="#bdb4a8" font-family="'Source Serif 4', Georgia, serif" font-size="38" font-style="italic">What to consider, what guidance exists, and the first steps to take</text>
+  <text x="120" y="600" fill="#8a8175" font-family="'DM Sans', system-ui, sans-serif" font-size="30">Most premises will spend time, not money &#8212; and the duties are not yet in force.</text>
+  <text x="120" y="648" fill="#8a8175" font-family="'DM Sans', system-ui, sans-serif" font-size="30">A practical starting point, while there is still a runway to prepare.</text>
+  <g font-family="'DM Sans', system-ui, sans-serif" font-size="28" fill="#a14545">
+    <text x="120" y="760" font-weight="600">guidance published 2026</text>
+    <text x="510" y="760" fill="#5a544e">&#8212;&#8212;&#8212;&#8212;&#8212;&#8594;</text>
+    <text x="705" y="760" font-weight="600">duties expected spring 2027</text>
+  </g>
+</svg>

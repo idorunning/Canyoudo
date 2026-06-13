@@ -47,4 +47,11 @@ get "fuel-filling-station.jpg" "https://commons.wikimedia.org/wiki/Special:FileP
 get "neurodiversity-symbol.svg" "https://commons.wikimedia.org/wiki/Special:FilePath/Neurodiversity%20Symbol.svg"
 get "police-officer-on-duty.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Slovak%20police%20car%20and%20police%20officer%20on%20duty%20(cropped).JPG"
 
+# Free-to-use Pexels photos for the Martyn's Law business guide (credited in-page).
+# Pexels serves these from its public CDN; the ?auto=compress query is the format
+# Pexels itself hotlinks. If any 404s, the <figure> hides itself gracefully.
+get "martyns-law-cafe.jpg" "https://images.pexels.com/photos/930402/pexels-photo-930402.jpeg?auto=compress&cs=tinysrgb&w=1200"
+get "martyns-law-staff-briefing.jpg" "https://images.pexels.com/photos/7640438/pexels-photo-7640438.jpeg?auto=compress&cs=tinysrgb&w=1200"
+get "martyns-law-event-crowd.jpg" "https://images.pexels.com/photos/3727129/pexels-photo-3727129.jpeg?auto=compress&cs=tinysrgb&w=1200"
+
 echo "Done. $(ls -1 | wc -l) images in public/images/"

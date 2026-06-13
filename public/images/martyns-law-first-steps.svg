@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" width="1200" height="760" role="img" aria-label="Your first five steps under Martyn's Law: 1. Work out your capacity and tier. 2. Name who owns it, a responsible person. 3. Learn the four procedures: evacuate, invacuate, lock down, communicate. 4. Do the free ACT Awareness e-learning. 5. Write a simple plan down and rehearse it with staff. Provisional, based on current guidance; the duties are not yet in force, expected spring 2027.">
+  <rect width="1200" height="760" fill="#f7f3eb"/>
+  <text x="80" y="74" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="46" font-weight="600">Your first five steps</text>
+  <text x="80" y="116" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="23" font-style="italic">simple, low-cost, and worth starting before the rules switch on</text>
+  <line x1="80" y1="146" x2="1120" y2="146" stroke="#ddd6c8" stroke-width="2"/>
+
+  <!-- step 1 -->
+  <circle cx="124" cy="212" r="36" fill="#7c2828"/>
+  <text x="124" y="225" fill="#fbf8f1" font-family="Fraunces, Georgia, serif" font-size="36" font-weight="700" text-anchor="middle">1</text>
+  <text x="190" y="204" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="600">Work out your capacity &#8212; and your tier</text>
+  <text x="190" y="240" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23">Under 200 and you are out of scope; 200&#8211;799 is standard; 800+ is enhanced.</text>
+
+  <!-- step 2 -->
+  <circle cx="124" cy="324" r="36" fill="#7c2828"/>
+  <text x="124" y="337" fill="#fbf8f1" font-family="Fraunces, Georgia, serif" font-size="36" font-weight="700" text-anchor="middle">2</text>
+  <text x="190" y="316" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="600">Name who owns it</text>
+  <text x="190" y="352" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23">A responsible person accountable for the plan &#8212; not &#8220;everyone&#8221;, which means no one.</text>
+
+  <!-- step 3 -->
+  <circle cx="124" cy="436" r="36" fill="#7c2828"/>
+  <text x="124" y="449" fill="#fbf8f1" font-family="Fraunces, Georgia, serif" font-size="36" font-weight="700" text-anchor="middle">3</text>
+  <text x="190" y="428" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="600">Learn the four procedures</text>
+  <text x="190" y="464" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23">Evacuate, invacuate (keep people in), lock down, and communicate with everyone on site.</text>
+
+  <!-- step 4 -->
+  <circle cx="124" cy="548" r="36" fill="#7c2828"/>
+  <text x="124" y="561" fill="#fbf8f1" font-family="Fraunces, Georgia, serif" font-size="36" font-weight="700" text-anchor="middle">4</text>
+  <text x="190" y="540" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="600">Do the free training</text>
+  <text x="190" y="576" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23">The ACT Awareness e-learning is free, takes about 45 minutes, and is open to any staff.</text>
+
+  <!-- step 5 -->
+  <circle cx="124" cy="660" r="36" fill="#7c2828"/>
+  <text x="124" y="673" fill="#fbf8f1" font-family="Fraunces, Georgia, serif" font-size="36" font-weight="700" text-anchor="middle">5</text>
+  <text x="190" y="652" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="600">Write it down and rehearse</text>
+  <text x="190" y="688" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="23">A short plan your staff actually know beats a thick one nobody has read.</text>
+
+  <text x="80" y="738" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="18" font-style="italic">Provisional, based on current guidance &#8212; the duties are not yet in force (expected spring 2027).</text>
+</svg>
