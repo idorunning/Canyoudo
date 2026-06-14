@@ -1,0 +1,262 @@
+---
+title: "PoliceAI: A Police Leader's Guide to What It Is, How It Works, and What to Watch"
+section: police-policy
+description: In June 2026 the government launched PoliceAI, a national centre to
+  develop and scale artificial intelligence across the 43 forces of England and
+  Wales. This is a working guide for leaders — what the institution is, the
+  platforms underneath it, and the questions worth asking before any of it
+  reaches your force. Built to grow as the picture does.
+pubDate: 2026-06-14
+heroImage: "/images/policeai-hero.jpg"
+thumbnail: "/images/policeai-hero.jpg"
+tags:
+  - policeai
+  - artificial intelligence
+  - predictive-policing
+  - surveillance
+  - facial recognition
+  - data
+  - technology
+  - leadership
+  - policing
+  - police
+  - policy
+---
+import Tabs from '../../components/Tabs.astro';
+import TabPanel from '../../components/TabPanel.astro';
+import BarChart from '../../components/data/BarChart.astro';
+import KeyNumbers from '../../components/data/KeyNumbers.astro';
+
+On 10 June 2026 the government launched **PoliceAI**: a national centre, backed by £75m over three years, to develop, pilot, evaluate and scale artificial intelligence across the 43 forces of England and Wales. The press release led with the headline figures — millions of officer hours saved, the equivalent of 3,000 extra officers, deepfakes detected and stolen goods traced. What it did not do, as these announcements rarely do, was say much about what the technology actually *is*, who builds it, or where it already runs.
+
+This guide is written for the police leader who has to look past the launch and ask the operational questions. It is built as a set of tabs: an overview first, then five deeper strands — the investigation engines, the Copilot problem, facial recognition, redaction and disclosure, and governance. It is deliberately a living document. The PoliceAI picture is moving quickly, and the intention is to add strands as the evidence lands rather than freeze a snapshot that is wrong by autumn.
+
+<figure>
+  <img src="/images/policeai-network.jpg" alt="A robotic hand reaching towards a glowing network of connected data points, representing AI linking fragmented information." loading="lazy" />
+  <figcaption>PoliceAI is not one product. It is an institution sitting on top of a patchwork of commercial platforms — most of which fuse data that forces already hold. Photo via <a href="https://www.pexels.com">Pexels</a>.</figcaption>
+</figure>
+
+<Tabs tabs={["Overview", "The investigation engines", "The Copilot problem", "Facial recognition", "Redaction & disclosure", "Governance & the registry"]}>
+
+<TabPanel>
+
+## What PoliceAI actually is
+
+The first thing to be clear about is that "PoliceAI" is not a piece of software you will be asked to log into. It is an **organisation** — a national centre that develops, tests, commissions and governs AI tools, which then run inside individual forces. It is the institutional layer, not the algorithm.
+
+It grew out of the National Police Chiefs' Council's existing AI portfolio and is now **hosted by the College of Policing**, whose chief executive is Sir Andy Marsh. It employs roughly **50 staff**, deliberately mixing serving officers and staff with AI specialists, and works on behalf of all 43 forces in England and Wales. Its interim director is **Alex Murray OBE**, a former temporary chief constable and National Crime Agency threat director. The political sponsors are the Policing Minister, **Sarah Jones MP**, and the Minister for Digital Government and Data, **Ian Murray MP**. The centre is expected, in time, to fold into the planned **National Policing Service**.
+
+So the honest one-line description is: PoliceAI is a procurement, testing and governance hub that decides which AI tools are safe and worthwhile, helps forces buy and deploy them once, and is supposed to stop 43 forces each making the same mistakes 43 times.
+
+<KeyNumbers
+  caption="PoliceAI by the headline numbers, as launched (government figures and claims)."
+  stats={[
+    { value: "£75m", label: "Dedicated PoliceAI funding", sub: "over 3 years" },
+    { value: "6m hrs", label: "Officer time the government claims could be saved a year", sub: "≈ 3,000 officers" },
+    { value: "10", label: "Forces in the first large-scale pilots", sub: "2026–27" },
+    { value: "43", label: "Forces it is meant to reach", sub: "by 2027" },
+  ]}
+/>
+
+## Where the money goes
+
+PoliceAI's £75m sits inside a wider **£140m AI policing settlement over three years**. Only some of that is publicly itemised. The named allocations are worth knowing, because they tell you where the government's priorities actually are — call handling and the unglamorous middle of an investigation, as much as the headline-grabbing facial recognition.
+
+<BarChart
+  caption="Named allocations within the £140m three-year AI policing settlement (£m). The balance is largely the facial-recognition expansion and as-yet-unallocated spend."
+  data={[
+    { label: "PoliceAI centre", count: 75 },
+    { label: "Call handling & public contact", count: 16.5 },
+    { label: "Copilot Centre of Excellence (Kent)", count: 3.4 },
+    { label: "Tool theft & retail crime", count: 1 },
+    { label: "Balance (facial recognition & other)", count: 44.1 },
+  ]}
+/>
+
+## What it is being asked to do
+
+Strip out the launch language and PoliceAI's work falls into a few practical buckets:
+
+- **Digital evidence triage, disclosure and summarisation** — reviewing, sorting and redacting the mountains of video, messages and documents that now sit behind almost every serious case. This is the single biggest time sink in modern investigation, and it is where the first large-scale pilots (up to 10 forces in 2026–27) are aimed.
+- **Contact handling** — transcribing 999 and 101 calls, linking reports to surface patterns, and routing non-emergency demand to the right place.
+- **Identification at scale** — facial recognition, child sexual abuse image categorisation, and computer-vision matching of stolen goods being resold online (a strand the minister has confirmed is being built with Google).
+- **The threat side** — a **PoliceAI Threat Hub (PATH)** focused not on using AI but on criminals *misusing* it: deepfakes, synthetic intimate images, AI-enabled fraud.
+
+The two trial results the government keeps citing give a flavour of the upside when it works: **800 hours of footage in a kidnapping case reviewed in about three hours**, contributing to an early guilty plea; and roughly **half a million e-books' worth of seized data translated** at speed, helping secure arrests against an organised crime group.
+
+## The honest caveat for a leader
+
+The promise is real and so is the risk, and they are the same promise. Every one of these tools works by making data faster to search, link and act on. That is genuinely transformative for an overwhelmed investigation — and it is exactly what makes oversight, accuracy and disclosure harder, not easier. A leader's job here is not to be a sceptic or an enthusiast but to insist on the boring questions: how was this tool tested, what is its error rate, who is accountable for its output in court, and what happens when it is wrong. The rest of these tabs are about those questions.
+
+</TabPanel>
+
+<TabPanel>
+
+## The investigation engines
+
+If there is one thing to correct in the popular picture of "police using AI", it is the assumption that this means chatbots. The most powerful tools under the PoliceAI umbrella are not large language models writing text. They are **intelligence-fusion platforms** — closer in spirit to Palantir than to ChatGPT — that ingest enormous, messy, multi-format evidence sets and turn them into searchable networks of people, places, events and objects.
+
+<figure>
+  <img src="/images/policeai-soze-servers.jpg" alt="Rows of illuminated server racks in a data centre, lit blue, representing cloud infrastructure." loading="lazy" />
+  <figcaption>The investigation engines are cloud platforms. Söze, the most-discussed of them, runs on Microsoft Azure. Photo via <a href="https://www.pexels.com">Pexels</a>.</figcaption>
+</figure>
+
+### Söze — the "81 years in 30 hours" tool
+
+The system behind the most eye-catching headlines is **Söze** (the Söze Analytics Platform), built by **Akkodis**, an engineering and technology consultancy with Australian roots. It is the tool **Avon and Somerset Police** trialled across 27 complex cold cases, where an evaluation found it did work the force estimated would take a human analyst **81 years** in around **30 hours**.
+
+What it is, technically, matters:
+
+- It runs **cloud-native on Microsoft Azure**, so a force buys capacity rather than racks of hardware.
+- Akkodis describes the core as a **patented investigative-intelligence engine** built on **graph analytics and entity resolution** — the same conceptual move Palantir makes. It resolves "is this the same person/phone/vehicle across all these sources?" and then maps the relationships between them. The company's own marketing claims acceleration figures as high as 23,600×; treat vendor multipliers with the usual caution.
+- It **ingests multiple evidence types at once** — video, financial transactions, call data, social media, emails, images, and extractions from phones and computers — into one queryable view.
+- Its advertised modules include link and frequency analysis, network mapping, geospatial movement tracking, object discovery (weapons, travel documents), text search and facial recognition across the evidence set.
+
+In plain terms: Söze does not generate new data. It makes the data you already seized vastly more searchable and cross-referenceable. That is the source of both its power and its problems.
+
+### Gorilla Technology — video at scale for the Met
+
+A second, distinct example already in UK use is the smart-policing video solution from **Gorilla Technology Group**, which the **Metropolitan Police** used in the investigation into the murder of Susan Hawkey in Neasden. Its job was narrower and very modern: reconstruct events across **thousands of hours of CCTV and other footage** from many locations, categorise it, and pinpoint people of interest faster than a team could by hand. The senior investigating officer described it publicly as a significant value-add that materially cut the time to find evidence, and it contributed to conviction.
+
+### Why this strand needs the hardest questions
+
+These platforms are the ones a defence team will probe hardest, and rightly. The standard critiques — set out well by practitioners and academics writing about Söze specifically — are worth a leader holding in mind before deployment:
+
+- **Opacity.** If the platform's reasoning for surfacing a lead cannot be explained, its output is vulnerable in court. "The computer flagged it" is not evidence.
+- **Inherited bias.** Cold-case and historic files carry the assumptions of the original investigation. A tool that ranks and connects can amplify those rather than correct them.
+- **Garbage in.** Degraded CCTV, corrupted metadata and inconsistent records can produce confident-looking false leads.
+- **Privacy and proportionality.** Fusing social media, financial and communications data on victims and witnesses — not just suspects — is exactly where data-protection impact assessments earn their keep.
+
+The defensible posture is the one the better practitioners already take: these are tools to **augment** an investigator's judgement and direct where humans look, never to replace the human decision or to stand alone as proof.
+
+</TabPanel>
+
+<TabPanel>
+
+## The Copilot problem
+
+Set against the polished launch is a genuine, recent and instructive failure — and a leader who only reads the press release will not see it coming. It involves the most mundane tool in the set: a general-purpose AI assistant, **Microsoft Copilot**.
+
+<figure>
+  <img src="/images/policeai-copilot-typewriter.jpg" alt="A sheet of paper in a typewriter bearing the words ARTIFICIAL INTELLIGENCE." loading="lazy" />
+  <figcaption>General-purpose assistants are the easiest AI to adopt and the easiest to misuse: confident, fluent, and capable of inventing facts. Photo via <a href="https://www.pexels.com">Pexels</a>.</figcaption>
+</figure>
+
+### What happened
+
+Copilot is not an investigation engine. It is a fluent text generator, and like all such models it can **hallucinate** — produce plausible, well-written statements that are simply false. In the most-cited UK case, **West Midlands Police** used Copilot in intelligence work and it generated material referring to a football fixture — a Maccabi Tel Aviv match — that did not take place as described, which fed into operational decisions including a fan ban. The fallout was serious: it was reported that a senior West Midlands officer **resigned** over the incident in early 2026, and forces were warned off using AI to draft **court statements** over accuracy fears.
+
+The telling detail for a leader is what happened next: reporting in February 2026 indicated that **around 21 forces continued using Copilot** despite the episode. The tool had spread faster than the training and the guardrails around it.
+
+### Why it matters more than it looks
+
+This is the cautionary half of the PoliceAI story, and it is not really a story about Microsoft. It is about the gap between *adopting* an AI tool and *governing* it. The investigation engines in the previous tab are bought deliberately, scoped and assessed. A general assistant arrives quietly through an existing enterprise licence, gets used for whatever is to hand, and produces output that looks authoritative regardless of whether it is true.
+
+### The official response
+
+PoliceAI's guardrails are, in part, a direct answer to this. The government has funded a **Copilot Centre of Excellence with Kent Police** — about **£3.4m over four years** — to work out responsible use, supported by the "Progressive Futures" academic team led by the AI ethicists **Professor Marion Oswald** and **Dame Muffy Calder**. The wider apparatus — independent testing, a public register, national guidance — is described in the Governance tab.
+
+The leadership lesson is blunt: the dangerous AI in your force this year is probably not the bespoke forensic platform with a business case and an impact assessment. It is the general-purpose assistant your staff are already using without one.
+
+</TabPanel>
+
+<TabPanel>
+
+## Facial recognition
+
+Of all the strands, **live facial recognition (LFR)** is the one with the clearest operational track record and the loudest civil-liberties objection — and the settlement expands it sharply.
+
+<figure>
+  <img src="/images/policeai-facial-recognition.jpg" alt="A person's face overlaid with laser scanning lines, representing biometric facial recognition." loading="lazy" />
+  <figcaption>Facial recognition is the most operationally proven and most contested strand of the AI settlement. Photo via <a href="https://www.pexels.com">Pexels</a>.</figcaption>
+</figure>
+
+### What is being bought
+
+The headline commitment is **40 additional LFR units**, which the government says will **triple** current capacity — implying a jump from roughly 20 deployable units to around 60. The technology compares faces in a live camera feed against a watchlist and alerts an operator to a possible match.
+
+<BarChart
+  caption="Live facial recognition capacity, before and after the planned expansion (deployable units, approximate — 'tripling' from a base of around 20)."
+  data={[
+    { label: "Current", count: 20 },
+    { label: "After expansion", count: 60 },
+  ]}
+/>
+
+The operational case is not hypothetical. Forces using LFR have made arrests of wanted sex offenders, domestic abusers and violent offenders who walked past a camera and were flagged in real time. The minister has spoken about regular arrests of serious offenders through LFR deployments.
+
+### The contested part
+
+Two things make LFR the most legally exposed strand:
+
+- **Accuracy and bias.** Match reliability has historically varied with demographics, which is why the algorithms are independently evaluated for accuracy and bias before operational use — a regime PoliceAI says it will mirror for its other tools. A leader should ask for the specific tested error rates and the false-match settings actually in use, not the vendor's best-case numbers.
+- **The watchlist and the legal base.** What surveillance does to public space depends entirely on who is on the watchlist, on what basis, how long images are retained, and what governs deployment. The technology is not the controversy; the discretion around it is.
+
+This is the strand where "what becomes possible" runs furthest ahead of settled law, and where transparency — publishing deployment criteria, watchlist rules and outcomes — is the cheapest way to keep public consent.
+
+</TabPanel>
+
+<TabPanel>
+
+## Redaction & disclosure
+
+This is the least glamorous strand and arguably the one that frees the most officer time. Modern disclosure obligations mean that before evidence can be shared — with the defence, the courts, the public, or in response to a subject access request — it often has to be **redacted**: faces, number plates, bystanders and sensitive spoken words blurred or bleeped. Done by hand, it is staggeringly slow.
+
+<figure>
+  <img src="/images/policeai-redaction-cctv.jpg" alt="A cluster of CCTV cameras mounted together outdoors." loading="lazy" />
+  <figcaption>Every hour of seized footage is an hour that may need redacting before it can be disclosed. This is where AI quietly saves the most time. Photo via <a href="https://www.pexels.com">Pexels</a>.</figcaption>
+</figure>
+
+### The scale of the problem
+
+The government's stated ambition is to use AI to handle the redaction of around **one million hours of audio-visual material a year**. That figure is the real story of policing's data problem: body-worn video, CCTV, doorbell cameras and phone footage have made evidence volumes unrecognisable from a decade ago, and the human cost of processing it is enormous.
+
+### Who actually does it
+
+The leading platform already embedded in UK policing is **Secure Redact**, built by **Pimloc**, which supplies digital-evidence redaction to a large majority of UK forces — reported as around **35 of the 43**. It automatically detects and anonymises personal data in video and, more recently, audio — faces, licence plates and sensitive spoken information — to meet UK GDPR, the Data Protection Act 2018 and disclosure obligations at a speed manual redaction cannot match. (Other tools, such as Veritone Redact, operate in the same space.)
+
+### Why it is the safest place to start
+
+For a leader weighing where to adopt AI first, redaction is a strong candidate: the task is well-defined, the output is checkable by eye, an error is a privacy slip rather than a wrongful lead, and the time saving is immediate and large. It is a far lower-risk entry point than letting a general assistant draft intelligence — and it builds the organisational habit of testing and assuring an AI tool before trusting it.
+
+</TabPanel>
+
+<TabPanel>
+
+## Governance & the registry
+
+The thread running through every tab is the same: the value and the danger come from the same capability, so the question is never just *what can it do* but *how is it controlled*. PoliceAI's credibility rests on this layer.
+
+<figure>
+  <img src="/images/policeai-justice.jpg" alt="A statue of Lady Justice holding the scales, symbolising fairness and accountability." loading="lazy" />
+  <figcaption>The case for AI in policing stands or falls on the guardrails — independent testing, transparency, and a human accountable for every decision. Photo via <a href="https://www.pexels.com">Pexels</a>.</figcaption>
+</figure>
+
+### The guardrails being built
+
+PoliceAI's published governance has several moving parts:
+
+- **A public AI register.** A first version is expected in **autumn 2026**, being developed with **CENTRIC at Sheffield Hallam University** — intended to let the public and oversight bodies see which AI tools forces are actually using. Transparency by default is the explicit aim, which is notable given how opaque some adjacent procurement (see the companion piece on Palantir) has been.
+- **Independent testing for accuracy and bias**, modelled on the existing evaluation regime for facial-recognition algorithms.
+- **National guidance and an ethics function**, including the academic team led by **Professor Marion Oswald** and **Dame Muffy Calder**, and the **PoliceAI Threat Hub (PATH)** for AI-enabled crime.
+- **A stated human-in-the-loop principle** — AI to inform and accelerate decisions, with a person accountable for the decision itself.
+
+### A leader's checklist
+
+Whatever reaches your force, the same handful of questions travels well across every tool in this guide:
+
+- **Provenance and testing.** Has PoliceAI (or an independent body) assessed it? What is the measured error rate, on what data, and how does it vary across groups?
+- **Accountability in court.** Who owns the output? Can its reasoning be explained to a defence team and a jury? Is it augmenting a human judgement or substituting for it?
+- **Disclosure and data protection.** Is there a current DPIA? What data does it ingest, about whom — suspects only, or victims and witnesses too? How long is it retained?
+- **The quiet tools.** What general-purpose AI (Copilot and the like) is *already* in use without a business case — and what training and policy sit around it?
+- **Exit and lock-in.** If you stop using the platform, can you get your data and your case out? At national-infrastructure scale this is a sovereignty question, not just a commercial one.
+
+The wider point is that this is arriving faster than the rules governing it. PoliceAI is, in large part, an attempt to build those rules in public and at pace. Whether it succeeds will be judged less on the impressive trial numbers than on whether the first time one of these tools is badly wrong in a real case, the force can show exactly how it was tested, who was accountable, and how the error was caught.
+
+</TabPanel>
+
+</Tabs>
+
+---
+
+*This is a living guide and will be updated as the PoliceAI picture develops; specific figures, vendors and contract details may change after publication. Sources for the figures and events above include the GOV.UK launch announcement and the Policing Minister's launch speech, the National Police Chiefs' Council, Akkodis's published material on the Söze platform, Gorilla Technology Group, Pimloc/Secure Redact, and reporting by The Register, IBTimes UK, Police Professional and others. For the related questions of data integration and supplier power, see the companion piece on [what Palantir's advance means for British policing](/public-policy/what-palantirs-advance-means-for-british-policing-and-should-we-trust-them/).*

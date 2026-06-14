@@ -1,0 +1,142 @@
+---
+// A dependency-free, accessible tabbed panel. Authors pass the tab labels as a
+// `tabs` array and write one <TabPanel> per label, in order, as the children.
+// The panels are styled by the surrounding .prose-article rules, so each tab
+// reads like an ordinary article section — the chrome is the only extra. Built
+// for a living explainer: add a label and a panel and the strip grows.
+interface Props {
+  tabs: string[];
+  id?: string;
+  /** Optional short label shown above the strip, e.g. "Jump to". */
+  label?: string;
+}
+const { tabs, id, label = 'In this guide' } = Astro.props;
+const uid = id ?? 'tabs-' + Math.random().toString(36).slice(2, 8);
+---
+<div class="tap-tabs" data-tap-tabs id={uid}>
+  <p class="tap-tabs-label">{label}</p>
+  <div class="tap-tablist" role="tablist" aria-label={label}>
+    {tabs.map((t, i) => (
+      <button
+        type="button"
+        role="tab"
+        class="tap-tab"
+        id={`${uid}-tab-${i}`}
+        aria-controls={`${uid}-panel-${i}`}
+        aria-selected={i === 0 ? 'true' : 'false'}
+        tabindex={i === 0 ? 0 : -1}
+        data-index={i}
+      >
+        <span class="tap-tab-num">{String(i + 1).padStart(2, '0')}</span>
+        <span class="tap-tab-text">{t}</span>
+      </button>
+    ))}
+  </div>
+  <div class="tap-tabpanels" data-tap-panels>
+    <slot />
+  </div>
+</div>
+
+<style>
+  .tap-tabs {
+    margin: 2.5rem 0;
+  }
+  .tap-tabs-label {
+    font-family: theme('fontFamily.sans');
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: theme('colors.ink.500');
+    margin: 0 0 0.65rem;
+  }
+  .tap-tablist {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    border-bottom: 1px solid theme('colors.ink.200');
+    padding-bottom: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tap-tab {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    font-family: theme('fontFamily.sans');
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: theme('colors.ink.500');
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 0.7rem 0.85rem;
+    margin-bottom: -1px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .tap-tab:hover {
+    color: theme('colors.ink.800');
+  }
+  .tap-tab[aria-selected='true'] {
+    color: theme('colors.accent.DEFAULT');
+    border-bottom-color: theme('colors.accent.DEFAULT');
+  }
+  .tap-tab-num {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: theme('colors.ink.300');
+    font-variant-numeric: tabular-nums;
+  }
+  .tap-tab[aria-selected='true'] .tap-tab-num {
+    color: theme('colors.accent.light');
+  }
+  .tap-tabpanels {
+    padding-top: 0.5rem;
+  }
+</style>
+
+<script>
+  function initTabs(root: HTMLElement) {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const panels = Array.from(root.querySelectorAll<HTMLElement>('.tap-tabpanel'));
+    const uid = root.id;
+
+    panels.forEach((p, i) => {
+      p.id = `${uid}-panel-${i}`;
+      p.setAttribute('role', 'tabpanel');
+      p.setAttribute('aria-labelledby', `${uid}-tab-${i}`);
+      p.setAttribute('tabindex', '0');
+      if (i !== 0) p.hidden = true;
+    });
+
+    function select(i: number, focus = false) {
+      tabs.forEach((t, j) => {
+        const on = j === i;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        if (panels[j]) panels[j].hidden = !on;
+      });
+      if (focus) tabs[i]?.focus();
+    }
+
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(i));
+      t.addEventListener('keydown', (e: KeyboardEvent) => {
+        let ni: number | null = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') ni = (i + 1) % tabs.length;
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') ni = (i - 1 + tabs.length) % tabs.length;
+        else if (e.key === 'Home') ni = 0;
+        else if (e.key === 'End') ni = tabs.length - 1;
+        if (ni !== null) {
+          e.preventDefault();
+          select(ni, true);
+        }
+      });
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-tap-tabs]').forEach(initTabs);
+</script>

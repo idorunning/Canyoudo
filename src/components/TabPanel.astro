@@ -1,0 +1,17 @@
+---
+// One panel within <Tabs>. Roles, ids and the initial hidden state are wired up
+// at runtime by Tabs' script (matched to the tab buttons by document order), so
+// here it is just a styled section. Content is authored as ordinary MDX, so the
+// surrounding .prose-article rules carry the typography.
+---
+<section class="tap-tabpanel">
+  <slot />
+</section>
+
+<style>
+  /* Drop the leading margin the prose rules would put on a panel's first
+     heading, so a tab opens flush under the strip rather than with a big gap. */
+  .tap-tabpanel > :first-child {
+    margin-top: 0;
+  }
+</style>

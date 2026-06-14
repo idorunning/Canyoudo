@@ -54,4 +54,13 @@ get "martyns-law-cafe.jpg" "https://images.pexels.com/photos/930402/pexels-photo
 get "martyns-law-staff-briefing.jpg" "https://images.pexels.com/photos/7640438/pexels-photo-7640438.jpeg?auto=compress&cs=tinysrgb&w=1200"
 get "martyns-law-event-crowd.jpg" "https://images.pexels.com/photos/3727129/pexels-photo-3727129.jpeg?auto=compress&cs=tinysrgb&w=1200"
 
+# Free-to-use Pexels photos for the PoliceAI explainer (credited in-page).
+get "policeai-hero.jpg" "https://images.pexels.com/photos/20783671/pexels-photo-20783671.jpeg?auto=compress&cs=tinysrgb&w=1400"
+get "policeai-network.jpg" "https://images.pexels.com/photos/8386437/pexels-photo-8386437.jpeg?auto=compress&cs=tinysrgb&w=1200"
+get "policeai-soze-servers.jpg" "https://images.pexels.com/photos/17489157/pexels-photo-17489157.jpeg?auto=compress&cs=tinysrgb&w=1200"
+get "policeai-copilot-typewriter.jpg" "https://images.pexels.com/photos/4604607/pexels-photo-4604607.jpeg?auto=compress&cs=tinysrgb&w=1200"
+get "policeai-facial-recognition.jpg" "https://images.pexels.com/photos/8090124/pexels-photo-8090124.jpeg?auto=compress&cs=tinysrgb&w=1200"
+get "policeai-redaction-cctv.jpg" "https://images.pexels.com/photos/36852946/pexels-photo-36852946.jpeg?auto=compress&cs=tinysrgb&w=1200"
+get "policeai-justice.jpg" "https://images.pexels.com/photos/30483132/pexels-photo-30483132.jpeg?auto=compress&cs=tinysrgb&w=1200"
+
 echo "Done. $(ls -1 | wc -l) images in public/images/"
