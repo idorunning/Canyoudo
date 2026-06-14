@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { SECTIONS, SECTION_LABELS } from '../content/config';
+import { getTopics } from '../lib/topics';
+
+// A human- and crawler-readable index of everything on the site, distinct from
+// the auto-generated XML sitemap-index.xml. Reinforces internal linking.
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+const topics = await getTopics();
+
+const bySection = SECTIONS.map((s) => ({
+  section: s,
+  label: SECTION_LABELS[s],
+  items: articles.filter((a) => a.data.section === s),
+}));
+
+const pages = [
+  { href: '/', label: 'Home' },
+  { href: '/ai', label: 'What this site covers (AI & search index)' },
+  { href: '/topics', label: 'Topics' },
+  { href: '/research', label: 'Research Assistant' },
+  { href: '/data', label: 'Crime Dashboard' },
+  { href: '/books', label: 'Books' },
+  { href: '/resources', label: 'Further reading' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/subscribe', label: 'Subscribe' },
+  { href: '/search', label: 'Search' },
+  { href: '/rss.xml', label: 'RSS feed' },
+];
+---
+
+<BaseLayout
+  title="Sitemap"
+  description="A complete index of Thinking About Policing — every article, section, topic and tool."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Sitemap</p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+        Everything on the site
+      </h1>
+      <p class="font-serif text-lg text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        Every article, section, topic and tool in one place. Looking for the machine-readable version? See the
+        <a href="/sitemap-index.xml" class="underline underline-offset-2 hover:text-accent">XML sitemap</a>.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16 space-y-12">
+      {/* Key pages */}
+      <div>
+        <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Pages</h2>
+        <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-2 font-sans text-sm">
+          {pages.map((p) => (
+            <li><a href={p.href} class="text-ink-700 hover:text-accent transition-colors">{p.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Articles by section */}
+      {bySection.map((group) => (
+        <div>
+          <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">
+            <a href={`/${group.section}`} class="hover:text-accent-dark">{group.label}</a>
+            <span class="text-ink-400 normal-case tracking-normal"> · {group.items.length}</span>
+          </h2>
+          <ul class="space-y-2">
+            {group.items.map((a) => (
+              <li>
+                <a href={`/${a.data.section}/${a.slug}`} class="font-display text-base font-semibold text-ink-800 hover:text-accent transition-colors">
+                  {a.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      {/* Topics */}
+      <div>
+        <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Topics</h2>
+        <ul class="flex flex-wrap gap-2">
+          {topics.map((t) => (
+            <li>
+              <a href={`/topics/${t.slug}`} class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors">
+                {t.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

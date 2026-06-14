@@ -10,6 +10,9 @@ interface Props {
   image?: string;
   type?: 'website' | 'article';
   publishedTime?: string;
+  // Optional schema.org JSON-LD graph(s) for this page (WebSite, Organization,
+  // Person, FAQPage, …). Rendered in <head> when present.
+  jsonLd?: object | object[];
 }
 
 const {
@@ -18,7 +21,10 @@ const {
   image = '/og-default.png',
   type = 'website',
   publishedTime,
+  jsonLd,
 } = Astro.props;
+
+const jsonLdGraph = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : null;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteTitle = 'Thinking About Policing';
@@ -54,6 +60,11 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
 
     {/* RSS */}
     <link rel="alternate" type="application/rss+xml" title={siteTitle} href={new URL('rss.xml', Astro.site)} />
+
+    {/* Structured data (schema.org) — page-supplied graph(s) for search and AI. */}
+    {jsonLdGraph && jsonLdGraph.map((node) => (
+      <script type="application/ld+json" set:html={JSON.stringify(node)} />
+    ))}
 
     {/* Fonts */}
     <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -2,7 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import ExplorePanel from '../components/ExplorePanel.astro';
+import NewsTicker from '../components/NewsTicker.astro';
+import SiteOverview from '../components/SiteOverview.astro';
+import StartHere from '../components/StartHere.astro';
+import ContributeCTA from '../components/ContributeCTA.astro';
 import { getCollection } from 'astro:content';
+import { getTopics } from '../lib/topics';
 
 import type { Section } from '../content/config';
 
@@ -21,10 +26,56 @@ const allArticles: Item[] = articles
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const [feature, ...rest] = allArticles;
+const recent = rest.slice(0, 8);
+
+// --- Site-level structured data (schema.org) for search and AI tools. -------
+const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
+const topics = await getTopics();
+const description =
+  'Evidence-based writing on policing, public policy, and the occasional historical puzzle. By Nathan Tracey, a serving UK Police Inspector.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Thinking About Policing',
+    url: `${site}/`,
+    description,
+    inLanguage: 'en-GB',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: { '@type': 'EntryPoint', urlTemplate: `${site}/search?q={search_term_string}` },
+      'query-input': 'required name=search_term_string',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Thinking About Policing',
+    url: `${site}/`,
+    description,
+    inLanguage: 'en-GB',
+    author: { '@type': 'Person', name: 'Nathan Tracey', url: `${site}/about` },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Thinking About Policing',
+      url: `${site}/`,
+      logo: { '@type': 'ImageObject', url: `${site}/favicon.svg` },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Nathan Tracey',
+    url: `${site}/about`,
+    jobTitle: 'Police Inspector',
+    knowsAbout: topics.map((t) => t.label),
+  },
+];
 ---
 
-<BaseLayout title="Thinking About Policing">
-  {/* Intro */}
+<BaseLayout title="Thinking About Policing" jsonLd={jsonLd}>
+  {/* Welcome / hero */}
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-16 md:py-24">
       <div class="max-w-3xl">
@@ -37,14 +88,37 @@ const [feature, ...rest] = allArticles;
         <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-7 max-w-2xl">
           Aimed at senior leaders, policymakers, and anyone who cares whether what we do in policing actually works.
         </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href="/subscribe"
+            class="font-sans text-sm font-medium bg-accent text-paper-50 px-4 py-2 rounded hover:bg-accent-dark transition-colors"
+          >
+            Subscribe by email →
+          </a>
+          <a
+            href="/rss.xml"
+            class="font-sans text-sm font-medium text-ink-700 border border-ink-200 px-4 py-2 rounded hover:text-accent hover:border-ink-300 transition-colors"
+          >
+            RSS feed
+          </a>
+          <a
+            href="/ai"
+            class="font-sans text-sm text-ink-500 hover:text-accent transition-colors"
+          >
+            What this site covers →
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
+  {/* News ticker */}
+  <NewsTicker />
+
   {/* Pull quotes — framing the site's editorial mission */}
   <section class="border-b border-ink-200 bg-paper-100">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
-      <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-8 md:py-10">
+      <div class="grid md:grid-cols-2 gap-6 md:gap-12">
         <blockquote class="border-l-2 border-accent pl-6">
           <p class="font-serif text-base md:text-lg text-ink-800 leading-relaxed italic">
             "The basic premise of evidence-based practice is that we are all entitled to our own opinions, but not to our own facts."
@@ -64,6 +138,12 @@ const [feature, ...rest] = allArticles;
       </div>
     </div>
   </section>
+
+  {/* Start here — cornerstone reading */}
+  <StartHere />
+
+  {/* Browse the site — sections + tools overview */}
+  <SiteOverview />
 
   {/* Featured article */}
   {feature && (
@@ -88,8 +168,8 @@ const [feature, ...rest] = allArticles;
   )}
 
   {/* Recent articles + Explore rail */}
-  {rest.length > 0 && (
-    <section>
+  {recent.length > 0 && (
+    <section class="border-b border-ink-200">
       <div class="max-w-wide mx-auto px-6 lg:px-10">
         <div class="lg:flex lg:gap-12 xl:gap-16">
           <div class="min-w-0 lg:flex-1">
@@ -97,7 +177,7 @@ const [feature, ...rest] = allArticles;
               More writing
             </div>
             <div>
-              {rest.map(article => (
+              {recent.map(article => (
                 <ArticleCard
                   href={`/${article.section}/${article.slug}`}
                   title={article.data.title}
@@ -110,6 +190,11 @@ const [feature, ...rest] = allArticles;
                 />
               ))}
             </div>
+            <div class="py-8">
+              <a href="/sitemap" class="font-sans text-sm font-medium text-accent hover:text-accent-dark transition-colors">
+                Browse every article →
+              </a>
+            </div>
           </div>
 
           <aside class="mt-10 border-t border-ink-200 pt-10 pb-16 lg:mt-0 lg:w-64 xl:w-72 lg:shrink-0 lg:border-t-0 lg:border-l lg:pl-12 lg:pt-16">
@@ -121,6 +206,9 @@ const [feature, ...rest] = allArticles;
       </div>
     </section>
   )}
+
+  {/* Invitation to contribute */}
+  <ContributeCTA />
 
   {allArticles.length === 0 && (
     <section>

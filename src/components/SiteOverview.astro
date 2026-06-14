@@ -1,0 +1,72 @@
+---
+// "Browse the site" — a card grid overview of the five sections plus the
+// interactive tools, with a one-line site-stats summary. Self-contained: counts
+// are computed at build from the article collection and the topics dictionary.
+import { getCollection } from 'astro:content';
+import { SECTIONS, SECTION_LABELS } from '../content/config';
+import { getTopics } from '../lib/topics';
+
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+const topics = await getTopics();
+
+const counts: Record<string, number> = {};
+for (const s of SECTIONS) counts[s] = 0;
+for (const a of articles) counts[a.data.section] = (counts[a.data.section] ?? 0) + 1;
+
+// Short, plain descriptions for each section (the config carries labels only).
+const SECTION_DESC: Record<string, string> = {
+  'police-policy': 'Operational policing, what works, and the evidence behind it.',
+  'public-policy': 'The wider policy questions that shape policing and public life.',
+  'influential-people': 'The thinkers and leaders who shaped how we police.',
+  'data-stories': 'Reading the numbers behind crime and policing — without being fooled by them.',
+  other: 'Historical puzzles and the occasional worthwhile tangent.',
+};
+
+// The interactive tools, given the same accent treatment as the header.
+const tools = [
+  { href: '/research', label: 'Research Assistant', desc: 'Ask questions of the evidence base and get sourced answers.' },
+  { href: '/data', label: 'Crime Dashboard', desc: 'Explore stop & search and recorded crime by force and area.' },
+  { href: '/topics', label: `Topics (${topics.length})`, desc: 'Browse every theme the site covers, from VAWG to AI.' },
+];
+---
+
+<section class="border-b border-ink-200">
+  <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-16">
+    <div class="flex flex-wrap items-baseline justify-between gap-3 mb-8">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent">Browse the site</p>
+      <p class="font-sans text-sm text-ink-500">
+        {articles.length} articles across {SECTIONS.length} sections and {topics.length} topics.
+      </p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {SECTIONS.map((s) => (
+        <a
+          href={`/${s}`}
+          class="group block border border-ink-200 rounded-md p-6 hover:border-ink-300 hover:bg-paper-100 transition-colors"
+        >
+          <h3 class="font-display text-xl font-semibold text-ink-900 group-hover:text-accent transition-colors leading-snug">
+            {SECTION_LABELS[s]}
+          </h3>
+          <p class="font-serif text-base text-ink-700 leading-relaxed mt-2">{SECTION_DESC[s]}</p>
+          <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mt-4">
+            {counts[s]} {counts[s] === 1 ? 'article' : 'articles'}
+          </p>
+        </a>
+      ))}
+
+      {tools.map((t) => (
+        <a
+          href={t.href}
+          class="group block border border-accent/30 bg-accent/[0.04] rounded-md p-6 hover:bg-accent/[0.08] hover:border-accent/50 transition-colors"
+        >
+          <h3 class="font-display text-xl font-semibold text-accent group-hover:text-accent-dark transition-colors leading-snug">
+            {t.label}
+          </h3>
+          <p class="font-serif text-base text-ink-700 leading-relaxed mt-2">{t.desc}</p>
+          <p class="font-sans text-xs uppercase tracking-[0.15em] text-accent/80 mt-4">Tool →</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

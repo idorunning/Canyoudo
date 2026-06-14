@@ -1,0 +1,45 @@
+---
+// A warm invitation to pitch an article, by email. No form, no backend — it
+// opens the reader's mail client with a prefilled subject and a light template,
+// matching the email-only contact pattern used elsewhere on the site.
+const email = 'hello@thinkingaboutpolicing.org';
+const subject = 'Article idea for Thinking About Policing';
+const body = `Hi Nathan,
+
+I'd like to pitch an idea:
+
+- Working title:
+- What it argues / the evidence behind it:
+- A bit about me:
+`;
+const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+---
+
+<section class="border-b border-ink-200">
+  <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-16">
+    <div class="border border-ink-200 bg-paper-100 rounded-md p-6 md:p-10 max-w-3xl">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-3">Write for us</p>
+      <h2 class="font-display text-2xl md:text-3xl font-semibold text-ink-900 leading-tight">
+        Got something worth saying about policing?
+      </h2>
+      <p class="font-serif text-base md:text-lg text-ink-700 leading-relaxed mt-4">
+        This site welcomes pieces from serving officers and staff, researchers, practitioners and
+        policymakers — anyone with evidence, experience or a sharp question to share. You don't need a
+        finished draft or a perfect argument; a good idea is plenty to start with. If writing isn't your
+        thing, send the gist and we'll shape it together.
+      </p>
+      <p class="font-serif text-base md:text-lg text-ink-700 leading-relaxed mt-4">
+        No forms, no hoops — just email me.
+      </p>
+      <a
+        href={mailto}
+        class="inline-block mt-6 font-sans text-sm font-medium bg-accent text-paper-50 px-5 py-2.5 rounded hover:bg-accent-dark transition-colors"
+      >
+        ✉ Pitch an article →
+      </a>
+      <p class="font-sans text-xs text-ink-500 mt-3">
+        Or write to <a href={`mailto:${email}`} class="underline underline-offset-2 hover:text-accent">{email}</a>.
+      </p>
+    </div>
+  </div>
+</section>

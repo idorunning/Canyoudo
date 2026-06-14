@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { SECTION_LABELS } from '../content/config';
+import { getTopics, buildEntries, articleMatchesEntry } from '../lib/topics';
+
+// A genuinely useful, fully-visible index of the questions this site answers —
+// built for human readers and AI/search crawlers alike. Everything here is real,
+// navigable content generated from the live topics dictionary and articles, so
+// it stays in sync and is not keyword-stuffing or cloaking.
+
+const topics = await getTopics();
+const entries = buildEntries(topics);
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+// A natural-language question per topic; falls back to a generic phrasing.
+const QUESTIONS: Record<string, string> = {
+  'reading-the-data': 'How do you read police statistics without being misled?',
+  'evidence-based-policing': 'What is evidence-based policing?',
+  'self-selection-policing': 'What is self-selection policing?',
+  'neighbourhood-policing': 'Does neighbourhood policing work?',
+  'public-confidence': 'How do the police build public confidence and legitimacy?',
+  misconduct: 'How is police misconduct handled?',
+  accountability: 'Who holds the police to account?',
+  'mental-health': "What is policing's role in mental health?",
+  neurodiversity: 'How does neurodiversity affect policing and the people police meet?',
+  drugs: 'What are nitazenes and how should police respond to synthetic opioids?',
+  'county-lines': 'What are county lines?',
+  'counter-terrorism': 'What is Martyn’s Law and how does counter-terrorism policing work?',
+  'stop-and-search': 'Does stop and search work?',
+  'use-of-force': 'How is police use of force scrutinised?',
+  surveillance: 'Do UK police use facial recognition and surveillance technology?',
+  'predictive-policing': 'What is PoliceAI, and how is AI used in policing?',
+  'hotspot-policing': 'Does hotspot policing reduce crime?',
+  safeguarding: 'How do police safeguard missing and vulnerable people?',
+  'violence-against-women': 'What does the data show about violence against women and girls?',
+  leadership: 'What makes good police leadership?',
+  law: 'How does the law shape policing, from PACE to the courts?',
+  wellbeing: 'What is the toll of policing on officer wellbeing?',
+};
+
+const qa = entries
+  .map((entry) => {
+    const topic = topics.find((t) => t.slug === entry.slug);
+    const matches = articles.filter((a) => articleMatchesEntry(a.body, a.data.tags, entry));
+    return {
+      slug: entry.slug,
+      label: entry.label,
+      question: QUESTIONS[entry.slug] ?? `What does Thinking About Policing say about ${entry.label}?`,
+      description: topic?.description ?? '',
+      matches,
+    };
+  })
+  .filter((q) => q.matches.length > 0);
+
+// Hand-written glossary of key terms (definitions are the site's own framing).
+const GLOSSARY: { term: string; def: string }[] = [
+  { term: 'Evidence-based policing', def: 'Deciding what policing does on the basis of the best available evidence, and testing whether it actually works.' },
+  { term: 'Hotspot policing', def: 'Concentrating patrol and resources on the small number of places where crime and harm cluster.' },
+  { term: 'Self-selection policing', def: 'Catching serious offenders through the minor offences they also commit — “those who do big bad things also do little bad things”.' },
+  { term: 'Procedural justice', def: 'The idea that how the police treat people — fairly, with voice and respect — drives trust and legitimacy.' },
+  { term: 'Stop and search', def: 'A contested police power to search people or vehicles; its fairness and effectiveness turn on how it is used.' },
+  { term: 'Predictive policing', def: 'Using data and algorithms to anticipate where or by whom crime may occur — increasingly powered by AI.' },
+  { term: 'County lines', def: 'Cross-border drug supply networks that exploit children and vulnerable people to move and sell drugs.' },
+  { term: 'Nitazenes', def: 'Potent synthetic opioids driving overdose risk, often more powerful than heroin or fentanyl.' },
+  { term: "Martyn's Law", def: 'The Terrorism (Protection of Premises) Act — a duty on venues to prepare for and reduce the harm of terrorist attacks.' },
+  { term: 'PoliceAI', def: 'The UK national centre (launched 2026) developing, testing and scaling artificial intelligence across police forces.' },
+];
+
+const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
+
+// FAQPage structured data — the same questions and answers shown on the page.
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  name: 'What Thinking About Policing covers',
+  url: `${site}/ai`,
+  mainEntity: qa
+    .filter((q) => q.description)
+    .map((q) => ({
+      '@type': 'Question',
+      name: q.question,
+      acceptedAnswer: { '@type': 'Answer', text: q.description },
+    })),
+};
+
+const sections = Object.entries(SECTION_LABELS) as [keyof typeof SECTION_LABELS, string][];
+---
+
+<BaseLayout
+  title="What this site covers — questions, topics and an AI index"
+  description="An index of the questions Thinking About Policing answers — evidence-based policing, AI and surveillance, stop and search, drugs, safeguarding and more — by Nathan Tracey, a serving UK Police Inspector."
+  jsonLd={faqLd}
+>
+  {/* Header */}
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Index · For readers &amp; AI</p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+        What this site covers
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-3xl">
+        A plain-language map of the questions <em>Thinking About Policing</em> answers, with links to the
+        writing behind each one. Built for readers finding their way in — and for the AI assistants and
+        search engines people increasingly ask first.
+      </p>
+    </div>
+  </section>
+
+  {/* Author / expertise (E-E-A-T) */}
+  <section class="border-b border-ink-200 bg-paper-100">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-3">Who writes this</p>
+      <p class="font-serif text-base md:text-lg text-ink-700 leading-relaxed max-w-3xl">
+        <em>Thinking About Policing</em> is written by <strong>Nathan Tracey</strong>, a serving UK police
+        inspector, with a focus on evidence-based policing — what the research actually shows, and whether
+        what we do in policing works. The site covers operational policing, public policy, the people who
+        shaped the field, and the data behind the headlines.
+        Read more <a href="/about" class="underline underline-offset-2 hover:text-accent">about the author</a>
+        or <a href="/contact" class="underline underline-offset-2 hover:text-accent">get in touch</a>.
+      </p>
+    </div>
+  </section>
+
+  {/* Question-led index */}
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-8">Questions this site answers</p>
+      <div class="space-y-10">
+        {qa.map((q) => (
+          <div>
+            <h2 class="font-display text-2xl font-semibold text-ink-900 leading-snug">
+              <a href={`/topics/${q.slug}`} class="hover:text-accent transition-colors">{q.question}</a>
+            </h2>
+            {q.description && (
+              <p class="font-serif text-base md:text-lg text-ink-700 leading-relaxed mt-2 max-w-3xl">{q.description}</p>
+            )}
+            <ul class="mt-4 space-y-2">
+              {q.matches.slice(0, 6).map((a) => (
+                <li>
+                  <a href={`/${a.data.section}/${a.slug}`} class="group flex flex-wrap items-baseline gap-x-2">
+                    <span class="font-display text-base font-semibold text-ink-800 group-hover:text-accent transition-colors">{a.data.title}</span>
+                    <span class="font-sans text-xs uppercase tracking-[0.12em] text-ink-400">{SECTION_LABELS[a.data.section]}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a href={`/topics/${q.slug}`} class="inline-block mt-3 font-sans text-xs uppercase tracking-[0.15em] text-accent hover:text-accent-dark">
+              All {q.label} writing →
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* Glossary */}
+  <section class="border-b border-ink-200 bg-paper-100">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-8">Glossary of key terms</p>
+      <dl class="grid md:grid-cols-2 gap-x-12 gap-y-6 max-w-5xl">
+        {GLOSSARY.map((g) => (
+          <div>
+            <dt class="font-display text-lg font-semibold text-ink-900">{g.term}</dt>
+            <dd class="font-serif text-base text-ink-700 leading-relaxed mt-1">{g.def}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  {/* Hubs */}
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-6">Where to go next</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-3 font-sans text-sm">
+        {sections.map(([slug, label]) => (
+          <a href={`/${slug}`} class="text-ink-700 hover:text-accent transition-colors">{label} →</a>
+        ))}
+        <a href="/topics" class="text-ink-700 hover:text-accent transition-colors">All topics →</a>
+        <a href="/research" class="text-ink-700 hover:text-accent transition-colors">Research Assistant →</a>
+        <a href="/data" class="text-ink-700 hover:text-accent transition-colors">Crime Dashboard →</a>
+        <a href="/sitemap" class="text-ink-700 hover:text-accent transition-colors">Full sitemap →</a>
+        <a href="/rss.xml" class="text-ink-700 hover:text-accent transition-colors">RSS feed →</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

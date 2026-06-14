@@ -1,0 +1,62 @@
+---
+// A single-line horizontal "ticker" of recent policing / law / AI headlines,
+// for the homepage. Reads the same build-time `news` snapshot as NewsWidget
+// (scripts/fetch-news.mjs writes it; refreshed on a schedule). The marquee CSS
+// lives in global.css (.tap-ticker / @keyframes tap-marquee), which also carries
+// the reduced-motion fallback. Renders nothing if the snapshot is empty.
+import { getCollection } from 'astro:content';
+
+interface Props {
+  /** How many headlines to include in the loop. */
+  limit?: number;
+}
+const { limit = 15 } = Astro.props;
+
+const entries = await getCollection('news');
+const snapshot = entries.find((e) => e.id === 'latest') ?? entries[0];
+const items = (snapshot?.data.items ?? []).slice(0, limit);
+
+const TOPIC_LABEL: Record<string, string> = {
+  policing: 'Policing',
+  law: 'Law',
+  ai: 'AI',
+  other: 'News',
+};
+---
+
+{items.length > 0 && (
+  <section
+    class="border-b border-ink-200 bg-paper-100"
+    aria-label="Latest policing, law and AI headlines"
+    data-pagefind-ignore
+  >
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-3 flex items-center gap-4">
+      <span class="hidden sm:inline-block font-sans text-[0.65rem] uppercase tracking-[0.18em] text-accent shrink-0">
+        In the news
+      </span>
+      <div class="tap-ticker min-w-0 flex-1">
+        <div class="tap-ticker-track">
+          {[0, 1].map((copy) => (
+            <ul class="flex items-center gap-8 shrink-0" aria-hidden={copy === 1 ? 'true' : undefined} data-ticker-dupe={copy === 1 ? '' : undefined}>
+              {items.map((item) => (
+                <li class="shrink-0">
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener nofollow"
+                    class="group inline-flex items-center gap-2 whitespace-nowrap"
+                    tabindex={copy === 1 ? -1 : undefined}
+                  >
+                    <span class={`news-chip news-chip--${item.topic}`}>{TOPIC_LABEL[item.topic] ?? 'News'}</span>
+                    <span class="font-display text-sm font-medium text-ink-800 group-hover:text-accent transition-colors">{item.title}</span>
+                    <span class="font-sans text-xs text-ink-400">{item.source}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}

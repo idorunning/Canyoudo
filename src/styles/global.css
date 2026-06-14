@@ -473,3 +473,73 @@
   --pagefind-ui-border-radius: 6px;
   --pagefind-ui-font: theme('fontFamily.sans');
 }
+
+/* ------------------------------------------------------------------ */
+/* Aggregated-news chips — shared by NewsWidget and NewsTicker          */
+/* ------------------------------------------------------------------ */
+.news-chip {
+  display: inline-block;
+  font-family: theme('fontFamily.sans');
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  line-height: 1.3;
+  background: theme('colors.paper.200');
+  color: theme('colors.ink.600');
+  flex-shrink: 0;
+}
+.news-chip--policing {
+  background: rgba(124, 40, 40, 0.1);
+  color: theme('colors.accent.DEFAULT');
+}
+.news-chip--ai {
+  background: rgba(90, 84, 78, 0.12);
+  color: theme('colors.ink.700');
+}
+.news-chip--law {
+  background: rgba(161, 69, 69, 0.12);
+  color: theme('colors.accent.light');
+}
+
+/* ------------------------------------------------------------------ */
+/* News ticker — a single-line marquee of recent headlines             */
+/* ------------------------------------------------------------------ */
+@keyframes tap-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.tap-ticker {
+  overflow: hidden;
+}
+.tap-ticker-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 2rem;
+  animation: tap-marquee 70s linear infinite;
+}
+/* Pause when the reader hovers or tabs into the strip, so links are clickable. */
+.tap-ticker:hover .tap-ticker-track,
+.tap-ticker:focus-within .tap-ticker-track {
+  animation-play-state: paused;
+}
+/* Respect reduced-motion: stop the animation and let it scroll by hand. The
+   duplicated (aria-hidden) copy is hidden so headlines aren't repeated. */
+@media (prefers-reduced-motion: reduce) {
+  .tap-ticker {
+    overflow-x: auto;
+  }
+  .tap-ticker-track {
+    animation: none;
+  }
+  .tap-ticker-track [data-ticker-dupe] {
+    display: none;
+  }
+}
