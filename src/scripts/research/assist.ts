@@ -5,7 +5,7 @@
 // All rendered via textContent; failures suppress the panel, never the search.
 
 import { el, type Work } from './cards';
-import { formatReference } from '../../lib/reference-format.mjs';
+import { citationParagraph, referenceList, CONFIDENCE_LABELS } from './citation-render';
 
 export interface Translation {
   query: string;
@@ -109,34 +109,6 @@ interface Answer {
   confidence: 'strong' | 'mixed' | 'thin';
 }
 
-const CONFIDENCE_LABELS: Record<Answer['confidence'], string> = {
-  strong: 'Evidence: converging',
-  mixed: 'Evidence: mixed',
-  thin: 'Evidence: thin',
-};
-
-/** Render one answer paragraph, turning [n] markers into superscript links to
- *  the matching reference line below. Everything else is plain textContent. */
-function answerParagraph(text: string, valid: Set<number>) {
-  const p = el('p', 'font-serif text-sm text-ink-800 leading-relaxed mt-2 first:mt-0');
-  for (const part of text.split(/(\[\d{1,3}\])/)) {
-    const m = part.match(/^\[(\d{1,3})\]$/);
-    const n = m ? Number(m[1]) : 0;
-    if (n && valid.has(n)) {
-      const sup = document.createElement('sup');
-      const a = document.createElement('a');
-      a.href = `#research-ref-${n}`;
-      a.className = 'text-accent font-sans font-medium hover:text-accent-dark no-underline px-0.5';
-      a.textContent = `[${n}]`;
-      sup.appendChild(a);
-      p.appendChild(sup);
-    } else if (part) {
-      p.appendChild(document.createTextNode(part));
-    }
-  }
-  return p;
-}
-
 /**
  * Fetch and render the cited evidence answer for a question search. The
  * numbered reference list is built locally from the retrieved Work objects —
@@ -206,25 +178,14 @@ export async function renderAnswer(
   box.appendChild(kicker);
 
   for (const para of data.answer.split(/\n{2,}/)) {
-    if (para.trim()) box.appendChild(answerParagraph(para.trim(), valid));
+    if (para.trim()) box.appendChild(citationParagraph(para.trim(), valid));
   }
   box.appendChild(el('p', 'font-serif text-xs italic text-ink-600 mt-3', data.caveat));
 
   // References: built from the actual retrieved works, numbered to match the
   // markers. Each line links nothing the model wrote — only real records.
-  if (valid.size) {
-    const refHead = el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500 mt-4 mb-1', 'References (from the results below)');
-    box.appendChild(refHead);
-    const list = el('ol', 'space-y-1');
-    for (const n of [...valid].sort((a, b) => a - b)) {
-      const li = el('li', 'font-serif text-xs text-ink-700 leading-relaxed');
-      li.id = `research-ref-${n}`;
-      li.appendChild(el('span', 'font-sans font-medium text-ink-500 mr-1', `[${n}]`));
-      li.appendChild(document.createTextNode(formatReference(works[n - 1])));
-      list.appendChild(li);
-    }
-    box.appendChild(list);
-  }
+  const refs = referenceList(works, valid);
+  if (refs) box.appendChild(refs);
 
   panel.appendChild(box);
   panel.hidden = false;

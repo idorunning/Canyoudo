@@ -163,6 +163,59 @@ insert into public.paper_folders (paper_id, folder_id, user_id)
 (The old `folder_id` column on `saved_papers` stays for now as a safety net —
 it just stops being written to.)
 
+## Part 4⅞ — Saved + shareable briefings (1 min, run once)
+
+The research assistant's problem→briefing flow saves each briefing to the
+reader's account and can mint a read-only share link. That needs one more
+table. Run this in the SQL Editor the same way. Until it's run, briefings are
+generated and shown on screen but can't be saved or shared.
+
+```sql
+create table public.briefings (
+  id             uuid primary key default gen_random_uuid(),
+  user_id        uuid not null references auth.users(id) on delete cascade,
+  problem        text not null,
+  framing        text,
+  briefing       text not null,                       -- markdown with [n] markers (already sanitised)
+  used           jsonb not null default '[]'::jsonb,  -- the valid citation indices
+  references_    jsonb not null default '[]'::jsonb,  -- the curated Work[] — renders the reference cards, no re-query
+  confidence     text,                                -- 'strong' | 'mixed' | 'thin'
+  caveat         text,
+  model          text,                                -- e.g. 'claude-sonnet-4-6'
+  prompt_version text,                                -- ASSIST_PROMPT_VERSION at authoring time
+  visibility     text not null default 'private',     -- 'private' | 'unlisted'
+  share_token    text not null unique default encode(gen_random_bytes(16), 'hex'),
+  created_at     timestamptz not null default now()
+);
+
+create index briefings_user  on public.briefings (user_id, created_at desc);
+create index briefings_share on public.briefings (share_token);
+
+alter table public.briefings enable row level security;
+
+-- The owner controls their own briefings completely.
+create policy "read own briefings"   on public.briefings
+  for select using (auth.uid() = user_id);
+create policy "insert own briefings" on public.briefings
+  for insert with check (auth.uid() = user_id);
+create policy "update own briefings" on public.briefings
+  for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "delete own briefings" on public.briefings
+  for delete using (auth.uid() = user_id);
+
+-- Public read of UNLISTED briefings only. A logged-out visitor opening a share
+-- link can read a row only when its owner has set it to 'unlisted'; private
+-- rows are invisible to anyone but the owner. The 128-bit share_token is the
+-- capability (it's unguessable, not enumerable); 'visibility' is the kill
+-- switch — flip a briefing back to 'private' and the link stops working.
+create policy "read shared briefings" on public.briefings
+  for select to anon using (visibility = 'unlisted');
+```
+
+The trailing underscore in `references_` avoids the SQL reserved word
+`references`. Nothing here exposes a private briefing: the anon policy returns
+only `unlisted` rows, and a row is found only by its exact token.
+
 ## Part 4½ — Email sign-in (1 min, optional but recommended)
 
 Besides Google, the site offers "Sign in with email" — a one-click link sent

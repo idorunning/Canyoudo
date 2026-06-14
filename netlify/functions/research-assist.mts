@@ -8,6 +8,8 @@ import {
   OVERVIEW_SYSTEM,
   ANSWER_SYSTEM,
   BRIEF_SYSTEM,
+  PLAN_SYSTEM,
+  BRIEFING_SYSTEM,
 } from '../../src/lib/research-assist-prompts';
 import { sanitizeCitations } from '../../src/lib/citations.mjs';
 import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-budget';
@@ -18,6 +20,15 @@ import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-bu
 //     { mode: 'overview', query, filters, items[≤8] }  → { overview, caveat, refinements }
 //     { mode: 'answer', question, items[≤10] }         → { answer, used, caveat, confidence }
 //     { mode: 'brief', topic, items[≤15] }             → { brief, used, caveat }
+//     { mode: 'plan', problem }                         → { framing, angles[3] }
+//     { mode: 'briefing', problem, items[≤15] }         → { briefing, used, confidence, caveat }
+//
+// plan + briefing are the two halves of the problem-first briefing flow: plan
+// (Sonnet) decomposes a problem into ~3 distinct search angles; the client
+// searches each, merges and curates the studies, then briefing (Sonnet)
+// synthesises a four-section evidence briefing. briefing carries the same
+// citation discipline as answer/brief — only [n] indices into the one numbered
+// list it was given, references built client-side, out-of-range stripped here.
 //
 // translate uses Sonnet (better inference from a vague question to the
 // literature's vocabulary); overview uses Haiku (fast, cheap synthesis of the
@@ -33,6 +44,8 @@ const TRANSLATE_MODEL: ModelId = 'claude-sonnet-4-6';
 const OVERVIEW_MODEL: ModelId = 'claude-haiku-4-5';
 const ANSWER_MODEL: ModelId = 'claude-sonnet-4-6';
 const BRIEF_MODEL: ModelId = 'claude-sonnet-4-6';
+const PLAN_MODEL: ModelId = 'claude-sonnet-4-6';
+const BRIEFING_MODEL: ModelId = 'claude-sonnet-4-6';
 
 const json = (status: number, body: unknown, cache: 'HIT' | 'MISS' | 'NONE' = 'NONE') =>
   new Response(JSON.stringify(body), {
@@ -89,7 +102,37 @@ export default async (req: Request) => {
   // upper bound for its citation indices.
   let citedItemCount = 0;
 
-  if (mode === 'brief') {
+  if (mode === 'plan') {
+    const problem = clipStr(body.problem, 600);
+    if (!problem) return json(400, { error: 'Describe the problem first.' });
+    model = PLAN_MODEL;
+    system = PLAN_SYSTEM;
+    user = `Problem: ${problem}`;
+    maxTokens = 500;
+    input = { p: problem.toLowerCase() };
+  } else if (mode === 'briefing') {
+    const problem = clipStr(body.problem, 600);
+    const items = Array.isArray(body.items)
+      ? body.items.slice(0, 15).map((it: any) => ({
+          title: clipStr(it?.title, 300),
+          authors: Array.isArray(it?.authors)
+            ? it.authors.slice(0, 4).map((a: unknown) => clipStr(a, 100)).filter(Boolean)
+            : [],
+          year: Number.isInteger(it?.year) ? it.year : null,
+          venue: clipStr(it?.venue, 150) || null,
+          abstract: clipStr(it?.abstract, 700),
+        })).filter((it: any) => it.title)
+      : [];
+    if (!problem || items.length === 0) return json(400, { error: 'Nothing to brief from.' });
+    citedItemCount = items.length;
+    model = BRIEFING_MODEL;
+    system = BRIEFING_SYSTEM;
+    user = `Problem: ${problem}\n\nStudies:\n${items
+      .map((it: any, i: number) => `[${i + 1}] ${JSON.stringify(it)}`)
+      .join('\n')}`;
+    maxTokens = 2500;
+    input = { p: problem.toLowerCase(), items };
+  } else if (mode === 'brief') {
     const topic = clipStr(body.topic, 100) || 'Saved papers';
     const items = Array.isArray(body.items)
       ? body.items.slice(0, 15).map((it: any) => ({
@@ -186,7 +229,40 @@ export default async (req: Request) => {
   // Validate the model's JSON to the contract the page expects; reject shapes
   // we don't recognise rather than passing anything through.
   let result: Record<string, unknown>;
-  if (mode === 'brief') {
+  if (mode === 'plan') {
+    const framing = clipStr(out?.framing, 500);
+    const angles = (Array.isArray(out?.angles) ? out.angles : [])
+      .map((a: any) => ({
+        label: clipStr(a?.label, 60),
+        query: clipStr(a?.query, 200),
+        review: a?.review === true,
+        from:
+          Number.isInteger(a?.from) && a.from >= 1950 && a.from <= 2100 ? a.from : null,
+      }))
+      .filter((a: any) => a.query)
+      .slice(0, 3);
+    // Need a framing and at least one usable angle, or the pipeline has nothing
+    // to search — fail rather than pass a shape the client can't run.
+    if (!framing || angles.length === 0) {
+      return json(502, { error: 'The assistant gave an unusable plan. Try rephrasing the problem.' });
+    }
+    result = { framing, angles };
+  } else if (mode === 'briefing') {
+    // Same citation discipline as answer/brief: strip out-of-range markers,
+    // reject a briefing left with nothing cited.
+    const { text: briefing, used } = sanitizeCitations(clipStr(out?.briefing, 8000), citedItemCount);
+    if (!briefing || used.length === 0) {
+      return json(502, { error: 'The assistant gave an unusable reply. Try again.' });
+    }
+    result = {
+      briefing,
+      used,
+      confidence: ['strong', 'mixed', 'thin'].includes(out?.confidence) ? out.confidence : 'mixed',
+      caveat:
+        clipStr(out?.caveat, 300) ||
+        'Synthesised from the abstracts of a curated set, not the full texts or a systematic review — read the studies before relying on this.',
+    };
+  } else if (mode === 'brief') {
     // Same citation discipline as answer: strip out-of-range markers, reject
     // a brief left with nothing cited.
     const { text: brief, used } = sanitizeCitations(clipStr(out?.brief, 6000), citedItemCount);

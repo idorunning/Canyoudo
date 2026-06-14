@@ -14,6 +14,9 @@ const hasAi = Boolean(process.env.ANTHROPIC_API_KEY);
 const hasAuth = Boolean(
   import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
+// The problem→briefing flow is the primary experience; it needs AI to plan and
+// synthesise. Without AI we fall back to plain search only.
+const hasBriefing = hasAi;
 
 // With a second catalogue configured, the merged "All sources" search leads
 // (and is the default); with OpenAlex alone it would add nothing, so it hides.
@@ -25,7 +28,7 @@ const sources = [
   ...(hasCore ? [{ id: 'core', label: 'CORE (full text)' }] : []),
 ];
 
-const pageConfig = { hasAi, hasAuth, sources: sources.map((s) => s.id) };
+const pageConfig = { hasAi, hasAuth, hasBriefing, sources: sources.map((s) => s.id) };
 
 // Curated evidence databases, maintained in the resources collection so the
 // CMS stays the single source of truth (also rendered on /resources).
@@ -37,8 +40,32 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 
 <BaseLayout
   title="Research assistant"
-  description="Ask a question about policing in plain English — the research assistant searches the open scholarly record, sketches what the evidence says, and links straight to free copies."
+  description="State a policing problem in plain English — the research assistant searches the open scholarly record from several angles, curates the strongest studies, and returns a cited evidence briefing with next steps."
 >
+  {/* Flash mitigation: a returning signed-in reader shouldn't see the marketing
+      landing before the Supabase session resolves. If an auth token is in
+      localStorage, pre-hide the landing and show a neutral skeleton until JS
+      verifies the session. Runs before the regions below are parsed. */}
+  {hasAuth && (
+    <Fragment>
+      <style is:inline set:html={`
+        html[data-maybe-authed] [data-research-landing] { display: none !important; }
+        html[data-maybe-authed] [data-research-skeleton][hidden] { display: block; }
+      `}></style>
+      <script is:inline>
+        try {
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.indexOf('sb-') === 0 && k.indexOf('-auth-token') > 0 && localStorage.getItem(k)) {
+              document.documentElement.setAttribute('data-maybe-authed', '');
+              break;
+            }
+          }
+        } catch (e) {}
+      </script>
+    </Fragment>
+  )}
+
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
       <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Evidence</p>
@@ -46,173 +73,308 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
         Research assistant
       </h1>
       <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
-        Most policing research sits behind paywalls a working officer will never cross.
-        A surprising amount of it also exists in free, legal copies — author manuscripts,
-        repository deposits, open-access journals. Ask a question here and the assistant
-        searches the open scholarly record, sketches what the studies say, and links you
-        straight to the free copy where one exists. No library card needed.
+        State a problem you're trying to solve and the assistant researches it for you:
+        it breaks the problem into a few angles, searches the open scholarly record from
+        each, curates the strongest studies, and writes a short evidence briefing — what
+        the research says, how strong it is, and concrete next steps to try. Every claim is
+        pinned to a study you can open and read.
       </p>
     </div>
   </section>
 
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
-      <div class="max-w-3xl" data-research>
+      <div data-research>
         <script is:inline type="application/json" id="research-config" set:html={JSON.stringify(pageConfig)}></script>
 
+        {/* ============================ SHARED VIEW ============================ */}
+        {/* A read-only briefing opened via /research?b=<token>. Shown ahead of
+            the gate; works whether or not the viewer is signed in. */}
         {hasAuth && (
-          <div class="mb-6" data-auth-slot></div>
+          <div data-research-shared hidden class="max-w-3xl"></div>
         )}
 
-        <form data-research-form class="flex flex-wrap gap-3 items-stretch">
-          <label for="research-q" class="sr-only">Ask the research assistant</label>
-          <input
-            id="research-q"
-            data-research-input
-            type="search"
-            autocomplete="off"
-            placeholder={hasAi ? 'e.g. does extra patrol cut burglary?' : 'e.g. hot spots policing'}
-            class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
-          />
-          <button
-            type="submit"
-            data-research-send
-            class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50"
-          >
-            Search
-          </button>
-        </form>
-
-        <p class="mt-2 font-sans text-xs text-ink-600 max-w-2xl leading-relaxed">
-          {hasAi
-            ? 'Ask it like a question — what works, what are you trying to achieve, what does the evidence say? The assistant turns it into a proper scholarly search, then reviews what came back. Plain keywords work too.'
-            : 'Search by keywords — e.g. hot spots policing, body-worn cameras, procedural justice.'}
-        </p>
-
-        {hasAi && (
-          <p
-            data-research-interpreted
-            hidden
-            class="mt-3 font-sans text-xs text-ink-700 bg-paper-200 rounded px-3 py-2"
-            aria-live="polite"
-          ></p>
+        {/* ============================== SKELETON ============================= */}
+        {/* Neutral placeholder for a returning signed-in reader, swapped for the
+            tool once the session resolves (see the head script above). */}
+        {hasAuth && (
+          <div data-research-skeleton hidden aria-busy="true" class="max-w-3xl animate-pulse">
+            <div class="h-10 bg-paper-200 rounded w-2/3 mb-6"></div>
+            <div class="h-4 bg-paper-200 rounded w-full mb-3"></div>
+            <div class="h-4 bg-paper-200 rounded w-5/6 mb-3"></div>
+            <div class="h-4 bg-paper-200 rounded w-3/4"></div>
+          </div>
         )}
 
-        <div class="mt-5 flex flex-wrap gap-2" role="radiogroup" aria-label="Search source">
-          {sources.map((s, i) => (
-            <label class="cursor-pointer">
-              <input
-                type="radio"
-                name="research-source"
-                value={s.id}
-                checked={i === 0}
-                class="peer sr-only"
-              />
-              <span class="inline-block font-sans text-xs px-3 py-1.5 rounded-full border border-ink-300 text-ink-700 peer-checked:bg-ink-900 peer-checked:text-paper-50 peer-checked:border-ink-900 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-accent transition-colors hover:border-ink-500">
-                {s.label}
-              </span>
-            </label>
-          ))}
-        </div>
-
-        <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-ink-700 items-center">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" data-filter-oa checked class="accent-[#7c2828]" />
-            Free-to-read only
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" data-filter-review class="accent-[#7c2828]" />
-            Reviews only
-          </label>
-          <label class="flex items-center gap-2">
-            Since
-            <select data-filter-from class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
-              <option value="">any year</option>
-              <option value="2020">2020</option>
-              <option value="2015">2015</option>
-              <option value="2010">2010</option>
-              <option value="2000">2000</option>
-            </select>
-          </label>
-          <label class="flex items-center gap-2">
-            Sort by
-            <select data-filter-sort class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
-              <option value="relevance">most relevant</option>
-              <option value="recent">newest</option>
-              <option value="cited">most popular (cited)</option>
-              {hasAi && <option value="suggested">suggested (AI picks)</option>}
-            </select>
-          </label>
-        </div>
-
-        <div data-research-topics class="mt-8">
-          <details class="group">
-            <summary class="md:hidden font-sans text-xs uppercase tracking-[0.15em] text-ink-500 cursor-pointer list-none mb-3">
-              Browse topics <span class="group-open:hidden">+</span><span class="hidden group-open:inline">−</span>
-            </summary>
-            <div class="space-y-5">
-              {TOPIC_GROUPS.map((g) => (
+        {/* ============================== LANDING ============================= */}
+        {/* Logged-out marketing view: how it works, a worked example, sign-in.
+            Visible by default so logged-out visitors see it with no flash. */}
+        {hasAuth && (
+          <div data-research-landing class="max-w-3xl">
+            <div class="grid sm:grid-cols-3 gap-6 mb-12">
+              {[
+                { n: '1', h: 'State the problem', p: 'Describe what you’re trying to solve, in plain English — “cut repeat burglary on an estate”, “improve trust after a use-of-force incident”.' },
+                { n: '2', h: 'It does the legwork', p: 'The assistant splits the problem into angles, searches the open research record from each, and curates the strongest studies — free copies where they exist.' },
+                { n: '3', h: 'Get a cited briefing', p: 'A short briefing: what the evidence says, how strong it is, and next steps to try — every claim pinned to a study you can open.' },
+              ].map((s) => (
                 <div>
-                  <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">{g.group}</p>
-                  <div class="flex flex-wrap gap-2">
-                    {g.chips.map((c) => (
-                      <button
-                        type="button"
-                        data-topic-q={c.q}
-                        data-topic-review={c.filters?.review ? '1' : undefined}
-                        data-topic-from={c.filters?.from ? String(c.filters.from) : undefined}
-                        class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
-                      >
-                        {c.label}
-                      </button>
-                    ))}
-                  </div>
+                  <div class="font-display text-2xl font-semibold text-accent mb-2">{s.n}</div>
+                  <h3 class="font-sans text-sm font-semibold text-ink-900 mb-1">{s.h}</h3>
+                  <p class="font-serif text-sm text-ink-700 leading-relaxed">{s.p}</p>
                 </div>
               ))}
             </div>
-          </details>
-        </div>
 
-        {hasAuth && (
-          <nav data-research-tabs hidden class="mt-8 flex gap-6 border-b border-ink-200 font-sans text-sm">
-            <button type="button" data-tab="results" class="pb-2 -mb-px border-b-2 border-accent text-accent">
-              Results
-            </button>
-            <button type="button" data-tab="saved" class="pb-2 -mb-px border-b-2 border-transparent text-ink-600 hover:text-ink-900">
-              Saved (<span data-saved-count>0</span>)
-            </button>
-          </nav>
+            {/* Worked example — static HTML, always present (no AI call). */}
+            <p class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-3">An example briefing</p>
+            <div class="rounded-lg border border-ink-200 bg-paper-50 px-6 py-7">
+              <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-2">Evidence briefing</p>
+              <h2 class="font-display text-xl md:text-2xl font-semibold text-ink-900 leading-tight">
+                How do we cut repeat domestic-abuse victimisation in our area?
+              </h2>
+              <span class="inline-block mt-3 font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-500 border border-ink-200 rounded px-1.5 py-0.5">Evidence: mixed</span>
+
+              <h3 class="font-display text-base font-semibold text-ink-900 mt-6 mb-1">What the evidence says</h3>
+              <p class="font-serif text-sm text-ink-800 leading-relaxed">
+                Repeat victimisation is concentrated and predictable: a small share of
+                victims account for a large share of calls, and risk is highest in the
+                weeks after an incident <sup class="text-accent font-sans font-medium">[1]</sup>.
+                Focused deterrence and structured risk-assessment approaches show promise,
+                but trials are few and effects vary by how faithfully they’re delivered
+                <sup class="text-accent font-sans font-medium">[2]</sup><sup class="text-accent font-sans font-medium">[3]</sup>.
+              </p>
+              <h3 class="font-display text-base font-semibold text-ink-900 mt-6 mb-1">Next steps and ideas to try</h3>
+              <p class="font-serif text-sm text-ink-800 leading-relaxed">
+                Target the post-incident window with a named contact and a clear safety
+                plan; measure repeat calls at 4 and 8 weeks rather than arrests alone
+                <sup class="text-accent font-sans font-medium">[1]</sup>. Pilot with one
+                team before scaling, and track fidelity — the effect lives in the delivery
+                <sup class="text-accent font-sans font-medium">[3]</sup>.
+              </p>
+              <p class="font-serif text-xs italic text-ink-600 mt-5">
+                Example only — synthesised from abstracts, not full papers. Your briefing cites the real studies it finds.
+              </p>
+            </div>
+
+            {/* Sign-in: the gate to the tool. Both routes mounted by the script. */}
+            <div class="mt-12 rounded-lg bg-paper-200 px-6 py-7">
+              <h2 class="font-display text-xl font-semibold text-ink-900">Sign in to use the research assistant</h2>
+              <p class="font-serif text-ink-700 leading-relaxed mt-2 max-w-xl">
+                It’s free. The email link is password-free and works with any address,
+                including a work one (e.g. police.gov.uk). Your briefings save to your
+                account, and you can share any of them with a read-only link.
+              </p>
+              <div class="mt-5" data-landing-signin></div>
+            </div>
+          </div>
         )}
 
-        <p data-research-status class="font-sans text-sm text-ink-600 mt-8" aria-live="polite"></p>
+        {/* =============================== TOOL ============================== */}
+        {/* The real tool. Hidden until the session resolves (when hasAuth);
+            shown directly on a keyless deploy where there's no gate. */}
+        <div data-research-tool hidden={hasAuth}>
+          {hasAuth && (
+            <div class="mb-6" data-auth-slot></div>
+          )}
 
-        <div data-results-pane>
-          {hasAi && <div data-research-overview hidden class="mt-4"></div>}
-          <div data-research-results class="mt-2"></div>
-          <div class="mt-8">
-            <button
-              type="button"
-              data-research-more
-              hidden
-              class="font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50"
-            >
-              More results
-            </button>
+          {/* Mode toggle: briefing is primary, plain search is secondary. */}
+          {hasBriefing && (
+            <nav data-research-mode class="mb-7 flex gap-2 font-sans text-sm" aria-label="Mode">
+              <button type="button" data-mode="briefing" class="px-4 py-2 rounded-md bg-ink-900 text-paper-50">
+                Build a briefing
+              </button>
+              <button type="button" data-mode="search" class="px-4 py-2 rounded-md border border-ink-300 text-ink-700 hover:border-ink-500">
+                Just search
+              </button>
+            </nav>
+          )}
+
+          {/* ---- briefing mode ---- */}
+          {hasBriefing && (
+            <div data-briefing-mode>
+              <form data-briefing-form class="space-y-3">
+                <label for="briefing-q" class="block font-sans text-sm font-medium text-ink-900">
+                  What problem are you trying to solve?
+                </label>
+                <textarea
+                  id="briefing-q"
+                  data-briefing-input
+                  rows="3"
+                  placeholder="e.g. How do we reduce repeat burglary on a single estate without simply displacing it?"
+                  class="w-full border border-ink-300 rounded-md px-4 py-3 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent resize-y"
+                ></textarea>
+                <div class="flex flex-wrap items-center gap-3">
+                  <button
+                    type="submit"
+                    data-briefing-send
+                    class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50"
+                  >
+                    Build briefing
+                  </button>
+                  <p class="font-sans text-xs text-ink-600">
+                    Searches several angles, then writes a cited briefing — about half a minute.
+                  </p>
+                </div>
+              </form>
+
+              <div data-briefing-progress hidden class="mt-6" aria-live="polite"></div>
+              <div data-briefing-result class="mt-8"></div>
+            </div>
+          )}
+
+          {/* ---- search mode (secondary) ---- */}
+          <div data-search-mode hidden={hasBriefing}>
+            <form data-research-form class="flex flex-wrap gap-3 items-stretch">
+              <label for="research-q" class="sr-only">Search the scholarly record</label>
+              <input
+                id="research-q"
+                data-research-input
+                type="search"
+                autocomplete="off"
+                placeholder={hasAi ? 'e.g. does extra patrol cut burglary?' : 'e.g. hot spots policing'}
+                class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
+              />
+              <button
+                type="submit"
+                data-research-send
+                class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50"
+              >
+                Search
+              </button>
+            </form>
+
+            <p class="mt-2 font-sans text-xs text-ink-600 max-w-2xl leading-relaxed">
+              {hasAi
+                ? 'Ask it like a question — what works, what does the evidence say? The assistant turns it into a scholarly search, then reviews what came back. Plain keywords work too.'
+                : 'Search by keywords — e.g. hot spots policing, body-worn cameras, procedural justice.'}
+            </p>
+
+            {hasAi && (
+              <p
+                data-research-interpreted
+                hidden
+                class="mt-3 font-sans text-xs text-ink-700 bg-paper-200 rounded px-3 py-2"
+                aria-live="polite"
+              ></p>
+            )}
+
+            <div class="mt-5 flex flex-wrap gap-2" role="radiogroup" aria-label="Search source">
+              {sources.map((s, i) => (
+                <label class="cursor-pointer">
+                  <input
+                    type="radio"
+                    name="research-source"
+                    value={s.id}
+                    checked={i === 0}
+                    class="peer sr-only"
+                  />
+                  <span class="inline-block font-sans text-xs px-3 py-1.5 rounded-full border border-ink-300 text-ink-700 peer-checked:bg-ink-900 peer-checked:text-paper-50 peer-checked:border-ink-900 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-accent transition-colors hover:border-ink-500">
+                    {s.label}
+                  </span>
+                </label>
+              ))}
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-ink-700 items-center">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" data-filter-oa checked class="accent-[#7c2828]" />
+                Free-to-read only
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" data-filter-review class="accent-[#7c2828]" />
+                Reviews only
+              </label>
+              <label class="flex items-center gap-2">
+                Since
+                <select data-filter-from class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
+                  <option value="">any year</option>
+                  <option value="2020">2020</option>
+                  <option value="2015">2015</option>
+                  <option value="2010">2010</option>
+                  <option value="2000">2000</option>
+                </select>
+              </label>
+              <label class="flex items-center gap-2">
+                Sort by
+                <select data-filter-sort class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
+                  <option value="relevance">most relevant</option>
+                  <option value="recent">newest</option>
+                  <option value="cited">most popular (cited)</option>
+                  {hasAi && <option value="suggested">suggested (AI picks)</option>}
+                </select>
+              </label>
+            </div>
+
+            <div data-research-topics class="mt-8">
+              <details class="group">
+                <summary class="md:hidden font-sans text-xs uppercase tracking-[0.15em] text-ink-500 cursor-pointer list-none mb-3">
+                  Browse topics <span class="group-open:hidden">+</span><span class="hidden group-open:inline">−</span>
+                </summary>
+                <div class="space-y-5">
+                  {TOPIC_GROUPS.map((g) => (
+                    <div>
+                      <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">{g.group}</p>
+                      <div class="flex flex-wrap gap-2">
+                        {g.chips.map((c) => (
+                          <button
+                            type="button"
+                            data-topic-q={c.q}
+                            data-topic-review={c.filters?.review ? '1' : undefined}
+                            data-topic-from={c.filters?.from ? String(c.filters.from) : undefined}
+                            class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+                          >
+                            {c.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            </div>
+
+            {hasAuth && (
+              <nav data-research-tabs hidden class="mt-8 flex gap-6 border-b border-ink-200 font-sans text-sm">
+                <button type="button" data-tab="results" class="pb-2 -mb-px border-b-2 border-accent text-accent">
+                  Results
+                </button>
+                <button type="button" data-tab="saved" class="pb-2 -mb-px border-b-2 border-transparent text-ink-600 hover:text-ink-900">
+                  Saved (<span data-saved-count>0</span>)
+                </button>
+              </nav>
+            )}
+
+            <p data-research-status class="font-sans text-sm text-ink-600 mt-8" aria-live="polite"></p>
+
+            <div data-results-pane>
+              {hasAi && <div data-research-overview hidden class="mt-4"></div>}
+              <div data-research-results class="mt-2"></div>
+              <div class="mt-8">
+                <button
+                  type="button"
+                  data-research-more
+                  hidden
+                  class="font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50"
+                >
+                  More results
+                </button>
+              </div>
+            </div>
+
+            {hasAuth && <div data-research-saved hidden class="mt-2"></div>}
           </div>
+
+          <p class="font-sans text-xs text-ink-600 mt-12 pt-6 border-t border-ink-200 max-w-2xl leading-relaxed">
+            Results come from
+            <a href="https://openalex.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">OpenAlex</a>{hasScholar && (
+              <Fragment>, <a href="https://www.semanticscholar.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Semantic Scholar</a></Fragment>
+            )}{hasCore && (
+              <Fragment> and <a href="https://core.ac.uk" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">CORE</a></Fragment>
+            )} — open catalogues of the scholarly record. "Free copy" links go to publisher or
+            repository versions; quality varies and inclusion here is not endorsement. Weigh
+            the study, not the headline.{hasAi && ' Briefings and AI summaries are sketches from abstracts, not verdicts — read the studies.'}
+          </p>
         </div>
-
-        {hasAuth && <div data-research-saved hidden class="mt-2"></div>}
-
-        <p class="font-sans text-xs text-ink-600 mt-12 pt-6 border-t border-ink-200 max-w-2xl leading-relaxed">
-          Results come from
-          <a href="https://openalex.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">OpenAlex</a>{hasScholar && (
-            <Fragment>, <a href="https://www.semanticscholar.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Semantic Scholar</a></Fragment>
-          )}{hasCore && (
-            <Fragment> and <a href="https://core.ac.uk" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">CORE</a></Fragment>
-          )} — open catalogues of the scholarly record. "Free copy" links go to publisher or
-          repository versions; quality varies and inclusion here is not endorsement. Weigh
-          the study, not the headline.{hasAi && ' AI summaries are sketches, not verdicts.'}
-        </p>
       </div>
     </div>
   </section>

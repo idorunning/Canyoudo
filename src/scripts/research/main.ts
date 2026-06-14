@@ -1,18 +1,31 @@
-// The /research page controller. Markup lives in src/pages/research.astro;
-// this wires the search, source picker, filters, topic rail, shareable URL
-// state, and — when configured at build time — the AI assist and saved-papers
-// features. All network data renders via createElement/textContent.
+// The /research page controller. Markup lives in src/pages/research.astro.
+//
+// The page has three regions, gated client-side after the Supabase session
+// resolves: a logged-out marketing LANDING, the signed-in TOOL, and a
+// read-only SHARED briefing view (opened via /research?b=<token>). The tool
+// leads with the problem→briefing flow (briefing.ts) and keeps the original
+// keyword/question search as a secondary mode. All network data renders via
+// createElement/textContent.
 
 import { SOURCE_CAPS } from '../../lib/research-sources.mjs';
 import { workMergeKey } from '../../lib/research-merge.mjs';
 import { card, el, type Work, type CardHooks } from './cards';
 import { readStateFromUrl, writeStateToUrl, type SearchState } from './state';
 import { translateQuestion, renderOverview, renderAnswer, clearOverview } from './assist';
+import {
+  runBriefingPipeline,
+  renderBriefing,
+  cancelBriefing,
+  type BriefingPlan,
+  type BriefingOutcome,
+} from './briefing';
 import type { SavedStore } from './saved';
+import type { BriefingsStore } from './briefings-store';
 
 interface PageConfig {
   hasAi: boolean;
   hasAuth: boolean;
+  hasBriefing: boolean;
   sources: string[];
 }
 
@@ -23,6 +36,347 @@ export async function initResearch() {
     document.getElementById('research-config')?.textContent ?? '{}'
   );
 
+  const landing = root.querySelector<HTMLElement>('[data-research-landing]');
+  const tool = root.querySelector<HTMLElement>('[data-research-tool]');
+  const shared = root.querySelector<HTMLElement>('[data-research-shared]');
+  const skeleton = root.querySelector<HTMLElement>('[data-research-skeleton]');
+
+  // ---- shared briefing route (/research?b=token), ahead of the gate ---------
+  const shareToken = new URLSearchParams(location.search).get('b');
+  if (shareToken && config.hasAuth && shared) {
+    document.documentElement.removeAttribute('data-maybe-authed');
+    if (landing) landing.hidden = true;
+    if (tool) tool.hidden = true;
+    if (skeleton) skeleton.hidden = true;
+    await showSharedBriefing(shared, shareToken);
+    return;
+  }
+
+  // ---- auth + storage (only when Supabase was configured at build time) -----
+  let savedStore: SavedStore | null = null;
+  let briefingsStore: BriefingsStore | null = null;
+  const authSlot = root.querySelector<HTMLElement>('[data-auth-slot]');
+  if (config.hasAuth && authSlot) {
+    try {
+      const { initSaved } = await import('./saved');
+      savedStore = await initSaved(
+        import.meta.env.PUBLIC_SUPABASE_URL,
+        import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
+        authSlot
+      );
+      const { initBriefings } = await import('./briefings-store');
+      briefingsStore = initBriefings(savedStore.supabase, savedStore.currentUser);
+    } catch {
+      // Auth init never blocks the tool from wiring up.
+    }
+  }
+
+  // Wire both modes up-front; they live in the (possibly hidden) tool region.
+  wireSearch(root, config, savedStore);
+  if (config.hasBriefing) wireBriefing(root, config, savedStore, briefingsStore);
+
+  // ---- gating: landing for logged-out, tool for signed-in -------------------
+  const landingSignin = root.querySelector<HTMLElement>('[data-landing-signin]');
+  function applyGate() {
+    document.documentElement.removeAttribute('data-maybe-authed');
+    if (skeleton) skeleton.hidden = true;
+    const signedIn = Boolean(savedStore?.signedIn());
+    if (signedIn) {
+      if (landing) landing.hidden = true;
+      if (tool) tool.hidden = false;
+    } else {
+      if (tool) tool.hidden = true;
+      if (landing) {
+        landing.hidden = false;
+        if (landingSignin && savedStore) {
+          landingSignin.replaceChildren();
+          savedStore.renderSignInOptions(landingSignin);
+        }
+      }
+    }
+  }
+
+  if (config.hasAuth) {
+    // initSaved already resolved the session before returning, so this is
+    // accurate immediately; re-run on sign-in/out for a live swap.
+    applyGate();
+    savedStore?.onChange(applyGate);
+  }
+  // Without auth there's no gate — the tool renders visible (astro), and the
+  // briefing flow still works, just without save/share.
+}
+
+// ---- shared read-only briefing --------------------------------------------
+
+async function showSharedBriefing(container: HTMLElement, token: string) {
+  container.hidden = false;
+  container.replaceChildren();
+  container.appendChild(el('p', 'font-sans text-sm text-ink-600 py-8', 'Loading shared briefing…'));
+
+  const notShared = () => {
+    container.replaceChildren();
+    const box = el('div', 'py-10 max-w-xl');
+    box.appendChild(el('h2', 'font-display text-2xl font-semibold text-ink-900', 'This briefing isn’t available'));
+    box.appendChild(
+      el('p', 'font-serif text-ink-700 leading-relaxed mt-3', 'The link may be wrong, or the briefing has been made private. Ask whoever shared it for an up-to-date link.')
+    );
+    const a = el('a', 'inline-block mt-5 font-sans text-sm uppercase tracking-[0.12em] text-accent hover:text-accent-dark', 'Go to the research assistant →') as HTMLAnchorElement;
+    a.href = '/research';
+    box.appendChild(a);
+    container.appendChild(box);
+  };
+
+  try {
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      import.meta.env.PUBLIC_SUPABASE_URL,
+      import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+    );
+    const { loadSharedBriefing } = await import('./briefings-store');
+    const briefing = await loadSharedBriefing(supabase, token);
+    if (!briefing) return notShared();
+
+    renderBriefing(container, briefing, { readOnly: true });
+
+    // A quiet "make your own" footer — the share link is also a funnel.
+    const cta = el('div', 'mt-10 border-t border-ink-200 pt-6');
+    const a = el('a', 'inline-block font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors', 'Build your own briefing →') as HTMLAnchorElement;
+    a.href = '/research';
+    cta.appendChild(a);
+    container.appendChild(cta);
+  } catch {
+    notShared();
+  }
+}
+
+// ---- briefing mode ---------------------------------------------------------
+
+function wireBriefing(
+  root: HTMLElement,
+  config: PageConfig,
+  savedStore: SavedStore | null,
+  briefingsStore: BriefingsStore | null
+) {
+  const modeNav = root.querySelector<HTMLElement>('[data-research-mode]');
+  const briefingMode = root.querySelector<HTMLElement>('[data-briefing-mode]');
+  const searchMode = root.querySelector<HTMLElement>('[data-search-mode]');
+  const form = root.querySelector<HTMLFormElement>('[data-briefing-form]');
+  const input = root.querySelector<HTMLTextAreaElement>('[data-briefing-input]');
+  const send = root.querySelector<HTMLButtonElement>('[data-briefing-send]');
+  const progress = root.querySelector<HTMLElement>('[data-briefing-progress]');
+  const result = root.querySelector<HTMLElement>('[data-briefing-result]');
+  if (!briefingMode || !form || !input || !send || !progress || !result) return;
+
+  // ---- mode toggle ----
+  function setMode(mode: 'briefing' | 'search') {
+    if (briefingMode) briefingMode.hidden = mode !== 'briefing';
+    if (searchMode) searchMode.hidden = mode !== 'search';
+    modeNav?.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => {
+      const active = b.dataset.mode === mode;
+      b.classList.toggle('bg-ink-900', active);
+      b.classList.toggle('text-paper-50', active);
+      b.classList.toggle('border', !active);
+      b.classList.toggle('border-ink-300', !active);
+      b.classList.toggle('text-ink-700', !active);
+    });
+  }
+  modeNav?.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) =>
+    b.addEventListener('click', () => setMode(b.dataset.mode as 'briefing' | 'search'))
+  );
+
+  const cardHooks: CardHooks = savedStore?.hooks ?? {};
+  const briefingSource = config.sources.includes('all') ? 'all' : 'openalex';
+
+  // ---- progress + angle checklist ----
+  function startProgress() {
+    progress!.replaceChildren();
+    progress!.hidden = false;
+    const status = el('p', 'font-sans text-sm text-ink-700');
+    status.dataset.role = 'status';
+    status.textContent = 'Framing the problem…';
+    progress!.appendChild(status);
+  }
+  function setProgressText(text: string) {
+    const s = progress!.querySelector<HTMLElement>('[data-role="status"]');
+    if (s) s.textContent = text;
+  }
+  function renderPlan(plan: BriefingPlan) {
+    if (plan.framing && !progress!.querySelector('[data-role="framing"]')) {
+      const f = el('p', 'font-serif text-sm text-ink-700 leading-relaxed mt-2 italic', plan.framing);
+      f.dataset.role = 'framing';
+      progress!.appendChild(f);
+    }
+    if (!progress!.querySelector('[data-role="checklist"]')) {
+      const ul = el('ul', 'mt-3 space-y-1 font-sans text-sm text-ink-600');
+      ul.dataset.role = 'checklist';
+      for (const a of plan.angles) {
+        const li = el('li', 'flex items-center gap-2');
+        li.appendChild(el('span', 'text-ink-400', '○'));
+        li.appendChild(el('span', '', a.label));
+        ul.appendChild(li);
+      }
+      progress!.appendChild(ul);
+    }
+  }
+  function tickAngle(index: number) {
+    const items = progress!.querySelectorAll<HTMLElement>('[data-role="checklist"] li');
+    const li = items[index];
+    if (li) {
+      const marker = li.querySelector('span');
+      if (marker) {
+        marker.textContent = '✓';
+        marker.className = 'text-accent';
+      }
+    }
+  }
+
+  // ---- the thin / failure fallback: show the curated studies plainly ----
+  function renderStudyList(framing: string, references: Work[], lead: string) {
+    result!.replaceChildren();
+    const wrap = el('div', 'max-w-3xl');
+    wrap.appendChild(el('p', 'font-serif text-base text-ink-800 leading-relaxed', lead));
+    if (framing) wrap.appendChild(el('p', 'font-serif text-sm text-ink-600 italic mt-2', framing));
+    if (references.length) {
+      const head = el('div', 'mt-6');
+      head.appendChild(el('h3', 'font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-2', `Studies found — ${references.length}`));
+      for (const w of references) head.appendChild(card(w, cardHooks));
+      wrap.appendChild(head);
+    }
+    result!.appendChild(wrap);
+  }
+
+  function showMessage(text: string) {
+    progress!.replaceChildren();
+    progress!.hidden = false;
+    progress!.appendChild(el('p', 'font-serif text-sm text-ink-700', text));
+  }
+
+  async function handleOutcome(outcome: BriefingOutcome) {
+    if (outcome.status === 'stale') return;
+    if (outcome.status === 'budget') {
+      showMessage(outcome.message);
+      return;
+    }
+    if (outcome.status === 'error') {
+      showMessage(outcome.message);
+      return;
+    }
+    if (outcome.status === 'thin') {
+      progress!.hidden = true;
+      renderStudyList(
+        outcome.framing,
+        outcome.references,
+        outcome.references.length
+          ? 'The open record is thin on this one — not enough to synthesise a confident briefing, but here’s what came back. Read the studies and try a sharper problem statement.'
+          : 'Nothing usable came back. Try rephrasing the problem, or broaden it.'
+      );
+      return;
+    }
+    // status === 'ok'
+    progress!.hidden = true;
+    renderBriefing(result!, outcome.result, { hooks: cardHooks });
+    // Save + share (only when signed in and storage is configured).
+    if (savedStore?.signedIn() && briefingsStore) {
+      const bar = el('div', 'mt-8 border-t border-ink-200 pt-5');
+      result!.querySelector('.max-w-3xl')?.appendChild(bar);
+      await renderSaveBar(bar, outcome, briefingsStore);
+    }
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const problem = input.value.trim();
+    if (problem.split(/\s+/).filter(Boolean).length < 3) {
+      showMessage('Describe the problem in a sentence or two — a few words isn’t enough to research.');
+      return;
+    }
+    cancelBriefing(); // supersede any in-flight run
+    send.disabled = true;
+    result.replaceChildren();
+    startProgress();
+    let outcome: BriefingOutcome;
+    try {
+      outcome = await runBriefingPipeline(problem, {
+        source: briefingSource,
+        onProgress: setProgressText,
+        onPlan: renderPlan,
+        onAngleDone: (i) => tickAngle(i),
+      });
+    } catch {
+      outcome = { status: 'error', message: 'Something went wrong building the briefing. Try again.' };
+    }
+    send.disabled = false;
+    await handleOutcome(outcome);
+  });
+
+  // Default to briefing; the search-mode region is hidden by astro when
+  // hasBriefing, so this only normalises the toggle styling.
+  setMode('briefing');
+}
+
+/** The save state + share-link control beneath a finished briefing. */
+async function renderSaveBar(
+  bar: HTMLElement,
+  outcome: Extract<BriefingOutcome, { status: 'ok' }>,
+  briefingsStore: BriefingsStore
+) {
+  bar.replaceChildren();
+  bar.appendChild(el('p', 'font-sans text-sm text-ink-600', 'Saving to your account…'));
+  const saved = await briefingsStore.saveBriefing(outcome.result);
+  bar.replaceChildren();
+  if (!saved) {
+    bar.appendChild(el('p', 'font-sans text-sm text-ink-600', 'Couldn’t save this briefing (you may have reached the saved limit). It’s still on screen.'));
+    return;
+  }
+
+  const row = el('div', 'flex flex-wrap items-center gap-3');
+  row.appendChild(el('span', 'font-sans text-sm text-ink-700', '✓ Saved to your account.'));
+  const shareBtn = el('button', 'font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-ink-500', 'Copy share link') as HTMLButtonElement;
+  shareBtn.type = 'button';
+  row.appendChild(shareBtn);
+  bar.appendChild(row);
+  const note = el('p', 'font-sans text-xs text-ink-500 mt-2', '');
+  bar.appendChild(note);
+
+  let shared = false;
+  shareBtn.addEventListener('click', async () => {
+    const url = `${location.origin}/research?b=${encodeURIComponent(saved.shareToken)}`;
+    if (!shared) {
+      // First share flips visibility to unlisted so the link works.
+      const ok = await briefingsStore.setVisibility(saved.id, 'unlisted');
+      if (!ok) {
+        note.textContent = 'Couldn’t create the share link — try again.';
+        return;
+      }
+      shared = true;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      note.textContent = `Link copied — anyone with it can view this briefing (read-only): ${url}`;
+    } catch {
+      note.textContent = `Share this read-only link: ${url}`;
+    }
+    // Offer to revoke once shared.
+    if (!bar.querySelector('[data-role="revoke"]')) {
+      const revoke = el('button', 'font-sans text-xs underline underline-offset-2 text-ink-500 hover:text-accent mt-1', 'Make private again') as HTMLButtonElement;
+      revoke.type = 'button';
+      revoke.dataset.role = 'revoke';
+      revoke.addEventListener('click', async () => {
+        const ok = await briefingsStore.setVisibility(saved.id, 'private');
+        if (ok) {
+          shared = false;
+          note.textContent = 'This briefing is private again — the share link no longer works.';
+          revoke.remove();
+        }
+      });
+      bar.appendChild(revoke);
+    }
+  });
+}
+
+// ---- search mode (the original keyword/question search) --------------------
+
+function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStore | null) {
   const $ = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
   const form = $<HTMLFormElement>('[data-research-form]');
   const input = $<HTMLInputElement>('[data-research-input]');
@@ -39,57 +393,36 @@ export async function initResearch() {
   const sortSel = $<HTMLSelectElement>('[data-filter-sort]');
   const tabs = root.querySelector<HTMLElement>('[data-research-tabs]');
   const savedView = root.querySelector<HTMLElement>('[data-research-saved]');
-  const authSlot = root.querySelector<HTMLElement>('[data-auth-slot]');
 
   let page = 1;
   let lastQuery = '';
-  // The reader's original plain-English question when the current search came
-  // from one — drives the cited evidence answer instead of the overview.
   let lastQuestion: string | null = null;
   let shown = 0;
   let total = 0;
   let totalApproximate = false;
-  // Works already on the page (by merge key) — "More results" from the merged
-  // "All sources" search can resurface a paper page 1 already showed.
   const seenKeys = new Set<string>();
   let activeTab: 'results' | 'saved' = 'results';
-  // What the AI picked when the sort select is on "suggested" (set per search).
   let aiSort: 'cited' | 'recent' | null = null;
-  let savedStore: SavedStore | null = null;
-  let cardHooks: CardHooks = {};
+  let cardHooks: CardHooks = savedStore?.hooks ?? {};
 
-  // ---- saved papers (only when Supabase was configured at build time) ------
-  if (config.hasAuth && authSlot) {
-    try {
-      const { initSaved } = await import('./saved');
-      savedStore = await initSaved(
-        import.meta.env.PUBLIC_SUPABASE_URL,
-        import.meta.env.PUBLIC_SUPABASE_ANON_KEY,
-        authSlot
-      );
-      cardHooks = savedStore.hooks;
-      savedStore.onChange(() => {
-        updateTabs();
-        if (activeTab === 'saved' && savedView) {
-          if (savedStore!.signedIn()) savedStore!.renderSavedView(savedView);
-          else savedStore!.renderSignedOutView(savedView);
-        }
-      });
-      // The signed-out pill (or a star click) asks us to show the sign-in
-      // pitch on the Saved tab. Scroll it into view so the click visibly acts.
-      root.addEventListener('research:show-signin', () => {
-        showTab('saved');
-        (tabs ?? savedView)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      });
+  // ---- saved papers wiring (when configured) -------------------------------
+  if (savedStore) {
+    savedStore.onChange(() => {
       updateTabs();
-    } catch {
-      // Auth never blocks the search.
-    }
+      if (activeTab === 'saved' && savedView) {
+        if (savedStore!.signedIn()) savedStore!.renderSavedView(savedView);
+        else savedStore!.renderSignedOutView(savedView);
+      }
+    });
+    root.addEventListener('research:show-signin', () => {
+      showTab('saved');
+      (tabs ?? savedView)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    updateTabs();
   }
 
   function updateTabs() {
     if (!tabs || !savedStore) return;
-    // The tab bar shows even signed out — the Saved tab is the nudge.
     tabs.hidden = false;
     const count = tabs.querySelector('[data-saved-count]');
     if (count) count.textContent = String(savedStore.count());
@@ -125,7 +458,7 @@ export async function initResearch() {
   function applyCaps() {
     const caps = (SOURCE_CAPS as Record<string, Record<string, boolean>>)[sourceOf()] ?? SOURCE_CAPS.openalex;
     if (!caps.oa) {
-      oaBox.checked = true; // CORE is all open access
+      oaBox.checked = true;
       oaBox.disabled = true;
     } else {
       oaBox.disabled = false;
@@ -194,8 +527,6 @@ export async function initResearch() {
     }
     total = data.count ?? 0;
     totalApproximate = Boolean(data.approximate);
-    // Drop anything a previous page of this search already showed — the merged
-    // "All sources" pages aren't disjoint across catalogues.
     const fresh = data.results.filter((w) => {
       const key = workMergeKey(w);
       if (key && seenKeys.has(key)) return false;
@@ -230,7 +561,6 @@ export async function initResearch() {
 
     if (!append && config.hasAi && overviewPanel && data.results.length > 0) {
       if (lastQuestion) {
-        // A question search gets a synthesized, cited answer.
         renderAnswer(overviewPanel, lastQuestion, data.results);
       } else {
         renderOverview(overviewPanel, q, data.results, (refined) => {
@@ -255,10 +585,6 @@ export async function initResearch() {
     search(false);
   }
 
-  // ---- one box, two behaviours ----------------------------------------------
-  // Plain keywords search directly. Anything that reads like a question (or a
-  // search with sort on "suggested") goes through the AI translator first, so
-  // the one Search button covers both.
   function looksLikeQuestion(s: string) {
     return (
       s.includes('?') ||
@@ -280,7 +606,6 @@ export async function initResearch() {
     status.textContent = 'Reading the question…';
     const t = await translateQuestion(raw);
     if (!t) {
-      // Fall back to searching the raw text — never a dead end.
       status.textContent = 'Couldn’t interpret that — searching for it as typed.';
       unlock();
       startSearch();
@@ -289,7 +614,6 @@ export async function initResearch() {
     input.value = t.query;
     reviewBox.checked = t.filters.review && !reviewBox.disabled;
     if (t.filters.from) {
-      // Snap to the nearest available "since" option at or before the year.
       const options = [...fromSel.options].map((o) => Number(o.value)).filter(Boolean);
       const pick = options.filter((y) => y <= t.filters.from!).sort((a, b) => b - a)[0];
       fromSel.value = pick ? String(pick) : '';
@@ -300,8 +624,6 @@ export async function initResearch() {
     }
     showInterpreted(t.query, t.filters, t.note);
     unlock();
-    // Only a genuine question earns the cited answer — a keyword search
-    // routed here by the "suggested" sort keeps the lighter overview.
     startSearch(looksLikeQuestion(raw) ? raw : null);
   }
 
@@ -332,7 +654,6 @@ export async function initResearch() {
     c.addEventListener('change', () => {
       if (!lastQuery) return;
       if (c === sortSel && sortSel.value === 'suggested' && config.hasAi) {
-        // Re-translate so the AI actually gets to pick the order.
         submitQuery();
         return;
       }
@@ -366,7 +687,6 @@ export async function initResearch() {
     })
   );
 
-  // Open the topic disclosure on desktop; mobile keeps it collapsed.
   const disclosure = topics.querySelector<HTMLDetailsElement>('details');
   if (disclosure && window.matchMedia('(min-width: 768px)').matches) disclosure.open = true;
 

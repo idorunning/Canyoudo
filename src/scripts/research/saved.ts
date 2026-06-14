@@ -32,8 +32,14 @@ export interface SavedStore {
   hooks: CardHooks;
   renderSavedView: (container: HTMLElement) => void;
   renderSignedOutView: (container: HTMLElement) => void;
+  /** Mount the two sign-in routes (email link + Google) into a container. */
+  renderSignInOptions: (container: HTMLElement) => void;
   count: () => number;
   signedIn: () => boolean;
+  /** The signed-in Supabase user, or null. */
+  currentUser: () => any;
+  /** The shared Supabase client (reused by the briefings store). */
+  supabase: any;
   onChange: (fn: () => void) => void;
 }
 
@@ -688,8 +694,11 @@ export async function initSaved(
     hooks,
     renderSavedView,
     renderSignedOutView,
+    renderSignInOptions,
     count: () => saved.size,
     signedIn: () => Boolean(user),
+    currentUser: () => user,
+    supabase,
     onChange: (fn) => listeners.push(fn),
   };
 }
