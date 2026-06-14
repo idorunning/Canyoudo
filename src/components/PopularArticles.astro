@@ -1,0 +1,57 @@
+---
+// "Popular" — a short, hand-picked list of the articles worth reading first.
+// Deliberately spare: a headline and one short line each, no cards or images,
+// so it reads as a clean list rather than a wall of text. Edit CURATED to
+// change the selection; missing slugs are skipped and the block hides itself
+// if none resolve.
+import { getCollection } from 'astro:content';
+import { SECTION_LABELS } from '../content/config';
+
+const CURATED = [
+  'lawrence-sherman-and-the-invention-of-evidence-based-policing',
+  'policeai-a-police-leaders-guide',
+  'sir-robert-peel-and-the-invention-of-policing-by-consent',
+  'what-palantirs-advance-means-for-british-policing-and-should-we-trust-them',
+  'self-selection-policing-catching-serious-criminals-through-minor-offences',
+  'the-drug-thats-already-here-what-nitazenes-mean-for-british-policing',
+];
+
+// A short, one-line teaser per pick (kept brief on purpose).
+const TEASER: Record<string, string> = {
+  'lawrence-sherman-and-the-invention-of-evidence-based-policing': 'How a domestic-violence experiment changed what we know works.',
+  'policeai-a-police-leaders-guide': 'A leader’s guide to the UK’s new national AI policing centre.',
+  'sir-robert-peel-and-the-invention-of-policing-by-consent': 'Where “policing by consent” came from — and why it still matters.',
+  'what-palantirs-advance-means-for-british-policing-and-should-we-trust-them': 'What Palantir has sold to British policing, and why it’s contested.',
+  'self-selection-policing-catching-serious-criminals-through-minor-offences': 'Catching serious offenders through the small offences they also commit.',
+  'the-drug-thats-already-here-what-nitazenes-mean-for-british-policing': 'The synthetic opioids already driving overdose risk in Britain.',
+};
+
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+const bySlug = new Map(articles.map((a) => [a.slug, a]));
+const picks = CURATED.map((slug) => bySlug.get(slug)).filter((a): a is NonNullable<typeof a> => Boolean(a));
+---
+
+{picks.length > 0 && (
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-14">
+      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-7">Popular</p>
+      <ul class="grid sm:grid-cols-2 gap-x-12 gap-y-6">
+        {picks.map((a) => (
+          <li>
+            <a href={`/${a.data.section}/${a.slug}`} class="group block">
+              <h3 class="font-display text-lg font-semibold text-ink-900 group-hover:text-accent transition-colors leading-snug">
+                {a.data.title}
+              </h3>
+              <p class="font-serif text-base text-ink-600 leading-snug mt-1">
+                {TEASER[a.slug] ?? a.data.description}
+              </p>
+              <span class="block font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-400 mt-1.5">
+                {SECTION_LABELS[a.data.section]}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

@@ -4,7 +4,7 @@ import ArticleCard from '../components/ArticleCard.astro';
 import ExplorePanel from '../components/ExplorePanel.astro';
 import NewsTicker from '../components/NewsTicker.astro';
 import SiteOverview from '../components/SiteOverview.astro';
-import StartHere from '../components/StartHere.astro';
+import PopularArticles from '../components/PopularArticles.astro';
 import ContributeCTA from '../components/ContributeCTA.astro';
 import { getCollection } from 'astro:content';
 import { getTopics } from '../lib/topics';
@@ -139,8 +139,8 @@ const jsonLd = [
     </div>
   </section>
 
-  {/* Start here — cornerstone reading */}
-  <StartHere />
+  {/* Popular — a short, hand-picked reading list */}
+  <PopularArticles />
 
   {/* Browse the site — sections + tools overview */}
   <SiteOverview />

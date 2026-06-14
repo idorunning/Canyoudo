@@ -523,7 +523,7 @@
   width: max-content;
   align-items: center;
   gap: 2rem;
-  animation: tap-marquee 70s linear infinite;
+  animation: tap-marquee 140s linear infinite;
 }
 /* Pause when the reader hovers or tabs into the strip, so links are clickable. */
 .tap-ticker:hover .tap-ticker-track,
