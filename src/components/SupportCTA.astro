@@ -10,7 +10,27 @@ interface Props {
   variant: 'banner' | 'footer';
 }
 const { variant } = Astro.props;
-const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
+
+// PUBLIC_SUPPORT_URL is meant to be a plain page URL, but it is easy to paste
+// the whole Buy Me a Coffee *embed snippet* (a <script ... data-slug="…">) in
+// by mistake — which then renders as a broken href. Normalise defensively:
+// recover the real URL from an embed, accept a plain URL as-is, and otherwise
+// render nothing rather than a broken link.
+function normaliseSupportUrl(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  const v = value.trim();
+  // A pasted Buy Me a Coffee embed — derive the page URL from its data-slug.
+  const slug = v.match(/data-slug=["']([^"']+)["']/i)?.[1];
+  if (slug) return `https://buymeacoffee.com/${slug}`;
+  // Already a plain URL (and not some larger HTML blob).
+  if (/^https?:\/\/\S+$/.test(v) && !v.includes('<')) return v;
+  // A URL buried in a larger string — take the first that isn't the embed's
+  // own script source.
+  const url = v.match(/https?:\/\/[^\s"'<>]+/i)?.[0];
+  if (url && !url.includes('button.prod.min.js')) return url;
+  return undefined;
+}
+const supportUrl = normaliseSupportUrl(import.meta.env.PUBLIC_SUPPORT_URL);
 ---
 
 {supportUrl && variant === 'banner' && (
