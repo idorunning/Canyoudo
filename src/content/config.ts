@@ -83,6 +83,33 @@ const resourcesSchema = z.object({
   ),
 });
 
+// --- Aggregated news headlines ---------------------------------------------
+// A rolling snapshot of policing / law / AI headlines, pulled from a curated
+// set of public RSS/Atom feeds by scripts/fetch-news.mjs (run on a schedule by
+// .github/workflows/news.yml) and read at build time by the sidebar widget.
+// Only headline, source, link and date are stored — never full article text —
+// so this stays within what RSS is meant for: syndicating links back to the
+// source. A single `latest.json` carries the whole list.
+const newsSchema = z.object({
+  provenance: z.object({
+    fetchedAt: z.string(), // ISO timestamp of the fetch
+    feedCount: z.number().default(0), // how many feeds responded
+    sources: z.array(z.string()).default([]),
+  }),
+  items: z
+    .array(
+      z.object({
+        title: z.string(),
+        link: z.string(),
+        source: z.string(),
+        topic: z.enum(['policing', 'law', 'ai', 'other']).default('other'),
+        isoDate: z.string(), // ISO publication date
+        summary: z.string().default(''),
+      })
+    )
+    .default([]),
+});
+
 // --- Police data snapshot ---------------------------------------------------
 // A monthly, version-controlled snapshot of data.police.uk, written by
 // scripts/fetch-police-data.mjs (run on a schedule by .github/workflows/
@@ -168,4 +195,5 @@ export const collections = {
   books: defineCollection({ type: 'data', schema: booksSchema }),
   resources: defineCollection({ type: 'data', schema: resourcesSchema }),
   policedata: defineCollection({ type: 'data', schema: policeDataSchema }),
+  news: defineCollection({ type: 'data', schema: newsSchema }),
 };

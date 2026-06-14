@@ -1,0 +1,99 @@
+---
+// "In the news" — a compact sidebar widget of aggregated policing / law / AI
+// headlines. Reads the build-time snapshot written by scripts/fetch-news.mjs
+// (collection `news`, entry `latest`). Headlines link out to the original
+// publisher; nothing here is the site's own content. Renders nothing if the
+// snapshot is missing or empty, so it never breaks the page.
+import { getCollection } from 'astro:content';
+
+interface Props {
+  /** How many headlines to show. */
+  limit?: number;
+}
+const { limit = 7 } = Astro.props;
+
+const entries = await getCollection('news');
+const snapshot = entries.find((e) => e.id === 'latest') ?? entries[0];
+const items = (snapshot?.data.items ?? []).slice(0, limit);
+
+const TOPIC_LABEL: Record<string, string> = {
+  policing: 'Policing',
+  law: 'Law',
+  ai: 'AI',
+  other: 'News',
+};
+
+// Short, friendly relative time: "3h", "2d", else a short date.
+function relative(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (isNaN(then)) return '';
+  const mins = Math.round((Date.now() - then) / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.round(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.round(hrs / 24);
+  if (days < 7) return `${days}d ago`;
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+---
+
+{items.length > 0 && (
+  <section class="mt-12 pt-10 border-t border-ink-200" data-pagefind-ignore aria-label="In the news">
+    <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-6">In the news</h2>
+    <ul class="space-y-5">
+      {items.map((item) => (
+        <li>
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noopener nofollow"
+            class="group block"
+          >
+            <span class="flex items-center gap-2 mb-1">
+              <span class={`news-chip news-chip--${item.topic}`}>{TOPIC_LABEL[item.topic] ?? 'News'}</span>
+              <span class="font-sans text-[0.68rem] text-ink-400 truncate">{item.source}</span>
+            </span>
+            <span class="block font-display text-sm font-semibold text-ink-900 leading-snug group-hover:text-accent transition-colors">
+              {item.title}
+            </span>
+            <span class="block font-sans text-xs text-ink-500 mt-1">{relative(item.isoDate)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 font-sans text-[0.68rem] leading-relaxed text-ink-400">
+      Headlines aggregated from public RSS feeds (GOV.UK, BBC, the judiciary and others) and
+      refreshed through the day. Each links to its original publisher.
+    </p>
+  </section>
+)}
+
+<style>
+  .news-chip {
+    display: inline-block;
+    font-family: theme('fontFamily.sans');
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    line-height: 1.3;
+    background: theme('colors.paper.200');
+    color: theme('colors.ink.600');
+    flex-shrink: 0;
+  }
+  .news-chip--policing {
+    background: rgba(124, 40, 40, 0.1);
+    color: theme('colors.accent.DEFAULT');
+  }
+  .news-chip--ai {
+    background: rgba(90, 84, 78, 0.12);
+    color: theme('colors.ink.700');
+  }
+  .news-chip--law {
+    background: rgba(161, 69, 69, 0.12);
+    color: theme('colors.accent.light');
+  }
+</style>

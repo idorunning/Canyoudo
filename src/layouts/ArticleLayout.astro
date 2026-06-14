@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import SectionBadge from '../components/SectionBadge.astro';
 import Comments from '../components/Comments.astro';
 import Sidebar from '../components/Sidebar.astro';
+import NewsWidget from '../components/NewsWidget.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
 import BookCTA from '../components/BookCTA.astro';
 import { getTopics, topicForTag } from '../lib/topics';
@@ -169,6 +170,7 @@ const jsonLd = JSON.stringify({
       <aside class="mx-auto w-full max-w-3xl border-t border-ink-200 pt-10 pb-16 lg:mx-0 lg:max-w-none lg:w-64 xl:w-72 lg:shrink-0 lg:border-t-0 lg:border-l lg:pl-12 lg:pt-16">
         <div class="lg:sticky lg:top-24">
           <Sidebar currentSlug={slug} section={section} />
+          <NewsWidget />
         </div>
       </aside>
     </div>

@@ -1,0 +1,55 @@
+name: Refresh news headlines
+
+# Aggregate policing / law / AI headlines from public RSS/Atom feeds and commit
+# the snapshot if it changed. Netlify's GitHub integration redeploys the site on
+# the resulting push, so the sidebar "In the news" widget stays current.
+#
+# No API key needed — these are open feeds. Runs every 3 hours (tune the cron to
+# taste; a longer interval means fewer rebuilds), and on demand.
+on:
+  schedule:
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# A new run supersedes an in-flight one rather than racing it on git push.
+concurrency:
+  group: news
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch headlines
+        run: node scripts/fetch-news.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "news-bot"
+          git config user.email "actions@users.noreply.github.com"
+          # Ignore changes that are only the fetch timestamp — otherwise the job
+          # would commit on every run even when no headline changed.
+          if git diff --quiet -I '"fetchedAt"' src/content/news; then
+            echo "No new headlines."; exit 0
+          fi
+          git add src/content/news
+          git commit -m "Refresh news headlines ($(date -u +%Y-%m-%dT%H:%MZ))"
+          # main may have advanced while this ran — rebase before pushing, retry.
+          # Only this workflow touches src/content/news, so rebase is conflict-free.
+          for attempt in 1 2 3; do
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}" || git rebase --abort
+            if git push origin "HEAD:${{ github.ref_name }}"; then echo "Pushed on attempt $attempt."; exit 0; fi
+            echo "Push attempt $attempt failed; retrying."; sleep 4
+          done
+          echo "Could not push after retries."; exit 1
