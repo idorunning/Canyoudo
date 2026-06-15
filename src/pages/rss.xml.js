@@ -12,6 +12,10 @@ export async function GET(context) {
     title: 'Thinking About Policing',
     description: 'Evidence-based writing on policing, public policy, and the occasional historical puzzle. By Nathan Tracey.',
     site: context.site,
+    // Browsers render raw RSS as a wall of tags ("html code" when you click
+    // it); this XSL turns the feed into a friendly, branded page for humans,
+    // while feed readers ignore the stylesheet and parse the XML as normal.
+    stylesheet: '/rss-styles.xsl',
     items: items.map(item => ({
       title: item.data.title,
       pubDate: item.data.pubDate,

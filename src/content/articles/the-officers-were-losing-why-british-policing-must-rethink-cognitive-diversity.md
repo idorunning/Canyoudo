@@ -5,8 +5,8 @@ description: British policing faces a talent paradox rarely discussed at command
 pubDate: 2025-05-06
 updatedDate: ''
 author: ''
-thumbnail: /images/pexels-tima-miroshnichenko-6010927.webp
-heroImage: /images/pexels-tara-winstead-8378733.webp
+thumbnail: /images/cognitive-diversity-jigsaw.jpg
+heroImage: /images/cognitive-diversity-jigsaw.jpg
 tags:
   - adhd
   - ai

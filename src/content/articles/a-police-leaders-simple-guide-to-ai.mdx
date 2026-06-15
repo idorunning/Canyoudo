@@ -1,0 +1,178 @@
+---
+title: "A Police Leader's Simple Guide to AI"
+section: police-policy
+description: "Artificial intelligence is reaching policing faster than most leaders were ever trained to understand it. A plain-English guide that builds from the basics — what the words mean, what AI can and can't do, how it uses your data, the risks to own, and where it genuinely helps."
+pubDate: 2026-06-15
+heroImage: "/images/ai-guide-hero.svg"
+thumbnail: "/images/ai-guide-hero.svg"
+tags:
+  - artificial intelligence
+  - ai
+  - machine learning
+  - technology
+  - data
+  - surveillance
+  - leadership
+  - policing
+  - police
+  - policy
+---
+
+import KeyNumbers from '../../components/data/KeyNumbers.astro';
+
+**You do not need to know how an engine works to be a good driver — but you would not let someone sell you a car without knowing what the pedals do.** That is roughly where many police leaders sit with artificial intelligence: asked to approve it, govern it, defend it in front of a scrutiny panel and answer for it when it goes wrong, but never actually handed the manual.
+
+This is the manual. It assumes no technical background. It starts with what the words mean, builds up to what AI can and cannot do, and ends with the questions worth asking before any of it reaches your force. You will not be able to write code by the end. You will be able to walk into a procurement meeting, a governance board or a community hall and hold your own.
+
+## Start here: what "AI" actually is
+
+Strip away the marketing and artificial intelligence is one simple idea: **getting computers to do things that used to need human judgement.** Recognising a face. Picking a name out of a thousand documents. Drafting a paragraph. Spotting that this transaction looks like the last fraud you saw.
+
+It is not a brain, and it does not *understand* anything in the way a person does. It is pattern-matching at enormous scale. That single fact — *it predicts, it does not comprehend* — explains almost every strength and every failure in this guide. Hold on to it.
+
+The phrase "AI" is also used loosely, which is half the confusion. It helps to see the words as a set of nested boxes, from the broadest idea down to the thing currently making headlines.
+
+<figure>
+  <img src="/images/ai-nested.svg" alt="Four nested boxes: Artificial Intelligence contains Machine Learning, which contains Deep Learning, which contains Generative AI and Large Language Models such as ChatGPT, Copilot, Gemini and Claude." loading="lazy" />
+  <figcaption>When someone says "AI", ask which box they mean. Most of today's noise — and most of the governance difficulty — lives in the innermost one.</figcaption>
+</figure>
+
+- **Artificial intelligence** is the whole field: any machine doing a task we associate with human intelligence.
+- **Machine learning** is how almost all modern AI is built: instead of a human writing the rules, the system is shown thousands of examples and works the rules out for itself.
+- **Deep learning** is machine learning using "neural networks" — many-layered systems that can learn very complex patterns from very large amounts of data. It is what made facial recognition and voice transcription suddenly good.
+- **Generative AI**, and the **large language models (LLMs)** behind tools like ChatGPT, Microsoft Copilot, Gemini and Claude, is the newest layer: models that *produce* new text, images or code on demand. It is the most powerful for everyday work and the least predictable to govern.
+
+## How a modern AI is made — without the maths
+
+Ordinary software does what a human told it to: *if this, then that*, written out line by line. You could, in principle, read the rules.
+
+Machine learning is different, and the difference is the whole story. You do not write the rules. You collect a mountain of examples — documents, images, recordings — and the system finds the patterns itself during a one-off, expensive process called **training**. What it produces is a **model**: the learned patterns, frozen in place. After that, every time you use it — feeding it a question or a file, the **prompt** — it runs those patterns to produce an **output**.
+
+<figure>
+  <img src="/images/ai-pipeline.svg" alt="A five-stage flow: training data, then training, then the model (built once, slow and expensive), then your input, then output (every time you use it, fast). Notes warn the model is only as good as what it learned from, and the output is plausible but not guaranteed true." loading="lazy" />
+  <figcaption>Built once, used endlessly. Because the model wrote its own rules from examples, no one — not even its makers — can fully explain any single answer it gives.</figcaption>
+</figure>
+
+Two consequences follow, and both matter to a leader:
+
+1. **It is only ever as good, and as biased, as what it learned from.** Train a model on data that reflects historic over-policing of one group, and it will reproduce that pattern with a confident, mathematical face. "Garbage in, garbage out" — but at scale and with an authoritative voice.
+2. **It cannot truly explain itself.** Ask it *why* and you will get a plausible-sounding reason, but that is another generated output, not a window into its reasoning. This is the "black box" problem, and it is why "the computer flagged him" is never, on its own, a lawful basis for a decision.
+
+## The vocabulary, decoded
+
+You do not need all of this, but when a vendor or a report uses these words, here is what they mean.
+
+| Term | In plain English |
+|---|---|
+| **Algorithm** | A set of steps for solving a problem. Old idea; not inherently "AI". |
+| **Model** | The trained system itself — the learned patterns you actually use. |
+| **Training data** | The examples the model learned from. Its strengths and its biases both come from here. |
+| **Parameters / weights** | The millions or billions of internal dials the model tuned during training. |
+| **Neural network** | A model design loosely inspired by the brain; the engine of deep learning. |
+| **Generative AI** | AI that produces new content — text, images, audio, code. |
+| **Large language model (LLM)** | A generative model trained on vast text. ChatGPT and Copilot are LLMs. |
+| **Prompt** | What you type in. The instruction or question. |
+| **Inference** | The model doing its job — turning your prompt into an output. |
+| **Hallucination** | When a model states something false with total confidence. Not a bug to be patched away; a property of how it works. |
+| **Bias** | Systematic skew learned from the data — often along lines of race, sex or class. |
+| **Computer vision** | AI that interprets images and video (object, number-plate or face recognition). |
+| **Predictive analytics** | Using past data to estimate future risk or demand. As good — or as flawed — as the past it learned from. |
+| **Automation bias** | The human tendency to over-trust a machine's answer and stop checking. |
+
+## What AI is genuinely good at — and where it fails
+
+The honest summary is that AI is brilliant at high-volume pattern work and unreliable at truth, novelty and judgement.
+
+**It is strong at:** finding a needle in a haystack of data; transcribing and translating; summarising long documents; drafting routine text; recognising objects, faces and number plates in images; and flagging items for a human to review. Anything where the job is *spot the pattern in a pile too big for a person*, it can do faster than any team.
+
+**It is weak — and sometimes dangerous — at:** telling truth from plausible fiction (a generative model will invent a case citation or a fact and present it perfectly formatted); handling the rare event it saw little of in training; anything where the training data was thin or skewed; and explaining or justifying itself. It does not know when it is wrong, because it does not "know" anything — it produces the most statistically likely answer, and the most likely answer is not always the true one.
+
+The practical rule: **use AI to narrow, draft and prioritise; never to decide.** A human who can understand and overturn the output must stay in the loop — and must actually be willing to.
+
+## The risks a leader must own
+
+You can delegate the build. You cannot delegate the accountability. Four risks sit with the command, not the supplier:
+
+- **Hallucination.** A model will produce confident, fluent, wrong answers. The danger is sharpest where the output looks authoritative — a drafted statement, a "summary" of an interview, a legal-sounding paragraph. In one widely-reported case a force trialling Microsoft Copilot found it inventing detail when summarising records; the [companion guide to PoliceAI](/police-policy/policeai-a-police-leaders-guide/) covers what that means for the national rollout.
+- **Bias and disproportionality.** A model trained on historic policing data inherits historic patterns. Without testing for it, you may automate the very disproportionality you are trying to reduce — and do it at a scale, and with an air of objectivity, that makes it harder to challenge.
+- **The black box and explainability.** If you cannot explain *why* a tool flagged a person, you cannot justify acting on it — to a court, to the IOPC, or to the public. "Policing by consent" does not survive decisions no one can account for.
+- **Automation bias.** "Human in the loop" is the standard reassurance, and it is worth little if the human rubber-stamps the screen. Oversight only counts when the officer has the time, the training and the standing to say *no, the machine is wrong*.
+
+## How your data is shared and used — the part most often missed
+
+This is where well-meaning people get a force into trouble, and it is the least technical risk of all. When an officer types into an AI tool, the information leaves the building.
+
+<figure>
+  <img src="/images/ai-data-flow.svg" alt="A flow showing information typed into a tool travelling over the internet to the vendor's cloud — often servers in another country — where it may be stored and logged, seen by staff or contractors, and used to train the next model. A banner reads: a public AI tool is a postcard, not a sealed envelope." loading="lazy" />
+  <figcaption>The question is never just "is the tool any good?" It is "where does what we put into it go, who can see it, and can we ever get it back?"</figcaption>
+</figure>
+
+With a **free, public tool** — consumer ChatGPT and the like — the default is the worst case for policing: what you type may be stored, read by the vendor's staff to improve the service, held on servers in another jurisdiction, and used to train future versions of the model. Once it is in, it is effectively unrecoverable.
+
+With a **properly contracted, enterprise tool**, those defaults can be turned off: a contract can forbid training on your data, keep it within the UK, limit who sees it and set how long it is kept. But "can be" is the operative phrase. None of it is automatic. It happens only if someone negotiated the terms, completed a **Data Protection Impact Assessment**, and checked where the data actually lives. The questions to insist on:
+
+- **Where is the data stored** — in the UK, the EU, or beyond? (Data residency.)
+- **Is our input used to train the vendor's models?** (It must not be, for operational or personal data.)
+- **Who can access it** — and is that logged?
+- **How long is it retained, and can we delete it?**
+- **Is it personal or special-category data** under UK GDPR, and have we done a DPIA?
+
+The lesson is written in real incidents. None of these needed clever hacking; they were ordinary mistakes with sensitive data — exactly the kind an over-trusted AI tool makes easier to commit.
+
+<KeyNumbers
+  caption="Three cautionary cases. Note that none involved a sophisticated attack — only sensitive data going somewhere it should not have."
+  stats={[
+    { value: "~10,000", label: "PSNI officers and staff exposed", sub: "Aug 2023 — surnames, ranks and roles, mistakenly published in an FOI response" },
+    { value: "3 leaks", label: "Samsung staff into ChatGPT", sub: "2023 — confidential code and notes pasted into a public chatbot; the firm then restricted it" },
+    { value: "38 TB", label: "Microsoft AI data exposed", sub: "2023 — internal data left open by a single misconfigured cloud setting" },
+  ]}
+/>
+
+The Police Service of Northern Ireland breach was not an AI failure at all — but it is the sharpest possible reminder of how dangerous the data you already hold becomes when it is mishandled, and AI tools multiply the number of places it can leak from. The Samsung case is the one to put in front of every officer: a few engineers pasted confidential material into a public chatbot to save time, and it left the company for good. Swap "source code" for "a victim's account" and the stakes are obvious.
+
+The rule of thumb is the one on the diagram: **treat any public AI tool like a postcard, not a sealed envelope.** If you would not write it on the back of a postcard, do not type it in.
+
+## Where AI genuinely helps policing
+
+None of the above is an argument against AI. Used well and governed honestly, it is a real force-multiplier for the high-volume, pattern-heavy, soul-sapping work that eats officer time:
+
+- **Redaction** — automatically blurring faces, number plates and bystanders in CCTV and body-worn footage, a job that currently consumes thousands of hours.
+- **Transcription and translation** — turning interviews and 999 calls into searchable text, across languages.
+- **Summarising and triage** — condensing long case files, or sorting a flood of digital evidence so a human looks at the right things first.
+- **Image and video search** — finding a vehicle or an object across hours of footage in minutes.
+- **Demand forecasting** — helping control rooms anticipate busy periods and place resources, in the tradition of [intelligence-led policing](/influential-people/jerry-ratcliffe-and-the-case-for-intelligence-led-policing/).
+
+The pattern in every good use is the same: AI does the heavy, repetitive sifting; a trained human makes the decision. For the national institution now coordinating this across forces, and the specific platforms already in use, see the [PoliceAI guide](/police-policy/policeai-a-police-leaders-guide/). For the flip side — AI as a threat to the integrity of evidence itself — see [When Seeing Is No Longer Believing](/public-policy/when-seeing-is-no-longer-believing-the-ai-generated-content-threat-to-criminal-justice/).
+
+## A leader's quick reference
+
+If you keep one thing from this guide, keep this. Before you say yes to any AI tool, you should be able to answer every row.
+
+| Ask | Why it matters |
+|---|---|
+| What problem does this solve, and how did we cope without it? | Forces a real benefit, not a tech purchase for its own sake. |
+| What was it trained on, and has it been tested for bias on *our* population? | A model fair in California may not be fair in your force area. |
+| Where does our data go, and is it used to train the vendor's model? | The difference between a contract and a leak. |
+| Can a human understand, challenge and overturn its output? | No explainability, no lawful decision. |
+| Who is accountable when it gets one wrong — us or the supplier? | The answer is almost always *us*. Know it in advance. |
+| Have we done a DPIA, and would we be comfortable explaining this in public? | If you would not defend it at a scrutiny panel, do not deploy it. |
+
+**If you remember five things:** AI predicts, it does not understand. It is only as good as its data. It will be confidently wrong. What you type in may never come back. And the accountability stays with you.
+
+---
+
+### Sources and trusted further reading
+
+This guide is deliberately introductory; the sources below are where to go deeper, and are the ones worth trusting over vendor marketing.
+
+- **Information Commissioner's Office (ICO)** — [Guidance on AI and data protection](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/), the authoritative UK reference on using AI lawfully with personal data.
+- **National Police Chiefs' Council** — the [Covenant for Using Artificial Intelligence (AI) in Policing](https://www.npcc.police.uk/), policing's own statement of principles for responsible AI.
+- **College of Policing** — [Authorised Professional Practice](https://www.college.police.uk/app) and guidance on data and technology.
+- **The Alan Turing Institute** — the UK's national institute for AI, including its public-sector and policing research on responsible deployment.
+- **Ada Lovelace Institute** — independent research on the social impact of AI and biometric technologies, including in policing.
+- **UK Government** — the [Artificial Intelligence Playbook for the UK Government](https://www.gov.uk/government/publications/ai-playbook-for-the-uk-government), a practical primer for public-sector leaders.
+- **NIST AI Risk Management Framework** — a widely used international standard for identifying and managing AI risk.
+
+For the incidents referenced above, see contemporaneous reporting on the August 2023 PSNI data breach, Samsung's 2023 restriction of generative AI after staff leaks, and the 2023 disclosure of a misconfigured Microsoft AI data store. On the related questions of supplier power and data integration, see [What Palantir's advance means for British policing](/public-policy/what-palantirs-advance-means-for-british-policing-and-should-we-trust-them/).
+
+*This is a foundational guide and may be updated as the technology and the guidance around it develop.*

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 660" width="1320" height="660" role="img" aria-label="What happens to what you type into a public AI tool: it travels to the vendor's cloud, where it may be stored, seen, and used for training">
+  <rect width="1320" height="660" fill="#fbf8f1"/>
+  <text x="40" y="60" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="34" font-weight="600">What happens to what you type in</text>
+
+  <g font-family="'DM Sans', system-ui, sans-serif">
+    <!-- device -->
+    <rect x="40" y="120" width="300" height="190" rx="14" fill="#ffffff" stroke="#c4bcae" stroke-width="2"/>
+    <text x="64" y="172" fill="#1a1817" font-size="24" font-weight="600">You type it in</text>
+    <text x="64" y="212" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="20">A name. Case details.</text>
+    <text x="64" y="240" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="20">A document. A photo.</text>
+    <text x="64" y="276" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="20">Maybe personal data.</text>
+
+    <!-- arrow / internet -->
+    <text x="360" y="200" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="17" letter-spacing="2" font-weight="600">THE INTERNET</text>
+    <path d="M352 222 L470 222" stroke="#9c9389" stroke-width="3" fill="none" marker-end="url(#ah2)"/>
+
+    <!-- vendor cloud -->
+    <rect x="486" y="120" width="360" height="240" rx="16" fill="#f7f3eb" stroke="#7c2828" stroke-width="3"/>
+    <text x="512" y="174" fill="#1a1817" font-size="25" font-weight="600">The vendor&#8217;s cloud</text>
+    <text x="512" y="214" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="20">Someone else&#8217;s computers,</text>
+    <text x="512" y="242" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="20">often in another country,</text>
+    <text x="512" y="270" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="20">under another country&#8217;s</text>
+    <text x="512" y="298" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="20">laws.</text>
+
+    <path d="M858 200 L900 200" stroke="#9c9389" stroke-width="3" fill="none" marker-end="url(#ah2)"/>
+
+    <!-- outcome chips -->
+    <rect x="912" y="120" width="368" height="70" rx="10" fill="#ffffff" stroke="#c4bcae" stroke-width="2"/>
+    <text x="936" y="163" fill="#1a1817" font-size="21" font-weight="600">Stored and logged</text>
+
+    <rect x="912" y="205" width="368" height="70" rx="10" fill="#ffffff" stroke="#c4bcae" stroke-width="2"/>
+    <text x="936" y="248" fill="#1a1817" font-size="21" font-weight="600">Seen by staff or contractors?</text>
+
+    <rect x="912" y="290" width="368" height="70" rx="10" fill="#ffffff" stroke="#c4bcae" stroke-width="2"/>
+    <text x="936" y="333" fill="#1a1817" font-size="21" font-weight="600">Used to train the next model?</text>
+  </g>
+
+  <defs>
+    <marker id="ah2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0 0 L7 3 L0 6 Z" fill="#9c9389"/>
+    </marker>
+  </defs>
+
+  <!-- rule of thumb banner -->
+  <rect x="40" y="430" width="1240" height="170" rx="16" fill="#7c2828"/>
+  <text x="80" y="492" fill="#ffffff" font-family="'DM Sans', system-ui, sans-serif" font-size="26" font-weight="600">The rule of thumb</text>
+  <text x="80" y="538" fill="#f3e3e0" font-family="'Source Serif 4', Georgia, serif" font-size="24">A public AI tool is a postcard, not a sealed envelope.</text>
+  <text x="80" y="572" fill="#f3e3e0" font-family="'Source Serif 4', Georgia, serif" font-size="24">Never put anything in one you wouldn&#8217;t be content to write on a postcard.</text>
+</svg>

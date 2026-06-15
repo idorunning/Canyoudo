@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 840" width="1600" height="840" role="img" aria-label="A plain-English guide to artificial intelligence for police leaders">
+  <rect width="1600" height="840" fill="#1a1817"/>
+  <!-- faint neural-network motif, right side -->
+  <g opacity="0.9">
+    <g stroke="#2e2a28" stroke-width="2" fill="none">
+      <path d="M1120 200 L1300 150 M1120 200 L1300 300 M1120 200 L1300 430"/>
+      <path d="M1120 420 L1300 150 M1120 420 L1300 300 M1120 420 L1300 430 M1120 420 L1300 560"/>
+      <path d="M1120 640 L1300 430 M1120 640 L1300 560 M1120 640 L1300 690"/>
+      <path d="M1300 150 L1470 300 M1300 300 L1470 300 M1300 430 L1470 300 M1300 430 L1470 480 M1300 560 L1470 480 M1300 690 L1470 480"/>
+    </g>
+    <g fill="#3d3936">
+      <circle cx="1120" cy="200" r="11"/><circle cx="1120" cy="420" r="11"/><circle cx="1120" cy="640" r="11"/>
+      <circle cx="1300" cy="150" r="11"/><circle cx="1300" cy="300" r="11"/><circle cx="1300" cy="430" r="11"/><circle cx="1300" cy="560" r="11"/><circle cx="1300" cy="690" r="11"/>
+    </g>
+    <g fill="#a14545">
+      <circle cx="1470" cy="300" r="13"/><circle cx="1470" cy="480" r="13"/>
+    </g>
+  </g>
+  <rect x="120" y="170" width="64" height="10" fill="#a14545"/>
+  <text x="120" y="240" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="30" letter-spacing="8" font-weight="500">POLICE POLICY</text>
+  <text x="120" y="372" fill="#f5f1e8" font-family="'DM Sans', system-ui, sans-serif" font-size="108" font-weight="600">A Plain-English</text>
+  <text x="120" y="492" fill="#f5f1e8" font-family="'DM Sans', system-ui, sans-serif" font-size="108" font-weight="600">Guide to AI</text>
+  <text x="120" y="612" fill="#bdb4a8" font-family="'Source Serif 4', Georgia, serif" font-size="40" font-style="italic">For the police leader who was never handed the manual.</text>
+  <text x="120" y="724" fill="#8a8175" font-family="'DM Sans', system-ui, sans-serif" font-size="29">What the words mean &#183; what it can and can&#8217;t do &#183; how it uses your data &#183; the risks to own.</text>
+</svg>

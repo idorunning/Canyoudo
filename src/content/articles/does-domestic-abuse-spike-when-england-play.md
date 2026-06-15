@@ -5,8 +5,8 @@ description: 'You have seen the headline: domestic abuse rises 38% when England 
 pubDate: 2026-06-13
 updatedDate: ''
 author: ''
-thumbnail: /images/pexels-omar-ramadan-24821683.webp
-heroImage: /images/pexels-pixabay-54308.webp
+thumbnail: /images/england-football-crowd.jpg
+heroImage: /images/england-football-crowd.jpg
 tags:
   - More or Less Policing
   - safeguarding

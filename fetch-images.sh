@@ -63,4 +63,11 @@ get "policeai-facial-recognition.jpg" "https://images.pexels.com/photos/8090124/
 get "policeai-redaction-cctv.jpg" "https://images.pexels.com/photos/36852946/pexels-photo-36852946.jpeg?auto=compress&cs=tinysrgb&w=1200"
 get "policeai-justice.jpg" "https://images.pexels.com/photos/30483132/pexels-photo-30483132.jpeg?auto=compress&cs=tinysrgb&w=1200"
 
+# Free-to-use Pexels photos replacing earlier generic stock with images that
+# fit each article's subject (hero + card thumbnail).
+get "england-football-crowd.jpg" "https://images.pexels.com/photos/1884576/pexels-photo-1884576.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "missing-foggy-road.jpg" "https://images.pexels.com/photos/14744912/pexels-photo-14744912.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "cognitive-diversity-jigsaw.jpg" "https://images.pexels.com/photos/1586950/pexels-photo-1586950.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "self-selection-car-street.jpg" "https://images.pexels.com/photos/7459482/pexels-photo-7459482.jpeg?auto=compress&cs=tinysrgb&w=1600"
+
 echo "Done. $(ls -1 | wc -l) images in public/images/"

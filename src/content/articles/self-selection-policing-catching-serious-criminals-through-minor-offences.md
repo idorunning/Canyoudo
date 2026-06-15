@@ -3,6 +3,8 @@ section: "police-policy"
 title: "Self-Selection Policing: Catching Serious Criminals Through the Small Offences They Can't Help Committing"
 description: "Serious offenders don't only commit serious offences — they park in disabled bays, drive while disqualified, and dodge fares too. Self-selection policing turns that insight into a practical, evidence-based way of finding active criminals: a plain-English explainer of what it is, the research behind it, and what it's good for."
 pubDate: 2026-06-11
+heroImage: "/images/self-selection-car-street.jpg"
+thumbnail: "/images/self-selection-car-street.jpg"
 tags: ["self-selection-policing", "evidence-based-policing", "evidence-based", "crime-prevention", "policing", "police", "criminology"]
 ---
 

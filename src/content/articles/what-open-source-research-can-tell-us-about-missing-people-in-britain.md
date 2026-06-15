@@ -5,8 +5,8 @@ description: Around 170,000 people are reported missing in the UK each year, yet
 pubDate: 2026-06-05
 updatedDate: ''
 author: ''
-thumbnail: /images/pexels-ron-lach-10349615.webp
-heroImage: /images/pexels-ron-lach-10349986.webp
+thumbnail: /images/missing-foggy-road.jpg
+heroImage: /images/missing-foggy-road.jpg
 tags:
   - missing-persons
   - osint

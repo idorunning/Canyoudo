@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 560" width="1320" height="560" role="img" aria-label="How an AI is made and used: training data, training, the model, your input, output">
+  <rect width="1320" height="560" fill="#fbf8f1"/>
+  <text x="40" y="64" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="34" font-weight="600">How an AI is made &#8212; and used</text>
+
+  <!-- phase labels -->
+  <text x="16" y="120" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="18" letter-spacing="3" font-weight="600">BUILT ONCE &#8212; SLOW AND EXPENSIVE</text>
+  <text x="800" y="120" fill="#5a544e" font-family="'DM Sans', system-ui, sans-serif" font-size="18" letter-spacing="3" font-weight="600">EVERY TIME YOU USE IT &#8212; FAST</text>
+
+  <g font-family="'DM Sans', system-ui, sans-serif">
+    <!-- 1 training data -->
+    <rect x="16" y="150" width="224" height="200" rx="14" fill="#ffffff" stroke="#c4bcae" stroke-width="2"/>
+    <text x="36" y="200" fill="#1a1817" font-size="24" font-weight="600">Training data</text>
+    <text x="36" y="240" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">Millions of</text>
+    <text x="36" y="266" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">documents, images</text>
+    <text x="36" y="292" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">and records.</text>
+
+    <!-- 2 training -->
+    <rect x="276" y="150" width="224" height="200" rx="14" fill="#ffffff" stroke="#c4bcae" stroke-width="2"/>
+    <text x="296" y="200" fill="#1a1817" font-size="24" font-weight="600">Training</text>
+    <text x="296" y="240" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">It works out the</text>
+    <text x="296" y="266" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">patterns itself &#8212;</text>
+    <text x="296" y="292" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">no rules written.</text>
+
+    <!-- 3 the model -->
+    <rect x="536" y="150" width="224" height="200" rx="14" fill="#f7f3eb" stroke="#7c2828" stroke-width="3"/>
+    <text x="556" y="200" fill="#1a1817" font-size="24" font-weight="600">The model</text>
+    <text x="556" y="240" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">The learned</text>
+    <text x="556" y="266" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">patterns, frozen</text>
+    <text x="556" y="292" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">in place.</text>
+
+    <!-- 4 your input -->
+    <rect x="796" y="150" width="224" height="200" rx="14" fill="#ffffff" stroke="#c4bcae" stroke-width="2"/>
+    <text x="816" y="200" fill="#1a1817" font-size="24" font-weight="600">Your input</text>
+    <text x="816" y="240" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">A question, a file,</text>
+    <text x="816" y="266" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">an image &#8212; the</text>
+    <text x="816" y="292" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">&#8220;prompt&#8221;.</text>
+
+    <!-- 5 output -->
+    <rect x="1056" y="150" width="224" height="200" rx="14" fill="#f7f3eb" stroke="#7c2828" stroke-width="3"/>
+    <text x="1076" y="200" fill="#1a1817" font-size="24" font-weight="600">Output</text>
+    <text x="1076" y="240" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">Its best-pattern</text>
+    <text x="1076" y="266" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="19">answer.</text>
+  </g>
+
+  <!-- arrows -->
+  <g stroke="#9c9389" stroke-width="3" fill="none">
+    <path d="M248 250 L268 250" marker-end="url(#ah)"/>
+    <path d="M508 250 L528 250" marker-end="url(#ah)"/>
+    <path d="M768 250 L788 250" marker-end="url(#ah)"/>
+    <path d="M1028 250 L1048 250" marker-end="url(#ah)"/>
+  </g>
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0 0 L7 3 L0 6 Z" fill="#9c9389"/>
+    </marker>
+  </defs>
+
+  <!-- notes -->
+  <text x="536" y="392" fill="#7c2828" font-family="'Source Serif 4', Georgia, serif" font-size="20" font-style="italic">Only as good &#8212; and as biased &#8212; as what it learned from.</text>
+  <text x="1056" y="392" fill="#7c2828" font-family="'Source Serif 4', Georgia, serif" font-size="20" font-style="italic">Plausible. Not</text>
+  <text x="1056" y="418" fill="#7c2828" font-family="'Source Serif 4', Georgia, serif" font-size="20" font-style="italic">guaranteed true.</text>
+
+  <text x="40" y="500" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="21">Traditional software follows rules a human wrote. AI writes its own rules from examples &#8212; which is exactly why</text>
+  <text x="40" y="528" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="21">no one, not even its makers, can fully explain any single answer it gives.</text>
+</svg>
