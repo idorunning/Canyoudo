@@ -57,8 +57,17 @@ const opt = (name) => { const i = argv.indexOf(name); return i >= 0 ? argv[i + 1
 const DRY = flag('--dry-run');
 const ZIP_PATH = opt('--zip');
 const MONTHS_OPT = opt('--months');
-const KEEP_MONTHS = Number(process.env.INGEST_MONTHS ?? 36);
-const LSOA_MONTHS = Number(process.env.INGEST_LSOA_MONTHS ?? 12);
+// Parse a positive-integer env var, falling back to a default. CRITICAL: the
+// workflow passes `${{ vars.X }}`, which is an EMPTY STRING (not undefined) when
+// the repo variable is unset — and `'' ?? def` keeps '', `Number('')` is 0, and
+// `arr.slice(-0)` returns the WHOLE array. So a plain `?? default` silently
+// disabled both windows. Treat empty/invalid/<1 as "use the default".
+const intEnv = (v, def) => {
+  const n = Number(v);
+  return v == null || String(v).trim() === '' || !Number.isFinite(n) || n < 1 ? def : Math.floor(n);
+};
+const KEEP_MONTHS = intEnv(process.env.INGEST_MONTHS, 36);
+const LSOA_MONTHS = intEnv(process.env.INGEST_LSOA_MONTHS, 12);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const md5 = (s) => createHash('md5').update(s).digest('hex');
@@ -317,12 +326,34 @@ async function ingestBulk(sb, runNotes) {
       if (sb) await sb.from('ingest_runs').insert({ kind: 'bulk', dataset_month: month, rows_upserted: n, ok: true, notes: `${monthEntries.length} files`, started_at: monthStart, finished_at: new Date().toISOString() }).then(() => {}, () => {});
     }
 
+    // Enforce the retention windows: the ingest only ever upserts, so without
+    // pruning, months that fall out of the window (and any LSOA history beyond
+    // INGEST_LSOA_MONTHS) would accumulate forever. Delete anything older.
+    await pruneOld(sb, wanted, lsoaWanted);
+
     runNotes.push(`bulk: ${wanted.size} months, ${total} rollup rows`);
     console.log(`Bulk done: ${total} rollup rows across ${wanted.size} months (${DRY ? 'dry-run, not written' : 'upserted'}).`);
     return total;
   } finally {
     await archive.cleanup?.();
   }
+}
+
+// Delete rows older than the retention windows. Months are 'YYYY-MM' strings, so
+// a lexicographic `< cutoff` correctly drops everything before the oldest kept
+// month. The rollup tables keep INGEST_MONTHS; crime_lsoa_month (the largest)
+// keeps only INGEST_LSOA_MONTHS.
+async function pruneOld(sb, wanted, lsoaWanted) {
+  if (DRY || !sb || !wanted.size) return;
+  const oldest = [...wanted].sort()[0];
+  const oldestLsoa = lsoaWanted.size ? [...lsoaWanted].sort()[0] : oldest;
+  const prune = async (table, cutoff) => {
+    const { count, error } = await sb.from(table).delete({ count: 'exact' }).lt('month', cutoff);
+    if (error) throw new Error(`prune ${table}: ${error.message}`);
+    if (count) console.log(`  pruned ${count} rows from ${table} older than ${cutoff}`);
+  };
+  for (const t of ['crime_force_month', 'outcome_force_month', 'ss_force_month', 'ss_dim']) await prune(t, oldest);
+  await prune('crime_lsoa_month', oldestLsoa);
 }
 
 // Sum per-force rows into '_all' rows for one month grouping.

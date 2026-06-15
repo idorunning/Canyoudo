@@ -34,7 +34,10 @@ Every per-force rollup also gets an aggregate row with `force_id = '_all'`, so
 
 **Volume control:** `INGEST_MONTHS` (default 36) bounds how many recent months of
 rollups are kept; `INGEST_LSOA_MONTHS` (default 12) bounds the larger LSOA map table.
-With these defaults the database fits comfortably inside Supabase's free tier.
+With these defaults the database fits comfortably inside Supabase's free tier. Leaving
+the repo variables unset uses these defaults. After each run the ingest **prunes**
+rows older than the windows (the upsert path never deletes on its own), so the tables
+stay bounded as the archive rolls forward.
 
 **Phased & resumable:** the multi-GB archive is never downloaded whole. The ingest
 reads the zip's central directory and then each wanted CSV via HTTP **range requests**,
