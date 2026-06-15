@@ -456,8 +456,8 @@ async function ingestApi(sb, runNotes) {
 
     let n = 0;
     n += await upsert(sb, 'police_forces', [forceRow], 'id');
-    n += await upsert(sb, 'police_force_people', peopleRows, 'force_id,name');
-    n += await upsert(sb, 'neighbourhoods', hoodRows, 'force_id,id');
+    n += await upsert(sb, 'police_force_people', dedupe(peopleRows, (r) => `${r.force_id}|${r.name}`), 'force_id,name');
+    n += await upsert(sb, 'neighbourhoods', dedupe(hoodRows, (r) => `${r.force_id}|${r.id}`), 'force_id,id');
     n += await upsert(sb, 'neighbourhood_priorities', dedupe(prioRows, (r) => `${r.force_id}|${r.neighbourhood_id}|${r.key}`), 'force_id,neighbourhood_id,key');
     total += n; done++;
     console.log(`  api: ${f.id} — ${hoodCount} neighbourhoods → ${n} rows (${DRY ? 'dry-run' : 'upserted'}).`);
