@@ -1,0 +1,77 @@
+# The police database
+
+A historical, queryable store of [data.police.uk](https://data.police.uk) in
+Supabase Postgres, powering the explorer tools under `/data/`:
+
+- **Crime & outcomes** — long-run trends and charge/solve ("justice gap") rates
+- **Stop & search disproportionality** — ethnicity, object, find rates over time
+- **Neighbourhood policing** — your local team's stated priorities
+- **Force profiles & data quality** — coverage tracker, senior officers
+
+This is separate from the lightweight committed snapshot (`src/content/policedata/`,
+refreshed by `police-data.yml`) that the original dashboard still uses. The database
+adds the historical depth and demographic detail the snapshot can't hold.
+
+## Why a database (and what's in it)
+
+The bulk archive is ~19M+ rows — far too big to commit as JSON. So the ingest stores
+bounded **rollups**, not raw rows:
+
+| Table | Grain | Source |
+|---|---|---|
+| `crime_force_month` | force × month × category (count) | archive `*-street.csv` |
+| `outcome_force_month` | force × month × outcome (count) | archive `*-outcomes.csv` |
+| `crime_lsoa_month` | LSOA × month (all-crime count) | archive `*-street.csv` |
+| `ss_force_month` | force × month (total, find rate) | archive `*-stop-and-search.csv` |
+| `ss_dim` | force × month × dimension × value (count, finds) | archive `*-stop-and-search.csv` |
+| `police_forces`, `police_force_people` | force metadata, senior officers | JSON API |
+| `neighbourhoods`, `neighbourhood_priorities` | local teams + priorities | JSON API |
+| `force_population_ethnicity` | ethnicity denominator (optional seed) | ONS census |
+| `ingest_runs` | provenance / idempotency | — |
+
+Every per-force rollup also gets an aggregate row with `force_id = '_all'`, so
+"national" is a plain query — no GROUP BY at request time.
+
+**Volume control:** `INGEST_MONTHS` (default 36) bounds how many recent months of
+rollups are kept; `INGEST_LSOA_MONTHS` (default 12) bounds the larger LSOA map table.
+With these defaults the database fits comfortably inside Supabase's free tier.
+
+## Setup (one-off)
+
+1. Use the existing Supabase project (the one behind sign-in / saved papers).
+2. Run the migration: paste `supabase/migrations/0001_police_database.sql` into the
+   Supabase SQL editor (or `supabase db push` with the CLI). It's idempotent.
+3. Add GitHub Actions **secrets**: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+   (Project settings → API). Optionally set repo **variables** `INGEST_MONTHS`,
+   `INGEST_LSOA_MONTHS`.
+4. The read path reuses the existing public `PUBLIC_SUPABASE_URL` /
+   `PUBLIC_SUPABASE_ANON_KEY` — nothing new to expose; public-SELECT RLS covers
+   these open-data tables.
+
+## Running the ingest
+
+- **Automatic:** `police-database.yml` runs monthly (6th, after the snapshot job).
+  Trigger manually from the Actions tab, optionally passing specific months.
+- **Manual / local** (needs network to data.police.uk, which the dev sandbox lacks):
+  ```bash
+  npm install --no-save @supabase/supabase-js unzipper
+  SUPABASE_URL=… SUPABASE_SERVICE_ROLE_KEY=… node scripts/ingest-bulk-police.mjs
+  # dry run against a local archive, no DB writes:
+  node scripts/ingest-bulk-police.mjs --zip ./archive.zip --months 2024-01 --dry-run
+  ```
+
+The ingest is **idempotent** — every write is an upsert keyed on the rollup grain,
+so re-running a month overwrites rather than duplicates.
+
+## Disproportionality denominator (optional)
+
+True stop-&-search disproportionality needs resident population by ethnicity per
+force area (ONS census). Seed `force_population_ethnicity` (broad groups: White,
+Black, Asian, Mixed, Other) to unlock disparity ratios; until then the tool shows
+search-volume shares + find rates, which are still informative but not proof of bias.
+
+## Parsing/rollup logic
+
+All CSV parsing and rollup maths lives in `scripts/lib/police-csv.mjs` (pure, no
+I/O) and is unit-tested in `tests/police-csv.test.mjs` (`npm test`). The ingest
+script is just the streaming + Supabase orchestration around it.

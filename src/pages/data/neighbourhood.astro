@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Your neighbourhood policing team"
+  description="Find your local neighbourhood policing team from a postcode, and see the priorities they have publicly committed to. Built on the data.police.uk neighbourhoods API."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <div class="max-w-3xl">
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-4"><a href="/data/explore" class="hover:text-accent-dark">Data Explorer</a> · Neighbourhood</p>
+        <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">Your neighbourhood team</h1>
+        <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
+          Every area in England &amp; Wales has a neighbourhood policing team with priorities they’ve publicly set.
+          Enter a postcode to find yours — and what they say they’re focusing on.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10">
+      <div class="max-w-3xl space-y-8">
+        <form data-form class="flex flex-wrap gap-3 items-stretch max-w-xl">
+          <label for="pc" class="sr-only">Postcode</label>
+          <input id="pc" name="postcode" type="text" autocomplete="postal-code" placeholder="e.g. SW1A 1AA"
+            class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+          <button type="submit" class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors">Find team</button>
+        </form>
+
+        <div data-result aria-live="polite"></div>
+
+        <p class="font-sans text-xs text-ink-500 leading-relaxed border-t border-ink-200 pt-5">
+          Source: <a href="https://data.police.uk" class="underline underline-offset-2 hover:text-accent">data.police.uk</a> neighbourhoods API
+          and <a href="https://postcodes.io" class="underline underline-offset-2 hover:text-accent">postcodes.io</a>, Open Government Licence v3.0.
+          Priorities are set by each force and may not be current.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.querySelector<HTMLFormElement>('[data-form]')!;
+    const input = document.getElementById('pc') as HTMLInputElement;
+    const result = document.querySelector<HTMLElement>('[data-result]')!;
+
+    const esc = (s: string) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+    const stripHtml = (s: string) => String(s ?? '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    const police = (p: string) => fetch(`/api/police${p}`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+
+    async function lookup(postcode: string) {
+      result.innerHTML = '<p class="font-serif italic text-ink-400">Finding your team…</p>';
+      const pc = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(postcode.trim())}`)
+        .then((r) => (r.ok ? r.json() : null)).catch(() => null);
+      if (!pc?.result) { result.innerHTML = `<p class="text-accent">Couldn’t find the postcode “${esc(postcode)}”.</p>`; return; }
+      const { latitude, longitude, admin_district } = pc.result;
+
+      const loc = await police(`/locate-neighbourhood?q=${latitude},${longitude}`);
+      if (!loc?.force || !loc?.neighbourhood) { result.innerHTML = '<p class="text-accent">No neighbourhood team found for that location.</p>'; return; }
+
+      const [detail, team, priorities] = await Promise.all([
+        police(`/${loc.force}/${loc.neighbourhood}`),
+        police(`/${loc.force}/${loc.neighbourhood}/people`),
+        police(`/${loc.force}/${loc.neighbourhood}/priorities`),
+      ]);
+
+      const name = detail?.name || loc.neighbourhood;
+      const prios = (priorities || []).map((p: any) => ({ issue: stripHtml(p.issue), action: stripHtml(p.action) }))
+        .filter((p: any) => p.issue || p.action).slice(0, 6);
+      const people = (team || []).filter((p: any) => p?.name).slice(0, 8);
+
+      result.innerHTML = `
+        <div class="space-y-8">
+          <div>
+            <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">${esc(admin_district || '')}</p>
+            <h2 class="font-display text-2xl font-semibold text-ink-900 mt-1">${esc(name)}</h2>
+            ${detail?.url_force ? `<a href="${esc(detail.url_force)}" class="font-sans text-sm text-accent hover:text-accent-dark underline underline-offset-2">Team page →</a>` : ''}
+          </div>
+          <div>
+            <h3 class="font-display text-lg font-semibold text-ink-900 mb-3">Stated priorities</h3>
+            ${prios.length ? `<ul class="space-y-4">${prios.map((p: any) => `
+              <li class="border-l-2 border-accent pl-4">
+                ${p.issue ? `<p class="font-serif text-ink-900">${esc(p.issue)}</p>` : ''}
+                ${p.action ? `<p class="font-serif text-sm text-ink-600 mt-1"><span class="font-sans text-xs uppercase tracking-wide text-ink-400">Action</span> ${esc(p.action)}</p>` : ''}
+              </li>`).join('')}</ul>`
+              : '<p class="font-serif text-ink-600">This team hasn’t published current priorities.</p>'}
+          </div>
+          ${people.length ? `<div>
+            <h3 class="font-display text-lg font-semibold text-ink-900 mb-3">Who they are</h3>
+            <ul class="grid sm:grid-cols-2 gap-x-6 gap-y-2 font-sans text-sm text-ink-700">
+              ${people.map((p: any) => `<li>${esc(p.name)}${p.rank ? ` <span class="text-ink-500">— ${esc(p.rank)}</span>` : ''}</li>`).join('')}
+            </ul></div>` : ''}
+        </div>`;
+    }
+
+    form.addEventListener('submit', (e) => { e.preventDefault(); if (input.value.trim()) lookup(input.value); });
+    const initial = new URLSearchParams(location.search).get('postcode');
+    if (initial) { input.value = initial; lookup(initial); }
+  </script>
+</BaseLayout>

@@ -1,0 +1,102 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const entries = await getCollection('policedata');
+const forces = entries
+  .filter((e) => e.data.kind === 'force')
+  .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'force' }>)
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+<BaseLayout
+  title="Forces & data quality"
+  description="Police force profiles and senior officers, plus an honest tracker of how complete the underlying data.police.uk data is."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <div class="max-w-3xl">
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-4"><a href="/data/explore" class="hover:text-accent-dark">Data Explorer</a> · Forces &amp; data quality</p>
+        <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">Forces &amp; data quality</h1>
+        <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
+          Who leads each force, and how complete the data behind every chart on this site actually is.
+          Numbers are only as good as their coverage — so here it is, in the open.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10">
+      <div class="max-w-3xl space-y-12">
+        <div>
+          <h2 class="font-display text-xl font-semibold text-ink-900 mb-4">Database coverage</h2>
+          <dl class="grid grid-cols-2 sm:grid-cols-3 gap-6" data-coverage>
+            <div><dt class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">Crime data to</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-crime>…</dd></div>
+            <div><dt class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">Stop &amp; search to</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-ss>…</dd></div>
+            <div><dt class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">Last ingest</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-run>…</dd></div>
+          </dl>
+          <p class="font-serif text-sm text-ink-600 mt-3" data-cov-note></p>
+        </div>
+
+        <div class="border-t border-ink-200 pt-10">
+          <h2 class="font-display text-xl font-semibold text-ink-900 mb-4">Force profile</h2>
+          <label for="force-pick" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Choose a force</label>
+          <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
+            <option value="">Choose a force…</option>
+            {forces.map((f) => <option value={f.id}>{f.name}</option>)}
+          </select>
+          <div class="mt-6" data-profile></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { fetchJson, lineChart } from '../../scripts/data/explorer';
+
+    const esc = (s: string) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+
+    // Coverage stamp.
+    fetchJson('/api/police-db?view=coverage').then((c) => {
+      const set = (sel: string, v: string) => { const el = document.querySelector<HTMLElement>(sel); if (el) el.textContent = v; };
+      set('[data-cov-crime]', c?.latestCrimeMonth || '—');
+      set('[data-cov-ss]', c?.latestStopSearchMonth || '—');
+      set('[data-cov-run]', c?.lastRun?.finished_at ? new Date(c.lastRun.finished_at).toLocaleDateString('en-GB') : '—');
+      const note = document.querySelector<HTMLElement>('[data-cov-note]');
+      if (note && c?.lastRun) note.textContent = `${c.lastRun.ok ? 'Last ingest succeeded' : 'Last ingest reported a problem'}: ${c.lastRun.notes || ''}`;
+    }).catch(() => {
+      const note = document.querySelector<HTMLElement>('[data-cov-note]');
+      if (note) note.textContent = 'The database isn’t configured yet, so coverage is unavailable.';
+    });
+
+    // Force profile.
+    const pick = document.getElementById('force-pick') as HTMLSelectElement;
+    const profile = document.querySelector<HTMLElement>('[data-profile]')!;
+    pick.addEventListener('change', async () => {
+      if (!pick.value) { profile.innerHTML = ''; return; }
+      profile.innerHTML = '<p class="font-serif italic text-ink-400">Loading…</p>';
+      try {
+        const p = await fetchJson(`/api/police-db?view=force-profile&force=${pick.value}`);
+        const people = (p.people || []).filter((x: any) => x?.name).slice(0, 12);
+        profile.innerHTML = `
+          <div class="space-y-6">
+            <div>
+              <h3 class="font-display text-2xl font-semibold text-ink-900">${esc(p.force.name)}</h3>
+              ${p.force.description ? `<p class="font-serif text-ink-700 leading-relaxed mt-2">${esc(p.force.description).slice(0, 800)}</p>` : ''}
+              ${p.force.url ? `<a href="${esc(p.force.url)}" class="font-sans text-sm text-accent hover:text-accent-dark underline underline-offset-2">Force website →</a>` : ''}
+            </div>
+            ${people.length ? `<div><h4 class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Senior officers</h4>
+              <ul class="space-y-1 font-sans text-sm text-ink-700">${people.map((x: any) => `<li>${esc(x.name)}${x.rank ? ` <span class="text-ink-500">— ${esc(x.rank)}</span>` : ''}</li>`).join('')}</ul></div>` : ''}
+            <div data-ss-chart><h4 class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Stop &amp; search, monthly</h4><div data-ss></div></div>
+          </div>`;
+        if (p.ssSeries?.length) {
+          lineChart(profile.querySelector('[data-ss]')!, p.ssSeries.map((s: any) => s.month), [{ label: 'Searches', values: p.ssSeries.map((s: any) => s.total) }]);
+        } else {
+          profile.querySelector('[data-ss-chart]')!.remove();
+        }
+      } catch (err: any) {
+        profile.innerHTML = `<p class="text-accent">${esc(err?.message || 'Couldn’t load that force — the database may still be filling.')}</p>`;
+      }
+    });
+  </script>
+</BaseLayout>
