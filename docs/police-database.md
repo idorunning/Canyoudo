@@ -77,7 +77,9 @@ vice versa). Both gate on a shared `guard` job that checks the Supabase secrets.
 ## Running the ingest
 
 - **Automatic:** `police-database.yml` runs monthly (6th, after the snapshot job).
-  Trigger manually from the Actions tab, optionally passing specific months.
+  Trigger manually from the Actions tab, optionally passing specific `months` and a
+  `phase` (`all` / `bulk` / `metadata`) to run just one phase — e.g. `metadata` to
+  refresh forces/neighbourhoods without re-reading the bulk archive.
 - **Manual / local** (needs network to data.police.uk, which the dev sandbox lacks):
   ```bash
   npm install --no-save @supabase/supabase-js unzipper

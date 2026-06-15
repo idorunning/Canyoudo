@@ -17,6 +17,12 @@ on:
         description: 'Comma-separated months to ingest (blank = recent window)'
         required: false
         default: ''
+      phase:
+        description: 'Which phase to run'
+        required: false
+        type: choice
+        default: all
+        options: [all, bulk, metadata]
 
 concurrency:
   group: police-database
@@ -44,7 +50,7 @@ jobs:
   # completed months and a re-run resumes.
   bulk:
     needs: guard
-    if: needs.guard.outputs.ok == 'true'
+    if: needs.guard.outputs.ok == 'true' && github.event.inputs.phase != 'metadata'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -75,7 +81,7 @@ jobs:
   # is written and checkpointed as it completes, so a cut-short run resumes.
   metadata:
     needs: guard
-    if: needs.guard.outputs.ok == 'true'
+    if: needs.guard.outputs.ok == 'true' && github.event.inputs.phase != 'bulk'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
