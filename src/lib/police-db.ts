@@ -11,6 +11,16 @@
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
+// @supabase/supabase-js eagerly constructs a realtime client whose guard throws on
+// Node < 22 when there's no global WebSocket ("Node.js 20 detected without native
+// WebSocket support"). The Netlify Functions runtime can be Node < 22, which 502s every
+// DB-backed endpoint. We only ever use PostgREST reads (never realtime), so providing a
+// stub WebSocket satisfies the guard harmlessly. No-op where a native WebSocket already
+// exists (Node 22+, browsers).
+if (typeof (globalThis as { WebSocket?: unknown }).WebSocket === 'undefined') {
+  (globalThis as { WebSocket?: unknown }).WebSocket = class {};
+}
+
 export const ALL = '_all';
 
 const URL = process.env.PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || '';

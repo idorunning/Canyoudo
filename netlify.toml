@@ -3,11 +3,15 @@
   publish = "dist"
 
 [build.environment]
-  # Node 22+ for both the build and the Functions runtime: @supabase/supabase-js's
-  # createClient() eagerly builds a realtime client that needs a native WebSocket and
-  # throws on Node < 22 ("Node.js 20 detected without native WebSocket support"), which
-  # 502s every DB-backed /api/police-db endpoint. Same reason the ingest workflow pins 22.
+  # Node 22+ for the build. @supabase/supabase-js's createClient() eagerly builds a
+  # realtime client that needs a native WebSocket and throws on Node < 22 ("Node.js 20
+  # detected without native WebSocket support"). Same reason the ingest workflow pins 22.
   NODE_VERSION = "22"
+  # NODE_VERSION alone does NOT set the Functions runtime — it stayed on Node 20 and kept
+  # 502-ing every DB-backed /api/police-db endpoint. This is the dedicated knob for the
+  # functions runtime. (src/lib/police-db.ts also stubs WebSocket as a belt-and-braces
+  # guard, so the read path works even if the runtime is older.)
+  AWS_LAMBDA_JS_RUNTIME = "nodejs22.x"
   # Public, build-time config (these values are exposed in the page source by
   # design — they are not secrets).
   # Analytics — GoatCounter (privacy-friendly, no cookie banner).
