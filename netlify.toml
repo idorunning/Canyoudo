@@ -3,7 +3,11 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  # Node 22+ for both the build and the Functions runtime: @supabase/supabase-js's
+  # createClient() eagerly builds a realtime client that needs a native WebSocket and
+  # throws on Node < 22 ("Node.js 20 detected without native WebSocket support"), which
+  # 502s every DB-backed /api/police-db endpoint. Same reason the ingest workflow pins 22.
+  NODE_VERSION = "22"
   # Public, build-time config (these values are exposed in the page source by
   # design — they are not secrets).
   # Analytics — GoatCounter (privacy-friendly, no cookie banner).
