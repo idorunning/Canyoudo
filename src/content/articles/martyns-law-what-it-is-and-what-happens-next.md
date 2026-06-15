@@ -3,8 +3,8 @@ section: "public-policy"
 title: "Martyn's Law: What It Is, Where It's Up To, and What It Asks of All of Us"
 description: "A mother's six-year campaign turned the Manchester Arena attack into the Terrorism (Protection of Premises) Act 2025 — Martyn's Law. A plain-English guide to what the law says, where it is on the road to enforcement, and what it means for businesses, police officers and police leaders."
 pubDate: 2026-06-12
-heroImage: "/images/martyns-law-hero.svg"
-thumbnail: "/images/martyns-law-hero.svg"
+heroImage: "/images/martyns-law-hero.jpg"
+thumbnail: "/images/martyns-law-hero.jpg"
 tags: ["martyns-law", "counter-terrorism", "public-policy", "policing", "police", "law", "crime-prevention", "leadership"]
 ---
 

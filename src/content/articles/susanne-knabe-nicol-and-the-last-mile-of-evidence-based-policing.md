@@ -3,7 +3,7 @@ section: "influential-people"
 title: "Susanne Knabe-Nicol and the Last Mile of Evidence-Based Policing"
 description: "A profile of Dr Susanne Knabe-Nicol — the 'Police Science Dr' — who left a decade inside policing to fix the problem that holds evidence-based practice back: the research that could change how officers work, but that almost no officer ever reads."
 pubDate: 2026-06-08
-heroImage: "/images/knabe-nicol-hero.svg"
+heroImage: "/images/knabe-nicol-hero.jpg"
 thumbnail: "/images/knabe-nicol-portrait.jpg"
 portrait: "/images/knabe-nicol-portrait.jpg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "criminology", "investigative-psychology", "professional-development", "research"]
@@ -42,6 +42,11 @@ Knabe-Nicol's insight was to treat that as the real bottleneck. The frontline do
 - **The Police Science Dr Academy**, a growing set of structured, police-relevant courses.
 
 The stated ambition is larger than any one video: a single global platform where researchers and practitioners meet, so that good evidence has somewhere to land and officers have somewhere to look. It is, in effect, the missing distribution layer for everything Sherman and Murray spent their careers producing.
+
+<figure>
+  <img src="/images/knabe-nicol-hero.svg" alt="Diagram of the Police Science Dr model: the academy (research) connects through a translation layer — video, podcast, transcript, course — to the frontline (practice), captioned 'where police research meets police practice'" loading="lazy" />
+  <figcaption>The model Knabe-Nicol built: a translation layer carrying research from the academy to the frontline — the missing distribution step in evidence-based policing.</figcaption>
+</figure>
 
 ### Why it helps
 
