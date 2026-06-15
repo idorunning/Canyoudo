@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaveatBanner from '../../components/data/CaveatBanner.astro';
+import { getCollection } from 'astro:content';
+
+const entries = await getCollection('policedata');
+const forces = entries
+  .filter((e) => e.data.kind === 'force')
+  .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'force' }>)
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+<BaseLayout
+  title="Stop & search disproportionality"
+  description="Who gets stopped and searched in England & Wales, how that compares with the resident population, and how often searches find what officers were looking for. Built on data.police.uk."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <div class="max-w-3xl">
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-4"><a href="/data/explore" class="hover:text-accent-dark">Data Explorer</a> · Stop &amp; search</p>
+        <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">Stop &amp; search disproportionality</h1>
+        <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
+          A raw ethnicity share is not proof of bias — it needs a population denominator and a look at what searches
+          actually find. This tool shows all three honestly, so the question can be asked properly.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10">
+      <div class="max-w-3xl space-y-10">
+        <CaveatBanner />
+
+        <div>
+          <label for="force-pick" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Choose an area</label>
+          <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
+            <option value="_all">England &amp; Wales (all forces)</option>
+            {forces.map((f) => <option value={f.id}>{f.name}</option>)}
+          </select>
+        </div>
+
+        <div class="not-prose">
+          <p class="font-sans text-xs uppercase tracking-[0.18em] text-accent mb-3">The reading</p>
+          <div class="prose-article min-h-[6rem]" data-interpretation aria-live="polite"></div>
+          <p class="mt-4 font-sans text-xs text-ink-500 leading-relaxed">
+            Interpreted by <strong class="font-medium text-ink-600" data-model>Claude</strong> from
+            <a href="https://data.police.uk" class="hover:text-accent underline underline-offset-2">data.police.uk</a>
+            (OGL v3.0) — AI-generated, read with care.<span data-month></span>
+          </p>
+        </div>
+
+        <div class="border-t border-ink-200 pt-8 space-y-10" data-charts hidden>
+          <div>
+            <h3 class="font-display text-lg font-semibold text-ink-900 mb-3">Searches by officer-defined ethnicity</h3>
+            <div data-chart-ethnicity></div>
+            <p class="font-serif text-sm text-ink-600 mt-2" data-denominator></p>
+          </div>
+          <div>
+            <h3 class="font-display text-lg font-semibold text-ink-900 mb-1">Find rate by ethnicity</h3>
+            <p class="font-serif text-sm text-ink-600 mb-3">Share of searches where the outcome was linked to the object sought. Similar find rates across groups argue against bias; large gaps invite scrutiny.</p>
+            <div data-chart-findrate></div>
+          </div>
+          <div>
+            <h3 class="font-display text-lg font-semibold text-ink-900 mb-3">What officers were looking for</h3>
+            <div data-chart-object></div>
+          </div>
+          <div>
+            <h3 class="font-display text-lg font-semibold text-ink-900 mb-3">Searches over time</h3>
+            <div data-chart-trend></div>
+          </div>
+        </div>
+
+        <p class="font-serif text-ink-500 italic" data-empty hidden>The database is still filling — check back once the first ingest has run.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { fetchJson, barTable, lineChart, streamInterpret, pct } from '../../scripts/data/explorer';
+
+    const pick = document.getElementById('force-pick') as HTMLSelectElement;
+    const charts = document.querySelector<HTMLElement>('[data-charts]')!;
+    const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+    const out = document.querySelector<HTMLElement>('[data-interpretation]')!;
+    const modelEl = document.querySelector<HTMLElement>('[data-model]');
+    const monthEl = document.querySelector<HTMLElement>('[data-month]');
+
+    async function load(force: string) {
+      streamInterpret(`/api/db-interpret?scope=disproportionality&force=${force}`, out, { modelEl, monthEl });
+      try {
+        const [disp, object, trend] = await Promise.all([
+          fetchJson(`/api/police-db?view=disproportionality&force=${force}`),
+          fetchJson(`/api/police-db?view=ss-dim&force=${force}&dimension=object_of_search`),
+          fetchJson(`/api/police-db?view=ss-trend&force=${force}`),
+        ]);
+        if (!disp.groups?.length) { charts.hidden = true; empty.hidden = false; return; }
+        empty.hidden = true; charts.hidden = false;
+
+        // Search share vs population share, side by side where population exists.
+        const eth = charts.querySelector('[data-chart-ethnicity]')!;
+        barTable(eth, disp.groups.map((g: any) => ({
+          label: g.ethnicity,
+          count: g.searches,
+          note: g.disparityRatio != null ? `${g.disparityRatio}× vs pop.` : undefined,
+        })), { asPercent: true });
+        const denom = charts.querySelector<HTMLElement>('[data-denominator]')!;
+        denom.textContent = disp.hasPopulation
+          ? 'The “×” is the disparity ratio: search share ÷ resident-population share. 1× means proportionate.'
+          : 'No resident-population denominator is loaded for this area yet, so only search shares are shown — these alone are not evidence of bias.';
+
+        // Find rate by ethnicity, as a percentage (fixed 0–100 scale so groups
+        // are comparable at a glance).
+        barTable(charts.querySelector('[data-chart-findrate]')!,
+          disp.groups.filter((g: any) => g.findRate != null)
+            .map((g: any) => ({ label: g.ethnicity, count: Math.round((g.findRate || 0) * 100), note: '%' })),
+          { max: 100 });
+
+        const obj = (object.values || []).slice(0, 8).map((v: any) => ({ label: v.value, count: v.count }));
+        if (obj.length) barTable(charts.querySelector('[data-chart-object]')!, obj, { asPercent: true });
+
+        if (trend.series?.length) {
+          lineChart(charts.querySelector('[data-chart-trend]')!, trend.series.map((s: any) => s.month),
+            [{ label: 'Searches per month', values: trend.series.map((s: any) => s.total) }]);
+        }
+      } catch {
+        charts.hidden = true; empty.hidden = false;
+      }
+    }
+
+    pick.addEventListener('change', () => load(pick.value));
+    load('_all');
+  </script>
+</BaseLayout>
