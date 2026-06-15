@@ -33,6 +33,8 @@ A semantic, natural-language search layer operating over the global open-source 
 
 Founder and Editor
 
+![](/images/20191231_210253.webp)
+
 I am a serving Police Sergeant with Sussex Police, specializing in neighbourhood policing and data-led operational strategy. My approach to law enforcement is defined by an unconventional but common trajectory into the service: minimal academic qualifications, entering policing at age thirty-one following a career managing commercial operations within a corporate environment.  subsequently I was also diagnosed with of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven. - This diagnosis literally saved my life, nut Ill write about that another day....
 
 This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organisational design, and institutional assumptions regarding human behaviour versus empirical reality.
