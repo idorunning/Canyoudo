@@ -2,7 +2,8 @@
 title: Purpose and Editorial Scope
 description: Evidence-based writing,  live crime dashboard and a free research search
 ---
-*Thinking About Policing* is an independent analytical platform dedicated to evidence-based policing (EBP), public policy, and institutional reform. It is written specifically for those who shape, study, and execute modern policing strategy: senior executives, operational leaders, policymakers, and academic researchers.
+
+_Thinking About Policing_ is an independent analytical platform dedicated to evidence-based policing (EBP), public policy, and institutional reform. It is written specifically for those who shape, study, and execute modern policing strategy: senior executives, operational leaders, policymakers, and academic researchers.
 
 Rather than offering passive literature reviews or broad surveys of the field, every analysis published here takes a definitive, data-led position. The editorial ethos is grounded in empirical rigor: where robust empirical evidence exists, it forms the foundation of the argument; where data is sparse, fragmented, or structurally contested, that limitation is explicitly stated and evaluated.
 
@@ -30,15 +31,15 @@ A semantic, natural-language search layer operating over the global open-source 
 
 ### Nathan Tracey
 
-Founder & Editor
+Founder and Editor
 
-I am a serving Police Inspector with Sussex Police, specializing in neighbourhood policing and data-led operational strategy. My approach to law enforcement is defined by an unconventional trajectory into the service: entering policing at age thirty-one following a career managing commercial operations within a major corporate environment, and a subsequent adult diagnosis of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven.
+I am a serving Police Sergeant with Sussex Police, specializing in neighbourhood policing and data-led operational strategy. My approach to law enforcement is defined by an unconventional but common trajectory into the service: minimal academic qualifications, entering policing at age thirty-one following a career managing commercial operations within a corporate environment.  subsequently I was also diagnosed with of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven. - This diagnosis literally saved my life, nut Ill write about that another day....
 
-This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organizational design, and institutional assumptions regarding human behavior versus empirical reality.
+This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organisational design, and institutional assumptions regarding human behaviour versus empirical reality.
 
-My operational interests focus heavily on data application—specifically the predictive analysis of officer assaults, use-of-force proportionality, and misconduct trends—with a strong structural bias toward early intervention frameworks. My methodology has been fundamentally shaped by statistical communication theory, Jerry Ratcliffe’s frameworks for intelligence-led policing, and the foundational principles of evidence-based practice championed by the Society of Evidence-Based Policing (SEBP).
+My operational interests focus heavily on data application—specifically the predictive analysis of officer assaults, use-of-force proportionality, and misconduct trends—with a strong structural bias toward early detection and intervention frameworks. My methodology has been fundamentally shaped by statistical communication theory, Jerry Ratcliffe’s frameworks for intelligence-led policing, and the foundational principles of evidence-based practice championed by the Society of Evidence-Based Policing (SEBP). - As well as a constant relistening to more or less podcasts (Thanks  [@TimHarford](https://t.co/20kzyGEfSM) )
 
-The underlying thesis of this platform is straightforward: an operational officer's instinct or institutional intuition is a hypothesis to be rigorously tested, not a verdict to be blindly actioned.
+The underlying purpose of this platform has changed: Initially it was planned to be a kind of personal blog related to things that interest me whilst also giving me a project to work on during my days off,  but as my coding (vibe not proper coding) has developed so has the website, with research assistants and crime dashboards being built as we speak.
 
 ## Disclaimers and Integrity
 
