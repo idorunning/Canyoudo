@@ -64,13 +64,48 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const md5 = (s) => createHash('md5').update(s).digest('hex');
 
 // --- Supabase ----------------------------------------------------------------
+const looksLikeHtml = (s) => /<!doctype html|<html[\s>]/i.test(String(s || ''));
+
+// data.police.uk ingest writes via the project's REST API. A very common
+// misconfiguration is pointing SUPABASE_URL at the dashboard URL
+// (supabase.com/dashboard/...), which silently returns the Studio HTML 404 page
+// on every request. Catch that (and other obviously-wrong URLs) up front.
+function validateSupabaseUrl(raw) {
+  const url = String(raw || '').trim().replace(/\/+$/, '');
+  let parsed;
+  try { parsed = new URL(url); } catch { throw new Error(`SUPABASE_URL is not a valid URL: "${raw}"`); }
+  const host = parsed.hostname.toLowerCase();
+  if (host === 'supabase.com' || host === 'www.supabase.com' || /\/(dashboard|project)\b/.test(parsed.pathname)) {
+    throw new Error(`SUPABASE_URL looks like the Supabase dashboard URL ("${url}"). Use the project API URL instead, e.g. https://<project-ref>.supabase.co (Supabase → Settings → API → Project URL; the same value as PUBLIC_SUPABASE_URL).`);
+  }
+  if (!host.endsWith('.supabase.co') && !host.endsWith('.supabase.in')) {
+    console.warn(`Warning: SUPABASE_URL host "${host}" is not a *.supabase.co address — proceeding, but double-check it is the project API URL.`);
+  }
+  return url;
+}
+
 async function getSupabase() {
   if (DRY) return null;
-  const url = process.env.SUPABASE_URL;
+  const rawUrl = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required (or pass --dry-run).');
+  if (!rawUrl || !key) throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required (or pass --dry-run).');
+  const url = validateSupabaseUrl(rawUrl);
   const { createClient } = await import('@supabase/supabase-js');
-  return createClient(url, key, { auth: { persistSession: false } });
+  const sb = createClient(url, key, { auth: { persistSession: false } });
+
+  // Fail fast: a tiny query confirms the URL + key reach the REST API and the
+  // schema exists, before we spend time reading the multi-GB archive.
+  const { error } = await sb.from('ingest_runs').select('id').limit(1);
+  if (error) {
+    if (looksLikeHtml(error.message)) {
+      throw new Error('Supabase returned an HTML page, not JSON — SUPABASE_URL is almost certainly wrong (it must be the project API URL https://<ref>.supabase.co, not the dashboard).');
+    }
+    if (error.code === '42P01' || /does not exist|could not find the table|schema cache/i.test(error.message || '')) {
+      throw new Error('The police database tables are missing — run supabase/migrations/0001_police_database.sql first (see docs/police-database.md).');
+    }
+    throw new Error(`Supabase preflight failed: ${error.message}`);
+  }
+  return sb;
 }
 
 async function upsert(sb, table, rows, onConflict) {
@@ -79,7 +114,12 @@ async function upsert(sb, table, rows, onConflict) {
   for (let i = 0; i < rows.length; i += 1000) {
     const batch = rows.slice(i, i + 1000);
     const { error } = await sb.from(table).upsert(batch, { onConflict });
-    if (error) throw new Error(`upsert ${table}: ${error.message}`);
+    if (error) {
+      const msg = looksLikeHtml(error.message)
+        ? 'Supabase returned an HTML page, not JSON — check SUPABASE_URL is the project API URL (https://<ref>.supabase.co), not the dashboard.'
+        : error.message;
+      throw new Error(`upsert ${table}: ${msg}`);
+    }
   }
   return rows.length;
 }
