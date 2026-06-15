@@ -15,9 +15,13 @@
 //   ARCHIVE_URL        default https://data.police.uk/data/archive/latest.zip
 //   INGEST_MONTHS      how many recent months of rollups to keep (default 36)
 //   INGEST_LSOA_MONTHS how many recent months of LSOA map data (default 12)
-//   SKIP_BULK / SKIP_API   set to '1' to run only one half
+//   SKIP_BULK / SKIP_API   set to '1' to run only one half (the workflow runs the
+//                      bulk and API phases as two separate jobs using these)
 //   FULL_DOWNLOAD      set to '1' to force downloading the whole archive instead
 //                      of the default per-entry HTTP range reads
+//   API_REFRESH_DAYS   resume window: skip forces crawled OK this recently (default 25)
+//   API_CONCURRENCY    neighbourhood requests in flight per force (default 6)
+//   API_FORCE          crawl only this force id (comma-separated for several)
 //
 // Phasing: the bulk archive is multi-GB, so rather than fetch it whole (which
 // times out), we read its central directory and then each wanted CSV entry via
@@ -28,6 +32,8 @@
 // Flags: --zip <path>  use a local archive instead of downloading
 //        --months a,b   ingest exactly these months (overrides INGEST_MONTHS)
 //        --dry-run      parse + summarise, don't write to Supabase
+//        --force <id>   crawl only this force id in the API phase (testing/repair)
+//        --no-resume    crawl every force, ignoring the API_REFRESH_DAYS window
 
 import { createWriteStream } from 'node:fs';
 import { mkdtemp, rm } from 'node:fs/promises';
@@ -45,6 +51,7 @@ import {
   rollupStops,
   mergeCounts,
 } from './lib/police-csv.mjs';
+import { pMap } from './lib/async.mjs';
 
 const API = 'https://data.police.uk/api';
 const ARCHIVE_URL = process.env.ARCHIVE_URL || 'https://data.police.uk/data/archive/latest.zip';
@@ -57,6 +64,10 @@ const opt = (name) => { const i = argv.indexOf(name); return i >= 0 ? argv[i + 1
 const DRY = flag('--dry-run');
 const ZIP_PATH = opt('--zip');
 const MONTHS_OPT = opt('--months');
+// API-phase controls (see ingestApi): resume by default, optionally scope to a
+// single force, and bound the per-force neighbourhood crawl's concurrency.
+const NO_RESUME = flag('--no-resume');
+const FORCE_OPT = opt('--force') || process.env.API_FORCE || null;
 // Parse a positive-integer env var, falling back to a default. CRITICAL: the
 // workflow passes `${{ vars.X }}`, which is an EMPTY STRING (not undefined) when
 // the repo variable is unset — and `'' ?? def` keeps '', `Number('')` is 0, and
@@ -68,6 +79,10 @@ const intEnv = (v, def) => {
 };
 const KEEP_MONTHS = intEnv(process.env.INGEST_MONTHS, 36);
 const LSOA_MONTHS = intEnv(process.env.INGEST_LSOA_MONTHS, 12);
+// Skip forces whose API metadata was crawled OK within this many days (resume
+// window); how many neighbourhood requests to run in flight at once.
+const API_REFRESH_DAYS = intEnv(process.env.API_REFRESH_DAYS, 25);
+const API_CONCURRENCY = intEnv(process.env.API_CONCURRENCY, 6);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const md5 = (s) => createHash('md5').update(s).digest('hex');
@@ -363,60 +378,97 @@ function byMonth(rows, keyFields, sumFields) {
 }
 
 // --- JSON API metadata -------------------------------------------------------
-async function ingestApi(sb, runNotes) {
-  const forces = (await api('/forces')) || [];
-  const forceRows = [];
-  const peopleRows = [];
+// Forces whose metadata was crawled successfully within the resume window, so a
+// re-run (e.g. after a cancelled job) skips them and resumes from the rest. The
+// per-force checkpoint rows are kind='api' with the force id in dataset_month.
+async function freshForces(sb) {
+  if (DRY || !sb || NO_RESUME || API_REFRESH_DAYS < 1) return new Set();
+  const since = new Date(Date.now() - API_REFRESH_DAYS * 86_400_000).toISOString();
+  const { data, error } = await sb
+    .from('ingest_runs')
+    .select('dataset_month')
+    .eq('kind', 'api')
+    .eq('ok', true)
+    .gte('finished_at', since);
+  if (error) { console.warn(`resume lookup failed (${error.message}); crawling all forces`); return new Set(); }
+  return new Set((data || []).map((r) => r.dataset_month).filter(Boolean));
+}
+
+// Crawl one force: its detail + senior officers, then every neighbourhood's
+// detail + priorities with bounded concurrency (the bulk of the API work).
+async function crawlForce(f) {
+  const detail = await api(`/forces/${f.id}`);
+  const forceRow = {
+    id: f.id,
+    name: f.name,
+    description: detail?.description ?? null,
+    url: detail?.url ?? null,
+    telephone: detail?.telephone ?? null,
+    engagement_methods: detail?.engagement_methods ?? null,
+    updated_at: new Date().toISOString(),
+  };
+  const people = (await api(`/forces/${f.id}/people`)) || [];
+  const peopleRows = people.filter((p) => p?.name).map((p) => ({ force_id: f.id, name: p.name, rank: p.rank ?? null, bio: p.bio ?? null }));
+
+  const hoods = (await api(`/${f.id}/neighbourhoods`)) || [];
   const hoodRows = [];
   const prioRows = [];
-
-  for (const f of forces) {
-    const detail = await api(`/forces/${f.id}`);
-    forceRows.push({
-      id: f.id,
-      name: f.name,
-      description: detail?.description ?? null,
-      url: detail?.url ?? null,
-      telephone: detail?.telephone ?? null,
-      engagement_methods: detail?.engagement_methods ?? null,
-      updated_at: new Date().toISOString(),
+  await pMap(hoods, async (h) => {
+    const d = await api(`/${f.id}/${encodeURIComponent(h.id)}`);
+    const centre = d?.centre || {};
+    hoodRows.push({
+      force_id: f.id, id: h.id, name: h.name ?? d?.name ?? null,
+      centre_lat: centre.latitude ? Number(centre.latitude) : null,
+      centre_lng: centre.longitude ? Number(centre.longitude) : null,
+      url: d?.url_force ?? null, updated_at: new Date().toISOString(),
     });
-    const people = (await api(`/forces/${f.id}/people`)) || [];
-    for (const p of people) if (p?.name) peopleRows.push({ force_id: f.id, name: p.name, rank: p.rank ?? null, bio: p.bio ?? null });
-
-    const hoods = (await api(`/${f.id}/neighbourhoods`)) || [];
-    for (const h of hoods) {
-      const d = await api(`/${f.id}/${encodeURIComponent(h.id)}`);
-      const centre = d?.centre || {};
-      hoodRows.push({
-        force_id: f.id, id: h.id, name: h.name ?? d?.name ?? null,
-        centre_lat: centre.latitude ? Number(centre.latitude) : null,
-        centre_lng: centre.longitude ? Number(centre.longitude) : null,
-        url: d?.url_force ?? null, updated_at: new Date().toISOString(),
+    const prios = (await api(`/${f.id}/${encodeURIComponent(h.id)}/priorities`)) || [];
+    for (const pr of prios) {
+      const issue = stripHtml(pr.issue), action = stripHtml(pr.action);
+      if (!issue && !action) continue;
+      prioRows.push({
+        force_id: f.id, neighbourhood_id: h.id, key: md5(`${issue}|${action}`),
+        issue, action, issued_on: pr['issue-date'] ?? pr.issue_date ?? null,
       });
-      const prios = (await api(`/${f.id}/${encodeURIComponent(h.id)}/priorities`)) || [];
-      for (const pr of prios) {
-        const issue = stripHtml(pr.issue), action = stripHtml(pr.action);
-        if (!issue && !action) continue;
-        prioRows.push({
-          force_id: f.id, neighbourhood_id: h.id, key: md5(`${issue}|${action}`),
-          issue, action, issued_on: pr['issue-date'] ?? pr.issue_date ?? null,
-        });
-      }
-      await sleep(60);
     }
-    console.log(`  api: ${f.id} — ${hoods.length} neighbourhoods`);
-    await sleep(60);
+  }, API_CONCURRENCY);
+
+  return { forceRow, peopleRows, hoodRows, prioRows, hoodCount: hoods.length };
+}
+
+// Phase 2 — crawl forces → neighbourhoods → priorities and write each force as
+// an independent, checkpointed, idempotent unit (mirroring how ingestBulk treats
+// each month). A cancelled run leaves every completed force persisted, and a
+// re-run resumes from the rest, so the crawl no longer needs to fit one budget.
+async function ingestApi(sb, runNotes) {
+  let forces = (await api('/forces')) || [];
+  if (FORCE_OPT) {
+    const want = new Set(FORCE_OPT.split(',').map((s) => s.trim()).filter(Boolean));
+    forces = forces.filter((f) => want.has(f.id));
+  }
+  const fresh = await freshForces(sb);
+
+  let total = 0, done = 0, skipped = 0;
+  for (const f of forces) {
+    if (fresh.has(f.id)) { skipped++; console.log(`  api: ${f.id} — skipped (crawled within ${API_REFRESH_DAYS}d)`); continue; }
+    const startedAt = new Date().toISOString();
+    const { forceRow, peopleRows, hoodRows, prioRows, hoodCount } = await crawlForce(f);
+
+    let n = 0;
+    n += await upsert(sb, 'police_forces', [forceRow], 'id');
+    n += await upsert(sb, 'police_force_people', peopleRows, 'force_id,name');
+    n += await upsert(sb, 'neighbourhoods', hoodRows, 'force_id,id');
+    n += await upsert(sb, 'neighbourhood_priorities', dedupe(prioRows, (r) => `${r.force_id}|${r.neighbourhood_id}|${r.key}`), 'force_id,neighbourhood_id,key');
+    total += n; done++;
+    console.log(`  api: ${f.id} — ${hoodCount} neighbourhoods → ${n} rows (${DRY ? 'dry-run' : 'upserted'}).`);
+
+    // Per-force provenance + resume checkpoint (force id in dataset_month).
+    if (sb) await sb.from('ingest_runs').insert({ kind: 'api', dataset_month: f.id, rows_upserted: n, ok: true, notes: `${hoodCount} neighbourhoods`, started_at: startedAt, finished_at: new Date().toISOString() }).then(() => {}, () => {});
   }
 
-  let n = 0;
-  n += await upsert(sb, 'police_forces', forceRows, 'id');
-  n += await upsert(sb, 'police_force_people', peopleRows, 'force_id,name');
-  n += await upsert(sb, 'neighbourhoods', hoodRows, 'force_id,id');
-  n += await upsert(sb, 'neighbourhood_priorities', dedupe(prioRows, (r) => `${r.force_id}|${r.neighbourhood_id}|${r.key}`), 'force_id,neighbourhood_id,key');
-  runNotes.push(`api: ${forceRows.length} forces, ${hoodRows.length} neighbourhoods, ${prioRows.length} priorities`);
-  console.log(`API done: ${n} metadata rows (${DRY ? 'dry-run' : 'upserted'}).`);
-  return n;
+  runNotes.push(`api: ${done} forces crawled, ${skipped} skipped`);
+  console.log(`API done: ${total} metadata rows across ${done} forces (${skipped} skipped, ${DRY ? 'dry-run' : 'upserted'}).`);
+  return total;
 }
 
 const stripHtml = (s) => (s ? String(s).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim() : null);
@@ -428,13 +480,20 @@ async function main() {
   const startedAt = new Date().toISOString();
   const runNotes = [];
   let total = 0;
+  // The bulk and metadata phases now run as separate jobs (each skips the other),
+  // so the run-summary row records whichever phase(s) actually ran. dataset_month
+  // is left null on summary rows, which distinguishes them from the per-month
+  // ('bulk') and per-force ('api') checkpoint rows that carry a scope value.
+  const ranBulk = process.env.SKIP_BULK !== '1';
+  const ranApi = process.env.SKIP_API !== '1';
+  const runKind = ranBulk && ranApi ? 'bulk+api' : ranBulk ? 'bulk' : ranApi ? 'api' : 'noop';
   try {
-    if (process.env.SKIP_BULK !== '1') total += await ingestBulk(sb, runNotes);
-    if (process.env.SKIP_API !== '1') total += await ingestApi(sb, runNotes);
-    if (sb) await sb.from('ingest_runs').insert({ kind: 'bulk+api', rows_upserted: total, ok: true, notes: runNotes.join('; '), started_at: startedAt, finished_at: new Date().toISOString() });
+    if (ranBulk) total += await ingestBulk(sb, runNotes);
+    if (ranApi) total += await ingestApi(sb, runNotes);
+    if (sb) await sb.from('ingest_runs').insert({ kind: runKind, rows_upserted: total, ok: true, notes: runNotes.join('; '), started_at: startedAt, finished_at: new Date().toISOString() });
     console.log(`\nDone. ${total} rows total. ${runNotes.join('; ')}`);
   } catch (err) {
-    if (sb) await sb.from('ingest_runs').insert({ kind: 'bulk+api', rows_upserted: total, ok: false, notes: `${runNotes.join('; ')} | ERROR: ${err.message}`, started_at: startedAt, finished_at: new Date().toISOString() }).then(() => {}, () => {});
+    if (sb) await sb.from('ingest_runs').insert({ kind: runKind, rows_upserted: total, ok: false, notes: `${runNotes.join('; ')} | ERROR: ${err.message}`, started_at: startedAt, finished_at: new Date().toISOString() }).then(() => {}, () => {});
     throw err;
   }
 }
