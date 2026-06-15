@@ -73,7 +73,7 @@ get "self-selection-car-street.jpg" "https://images.pexels.com/photos/7459482/pe
 # Free-to-use Pexels photos replacing the dark SVG "title-card" heroes with real
 # photographs. These also become each article's og:image / card thumbnail, so the
 # subject reads at a glance and social shares no longer fall back to an SVG.
-get "ai-guide-hero.jpg" "https://images.pexels.com/photos/8386437/pexels-photo-8386437.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "ai-guide-hero.jpg" "https://images.pexels.com/photos/37730212/pexels-photo-37730212.jpeg?auto=compress&cs=tinysrgb&w=1600"
 get "burnout-hero.jpg" "https://images.pexels.com/photos/6837643/pexels-photo-6837643.jpeg?auto=compress&cs=tinysrgb&w=1600"
 get "fuel-theft-hero.jpg" "https://images.pexels.com/photos/12377481/pexels-photo-12377481.jpeg?auto=compress&cs=tinysrgb&w=1600"
 get "murray-ebp-hero.jpg" "https://images.pexels.com/photos/29822051/pexels-photo-29822051.jpeg?auto=compress&cs=tinysrgb&w=1600"
