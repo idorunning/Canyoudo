@@ -25,7 +25,10 @@ concurrency:
 jobs:
   ingest:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # Generous cap: the bulk archive is read per-month over many small range
+    # requests. Each month is upserted independently and idempotently, so even
+    # if a run is cut short the completed months persist and a re-run resumes.
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

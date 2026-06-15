@@ -36,6 +36,14 @@ Every per-force rollup also gets an aggregate row with `force_id = '_all'`, so
 rollups are kept; `INGEST_LSOA_MONTHS` (default 12) bounds the larger LSOA map table.
 With these defaults the database fits comfortably inside Supabase's free tier.
 
+**Phased & resumable:** the multi-GB archive is never downloaded whole. The ingest
+reads the zip's central directory and then each wanted CSV via HTTP **range requests**,
+processing and upserting **one month at a time**. Each month is an independent,
+idempotent upsert, so a run that is cut short still persists its completed months and
+a re-run resumes cleanly. Per-month progress is logged in the `ingest_runs` table. If
+the host ever stops honouring range requests, set `FULL_DOWNLOAD=1` to fall back to a
+single streamed download.
+
 ## Setup (one-off)
 
 1. Use the existing Supabase project (the one behind sign-in / saved papers).

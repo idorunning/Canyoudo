@@ -16,6 +16,15 @@
 //   INGEST_MONTHS      how many recent months of rollups to keep (default 36)
 //   INGEST_LSOA_MONTHS how many recent months of LSOA map data (default 12)
 //   SKIP_BULK / SKIP_API   set to '1' to run only one half
+//   FULL_DOWNLOAD      set to '1' to force downloading the whole archive instead
+//                      of the default per-entry HTTP range reads
+//
+// Phasing: the bulk archive is multi-GB, so rather than fetch it whole (which
+// times out), we read its central directory and then each wanted CSV entry via
+// HTTP range requests, and process+upsert ONE MONTH AT A TIME. Each month is an
+// independent, idempotent upsert, so a partial run still persists and a re-run
+// resumes cleanly. If the host doesn't honour range requests we fall back to a
+// single streamed download (see openArchive / FULL_DOWNLOAD).
 // Flags: --zip <path>  use a local archive instead of downloading
 //        --months a,b   ingest exactly these months (overrides INGEST_MONTHS)
 //        --dry-run      parse + summarise, don't write to Supabase
@@ -25,6 +34,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pipeline } from 'node:stream/promises';
+import { PassThrough, Readable } from 'node:stream';
 import { createHash } from 'node:crypto';
 import {
   parseCsv,
@@ -92,21 +102,98 @@ async function api(path, tries = 4) {
 }
 
 // --- bulk archive ------------------------------------------------------------
+// A small fetch wrapper with retry/backoff and a per-request timeout, used for
+// the range reads (and the size probe) so a transient blip doesn't fail the run.
+async function fetchRetry(url, init = {}, tries = 4, timeoutMs = 120_000) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      const res = await fetch(url, { ...init, headers: { 'User-Agent': UA, ...(init.headers || {}) }, signal: AbortSignal.timeout(timeoutMs) });
+      if (res.status === 429 || res.status >= 500) { await sleep(1000 * (i + 1)); continue; }
+      return res;
+    } catch (err) {
+      if (i === tries - 1) throw err;
+      await sleep(1000 * (i + 1));
+    }
+  }
+  throw new Error(`fetch failed after ${tries} tries: ${url}`);
+}
+
+// An unzipper "custom" source backed by HTTP range requests. unzipper reads the
+// zip's central directory from the tail, then pulls each entry on demand — so we
+// only ever transfer the bytes we actually parse, in many small requests rather
+// than one giant download that times out.
+function rangeSource(url) {
+  return {
+    async size() {
+      const head = await fetchRetry(url, { method: 'HEAD' });
+      const len = Number(head.headers.get('content-length'));
+      if (Number.isFinite(len) && len > 0) return len;
+      // Some hosts don't answer HEAD with a length; ask for one byte and read
+      // the total out of the Content-Range header instead.
+      const probe = await fetchRetry(url, { headers: { Range: 'bytes=0-0' } });
+      const total = Number((probe.headers.get('content-range') || '').split('/')[1]);
+      if (Number.isFinite(total) && total > 0) return total;
+      throw new Error('archive host did not report a size (no Content-Length or Content-Range)');
+    },
+    // Must return a Node Readable synchronously; fetch is async, so pipe into a
+    // PassThrough once the response lands.
+    stream(offset, bytes) {
+      const end = bytes ? offset + bytes - 1 : '';
+      const pass = new PassThrough();
+      fetchRetry(url, { headers: { Range: `bytes=${offset}-${end}` } })
+        .then((res) => {
+          if (res.status !== 206 && res.status !== 200) { pass.destroy(new Error(`range request → ${res.status}`)); return; }
+          if (!res.body) { pass.destroy(new Error('range request returned no body')); return; }
+          Readable.fromWeb(res.body).pipe(pass);
+        })
+        .catch((err) => pass.destroy(err));
+      return pass;
+    },
+  };
+}
+
+// Returns { files, cleanup }. Default: read via HTTP range (no full download).
+// Falls back to a single streamed download if --zip is given, FULL_DOWNLOAD=1,
+// or the range read fails (e.g. the host ignores Range headers).
 async function openArchive() {
   const unzipper = (await import('unzipper')).default;
   if (ZIP_PATH) {
     console.log(`Opening local archive ${ZIP_PATH}`);
-    return unzipper.Open.file(ZIP_PATH);
+    const d = await unzipper.Open.file(ZIP_PATH);
+    return { files: d.files };
   }
+  if (process.env.FULL_DOWNLOAD !== '1') {
+    try {
+      console.log(`Opening ${ARCHIVE_URL} via HTTP range reads …`);
+      const d = await unzipper.Open.custom(rangeSource(ARCHIVE_URL));
+      if (!d.files?.length) throw new Error('central directory read returned no files');
+      console.log(`Central directory read: ${d.files.length} entries.`);
+      return { files: d.files };
+    } catch (err) {
+      console.warn(`Range read unavailable (${err.message}); falling back to full download.`);
+    }
+  }
+  return downloadAndOpen(unzipper);
+}
+
+// Fallback: stream the whole archive to disk, then open it locally.
+async function downloadAndOpen(unzipper) {
   const dir = await mkdtemp(join(tmpdir(), 'police-archive-'));
   const zipPath = join(dir, 'archive.zip');
   console.log(`Downloading ${ARCHIVE_URL} …`);
-  const res = await fetch(ARCHIVE_URL, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(20 * 60_000) });
+  const res = await fetch(ARCHIVE_URL, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(50 * 60_000) });
   if (!res.ok || !res.body) throw new Error(`archive download → ${res.status}`);
   await pipeline(res.body, createWriteStream(zipPath));
-  const archive = await unzipper.Open.file(zipPath);
-  archive._cleanup = () => rm(dir, { recursive: true, force: true });
-  return archive;
+  const d = await unzipper.Open.file(zipPath);
+  return { files: d.files, cleanup: () => rm(dir, { recursive: true, force: true }) };
+}
+
+// Read one entry's bytes, retrying transient range-read failures.
+async function entryBuffer(f, tries = 4) {
+  for (let i = 0; i < tries; i++) {
+    try { return await f.buffer(); }
+    catch (err) { if (i === tries - 1) throw err; await sleep(1000 * (i + 1)); }
+  }
 }
 
 // Decide which months to ingest from the months present in the archive.
@@ -126,56 +213,75 @@ async function ingestBulk(sb, runNotes) {
     const lsoaWanted = new Set([...wanted].sort().slice(-LSOA_MONTHS));
     console.log(`Archive: ${parsed.length} CSVs, ${monthsPresent.size} months present; ingesting ${wanted.size} months (LSOA: ${lsoaWanted.size}).`);
 
-    // Per-force accumulators (force_id kept on each row; '_all' derived at the end).
-    const crimeCat = []; // {force_id, month, category, count}
-    const outcomes = []; // {force_id, month, outcome_category, count}
-    const ssForce = []; // {force_id, month, total, find_count, find_known}
-    const ssDim = []; // {force_id, month, dimension, value, count, find_count}
-    const lsoaMap = new Map(); // `${code}|${month}` → {lsoa_code, lsoa_name, month, count}
-
-    let done = 0;
-    for (const { f, meta } of parsed) {
-      if (!wanted.has(meta.month)) continue;
-      const text = (await f.buffer()).toString('utf8');
-      const records = parseCsv(text);
-      if (meta.kind === 'street') {
-        for (const c of rollupStreetByCategory(records)) crimeCat.push({ force_id: meta.force, month: meta.month, ...c });
-        if (lsoaWanted.has(meta.month)) {
-          for (const l of rollupStreetByLsoa(records)) {
-            const k = `${l.lsoa_code}|${meta.month}`;
-            const e = lsoaMap.get(k);
-            if (e) e.count += l.count;
-            else lsoaMap.set(k, { lsoa_code: l.lsoa_code, lsoa_name: l.lsoa_name, month: meta.month, count: l.count });
-          }
-        }
-      } else if (meta.kind === 'outcomes') {
-        for (const o of rollupOutcomes(records)) outcomes.push({ force_id: meta.force, month: meta.month, ...o });
-      } else if (meta.kind === 'stop-and-search') {
-        const r = rollupStops(records);
-        ssForce.push({ force_id: meta.force, month: meta.month, total: r.total, find_count: r.find_count, find_known: r.find_known });
-        for (const d of r.dims) ssDim.push({ force_id: meta.force, month: meta.month, ...d });
-      }
-      if (++done % 200 === 0) console.log(`  …${done} files`);
+    // Group the wanted entries by month so each month is processed and written
+    // as one independent, idempotent phase.
+    const byMonthEntries = new Map();
+    for (const e of parsed) {
+      if (!wanted.has(e.meta.month)) continue;
+      if (!byMonthEntries.has(e.meta.month)) byMonthEntries.set(e.meta.month, []);
+      byMonthEntries.get(e.meta.month).push(e);
     }
 
-    // Derive '_all' national aggregates by summing across forces, per month.
-    const allCrime = byMonth(crimeCat, ['month', 'category'], ['count']);
-    const allOutcome = byMonth(outcomes, ['month', 'outcome_category'], ['count']);
-    const allSsForce = byMonth(ssForce, ['month'], ['total', 'find_count', 'find_known']);
-    const allSsDim = byMonth(ssDim, ['month', 'dimension', 'value'], ['count', 'find_count']);
+    let total = 0;
+    const orderedMonths = [...wanted].sort();
+    for (const month of orderedMonths) {
+      const monthEntries = byMonthEntries.get(month) || [];
+      if (!monthEntries.length) continue;
+      const monthStart = new Date().toISOString();
 
-    const lsoaRows = [...lsoaMap.values()];
-    let n = 0;
-    n += await upsert(sb, 'crime_force_month', [...crimeCat, ...allCrime], 'force_id,month,category');
-    n += await upsert(sb, 'outcome_force_month', [...outcomes, ...allOutcome], 'force_id,month,outcome_category');
-    n += await upsert(sb, 'ss_force_month', [...ssForce, ...allSsForce], 'force_id,month');
-    n += await upsert(sb, 'ss_dim', [...ssDim, ...allSsDim], 'force_id,month,dimension,value');
-    n += await upsert(sb, 'crime_lsoa_month', lsoaRows, 'lsoa_code,month');
-    runNotes.push(`bulk: ${wanted.size} months, ${n} rollup rows`);
-    console.log(`Bulk done: ${n} rollup rows (${DRY ? 'dry-run, not written' : 'upserted'}).`);
-    return n;
+      // Per-force accumulators for this month only ('_all' derived below).
+      const crimeCat = []; // {force_id, month, category, count}
+      const outcomes = []; // {force_id, month, outcome_category, count}
+      const ssForce = []; // {force_id, month, total, find_count, find_known}
+      const ssDim = []; // {force_id, month, dimension, value, count, find_count}
+      const lsoaMap = new Map(); // `${code}|${month}` → {lsoa_code, lsoa_name, month, count}
+
+      for (const { f, meta } of monthEntries) {
+        const text = (await entryBuffer(f)).toString('utf8');
+        const records = parseCsv(text);
+        if (meta.kind === 'street') {
+          for (const c of rollupStreetByCategory(records)) crimeCat.push({ force_id: meta.force, month, ...c });
+          if (lsoaWanted.has(month)) {
+            for (const l of rollupStreetByLsoa(records)) {
+              const k = `${l.lsoa_code}|${month}`;
+              const e = lsoaMap.get(k);
+              if (e) e.count += l.count;
+              else lsoaMap.set(k, { lsoa_code: l.lsoa_code, lsoa_name: l.lsoa_name, month, count: l.count });
+            }
+          }
+        } else if (meta.kind === 'outcomes') {
+          for (const o of rollupOutcomes(records)) outcomes.push({ force_id: meta.force, month, ...o });
+        } else if (meta.kind === 'stop-and-search') {
+          const r = rollupStops(records);
+          ssForce.push({ force_id: meta.force, month, total: r.total, find_count: r.find_count, find_known: r.find_known });
+          for (const d of r.dims) ssDim.push({ force_id: meta.force, month, ...d });
+        }
+      }
+
+      // Derive this month's '_all' national aggregates by summing across forces.
+      const allCrime = byMonth(crimeCat, ['month', 'category'], ['count']);
+      const allOutcome = byMonth(outcomes, ['month', 'outcome_category'], ['count']);
+      const allSsForce = byMonth(ssForce, ['month'], ['total', 'find_count', 'find_known']);
+      const allSsDim = byMonth(ssDim, ['month', 'dimension', 'value'], ['count', 'find_count']);
+
+      let n = 0;
+      n += await upsert(sb, 'crime_force_month', [...crimeCat, ...allCrime], 'force_id,month,category');
+      n += await upsert(sb, 'outcome_force_month', [...outcomes, ...allOutcome], 'force_id,month,outcome_category');
+      n += await upsert(sb, 'ss_force_month', [...ssForce, ...allSsForce], 'force_id,month');
+      n += await upsert(sb, 'ss_dim', [...ssDim, ...allSsDim], 'force_id,month,dimension,value');
+      n += await upsert(sb, 'crime_lsoa_month', [...lsoaMap.values()], 'lsoa_code,month');
+      total += n;
+      console.log(`  ${month}: ${monthEntries.length} files → ${n} rollup rows (${DRY ? 'dry-run' : 'upserted'}).`);
+
+      // Per-month provenance so phased progress is visible in ingest_runs.
+      if (sb) await sb.from('ingest_runs').insert({ kind: 'bulk', dataset_month: month, rows_upserted: n, ok: true, notes: `${monthEntries.length} files`, started_at: monthStart, finished_at: new Date().toISOString() }).then(() => {}, () => {});
+    }
+
+    runNotes.push(`bulk: ${wanted.size} months, ${total} rollup rows`);
+    console.log(`Bulk done: ${total} rollup rows across ${wanted.size} months (${DRY ? 'dry-run, not written' : 'upserted'}).`);
+    return total;
   } finally {
-    await archive._cleanup?.();
+    await archive.cleanup?.();
   }
 }
 
