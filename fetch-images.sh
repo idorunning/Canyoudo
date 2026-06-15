@@ -70,4 +70,16 @@ get "missing-foggy-road.jpg" "https://images.pexels.com/photos/14744912/pexels-p
 get "cognitive-diversity-jigsaw.jpg" "https://images.pexels.com/photos/1586950/pexels-photo-1586950.jpeg?auto=compress&cs=tinysrgb&w=1600"
 get "self-selection-car-street.jpg" "https://images.pexels.com/photos/7459482/pexels-photo-7459482.jpeg?auto=compress&cs=tinysrgb&w=1600"
 
+# Free-to-use Pexels photos replacing the dark SVG "title-card" heroes with real
+# photographs. These also become each article's og:image / card thumbnail, so the
+# subject reads at a glance and social shares no longer fall back to an SVG.
+get "ai-guide-hero.jpg" "https://images.pexels.com/photos/37730212/pexels-photo-37730212.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "burnout-hero.jpg" "https://images.pexels.com/photos/6837643/pexels-photo-6837643.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "fuel-theft-hero.jpg" "https://images.pexels.com/photos/12377481/pexels-photo-12377481.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "murray-ebp-hero.jpg" "https://images.pexels.com/photos/29822051/pexels-photo-29822051.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "sherman-ebp-hero.jpg" "https://images.pexels.com/photos/12689753/pexels-photo-12689753.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "knabe-nicol-hero.jpg" "https://images.pexels.com/photos/8761351/pexels-photo-8761351.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "martyns-law-hero.jpg" "https://images.pexels.com/photos/5193526/pexels-photo-5193526.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "martyns-law-business-hero.jpg" "https://images.pexels.com/photos/6814345/pexels-photo-6814345.jpeg?auto=compress&cs=tinysrgb&w=1600"
+
 echo "Done. $(ls -1 | wc -l) images in public/images/"

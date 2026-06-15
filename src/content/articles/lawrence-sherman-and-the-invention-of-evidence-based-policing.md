@@ -5,8 +5,8 @@ description: In 1981 Lawrence Sherman ran a domestic violence call as a scientif
 pubDate: 2026-06-07
 updatedDate: ''
 author: ''
-thumbnail: /images/sherman-ebp-hero.svg
-heroImage: /images/sherman-ebp-hero.svg
+thumbnail: /images/sherman-portrait.jpg
+heroImage: /images/sherman-ebp-hero.jpg
 portrait: /images/sherman-portrait.jpg
 tags:
   - evidence-based-policing
@@ -76,6 +76,11 @@ Sherman's American career was substantial in its own right. He chaired the crimi
 The vehicle was the Police Executive Programme, the part-time Cambridge master's for serving senior officers, which from 2008 Sherman built around evidence-based policing. A generation of British and international police leaders passed through it, writing their own small experiments as dissertations and carrying the method home to their forces. Alex Murray's 2008 thesis on police legitimacy in Muslim communities was one of them; the two later co-authored a peer-reviewed paper from it. The Society of Evidence-Based Policing that Murray founded in 2010 elected Sherman its honorary president. Much of what looks, from the outside, like a British movement was in practice a Cambridge seminar room spreading outward.
 
 Two further pieces of work from this period are worth naming. With Heather Strang, Sherman ran a long programme of randomised trials of restorative justice — bringing offenders and victims face to face — which found, against many expectations, that it often reduced reoffending and helped victims more than conventional prosecution. And in 2016, with the former chief constable Peter Neyroud, he proposed the Cambridge Crime Harm Index: a way of counting crime weighted by the harm each offence does, measured by the sentence the guidelines recommend for it, rather than treating a stolen bicycle and a serious assault as one "crime" apiece. It is a quiet idea with large consequences, because what a police force measures is what it ends up managing.
+
+<figure>
+  <img src="/images/sherman-ebp-hero.svg" alt="Timeline of Lawrence Sherman's career: the Minneapolis Domestic Violence Experiment in 1981, the hot-spots-of-crime study in 1989, naming evidence-based policing in 1998, his return to Cambridge in 2007, the Police Executive Programme from 2008, and the Cambridge Crime Harm Index in 2016" loading="lazy" />
+  <figcaption>Sherman's career at a glance — five decades of experiments, from the Minneapolis arrest trial to the Cambridge Crime Harm Index.</figcaption>
+</figure>
 
 ### The honours, and the argument they recognise
 

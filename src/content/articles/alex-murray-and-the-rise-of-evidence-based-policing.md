@@ -3,8 +3,8 @@ section: "influential-people"
 title: "Alex Murray and the Society That Asked Policing to Prove What Works"
 description: "Alex Murray spent a career investigating murders and running counter-terrorism operations, then built the institution that asked British policing a harder question: does any of this actually work? A profile of the founder of the Society of Evidence-Based Policing."
 pubDate: 2026-06-07
-heroImage: "/images/murray-ebp-hero.svg"
-thumbnail: "/images/murray-ebp-hero.svg"
+heroImage: "/images/murray-ebp-hero.jpg"
+thumbnail: "/images/alex-murray-portrait.jpg"
 portrait: "/images/alex-murray-portrait.jpg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "leadership", "criminology", "artificial-intelligence"]
 redirectFrom: ["/police-policy/alex-murray-and-the-rise-of-evidence-based-policing"]
@@ -74,6 +74,11 @@ By the 2020s Murray had risen to temporary Chief Constable of West Mercia Police
 He set out three priorities for the role — improving productivity, making policing more effective at cutting crime, and tackling the criminal use of AI — and he has been notably plain about the politics of it. ["Our use of AI is not about government trying to make us do things,"](https://policinginsight.com/feature/interview/alex-murray-our-use-of-ai-is-not-about-government-trying-to-make-us-do-things-its-about-protecting-people/) he told *Policing Insight*. "It's about protecting people." The framing is characteristic: pragmatic, public-facing, suspicious of technology adopted for its own sake rather than because it demonstrably helps.
 
 Later in 2024 Murray left West Mercia to become Director of Threat Leadership at the National Crime Agency, the body that leads Britain's response to serious and organised crime. He had been awarded the OBE in 2017, by then already a decade into the work for which he is best known.
+
+<figure>
+  <img src="/images/murray-ebp-hero.svg" alt="Timeline of Alex Murray's career: criminology degree in 1996, Cambridge Master's in 2008, founding the Society of Evidence-Based Policing in 2010, OBE in 2017, and national AI lead then the National Crime Agency in 2024" loading="lazy" />
+  <figcaption>Murray's career at a glance — from a West Midlands beat to British policing's first national lead for artificial intelligence.</figcaption>
+</figure>
 
 ### The influence, in proportion
 

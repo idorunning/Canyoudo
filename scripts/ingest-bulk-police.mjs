@@ -15,16 +15,32 @@
 //   ARCHIVE_URL        default https://data.police.uk/data/archive/latest.zip
 //   INGEST_MONTHS      how many recent months of rollups to keep (default 36)
 //   INGEST_LSOA_MONTHS how many recent months of LSOA map data (default 12)
-//   SKIP_BULK / SKIP_API   set to '1' to run only one half
+//   SKIP_BULK / SKIP_API   set to '1' to run only one half (the workflow runs the
+//                      bulk and API phases as two separate jobs using these)
+//   FULL_DOWNLOAD      set to '1' to force downloading the whole archive instead
+//                      of the default per-entry HTTP range reads
+//   API_REFRESH_DAYS   resume window: skip forces crawled OK this recently (default 25)
+//   API_CONCURRENCY    neighbourhood requests in flight per force (default 6)
+//   API_FORCE          crawl only this force id (comma-separated for several)
+//
+// Phasing: the bulk archive is multi-GB, so rather than fetch it whole (which
+// times out), we read its central directory and then each wanted CSV entry via
+// HTTP range requests, and process+upsert ONE MONTH AT A TIME. Each month is an
+// independent, idempotent upsert, so a partial run still persists and a re-run
+// resumes cleanly. If the host doesn't honour range requests we fall back to a
+// single streamed download (see openArchive / FULL_DOWNLOAD).
 // Flags: --zip <path>  use a local archive instead of downloading
 //        --months a,b   ingest exactly these months (overrides INGEST_MONTHS)
 //        --dry-run      parse + summarise, don't write to Supabase
+//        --force <id>   crawl only this force id in the API phase (testing/repair)
+//        --no-resume    crawl every force, ignoring the API_REFRESH_DAYS window
 
 import { createWriteStream } from 'node:fs';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pipeline } from 'node:stream/promises';
+import { PassThrough, Readable } from 'node:stream';
 import { createHash } from 'node:crypto';
 import {
   parseCsv,
@@ -35,6 +51,7 @@ import {
   rollupStops,
   mergeCounts,
 } from './lib/police-csv.mjs';
+import { pMap } from './lib/async.mjs';
 
 const API = 'https://data.police.uk/api';
 const ARCHIVE_URL = process.env.ARCHIVE_URL || 'https://data.police.uk/data/archive/latest.zip';
@@ -47,20 +64,72 @@ const opt = (name) => { const i = argv.indexOf(name); return i >= 0 ? argv[i + 1
 const DRY = flag('--dry-run');
 const ZIP_PATH = opt('--zip');
 const MONTHS_OPT = opt('--months');
-const KEEP_MONTHS = Number(process.env.INGEST_MONTHS ?? 36);
-const LSOA_MONTHS = Number(process.env.INGEST_LSOA_MONTHS ?? 12);
+// API-phase controls (see ingestApi): resume by default, optionally scope to a
+// single force, and bound the per-force neighbourhood crawl's concurrency.
+const NO_RESUME = flag('--no-resume');
+const FORCE_OPT = opt('--force') || process.env.API_FORCE || null;
+// Parse a positive-integer env var, falling back to a default. CRITICAL: the
+// workflow passes `${{ vars.X }}`, which is an EMPTY STRING (not undefined) when
+// the repo variable is unset — and `'' ?? def` keeps '', `Number('')` is 0, and
+// `arr.slice(-0)` returns the WHOLE array. So a plain `?? default` silently
+// disabled both windows. Treat empty/invalid/<1 as "use the default".
+const intEnv = (v, def) => {
+  const n = Number(v);
+  return v == null || String(v).trim() === '' || !Number.isFinite(n) || n < 1 ? def : Math.floor(n);
+};
+const KEEP_MONTHS = intEnv(process.env.INGEST_MONTHS, 36);
+const LSOA_MONTHS = intEnv(process.env.INGEST_LSOA_MONTHS, 12);
+// Skip forces whose API metadata was crawled OK within this many days (resume
+// window); how many neighbourhood requests to run in flight at once.
+const API_REFRESH_DAYS = intEnv(process.env.API_REFRESH_DAYS, 25);
+const API_CONCURRENCY = intEnv(process.env.API_CONCURRENCY, 6);
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const md5 = (s) => createHash('md5').update(s).digest('hex');
 
 // --- Supabase ----------------------------------------------------------------
+const looksLikeHtml = (s) => /<!doctype html|<html[\s>]/i.test(String(s || ''));
+
+// data.police.uk ingest writes via the project's REST API. A very common
+// misconfiguration is pointing SUPABASE_URL at the dashboard URL
+// (supabase.com/dashboard/...), which silently returns the Studio HTML 404 page
+// on every request. Catch that (and other obviously-wrong URLs) up front.
+function validateSupabaseUrl(raw) {
+  const url = String(raw || '').trim().replace(/\/+$/, '');
+  let parsed;
+  try { parsed = new URL(url); } catch { throw new Error(`SUPABASE_URL is not a valid URL: "${raw}"`); }
+  const host = parsed.hostname.toLowerCase();
+  if (host === 'supabase.com' || host === 'www.supabase.com' || /\/(dashboard|project)\b/.test(parsed.pathname)) {
+    throw new Error(`SUPABASE_URL looks like the Supabase dashboard URL ("${url}"). Use the project API URL instead, e.g. https://<project-ref>.supabase.co (Supabase → Settings → API → Project URL; the same value as PUBLIC_SUPABASE_URL).`);
+  }
+  if (!host.endsWith('.supabase.co') && !host.endsWith('.supabase.in')) {
+    console.warn(`Warning: SUPABASE_URL host "${host}" is not a *.supabase.co address — proceeding, but double-check it is the project API URL.`);
+  }
+  return url;
+}
+
 async function getSupabase() {
   if (DRY) return null;
-  const url = process.env.SUPABASE_URL;
+  const rawUrl = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required (or pass --dry-run).');
+  if (!rawUrl || !key) throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required (or pass --dry-run).');
+  const url = validateSupabaseUrl(rawUrl);
   const { createClient } = await import('@supabase/supabase-js');
-  return createClient(url, key, { auth: { persistSession: false } });
+  const sb = createClient(url, key, { auth: { persistSession: false } });
+
+  // Fail fast: a tiny query confirms the URL + key reach the REST API and the
+  // schema exists, before we spend time reading the multi-GB archive.
+  const { error } = await sb.from('ingest_runs').select('id').limit(1);
+  if (error) {
+    if (looksLikeHtml(error.message)) {
+      throw new Error('Supabase returned an HTML page, not JSON — SUPABASE_URL is almost certainly wrong (it must be the project API URL https://<ref>.supabase.co, not the dashboard).');
+    }
+    if (error.code === '42P01' || /does not exist|could not find the table|schema cache/i.test(error.message || '')) {
+      throw new Error('The police database tables are missing — run supabase/migrations/0001_police_database.sql first (see docs/police-database.md).');
+    }
+    throw new Error(`Supabase preflight failed: ${error.message}`);
+  }
+  return sb;
 }
 
 async function upsert(sb, table, rows, onConflict) {
@@ -69,7 +138,12 @@ async function upsert(sb, table, rows, onConflict) {
   for (let i = 0; i < rows.length; i += 1000) {
     const batch = rows.slice(i, i + 1000);
     const { error } = await sb.from(table).upsert(batch, { onConflict });
-    if (error) throw new Error(`upsert ${table}: ${error.message}`);
+    if (error) {
+      const msg = looksLikeHtml(error.message)
+        ? 'Supabase returned an HTML page, not JSON — check SUPABASE_URL is the project API URL (https://<ref>.supabase.co), not the dashboard.'
+        : error.message;
+      throw new Error(`upsert ${table}: ${msg}`);
+    }
   }
   return rows.length;
 }
@@ -92,21 +166,98 @@ async function api(path, tries = 4) {
 }
 
 // --- bulk archive ------------------------------------------------------------
+// A small fetch wrapper with retry/backoff and a per-request timeout, used for
+// the range reads (and the size probe) so a transient blip doesn't fail the run.
+async function fetchRetry(url, init = {}, tries = 4, timeoutMs = 120_000) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      const res = await fetch(url, { ...init, headers: { 'User-Agent': UA, ...(init.headers || {}) }, signal: AbortSignal.timeout(timeoutMs) });
+      if (res.status === 429 || res.status >= 500) { await sleep(1000 * (i + 1)); continue; }
+      return res;
+    } catch (err) {
+      if (i === tries - 1) throw err;
+      await sleep(1000 * (i + 1));
+    }
+  }
+  throw new Error(`fetch failed after ${tries} tries: ${url}`);
+}
+
+// An unzipper "custom" source backed by HTTP range requests. unzipper reads the
+// zip's central directory from the tail, then pulls each entry on demand — so we
+// only ever transfer the bytes we actually parse, in many small requests rather
+// than one giant download that times out.
+function rangeSource(url) {
+  return {
+    async size() {
+      const head = await fetchRetry(url, { method: 'HEAD' });
+      const len = Number(head.headers.get('content-length'));
+      if (Number.isFinite(len) && len > 0) return len;
+      // Some hosts don't answer HEAD with a length; ask for one byte and read
+      // the total out of the Content-Range header instead.
+      const probe = await fetchRetry(url, { headers: { Range: 'bytes=0-0' } });
+      const total = Number((probe.headers.get('content-range') || '').split('/')[1]);
+      if (Number.isFinite(total) && total > 0) return total;
+      throw new Error('archive host did not report a size (no Content-Length or Content-Range)');
+    },
+    // Must return a Node Readable synchronously; fetch is async, so pipe into a
+    // PassThrough once the response lands.
+    stream(offset, bytes) {
+      const end = bytes ? offset + bytes - 1 : '';
+      const pass = new PassThrough();
+      fetchRetry(url, { headers: { Range: `bytes=${offset}-${end}` } })
+        .then((res) => {
+          if (res.status !== 206 && res.status !== 200) { pass.destroy(new Error(`range request → ${res.status}`)); return; }
+          if (!res.body) { pass.destroy(new Error('range request returned no body')); return; }
+          Readable.fromWeb(res.body).pipe(pass);
+        })
+        .catch((err) => pass.destroy(err));
+      return pass;
+    },
+  };
+}
+
+// Returns { files, cleanup }. Default: read via HTTP range (no full download).
+// Falls back to a single streamed download if --zip is given, FULL_DOWNLOAD=1,
+// or the range read fails (e.g. the host ignores Range headers).
 async function openArchive() {
   const unzipper = (await import('unzipper')).default;
   if (ZIP_PATH) {
     console.log(`Opening local archive ${ZIP_PATH}`);
-    return unzipper.Open.file(ZIP_PATH);
+    const d = await unzipper.Open.file(ZIP_PATH);
+    return { files: d.files };
   }
+  if (process.env.FULL_DOWNLOAD !== '1') {
+    try {
+      console.log(`Opening ${ARCHIVE_URL} via HTTP range reads …`);
+      const d = await unzipper.Open.custom(rangeSource(ARCHIVE_URL));
+      if (!d.files?.length) throw new Error('central directory read returned no files');
+      console.log(`Central directory read: ${d.files.length} entries.`);
+      return { files: d.files };
+    } catch (err) {
+      console.warn(`Range read unavailable (${err.message}); falling back to full download.`);
+    }
+  }
+  return downloadAndOpen(unzipper);
+}
+
+// Fallback: stream the whole archive to disk, then open it locally.
+async function downloadAndOpen(unzipper) {
   const dir = await mkdtemp(join(tmpdir(), 'police-archive-'));
   const zipPath = join(dir, 'archive.zip');
   console.log(`Downloading ${ARCHIVE_URL} …`);
-  const res = await fetch(ARCHIVE_URL, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(20 * 60_000) });
+  const res = await fetch(ARCHIVE_URL, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(50 * 60_000) });
   if (!res.ok || !res.body) throw new Error(`archive download → ${res.status}`);
   await pipeline(res.body, createWriteStream(zipPath));
-  const archive = await unzipper.Open.file(zipPath);
-  archive._cleanup = () => rm(dir, { recursive: true, force: true });
-  return archive;
+  const d = await unzipper.Open.file(zipPath);
+  return { files: d.files, cleanup: () => rm(dir, { recursive: true, force: true }) };
+}
+
+// Read one entry's bytes, retrying transient range-read failures.
+async function entryBuffer(f, tries = 4) {
+  for (let i = 0; i < tries; i++) {
+    try { return await f.buffer(); }
+    catch (err) { if (i === tries - 1) throw err; await sleep(1000 * (i + 1)); }
+  }
 }
 
 // Decide which months to ingest from the months present in the archive.
@@ -126,57 +277,98 @@ async function ingestBulk(sb, runNotes) {
     const lsoaWanted = new Set([...wanted].sort().slice(-LSOA_MONTHS));
     console.log(`Archive: ${parsed.length} CSVs, ${monthsPresent.size} months present; ingesting ${wanted.size} months (LSOA: ${lsoaWanted.size}).`);
 
-    // Per-force accumulators (force_id kept on each row; '_all' derived at the end).
-    const crimeCat = []; // {force_id, month, category, count}
-    const outcomes = []; // {force_id, month, outcome_category, count}
-    const ssForce = []; // {force_id, month, total, find_count, find_known}
-    const ssDim = []; // {force_id, month, dimension, value, count, find_count}
-    const lsoaMap = new Map(); // `${code}|${month}` → {lsoa_code, lsoa_name, month, count}
-
-    let done = 0;
-    for (const { f, meta } of parsed) {
-      if (!wanted.has(meta.month)) continue;
-      const text = (await f.buffer()).toString('utf8');
-      const records = parseCsv(text);
-      if (meta.kind === 'street') {
-        for (const c of rollupStreetByCategory(records)) crimeCat.push({ force_id: meta.force, month: meta.month, ...c });
-        if (lsoaWanted.has(meta.month)) {
-          for (const l of rollupStreetByLsoa(records)) {
-            const k = `${l.lsoa_code}|${meta.month}`;
-            const e = lsoaMap.get(k);
-            if (e) e.count += l.count;
-            else lsoaMap.set(k, { lsoa_code: l.lsoa_code, lsoa_name: l.lsoa_name, month: meta.month, count: l.count });
-          }
-        }
-      } else if (meta.kind === 'outcomes') {
-        for (const o of rollupOutcomes(records)) outcomes.push({ force_id: meta.force, month: meta.month, ...o });
-      } else if (meta.kind === 'stop-and-search') {
-        const r = rollupStops(records);
-        ssForce.push({ force_id: meta.force, month: meta.month, total: r.total, find_count: r.find_count, find_known: r.find_known });
-        for (const d of r.dims) ssDim.push({ force_id: meta.force, month: meta.month, ...d });
-      }
-      if (++done % 200 === 0) console.log(`  …${done} files`);
+    // Group the wanted entries by month so each month is processed and written
+    // as one independent, idempotent phase.
+    const byMonthEntries = new Map();
+    for (const e of parsed) {
+      if (!wanted.has(e.meta.month)) continue;
+      if (!byMonthEntries.has(e.meta.month)) byMonthEntries.set(e.meta.month, []);
+      byMonthEntries.get(e.meta.month).push(e);
     }
 
-    // Derive '_all' national aggregates by summing across forces, per month.
-    const allCrime = byMonth(crimeCat, ['month', 'category'], ['count']);
-    const allOutcome = byMonth(outcomes, ['month', 'outcome_category'], ['count']);
-    const allSsForce = byMonth(ssForce, ['month'], ['total', 'find_count', 'find_known']);
-    const allSsDim = byMonth(ssDim, ['month', 'dimension', 'value'], ['count', 'find_count']);
+    let total = 0;
+    const orderedMonths = [...wanted].sort();
+    for (const month of orderedMonths) {
+      const monthEntries = byMonthEntries.get(month) || [];
+      if (!monthEntries.length) continue;
+      const monthStart = new Date().toISOString();
 
-    const lsoaRows = [...lsoaMap.values()];
-    let n = 0;
-    n += await upsert(sb, 'crime_force_month', [...crimeCat, ...allCrime], 'force_id,month,category');
-    n += await upsert(sb, 'outcome_force_month', [...outcomes, ...allOutcome], 'force_id,month,outcome_category');
-    n += await upsert(sb, 'ss_force_month', [...ssForce, ...allSsForce], 'force_id,month');
-    n += await upsert(sb, 'ss_dim', [...ssDim, ...allSsDim], 'force_id,month,dimension,value');
-    n += await upsert(sb, 'crime_lsoa_month', lsoaRows, 'lsoa_code,month');
-    runNotes.push(`bulk: ${wanted.size} months, ${n} rollup rows`);
-    console.log(`Bulk done: ${n} rollup rows (${DRY ? 'dry-run, not written' : 'upserted'}).`);
-    return n;
+      // Per-force accumulators for this month only ('_all' derived below).
+      const crimeCat = []; // {force_id, month, category, count}
+      const outcomes = []; // {force_id, month, outcome_category, count}
+      const ssForce = []; // {force_id, month, total, find_count, find_known}
+      const ssDim = []; // {force_id, month, dimension, value, count, find_count}
+      const lsoaMap = new Map(); // `${code}|${month}` → {lsoa_code, lsoa_name, month, count}
+
+      for (const { f, meta } of monthEntries) {
+        const text = (await entryBuffer(f)).toString('utf8');
+        const records = parseCsv(text);
+        if (meta.kind === 'street') {
+          for (const c of rollupStreetByCategory(records)) crimeCat.push({ force_id: meta.force, month, ...c });
+          if (lsoaWanted.has(month)) {
+            for (const l of rollupStreetByLsoa(records)) {
+              const k = `${l.lsoa_code}|${month}`;
+              const e = lsoaMap.get(k);
+              if (e) e.count += l.count;
+              else lsoaMap.set(k, { lsoa_code: l.lsoa_code, lsoa_name: l.lsoa_name, month, count: l.count });
+            }
+          }
+        } else if (meta.kind === 'outcomes') {
+          for (const o of rollupOutcomes(records)) outcomes.push({ force_id: meta.force, month, ...o });
+        } else if (meta.kind === 'stop-and-search') {
+          const r = rollupStops(records);
+          ssForce.push({ force_id: meta.force, month, total: r.total, find_count: r.find_count, find_known: r.find_known });
+          for (const d of r.dims) ssDim.push({ force_id: meta.force, month, ...d });
+        }
+      }
+
+      // Derive this month's '_all' national aggregates by summing across forces.
+      const allCrime = byMonth(crimeCat, ['month', 'category'], ['count']);
+      const allOutcome = byMonth(outcomes, ['month', 'outcome_category'], ['count']);
+      const allSsForce = byMonth(ssForce, ['month'], ['total', 'find_count', 'find_known']);
+      const allSsDim = byMonth(ssDim, ['month', 'dimension', 'value'], ['count', 'find_count']);
+
+      let n = 0;
+      n += await upsert(sb, 'crime_force_month', [...crimeCat, ...allCrime], 'force_id,month,category');
+      n += await upsert(sb, 'outcome_force_month', [...outcomes, ...allOutcome], 'force_id,month,outcome_category');
+      n += await upsert(sb, 'ss_force_month', [...ssForce, ...allSsForce], 'force_id,month');
+      n += await upsert(sb, 'ss_dim', [...ssDim, ...allSsDim], 'force_id,month,dimension,value');
+      n += await upsert(sb, 'crime_lsoa_month', [...lsoaMap.values()], 'lsoa_code,month');
+      total += n;
+      console.log(`  ${month}: ${monthEntries.length} files → ${n} rollup rows (${DRY ? 'dry-run' : 'upserted'}).`);
+
+      // Per-month provenance so phased progress is visible in ingest_runs.
+      if (sb) await sb.from('ingest_runs').insert({ kind: 'bulk', dataset_month: month, rows_upserted: n, ok: true, notes: `${monthEntries.length} files`, started_at: monthStart, finished_at: new Date().toISOString() }).then(() => {}, () => {});
+    }
+
+    // Enforce the retention windows: the ingest only ever upserts, so without
+    // pruning, months that fall out of the window (and any LSOA history beyond
+    // INGEST_LSOA_MONTHS) would accumulate forever. Delete anything older.
+    await pruneOld(sb, wanted, lsoaWanted);
+
+    runNotes.push(`bulk: ${wanted.size} months, ${total} rollup rows`);
+    console.log(`Bulk done: ${total} rollup rows across ${wanted.size} months (${DRY ? 'dry-run, not written' : 'upserted'}).`);
+    return total;
   } finally {
-    await archive._cleanup?.();
+    await archive.cleanup?.();
   }
+}
+
+// Delete rows older than the retention windows. Months are 'YYYY-MM' strings, so
+// a lexicographic `< cutoff` correctly drops everything before the oldest kept
+// month. The rollup tables keep INGEST_MONTHS; crime_lsoa_month (the largest)
+// keeps only INGEST_LSOA_MONTHS.
+async function pruneOld(sb, wanted, lsoaWanted) {
+  if (DRY || !sb || !wanted.size) return;
+  const oldest = [...wanted].sort()[0];
+  const oldestLsoa = lsoaWanted.size ? [...lsoaWanted].sort()[0] : oldest;
+  const prune = async (table, cutoff) => {
+    const { count, error } = await sb.from(table).delete({ count: 'exact' }).lt('month', cutoff);
+    if (error) throw new Error(`prune ${table}: ${error.message}`);
+    if (count) console.log(`  pruned ${count} rows from ${table} older than ${cutoff}`);
+  };
+  for (const t of ['crime_force_month', 'outcome_force_month', 'ss_force_month', 'ss_dim']) await prune(t, oldest);
+  await prune('crime_lsoa_month', oldestLsoa);
 }
 
 // Sum per-force rows into '_all' rows for one month grouping.
@@ -186,60 +378,97 @@ function byMonth(rows, keyFields, sumFields) {
 }
 
 // --- JSON API metadata -------------------------------------------------------
-async function ingestApi(sb, runNotes) {
-  const forces = (await api('/forces')) || [];
-  const forceRows = [];
-  const peopleRows = [];
+// Forces whose metadata was crawled successfully within the resume window, so a
+// re-run (e.g. after a cancelled job) skips them and resumes from the rest. The
+// per-force checkpoint rows are kind='api' with the force id in dataset_month.
+async function freshForces(sb) {
+  if (DRY || !sb || NO_RESUME || API_REFRESH_DAYS < 1) return new Set();
+  const since = new Date(Date.now() - API_REFRESH_DAYS * 86_400_000).toISOString();
+  const { data, error } = await sb
+    .from('ingest_runs')
+    .select('dataset_month')
+    .eq('kind', 'api')
+    .eq('ok', true)
+    .gte('finished_at', since);
+  if (error) { console.warn(`resume lookup failed (${error.message}); crawling all forces`); return new Set(); }
+  return new Set((data || []).map((r) => r.dataset_month).filter(Boolean));
+}
+
+// Crawl one force: its detail + senior officers, then every neighbourhood's
+// detail + priorities with bounded concurrency (the bulk of the API work).
+async function crawlForce(f) {
+  const detail = await api(`/forces/${f.id}`);
+  const forceRow = {
+    id: f.id,
+    name: f.name,
+    description: detail?.description ?? null,
+    url: detail?.url ?? null,
+    telephone: detail?.telephone ?? null,
+    engagement_methods: detail?.engagement_methods ?? null,
+    updated_at: new Date().toISOString(),
+  };
+  const people = (await api(`/forces/${f.id}/people`)) || [];
+  const peopleRows = people.filter((p) => p?.name).map((p) => ({ force_id: f.id, name: p.name, rank: p.rank ?? null, bio: p.bio ?? null }));
+
+  const hoods = (await api(`/${f.id}/neighbourhoods`)) || [];
   const hoodRows = [];
   const prioRows = [];
-
-  for (const f of forces) {
-    const detail = await api(`/forces/${f.id}`);
-    forceRows.push({
-      id: f.id,
-      name: f.name,
-      description: detail?.description ?? null,
-      url: detail?.url ?? null,
-      telephone: detail?.telephone ?? null,
-      engagement_methods: detail?.engagement_methods ?? null,
-      updated_at: new Date().toISOString(),
+  await pMap(hoods, async (h) => {
+    const d = await api(`/${f.id}/${encodeURIComponent(h.id)}`);
+    const centre = d?.centre || {};
+    hoodRows.push({
+      force_id: f.id, id: h.id, name: h.name ?? d?.name ?? null,
+      centre_lat: centre.latitude ? Number(centre.latitude) : null,
+      centre_lng: centre.longitude ? Number(centre.longitude) : null,
+      url: d?.url_force ?? null, updated_at: new Date().toISOString(),
     });
-    const people = (await api(`/forces/${f.id}/people`)) || [];
-    for (const p of people) if (p?.name) peopleRows.push({ force_id: f.id, name: p.name, rank: p.rank ?? null, bio: p.bio ?? null });
-
-    const hoods = (await api(`/${f.id}/neighbourhoods`)) || [];
-    for (const h of hoods) {
-      const d = await api(`/${f.id}/${encodeURIComponent(h.id)}`);
-      const centre = d?.centre || {};
-      hoodRows.push({
-        force_id: f.id, id: h.id, name: h.name ?? d?.name ?? null,
-        centre_lat: centre.latitude ? Number(centre.latitude) : null,
-        centre_lng: centre.longitude ? Number(centre.longitude) : null,
-        url: d?.url_force ?? null, updated_at: new Date().toISOString(),
+    const prios = (await api(`/${f.id}/${encodeURIComponent(h.id)}/priorities`)) || [];
+    for (const pr of prios) {
+      const issue = stripHtml(pr.issue), action = stripHtml(pr.action);
+      if (!issue && !action) continue;
+      prioRows.push({
+        force_id: f.id, neighbourhood_id: h.id, key: md5(`${issue}|${action}`),
+        issue, action, issued_on: pr['issue-date'] ?? pr.issue_date ?? null,
       });
-      const prios = (await api(`/${f.id}/${encodeURIComponent(h.id)}/priorities`)) || [];
-      for (const pr of prios) {
-        const issue = stripHtml(pr.issue), action = stripHtml(pr.action);
-        if (!issue && !action) continue;
-        prioRows.push({
-          force_id: f.id, neighbourhood_id: h.id, key: md5(`${issue}|${action}`),
-          issue, action, issued_on: pr['issue-date'] ?? pr.issue_date ?? null,
-        });
-      }
-      await sleep(60);
     }
-    console.log(`  api: ${f.id} — ${hoods.length} neighbourhoods`);
-    await sleep(60);
+  }, API_CONCURRENCY);
+
+  return { forceRow, peopleRows, hoodRows, prioRows, hoodCount: hoods.length };
+}
+
+// Phase 2 — crawl forces → neighbourhoods → priorities and write each force as
+// an independent, checkpointed, idempotent unit (mirroring how ingestBulk treats
+// each month). A cancelled run leaves every completed force persisted, and a
+// re-run resumes from the rest, so the crawl no longer needs to fit one budget.
+async function ingestApi(sb, runNotes) {
+  let forces = (await api('/forces')) || [];
+  if (FORCE_OPT) {
+    const want = new Set(FORCE_OPT.split(',').map((s) => s.trim()).filter(Boolean));
+    forces = forces.filter((f) => want.has(f.id));
+  }
+  const fresh = await freshForces(sb);
+
+  let total = 0, done = 0, skipped = 0;
+  for (const f of forces) {
+    if (fresh.has(f.id)) { skipped++; console.log(`  api: ${f.id} — skipped (crawled within ${API_REFRESH_DAYS}d)`); continue; }
+    const startedAt = new Date().toISOString();
+    const { forceRow, peopleRows, hoodRows, prioRows, hoodCount } = await crawlForce(f);
+
+    let n = 0;
+    n += await upsert(sb, 'police_forces', [forceRow], 'id');
+    n += await upsert(sb, 'police_force_people', peopleRows, 'force_id,name');
+    n += await upsert(sb, 'neighbourhoods', hoodRows, 'force_id,id');
+    n += await upsert(sb, 'neighbourhood_priorities', dedupe(prioRows, (r) => `${r.force_id}|${r.neighbourhood_id}|${r.key}`), 'force_id,neighbourhood_id,key');
+    total += n; done++;
+    console.log(`  api: ${f.id} — ${hoodCount} neighbourhoods → ${n} rows (${DRY ? 'dry-run' : 'upserted'}).`);
+
+    // Per-force provenance + resume checkpoint (force id in dataset_month).
+    if (sb) await sb.from('ingest_runs').insert({ kind: 'api', dataset_month: f.id, rows_upserted: n, ok: true, notes: `${hoodCount} neighbourhoods`, started_at: startedAt, finished_at: new Date().toISOString() }).then(() => {}, () => {});
   }
 
-  let n = 0;
-  n += await upsert(sb, 'police_forces', forceRows, 'id');
-  n += await upsert(sb, 'police_force_people', peopleRows, 'force_id,name');
-  n += await upsert(sb, 'neighbourhoods', hoodRows, 'force_id,id');
-  n += await upsert(sb, 'neighbourhood_priorities', dedupe(prioRows, (r) => `${r.force_id}|${r.neighbourhood_id}|${r.key}`), 'force_id,neighbourhood_id,key');
-  runNotes.push(`api: ${forceRows.length} forces, ${hoodRows.length} neighbourhoods, ${prioRows.length} priorities`);
-  console.log(`API done: ${n} metadata rows (${DRY ? 'dry-run' : 'upserted'}).`);
-  return n;
+  runNotes.push(`api: ${done} forces crawled, ${skipped} skipped`);
+  console.log(`API done: ${total} metadata rows across ${done} forces (${skipped} skipped, ${DRY ? 'dry-run' : 'upserted'}).`);
+  return total;
 }
 
 const stripHtml = (s) => (s ? String(s).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim() : null);
@@ -251,13 +480,20 @@ async function main() {
   const startedAt = new Date().toISOString();
   const runNotes = [];
   let total = 0;
+  // The bulk and metadata phases now run as separate jobs (each skips the other),
+  // so the run-summary row records whichever phase(s) actually ran. dataset_month
+  // is left null on summary rows, which distinguishes them from the per-month
+  // ('bulk') and per-force ('api') checkpoint rows that carry a scope value.
+  const ranBulk = process.env.SKIP_BULK !== '1';
+  const ranApi = process.env.SKIP_API !== '1';
+  const runKind = ranBulk && ranApi ? 'bulk+api' : ranBulk ? 'bulk' : ranApi ? 'api' : 'noop';
   try {
-    if (process.env.SKIP_BULK !== '1') total += await ingestBulk(sb, runNotes);
-    if (process.env.SKIP_API !== '1') total += await ingestApi(sb, runNotes);
-    if (sb) await sb.from('ingest_runs').insert({ kind: 'bulk+api', rows_upserted: total, ok: true, notes: runNotes.join('; '), started_at: startedAt, finished_at: new Date().toISOString() });
+    if (ranBulk) total += await ingestBulk(sb, runNotes);
+    if (ranApi) total += await ingestApi(sb, runNotes);
+    if (sb) await sb.from('ingest_runs').insert({ kind: runKind, rows_upserted: total, ok: true, notes: runNotes.join('; '), started_at: startedAt, finished_at: new Date().toISOString() });
     console.log(`\nDone. ${total} rows total. ${runNotes.join('; ')}`);
   } catch (err) {
-    if (sb) await sb.from('ingest_runs').insert({ kind: 'bulk+api', rows_upserted: total, ok: false, notes: `${runNotes.join('; ')} | ERROR: ${err.message}`, started_at: startedAt, finished_at: new Date().toISOString() }).then(() => {}, () => {});
+    if (sb) await sb.from('ingest_runs').insert({ kind: runKind, rows_upserted: total, ok: false, notes: `${runNotes.join('; ')} | ERROR: ${err.message}`, started_at: startedAt, finished_at: new Date().toISOString() }).then(() => {}, () => {});
     throw err;
   }
 }
