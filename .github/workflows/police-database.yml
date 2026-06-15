@@ -17,17 +17,41 @@ on:
         description: 'Comma-separated months to ingest (blank = recent window)'
         required: false
         default: ''
+      phase:
+        description: 'Which phase to run'
+        required: false
+        type: choice
+        default: all
+        options: [all, bulk, metadata]
 
 concurrency:
   group: police-database
   cancel-in-progress: false
 
 jobs:
-  ingest:
+  # Single place to check the Supabase secrets; both ingest jobs gate on this so
+  # forks without secrets no-op cleanly instead of failing.
+  guard:
     runs-on: ubuntu-latest
-    # Generous cap: the bulk archive is read per-month over many small range
-    # requests. Each month is upserted independently and idempotently, so even
-    # if a run is cut short the completed months persist and a re-run resumes.
+    outputs:
+      ok: ${{ steps.guard.outputs.ok }}
+    steps:
+      - name: Guard — Supabase configured?
+        id: guard
+        run: |
+          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ]; then
+            echo "Supabase secrets not set — skipping ingest."; echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Phase 1 — bulk crime CSV. Read per-month over many small range requests; each
+  # month is upserted independently and idempotently, so a cut-short run persists
+  # completed months and a re-run resumes.
+  bulk:
+    needs: guard
+    if: needs.guard.outputs.ok == 'true' && github.event.inputs.phase != 'metadata'
+    runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
@@ -38,28 +62,40 @@ jobs:
           # ("Node.js 20 detected without native WebSocket support"), even though
           # the ingest only uses PostgREST. 22 avoids that with no extra deps.
           node-version: '22'
-
-      - name: Guard — Supabase configured?
-        id: guard
-        run: |
-          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" ]; then
-            echo "Supabase secrets not set — skipping ingest."; echo "ok=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "ok=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Install ingest deps
-        if: steps.guard.outputs.ok == 'true'
         run: npm install --no-save @supabase/supabase-js unzipper
-
-      - name: Ingest
-        if: steps.guard.outputs.ok == 'true'
+      - name: Ingest bulk crime data
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           INGEST_MONTHS: ${{ vars.INGEST_MONTHS }}
           INGEST_LSOA_MONTHS: ${{ vars.INGEST_LSOA_MONTHS }}
+          SKIP_API: '1'
         run: |
           ARGS=""
           if [ -n "${{ github.event.inputs.months }}" ]; then ARGS="--months ${{ github.event.inputs.months }}"; fi
           node scripts/ingest-bulk-police.mjs $ARGS
+
+  # Phase 2 — JSON API metadata. Decoupled from bulk so it has its own runner and
+  # timeout (it can no longer starve, or be starved by, the bulk phase). Each force
+  # is written and checkpointed as it completes, so a cut-short run resumes.
+  metadata:
+    needs: guard
+    if: needs.guard.outputs.ok == 'true' && github.event.inputs.phase != 'bulk'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install ingest deps
+        run: npm install --no-save @supabase/supabase-js unzipper
+      - name: Ingest API metadata
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          API_REFRESH_DAYS: ${{ vars.API_REFRESH_DAYS }}
+          API_CONCURRENCY: ${{ vars.API_CONCURRENCY }}
+          SKIP_BULK: '1'
+        run: node scripts/ingest-bulk-police.mjs

@@ -39,13 +39,28 @@ the repo variables unset uses these defaults. After each run the ingest **prunes
 rows older than the windows (the upsert path never deletes on its own), so the tables
 stay bounded as the archive rolls forward.
 
-**Phased & resumable:** the multi-GB archive is never downloaded whole. The ingest
-reads the zip's central directory and then each wanted CSV via HTTP **range requests**,
-processing and upserting **one month at a time**. Each month is an independent,
-idempotent upsert, so a run that is cut short still persists its completed months and
-a re-run resumes cleanly. Per-month progress is logged in the `ingest_runs` table. If
-the host ever stops honouring range requests, set `FULL_DOWNLOAD=1` to fall back to a
-single streamed download.
+**Phased & resumable (bulk):** the multi-GB archive is never downloaded whole. The
+ingest reads the zip's central directory and then each wanted CSV via HTTP **range
+requests**, processing and upserting **one month at a time**. Each month is an
+independent, idempotent upsert, so a run that is cut short still persists its completed
+months and a re-run resumes cleanly. Per-month progress is logged in the `ingest_runs`
+table. If the host ever stops honouring range requests, set `FULL_DOWNLOAD=1` to fall
+back to a single streamed download.
+
+**Resumable & concurrent (API metadata):** the JSON API phase crawls each force's
+neighbourhoods + priorities with bounded concurrency (`API_CONCURRENCY`, default 6 —
+well under data.police.uk's ~15 req/s limit) and writes **one force at a time**, with a
+per-force checkpoint row (`kind='api'`, force id in `dataset_month`) in `ingest_runs`.
+A cancelled run therefore keeps every completed force, and a re-run **skips forces
+crawled OK within `API_REFRESH_DAYS`** (default 25) and resumes from the rest. Use
+`--no-resume` to force a full re-crawl, or `--force <id>` / `API_FORCE` to crawl a
+single force. Because each force stands alone, the metadata phase no longer has to fit
+inside one job budget.
+
+**Separate jobs:** the workflow runs the bulk and metadata phases as two independent
+jobs (`bulk`, with `SKIP_API=1`; `metadata`, with `SKIP_BULK=1`), each on its own runner
+with its own timeout, so a slow metadata crawl can't consume the bulk phase's budget (or
+vice versa). Both gate on a shared `guard` job that checks the Supabase secrets.
 
 ## Setup (one-off)
 
@@ -54,7 +69,7 @@ single streamed download.
    Supabase SQL editor (or `supabase db push` with the CLI). It's idempotent.
 3. Add GitHub Actions **secrets**: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
    (Project settings → API). Optionally set repo **variables** `INGEST_MONTHS`,
-   `INGEST_LSOA_MONTHS`.
+   `INGEST_LSOA_MONTHS`, `API_REFRESH_DAYS`, `API_CONCURRENCY`.
 4. The read path reuses the existing public `PUBLIC_SUPABASE_URL` /
    `PUBLIC_SUPABASE_ANON_KEY` — nothing new to expose; public-SELECT RLS covers
    these open-data tables.
@@ -62,7 +77,9 @@ single streamed download.
 ## Running the ingest
 
 - **Automatic:** `police-database.yml` runs monthly (6th, after the snapshot job).
-  Trigger manually from the Actions tab, optionally passing specific months.
+  Trigger manually from the Actions tab, optionally passing specific `months` and a
+  `phase` (`all` / `bulk` / `metadata`) to run just one phase — e.g. `metadata` to
+  refresh forces/neighbourhoods without re-reading the bulk archive.
 - **Manual / local** (needs network to data.police.uk, which the dev sandbox lacks):
   ```bash
   npm install --no-save @supabase/supabase-js unzipper
