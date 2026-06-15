@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-15T18:58:40.572Z",
+    "fetchedAt": "2026-06-15T22:53:17.560Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -15,22 +15,6 @@
     ]
   },
   "items": [
-    {
-      "title": "Anthropic to meet White House over AI tool suspension",
-      "link": "https://www.bbc.com/news/articles/c9w2p7ykp8yo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-06-15T18:44:26.000Z",
-      "summary": "The sudden meeting was called after Anthropic had to block users from just-released AI models."
-    },
-    {
-      "title": "Gang guilty of organised crime in £4m cocaine and dirty money ring",
-      "link": "https://www.bbc.com/news/articles/c20ydeep2x2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-15T15:14:00.000Z",
-      "summary": "The five men were caught during a major police investigation called Operation Silhouette."
-    },
     {
       "title": "How adoptive parents' lies unravelled to reveal 'reign of terror'",
       "link": "https://www.bbc.com/news/articles/clyp77l79e9o?at_medium=RSS&at_campaign=rss",
@@ -62,6 +46,14 @@
       "topic": "policing",
       "isoDate": "2026-06-15T12:44:04.000Z",
       "summary": "The Home Office had challenged a High Court ruling that the group's proscription should be quashed."
+    },
+    {
+      "title": "Man arrested for allegedly pushing woman in front of bus in 2017",
+      "link": "https://www.bbc.com/news/articles/cp9ly0gy10yo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-15T11:52:08.000Z",
+      "summary": "A 44-year-old man is in custody over the incident where a woman appeared to be shoved into the path of a bus."
     },
     {
       "title": "Sullivan & Cromwell hunts for City digs twice the size",
@@ -206,6 +198,14 @@
       "topic": "ai",
       "isoDate": "2026-06-09T16:16:12.000Z",
       "summary": "Meta has accused the EU of \"regulatory overreach\" and says its decision will allow tech giants like OpenAI free access to WhatsApp."
+    },
+    {
+      "title": "AI giants' race to raise funds heats up as ChatGPT-owner plans stock market debut",
+      "link": "https://www.bbc.com/news/articles/cd958eqg1n5o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-06-09T08:02:43.000Z",
+      "summary": "The company behind ChatGPT files its plans one week after Anthropic did the same."
     },
     {
       "title": "AI tech ambition to deliver smarter justice for victims",
