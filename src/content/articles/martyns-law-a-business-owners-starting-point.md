@@ -3,8 +3,8 @@ title: "Martyn's Law: A Business Owner's Starting Point"
 section: "public-policy"
 description: "You run a venue, a shop, a café or an event — and you have heard Martyn's Law is coming. A practical, plain-English starting point: are you in scope, what will you actually have to do, where the official guidance lives, what the 'Purple Guide' is, and a provisional checklist to work from while the duties are not yet in force."
 pubDate: 2026-06-13
-heroImage: "/images/martyns-law-business-hero.svg"
-thumbnail: "/images/martyns-law-business-hero.svg"
+heroImage: "/images/martyns-law-business-hero.jpg"
+thumbnail: "/images/martyns-law-business-hero.jpg"
 tags: ["martyns-law", "counter-terrorism", "public-policy", "business", "crime-prevention", "leadership"]
 ---
 

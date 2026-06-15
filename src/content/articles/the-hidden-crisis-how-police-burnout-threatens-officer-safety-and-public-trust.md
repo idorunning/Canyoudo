@@ -3,8 +3,8 @@ section: "police-policy"
 title: "The Hidden Crisis: How Police Burnout Threatens Officer Safety and Public Trust"
 description: "Burnout raises the risk of excessive force and corrodes public trust. What the evidence says about exhausted officers, and what forces can do about it."
 pubDate: 2025-07-29
-heroImage: "/images/burnout-hero.svg"
-thumbnail: "/images/burnout-hero.svg"
+heroImage: "/images/burnout-hero.jpg"
+thumbnail: "/images/burnout-hero.jpg"
 tags: ["crime", "evidence-based-policing", "mental-health", "neurodiversity", "police", "policing"]
 ---
 ### 
