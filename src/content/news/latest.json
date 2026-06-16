@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-16T18:50:24.333Z",
+    "fetchedAt": "2026-06-16T22:46:01.530Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -15,6 +15,38 @@
     ]
   },
   "items": [
+    {
+      "title": "AI tool to slash planning decision times as government accelerates push to build 1.5 million homes",
+      "link": "https://www.gov.uk/government/news/ai-tool-to-slash-planning-decision-times-as-government-accelerates-push-to-build-15-million-homes",
+      "source": "DSIT",
+      "topic": "ai",
+      "isoDate": "2026-06-16T21:30:01.000Z",
+      "summary": "Millions of homeowners could benefit from faster planning decisions, as 2 new AI tools are unveiled to modernise England’s planning permission system."
+    },
+    {
+      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-16T20:47:37.000Z",
+      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
+    },
+    {
+      "title": "Murdered Preston Davey's biological dad tells of anguish at vigil",
+      "link": "https://www.bbc.com/news/articles/c0ly08rk48zo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-16T20:00:59.000Z",
+      "summary": "Gary Nolan spoke of the \"terror\" his son endured as tributes were paid at a vigil for the baby."
+    },
+    {
+      "title": "Tech Life",
+      "link": "https://www.bbc.co.uk/sounds/play/w3ct8jy0?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-06-16T19:30:00.000Z",
+      "summary": "The prompt that made ChatGPT generate disturbing images. What does this tell us about AI?"
+    },
     {
       "title": "Featherstone Prison",
       "link": "https://www.gov.uk/guidance/featherstone-prison",
@@ -86,14 +118,6 @@
       "topic": "policing",
       "isoDate": "2026-06-15T13:33:33.000Z",
       "summary": "The Solicitor General Ellie Reeves KC has referred the sentence of Vickrum Digwa, convicted of the murder of Henry Nowak, to the Court of Appeal under the Unduly Lenient…"
-    },
-    {
-      "title": "Palestine Action ban is lawful, Court of Appeal rules",
-      "link": "https://www.bbc.com/news/articles/c4gy927jx88o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-15T12:44:04.000Z",
-      "summary": "The Home Office had challenged a High Court ruling that the group's proscription should be quashed."
     },
     {
       "title": "Sullivan & Cromwell hunts for City digs twice the size",
@@ -216,14 +240,6 @@
       "summary": "Meta has accused the EU of \"regulatory overreach\" and says its decision will allow tech giants like OpenAI free access to WhatsApp."
     },
     {
-      "title": "AI giants' race to raise funds heats up as ChatGPT-owner plans stock market debut",
-      "link": "https://www.bbc.com/news/articles/cd958eqg1n5o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-06-09T08:02:43.000Z",
-      "summary": "The company behind ChatGPT files its plans one week after Anthropic did the same."
-    },
-    {
       "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
       "link": "https://www.theregister.com/ai-and-ml/2026/06/03/no-longer-just-a-copilot-microsofts-ai-wants-to-take-the-wheel/5250718",
       "source": "The Register",
@@ -238,22 +254,6 @@
       "topic": "ai",
       "isoDate": "2026-06-01T18:12:22.000Z",
       "summary": "First it tops OpenAI's valuation, then it beats Altman to the IPO punch"
-    },
-    {
-      "title": "Google has seriously leaned into AI enshittification lately",
-      "link": "https://www.theregister.com/ai-ml/2026/05/25/google-has-seriously-leaned-into-ai-enshittification-lately/5245365",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-05-24T23:00:00.000Z",
-      "summary": "Could the Chocolate Factory's mission to reshape the web backfire?"
-    },
-    {
-      "title": "Sick and wrong: Ontario auditors find doctors' AI note takers routinely blow basic facts",
-      "link": "https://www.theregister.com/ai-and-ml/2026/05/14/ontario-auditors-find-doctors-ai-note-takers-routinely-blow-basic-facts/5240771",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-05-14T20:50:05.000Z",
-      "summary": "60% of evaluated AI Scribe systems mixed up prescribed drugs in patient notes, auditors say"
     }
   ]
 }
