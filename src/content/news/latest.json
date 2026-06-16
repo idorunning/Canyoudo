@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-16T08:36:00.155Z",
+    "fetchedAt": "2026-06-16T13:20:15.883Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -15,6 +15,30 @@
     ]
   },
   "items": [
+    {
+      "title": "Woman in court over fatal Wimbledon school crash",
+      "link": "https://www.bbc.com/news/articles/cpq32r3zwpro?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-16T11:25:20.000Z",
+      "summary": "Claire Freemantle was driving the car that killed Nuria Sajjad and Selena Lau outside a school in 2023."
+    },
+    {
+      "title": "Paralegal hit with restrictions after covering up forgotten email",
+      "link": "https://www.legalcheek.com/2026/06/paralegal-hit-with-restrictions-after-covering-up-forgotten-email/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-16T10:34:49.000Z",
+      "summary": "Altered time entry The post Paralegal hit with restrictions after covering up forgotten email appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Exeter Prison",
+      "link": "https://www.gov.uk/guidance/exeter-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-06-16T10:02:21.000Z",
+      "summary": "Exeter is a men’s prison in Exeter city centre in Devon."
+    },
     {
       "title": "Suspension for barrister who helped ex-solicitor daughter breach High Court injunction",
       "link": "https://www.legalcheek.com/2026/06/suspension-for-barrister-who-helped-ex-solicitor-daughter-breach-high-court-injunction/",
@@ -56,14 +80,6 @@
       "summary": "The Home Office had challenged a High Court ruling that the group's proscription should be quashed."
     },
     {
-      "title": "Man arrested for allegedly pushing woman in front of bus in 2017",
-      "link": "https://www.bbc.com/news/articles/cp9ly0gy10yo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-15T11:52:08.000Z",
-      "summary": "A 44-year-old man is in custody over the incident where a woman appeared to be shoved into the path of a bus."
-    },
-    {
       "title": "Sullivan & Cromwell hunts for City digs twice the size",
       "link": "https://www.legalcheek.com/2026/06/sullivan-cromwell-hunts-for-city-digs-twice-the-size/",
       "source": "Legal Cheek",
@@ -94,14 +110,6 @@
       "topic": "law",
       "isoDate": "2026-06-15T08:31:35.000Z",
       "summary": "Exclusive: 10 spots The post US giant Simpson Thacher launches London private equity training contract with £178k NQ salary appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Monday morning round-up",
-      "link": "https://www.legalcheek.com/2026/06/monday-morning-round-up-153/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-15T06:44:06.000Z",
-      "summary": "The top legal affairs news stories from this morning and the weekend The post Monday morning round-up appeared first on Legal Cheek ."
     },
     {
       "title": "Disqualified director jailed for £3 million fraud which helped bankroll lavish lifestyle with chauffeur-driven Rolls-Royce",
@@ -222,14 +230,6 @@
       "topic": "law",
       "isoDate": "2026-06-08T16:11:13.000Z",
       "summary": "New AI Growth Labs launched designed to accelerate the development and deployment of AI products and services."
-    },
-    {
-      "title": "Legal innovation to be supercharged by new AI Growth project",
-      "link": "https://www.gov.uk/government/news/legal-innovation-to-be-supercharged-by-new-ai-growth-project",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-08T15:19:51.000Z",
-      "summary": "In a major boost to the economy, the Government has launched a new AI growth project to fast-track innovation in legal technology, often known as LawTech."
     },
     {
       "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
