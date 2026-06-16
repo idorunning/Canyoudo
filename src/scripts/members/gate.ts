@@ -97,11 +97,38 @@ export async function initMembersGate(): Promise<void> {
     }
   }
 
-  // getSession resolves the stored session before we gate, so the first paint
-  // is accurate; re-run on sign-in/out for a live swap.
-  const { data } = await supabase.auth.getSession();
-  applyGate(Boolean(data?.session?.user));
+  // Resolve the stored session, then gate. Two safety nets so a slow or wedged
+  // auth read can never strand a signed-in reader on the skeleton:
+  //   1. a timeout that fails OPEN (only readers who already hold a token ever
+  //      reach the skeleton, so revealing the tool there is safe and correct);
+  //   2. a try/catch that does the same on an outright error.
+  // onAuthStateChange still fires for the live sign-in/out swap and supersedes
+  // whichever net ran first.
+  let settled = false;
+  const safety = setTimeout(() => {
+    if (settled) return;
+    settled = true;
+    openUp();
+  }, 3500);
+
+  try {
+    const { data } = await supabase.auth.getSession();
+    if (!settled) {
+      settled = true;
+      clearTimeout(safety);
+      applyGate(Boolean(data?.session?.user));
+    }
+  } catch {
+    if (!settled) {
+      settled = true;
+      clearTimeout(safety);
+      openUp();
+    }
+  }
+
   supabase.auth.onAuthStateChange((_event: string, session: any) => {
+    settled = true;
+    clearTimeout(safety);
     applyGate(Boolean(session?.user));
   });
 }

@@ -30,7 +30,7 @@ const { hasAuth, feature = 'this' } = Astro.props;
       html[data-maybe-authed] [data-members-gate] { display: none !important; }
       html[data-maybe-authed] [data-members-skeleton][hidden] { display: block; }
     `}></style>
-    <script is:inline set:html={`try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('sb-')===0&&k.indexOf('-auth-token')>0&&localStorage.getItem(k)){document.documentElement.setAttribute('data-maybe-authed','');break;}}}catch(e){}`}></script>
+    <script is:inline set:html={`try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('sb-')===0&&k.indexOf('-auth-token')>0&&localStorage.getItem(k)){document.documentElement.setAttribute('data-maybe-authed','');break;}}}catch(e){}setTimeout(function(){document.documentElement.removeAttribute('data-maybe-authed');},7000);`}></script>
 
     <div data-members>
       <div data-members-skeleton hidden aria-busy="true" class="max-w-2xl animate-pulse">
