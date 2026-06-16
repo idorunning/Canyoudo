@@ -9,6 +9,12 @@
 //   curate   src/lib/briefing-curate.mjs (deterministic)  → 12–15 studies
 //   briefing POST /api/research-assist {mode:'briefing'}  → cited four-section briefing
 //
+// The search step is adaptive: it starts with one free-to-read page per angle
+// and, only when that curates thin, automatically escalates — further pages,
+// then beyond free-to-read — re-curating until the evidence base is healthy or
+// the ladder is spent. Catalogue searches are free and edge-cached, so the
+// scale grows with the difficulty of the problem at no extra AI cost.
+//
 // Citation safety is the same contract as the search answer: the model emits
 // only [n] indices into the ONE curated list it was shown; the reference
 // anchors are the real study cards, built here from the Work objects. Nothing
@@ -23,6 +29,21 @@ import { ASSIST_PROMPT_VERSION } from '../../lib/research-assist-prompts';
 const BRIEFING_MODEL = 'claude-sonnet-4-6';
 const REF_ID_PREFIX = 'briefing-ref-';
 const THIN_THRESHOLD = 4; // below this, don't spend a synthesis call
+// Adaptive depth — a "healthy" evidence base. When the free first pass curates
+// fewer than this, the pipeline escalates (see ESCALATION_STEPS) before
+// synthesising; at or above it, one pass was enough and we stop.
+const TARGET_STUDIES = 12;
+// The escalation ladder, applied in order and only while the curated set is
+// still below TARGET_STUDIES: first dig deeper (further result pages, still
+// free-to-read), then widen beyond free-to-read. Searches are free and
+// edge-cached, so this costs only a little latency — and only on the hard
+// problems that actually need it.
+const ESCALATION_STEPS: { page: number; oa: boolean }[] = [
+  { page: 2, oa: true },
+  { page: 3, oa: true },
+  { page: 1, oa: false },
+  { page: 2, oa: false },
+];
 
 export interface BriefingAngle {
   label: string;
@@ -91,12 +112,19 @@ export async function planProblem(problem: string): Promise<BriefingPlan | null>
   }
 }
 
-async function searchAngle(angle: BriefingAngle, source: string): Promise<Work[]> {
+/** One angle's search. `page`/`oa` let the adaptive pass dig deeper (further
+ *  pages) and wider (beyond free-to-read) when the first pass comes back thin. */
+async function searchAngle(
+  angle: BriefingAngle,
+  source: string,
+  { page = 1, oa = true }: { page?: number; oa?: boolean } = {}
+): Promise<Work[]> {
   const params = new URLSearchParams({ q: angle.query });
   if (source !== 'openalex') params.set('source', source);
-  params.set('oa', '1'); // free-to-read: practitioners without library access
+  if (oa) params.set('oa', '1'); // free-to-read: practitioners without library access
   if (angle.review) params.set('review', '1');
   if (angle.from) params.set('from', String(angle.from));
+  if (page > 1) params.set('page', String(page));
   try {
     const res = await fetch(`/api/research?${params}`);
     const data = await res.json().catch(() => null);
@@ -126,14 +154,15 @@ export async function runBriefingPipeline(
   }
   hooks.onPlan?.(plan);
 
-  const perAngle: Work[][] = [];
+  const perAngle: Work[][] = plan.angles.map(() => []);
   let foundAny = false;
+  // First pass: each planned angle, free-to-read, first page.
   for (let i = 0; i < plan.angles.length; i++) {
     const a = plan.angles[i];
     hooks.onProgress(`Searching angle ${i + 1} of ${plan.angles.length}: ${a.label}…`);
-    const results = await searchAngle(a, hooks.source);
+    const results = await searchAngle(a, hooks.source, { page: 1, oa: true });
     if (stale()) return { status: 'stale' };
-    perAngle.push(results);
+    perAngle[i] = results;
     if (results.length) foundAny = true;
     hooks.onAngleDone?.(i, plan.angles.length);
   }
@@ -147,7 +176,28 @@ export async function runBriefingPipeline(
   hooks.onProgress('Curating the strongest studies…');
   // curate lives in untyped lib JS (like research-merge); it preserves the
   // Work shape it's given, so assert the element type back here.
-  const references = curate(perAngle) as Work[];
+  let references = curate(perAngle) as Work[];
+
+  // Adaptive depth (the self-adapting "scale"): a thin free first pass triggers
+  // escalation — dig deeper (further pages) then wider (beyond free-to-read),
+  // re-curating after each step, until the evidence base is healthy or the
+  // ladder is exhausted. Easy problems stop after one pass; hard ones
+  // automatically search harder, pulling in more sources, at no extra AI cost.
+  for (let s = 0; s < ESCALATION_STEPS.length && references.length < TARGET_STUDIES; s++) {
+    const step = ESCALATION_STEPS[s];
+    hooks.onProgress(
+      step.oa
+        ? 'Thin so far — digging deeper for more studies…'
+        : 'Widening the search beyond free-to-read…'
+    );
+    for (let i = 0; i < plan.angles.length; i++) {
+      const more = await searchAngle(plan.angles[i], hooks.source, step);
+      if (stale()) return { status: 'stale' };
+      if (more.length) perAngle[i] = perAngle[i].concat(more);
+    }
+    references = curate(perAngle) as Work[];
+  }
+
   const framing = plan.framing;
 
   // Don't spend a synthesis call on near-nothing — show what came back honestly.

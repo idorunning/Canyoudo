@@ -1,0 +1,71 @@
+---
+// Client-side members gate for the data dashboard pages. A logged-out reader
+// sees the page's public overview (the hero, which each page keeps OUTSIDE this
+// component) plus a sign-in prompt; a signed-in reader sees the gated content
+// (the default slot). Auth is the same Supabase project as the research
+// assistant, so one sign-in covers the whole members area. Mirrors /research.
+//
+// Pass `hasAuth` — computed in the page frontmatter from the PUBLIC_SUPABASE_*
+// env vars — so the gate only engages when auth is actually configured at build
+// time. With no auth, this renders the content for everyone and fires the
+// unlock signal immediately, so deferred page scripts still run (graceful
+// degrade, identical to /research on a keyless deploy).
+//
+// See src/scripts/members/gate.ts for the controller and the `members:unlock`
+// contract the gated page scripts wait on.
+interface Props {
+  hasAuth: boolean;
+  /** What sits behind the gate, named in the sign-in prompt. */
+  feature?: string;
+}
+const { hasAuth, feature = 'this' } = Astro.props;
+---
+{hasAuth ? (
+  <Fragment>
+    {/* Flash mitigation: a returning signed-in reader shouldn't see the
+        sign-in prompt before the Supabase session resolves. If an auth token
+        is in localStorage, pre-hide the prompt and show a neutral skeleton
+        until JS verifies the session. */}
+    <style is:inline set:html={`
+      html[data-maybe-authed] [data-members-gate] { display: none !important; }
+      html[data-maybe-authed] [data-members-skeleton][hidden] { display: block; }
+    `}></style>
+    <script is:inline set:html={`try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('sb-')===0&&k.indexOf('-auth-token')>0&&localStorage.getItem(k)){document.documentElement.setAttribute('data-maybe-authed','');break;}}}catch(e){}`}></script>
+
+    <div data-members>
+      <div data-members-skeleton hidden aria-busy="true" class="max-w-2xl animate-pulse">
+        <div class="h-4 bg-paper-200 rounded w-full mb-3"></div>
+        <div class="h-4 bg-paper-200 rounded w-5/6 mb-3"></div>
+        <div class="h-4 bg-paper-200 rounded w-2/3"></div>
+      </div>
+
+      <div data-members-gate class="rounded-lg bg-paper-200 px-6 py-7 max-w-2xl">
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-2">Members</p>
+        <h2 class="font-display text-xl font-semibold text-ink-900">Sign in to use {feature}</h2>
+        <p class="font-serif text-ink-700 leading-relaxed mt-2">
+          It’s free. The email link is password-free and works with any address,
+          including a work one (e.g. police.gov.uk). One sign-in also unlocks the
+          <a href="/research" class="underline underline-offset-2 hover:text-accent">research assistant</a>,
+          and your work saves to your account.
+        </p>
+        <div class="mt-5" data-members-signin></div>
+      </div>
+
+      <div data-members-tool hidden>
+        <slot />
+      </div>
+    </div>
+
+    <script>
+      import { initMembersGate } from '../scripts/members/gate';
+      initMembersGate();
+    </script>
+  </Fragment>
+) : (
+  <Fragment>
+    {/* No auth configured → no gate. Unlock immediately so deferred page
+        scripts (which wait on `members:unlock`) still run. */}
+    <script is:inline set:html={`document.documentElement.setAttribute('data-members-unlocked','');`}></script>
+    <slot />
+  </Fragment>
+)}

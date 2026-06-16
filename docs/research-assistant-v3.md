@@ -42,6 +42,18 @@ corroboration → upstream position → citations; `curate()` round-robins acros
 the angles for topical coverage, dedups via `workMergeKey`, and slices to 15.
 The seam is there for a cheap model re-rank later if real misses appear.
 
+### Adaptive search depth (the self-adapting scale)
+
+The search step scales itself to the difficulty of the problem. It begins with
+one free-to-read page per angle; if that curates to fewer than `TARGET_STUDIES`
+(12) it escalates down a fixed ladder — further result pages first, then beyond
+free-to-read — re-curating after each step until the evidence base is healthy or
+the ladder is spent (`ESCALATION_STEPS` in `briefing.ts`). Easy problems stop
+after the first pass; hard ones automatically search deeper and pull in more
+sources. Because catalogue searches are free and edge-cached, this costs only a
+little latency and **no extra AI spend** — `plan` and `briefing` still run once
+each. There is no user-facing knob: the scale is automatic.
+
 ### Citation safety (unchanged contract)
 
 The briefing model is shown ONE numbered list of the curated studies and may

@@ -1,7 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaveatBanner from '../../components/data/CaveatBanner.astro';
+import MemberGate from '../../components/MemberGate.astro';
 import { getCollection } from 'astro:content';
+
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
 
 // Crime & outcomes over time, read from the Supabase police database at request
 // time. The force picker is built from the committed snapshot so it always
@@ -31,7 +36,9 @@ const forces = entries
 
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-10">
-      <div class="max-w-3xl space-y-10">
+      <div class="max-w-3xl">
+       <MemberGate hasAuth={hasAuth} feature="Crime &amp; outcomes over time">
+        <div class="space-y-10">
         <CaveatBanner />
 
         <div>
@@ -74,12 +81,15 @@ const forces = entries
         </div>
 
         <p class="font-serif text-ink-500 italic" data-empty hidden>The database is still filling — check back once the first ingest has run.</p>
+        </div>
+       </MemberGate>
       </div>
     </div>
   </section>
 
   <script>
     import { fetchJson, barTable, lineChart, streamInterpret, monthLabel, pct } from '../../scripts/data/explorer';
+    import { onMembersUnlock } from '../../scripts/members/gate';
 
     const pick = document.getElementById('force-pick') as HTMLSelectElement;
     const charts = document.querySelector<HTMLElement>('[data-charts]')!;
@@ -124,6 +134,7 @@ const forces = entries
     }
 
     pick.addEventListener('change', () => load(pick.value));
-    load('_all');
+    // Hold the first (billable) read until the members area unlocks.
+    onMembersUnlock(() => load('_all'));
   </script>
 </BaseLayout>

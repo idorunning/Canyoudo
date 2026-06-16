@@ -1,5 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import MemberGate from '../../components/MemberGate.astro';
+
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
 
 // Hub for the police-database explorer tools. The tools themselves read the
 // Supabase historical database at request time (docs/police-database.md); this
@@ -30,6 +35,7 @@ const tools = [
 
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
+     <MemberGate hasAuth={hasAuth} feature="the Data Explorer">
       <div class="grid md:grid-cols-2 gap-6 max-w-4xl">
         {tools.map((t) => (
           <a href={t.href} class="block border border-ink-200 rounded-lg p-6 hover:border-accent transition-colors group">
@@ -43,18 +49,22 @@ const tools = [
       <p class="mt-10 font-sans text-xs text-ink-500 leading-relaxed max-w-3xl" data-coverage>
         Source: <a href="https://data.police.uk" class="underline underline-offset-2 hover:text-accent">data.police.uk</a>, Open Government Licence v3.0.
       </p>
+     </MemberGate>
     </div>
   </section>
 
   <script>
     import { fetchJson } from '../../scripts/data/explorer';
+    import { onMembersUnlock } from '../../scripts/members/gate';
     const el = document.querySelector<HTMLElement>('[data-coverage]');
-    fetchJson('/api/police-db?view=coverage')
-      .then((c) => {
-        if (el && c?.latestCrimeMonth) {
-          el.innerHTML = `Database current to <strong>${c.latestCrimeMonth}</strong> (crime) and <strong>${c.latestStopSearchMonth ?? '—'}</strong> (stop &amp; search). ` + el.innerHTML;
-        }
-      })
-      .catch(() => {});
+    onMembersUnlock(() =>
+      fetchJson('/api/police-db?view=coverage')
+        .then((c) => {
+          if (el && c?.latestCrimeMonth) {
+            el.innerHTML = `Database current to <strong>${c.latestCrimeMonth}</strong> (crime) and <strong>${c.latestStopSearchMonth ?? '—'}</strong> (stop &amp; search). ` + el.innerHTML;
+          }
+        })
+        .catch(() => {})
+    );
   </script>
 </BaseLayout>

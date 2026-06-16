@@ -3,6 +3,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaveatBanner from '../../components/data/CaveatBanner.astro';
 import PersonaInterpreter from '../../components/data/PersonaInterpreter.astro';
 import DataChat from '../../components/data/DataChat.astro';
+import MemberGate from '../../components/MemberGate.astro';
+
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
 ---
 <BaseLayout
   title="Look up your area — Crime Dashboard"
@@ -25,10 +30,14 @@ import DataChat from '../../components/data/DataChat.astro';
 
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
-      <div class="max-w-3xl space-y-10">
+      <div class="max-w-3xl">
+       <MemberGate hasAuth={hasAuth} feature="the area lookup">
+        <div class="space-y-10">
         <PersonaInterpreter scope="area" />
         <DataChat scope="area" />
         <CaveatBanner />
+        </div>
+       </MemberGate>
       </div>
     </div>
   </section>

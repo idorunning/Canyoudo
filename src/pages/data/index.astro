@@ -6,8 +6,15 @@ import BarChart from '../../components/data/BarChart.astro';
 import Sparkline from '../../components/data/Sparkline.astro';
 import PersonaInterpreter from '../../components/data/PersonaInterpreter.astro';
 import DataChat from '../../components/data/DataChat.astro';
+import MemberGate from '../../components/MemberGate.astro';
 import { getCollection } from 'astro:content';
 import { readFileSync } from 'node:fs';
+
+// Members gate: the dashboard itself is for signed-in readers; the hero above
+// stays public as a basic overview. Only engages when Supabase is configured.
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
 
 let recordedCrime: any = null;
 try { recordedCrime = JSON.parse(readFileSync('src/data/recorded-crime.json', 'utf8')); } catch {}
@@ -52,7 +59,9 @@ const monthLabel = (m: string) => {
 
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
-      <div class="max-w-3xl space-y-10">
+      <div class="max-w-3xl">
+       <MemberGate hasAuth={hasAuth} feature="the Crime Dashboard">
+        <div class="space-y-10">
         <CaveatBanner />
 
         {ss && national ? (
@@ -133,6 +142,8 @@ const monthLabel = (m: string) => {
         ) : (
           <p class="font-serif text-lg text-ink-600">No snapshot found yet.</p>
         )}
+        </div>
+       </MemberGate>
       </div>
     </div>
   </section>

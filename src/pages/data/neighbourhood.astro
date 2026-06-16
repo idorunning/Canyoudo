@@ -1,5 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import MemberGate from '../../components/MemberGate.astro';
+
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
 ---
 <BaseLayout
   title="Your neighbourhood policing team"
@@ -20,7 +25,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-10">
-      <div class="max-w-3xl space-y-8">
+      <div class="max-w-3xl">
+       <MemberGate hasAuth={hasAuth} feature="the neighbourhood lookup">
+        <div class="space-y-8">
         <form data-form class="flex flex-wrap gap-3 items-stretch max-w-xl">
           <label for="pc" class="sr-only">Postcode</label>
           <input id="pc" name="postcode" type="text" autocomplete="postal-code" placeholder="e.g. SW1A 1AA"
@@ -35,11 +42,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           and <a href="https://postcodes.io" class="underline underline-offset-2 hover:text-accent">postcodes.io</a>, Open Government Licence v3.0.
           Priorities are set by each force and may not be current.
         </p>
+        </div>
+       </MemberGate>
       </div>
     </div>
   </section>
 
   <script>
+    import { onMembersUnlock } from '../../scripts/members/gate';
+
     const form = document.querySelector<HTMLFormElement>('[data-form]')!;
     const input = document.getElementById('pc') as HTMLInputElement;
     const result = document.querySelector<HTMLElement>('[data-result]')!;
@@ -95,6 +106,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     form.addEventListener('submit', (e) => { e.preventDefault(); if (input.value.trim()) lookup(input.value); });
     const initial = new URLSearchParams(location.search).get('postcode');
-    if (initial) { input.value = initial; lookup(initial); }
+    if (initial) { input.value = initial; onMembersUnlock(() => lookup(initial)); }
   </script>
 </BaseLayout>

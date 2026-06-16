@@ -50,6 +50,7 @@ const { scope, id = '', postcode = '', eyebrow } = Astro.props;
 
 <script>
   import { renderMarkdown } from '../../lib/md';
+  import { onMembersUnlock } from '../../scripts/members/gate';
 
   document.querySelectorAll<HTMLElement>('.persona-interpreter').forEach((root) => {
     const scope = root.dataset.scope!;
@@ -115,6 +116,8 @@ const { scope, id = '', postcode = '', eyebrow } = Astro.props;
       load();
     });
 
-    if (scope !== 'area' || postcode) load();
+    // Defer the (billable) auto-interpretation until the members area unlocks —
+    // a logged-out visitor never triggers it. The postcode form stays live.
+    if (scope !== 'area' || postcode) onMembersUnlock(() => load());
   });
 </script>

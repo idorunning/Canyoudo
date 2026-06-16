@@ -65,7 +65,11 @@ developer console — it's free and doesn't need a credit card.
 3. Paste in the **Client ID** and **Client secret** from Part 2 → **Save**.
 4. Still in Authentication, open **URL Configuration**:
    - **Site URL**: `https://thinkingaboutpolicing.org`
-   - **Redirect URLs** → add: `https://thinkingaboutpolicing.org/*`
+   - **Redirect URLs** → add: `https://thinkingaboutpolicing.org/**`
+     (use `/**`, not `/*` — the members area returns readers to the page they
+     signed in from, e.g. `/data/crime` or `/data/force/metropolitan`, and a
+     single `*` only matches one path segment so those deeper paths would
+     bounce back signed out.)
    - *(Optional, for testing deploy previews: also add
      `https://*--thinkingaboutpolicing.netlify.app/**` — replace with your
      actual Netlify site name.)*

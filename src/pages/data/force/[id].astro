@@ -5,8 +5,13 @@ import BarChart from '../../../components/data/BarChart.astro';
 import Sparkline from '../../../components/data/Sparkline.astro';
 import PersonaInterpreter from '../../../components/data/PersonaInterpreter.astro';
 import DataChat from '../../../components/data/DataChat.astro';
+import MemberGate from '../../../components/MemberGate.astro';
 import { getCollection } from 'astro:content';
 import { readFileSync } from 'node:fs';
+
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
 
 // Home Office annual recorded crime (optional — present after the first fetch).
 let recordedCrime: any = null;
@@ -50,7 +55,9 @@ const monthLabel = (m: string) => {
 
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
-      <div class="max-w-3xl space-y-10">
+      <div class="max-w-3xl">
+       <MemberGate hasAuth={hasAuth} feature={`the ${force.name} dashboard`}>
+        <div class="space-y-10">
         {/* Interpretation leads */}
         <PersonaInterpreter scope="force" id={force.id} />
 
@@ -106,6 +113,8 @@ const monthLabel = (m: string) => {
             Look up a specific postcode →
           </a>
         </div>
+        </div>
+       </MemberGate>
       </div>
     </div>
   </section>
