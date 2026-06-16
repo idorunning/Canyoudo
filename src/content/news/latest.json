@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-16T13:20:15.883Z",
+    "fetchedAt": "2026-06-16T18:50:24.333Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -15,6 +15,22 @@
     ]
   },
   "items": [
+    {
+      "title": "Featherstone Prison",
+      "link": "https://www.gov.uk/guidance/featherstone-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-06-16T18:26:31.000Z",
+      "summary": "Featherstone is a men’s prison in the village of Featherstone, near Wolverhampton."
+    },
+    {
+      "title": "Criminal justice system: data standards forum guidance",
+      "link": "https://www.gov.uk/guidance/criminal-justice-system-data-standards-forum-guidance",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-06-16T15:25:01.000Z",
+      "summary": "How to use the common data standards for the criminal justice system (CJS) in England and Wales."
+    },
     {
       "title": "Woman in court over fatal Wimbledon school crash",
       "link": "https://www.bbc.com/news/articles/cpq32r3zwpro?at_medium=RSS&at_campaign=rss",
@@ -176,14 +192,6 @@
       "summary": "Remote Participation Guidance for the criminal courts will be published soon The post Upcoming Remote Participation Guidance for the criminal courts appeared first on Courts…"
     },
     {
-      "title": "New backing for open-source AI builders, data centre design challenge and robotics partnership",
-      "link": "https://www.gov.uk/government/news/new-backing-for-open-source-ai-builders-data-centre-design-challenge-and-robotics-partnership",
-      "source": "DSIT",
-      "topic": "ai",
-      "isoDate": "2026-06-10T10:35:06.000Z",
-      "summary": "In a keynote speech at the AI Summit during London Tech Week, AI Minister Kanishka Narayan argued that the central question of AI is not just what the technology can do, but…"
-    },
-    {
       "title": "Version of AI tool 'too powerful for public' released to public",
       "link": "https://www.bbc.com/news/articles/ckg701v1dp6o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -216,22 +224,6 @@
       "summary": "The company behind ChatGPT files its plans one week after Anthropic did the same."
     },
     {
-      "title": "AI tech ambition to deliver smarter justice for victims",
-      "link": "https://www.gov.uk/government/news/ai-tech-ambition-to-deliver-smarter-justice-for-victims",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-08T23:01:03.000Z",
-      "summary": "Thousands of victims could see justice delivered more quickly as the Government pilots the use of artificial intelligence (AI) in the Crown Court."
-    },
-    {
-      "title": "Advisory AI Growth Lab to support responsible AI adoption in legal services",
-      "link": "https://www.gov.uk/government/news/advisory-ai-growth-lab-to-support-responsible-ai-adoption-in-legal-services",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-08T16:11:13.000Z",
-      "summary": "New AI Growth Labs launched designed to accelerate the development and deployment of AI products and services."
-    },
-    {
       "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
       "link": "https://www.theregister.com/ai-and-ml/2026/06/03/no-longer-just-a-copilot-microsofts-ai-wants-to-take-the-wheel/5250718",
       "source": "The Register",
@@ -254,6 +246,14 @@
       "topic": "ai",
       "isoDate": "2026-05-24T23:00:00.000Z",
       "summary": "Could the Chocolate Factory's mission to reshape the web backfire?"
+    },
+    {
+      "title": "Sick and wrong: Ontario auditors find doctors' AI note takers routinely blow basic facts",
+      "link": "https://www.theregister.com/ai-and-ml/2026/05/14/ontario-auditors-find-doctors-ai-note-takers-routinely-blow-basic-facts/5240771",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-05-14T20:50:05.000Z",
+      "summary": "60% of evaluated AI Scribe systems mixed up prescribed drugs in patient notes, auditors say"
     }
   ]
 }
