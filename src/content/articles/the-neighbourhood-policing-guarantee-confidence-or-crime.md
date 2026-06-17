@@ -1,11 +1,21 @@
 ---
-section: "police-policy"
-title: "The Neighbourhood Policing Guarantee: Confidence or Crime?"
-description: "The Guarantee borrows the language of evidence — data-guided presence, hotspot patrolling. But it folds together two different jobs. A named officer per ward builds confidence. Hotspot patrolling cuts crime. The evidence for each is strong and specific, and the design honours it in some places and departs from it in others."
+title: 'The Neighbourhood Policing Guarantee: Confidence or Crime?'
+section: police-policy
+description: The Guarantee borrows the language of evidence — data-guided presence, hotspot patrolling. But it folds together two different jobs. A named officer per ward builds confidence. Hotspot patrolling cuts crime. The evidence for each is strong and specific, and the design honours it in some places and departs from it in others.
 pubDate: 2026-06-06
-thumbnail: "/images/neighbourhood-guarantee-chart2-koper-curve.png"
-heroImage: "/images/neighbourhood-guarantee-chart2-koper-curve.png"
-tags: ["neighbourhood-policing", "hotspot-policing", "public-confidence", "evidence-based-policing", "white-paper", "what-works", "policy", "police"]
+updatedDate: ''
+author: ''
+thumbnail: /images/11545.webp
+heroImage: /images/11545.webp
+tags:
+  - neighbourhood-policing
+  - hotspot-policing
+  - public-confidence
+  - evidence-based-policing
+  - white-paper
+  - what-works
+  - policy
+  - police
 ---
 
 Every council ward in England and Wales now has a named, contactable police officer. The government hit its first milestone — **3,000** additional neighbourhood personnel — in January 2026, ahead of schedule, on the way to **13,000** officers, PCSOs and special constables in neighbourhood roles by 2029. The January 2026 White Paper put the Neighbourhood Policing Guarantee at the centre of the most significant reshaping of policing in a generation.[^1]
