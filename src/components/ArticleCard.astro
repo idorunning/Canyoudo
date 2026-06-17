@@ -38,7 +38,11 @@ const formattedDate = pubDate.toLocaleDateString('en-GB', {
 const isFeature = variant === 'feature';
 const cardImage = portrait ?? heroImage;
 const initial = (title.match(/[A-Za-z0-9]/)?.[0] ?? '·').toUpperCase();
-const thumbSize = isFeature ? 'h-28 w-28 md:h-36 md:w-36' : 'h-20 w-20 md:h-24 md:w-24';
+// Bigger, more prominent card images: a full-width banner on mobile, and a
+// larger square thumbnail beside the text from `sm` up.
+const thumbSize = isFeature
+  ? 'w-full h-56 sm:h-44 sm:w-44 md:h-52 md:w-52'
+  : 'w-full h-48 sm:h-32 sm:w-32 md:h-40 md:w-40';
 ---
 
 <article class={`group ${isFeature ? 'py-10' : 'py-7'} border-b border-ink-200`}>
