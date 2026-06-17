@@ -1,9 +1,20 @@
 ---
-section: "influential-people"
-title: "The Society of Evidence-Based Policing: Nurturing the Idea That Every Officer Can Test What Works"
-description: "The SEBP's real value isn't lobbying or publishing — it's lowering the bar so that any officer with a good idea can test it, get support to do so properly, and share what they find. Here is what it is, what it actually does, and why that matters."
+title: 'The Society of Evidence-Based Policing: Nurturing the Idea That Every Officer Can Test What Works'
+section: influential-people
+description: The SEBP's real value isn't lobbying or publishing — it's lowering the bar so that any officer with a good idea can test it, get support to do so properly, and share what they find. Here is what it is, what it actually does, and why that matters.
 pubDate: 2026-06-11
-tags: ["evidence-based-policing", "evidence-based", "policing", "police", "professional-development", "research", "leadership"]
+updatedDate: ''
+author: ''
+thumbnail: /images/11540.webp
+heroImage: /images/11540.webp
+tags:
+  - evidence-based-policing
+  - evidence-based
+  - policing
+  - police
+  - professional-development
+  - research
+  - leadership
 ---
 
 **The most important thing the Society of Evidence-Based Policing does is not what appears in its mission statement — it is making ordinary officers feel entitled to ask whether what they are doing actually works.** That might sound like a modest ambition. In the culture of British policing for most of its history, it was genuinely radical. Fifteen years on, the SEBP has not solved the problem. But it has built the infrastructure that makes solving it possible — and the infrastructure is more interesting than it first appears.
