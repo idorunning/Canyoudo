@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-17T08:18:09.540Z",
+    "fetchedAt": "2026-06-17T12:43:09.389Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -15,6 +15,30 @@
     ]
   },
   "items": [
+    {
+      "title": "Patient dies and three people injured after ambulance and car crash",
+      "link": "https://www.bbc.com/news/articles/c79y3xy2p47o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-17T11:57:42.000Z",
+      "summary": "Police were called to the scene of the collision on Balmore Road in Glasgow at about 21:00 on Tuesday."
+    },
+    {
+      "title": "Barrister disbarred after string of motoring offences",
+      "link": "https://www.legalcheek.com/2026/06/barrister-disbarred-after-string-of-motoring-offences/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-17T10:27:24.000Z",
+      "summary": "Failed to promptly inform regulator The post Barrister disbarred after string of motoring offences appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Two more charged over disorder at Nowak protest",
+      "link": "https://www.bbc.com/news/articles/c9d2j6d740no?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-17T10:08:05.000Z",
+      "summary": "Twelve police officers and a police dog were injured during protests on 2 June."
+    },
     {
       "title": "What students get wrong about commercial awareness",
       "link": "https://www.legalcheek.com/2026/06/what-students-get-wrong-about-commercial-awareness/",
@@ -57,7 +81,7 @@
     },
     {
       "title": "Tech Life",
-      "link": "https://www.bbc.co.uk/sounds/play/w3ct8jy0?at_medium=RSS&at_campaign=rss",
+      "link": "https://www.bbc.co.uk/sounds/play/live:bbc_world_service_west_africa?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
       "isoDate": "2026-06-16T19:30:00.000Z",
@@ -78,14 +102,6 @@
       "topic": "law",
       "isoDate": "2026-06-16T15:25:01.000Z",
       "summary": "How to use the common data standards for the criminal justice system (CJS) in England and Wales."
-    },
-    {
-      "title": "Woman in court over fatal Wimbledon school crash",
-      "link": "https://www.bbc.com/news/articles/cpq32r3zwpro?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-16T11:25:20.000Z",
-      "summary": "Claire Freemantle was driving the car that killed Nuria Sajjad and Selena Lau outside a school in 2023."
     },
     {
       "title": "Paralegal hit with restrictions after covering up forgotten email",
@@ -126,14 +142,6 @@
       "topic": "policing",
       "isoDate": "2026-06-15T13:33:33.000Z",
       "summary": "The Solicitor General Ellie Reeves KC has referred the sentence of Vickrum Digwa, convicted of the murder of Henry Nowak, to the Court of Appeal under the Unduly Lenient…"
-    },
-    {
-      "title": "Sullivan & Cromwell hunts for City digs twice the size",
-      "link": "https://www.legalcheek.com/2026/06/sullivan-cromwell-hunts-for-city-digs-twice-the-size/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-15T11:04:48.000Z",
-      "summary": "New London base The post Sullivan & Cromwell hunts for City digs twice the size appeared first on Legal Cheek ."
     },
     {
       "title": "DBS launches Series 2 of its podcast to support safer recruitment across the UK",
@@ -198,14 +206,6 @@
       "topic": "law",
       "isoDate": "2026-06-11T10:55:50.000Z",
       "summary": "Sir Geoffrey Vos delivered his remarks as part of London International Disputes Week The post Speech by the Master of the Rolls: AI in Arbitration – Promises and Pitfalls…"
-    },
-    {
-      "title": "AI to speed up cancer diagnosis for millions of NHS patients",
-      "link": "https://www.gov.uk/government/news/ai-to-speed-up-cancer-diagnosis-for-millions-of-nhs-patients",
-      "source": "DSIT",
-      "topic": "ai",
-      "isoDate": "2026-06-10T21:31:00.000Z",
-      "summary": "Government invests in artificial intelligence (AI) technologies to modernise the NHS and reduce waiting times."
     },
     {
       "title": "Upcoming Remote Participation Guidance for the criminal courts",
