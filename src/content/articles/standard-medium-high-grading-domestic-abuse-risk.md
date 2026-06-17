@@ -5,8 +5,8 @@ description: "On a domestic abuse call, medium is the grade we reach for when we
 pubDate: 2026-06-17
 updatedDate: ''
 author: ''
-thumbnail: /images/dara-risk-grading-hero.svg
-heroImage: /images/dara-risk-grading-hero.svg
+thumbnail: /images/dara-risk-grading-hero.jpg
+heroImage: /images/dara-risk-grading-hero.jpg
 tags:
   - domestic abuse
   - safeguarding

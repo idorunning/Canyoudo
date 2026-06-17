@@ -82,4 +82,12 @@ get "knabe-nicol-hero.jpg" "https://images.pexels.com/photos/8761351/pexels-phot
 get "martyns-law-hero.jpg" "https://images.pexels.com/photos/5193526/pexels-photo-5193526.jpeg?auto=compress&cs=tinysrgb&w=1600"
 get "martyns-law-business-hero.jpg" "https://images.pexels.com/photos/6814345/pexels-photo-6814345.jpeg?auto=compress&cs=tinysrgb&w=1600"
 
+# Free-to-use Pexels photos replacing the SVG title-card heroes on two newer
+# articles with real photographs (hero + card thumbnail / og:image).
+# Civil orders: a British high-street parade of shops — the setting the guide
+# opens on. Risk grading: an officer completing notes at the scene, which is
+# exactly what the DARA risk assessment is.
+get "civil-orders-hero.jpg" "https://images.pexels.com/photos/18987904/pexels-photo-18987904.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "dara-risk-grading-hero.jpg" "https://images.pexels.com/photos/7715105/pexels-photo-7715105.jpeg?auto=compress&cs=tinysrgb&w=1600"
+
 echo "Done. $(ls -1 | wc -l) images in public/images/"
