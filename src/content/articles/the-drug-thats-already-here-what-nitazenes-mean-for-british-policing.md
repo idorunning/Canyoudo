@@ -5,8 +5,8 @@ description: Synthetic opioids have landed in the UK. What nitazenes are, why th
 pubDate: 2026-06-05
 updatedDate: ''
 author: ''
-thumbnail: /images/nitazenes-chart1-deaths.png
-heroImage: /images/nitazenes-chart1-deaths.png
+thumbnail: /images/11553.webp
+heroImage: /images/11553.webp
 tags:
   - drugs
   - synthetic-opioids
