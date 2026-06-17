@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-16T22:46:01.530Z",
+    "fetchedAt": "2026-06-17T02:11:34.183Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -102,14 +102,6 @@
       "topic": "policing",
       "isoDate": "2026-06-16T05:31:19.000Z",
       "summary": "Spen Valley MP Kim Leadbeater reflects a decade after her sister was murdered in Birstall."
-    },
-    {
-      "title": "Nowak killer's 'unduly lenient' sentence to be reviewed",
-      "link": "https://www.bbc.com/news/articles/c8721y4341qo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-15T14:48:33.000Z",
-      "summary": "The sentence of Vickrum Digwa, who was convicted of the murder of Henry Nowak, has been referred to the Court of Appeal."
     },
     {
       "title": "Solicitor General refers Vickrum Digwa to Court of Appeal",
@@ -254,6 +246,14 @@
       "topic": "ai",
       "isoDate": "2026-06-01T18:12:22.000Z",
       "summary": "First it tops OpenAI's valuation, then it beats Altman to the IPO punch"
+    },
+    {
+      "title": "Google has seriously leaned into AI enshittification lately",
+      "link": "https://www.theregister.com/ai-ml/2026/05/25/google-has-seriously-leaned-into-ai-enshittification-lately/5245365",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-05-24T23:00:00.000Z",
+      "summary": "Could the Chocolate Factory's mission to reshape the web backfire?"
     }
   ]
 }
