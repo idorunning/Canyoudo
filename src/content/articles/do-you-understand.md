@@ -1,11 +1,14 @@
 ---
-section: "police-policy"
-title: "“Do you understand?”"
-description: "When comprehension, shame, and social pressure hinder a fair process"
+title: “Do you understand?” - Does this question serve a purpose?
+section: police-policy
+description: When comprehension, shame, and social pressure hinder a fair process
 pubDate: 2026-01-07
-heroImage: "/images/custody-appropriate-adult.jpg"
-thumbnail: "/images/custody-appropriate-adult.jpg"
+updatedDate: ''
+author: ''
+thumbnail: /images/custody-appropriate-adult.jpg
+heroImage: /images/custody-appropriate-adult.jpg
 ---
+
 ## Why we should stop asking, and start explaining
 
 <figure>
