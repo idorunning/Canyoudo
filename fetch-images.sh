@@ -80,7 +80,6 @@ get "murray-ebp-hero.jpg" "https://images.pexels.com/photos/29822051/pexels-phot
 get "sherman-ebp-hero.jpg" "https://images.pexels.com/photos/12689753/pexels-photo-12689753.jpeg?auto=compress&cs=tinysrgb&w=1600"
 get "knabe-nicol-hero.jpg" "https://images.pexels.com/photos/8761351/pexels-photo-8761351.jpeg?auto=compress&cs=tinysrgb&w=1600"
 get "martyns-law-hero.jpg" "https://images.pexels.com/photos/5193526/pexels-photo-5193526.jpeg?auto=compress&cs=tinysrgb&w=1600"
-get "martyns-law-business-hero.jpg" "https://images.pexels.com/photos/6814345/pexels-photo-6814345.jpeg?auto=compress&cs=tinysrgb&w=1600"
 
 # Free-to-use Pexels photos replacing the SVG title-card heroes on two newer
 # articles with real photographs (hero + card thumbnail / og:image).

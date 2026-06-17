@@ -169,6 +169,129 @@ collections:
           hint: "Footnotes use [^1] in the text and [^1]: ... at the foot, as in the existing pieces.",
         }
 
+  # Interactive articles — the handful of pieces built with layout components
+  # (tabs, charts, callouts, sticky nav). These live as .mdx files so those
+  # components render, which is why they don't show in the "Articles" list above
+  # (that list is .md only). They're surfaced here so their details — title,
+  # section, dates, images, tags, draft — stay editable in the browser.
+  #
+  # The one deliberate difference: the body is a plain-text box, NOT the rich
+  # markdown editor. The rich editor would rewrite the embedded <Component …>
+  # blocks and break the page. Edit the prose around those blocks carefully and
+  # leave the component blocks themselves alone; for anything structural, edit
+  # the file in the code. `create: false` because new component pieces are built
+  # in code, not here.
+  - name: "articles_interactive"
+    label: "Interactive articles"
+    label_singular: "Interactive article"
+    description: "Articles built with layout components (tabs, charts, callouts). Their details are editable here; the body is shown as raw text — edit the prose carefully and leave the <Component …> blocks unchanged."
+    folder: "src/content/articles"
+    create: false
+    extension: "mdx"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    preview_path: "{{section}}/{{slug}}"
+    thumbnail: "thumbnail"
+    sortable_fields: ["pubDate", "title", "section"]
+    view_groups:
+      - { label: "Section", field: "section" }
+    fields:
+      - { name: "title", label: "Title", widget: "string" }
+      - {
+          name: "section",
+          label: "Section — change this to move the article between areas",
+          widget: "select",
+          default: "police-policy",
+          options:
+            [
+              { label: "Police Policy", value: "police-policy" },
+              { label: "Public Policy", value: "public-policy" },
+              { label: "Influential People", value: "influential-people" },
+              { label: "Interesting Distractions", value: "other" },
+              { label: "The Data Tells a Story", value: "data-stories" },
+            ],
+        }
+      - {
+          name: "description",
+          label: "Description — the standfirst, and the search/social summary",
+          widget: "text",
+        }
+      - {
+          name: "pubDate",
+          label: "Publish date",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: false,
+          format: "YYYY-MM-DD",
+          picker_utc: true,
+        }
+      - {
+          name: "updatedDate",
+          label: "Updated date (optional)",
+          widget: "datetime",
+          date_format: "YYYY-MM-DD",
+          time_format: false,
+          format: "YYYY-MM-DD",
+          picker_utc: true,
+          required: false,
+        }
+      - {
+          name: "author",
+          label: "Author",
+          widget: "string",
+          default: "Nathan Tracey",
+          required: false,
+        }
+      - {
+          name: "thumbnail",
+          label: "Thumbnail / card image (optional)",
+          widget: "image",
+          required: false,
+          choose_url: true,
+        }
+      - {
+          name: "heroImage",
+          label: "Hero image (optional)",
+          widget: "image",
+          required: false,
+          choose_url: true,
+        }
+      - {
+          name: "portrait",
+          label: "Portrait (optional) — head-and-shoulders photo for Influential People cards",
+          widget: "image",
+          required: false,
+          choose_url: true,
+        }
+      - {
+          name: "tags",
+          label: "Tags",
+          widget: "list",
+          required: false,
+          hint: "One per entry, e.g. policing, policy, evidence-based-policing.",
+        }
+      - {
+          name: "redirectFrom",
+          label: "Redirect from (old paths)",
+          widget: "list",
+          required: false,
+          hint: "If you move this article to a different section, paste its old path here (e.g. /police-policy/the-old-slug) so the old link keeps working.",
+        }
+      - {
+          name: "draft",
+          label: "Keep hidden on the live site",
+          widget: "boolean",
+          default: false,
+          required: false,
+          hint: "On = saved but not shown on the site (your way to hold a draft or take a piece down). Off = live on the next build.",
+        }
+      - {
+          name: "body",
+          label: "Body (raw — contains layout components)",
+          widget: "text",
+          hint: "This piece uses layout components (tabs, charts, callouts) written as <Component …> blocks and, at the top, import lines. Edit the prose around them carefully and leave those blocks and the imports unchanged. For structural changes, edit the file in the code.",
+        }
+
   # Static pages — About and Contact. Editable prose; the page template handles
   # structural elements (header, email display) so the editor only touches copy.
   - name: "pages"
