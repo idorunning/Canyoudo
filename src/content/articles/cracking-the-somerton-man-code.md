@@ -1,12 +1,23 @@
 ---
-section: "other"
-title: "The Letters in the Book: A Travel Itinerary, a Missing Woman, and the Limits of Pattern-Matching"
+title: Somerton Man code - Did I crack an 80 year mystery?
+section: other
 description: "An updated reading of the Somerton Man code. The letters are probably initials — but initials of what? A serving police inspector sets out the travel-itinerary hypothesis, weighs it honestly against the horse-betting rival, and then does what the first draft didn't: tries to break it."
 pubDate: 2025-12-19
 updatedDate: 2026-06-12
-thumbnail: "/images/somerton-man-1948.jpg"
-heroImage: "/images/somerton-man-code.jpg"
-tags: ["adelaide", "codes", "crime", "cryptographer", "cryptography", "mysteries", "somerton man", "tamam shud", "true crime", "evidence-based"]
+author: ''
+thumbnail: /images/11541.webp
+heroImage: /images/somerton-man-code.jpg
+tags:
+  - adelaide
+  - codes
+  - crime
+  - cryptographer
+  - cryptography
+  - mysteries
+  - somerton man
+  - tamam shud
+  - true crime
+  - evidence-based
 ---
 
 *This piece updates my earlier analysis of the Somerton Man code. The first version proposed a single base location and a rail-led reading of the letters. What follows widens the transport assumptions to a multimodal model, sets out the search interpretation as the organising idea, tests and rejects the suggestion that Webb's estranged wife explains his presence in South Australia, and then does the thing my first draft did not do properly: it tries to break its own hypothesis. The analysis tools behind it are now public too — see the work-in-progress [Somerton Lab](/somerton-lab/).*
