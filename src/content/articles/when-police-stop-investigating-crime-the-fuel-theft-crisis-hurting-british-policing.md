@@ -1,12 +1,23 @@
 ---
-section: "police-policy"
-title: "When Police Stop Investigating Crime: The Fuel Theft Crisis hurting British Policing"
-description: "Clear CCTV, a registration plate, precise timestamps — and still “case closed, no suspect identified”. How fuel theft became effectively decriminalised."
+title: 'When Police Stop Investigating Crime: The Fuel Theft Crisis hurting British Policing'
+section: police-policy
+description: Clear CCTV, a registration plate, precise timestamps — and still “case closed, no suspect identified”. How fuel theft became effectively decriminalised.
 pubDate: 2025-06-17
-heroImage: "/images/fuel-theft-hero.jpg"
-thumbnail: "/images/fuel-theft-hero.jpg"
-tags: ["crime", "evidence-based-policing", "history", "law", "news", "police", "policing", "politics"]
+updatedDate: ''
+author: ''
+thumbnail: /images/11543.webp
+heroImage: /images/11543.webp
+tags:
+  - crime
+  - evidence-based-policing
+  - history
+  - law
+  - news
+  - police
+  - policing
+  - politics
 ---
+
 Consider a business that reports a crime with clear CCTV footage, the suspect's vehicle registration and precise timestamps, and then receives a text message hours later saying "case closed, no suspect identified." For Britain's petrol station operators, this is not a hypothetical scenario. It is a routine experience.
 
 <figure>
