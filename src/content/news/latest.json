@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-17T02:11:34.183Z",
+    "fetchedAt": "2026-06-17T08:18:09.540Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,11 +16,27 @@
   },
   "items": [
     {
+      "title": "What students get wrong about commercial awareness",
+      "link": "https://www.legalcheek.com/2026/06/what-students-get-wrong-about-commercial-awareness/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-17T07:52:40.000Z",
+      "summary": "Don't try and run before you can walk... The post What students get wrong about commercial awareness appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Swansea Prison: Families and significant others strategy",
+      "link": "https://www.gov.uk/guidance/swansea-prison-families-and-significant-others-strategy",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-06-17T07:15:58.000Z",
+      "summary": "Swansea’s family strategy outlines how we support prisoners in our care to develop meaningful and constructive relationships with their family or significant others."
+    },
+    {
       "title": "AI tool to slash planning decision times as government accelerates push to build 1.5 million homes",
       "link": "https://www.gov.uk/government/news/ai-tool-to-slash-planning-decision-times-as-government-accelerates-push-to-build-15-million-homes",
       "source": "DSIT",
       "topic": "ai",
-      "isoDate": "2026-06-16T21:30:01.000Z",
+      "isoDate": "2026-06-16T21:30:00.000Z",
       "summary": "Millions of homeowners could benefit from faster planning decisions, as 2 new AI tools are unveiled to modernise England’s planning permission system."
     },
     {
@@ -136,14 +152,6 @@
       "summary": "UK <mark>police</mark> to access European vehicle data in seconds, accelerating organised crime investigations."
     },
     {
-      "title": "US giant Simpson Thacher launches London private equity training contract with £178k NQ salary",
-      "link": "https://www.legalcheek.com/2026/06/us-giant-simpson-thacher-launches-london-private-equity-training-contract-with-178k-nq-salary/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-15T08:31:35.000Z",
-      "summary": "Exclusive: 10 spots The post US giant Simpson Thacher launches London private equity training contract with £178k NQ salary appeared first on Legal Cheek ."
-    },
-    {
       "title": "Disqualified director jailed for £3 million fraud which helped bankroll lavish lifestyle with chauffeur-driven Rolls-Royce",
       "link": "https://www.gov.uk/government/news/disqualified-director-jailed-for-3-million-fraud-which-helped-bankroll-lavish-lifestyle-with-chauffeur-driven-rolls-royce",
       "source": "GOV.UK",
@@ -246,14 +254,6 @@
       "topic": "ai",
       "isoDate": "2026-06-01T18:12:22.000Z",
       "summary": "First it tops OpenAI's valuation, then it beats Altman to the IPO punch"
-    },
-    {
-      "title": "Google has seriously leaned into AI enshittification lately",
-      "link": "https://www.theregister.com/ai-ml/2026/05/25/google-has-seriously-leaned-into-ai-enshittification-lately/5245365",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-05-24T23:00:00.000Z",
-      "summary": "Could the Chocolate Factory's mission to reshape the web backfire?"
     }
   ]
 }
