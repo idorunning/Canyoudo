@@ -103,18 +103,33 @@ longer set-up:
 
 The short sentence is a closer, not a default. Long sentences run when the
 argument needs them, but each paragraph usually resolves to something plain.
+The blunt closer often coins a concrete image or phrase rather than restating:
+- "It is the absence of a decision wearing the costume of one." (Risk Grading)
+- "Take them out of the drawer." (Civil Orders)
+- "The order is the easy part; the safeguarding around it is the work." (Civil Orders)
 
 ### How he opens
-Never with throat-clearing. He opens on a concrete scene, a figure, or a direct
-claim:
-- "Every ninety seconds or so, someone in the United Kingdom is reported
-  missing." (Missing People)
-- "Consider a business that reports a crime with clear CCTV footage… and then
-  receives a text message hours later saying 'case closed, no suspect
-  identified.'" (Fuel Theft)
+Never with throat-clearing. Three openers recur:
 
-The "Consider…" / "Imagine…" cold open and the single arresting statistic are
-both characteristic.
+1. **The operational first-person scene** — the strongest opener in the recent
+   pieces. A vivid moment from the writer's own frontline experience, in the
+   first person, that earns his authority on the subject before any argument:
+   - "On the risk assessment in front of me, in the box where the grade is
+     supposed to read standard, medium or high, an officer has written
+     'medium/high'." (Risk Grading)
+   - "A man I had arrested more times than I could remember was back on the same
+     parade of shops by the weekend." (Civil Orders)
+2. **The single arresting statistic / direct claim:**
+   - "Every ninety seconds or so, someone in the United Kingdom is reported
+     missing." (Missing People)
+3. **The "Consider…" / "Imagine…" cold open:**
+   - "Consider a business that reports a crime with clear CCTV footage… and then
+     receives a text message hours later saying 'case closed, no suspect
+     identified.'" (Fuel Theft)
+
+The opening paragraph is usually a **bold standfirst**, and where the first
+person is used it is operational and confident ("I have written something like
+it myself"), never a personal-blog ramble.
 
 ### Concrete figures and named sources
 Evidence-led to the core. Hard numbers carry the argument, usually in **bold**,
@@ -149,6 +164,27 @@ He distinguishes the strong claim from the weak one and tells the reader which i
 which. Where the other side has a point, he says so: "This is the strongest plank
 in the 'drill more' argument, and it deserves a fair hearing." (North Sea)
 
+This often becomes a **dedicated counter-argument section** — a structural
+signature of the recent pieces. He builds the case, then turns on it under an
+honest heading and concedes what undercuts him, which leaves the argument
+stronger and narrower:
+- "The uncomfortable part: the grade is a weak predictor too… I am not going to
+  pretend the answer is simply 'grade more people standard and you have fixed
+  it', because the evidence will not let me." (Risk Grading)
+- "Where these powers go wrong… a guide that only sang their praises would be
+  worthless." (Civil Orders)
+- The pre-emptive disavowal: "I want to be careful here, because this is not an
+  argument that more people should be locked up." (Civil Orders)
+
+### Bringing in evidence from other fields
+He reaches outside policing for an illuminating parallel and then brings it
+home, often with a line like "Policing already knows how to do this." The Risk
+Grading piece runs through the CIA (Sherman Kent), a *Harvard Business Review*
+survey, drug-labelling research, the IPCC and the intelligence Probability
+Yardstick — all to light up a domestic-abuse grading problem. The borrowed
+domain is always returned to the concrete policing case ("the kitchen table"),
+never left as decoration.
+
 ### How he closes
 On a judgement or an image, never on "In conclusion":
 - "The North Sea has served Britain well for sixty years. It is tired. Our
@@ -167,9 +203,20 @@ organise, behaviour, programme, defence, criticised, sceptical, whilst,
 
 ### Characteristic constructions
 - "The relevant question here is not X. It is Y." — used to reframe, sparingly.
-- "In short" / "In practice" / "For scale" as orienting tags.
+- "In short" / "In practice" / "For scale" as orienting tags. The recent pieces
+  add reader-instructing tags: "Read them slowly, because almost nobody does.",
+  "Here is the part that should change the conversation:", "Turn it around."
+  (all Risk Grading).
 - Direct address to a professional audience: "For senior leaders…",
-  "For investigators…".
+  "For investigators…". Also the **collective professional "we"** that
+  implicates the writer in the problem: "We almost never grade a domestic
+  standard.", "We will not say standard because…" (Risk Grading).
+- The **teaching/definitional move**: quote the actual definition or legal test
+  verbatim, then build the argument on the precise words ("Notice what the line
+  between medium and high actually turns on.").
+- A **coined word or refrain** that carries the argument: "Hedium", "the noise
+  floor", "free safeguarding tool", "Take them out of the drawer" — the last
+  bookends the Civil Orders piece, opening and closing on the same image.
 - Occasional dry parenthetical aside in lighter pieces: "(Who actually
   understands the olde world legal jargon anyway?)" (Do You Understand?)
 
@@ -177,9 +224,29 @@ organise, behaviour, programme, defence, criticised, sceptical, whilst,
 - Paragraphs are substantial — developed argument, not bullet-fragments, except
   where a genuine list is warranted.
 - Headings are sentence-style, concrete and often argumentative: "Why drilling
-  more would not lower your gas bill", "The limits that are not negotiable". Not
-  clickbait, not single-word labels.
+  more would not lower your gas bill", "Why we will not say standard", "The
+  uncomfortable part: the grade is a weak predictor too", "Where these powers go
+  wrong". Not clickbait, not single-word labels.
 - Several pieces open with an **"In short"** box or a bold standfirst.
+- **Figure captions make a point, they don't describe the picture.** A
+  figcaption carries a line of argument the reader should take away: "Orders are
+  not a substitute for custody. But they are real, lawful protection that does
+  not depend on a remand decision going your way." (Civil Orders) — not "a
+  diagram showing the remand process".
+
+### The long-form "frontline guide" format
+Some pieces are practical how-to guides for practitioners (Civil Orders,
+Martyn's Law) rather than essays. These keep the same voice but add structure
+that serves a working reader, built with the repo's MDX components:
+- a `StickyNav` "Jump to" list at the top for a long piece;
+- `PowerSummary` / `Callout` boxes that pin the hard reference detail (statute,
+  legal test, who, court, duration, breach) out of the prose;
+- a comparison **table** for "which tool for which problem";
+- **real, named, linked examples** of the power in use, not invented ones;
+- adaptable **templates** with an explicit "this is not legal advice / run it
+  through legal services" disclaimer.
+Even in guide mode, the open and close are still scene-and-judgement, not a
+manual's "Introduction"/"Conclusion".
 
 ---
 
@@ -187,7 +254,16 @@ organise, behaviour, programme, defence, criticised, sceptical, whilst,
 
 **Do**
 - Open on a concrete figure, scene or direct claim (the "Consider…" / single-
-  statistic cold open).
+  statistic cold open) — or, where you have standing, an operational first-person
+  frontline scene.
+- Where it earns the authority, write from the practitioner's chair in a
+  confident operational "I"/"we" — but keep it grounded in the work, never a
+  personal-blog ramble.
+- Bring in an illuminating parallel from another field if it lights up the
+  policing problem, then bring it firmly back home to the concrete case.
+- Include a genuine counter-argument section that concedes what undercuts you;
+  let it make the claim narrower and stronger.
+- Make figure captions argue a point, not describe the image.
 - Lead with hard numbers in **bold** and name the source organisation in the
   prose.
 - Write plain English; explain jargon explicitly and say you're doing so.
@@ -218,11 +294,23 @@ organise, behaviour, programme, defence, criticised, sceptical, whilst,
 
 ## Notes and caveats
 
-- **Stronger vs weaker models of the house voice.** The North Sea and Missing
-  People pieces are the best exemplars (recent, evidence-led, light on first
-  person). The older neighbourhood-policing and burnout pieces are heavier and
-  more report-like, with more bullets and bolding — closer to the tics this
-  guide warns against. Treat them as weaker models.
+- **Stronger vs weaker models of the house voice.** The current *best*
+  exemplars are [Why Medium Risk Is the Safe Option](/police-policy/standard-medium-high-grading-domestic-abuse-risk/)
+  (the DARA risk-grading piece) and [The Power of Civil Orders](/police-policy/the-power-of-civil-orders/),
+  both flagged by Nathan as well written (added June 2026). They pair the
+  evidence-led essay style of the North Sea and Missing People pieces with a
+  confident operational first person and, in Civil Orders, the practical
+  guide format. North Sea and Missing People remain strong models for the
+  essayistic, lighter-first-person register. The older neighbourhood-policing
+  and burnout pieces are heavier and more report-like, with more bullets and
+  bolding — closer to the tics this guide warns against. Treat them as weaker
+  models.
+- **Two registers, one voice.** The house voice now spans two registers: the
+  third-person evidence essay (North Sea) and the operational practitioner
+  piece written from inside the job (Risk Grading, Civil Orders). Both are
+  legitimate. Match the register to the subject — a frontline how-to leans
+  first-person and practical; a policy/analysis essay can stay more detached —
+  but the constraints in this guide apply to both.
 - **Some avoid-words appear in Nathan's own writing** ("genuine", "crucial", and
   even "the honest answer is" in the North Sea piece). The lists above resolve
   this by banning "honest" firmly (per Nathan's request) and marking the others

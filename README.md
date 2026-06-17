@@ -119,6 +119,11 @@ Drop image files into `public/images/`. Reference them in markdown as `/images/f
 
 For big hero images, use the `heroImage` field in frontmatter. For images inside the body, use markdown syntax: `![alt text](/images/filename.jpg)`.
 
+**Stock photos from Pexels.** Article photos come from [Pexels](https://www.pexels.com) (free to use, attribution courteous). Two ways to pull them:
+
+- **Hotlinking (no key needed).** `fetch-images.sh` downloads chosen Pexels CDN URLs straight into `public/images/` during the Netlify build. Add a new `get "name.jpg" "https://images.pexels.com/..."` line per photo.
+- **Reproducible fetcher (needs a key).** `npm run fetch-pexels` (`scripts/fetch-pexels.mjs`) searches Pexels, resizes to WebP and writes a `pexels-credits.json` for attribution. It needs `PEXELS_API_KEY` (free key from <https://www.pexels.com/api/>) and the `sharp` dev dependency (`npm install`). Set the key locally in `.env`, or as a Netlify env var if you want it in the build.
+
 ---
 
 ## Writing in the browser (the `/admin` editor)
