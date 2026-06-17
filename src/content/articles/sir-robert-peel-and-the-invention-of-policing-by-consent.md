@@ -1,10 +1,23 @@
 ---
-section: "influential-people"
-title: "Sir Robert Peel and the Invention of Policing by Consent"
-description: "In 1829 a Home Secretary persuaded a suspicious country to accept the first modern police force — unarmed, in plain blue, and answerable to the public rather than the Crown. A profile of Sir Robert Peel and the idea that still underwrites British policing: that the police are only ever the public in uniform."
+title: Sir Robert Peel and the Invention of Policing by Consent
+section: influential-people
+description: 'In 1829 a Home Secretary persuaded a suspicious country to accept the first modern police force — unarmed, in plain blue, and answerable to the public rather than the Crown. A profile of Sir Robert Peel and the idea that still underwrites British policing: that the police are only ever the public in uniform.'
 pubDate: 2026-06-07
-portrait: "/images/peel-portrait.jpg"
-tags: ["public-confidence", "accountability", "neighbourhood-policing", "law", "leadership", "police", "policing", "history", "legitimacy"]
+updatedDate: ''
+author: ''
+thumbnail: /images/11539.webp
+heroImage: /images/11539.webp
+portrait: /images/peel-portrait.jpg
+tags:
+  - public-confidence
+  - accountability
+  - neighbourhood-policing
+  - law
+  - leadership
+  - police
+  - policing
+  - history
+  - legitimacy
 ---
 
 **For most of human history, the alternative to crime was not the police but the mob, the militia or the gallows.** A standing body of paid officials whose job was to walk the streets and prevent crime before it happened — and who did so with the consent rather than the fear of the people they policed — is a surprisingly modern invention. In England it has a date, 1829, and a name: Sir Robert Peel. The officers London first put on the street were nicknamed "Peelers" and then "Bobbies" after him, and nearly two centuries later British policing still rests on a doctrine that carries his name. This is the story of how that came about, and of how much of it is genuinely his.
@@ -44,11 +57,11 @@ It would be wrong to romanticise him. Consent in 1829 was unevenly distributed; 
 
 Peel died in 1850, thrown from his horse on Constitution Hill. By then the model he had built in London was being copied across England and, eventually, much of the world. Not bad for a cold administrator who simply wanted the machinery of the state to work — and understood, better than most, that it only works when the public lets it.
 
----
+***
 
 ### Sources and further reading
 
 - Metropolitan Police, ["Sir Robert Peel and the New Police"](https://www.met.police.uk/police-forces/metropolitan-police/areas/about-us/about-the-met/structure/peelian-principles/) and the "Definition of policing by consent", Home Office.
-- Susan A. Lentz and Robert H. Chamlin, "The Invention of Peel's Principles: A Study of Policing 'Textbook' History", *Journal of Criminal Justice*, 2007.
-- Charles Reith, *A New Study of Police History* (1956).
-- Douglas Hurd, *Robert Peel: A Biography* (2007).
+- Susan A. Lentz and Robert H. Chamlin, "The Invention of Peel's Principles: A Study of Policing 'Textbook' History", _Journal of Criminal Justice_, 2007.
+- Charles Reith, _A New Study of Police History_ (1956).
+- Douglas Hurd, _Robert Peel: A Biography_ (2007).
