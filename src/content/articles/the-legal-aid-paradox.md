@@ -1,12 +1,25 @@
 ---
-section: "police-policy"
-title: "The Legal Aid Paradox"
-description: "The suspects who most need legal advice in police custody are the least likely to ask for it — and that undermines one of PACE 1984's core protections."
+title: The Legal Aid Paradox - when "I don't need a solicitor, I've done nothing wrong" undermines procedural fairness
+section: police-policy
+description: The suspects who most need legal advice in police custody are the least likely to ask for it — and that undermines one of PACE 1984's core protections.
 pubDate: 2025-10-21
-heroImage: "/images/legal-aid-advice.jpg"
-thumbnail: "/images/legal-aid-advice.jpg"
-tags: ["crime", "evidence-based-policing", "law", "leadership", "mental-health", "neurodiversity", "news", "police", "policing", "politics"]
+updatedDate: ''
+author: ''
+thumbnail: /images/legal-aid-advice.jpg
+heroImage: /images/legal-aid-advice.jpg
+tags:
+  - crime
+  - evidence-based-policing
+  - law
+  - leadership
+  - mental-health
+  - neurodiversity
+  - news
+  - police
+  - policing
+  - politics
 ---
+
 #### Why the inequity of free and independent legal advice in police detention is causing more harm than good.
 
 ![](/images/17665025160078295174207330247108.jpg)
@@ -51,8 +64,6 @@ This is where the central inequity lies. First-time suspects, unfamiliar with th
 The miscarriages that drove PACE's creation involved suspects without proper legal representation making false confessions under pressure. The Confait case saw three boys—two aged 14-15, one 18 with learning difficulties—convicted on "confessions" extracted without lawyers or appropriate adults. They were later proved innocent. The Birmingham Six and Guildford Four cases involved similar dynamics. These historical examples prompted reform, yet the underlying vulnerability persists.
 
 ### Other jurisdictions offer instructive contrasts
-
-![](/images/17665023390687019426064417612503.jpg)
 
 Scotland's experience demonstrates both possibilities and limitations. Following the 2010 Cadder v HM Advocate Supreme Court decision, Scotland established that children under 16 and vulnerable adults cannot waive the right to have a solicitor present at interview. The interview simply cannot proceed without legal representation for these categories. This mandatory model provides one benchmark for reform.
 
