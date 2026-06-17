@@ -1,11 +1,22 @@
 ---
-section: "police-policy"
-title: "The Drug That's Already Here: What Nitazenes Mean for British Policing"
-description: "Synthetic opioids have landed in the UK. What nitazenes are, why they are more dangerous than the heroin they are displacing, and the strategic, tactical and operational picture for policing."
+title: Nitazenes - What This New drug Means For British Policing
+section: police-policy
+description: Synthetic opioids have landed in the UK. What nitazenes are, why they are more dangerous than the heroin they are displacing, and the strategic, tactical and operational picture for policing.
 pubDate: 2026-06-05
-thumbnail: "/images/nitazenes-chart1-deaths.png"
-heroImage: "/images/nitazenes-chart1-deaths.png"
-tags: ["drugs", "synthetic-opioids", "nitazenes", "harm-reduction", "public-health", "county-lines", "policing", "police", "policy"]
+updatedDate: ''
+author: ''
+thumbnail: /images/nitazenes-chart1-deaths.png
+heroImage: /images/nitazenes-chart1-deaths.png
+tags:
+  - drugs
+  - synthetic-opioids
+  - nitazenes
+  - harm-reduction
+  - public-health
+  - county-lines
+  - policing
+  - police
+  - policy
 ---
 
 Synthetic opioids are no longer a problem we're watching arrive from across the Atlantic. They've landed. The National Crime Agency now links nitazenes to roughly 1,000 deaths in the UK since they appeared at scale in June 2023, a figure its Director General has called "extraordinary".[^1] For an audience of senior leaders and policymakers, that single sentence reframes the question. This isn't horizon-scanning. It's an operational reality that most forces are under-resourced to detect, let alone respond to.
