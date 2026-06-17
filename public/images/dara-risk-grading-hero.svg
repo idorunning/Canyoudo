@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 840" width="1600" height="840" role="img" aria-label="Standard, Medium, High — grading domestic abuse risk. A scale showing standard greyed out and rarely used, with medium and high filled, and the invented word 'Hedium' scrawled at the seam between them.">
+  <rect width="1600" height="840" fill="#1a1817"/>
+  <rect x="120" y="150" width="64" height="10" fill="#a14545"/>
+  <text x="120" y="220" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="30" letter-spacing="8" font-weight="500">POLICE POLICY</text>
+  <text x="120" y="338" fill="#f5f1e8" font-family="Fraunces, Georgia, serif" font-size="98" font-weight="600">Standard, Medium, High</text>
+  <text x="120" y="420" fill="#bdb4a8" font-family="'Source Serif 4', Georgia, serif" font-size="38" font-style="italic">Do we know what we mean when we grade a domestic abuse risk?</text>
+
+  <!-- the compressed scale -->
+  <g font-family="'DM Sans', system-ui, sans-serif" text-anchor="middle">
+    <!-- standard: ghosted, rarely used -->
+    <rect x="120" y="600" width="300" height="80" rx="6" fill="#26221f" stroke="#3a3531" stroke-width="2" stroke-dasharray="6 6"/>
+    <text x="270" y="648" fill="#6f675e" font-size="26" font-weight="600" letter-spacing="2">STANDARD</text>
+    <text x="270" y="722" fill="#5a544e" font-size="20" font-style="italic">almost never used</text>
+    <!-- medium -->
+    <rect x="436" y="600" width="600" height="80" rx="6" fill="#a14545"/>
+    <text x="736" y="648" fill="#f5f1e8" font-size="26" font-weight="600" letter-spacing="2">MEDIUM</text>
+    <!-- high -->
+    <rect x="1052" y="600" width="428" height="80" rx="6" fill="#7c2828"/>
+    <text x="1266" y="648" fill="#f5f1e8" font-size="26" font-weight="600" letter-spacing="2">HIGH</text>
+  </g>
+
+  <!-- the scrawl filling the gap the scale lost -->
+  <g transform="rotate(-7 1044 560)">
+    <text x="1044" y="566" fill="#d98a8a" font-family="'DM Sans', system-ui, sans-serif" font-size="34" font-style="italic" font-weight="600" text-anchor="middle">&#8220;Hedium&#8221;?</text>
+  </g>
+  <path d="M 1044 576 q 6 14 6 22" fill="none" stroke="#d98a8a" stroke-width="2.5"/>
+  <path d="M 1044 598 l -7 -8 m 7 8 l 7 -8" fill="none" stroke="#d98a8a" stroke-width="2.5"/>
+</svg>

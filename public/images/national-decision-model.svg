@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="The National Decision Model as five stages in a ring around a central Code of Ethics, applied to a domestic abuse grading decision. One: gather information and intelligence. Two: assess threat and risk and develop a working strategy. Three: consider powers and policy. Four: identify options and contingencies. Five: take action and review what happened.">
+  <rect width="1200" height="900" fill="#f7f3eb"/>
+  <text x="600" y="52" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="40" font-weight="600" text-anchor="middle">The National Decision Model</text>
+  <text x="600" y="88" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="21" font-style="italic" text-anchor="middle">run a grading decision around the wheel and the answer comes with a reason</text>
+
+  <!-- the ring -->
+  <circle cx="600" cy="500" r="280" fill="none" stroke="#ddd6c8" stroke-width="2" stroke-dasharray="3 9"/>
+
+  <!-- centre: Code of Ethics -->
+  <circle cx="600" cy="500" r="100" fill="#7c2828"/>
+  <text x="600" y="486" fill="#f5f1e8" font-family="Fraunces, Georgia, serif" font-size="27" font-weight="600" text-anchor="middle">Code of</text>
+  <text x="600" y="520" fill="#f5f1e8" font-family="Fraunces, Georgia, serif" font-size="27" font-weight="600" text-anchor="middle">Ethics</text>
+  <text x="600" y="552" fill="#e3b9b9" font-family="'DM Sans', system-ui, sans-serif" font-size="14" font-style="italic" text-anchor="middle">at the centre</text>
+
+  <!-- nodes -->
+  <g font-family="'DM Sans', system-ui, sans-serif" text-anchor="middle">
+    <!-- 1: top (600,220) -->
+    <circle cx="600" cy="220" r="92" fill="#fbf8f1" stroke="#a14545" stroke-width="2.5"/>
+    <text x="600" y="196" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="700">1</text>
+    <text x="600" y="228" fill="#3d3936" font-size="16" font-weight="600">Gather information</text>
+    <text x="600" y="250" fill="#3d3936" font-size="16" font-weight="600">&amp; intelligence</text>
+    <text x="600" y="124" fill="#7a7268" font-size="14" font-style="italic">history, markers, children, previous calls</text>
+
+    <!-- 2: upper right (866,414) -->
+    <circle cx="866" cy="414" r="92" fill="#fbf8f1" stroke="#a14545" stroke-width="2.5"/>
+    <text x="866" y="392" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="700">2</text>
+    <text x="866" y="424" fill="#3d3936" font-size="16" font-weight="600">Assess threat &amp; risk;</text>
+    <text x="866" y="446" fill="#3d3936" font-size="16" font-weight="600">working strategy</text>
+    <text x="970" y="402" fill="#7a7268" font-size="14" font-style="italic" text-anchor="start">hold it against</text>
+    <text x="970" y="422" fill="#7a7268" font-size="14" font-style="italic" text-anchor="start">the definition</text>
+
+    <!-- 3: lower right (765,727) -->
+    <circle cx="765" cy="727" r="92" fill="#fbf8f1" stroke="#a14545" stroke-width="2.5"/>
+    <text x="765" y="705" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="700">3</text>
+    <text x="765" y="737" fill="#3d3936" font-size="16" font-weight="600">Consider powers</text>
+    <text x="765" y="759" fill="#3d3936" font-size="16" font-weight="600">&amp; policy</text>
+    <text x="765" y="848" fill="#7a7268" font-size="14" font-style="italic">DA Act, orders, positive action</text>
+
+    <!-- 4: lower left (435,727) -->
+    <circle cx="435" cy="727" r="92" fill="#fbf8f1" stroke="#a14545" stroke-width="2.5"/>
+    <text x="435" y="705" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="700">4</text>
+    <text x="435" y="737" fill="#3d3936" font-size="16" font-weight="600">Identify options</text>
+    <text x="435" y="759" fill="#3d3936" font-size="16" font-weight="600">&amp; contingencies</text>
+    <text x="435" y="848" fill="#7a7268" font-size="14" font-style="italic">the safeguarding the grade triggers</text>
+
+    <!-- 5: upper left (334,414) -->
+    <circle cx="334" cy="414" r="92" fill="#fbf8f1" stroke="#a14545" stroke-width="2.5"/>
+    <text x="334" y="392" fill="#7c2828" font-family="Fraunces, Georgia, serif" font-size="30" font-weight="700">5</text>
+    <text x="334" y="424" fill="#3d3936" font-size="16" font-weight="600">Take action</text>
+    <text x="334" y="446" fill="#3d3936" font-size="16" font-weight="600">&amp; review</text>
+    <text x="230" y="402" fill="#7a7268" font-size="14" font-style="italic" text-anchor="end">do it, write</text>
+    <text x="230" y="422" fill="#7a7268" font-size="14" font-style="italic" text-anchor="end">the reason</text>
+  </g>
+
+  <!-- clockwise flow arrowheads on the ring -->
+  <g fill="#c2a98f">
+    <path d="M 742 248 l 20 -3 l -11 17 z"/>
+    <path d="M 832 654 l 14 15 l -20 4 z"/>
+    <path d="M 470 673 l -20 -4 l 14 -15 z"/>
+    <path d="M 358 245 l -9 -18 l 20 4 z"/>
+  </g>
+
+  <text x="600" y="884" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="18" font-style="italic" text-anchor="middle">College of Policing, National Decision Model. The Code of Ethics sits at the centre of every stage.</text>
+</svg>

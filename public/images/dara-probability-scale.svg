@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Two ways to use a probability word. Top: the words 'possible', 'real possibility' and 'likely' shown as wide, overlapping bands across the 0 to 100 percent scale, because people read them so differently. Bottom: the PHIA Probability Yardstick, which fixes each term to a defined band — remote chance about 5 percent, highly unlikely 10 to 20, unlikely 25 to 35, realistic possibility 40 to 50, likely or probably 55 to 75, highly likely 80 to 90, almost certain 95 percent or more.">
+  <rect width="1200" height="720" fill="#f7f3eb"/>
+  <text x="600" y="62" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="40" font-weight="600" text-anchor="middle">Two ways to use a probability word</text>
+
+  <!-- TOP: overlapping bands -->
+  <text x="120" y="128" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600">Left to themselves, the words overlap and drift</text>
+  <text x="120" y="156" fill="#7a7268" font-family="'Source Serif 4', Georgia, serif" font-size="19" font-style="italic">the range of answers people give when asked to put a number on each word</text>
+
+  <!-- baseline grid for top group -->
+  <g stroke="#e6ddcc" stroke-width="1">
+    <line x1="120" y1="186" x2="120" y2="346"/>
+    <line x1="360" y1="186" x2="360" y2="346"/>
+    <line x1="600" y1="186" x2="600" y2="346"/>
+    <line x1="840" y1="186" x2="840" y2="346"/>
+    <line x1="1080" y1="186" x2="1080" y2="346"/>
+  </g>
+
+  <!-- possible: 10-70% -->
+  <rect x="216" y="190" width="576" height="44" rx="8" fill="#a14545" fill-opacity="0.30" stroke="#a14545" stroke-opacity="0.7" stroke-width="1.5"/>
+  <text x="226" y="218" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="21" font-weight="600">possible</text>
+  <!-- real possibility: 20-80% -->
+  <rect x="312" y="244" width="576" height="44" rx="8" fill="#a14545" fill-opacity="0.30" stroke="#a14545" stroke-opacity="0.7" stroke-width="1.5"/>
+  <text x="322" y="272" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="21" font-weight="600">real possibility</text>
+  <!-- likely: 55-90% -->
+  <rect x="648" y="298" width="336" height="44" rx="8" fill="#7c2828" fill-opacity="0.32" stroke="#7c2828" stroke-opacity="0.75" stroke-width="1.5"/>
+  <text x="658" y="326" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="21" font-weight="600">likely</text>
+
+  <!-- BOTTOM: PHIA yardstick fixed bands -->
+  <text x="120" y="424" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="22" font-weight="600">Pinned down: the UK intelligence Probability Yardstick</text>
+  <text x="120" y="452" fill="#7a7268" font-family="'Source Serif 4', Georgia, serif" font-size="19" font-style="italic">each term fixed to a band, so everyone reads the same odds</text>
+
+  <g font-family="'DM Sans', system-ui, sans-serif" text-anchor="middle">
+    <!-- bands y=472 h=52 -->
+    <rect x="120" y="472" width="67"  height="52" rx="5" fill="#e3c9c0"/>
+    <rect x="216" y="472" width="96"  height="52" rx="5" fill="#d9b0a3"/>
+    <rect x="360" y="472" width="96"  height="52" rx="5" fill="#cd9485"/>
+    <rect x="504" y="472" width="96"  height="52" rx="5" fill="#bf7a69"/>
+    <rect x="648" y="472" width="192" height="52" rx="5" fill="#a8564a"/>
+    <rect x="888" y="472" width="96"  height="52" rx="5" fill="#8d4035"/>
+    <rect x="1032" y="472" width="48" height="52" rx="5" fill="#7c2828"/>
+
+    <!-- staggered term labels with connectors -->
+    <g font-size="15.5" fill="#3d3936">
+      <line x1="153" y1="524" x2="153" y2="548" stroke="#bdb4a8" stroke-width="1"/>
+      <text x="153" y="566">remote</text>
+      <text x="153" y="584">chance</text>
+
+      <line x1="264" y1="524" x2="264" y2="600" stroke="#bdb4a8" stroke-width="1"/>
+      <text x="264" y="618">highly</text>
+      <text x="264" y="636">unlikely</text>
+
+      <line x1="408" y1="524" x2="408" y2="548" stroke="#bdb4a8" stroke-width="1"/>
+      <text x="408" y="566">unlikely</text>
+
+      <line x1="552" y1="524" x2="552" y2="600" stroke="#bdb4a8" stroke-width="1"/>
+      <text x="552" y="618">realistic</text>
+      <text x="552" y="636">possibility</text>
+
+      <line x1="744" y1="524" x2="744" y2="548" stroke="#bdb4a8" stroke-width="1"/>
+      <text x="744" y="566" font-weight="600">likely / probably</text>
+
+      <line x1="936" y1="524" x2="936" y2="600" stroke="#bdb4a8" stroke-width="1"/>
+      <text x="936" y="618">highly</text>
+      <text x="936" y="636">likely</text>
+
+      <line x1="1056" y1="524" x2="1056" y2="548" stroke="#bdb4a8" stroke-width="1"/>
+      <text x="1056" y="566">almost</text>
+      <text x="1056" y="584">certain</text>
+    </g>
+  </g>
+
+  <!-- shared percentage axis -->
+  <line x1="120" y1="668" x2="1080" y2="668" stroke="#c9c0b0" stroke-width="1.5"/>
+  <g font-family="'DM Sans', system-ui, sans-serif" font-size="16" fill="#7a7268" text-anchor="middle">
+    <text x="120" y="692">0%</text>
+    <text x="360" y="692">25%</text>
+    <text x="600" y="692">50%</text>
+    <text x="840" y="692">75%</text>
+    <text x="1080" y="692">100%</text>
+  </g>
+</svg>
