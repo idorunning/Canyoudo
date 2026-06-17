@@ -1,0 +1,165 @@
+---
+section: public-policy
+title: 'Seeing Is No Longer Believing: How Synthetic Evidence Could Convict an Innocent Man'
+description: Every image and video in this article is fictional and AI-generated for illustration. John Smith, Margaret Doyle and Wessex Police do not exist, and no real person or event is depicted. A short case study in how cheaply CCTV can now be faked — and what an investigator has to do to keep a manipulated clip out of the file.
+pubDate: 2025-03-25
+updatedDate: 2026-06-17
+thumbnail: /images/seeing-cctv-weapon.webp
+heroImage: /images/seeing-cctv-weapon.webp
+tags:
+  - artificial intelligence
+  - deepfakes
+  - digital evidence
+  - criminal justice
+  - CCTV
+  - digital forensics
+  - jury
+---
+
+import StickyNav from '../../components/StickyNav.astro';
+import Callout from '../../components/Callout.astro';
+import KeyNumbers from '../../components/data/KeyNumbers.astro';
+
+**Imagine the file on your desk. A burglary at 14 Alder Close: a 72-year-old woman, Margaret Doyle, comes home to a forced kitchen window, her jewellery and £300 in cash gone.** A neighbour's doorbell camera caught a man at her door, and a second camera across the road appears to catch him again. There is a still and two short clips with sound. By the time you reach the bottom of the bundle you are fairly sure who did it. His name is John Smith, and he did not do it. Every image of him was made on a laptop in an afternoon.
+
+<Callout label="Read this first" tone="warning">
+
+Everything below is fictional and was generated for illustration. **John Smith, Margaret Doyle and Wessex Police do not exist**, and no real person or event is depicted. Each exhibit is labelled where it appears. The point is not to show how to fabricate evidence — it is to show what fabricated evidence now looks like when it lands on an investigator's desk, and what it takes to catch it.
+
+</Callout>
+
+When I last wrote about this in 2025, the argument was a forecast: generative AI *would* reach the point where video evidence could be faked convincingly. That forecast has expired. In 2026 the tools sit on a phone, the fakes carry sound, and the first cases of synthetic evidence reaching a courtroom have already been decided. So this is not an essay about whether it can be done. It is a short walk through one ordinary case, asking the only questions that now matter: what does this appear to show, how easily could it have been faked, and could I actually prove which it is?
+
+<KeyNumbers
+  stats={[
+    { value: '8 million', label: 'deepfakes projected to circulate in 2025, up from around 500,000 in 2023', sub: 'scale' },
+    { value: '4 of 6', label: 'leading AI video models now generate synchronised audio with the picture', sub: 'as of early 2026' },
+    { value: '$25.6m', label: 'taken in a single day in the Arup deepfake video-call fraud', sub: 'Hong Kong, 2024' },
+    { value: '28 days', label: 'typical CCTV retention before the original recording is overwritten', sub: 'then only copies remain' },
+  ]}
+  caption="The numbers that frame the problem. Sources are listed at the foot of the article."
+/>
+
+<StickyNav
+  label="Jump to"
+  items={[
+    { label: 'The still', href: '#still' },
+    { label: 'The video', href: '#video' },
+    { label: 'A second camera', href: '#second' },
+    { label: 'The CCTV problem', href: '#cctv' },
+    { label: 'Doubt either way', href: '#doubt' },
+    { label: 'Already happening', href: '#real' },
+    { label: 'What protects a case', href: '#protect' },
+  ]}
+/>
+
+<h2 id="still">The still</h2>
+
+For decades video evidence has held a privileged place in a courtroom. When a jury sees footage of an event they tend to treat it as the truth, and where a witness's account conflicts with what the camera recorded, the camera usually wins. That instinct was reasonable for as long as fabricating convincing footage took a film studio's budget. It is now the weak point an adversary aims at, because the budget has fallen to nothing.
+
+The neighbour's doorbell camera caught John at Margaret's door. In the genuine frame it is twenty past two in the afternoon and he is holding a bouquet — he had called round to drop off flowers, which is the whole of what he did that day.
+
+<figure>
+  <img src="/images/seeing-cctv-flowers.webp" alt="A doorbell-camera still of a man in a grey hoodie at a front door in daylight, holding a bouquet of flowers, timestamp 2026-05-09 14:10:22" loading="lazy" />
+  <figcaption><strong>AI-GENERATED ILLUSTRATION — NOT REAL EVIDENCE.</strong> The genuine-looking frame: a daytime visit, flowers in hand, timestamped 14:10.</figcaption>
+</figure>
+
+Here is the same frame after a few minutes of work. The flowers are now a crowbar, the posture has shifted toward the door, the afternoon has become night, and the timestamp reads 21:38 — placing him at the door at the moment of the break-in.
+
+<figure>
+  <img src="/images/seeing-cctv-weapon.webp" alt="The same doorbell-camera scene altered: night-time, the man now appears to hold a crowbar and lean into the door, timestamp 2026-05-09 21:38:54" loading="lazy" />
+  <figcaption><strong>AI-GENERATED ILLUSTRATION — NOT REAL EVIDENCE.</strong> The same scene, altered: object, posture, lighting and the on-screen time all changed.</figcaption>
+</figure>
+
+Notice what carries the weight in the altered version: the timestamp burned into the corner. That overlay is not metadata and it is not proof of anything — it is pixels, drawn by whatever produced the file, as editable as the crowbar. An officer who reads the time off the front of the image is reading a caption the forger wrote. The lighting is consistent, the posture is natural, and to the eye there is nothing to see. On its own the frame would anchor a charge.
+
+<h2 id="video">The video, with sound</h2>
+
+It is no longer only stills. From a single reference image and a line of text, the current video models — Google's Veo, OpenAI's Sora, Google's Gemini "Omni" line — produce short clips with synchronised audio in one step. By early 2026, **four of the six leading video generators create sound natively with the picture**: footsteps, the scrape of a gate, the thud of a window. The clip below was made that way, from the still above.
+
+<figure>
+  <video controls playsinline preload="metadata" poster="/images/seeing-cctv-weapon.webp" style="width:100%;height:auto;border-radius:4px;">
+    <source src="/media/seeing-omni-breakin.mp4" type="video/mp4" />
+    Your browser does not support embedded video.
+  </video>
+  <figcaption><strong>AI-GENERATED ILLUSTRATION — NOT REAL EVIDENCE.</strong> A synthetic doorbell-camera clip with audio, generated from one still and a short prompt.</figcaption>
+</figure>
+
+A jury finds a clip like this very hard to disbelieve, and that is the problem stated plainly: the form of evidence people trust most is now the form easiest to fabricate end to end. Sound makes it worse, because a recognisable voice can be cloned from a few seconds of sample, so the soundtrack is no more reliable than the picture. The honest position for an investigator is that a video file, arriving as a file, proves nothing about the world until its origin is established.
+
+<h2 id="second">A second camera, the same lie</h2>
+
+One synthetic clip might be doubted. The danger is corroboration, because corroboration is just as easy to manufacture. Here is a second angle — a camera across the road, apparently independent, apparently catching the same man at the same moment.
+
+<figure>
+  <video controls playsinline preload="metadata" style="width:100%;height:auto;border-radius:4px;">
+    <source src="/media/seeing-cctv-second-angle.mp4" type="video/mp4" />
+    Your browser does not support embedded video.
+  </video>
+  <figcaption><strong>AI-GENERATED ILLUSTRATION — NOT REAL EVIDENCE.</strong> A second "camera" across the road — apparently independent corroboration, equally synthetic.</figcaption>
+</figure>
+
+This is the move that turns a doubtful exhibit into a confident case. Two cameras agreeing feels like proof, because in the old world two independent recordings of the same event almost had to be real. That assumption is now broken. A second angle is one more prompt, and "independent" footage that was never independent is exactly what builds false certainty in a jury — several modest clips that each look unremarkable and together look conclusive. No single item has to be perfect. They only have to agree.
+
+<h2 id="cctv">The CCTV problem software cannot fix</h2>
+
+Here is the part that no detector solves, and it is the one most likely to decide a real case. Most CCTV and doorbell systems overwrite themselves on a loop — **commonly around 28 days**. If the owner hands the police an exported clip and the device then writes over the original, there is no master left to compare the export against. The file you hold may be the only copy in existence, and there is nothing behind it.
+
+<Callout label="The questions that have no clean answer" tone="warning">
+
+**Can the metadata be edited?** Yes. File timestamps and container metadata are trivially changed with free tools, so metadata that *looks* right proves nothing.
+
+**Is missing metadata enough to condemn it?** No. Ordinary DVR exports and re-encodes routinely strip metadata too, so its absence is not proof of fakery either.
+
+Metadata is therefore neither sufficient to authenticate a clip nor sufficient to discredit it. An owner-supplied export with no surviving original is weak by provenance *even when it is completely genuine* — and a guilty defendant's lawyer now knows to say so about real footage, while a frame-up relies on you not saying it about fake footage.
+
+</Callout>
+
+<figure>
+  <img src="/images/seeing-chain-of-custody-gap.svg" alt="A timeline showing footage recorded on day zero, an owner-supplied export handed over around day three, the police acting on that export, and the original being overwritten around day 28 — after which only copies remain and the original can never be compared against them" loading="lazy" />
+  <figcaption>The gap where authenticity dies. If the original is overwritten before it is seized, the owner-supplied export becomes the only copy — and nothing remains to test it against.</figcaption>
+</figure>
+
+The practical consequence is uncomfortable but clear. The evidential value of CCTV now depends less on what the clip shows than on how it was obtained. Recover the native recording from the original device, in its native format, with a hash taken at the point of seizure, and do it before the loop erases the source. Take a statement from whoever operates the system. Record the chain of custody as if it will be attacked, because it will. Where the original is genuinely gone, the surviving file should be treated as what it is — an account that happens to be in pixels, weighed like any other account, not as the camera's incorruptible testimony.
+
+<figure>
+  <img src="/images/seeing-provenance-ladder.svg" alt="A ladder from weakest to strongest provenance: a bare screenshot, then editable EXIF metadata, then signed C2PA Content Credentials, then a SynthID watermark that survives screenshotting, then a seized native source file with a hash and chain of custody" loading="lazy" />
+  <figcaption>Not all "digital evidence" is equal. Provenance runs from a bare screenshot, which proves nothing, up to a seized native source with a hash and an unbroken chain of custody, which proves a great deal. Most exhibits arrive near the bottom.</figcaption>
+</figure>
+
+<h2 id="doubt">It cuts both ways</h2>
+
+The frame-up is the obvious danger; it is not the only one. A fabricated clip that *is* believed can convict the innocent. A genuine clip that is *disbelieved* — waved away as "probably AI" — lets the guilty walk. Legal scholars Bobby Chesney and Danielle Citron named the second effect the **liar's dividend**: once everyone knows footage can be faked, anyone caught on camera can claim it was. Both corrode the same thing — a jury's ability to decide anything from a screen at all.
+
+And juries are unusually vulnerable here, for a reason that has nothing to do with technology. People remember moving images more strongly than words, and they remember them as things they witnessed. In published experiments, people shown fabricated footage of an event later recalled it as something they had seen with their own eyes. A correction read out after the clip has played does not reliably undo the impression it left. For a standard that asks twelve people to be sure **beyond reasonable doubt**, evidence that manufactures false certainty — or false doubt — is close to the most corrosive thing that could enter the room.
+
+<h2 id="real">This is not hypothetical</h2>
+
+The case of John Smith is invented. The capability is not, and the courts have started to meet it.
+
+In September 2025 a California court threw out *Mendones v. Cushman & Wakefield* after finding the self-represented claimants had submitted deepfake video and altered images; the judge dismissed the case but admitted the court had neither "the time, funding, [n]or technical expertise" to authenticate everything it had been handed — the quiet part said out loud. In 2024, in *State of Washington v. Puloka*, a judge refused to admit AI-"enhanced" video because the process produced "what the AI model thought should be shown" rather than what the camera saw. The Arup fraud put a real **$25.6 million** through the door on the strength of a deepfaked video call. And in the UK a serving officer has been investigated over the alleged use of AI to create false evidence — the precise failure this article is about, arriving from the inside.
+
+The legal scaffolding is not ready. England and Wales still leans on the common-law presumption that a computer was working correctly — the presumption that helped convict hundreds of subpostmasters in the **Post Office Horizon** scandal — and the Ministry of Justice only opened a call for evidence on reforming it in **January 2025**. There is still no practice direction telling a judge how to handle a disputed deepfake.
+
+<h2 id="protect">What protects a case now</h2>
+
+The reassuring part is that most of the defence is old craft, applied with new seriousness. I am not going to pretend an investigator can verify their way out of this one case at a time — detection is losing the arms race by design, since a generator improves precisely by defeating the latest detector, and metadata settles nothing either way. So the answer is not a gadget, and it is not blanket suspicion of all digital evidence, which would simply hand every guilty defendant the liar's dividend. It is procedural, and it is duller than a detector: treat provenance as the evidence.
+
+Recover the **original from the original device**, in native format, hashed at seizure, before the retention loop erases the source, and treat third-party exports as second-best from the outset. Look for **provenance signals** and know their limits: the Content Credentials standard, C2PA, now ships in cameras and phones from Sony, Canon, Leica, Samsung's Galaxy S25 and Google's Pixel 10, cryptographically signing where an image came from; Google's SynthID watermark, which OpenAI and Google have agreed to carry across their image tools, survives a screenshot where metadata does not. The teachable irony is that the exhibits in this article carry exactly those marks, because they were made with consumer AI — which is precisely the signal an investigator should read. A real adversary will try to strip them, and a stripped or absent credential is a reason to ask harder questions, not a verdict on its own. Behind the officer sits the institutional work: reform the computer-evidence presumption, build access to forensic experts who can explain authentication to a jury, and write the practice directions and jury guidance a court still lacks.
+
+None of this means abandoning digital evidence, and none of it means believing it on sight. It means the camera has lost its privilege. It is now a witness like any other — capable of truth, capable of lies, and entitled to be tested before it is believed. The afternoon it took to build John Smith's file is the same afternoon it would take to build anyone's. The only thing standing between that file and a conviction is an investigator who stops, at each clip, and asks not "what does this show?" but "how do I know it is real?"
+
+***
+
+### Sources and further reading
+
+- _Mendones v. Cushman & Wakefield, Inc._ (Superior Court of California, Alameda County, 2025) — first widely reported case of deepfake video submitted as evidence; see the [Volokh Conspiracy / Reason write-up](https://reason.com/volokh/2025/09/25/court-throws-out-case-after-finding-plaintiffs-submitted-deepfake-videos-and-altered-images/) and [Thomson Reuters Institute on deepfake authentication](https://www.thomsonreuters.com/en-us/posts/ai-in-courts/deepfakes-evidence-authentication/).
+- _State of Washington v. Puloka_ (King County Superior Court, 2024) — AI-"enhanced" video ruled inadmissible. [National Law Review](https://natlawreview.com/article/washington-court-rejects-novel-use-ai-enhanced-video-trial); [American Bar Association](https://www.americanbar.org/groups/litigation/resources/litigation-news/2024/fall/court-excludes-aienhanced-videos-trial-evidence/).
+- The Arup deepfake video-call fraud, Hong Kong, 2024 — [CNN Business](https://www.cnn.com/2024/05/16/tech/arup-deepfake-scam-loss-hong-kong-intl-hnk).
+- UK police officer investigated over alleged AI-fabricated evidence — [International Business Times UK](https://www.ibtimes.co.uk/uk-police-officer-ai-fake-evidence-investigation-1802830).
+- Bobby Chesney & Danielle Citron, "Deep Fakes: A Looming Challenge for Privacy, Democracy, and National Security" (2019) — origin of the "liar's dividend"; and the [Brennan Center on shrinking it](https://www.brennancenter.org/our-work/research-reports/deepfakes-elections-and-shrinking-liars-dividend). On juror memory and audiovisual evidence, see [Thomson Reuters Institute, "AI evidence in jury trials"](https://www.thomsonreuters.com/en-us/posts/ai-in-courts/ai-evidence-trials/).
+- The computer-evidence presumption and Post Office Horizon — Ministry of Justice call for evidence, January 2025; background at [Computer Weekly](https://www.computerweekly.com/news/366614104/Change-to-rules-on-computer-evidence-will-be-an-outcome-of-Post-Office-scandal).
+- Content provenance — the [Coalition for Content Provenance and Authenticity (C2PA)](https://c2pa.org/) and the [Content Authenticity Initiative's state of the field](https://contentauthenticity.org/blog/the-state-of-content-authenticity-in-2026); Google [SynthID](https://deepmind.google/technologies/synthid/).
+- EU AI Act (Regulation 2024/1689), Article 50 transparency obligations, with enforcement from August 2026; California SB 942 (AI Transparency Act), in force from 2026.
+
+_This article updates and replaces an earlier 2025 version. All illustrative material remains fictional and AI-generated._

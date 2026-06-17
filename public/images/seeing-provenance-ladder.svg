@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" width="1200" height="820" role="img" aria-label="A ladder of provenance from weakest to strongest. Weakest at the bottom: a bare screenshot, which proves nothing. Then editable EXIF metadata, which settles little whether present or absent. Then C2PA Content Credentials, a cryptographically signed record of where a file came from. Then a SynthID watermark, an embedded signal that survives a screenshot where metadata does not. Strongest at the top: a seized native source file with a hash and an unbroken chain of custody, which proves a great deal. Most exhibits arrive near the bottom.">
+  <rect width="1200" height="820" fill="#f7f3eb"/>
+  <text x="600" y="62" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="42" font-weight="600" text-anchor="middle">The provenance ladder</text>
+  <text x="600" y="104" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="22" font-style="italic" text-anchor="middle">not all &#8220;digital evidence&#8221; is equal &#8212; most exhibits arrive near the bottom</text>
+
+  <!-- vertical strength axis -->
+  <line x1="92" y1="762" x2="92" y2="190" stroke="#c4bcae" stroke-width="2.5"/>
+  <path d="M 92 178 l -7 16 l 14 0 z" fill="#c4bcae"/>
+  <text x="74" y="476" fill="#9c9389" font-family="'DM Sans', system-ui, sans-serif" font-size="16" letter-spacing="0.12em" text-anchor="middle" transform="rotate(-90 74 476)">WEAKER &#8594; STRONGER PROVENANCE</text>
+
+  <!-- Rung 5 (strongest, top) -->
+  <rect x="170" y="170" width="900" height="104" rx="8" fill="#7c2828"/>
+  <text x="196" y="212" fill="#ffffff" font-family="'DM Sans', system-ui, sans-serif" font-size="25" font-weight="700">Seized native source + hash + chain of custody</text>
+  <text x="196" y="246" fill="#f0d9d9" font-family="'Source Serif 4', Georgia, serif" font-size="20">The original, fixed at the point of seizure and traceable end to end. Proves a great deal.</text>
+
+  <!-- Rung 4 -->
+  <rect x="170" y="292" width="900" height="104" rx="8" fill="#b5654c"/>
+  <text x="196" y="334" fill="#ffffff" font-family="'DM Sans', system-ui, sans-serif" font-size="25" font-weight="700">SynthID watermark</text>
+  <text x="196" y="368" fill="#f6e7df" font-family="'Source Serif 4', Georgia, serif" font-size="20">An embedded signal that survives a screenshot, where metadata does not.</text>
+
+  <!-- Rung 3 -->
+  <rect x="170" y="414" width="900" height="104" rx="8" fill="#d6a288"/>
+  <text x="196" y="456" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="25" font-weight="700">C2PA Content Credentials</text>
+  <text x="196" y="490" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20">A cryptographically signed record of where the file came from.</text>
+
+  <!-- Rung 2 -->
+  <rect x="170" y="536" width="900" height="104" rx="8" fill="#e7c9b8"/>
+  <text x="196" y="578" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="25" font-weight="700">Editable metadata (EXIF)</text>
+  <text x="196" y="612" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="20">Timestamps and tags, freely altered. Present or absent, it settles little.</text>
+
+  <!-- Rung 1 (weakest, bottom) -->
+  <rect x="170" y="658" width="900" height="104" rx="8" fill="#efe6d4" stroke="#c4bcae" stroke-width="1.5"/>
+  <text x="196" y="700" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="25" font-weight="700">Bare screenshot</text>
+  <text x="196" y="734" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="20">A picture of a screen, or of nothing drawn to look like one. Proves nothing.</text>
+</svg>

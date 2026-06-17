@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 560" width="1200" height="560" role="img" aria-label="A timeline of a CCTV recording's life. Day zero: the footage is recorded on the device. Around day three: the owner exports a clip and hands it to the police. The police then act on that export. Around day 28: the device overwrites the original on its retention loop. After that point only copies remain, and there is no surviving original to test the export against. The window between the export and the overwrite is the gap where authenticity dies, unless the native original is seized first.">
+  <rect width="1200" height="560" fill="#f7f3eb"/>
+  <text x="600" y="60" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="42" font-weight="600" text-anchor="middle">The gap where authenticity dies</text>
+  <text x="600" y="102" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="22" font-style="italic" text-anchor="middle">a 28-day retention loop, and one chance to seize the original before it is gone</text>
+
+  <!-- danger band: from export handed over to original overwritten -->
+  <rect x="430" y="250" width="560" height="60" fill="#f0dcd3"/>
+  <text x="710" y="288" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-weight="700" text-anchor="middle">the export is the only basis &#8212; and soon the only copy</text>
+
+  <!-- timeline -->
+  <line x1="120" y1="280" x2="1080" y2="280" stroke="#c4bcae" stroke-width="3"/>
+
+  <!-- Day 0 -->
+  <circle cx="170" cy="280" r="11" fill="#1a1817"/>
+  <text x="170" y="210" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="20" font-weight="700" text-anchor="middle">Day 0</text>
+  <text x="170" y="238" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="19" text-anchor="middle">Footage recorded</text>
+
+  <!-- Day ~3 export -->
+  <circle cx="430" cy="280" r="11" fill="#7c2828"/>
+  <text x="430" y="360" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="20" font-weight="700" text-anchor="middle">Day ~3</text>
+  <text x="430" y="388" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="19" text-anchor="middle">Owner exports a clip,</text>
+  <text x="430" y="412" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="19" text-anchor="middle">hands it to police</text>
+
+  <!-- Day ~10 police act -->
+  <circle cx="650" cy="280" r="11" fill="#7c2828"/>
+  <text x="650" y="210" fill="#1a1817" font-family="'DM Sans', system-ui, sans-serif" font-size="20" font-weight="700" text-anchor="middle">Day ~10</text>
+  <text x="650" y="238" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="19" text-anchor="middle">Police act on the export</text>
+
+  <!-- Day 28 overwrite -->
+  <circle cx="990" cy="280" r="11" fill="#1a1817"/>
+  <text x="990" y="360" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="20" font-weight="700" text-anchor="middle">Day 28</text>
+  <text x="990" y="388" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="19" text-anchor="middle">Original overwritten</text>
+  <text x="990" y="412" fill="#3d3936" font-family="'Source Serif 4', Georgia, serif" font-size="19" text-anchor="middle">on the retention loop</text>
+
+  <!-- after: only copies -->
+  <text x="600" y="492" fill="#1a1817" font-family="'Source Serif 4', Georgia, serif" font-size="21" font-style="italic" text-anchor="middle">After the loop, only copies remain &#8212; and nothing is left to test them against.</text>
+</svg>
