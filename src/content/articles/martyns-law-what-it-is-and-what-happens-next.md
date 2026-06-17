@@ -1,13 +1,24 @@
 ---
-section: "public-policy"
 title: "Martyn's Law: What It Is, Where It's Up To, and What You Actually Need to Do"
-description: "A mother's six-year campaign turned the Manchester Arena attack into the Terrorism (Protection of Premises) Act 2025 — Martyn's Law. A plain-English guide to what the law says, where it is on the road to enforcement, what it means for businesses, police officers and police leaders — and a practical, provisional checklist for getting a venue ready."
+section: public-policy
+description: A mother's six-year campaign turned the Manchester Arena attack into the Terrorism (Protection of Premises) Act 2025 — Martyn's Law. A plain-English guide to what the law says, where it is on the road to enforcement, what it means for businesses, police officers and police leaders — and a practical, provisional checklist for getting a venue ready.
 pubDate: 2026-06-12
 updatedDate: 2026-06-17
-heroImage: "/images/martyns-law-hero.jpg"
-thumbnail: "/images/martyns-law-hero.jpg"
-tags: ["martyns-law", "counter-terrorism", "public-policy", "policing", "police", "law", "crime-prevention", "leadership", "business"]
-redirectFrom: ["/public-policy/martyns-law-a-business-owners-starting-point"]
+author: ''
+thumbnail: /images/11551.webp
+heroImage: /images/11551.webp
+tags:
+  - martyns-law
+  - counter-terrorism
+  - public-policy
+  - policing
+  - police
+  - law
+  - crime-prevention
+  - leadership
+  - business
+redirectFrom:
+  - /public-policy/martyns-law-a-business-owners-starting-point
 ---
 
 **Martyn Hett was 29 when he was murdered at the Manchester Arena on 22 May 2017, one of 22 people killed as they left an Ariana Grande concert — and the law that now carries his name exists because his mother refused to accept that nothing would change.** [Figen Murray's campaign](https://counterterrorbusiness.com/features/campaign-martyns-law) ran for six years, through three Prime Ministers, a public inquiry and two governments, and ended with her [walking 200 miles from the spot where her son died to the door of Downing Street](https://homeofficemedia.blog.gov.uk/2025/04/03/martyns-law-factsheet/), arriving on the seventh anniversary of the attack. Eleven months later, on 3 April 2025, the [Terrorism (Protection of Premises) Act 2025](https://homeofficemedia.blog.gov.uk/2025/04/03/martyns-law-factsheet/) received Royal Assent. Everyone, including the government, calls it Martyn's Law.
