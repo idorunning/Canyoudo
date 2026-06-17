@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600" role="img" aria-label="Why civil orders matter more now. The Sentencing Act 2026 means courts must consider whether there is no real prospect of immediate custody, with a tighter Bail Act pointing the same way. The result is fewer defendants remanded into custody and more released on bail, which removes the incidental safeguarding custody used to provide. Civil orders — community protection notices, civil injunctions, criminal behaviour orders and closure orders — are the protection that can still be imposed when remand is off the table.">
+  <rect width="1200" height="600" fill="#f7f3eb"/>
+  <text x="600" y="58" fill="#1a1817" font-family="Fraunces, Georgia, serif" font-size="40" font-weight="600" text-anchor="middle">Why this matters more now</text>
+  <text x="600" y="98" fill="#5a544e" font-family="'Source Serif 4', Georgia, serif" font-size="21" font-style="italic" text-anchor="middle">the Sentencing Act 2026 and the safeguarding gap</text>
+
+  <!-- Box A -->
+  <rect x="50" y="170" width="300" height="270" rx="10" fill="#fbf8f1" stroke="#ddd6c8" stroke-width="1.5"/>
+  <rect x="50" y="170" width="300" height="46" rx="10" fill="#5a544e"/>
+  <rect x="50" y="200" width="300" height="16" fill="#5a544e"/>
+  <text x="200" y="201" fill="#f5f1e8" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-weight="700" text-anchor="middle">Sentencing Act 2026</text>
+  <g font-family="'Source Serif 4', Georgia, serif" font-size="17" fill="#3d3936">
+    <text x="72" y="262">Courts must consider whether</text>
+    <text x="72" y="288">there is <tspan font-style="italic">no real prospect of</tspan></text>
+    <text x="72" y="314"><tspan font-style="italic">immediate custody</tspan> &#8212; and a</text>
+    <text x="72" y="340">tighter Bail Act points the</text>
+    <text x="72" y="366">same way.</text>
+    <text x="72" y="408" fill="#7a7268" font-size="14" font-style="italic">From the Gauke review.</text>
+  </g>
+
+  <!-- Box B -->
+  <rect x="450" y="170" width="300" height="270" rx="10" fill="#fbf8f1" stroke="#ddd6c8" stroke-width="1.5"/>
+  <rect x="450" y="170" width="300" height="46" rx="10" fill="#a14545"/>
+  <rect x="450" y="200" width="300" height="16" fill="#a14545"/>
+  <text x="600" y="201" fill="#f5f1e8" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-weight="700" text-anchor="middle">Fewer remands, more bail</text>
+  <g font-family="'Source Serif 4', Georgia, serif" font-size="17" fill="#3d3936">
+    <text x="472" y="262">More defendants released on</text>
+    <text x="472" y="288">bail instead of held on remand.</text>
+  </g>
+  <!-- gap strip -->
+  <rect x="472" y="318" width="256" height="98" rx="8" fill="#fbf3ef" stroke="#7c2828" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="600" y="350" fill="#7c2828" font-family="'DM Sans', system-ui, sans-serif" font-size="16" font-weight="700" text-anchor="middle">The safeguarding gap</text>
+  <text x="600" y="378" fill="#5a1c1c" font-family="'Source Serif 4', Georgia, serif" font-size="15" text-anchor="middle">custody's incidental</text>
+  <text x="600" y="398" fill="#5a1c1c" font-family="'Source Serif 4', Georgia, serif" font-size="15" text-anchor="middle">protection, removed</text>
+
+  <!-- Box C -->
+  <rect x="850" y="170" width="300" height="270" rx="10" fill="#fbf8f1" stroke="#7c2828" stroke-width="2"/>
+  <rect x="850" y="170" width="300" height="46" rx="10" fill="#7c2828"/>
+  <rect x="850" y="200" width="300" height="16" fill="#7c2828"/>
+  <text x="1000" y="201" fill="#f5f1e8" font-family="'DM Sans', system-ui, sans-serif" font-size="19" font-weight="700" text-anchor="middle">Civil orders fill it</text>
+  <g font-family="'Source Serif 4', Georgia, serif" font-size="17" fill="#3d3936">
+    <text x="872" y="262">The protection you can still</text>
+    <text x="872" y="288">impose when remand is off</text>
+    <text x="872" y="314">the table:</text>
+    <text x="872" y="352" fill="#7c2828" font-weight="600" font-family="'DM Sans', system-ui, sans-serif" font-size="16">CPN &#183; injunction</text>
+    <text x="872" y="380" fill="#7c2828" font-weight="600" font-family="'DM Sans', system-ui, sans-serif" font-size="16">CBO &#183; closure order</text>
+  </g>
+
+  <!-- arrows -->
+  <g fill="#c4bcae">
+    <path d="M 360 305 l 80 0 m 0 0 l -14 -9 m 14 9 l -14 9" stroke="#c4bcae" stroke-width="3" fill="none"/>
+    <path d="M 760 305 l 80 0 m 0 0 l -14 -9 m 14 9 l -14 9" stroke="#c4bcae" stroke-width="3" fill="none"/>
+  </g>
+
+  <text x="600" y="492" fill="#7a7268" font-family="'DM Sans', system-ui, sans-serif" font-size="17" font-style="italic" text-anchor="middle">Orders are not a substitute for custody &#8212; but they are real, lawful protection that does not depend on a remand decision.</text>
+</svg>

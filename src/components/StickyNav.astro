@@ -1,0 +1,154 @@
+---
+// A sticky in-page "jump to" bar for long explainer articles. Authors pass an
+// `items` list of { label, href } where each href is a fragment ("#cpn") that
+// matches an id on a heading/section in the article body. The bar pins directly
+// under the site header (which is `sticky top-0`), so it stays reachable while
+// the reader scrolls; the active section is highlighted as it comes into view.
+//
+// It is dependency-free. A small script measures the live header height into a
+// CSS variable so the bar sits flush beneath it on any breakpoint, and sets
+// scroll-margin-top on each target so jump links land below both sticky bars.
+interface Item {
+  label: string;
+  href: string;
+}
+interface Props {
+  items: Item[];
+  label?: string;
+}
+const { items, label = 'Jump to' } = Astro.props;
+---
+
+<nav class="co-nav" data-co-nav aria-label="Sections of this guide">
+  <span class="co-nav-label">{label}</span>
+  <ul class="co-nav-list" role="list">
+    {items.map((it) => (
+      <li>
+        <a href={it.href} class="co-nav-link" data-co-link>{it.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .co-nav {
+    position: sticky;
+    top: var(--co-header-h, 0px);
+    z-index: 30;
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    margin: 2.5rem 0;
+    padding: 0.55rem 0.2rem;
+    background: theme('colors.paper.100');
+    border-top: 1px solid theme('colors.ink.200');
+    border-bottom: 1px solid theme('colors.ink.200');
+    overflow-x: auto;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+  .co-nav-label {
+    flex: 0 0 auto;
+    font-family: theme('fontFamily.sans');
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: theme('colors.ink.500');
+    padding-top: 0.2rem;
+  }
+  .co-nav-list {
+    display: flex;
+    gap: 0.3rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .co-nav-link {
+    flex: 0 0 auto;
+    display: inline-block;
+    font-family: theme('fontFamily.sans');
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: theme('colors.ink.500');
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    padding: 0.35rem 0.55rem;
+    border-radius: 4px 4px 0 0;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .co-nav-link:hover {
+    color: theme('colors.ink.800');
+    background: theme('colors.paper.200');
+  }
+  .co-nav-link[aria-current='true'] {
+    color: theme('colors.accent.DEFAULT');
+    border-bottom-color: theme('colors.accent.DEFAULT');
+  }
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(html) {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+
+<script>
+  function setHeaderOffset() {
+    const header = document.querySelector('header');
+    const h = header ? Math.round(header.getBoundingClientRect().height) : 0;
+    document.documentElement.style.setProperty('--co-header-h', h + 'px');
+  }
+
+  function initCoNav(nav: HTMLElement) {
+    const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-co-link]'));
+    const byId = new Map<string, HTMLAnchorElement>();
+    const targets: HTMLElement[] = [];
+    links.forEach((l) => {
+      const id = (l.getAttribute('href') || '').replace(/^#/, '');
+      const el = id ? document.getElementById(id) : null;
+      if (el) {
+        byId.set(id, l);
+        targets.push(el);
+      }
+    });
+
+    function applyScrollMargin() {
+      const headerH =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--co-header-h')) || 0;
+      const navH = nav.getBoundingClientRect().height;
+      const offset = Math.ceil(headerH + navH + 14);
+      targets.forEach((t) => {
+        t.style.scrollMarginTop = offset + 'px';
+      });
+    }
+
+    setHeaderOffset();
+    applyScrollMargin();
+    window.addEventListener('resize', () => {
+      setHeaderOffset();
+      applyScrollMargin();
+    });
+
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              links.forEach((l) => l.removeAttribute('aria-current'));
+              const active = byId.get((e.target as HTMLElement).id);
+              if (active) active.setAttribute('aria-current', 'true');
+            }
+          });
+        },
+        { rootMargin: '-25% 0px -65% 0px', threshold: 0 }
+      );
+      targets.forEach((t) => obs.observe(t));
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-co-nav]').forEach(initCoNav);
+</script>

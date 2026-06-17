@@ -1,0 +1,85 @@
+---
+// A compact "fact box" for each civil order in the guide: the statute, the legal
+// test, who can use it, where, how long it lasts and what breach means. Values
+// are passed as props (inline HTML allowed, so links work) to keep the MDX clean
+// and the boxes visually consistent from one power to the next.
+interface Props {
+  statute: string;
+  test: string;
+  who: string;
+  court: string;
+  duration: string;
+  breach: string;
+}
+const { statute, test, who, court, duration, breach } = Astro.props;
+const rows: [string, string][] = [
+  ['Statute', statute],
+  ['The test', test],
+  ['Who can use it', who],
+  ['Where', court],
+  ['How long', duration],
+  ['Breach', breach],
+];
+---
+
+<div class="co-power" role="group" aria-label="Summary">
+  <dl>
+    {rows.map(([k, v]) => (
+      <div class="co-power-row">
+        <dt>{k}</dt>
+        <dd set:html={v} />
+      </div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  .co-power {
+    margin: 1.75rem 0;
+    border: 1px solid theme('colors.ink.200');
+    border-left: 4px solid theme('colors.accent.DEFAULT');
+    border-radius: 6px;
+    background: theme('colors.paper.100');
+    padding: 0.4rem 1.25rem;
+  }
+  .co-power dl {
+    margin: 0;
+  }
+  .co-power-row {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 0.5rem 1.1rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid theme('colors.ink.200');
+  }
+  .co-power-row:last-child {
+    border-bottom: 0;
+  }
+  .co-power dt {
+    font-family: theme('fontFamily.sans');
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: theme('colors.ink.500');
+    padding-top: 0.15rem;
+  }
+  .co-power dd {
+    margin: 0;
+    font-family: theme('fontFamily.serif');
+    font-size: 1rem;
+    line-height: 1.5;
+    color: theme('colors.ink.800');
+  }
+  .co-power dd :global(a) {
+    color: theme('colors.accent.DEFAULT');
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  @media (max-width: 540px) {
+    .co-power-row {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+</style>

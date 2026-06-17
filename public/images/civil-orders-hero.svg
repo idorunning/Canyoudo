@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 840" width="1600" height="840" role="img" aria-label="The Power of Civil Orders — a frontline guide to community protection warnings and notices, civil injunctions, criminal behaviour orders and closure orders.">
+  <rect width="1600" height="840" fill="#1a1817"/>
+  <!-- faint ascending-ladder motif -->
+  <g stroke="#2e2a28" stroke-width="3" fill="none">
+    <path d="M 980 690 L 980 250"/>
+    <path d="M 1180 690 L 1180 250"/>
+    <path d="M 980 650 L 1180 650"/>
+    <path d="M 980 570 L 1180 570"/>
+    <path d="M 980 490 L 1180 490"/>
+    <path d="M 980 410 L 1180 410"/>
+    <path d="M 980 330 L 1180 330"/>
+  </g>
+  <g stroke="#3a3531" stroke-width="3" fill="none">
+    <path d="M 1240 690 L 1240 360"/>
+    <path d="M 1440 690 L 1440 360"/>
+    <path d="M 1240 650 L 1440 650"/>
+    <path d="M 1240 560 L 1440 560"/>
+    <path d="M 1240 460 L 1440 460"/>
+  </g>
+
+  <rect x="120" y="150" width="64" height="10" fill="#a14545"/>
+  <text x="120" y="220" fill="#a14545" font-family="'DM Sans', system-ui, sans-serif" font-size="30" letter-spacing="8" font-weight="500">POLICE POLICY</text>
+  <text x="120" y="346" fill="#f5f1e8" font-family="Fraunces, Georgia, serif" font-size="100" font-weight="600">The Power of</text>
+  <text x="120" y="452" fill="#f5f1e8" font-family="Fraunces, Georgia, serif" font-size="100" font-weight="600">Civil Orders</text>
+  <text x="120" y="540" fill="#bdb4a8" font-family="'Source Serif 4', Georgia, serif" font-size="36" font-style="italic">Warnings, notices and orders &#8212; the protective powers we</text>
+  <text x="120" y="586" fill="#bdb4a8" font-family="'Source Serif 4', Georgia, serif" font-size="36" font-style="italic">under-use, and how to use them well.</text>
+  <g font-family="'DM Sans', system-ui, sans-serif" font-size="24" fill="#8a8175">
+    <text x="120" y="700">CPW &#183; CPN &#183; civil injunction &#183; CBO &#183; closure order</text>
+  </g>
+</svg>

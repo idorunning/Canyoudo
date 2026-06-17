@@ -1,0 +1,55 @@
+---
+// A simple labelled callout box for the longer guides: a "why this matters" note,
+// a caution, or a downloadable template block. Tone sets the accent. Content is
+// passed as children (ordinary Markdown/MDX), so authors write normally inside.
+interface Props {
+  label?: string;
+  tone?: 'default' | 'note' | 'warning' | 'template';
+}
+const { label, tone = 'default' } = Astro.props;
+---
+
+<aside class:list={['co-callout', `co-callout--${tone}`]}>
+  {label && <p class="co-callout-label">{label}</p>}
+  <div class="co-callout-body"><slot /></div>
+</aside>
+
+<style>
+  .co-callout {
+    margin: 2rem 0;
+    border-radius: 6px;
+    padding: 1.1rem 1.35rem;
+    border: 1px solid theme('colors.ink.200');
+    background: theme('colors.paper.100');
+  }
+  .co-callout--note {
+    border-left: 4px solid theme('colors.accent.DEFAULT');
+    background: theme('colors.paper.200');
+  }
+  .co-callout--warning {
+    border-left: 4px solid theme('colors.accent.dark');
+    background: #fbf3ef;
+  }
+  .co-callout--template {
+    border: 1px dashed theme('colors.ink.300');
+    background: theme('colors.paper.200');
+  }
+  .co-callout-label {
+    font-family: theme('fontFamily.sans');
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: theme('colors.accent.DEFAULT');
+    margin: 0 0 0.55rem;
+  }
+  .co-callout--warning .co-callout-label {
+    color: theme('colors.accent.dark');
+  }
+  .co-callout-body :global(> :first-child) {
+    margin-top: 0;
+  }
+  .co-callout-body :global(> :last-child) {
+    margin-bottom: 0;
+  }
+</style>
