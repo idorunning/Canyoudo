@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-18T12:15:28.616Z",
+    "fetchedAt": "2026-06-18T17:51:22.912Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,12 +16,36 @@
   },
   "items": [
     {
-      "title": "Crime boss Steven Lyons loses bid to block extradition to Spain",
-      "link": "https://www.bbc.com/news/articles/c5yz85nv53xo?at_medium=RSS&at_campaign=rss",
+      "title": "Man arrested on suspicion of attempted murder after boy injured in crocodile enclosure",
+      "link": "https://www.bbc.com/news/articles/czx50n2vj74o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-18T11:07:09.000Z",
-      "summary": "A court in Amsterdam rules Lyons must face charges related to drug trafficking, money laundering and violent crime in Spain."
+      "isoDate": "2026-06-18T17:36:27.000Z",
+      "summary": "A three-year-old boy was taken to Addenbrooke's Hospital with critical injuries and is in a stable condition, Cambridgeshire Police said."
+    },
+    {
+      "title": "Swinney apologises to girl at centre of Dundee viral knife video",
+      "link": "https://www.bbc.com/news/articles/c892p75v0vzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-18T16:34:55.000Z",
+      "summary": "The child brandished weapons at a Bulgarian man who was later convicted of assaulting her."
+    },
+    {
+      "title": "Two teenagers on trial for murder of 15-year-old Amen Teklay",
+      "link": "https://www.bbc.com/news/articles/cvgj7exmzjzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-18T16:06:28.000Z",
+      "summary": "Prosecutors claim the boys chased and struck him with a sword, leaving him so severely hurt that he died on street in Glasgow."
+    },
+    {
+      "title": "Men jailed for spying for Chinese intelligence in UK",
+      "link": "https://www.bbc.com/news/articles/cgjx87gvlnxo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-18T15:45:50.000Z",
+      "summary": "One, a Border Force official, used his access to Home Office data, to get information about Chinese dissidents."
     },
     {
       "title": "Reappointment of member of the Tribunal Procedure Committee",
@@ -206,14 +230,6 @@
       "topic": "law",
       "isoDate": "2026-06-10T13:59:54.000Z",
       "summary": "Remote Participation Guidance for the criminal courts will be published soon The post Upcoming Remote Participation Guidance for the criminal courts appeared first on Courts…"
-    },
-    {
-      "title": "Version of AI tool 'too powerful for public' released to public",
-      "link": "https://www.bbc.com/news/articles/ckg701v1dp6o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-06-09T18:35:59.000Z",
-      "summary": "Claude Fable 5 is a version of Anthropic's Claude Mythos, an AI program which caused a stir among technology, finance, and government leaders."
     },
     {
       "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
