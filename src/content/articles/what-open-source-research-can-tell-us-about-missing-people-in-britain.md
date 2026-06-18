@@ -17,6 +17,7 @@ tags:
   - county-lines
   - ethics
   - policy
+draft: true
 ---
 
 Every ninety seconds or so, someone in the United Kingdom is reported missing. The figure most often quoted by the National Crime Agency and the charity Missing People is around 170,000 people each year, generating something closer to 330,000 separate incidents. The gap between those two numbers is itself the first useful fact about missing people: a great many of them go missing more than once.
@@ -27,7 +28,7 @@ The answer is a qualified yes, but the qualifications matter more than the yes. 
 
 ### What the open record actually contains
 
-The single most important open source is the National Crime Agency's UK Missing Persons Unit (UKMPU), which publishes an annual *Missing Persons Data Report* with accompanying statistical tables. It is the closest thing Britain has to a national picture, and it is genuinely open: anyone can download it.
+The single most important open source is the National Crime Agency's UK Missing Persons Unit (UKMPU), which publishes an annual _Missing Persons Data Report_ with accompanying statistical tables. It is the closest thing Britain has to a national picture, and it is genuinely open: anyone can download it.
 
 It is also, by its own admission, incomplete. The data is requested each year from the 43 forces in England and Wales, plus Police Scotland and the Police Service of Northern Ireland "where possible." Submission is voluntary and the forces use different recording systems. The reports warn explicitly that not all forces can supply the requested breakdowns and that year-on-year comparisons are therefore limited. In the most recent edition, for instance, PSNI returned no data at all on the duration of missing incidents. Every "national" total is best understood as a lower bound assembled from partial returns, not a census.
 
@@ -63,7 +64,7 @@ The charity infrastructure is more reliable than raw social media because it is 
 
 Online communities sit at the unreliable end. Websleuths, the missing-persons subreddits, and Facebook groups amplify cases, but they verify nothing, skew heavily towards sensational and cold cases, are dominated by US material, and almost never propagate the "found safe" updates that would correct the record. Britain also lacks a true public equivalent of the United States' NamUs database or the volunteer-curated Charley Project. The closest official thing is the UKMPU's own public case-search site for unidentified bodies and long-term cases, which deliberately publishes only a fraction of what the unit holds.
 
-The lesson is not that proxy sources are useless. It is that they answer a narrow question—*which cases became visible, and why*—and cannot answer the broad one—*who goes missing in Britain*. Treating the first as if it were the second is the characteristic error of amateur missing-persons analysis.
+The lesson is not that proxy sources are useless. It is that they answer a narrow question—_which cases became visible, and why_—and cannot answer the broad one—_who goes missing in Britain_. Treating the first as if it were the second is the characteristic error of amateur missing-persons analysis.
 
 ### What open-source technique realistically adds
 
@@ -79,7 +80,7 @@ Two things are conspicuously harder in Britain than the headlines suggest. Foren
 
 Which brings us to the constraints, because the gap between what is technically possible and what is lawful and ethical is wide.
 
-The legal position is straightforward and frequently misunderstood: information about an identifiable living person remains personal data under UK GDPR and the Data Protection Act 2018 *even when it is already public*. Compiling public posts about a named missing person is processing personal data, and the compiler becomes a data controller with the full set of obligations. Missing-persons material routinely involves "special category" data—health, mental health, ethnicity—which attracts stricter conditions, and the convenient-sounding exemption for data "manifestly made public by the individual" is narrow: a news report or police appeal disclosing someone's mental-health crisis does not qualify. Children, who make up most cases, attract heightened protection again under the ICO's Children's Code.
+The legal position is straightforward and frequently misunderstood: information about an identifiable living person remains personal data under UK GDPR and the Data Protection Act 2018 _even when it is already public_. Compiling public posts about a named missing person is processing personal data, and the compiler becomes a data controller with the full set of obligations. Missing-persons material routinely involves "special category" data—health, mental health, ethnicity—which attracts stricter conditions, and the convenient-sounding exemption for data "manifestly made public by the individual" is narrow: a news report or police appeal disclosing someone's mental-health crisis does not qualify. Children, who make up most cases, attract heightened protection again under the ICO's Children's Code.
 
 The ethical position is, if anything, more demanding than the legal one. A competent adult has a qualified right to go missing; the police will generally respect an adult's wish not to be located unless a safeguarding duty applies. Many missing people are vulnerable in ways that make exposure actively dangerous—domestic-abuse survivors who have fled, trafficking victims, people in acute crisis. Publishing a sighting or a location-revealing detail can lead an abuser straight to someone. The risk is asymmetric: being careless, or being right but indiscreet, can be fatal.
 
@@ -91,8 +92,8 @@ There is, finally, the matter of inference. Public appeals are a biased, survivo
 
 So: can open-source research into missing people in the UK offer real insight? Yes—provided one is clear about which question is being asked.
 
-If the question is *who goes missing in Britain, how the harm concentrates, and how well the system responds*, the potential is substantial and largely untapped. The official data, however imperfect, already reveals the concentration of incidents among repeatedly-missing children, the over-representation of the care system, the link between going missing and exploitation, the ethnic disproportionality in how seriously cases are treated, and the distinct vulnerabilities of missing adults. FOI-driven investigation has repeatedly turned that open record into accountability. Proxy sources—appeals, charity output, news—are useful here too, not as a measure of the missing population but as a measure of which cases society chooses to see, which is itself a finding worth having.
+If the question is _who goes missing in Britain, how the harm concentrates, and how well the system responds_, the potential is substantial and largely untapped. The official data, however imperfect, already reveals the concentration of incidents among repeatedly-missing children, the over-representation of the care system, the link between going missing and exploitation, the ethnic disproportionality in how seriously cases are treated, and the distinct vulnerabilities of missing adults. FOI-driven investigation has repeatedly turned that open record into accountability. Proxy sources—appeals, charity output, news—are useful here too, not as a measure of the missing population but as a measure of which cases society chooses to see, which is itself a finding worth having.
 
-If the question is *can we use open sources to find a particular missing person*, the answer is mostly no, and the attempt is where the harm lives. That work belongs to the police and to the small number of properly governed, law-enforcement-coordinated bodies, working passively and within the law.
+If the question is _can we use open sources to find a particular missing person_, the answer is mostly no, and the attempt is where the harm lives. That work belongs to the police and to the small number of properly governed, law-enforcement-coordinated bodies, working passively and within the law.
 
 The most valuable open-source contribution an outsider can make to missing people in Britain is therefore not detection but illumination: studying the phenomenon and the institutions rather than the individuals, treating the numbers with the scepticism their gaps deserve, and remembering throughout that behind every data point is a person who may have very good reasons not to be found.
