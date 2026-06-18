@@ -23,27 +23,41 @@
 import { card, el, type Work, type CardHooks } from './cards';
 import { citationParagraph, CONFIDENCE_LABELS } from './citation-render';
 import { curate } from '../../lib/briefing-curate.mjs';
-import { ASSIST_PROMPT_VERSION } from '../../lib/research-assist-prompts';
+import { ASSIST_PROMPT_VERSION, type BriefingDepth } from '../../lib/research-assist-prompts';
 
 // Provenance recorded with a saved briefing (matches the function's model).
 const BRIEFING_MODEL = 'claude-sonnet-4-6';
 const REF_ID_PREFIX = 'briefing-ref-';
-const THIN_THRESHOLD = 4; // below this, don't spend a synthesis call
-// Adaptive depth — a "healthy" evidence base. When the free first pass curates
-// fewer than this, the pipeline escalates (see ESCALATION_STEPS) before
-// synthesising; at or above it, one pass was enough and we stop.
-const TARGET_STUDIES = 12;
-// The escalation ladder, applied in order and only while the curated set is
-// still below TARGET_STUDIES: first dig deeper (further result pages, still
-// free-to-read), then widen beyond free-to-read. Searches are free and
-// edge-cached, so this costs only a little latency — and only on the hard
-// problems that actually need it.
-const ESCALATION_STEPS: { page: number; oa: boolean }[] = [
-  { page: 2, oa: true },
-  { page: 3, oa: true },
-  { page: 1, oa: false },
-  { page: 2, oa: false },
-];
+
+// The depth scale drives how hard the client searches before synthesising, in
+// step with the synthesis prompt the function runs at the same level:
+//  - thinThreshold: below this many curated studies, don't spend a synthesis
+//    call — show what came back honestly (a quick scan tolerates a thinner base).
+//  - targetStudies: a "healthy" evidence base. While the curated set is below
+//    it, escalate; at or above it, stop.
+//  - escalation: the ladder, applied in order while still below target — dig
+//    deeper (further free-to-read pages) then widen beyond free-to-read.
+//    Catalogue searches are free and edge-cached, so a deeper level costs only
+//    latency. Quick scan never escalates; full review walks the whole ladder.
+interface DepthSearch {
+  thinThreshold: number;
+  targetStudies: number;
+  escalation: { page: number; oa: boolean }[];
+}
+const DEPTH_SEARCH: Record<BriefingDepth, DepthSearch> = {
+  low: { thinThreshold: 3, targetStudies: 6, escalation: [] },
+  mid: { thinThreshold: 4, targetStudies: 10, escalation: [{ page: 2, oa: true }] },
+  high: {
+    thinThreshold: 4,
+    targetStudies: 14,
+    escalation: [
+      { page: 2, oa: true },
+      { page: 3, oa: true },
+      { page: 1, oa: false },
+      { page: 2, oa: false },
+    ],
+  },
+};
 
 export interface BriefingAngle {
   label: string;
@@ -71,7 +85,12 @@ export interface BriefingResult {
 
 export type BriefingOutcome =
   | { status: 'ok'; result: BriefingResult }
+  // Genuinely too little evidence to brief from — the open record is thin.
   | { status: 'thin'; problem: string; framing: string; references: Work[] }
+  // A healthy evidence base was found, but the synthesis step itself failed —
+  // the fault is the assistant, not the sources. Kept distinct from 'thin' so
+  // the UI never blames the record for a model-side failure.
+  | { status: 'failed'; problem: string; framing: string; references: Work[] }
   | { status: 'budget'; message: string }
   | { status: 'error'; message: string }
   | { status: 'stale' };
@@ -85,6 +104,8 @@ export interface PipelineHooks {
   onAngleDone?: (index: number, count: number) => void;
   /** Which catalogue to search: 'all' when configured, else 'openalex'. */
   source: string;
+  /** How deep to go: quick scan, overview, or full review. */
+  depth: BriefingDepth;
 }
 
 // A briefing runs while the tab is open; a second submit supersedes the first.
@@ -178,13 +199,15 @@ export async function runBriefingPipeline(
   // Work shape it's given, so assert the element type back here.
   let references = curate(perAngle) as Work[];
 
-  // Adaptive depth (the self-adapting "scale"): a thin free first pass triggers
+  // Adaptive depth, scaled by the chosen level: a thin first pass triggers
   // escalation — dig deeper (further pages) then wider (beyond free-to-read),
-  // re-curating after each step, until the evidence base is healthy or the
-  // ladder is exhausted. Easy problems stop after one pass; hard ones
-  // automatically search harder, pulling in more sources, at no extra AI cost.
-  for (let s = 0; s < ESCALATION_STEPS.length && references.length < TARGET_STUDIES; s++) {
-    const step = ESCALATION_STEPS[s];
+  // re-curating after each step, until the evidence base hits the level's target
+  // or its ladder is exhausted. A quick scan has no ladder and stops after one
+  // pass; a full review searches hardest, pulling in more sources, at no extra
+  // AI cost (catalogue searches are free and edge-cached).
+  const ds = DEPTH_SEARCH[hooks.depth];
+  for (let s = 0; s < ds.escalation.length && references.length < ds.targetStudies; s++) {
+    const step = ds.escalation[s];
     hooks.onProgress(
       step.oa
         ? 'Thin so far — digging deeper for more studies…'
@@ -201,7 +224,7 @@ export async function runBriefingPipeline(
   const framing = plan.framing;
 
   // Don't spend a synthesis call on near-nothing — show what came back honestly.
-  if (references.length < THIN_THRESHOLD) {
+  if (references.length < ds.thinThreshold) {
     return { status: 'thin', problem, framing, references };
   }
 
@@ -220,7 +243,7 @@ export async function runBriefingPipeline(
     const res = await fetch('/api/research-assist', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ mode: 'briefing', problem, items }),
+      body: JSON.stringify({ mode: 'briefing', problem, items, depth: hooks.depth }),
     });
     const body = await res.json().catch(() => null);
     if (res.ok && typeof body?.briefing === 'string' && body.briefing && Array.isArray(body?.used)) {
@@ -232,8 +255,10 @@ export async function runBriefingPipeline(
   if (stale()) return { status: 'stale' };
   if (!data) {
     if (budgetMessage) return { status: 'budget', message: budgetMessage };
-    // Synthesis failed, but the curated studies are still worth showing.
-    return { status: 'thin', problem, framing, references };
+    // The evidence base was healthy (we passed THIN_THRESHOLD above) — the
+    // synthesis call is what failed. Report that honestly rather than blaming
+    // the record: still show the curated studies, which are worth reading.
+    return { status: 'failed', problem, framing, references };
   }
 
   return {

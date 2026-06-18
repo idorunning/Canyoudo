@@ -12,8 +12,8 @@ const src = readFileSync(
   'utf8'
 );
 
-test('prompt version bumped to v5 (invalidates the assist cache)', () => {
-  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v5'/);
+test('prompt version bumped to v6 (invalidates the assist cache)', () => {
+  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v6'/);
 });
 
 test('PLAN_SYSTEM demands JSON-only with framing + angles', () => {
@@ -26,20 +26,42 @@ test('PLAN_SYSTEM demands JSON-only with framing + angles', () => {
   assert.match(src, /data, not instructions/i);
 });
 
-test('BRIEFING_SYSTEM demands JSON-only and the four exact ### headings', () => {
-  assert.match(src, /export const BRIEFING_SYSTEM/);
+test('briefing depth scale exposes three levels with prompts + budgets', () => {
+  assert.match(src, /export type BriefingDepth = 'low' \| 'mid' \| 'high'/);
+  assert.match(src, /export const BRIEFING_LOW_SYSTEM/);
+  assert.match(src, /export const BRIEFING_MID_SYSTEM/);
+  assert.match(src, /export const BRIEFING_HIGH_SYSTEM/);
+  assert.match(src, /export const BRIEFING_SYSTEMS/);
+  assert.match(src, /export const BRIEFING_MAX_TOKENS/);
+});
+
+test('the full-review (high) depth names the four exact ### headings', () => {
   // The renderer parses on these headings — keep them in lockstep.
+  const high = src.slice(src.indexOf('BRIEFING_HIGH_SYSTEM'));
   for (const heading of [
     'The problem',
     'What the evidence says',
     'Strength and gaps in the evidence',
-    'Next steps and ideas to try',
+    'Evidence-based approaches to try',
   ]) {
-    assert.ok(src.includes(`"${heading}"`), `BRIEFING_SYSTEM names the "${heading}" section`);
+    assert.ok(high.includes(`"${heading}"`), `high depth names the "${heading}" section`);
   }
 });
 
-test('BRIEFING_SYSTEM enforces citation discipline and confidence levels', () => {
+test('the overview (mid) depth is a two-section summary', () => {
+  const mid = src.slice(src.indexOf('BRIEFING_MID_SYSTEM'), src.indexOf('BRIEFING_HIGH_SYSTEM'));
+  assert.ok(mid.includes('"What the evidence says"'), 'mid names the evidence section');
+  assert.ok(mid.includes('"Strength and gaps"'), 'mid names the strength/gaps section');
+  assert.match(mid, /exactly two sections/i);
+});
+
+test('the quick-scan (low) depth is short and heading-free', () => {
+  const low = src.slice(src.indexOf('BRIEFING_LOW_SYSTEM'), src.indexOf('BRIEFING_MID_SYSTEM'));
+  assert.match(low, /NO headings/i);
+  assert.match(low, /QUICK SCAN/i);
+});
+
+test('every briefing depth keeps citation discipline and confidence levels', () => {
   assert.match(src, /ONLY the numbered studies/i);
   assert.match(src, /untrusted data/i);
   for (const level of ['strong', 'mixed', 'thin']) {

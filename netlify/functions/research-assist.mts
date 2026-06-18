@@ -9,7 +9,10 @@ import {
   ANSWER_SYSTEM,
   BRIEF_SYSTEM,
   PLAN_SYSTEM,
-  BRIEFING_SYSTEM,
+  BRIEFING_SYSTEMS,
+  BRIEFING_MAX_TOKENS,
+  BRIEFING_DEPTHS,
+  type BriefingDepth,
 } from '../../src/lib/research-assist-prompts';
 import { sanitizeCitations } from '../../src/lib/citations.mjs';
 import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-budget';
@@ -21,12 +24,14 @@ import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-bu
 //     { mode: 'answer', question, items[≤10] }         → { answer, used, caveat, confidence }
 //     { mode: 'brief', topic, items[≤15] }             → { brief, used, caveat }
 //     { mode: 'plan', problem }                         → { framing, angles[3] }
-//     { mode: 'briefing', problem, items[≤15] }         → { briefing, used, confidence, caveat }
+//     { mode: 'briefing', problem, items[≤15], depth }  → { briefing, used, confidence, caveat }
 //
 // plan + briefing are the two halves of the problem-first briefing flow: plan
 // (Sonnet) decomposes a problem into ~3 distinct search angles; the client
 // searches each, merges and curates the studies, then briefing (Sonnet)
-// synthesises a four-section evidence briefing. briefing carries the same
+// synthesises the evidence briefing. `depth` ('low'|'mid'|'high') selects the
+// synthesis prompt and token budget — a quick scan, a balanced overview, or a
+// full review with approaches to try. briefing carries the same
 // citation discipline as answer/brief — only [n] indices into the one numbered
 // list it was given, references built client-side, out-of-range stripped here.
 //
@@ -62,6 +67,30 @@ function cacheKey(mode: string, input: Record<string, unknown>, model: string) {
   return `${mode}:${(h >>> 0).toString(36)}:${model}:${ASSIST_PROMPT_VERSION}`;
 }
 
+// Parse the model's reply as the JSON object the contract asks for. The prompts
+// all demand bare JSON with no fences, but a model can still wrap it in a
+// ```json block or add a stray line; rather than let that throw (and surface as
+// a generic failure), tolerate those shapes by extracting the object span.
+function parseJsonObject(text: string): any {
+  const trimmed = text.trim();
+  try {
+    return JSON.parse(trimmed);
+  } catch {}
+  const fenced = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced) {
+    try {
+      return JSON.parse(fenced[1].trim());
+    } catch {}
+  }
+  // Last resort: the outermost { … } span. Handles leading/trailing prose.
+  const start = trimmed.indexOf('{');
+  const end = trimmed.lastIndexOf('}');
+  if (start !== -1 && end > start) {
+    return JSON.parse(trimmed.slice(start, end + 1));
+  }
+  throw new SyntaxError('Model response was not JSON.');
+}
+
 async function callClaude(model: ModelId, system: string, user: string, maxTokens: number) {
   const client = new Anthropic();
   const res = await client.messages.create({
@@ -77,7 +106,7 @@ async function callClaude(model: ModelId, system: string, user: string, maxToken
     .filter((b): b is Anthropic.TextBlock => b.type === 'text')
     .map((b) => b.text)
     .join('');
-  return JSON.parse(text.trim());
+  return parseJsonObject(text);
 }
 
 const clipStr = (v: unknown, max: number) =>
@@ -124,14 +153,19 @@ export default async (req: Request) => {
         })).filter((it: any) => it.title)
       : [];
     if (!problem || items.length === 0) return json(400, { error: 'Nothing to brief from.' });
+    // Depth picks the synthesis prompt and its budget (quick scan → full
+    // review). Headroom matters at the deep end: too low and a long markdown
+    // briefing truncates mid-object, fails the parse, and shows as no briefing.
+    const depth: BriefingDepth = BRIEFING_DEPTHS.includes(body.depth) ? body.depth : 'mid';
     citedItemCount = items.length;
     model = BRIEFING_MODEL;
-    system = BRIEFING_SYSTEM;
+    system = BRIEFING_SYSTEMS[depth];
     user = `Problem: ${problem}\n\nStudies:\n${items
       .map((it: any, i: number) => `[${i + 1}] ${JSON.stringify(it)}`)
       .join('\n')}`;
-    maxTokens = 2500;
-    input = { p: problem.toLowerCase(), items };
+    maxTokens = BRIEFING_MAX_TOKENS[depth];
+    // depth is part of the cache identity — each level is a distinct briefing.
+    input = { p: problem.toLowerCase(), items, depth };
   } else if (mode === 'brief') {
     const topic = clipStr(body.topic, 100) || 'Saved papers';
     const items = Array.isArray(body.items)

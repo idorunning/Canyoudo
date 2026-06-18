@@ -207,6 +207,40 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                   placeholder="e.g. How do we reduce repeat burglary on a single estate without simply displacing it?"
                   class="w-full border border-ink-300 rounded-md px-4 py-3 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent resize-y"
                 ></textarea>
+
+                {/* Research depth: a 3-stop slider from a quick scan to a full
+                    review. Defaults to the middle (overview). The description
+                    below updates live so each level explains itself. */}
+                <div data-depth-control class="border border-ink-200 rounded-md bg-paper-100 px-4 py-3">
+                  <div class="flex items-baseline justify-between gap-3">
+                    <label for="briefing-depth" class="font-sans text-sm font-medium text-ink-900">
+                      Research depth
+                    </label>
+                    <span data-depth-name class="font-sans text-xs uppercase tracking-[0.12em] text-accent">
+                      Overview
+                    </span>
+                  </div>
+                  <input
+                    id="briefing-depth"
+                    data-briefing-depth
+                    type="range"
+                    min="0"
+                    max="2"
+                    step="1"
+                    value="1"
+                    aria-describedby="briefing-depth-desc"
+                    class="w-full mt-3 accent-[#7c2828] cursor-pointer"
+                  />
+                  <div class="flex justify-between font-sans text-xs text-ink-500 mt-1" aria-hidden="true">
+                    <span>Quick scan</span>
+                    <span>Overview</span>
+                    <span>Full review</span>
+                  </div>
+                  <p id="briefing-depth-desc" data-depth-desc class="font-sans text-xs text-ink-600 mt-2 leading-relaxed">
+                    A balanced summary — what the evidence says and how strong it is, cited to the studies. The default.
+                  </p>
+                </div>
+
                 <div class="flex flex-wrap items-center gap-3">
                   <button
                     type="submit"
@@ -216,7 +250,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                     Build briefing
                   </button>
                   <p class="font-sans text-xs text-ink-600">
-                    Searches several angles, then writes a cited briefing — about half a minute.
+                    Searches several angles, then writes a cited briefing at the depth you choose above.
                   </p>
                 </div>
               </form>

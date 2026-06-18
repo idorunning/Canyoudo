@@ -113,8 +113,9 @@ degrades gracefully (over budget → the curated studies still show).
 
 ## Files
 
-- `src/lib/research-assist-prompts.ts` — `PLAN_SYSTEM`, `BRIEFING_SYSTEM`;
-  `ASSIST_PROMPT_VERSION` bumped to `v5`.
+- `src/lib/research-assist-prompts.ts` — `PLAN_SYSTEM`; the depth scale
+  (`BRIEFING_LOW/MID/HIGH_SYSTEM`, `BRIEFING_SYSTEMS`, `BRIEFING_MAX_TOKENS`);
+  `ASSIST_PROMPT_VERSION` bumped to `v6`.
 - `netlify/functions/research-assist.mts` — `plan` + `briefing` modes.
 - `src/lib/briefing-curate.mjs` — pure curation (tests/briefing-curate.test.mjs).
 - `src/scripts/research/briefing.ts` — pipeline orchestrator + renderer.

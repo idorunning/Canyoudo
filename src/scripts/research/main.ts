@@ -19,6 +19,27 @@ import {
   type BriefingPlan,
   type BriefingOutcome,
 } from './briefing';
+import type { BriefingDepth } from '../../lib/research-assist-prompts';
+
+// The depth slider's three stops, in order — its integer value indexes this.
+// Each carries the chip label and the live description shown under the slider.
+const DEPTH_STOPS: { key: BriefingDepth; name: string; desc: string }[] = [
+  {
+    key: 'low',
+    name: 'Quick scan',
+    desc: 'A fast read of the open record — the headline findings and whether the problem is worth a deeper dig. A few cited paragraphs, in seconds.',
+  },
+  {
+    key: 'mid',
+    name: 'Overview',
+    desc: 'A balanced summary — what the evidence says and how strong it is, cited to the studies. The default. About half a minute.',
+  },
+  {
+    key: 'high',
+    name: 'Full review',
+    desc: 'A full evidence review — the problem framed, what the research shows, its strengths and gaps, and evidence-based approaches to try. Searches widest, so it takes a little longer.',
+  },
+];
 import type { SavedStore } from './saved';
 import type { BriefingsStore } from './briefings-store';
 
@@ -167,6 +188,22 @@ function wireBriefing(
   const result = root.querySelector<HTMLElement>('[data-briefing-result]');
   if (!briefingMode || !form || !input || !send || !progress || !result) return;
 
+  // ---- research depth slider ----
+  const depthSlider = root.querySelector<HTMLInputElement>('[data-briefing-depth]');
+  const depthName = root.querySelector<HTMLElement>('[data-depth-name]');
+  const depthDesc = root.querySelector<HTMLElement>('[data-depth-desc]');
+  function currentDepthStop() {
+    const i = depthSlider ? Number(depthSlider.value) : 1;
+    return DEPTH_STOPS[i] ?? DEPTH_STOPS[1];
+  }
+  function syncDepthLabels() {
+    const stop = currentDepthStop();
+    if (depthName) depthName.textContent = stop.name;
+    if (depthDesc) depthDesc.textContent = stop.desc;
+  }
+  depthSlider?.addEventListener('input', syncDepthLabels);
+  syncDepthLabels();
+
   // ---- mode toggle ----
   function setMode(mode: 'briefing' | 'search') {
     if (briefingMode) briefingMode.hidden = mode !== 'briefing';
@@ -272,6 +309,18 @@ function wireBriefing(
       );
       return;
     }
+    if (outcome.status === 'failed') {
+      // A healthy evidence base came back, but writing the briefing failed —
+      // an assistant-side problem, not a thin record. Say so plainly and show
+      // the studies it would have drawn on.
+      progress!.hidden = true;
+      renderStudyList(
+        outcome.framing,
+        outcome.references,
+        'The studies came back fine — but the briefing couldn’t be written this time. That’s on the assistant, not the evidence. Here’s the evidence base it found; try again in a moment.'
+      );
+      return;
+    }
     // status === 'ok'
     progress!.hidden = true;
     renderBriefing(result!, outcome.result, { hooks: cardHooks });
@@ -298,6 +347,7 @@ function wireBriefing(
     try {
       outcome = await runBriefingPipeline(problem, {
         source: briefingSource,
+        depth: currentDepthStop().key,
         onProgress: setProgressText,
         onPlan: renderPlan,
         onAngleDone: (i) => tickAngle(i),
