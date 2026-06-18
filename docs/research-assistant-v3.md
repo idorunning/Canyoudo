@@ -7,6 +7,28 @@ until then briefings generate and display but can't be saved or shared.
 The governing principle is unchanged: **sources and evidence are king** — the
 assistant never says anything it cannot pin to a retrieved paper.
 
+## Added since v3 — more catalogues (June 2026)
+
+The source layer (`src/lib/research-sources.mjs`) gained three keyless
+catalogues and an open-access enrichment step, all behind the same adapter
+pattern (`buildXUrl` + `mapXWork`):
+
+- **Crossref** (`crossref`) and **Europe PMC** (`europepmc`) — scholarly,
+  keyless, so they're always available and join the merged "All sources"
+  fan-out alongside OpenAlex/Scholar/CORE. Europe PMC is strong on
+  health-adjacent CJ topics (violence, drugs, mental-health crisis).
+- **GOV.UK Search** (`govuk`) — UK official / grey literature (Home Office,
+  HMICFRS, College of Policing, statistics) the journal sources miss. It stays
+  a *standalone* source rather than joining the scholarly merge: its records
+  carry no DOI, citations or peer-review status to corroborate against.
+- **Unpaywall enrichment** — not a source. When a result has a DOI but no
+  free-copy link, `enrichOa` in `netlify/functions/research.mjs` asks Unpaywall
+  for the best open-access copy (bounded to the page, best-effort, gated on
+  `UNPAYWALL_EMAIL`). Without the env var it's simply skipped.
+
+Because the new scholarly sources need no key, the merged search now leads even
+on a keyless deploy. New optional env: `CROSSREF_MAILTO`, `UNPAYWALL_EMAIL`.
+
 ## What changed from v2
 
 v2 was *search-first*: type a query, get results plus an optional cited answer.

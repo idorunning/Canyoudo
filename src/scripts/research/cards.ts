@@ -25,6 +25,9 @@ export const SOURCE_LABELS: Record<string, string> = {
   policing: 'OpenAlex · policing journals',
   scholar: 'Semantic Scholar',
   core: 'CORE',
+  crossref: 'Crossref',
+  europepmc: 'Europe PMC',
+  govuk: 'GOV.UK',
 };
 
 // Compact per-catalogue labels for merged-result provenance badges.
@@ -32,6 +35,8 @@ const SHORT_SOURCE_LABELS: Record<string, string> = {
   openalex: 'OpenAlex',
   scholar: 'S2',
   core: 'CORE',
+  crossref: 'Crossref',
+  europepmc: 'Europe PMC',
 };
 
 /** "OpenAlex · S2" provenance text for a work, falling back to its source. */

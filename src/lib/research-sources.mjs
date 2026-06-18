@@ -5,10 +5,22 @@
 // query params into upstream requests.
 //
 // Sources:
-//   openalex — OpenAlex (https://docs.openalex.org), no key, the default.
-//   policing — OpenAlex restricted to the policing journals below.
-//   scholar  — Semantic Scholar Graph API (free key, has TL;DR summaries).
-//   core     — CORE v3 (free key, full-text search of open-access repositories).
+//   openalex   — OpenAlex (https://docs.openalex.org), no key, the default.
+//   policing   — OpenAlex restricted to the policing journals below.
+//   scholar    — Semantic Scholar Graph API (free key, has TL;DR summaries).
+//   core       — CORE v3 (free key, full-text search of open-access repositories).
+//   crossref   — Crossref REST API (no key; polite pool via CROSSREF_MAILTO).
+//   europepmc  — Europe PMC (no key; full text, health-adjacent CJ topics).
+//   govuk      — GOV.UK Search API (no key; UK official / grey literature).
+//
+// Crossref + Europe PMC are scholarly catalogues that join the merged "All
+// sources" fan-out alongside OpenAlex/Scholar/CORE. GOV.UK is grey literature
+// (Home Office, HMICFRS, College of Policing reports) — it stays a standalone
+// source rather than diluting the peer-reviewed merge, since its records carry
+// no DOI, citations or peer-review status to corroborate against.
+//
+// Unpaywall is not a search source: buildUnpaywallUrl/applyUnpaywall enrich a
+// work that has a DOI but no free-copy link, gated on UNPAYWALL_EMAIL.
 
 export const PER_PAGE = 10;
 
@@ -46,6 +58,12 @@ export const SOURCE_CAPS = {
   policing: { oa: true, review: true, from: true, sort: true },
   scholar: { oa: true, review: true, from: true, sort: false },
   core: { oa: false, review: false, from: true, sort: false }, // CORE is all-OA
+  // Crossref has no dependable open-access or review-article filter in search;
+  // it does sort by citations/date and floor by publication date.
+  crossref: { oa: false, review: false, from: true, sort: true },
+  europepmc: { oa: true, review: true, from: true, sort: true },
+  // GOV.UK is grey literature: no OA/review/citation concepts; date floor only.
+  govuk: { oa: false, review: false, from: true, sort: false },
 };
 
 // ---------------------------------------------------------------------------
@@ -174,6 +192,14 @@ export function clip(text, maxChars = 320) {
   return `${cut.slice(0, cut.lastIndexOf(' '))}…`;
 }
 
+// Crossref abstracts arrive as JATS/XML ("<jats:p>…</jats:p>"); strip the tags
+// back to plain text before clipping for a card.
+export function stripTags(text) {
+  if (text == null) return null;
+  const t = String(text).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return t || null;
+}
+
 export function mapOpenAlexWork(w) {
   const authors = (w.authorships ?? [])
     .map((a) => a?.author?.display_name)
@@ -295,5 +321,186 @@ export function mapCoreWork(w) {
     citedBy: w.citationCount ?? 0,
     abstract: clip(w.abstract),
     source: 'core',
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Crossref REST API. No key; a contact email (CROSSREF_MAILTO) joins the polite
+// pool for faster, more reliable responses. https://api.crossref.org
+// ---------------------------------------------------------------------------
+
+const CROSSREF_SELECT =
+  'title,author,issued,container-title,publisher,DOI,is-referenced-by-count,abstract,link';
+
+export function buildCrossrefUrl(p, { mailto = '', perPage = PER_PAGE } = {}) {
+  const u = new URL('https://api.crossref.org/works');
+  u.searchParams.set('query', p.q);
+  u.searchParams.set('rows', String(perPage));
+  u.searchParams.set('offset', String((p.page - 1) * perPage));
+  u.searchParams.set('select', CROSSREF_SELECT);
+
+  const filters = ['type:journal-article'];
+  if (p.from) filters.push(`from-pub-date:${p.from}-01-01`);
+  u.searchParams.set('filter', filters.join(','));
+
+  // relevance is Crossref's default for a query; only override when asked.
+  const sorts = { cited: 'is-referenced-by-count', recent: 'published' };
+  const sort = sorts[p.sort];
+  if (sort) {
+    u.searchParams.set('sort', sort);
+    u.searchParams.set('order', 'desc');
+  }
+  if (mailto) u.searchParams.set('mailto', mailto);
+  return u;
+}
+
+export function mapCrossrefWork(w) {
+  const authors = (w.author ?? [])
+    .map((a) => [a?.given, a?.family].filter(Boolean).join(' ').trim() || a?.name)
+    .filter(Boolean);
+  const doi = w.DOI ? `https://doi.org/${w.DOI}` : null;
+  // Crossref only surfaces a free copy when a publisher registered a full-text
+  // link; Unpaywall enrichment fills the gaps for the rest.
+  const pdf = (w.link ?? []).find((l) => l?.['content-type'] === 'application/pdf')?.URL ?? null;
+  return {
+    title: Array.isArray(w.title) ? w.title[0] ?? 'Untitled' : w.title ?? 'Untitled',
+    authors: authors.slice(0, 4),
+    moreAuthors: Math.max(0, authors.length - 4),
+    year: w.issued?.['date-parts']?.[0]?.[0] ?? null,
+    venue: w['container-title']?.[0] ?? null,
+    publisher: w.publisher ?? null,
+    doi,
+    pdfUrl: pdf,
+    oaUrl: pdf,
+    isOa: Boolean(pdf),
+    citedBy: w['is-referenced-by-count'] ?? 0,
+    abstract: clip(stripTags(w.abstract)),
+    source: 'crossref',
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Europe PMC. No key; full-text-aware, strong on health-adjacent CJ topics
+// (violence, drugs, mental-health crisis). resultType=core returns rich records.
+// https://europepmc.org/RestfulWebService
+// ---------------------------------------------------------------------------
+
+export function buildEuropePmcUrl(p, { perPage = PER_PAGE } = {}) {
+  const clauses = [p.q];
+  if (p.oa) clauses.push('OPEN_ACCESS:y');
+  if (p.review) clauses.push('PUB_TYPE:"Review"');
+  if (p.from) clauses.push(`PUB_YEAR:[${p.from} TO 3000]`);
+
+  const u = new URL('https://www.ebi.ac.uk/europepmc/webservices/rest/search');
+  u.searchParams.set('query', clauses.join(' AND '));
+  u.searchParams.set('format', 'json');
+  u.searchParams.set('resultType', 'core');
+  u.searchParams.set('pageSize', String(perPage));
+  u.searchParams.set('page', String(p.page));
+
+  const sorts = { cited: 'CITED desc', recent: 'P_PDATE_D desc' };
+  const sort = sorts[p.sort]; // anything else → Europe PMC's relevance default
+  if (sort) u.searchParams.set('sort', sort);
+  return u;
+}
+
+export function mapEuropePmcWork(w) {
+  const authors = (w.authorList?.author ?? [])
+    .map((a) => a?.fullName)
+    .filter(Boolean);
+  const doi = w.doi ? `https://doi.org/${w.doi}` : null;
+  const urls = w.fullTextUrlList?.fullTextUrl ?? [];
+  const pdf = urls.find((u) => u?.documentStyle === 'pdf' && u?.availabilityCode === 'OA')?.url ?? null;
+  const oaHtml = urls.find((u) => u?.availabilityCode === 'OA')?.url ?? null;
+  return {
+    title: w.title ?? 'Untitled',
+    authors: authors.slice(0, 4),
+    moreAuthors: Math.max(0, authors.length - 4),
+    year: Number(w.pubYear) || null,
+    venue: w.journalInfo?.journal?.title ?? w.journalTitle ?? null,
+    publisher: null,
+    doi,
+    pdfUrl: pdf,
+    oaUrl: pdf ?? oaHtml,
+    isOa: w.isOpenAccess === 'Y',
+    citedBy: w.citedByCount ?? 0,
+    abstract: clip(w.abstractText),
+    source: 'europepmc',
+  };
+}
+
+// ---------------------------------------------------------------------------
+// GOV.UK Search API. No key; surfaces UK official material the journal sources
+// miss — Home Office reports, HMICFRS inspections, College of Policing
+// publications, statistics. Grey literature, so no DOI/citation/peer-review.
+// https://www.gov.uk/api/search.json
+// ---------------------------------------------------------------------------
+
+const GOVUK_FIELDS = ['title', 'link', 'description', 'public_timestamp', 'organisations'];
+
+export function buildGovukUrl(p, { perPage = PER_PAGE } = {}) {
+  const u = new URL('https://www.gov.uk/api/search.json');
+  u.searchParams.set('q', p.q);
+  u.searchParams.set('count', String(perPage));
+  u.searchParams.set('start', String((p.page - 1) * perPage));
+  for (const f of GOVUK_FIELDS) u.searchParams.append('fields', f);
+  if (p.from) u.searchParams.set('filter_public_timestamp', `from:${p.from}-01-01`);
+  return u;
+}
+
+export function mapGovukWork(w) {
+  // GOV.UK returns a site-relative path; make it an absolute URL.
+  const path = w.link ?? '';
+  const url = path.startsWith('http') ? path : `https://www.gov.uk${path}`;
+  const org = w.organisations?.[0]?.title ?? null;
+  const year = w.public_timestamp ? new Date(w.public_timestamp).getFullYear() : null;
+  return {
+    title: w.title ?? 'Untitled',
+    authors: [],
+    moreAuthors: 0,
+    year: Number.isFinite(year) ? year : null,
+    venue: org ?? 'GOV.UK',
+    publisher: 'GOV.UK',
+    doi: null,
+    pdfUrl: null,
+    oaUrl: url || null,
+    isOa: true, // official pages are free to read
+    citedBy: 0,
+    abstract: clip(w.description),
+    source: 'govuk',
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Unpaywall enrichment. Not a search source: given a work's DOI, look up the
+// best open-access copy and fill a missing free-copy link. Requires an email
+// (UNPAYWALL_EMAIL); when unset the caller skips enrichment entirely.
+// https://unpaywall.org/products/api
+// ---------------------------------------------------------------------------
+
+export function buildUnpaywallUrl(doi, email) {
+  // Accept a full https://doi.org/… URL or a bare DOI; Unpaywall wants the bare.
+  const bare = String(doi ?? '')
+    .trim()
+    .replace(/^https?:\/\/(dx\.)?doi\.org\//i, '');
+  const u = new URL(`https://api.unpaywall.org/v2/${encodeURIComponent(bare)}`);
+  u.searchParams.set('email', email);
+  return u;
+}
+
+// Fold an Unpaywall response into a work, but never overwrite a link the work
+// already has — enrichment only fills gaps.
+export function applyUnpaywall(work, data) {
+  const loc = data?.best_oa_location;
+  if (!loc) return work;
+  const pdf = loc.url_for_pdf ?? null;
+  const landing = loc.url ?? loc.url_for_landing_page ?? null;
+  const oa = pdf ?? landing;
+  if (!oa) return work;
+  return {
+    ...work,
+    pdfUrl: work.pdfUrl ?? pdf,
+    oaUrl: work.oaUrl ?? oa,
+    isOa: work.isOa || Boolean(oa),
   };
 }

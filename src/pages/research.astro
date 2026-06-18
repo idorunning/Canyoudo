@@ -18,14 +18,18 @@ const hasAuth = Boolean(
 // synthesise. Without AI we fall back to plain search only.
 const hasBriefing = hasAi;
 
-// With a second catalogue configured, the merged "All sources" search leads
-// (and is the default); with OpenAlex alone it would add nothing, so it hides.
+// Crossref, Europe PMC and GOV.UK need no key, so they're always available and
+// the merged "All sources" search always leads (and is the default). Scholar
+// and CORE join only when their free keys are configured.
 const sources = [
-  ...(hasScholar || hasCore ? [{ id: 'all', label: 'All sources (merged)' }] : []),
+  { id: 'all', label: 'All sources (merged)' },
   { id: 'openalex', label: 'All research' },
   { id: 'policing', label: 'Policing journals' },
+  { id: 'crossref', label: 'Crossref' },
+  { id: 'europepmc', label: 'Europe PMC' },
   ...(hasScholar ? [{ id: 'scholar', label: 'Semantic Scholar' }] : []),
   ...(hasCore ? [{ id: 'core', label: 'CORE (full text)' }] : []),
+  { id: 'govuk', label: 'UK official (GOV.UK)' },
 ];
 
 const pageConfig = { hasAi, hasAuth, hasBriefing, sources: sources.map((s) => s.id) };
@@ -74,10 +78,10 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
       </h1>
       <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
         State a problem you're trying to solve and the assistant researches it for you:
-        it breaks the problem into a few angles, searches the open scholarly record from
-        each, curates the strongest studies, and writes a short evidence briefing — what
-        the research says, how strong it is, and concrete next steps to try. Every claim is
-        pinned to a study you can open and read.
+        it breaks the problem into a few angles, searches across several open research
+        catalogues — and UK official sources — from each, curates the strongest studies,
+        and writes a short evidence briefing — what the research says, how strong it is,
+        and concrete next steps to try. Every claim is pinned to a study you can open and read.
       </p>
     </div>
   </section>
@@ -114,7 +118,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             <div class="grid sm:grid-cols-3 gap-6 mb-12">
               {[
                 { n: '1', h: 'State the problem', p: 'Describe what you’re trying to solve, in plain English — “cut repeat burglary on an estate”, “improve trust after a use-of-force incident”.' },
-                { n: '2', h: 'It does the legwork', p: 'The assistant splits the problem into angles, searches the open research record from each, and curates the strongest studies — free copies where they exist.' },
+                { n: '2', h: 'It does the legwork', p: 'The assistant splits the problem into angles and searches several research catalogues — OpenAlex, Crossref, Europe PMC and more — plus UK official sources, curating the strongest studies with free copies where they exist.' },
                 { n: '3', h: 'Get a cited briefing', p: 'A short briefing: what the evidence says, how strong it is, and next steps to try — every claim pinned to a study you can open.' },
               ].map((s) => (
                 <div>
@@ -366,13 +370,17 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 
           <p class="font-sans text-xs text-ink-600 mt-12 pt-6 border-t border-ink-200 max-w-2xl leading-relaxed">
             Results come from
-            <a href="https://openalex.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">OpenAlex</a>{hasScholar && (
+            <a href="https://openalex.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">OpenAlex</a>,
+            <a href="https://www.crossref.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Crossref</a>,
+            <a href="https://europepmc.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Europe PMC</a>{hasScholar && (
               <Fragment>, <a href="https://www.semanticscholar.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Semantic Scholar</a></Fragment>
             )}{hasCore && (
-              <Fragment> and <a href="https://core.ac.uk" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">CORE</a></Fragment>
-            )} — open catalogues of the scholarly record. "Free copy" links go to publisher or
-            repository versions; quality varies and inclusion here is not endorsement. Weigh
-            the study, not the headline.{hasAi && ' Briefings and AI summaries are sketches from abstracts, not verdicts — read the studies.'}
+              <Fragment>, <a href="https://core.ac.uk" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">CORE</a></Fragment>
+            )} and the <a href="https://www.gov.uk/help/reuse-govuk-content" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">GOV.UK</a> search API
+            — open catalogues of the scholarly record plus UK official publications. Free-copy
+            availability is topped up via <a href="https://unpaywall.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Unpaywall</a>.
+            "Free copy" links go to publisher or repository versions; quality varies and
+            inclusion here is not endorsement. Weigh the study, not the headline.{hasAi && ' Briefings and AI summaries are sketches from abstracts, not verdicts — read the studies.'}
           </p>
         </div>
       </div>

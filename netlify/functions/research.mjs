@@ -3,13 +3,20 @@
 // mapping its work objects down to the handful of fields the page renders.
 // Upstream hosts are hard-pinned, so this cannot be turned into an open proxy.
 //
-//   source=openalex  OpenAlex (default; no key; OPENALEX_MAILTO joins the
-//                    polite pool for faster responses)
-//   source=policing  OpenAlex restricted to the policing journals
-//   source=scholar   Semantic Scholar (needs SEMANTIC_SCHOLAR_API_KEY)
-//   source=core      CORE (needs CORE_API_KEY)
+//   source=openalex   OpenAlex (default; no key; OPENALEX_MAILTO joins the
+//                     polite pool for faster responses)
+//   source=policing   OpenAlex restricted to the policing journals
+//   source=scholar    Semantic Scholar (needs SEMANTIC_SCHOLAR_API_KEY)
+//   source=core       CORE (needs CORE_API_KEY)
+//   source=crossref   Crossref (no key; CROSSREF_MAILTO joins the polite pool)
+//   source=europepmc  Europe PMC (no key; health-adjacent CJ topics)
+//   source=govuk      GOV.UK Search (no key; UK official / grey literature)
 //
-// One upstream per query, never a fan-out: Semantic Scholar's free key allows
+// Results carrying a DOI but no free-copy link are topped up via Unpaywall when
+// UNPAYWALL_EMAIL is set (see enrichOa below).
+//
+// One upstream per query for a single source; "all" fans out across the
+// scholarly catalogues. Semantic Scholar's free key allows
 // ~1 req/s, so the edge cache plus opt-in selection is what keeps us inside
 // the limits. Results are cached hard at Netlify's edge — the corpus changes
 // slowly and the same practitioner queries ("hot spots policing") recur.
@@ -19,9 +26,17 @@ import {
   mapOpenAlexWork,
   mapScholarPaper,
   mapCoreWork,
+  mapCrossrefWork,
+  mapEuropePmcWork,
+  mapGovukWork,
   buildOpenAlexUrl,
   buildScholarUrl,
   buildCoreRequest,
+  buildCrossrefUrl,
+  buildEuropePmcUrl,
+  buildGovukUrl,
+  buildUnpaywallUrl,
+  applyUnpaywall,
   isPolicingRelevant,
   PER_PAGE,
   GUARDED_PER_PAGE,
@@ -29,7 +44,7 @@ import {
 import { mergeWorks } from '../../src/lib/research-merge.mjs';
 
 const UA = 'thinkingaboutpolicing.org (+https://thinkingaboutpolicing.org)';
-const SOURCES = ['all', 'openalex', 'policing', 'scholar', 'core'];
+const SOURCES = ['all', 'openalex', 'policing', 'scholar', 'core', 'crossref', 'europepmc', 'govuk'];
 
 const json = (body, status = 200, cache = 'no-store', extra = {}) =>
   new Response(JSON.stringify(body), {
@@ -88,6 +103,35 @@ export default async (req) => {
         map: (data) => ({ count: data.totalHits ?? 0, results: (data.results ?? []).map(mapCoreWork) }),
       };
     }
+    // Keyless catalogues — over-fetched (GUARDED_PER_PAGE) so the relevance
+    // guard can prune strays and still leave a full page behind.
+    if (src === 'crossref') {
+      return {
+        url: buildCrossrefUrl(p, { mailto: process.env.CROSSREF_MAILTO ?? '', perPage: GUARDED_PER_PAGE }),
+        init: { headers: { 'User-Agent': UA, Accept: 'application/json' } },
+        map: (data) => ({
+          count: data.message?.['total-results'] ?? 0,
+          results: (data.message?.items ?? []).map(mapCrossrefWork),
+        }),
+      };
+    }
+    if (src === 'europepmc') {
+      return {
+        url: buildEuropePmcUrl(p, { perPage: GUARDED_PER_PAGE }),
+        init: { headers: { 'User-Agent': UA, Accept: 'application/json' } },
+        map: (data) => ({
+          count: data.hitCount ?? 0,
+          results: (data.resultList?.result ?? []).map(mapEuropePmcWork),
+        }),
+      };
+    }
+    if (src === 'govuk') {
+      return {
+        url: buildGovukUrl(p, { perPage: GUARDED_PER_PAGE }),
+        init: { headers: { 'User-Agent': UA, Accept: 'application/json' } },
+        map: (data) => ({ count: data.total ?? 0, results: (data.results ?? []).map(mapGovukWork) }),
+      };
+    }
     return {
       url: buildOpenAlexUrl(p, {
         policingOnly: src === 'policing',
@@ -114,12 +158,42 @@ export default async (req) => {
     return request.map(await res.json());
   }
 
+  // Fill missing free-copy links via Unpaywall (gated on UNPAYWALL_EMAIL).
+  // Bounded to the works we're about to return that have a DOI but no OA link;
+  // failures are silent and the edge cache pays the cost once per query.
+  async function enrichOa(works, max = PER_PAGE) {
+    const email = process.env.UNPAYWALL_EMAIL;
+    if (!email) return works;
+    const targets = [];
+    for (let i = 0; i < works.length && targets.length < max; i++) {
+      const w = works[i];
+      if (w.doi && !w.pdfUrl && !w.oaUrl) targets.push(i);
+    }
+    if (targets.length === 0) return works;
+    await Promise.allSettled(
+      targets.map(async (i) => {
+        try {
+          const res = await fetch(buildUnpaywallUrl(works[i].doi, email), {
+            headers: { 'User-Agent': UA, Accept: 'application/json' },
+            signal: AbortSignal.timeout(6_000),
+          });
+          if (!res.ok) return;
+          works[i] = applyUnpaywall(works[i], await res.json());
+        } catch {
+          /* enrichment is best-effort */
+        }
+      })
+    );
+    return works;
+  }
+
   // ---- "All sources": fan out, dedupe, corroborate --------------------------
   if (source === 'all') {
-    // CORE can't honour the reviews-only filter, so it sits that one out
-    // rather than polluting a filtered page. Missing keys are skipped — a
-    // keyless deploy quietly degrades to OpenAlex alone.
-    const subSources = ['openalex', 'scholar', ...(p.review ? [] : ['core'])];
+    // CORE and Crossref can't honour the reviews-only filter, so they sit that
+    // one out rather than polluting a filtered page. Missing keys are skipped —
+    // a keyless deploy still merges OpenAlex, Crossref and Europe PMC. GOV.UK
+    // stays out of the scholarly merge (grey literature, nothing to dedupe on).
+    const subSources = ['openalex', 'scholar', 'europepmc', ...(p.review ? [] : ['core', 'crossref'])];
     const requests = subSources
       .map((src) => ({ src, request: buildRequest(src) }))
       .filter((r) => r.request);
@@ -146,7 +220,7 @@ export default async (req) => {
         perPage: PER_PAGE,
         source,
         sourcesUsed,
-        results: mergeWorks(lists),
+        results: await enrichOa(mergeWorks(lists)),
       },
       200,
       'public, max-age=300',
@@ -178,7 +252,7 @@ export default async (req) => {
   // as off-topic (medical, genetics, economics) before it reaches the page.
   const onTopic = source === 'policing' ? results : results.filter(isPolicingRelevant);
   return json(
-    { count, page: p.page, perPage: PER_PAGE, source, results: onTopic },
+    { count, page: p.page, perPage: PER_PAGE, source, results: await enrichOa(onTopic) },
     200,
     // Slow-moving corpus → cache briefly in the browser, hard at the edge.
     // This is also the main shield on Semantic Scholar's 1 req/s key.

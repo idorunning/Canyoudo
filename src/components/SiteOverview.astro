@@ -23,8 +23,9 @@ const SECTION_DESC: Record<string, string> = {
 };
 
 // The interactive tools, given the same accent treatment as the header.
+// `badge` flags a recently improved tool (shown as a small pill on the card).
 const tools = [
-  { href: '/research', label: 'Research Assistant', desc: 'Ask questions of the evidence base and get sourced answers.' },
+  { href: '/research', label: 'Research Assistant', badge: 'Expanded', desc: 'State a policing problem and get a cited briefing — now searching more research catalogues plus UK official sources.' },
   { href: '/data', label: 'Crime Dashboard', desc: 'Explore stop & search and recorded crime by force and area.' },
   { href: '/topics', label: `Topics (${topics.length})`, desc: 'Browse every theme the site covers, from VAWG to AI.' },
 ];
@@ -62,6 +63,11 @@ const tools = [
         >
           <h3 class="font-display text-xl font-semibold text-accent group-hover:text-accent-dark transition-colors leading-snug">
             {t.label}
+            {t.badge && (
+              <span class="align-middle ml-2 font-sans text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-accent bg-accent/10 border border-accent/30 rounded-full px-2 py-0.5">
+                {t.badge}
+              </span>
+            )}
           </h3>
           <p class="font-serif text-base text-ink-700 leading-relaxed mt-2">{t.desc}</p>
           <p class="font-sans text-xs uppercase tracking-[0.15em] text-accent/80 mt-4">Tool →</p>

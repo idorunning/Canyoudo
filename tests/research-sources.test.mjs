@@ -4,13 +4,22 @@ import assert from 'node:assert/strict';
 import {
   abstractFromIndex,
   clip,
+  stripTags,
   readParams,
   mapOpenAlexWork,
   mapScholarPaper,
   mapCoreWork,
+  mapCrossrefWork,
+  mapEuropePmcWork,
+  mapGovukWork,
   buildOpenAlexUrl,
   buildScholarUrl,
   buildCoreRequest,
+  buildCrossrefUrl,
+  buildEuropePmcUrl,
+  buildGovukUrl,
+  buildUnpaywallUrl,
+  applyUnpaywall,
   isPolicingRelevant,
   POLICING_JOURNAL_ISSNS,
   SOURCE_CAPS,
@@ -216,8 +225,164 @@ test('isPolicingRelevant drops off-topic work', () => {
 });
 
 test('SOURCE_CAPS covers every source', () => {
-  assert.deepEqual(Object.keys(SOURCE_CAPS).sort(), ['all', 'core', 'openalex', 'policing', 'scholar']);
+  assert.deepEqual(
+    Object.keys(SOURCE_CAPS).sort(),
+    ['all', 'core', 'crossref', 'europepmc', 'govuk', 'openalex', 'policing', 'scholar']
+  );
   for (const caps of Object.values(SOURCE_CAPS)) {
     assert.deepEqual(Object.keys(caps).sort(), ['from', 'oa', 'review', 'sort']);
   }
+});
+
+// ---------------------------------------------------------------------------
+// Crossref / Europe PMC / GOV.UK adapters + Unpaywall enrichment
+// ---------------------------------------------------------------------------
+test('stripTags flattens JATS/HTML to plain text', () => {
+  assert.equal(stripTags('<jats:p>Hot <i>spots</i></jats:p>'), 'Hot spots');
+  assert.equal(stripTags('  plain  text  '), 'plain text');
+  assert.equal(stripTags('<p></p>'), null);
+  assert.equal(stripTags(null), null);
+});
+
+test('mapCrossrefWork maps names, year, JATS abstract and cited count', () => {
+  const w = mapCrossrefWork({
+    title: ['Procedural justice and police legitimacy'],
+    author: [
+      { given: 'Jonathan', family: 'Jackson' },
+      { given: 'Ben', family: 'Bradford' },
+    ],
+    issued: { 'date-parts': [[2021, 6]] },
+    'container-title': ['Policing and Society'],
+    publisher: 'Taylor & Francis',
+    DOI: '10.1080/10439463.2021.123',
+    'is-referenced-by-count': 57,
+    abstract: '<jats:p>A study of legitimacy and crime.</jats:p>',
+    link: [{ URL: 'https://example.org/full.pdf', 'content-type': 'application/pdf' }],
+  });
+  assert.deepEqual(Object.keys(w).sort(), [...WORK_KEYS].sort());
+  assert.equal(w.title, 'Procedural justice and police legitimacy');
+  assert.equal(w.authors[0], 'Jonathan Jackson');
+  assert.equal(w.year, 2021);
+  assert.equal(w.venue, 'Policing and Society');
+  assert.equal(w.doi, 'https://doi.org/10.1080/10439463.2021.123');
+  assert.equal(w.pdfUrl, 'https://example.org/full.pdf');
+  assert.equal(w.isOa, true);
+  assert.equal(w.citedBy, 57);
+  assert.equal(w.abstract, 'A study of legitimacy and crime.');
+  assert.equal(w.source, 'crossref');
+});
+
+test('mapCrossrefWork tolerates a sparse record with no full text', () => {
+  const w = mapCrossrefWork({ DOI: '10.1/x' });
+  assert.equal(w.title, 'Untitled');
+  assert.equal(w.pdfUrl, null);
+  assert.equal(w.isOa, false);
+  assert.equal(w.citedBy, 0);
+});
+
+test('buildCrossrefUrl filters, paginates and sorts', () => {
+  const u = buildCrossrefUrl(params({ q: 'hot spots', from: '2015', sort: 'cited', page: '2' }), {
+    mailto: 'hi@example.org',
+    perPage: GUARDED_PER_PAGE,
+  });
+  assert.equal(u.origin + u.pathname, 'https://api.crossref.org/works');
+  assert.equal(u.searchParams.get('query'), 'hot spots');
+  assert.equal(u.searchParams.get('rows'), String(GUARDED_PER_PAGE));
+  assert.equal(u.searchParams.get('offset'), String(GUARDED_PER_PAGE));
+  assert.equal(u.searchParams.get('filter'), 'type:journal-article,from-pub-date:2015-01-01');
+  assert.equal(u.searchParams.get('sort'), 'is-referenced-by-count');
+  assert.equal(u.searchParams.get('order'), 'desc');
+  assert.equal(u.searchParams.get('mailto'), 'hi@example.org');
+});
+
+test('mapEuropePmcWork maps authors, OA pdf and citations', () => {
+  const w = mapEuropePmcWork({
+    title: 'Domestic abuse and repeat victimisation',
+    authorList: { author: [{ fullName: 'Smith J' }, { fullName: 'Jones K' }] },
+    pubYear: '2019',
+    journalInfo: { journal: { title: 'Journal of Criminal Justice' } },
+    doi: '10.1016/j.jcj.2019.1',
+    isOpenAccess: 'Y',
+    citedByCount: 33,
+    abstractText: 'A cohort study.',
+    fullTextUrlList: {
+      fullTextUrl: [
+        { documentStyle: 'html', availabilityCode: 'OA', url: 'https://example.org/html' },
+        { documentStyle: 'pdf', availabilityCode: 'OA', url: 'https://example.org/p.pdf' },
+      ],
+    },
+  });
+  assert.deepEqual(Object.keys(w).sort(), [...WORK_KEYS].sort());
+  assert.equal(w.authors.length, 2);
+  assert.equal(w.year, 2019);
+  assert.equal(w.venue, 'Journal of Criminal Justice');
+  assert.equal(w.doi, 'https://doi.org/10.1016/j.jcj.2019.1');
+  assert.equal(w.pdfUrl, 'https://example.org/p.pdf');
+  assert.equal(w.isOa, true);
+  assert.equal(w.citedBy, 33);
+  assert.equal(w.source, 'europepmc');
+});
+
+test('buildEuropePmcUrl ANDs filters into the query and sorts', () => {
+  const u = buildEuropePmcUrl(params({ q: 'knife crime', oa: '1', review: '1', from: '2018', sort: 'recent', page: '3' }));
+  assert.equal(u.origin + u.pathname, 'https://www.ebi.ac.uk/europepmc/webservices/rest/search');
+  assert.equal(u.searchParams.get('query'), 'knife crime AND OPEN_ACCESS:y AND PUB_TYPE:"Review" AND PUB_YEAR:[2018 TO 3000]');
+  assert.equal(u.searchParams.get('format'), 'json');
+  assert.equal(u.searchParams.get('resultType'), 'core');
+  assert.equal(u.searchParams.get('page'), '3');
+  assert.equal(u.searchParams.get('sort'), 'P_PDATE_D desc');
+});
+
+test('mapGovukWork builds an absolute link and dates the record', () => {
+  const w = mapGovukWork({
+    title: 'Police use of force statistics',
+    link: '/government/statistics/police-use-of-force',
+    description: 'Annual data on use of force by police forces in England and Wales.',
+    public_timestamp: '2023-12-07T09:30:00.000+00:00',
+    organisations: [{ title: 'Home Office' }],
+  });
+  assert.deepEqual(Object.keys(w).sort(), [...WORK_KEYS].sort());
+  assert.equal(w.oaUrl, 'https://www.gov.uk/government/statistics/police-use-of-force');
+  assert.equal(w.venue, 'Home Office');
+  assert.equal(w.publisher, 'GOV.UK');
+  assert.equal(w.year, 2023);
+  assert.equal(w.isOa, true);
+  assert.equal(w.doi, null);
+  assert.equal(w.source, 'govuk');
+});
+
+test('buildGovukUrl paginates and floors by date', () => {
+  const u = buildGovukUrl(params({ q: 'stop and search', from: '2015', page: '2' }), { perPage: GUARDED_PER_PAGE });
+  assert.equal(u.origin + u.pathname, 'https://www.gov.uk/api/search.json');
+  assert.equal(u.searchParams.get('q'), 'stop and search');
+  assert.equal(u.searchParams.get('count'), String(GUARDED_PER_PAGE));
+  assert.equal(u.searchParams.get('start'), String(GUARDED_PER_PAGE));
+  assert.deepEqual(u.searchParams.getAll('fields'), ['title', 'link', 'description', 'public_timestamp', 'organisations']);
+  assert.equal(u.searchParams.get('filter_public_timestamp'), 'from:2015-01-01');
+});
+
+test('buildUnpaywallUrl strips a doi.org prefix and adds the email', () => {
+  const u = buildUnpaywallUrl('https://doi.org/10.1/AbC', 'me@example.org');
+  assert.equal(u.origin + u.pathname, 'https://api.unpaywall.org/v2/10.1%2FAbC');
+  assert.equal(u.searchParams.get('email'), 'me@example.org');
+  const bare = buildUnpaywallUrl('10.1/x', 'me@example.org');
+  assert.ok(bare.pathname.endsWith('10.1%2Fx'));
+});
+
+test('applyUnpaywall fills missing links but never overwrites', () => {
+  const base = { pdfUrl: null, oaUrl: null, isOa: false };
+  const filled = applyUnpaywall(base, {
+    best_oa_location: { url_for_pdf: 'https://oa.org/x.pdf', url: 'https://oa.org/x' },
+  });
+  assert.equal(filled.pdfUrl, 'https://oa.org/x.pdf');
+  assert.equal(filled.oaUrl, 'https://oa.org/x.pdf');
+  assert.equal(filled.isOa, true);
+
+  // No OA location → unchanged; existing links are preserved.
+  assert.deepEqual(applyUnpaywall(base, { best_oa_location: null }), base);
+  const kept = applyUnpaywall(
+    { pdfUrl: 'https://keep.me/p.pdf', oaUrl: 'https://keep.me/p.pdf', isOa: true },
+    { best_oa_location: { url_for_pdf: 'https://other.org/y.pdf' } }
+  );
+  assert.equal(kept.pdfUrl, 'https://keep.me/p.pdf');
 });
