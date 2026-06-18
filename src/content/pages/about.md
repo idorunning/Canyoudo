@@ -35,13 +35,17 @@ Founder and Editor
 
 ![](/images/20191231_210253.webp)
 
-I am a serving Police Sergeant with Sussex Police, specializing in neighbourhood policing and data-led operational strategy. My approach to law enforcement is defined by an unconventional but common trajectory into the service: minimal academic qualifications, entering policing at age thirty-one following a career managing commercial operations within a corporate environment.  subsequently I was also diagnosed with of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven. - This diagnosis literally saved my life, nut Ill write about that another day....
+I am an Acting Inspector with Sussex Police, specializing in neighbourhood policing and data-led operational strategy.  I have been hostage and crisis negotiator during this time as well a a response cop, neighbourhood Sergeant, and my current role is spread between being duty Inspector, response Inspector and investigations inspector. 
 
-This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organisational design, and institutional assumptions regarding human behaviour versus empirical reality.
+My thoughts on policing are defined by an unconventional but common trajectory into the service: minimal academic qualifications, entering policing in my thirties following a career managing commercial operations within a corporate environment.  Subsequently I was also diagnosed with of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven. - This diagnosis literally saved my life, (maybe Ill write about that another day....)
 
-My operational interests focus heavily on data application—specifically the predictive analysis of officer assaults, use-of-force proportionality, and misconduct trends—with a strong structural bias toward early detection and intervention frameworks. My methodology has been fundamentally shaped by statistical communication theory, Jerry Ratcliffe’s frameworks for intelligence-led policing, and the foundational principles of evidence-based practice championed by the Society of Evidence-Based Policing (SEBP). - As well as a constant relistening to more or less podcasts (Thanks  [@TimHarford](https://t.co/20kzyGEfSM) )
+I was drawn into evidence based policing via a small project at work that ended up with a school run phone call from Alex Murray OBE the interim director of Police Ai (was the ACC for West Midlands police at the time) and invited to present my tiny none academic research at the college of policing and also at Whitehall at an AI conference - yes using Chat GPT back in 2022 for maths was less common back then!
 
-The underlying purpose of this platform has changed: Initially it was planned to be a kind of personal blog related to things that interest me whilst also giving me a project to work on during my days off,  but as my coding (vibe not proper coding) has developed so has the website, with research assistants and crime dashboards being built as we speak.
+This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organisational design, and institutional assumptions regarding human behaviour versus empirical reality and actually checking what we think works, works. 
+
+My operational interests focus heavily on data application—specifically the predictive analysis of officer assaults, use-of-force proportionality, and misconduct trends—with a strong structural bias toward early detection and intervention frameworks. My methodology has been fundamentally shaped by statistical communication theory, Jerry Ratcliffe’s frameworks for intelligence-led policing, and the foundational principles of evidence-based practice championed by the Society of Evidence-Based Policing (SEBP). - As well as a constant relistening to more or less episodes on BBC radio (Thanks  [@TimHarford](https://t.co/20kzyGEfSM) )
+
+The underlying purpose of this platform has changed: Initially it was planned to be a kind of personal blog related to things that interest me whilst also giving me a project to work on during my days off,  but as my coding (vibe coded not "proper" coding) has developed so has the website, with research assistants and crime dashboards being built as we speak.
 
 ## Disclaimers and Integrity
 
