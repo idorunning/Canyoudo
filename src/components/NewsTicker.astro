@@ -22,6 +22,18 @@ const TOPIC_LABEL: Record<string, string> = {
   ai: 'AI',
   other: 'News',
 };
+
+// A small publisher logo for each headline: the source domain's own favicon,
+// derived from the article link. Loaded first-party from the publisher (the
+// same domain the link points to), with no referrer leaked. Returns null if the
+// link can't be parsed, in which case we just show the source name on its own.
+function faviconFor(link: string): string | null {
+  try {
+    return `https://${new URL(link).hostname}/favicon.ico`;
+  } catch {
+    return null;
+  }
+}
 ---
 
 {items.length > 0 && (
@@ -49,6 +61,19 @@ const TOPIC_LABEL: Record<string, string> = {
                   >
                     <span class={`news-chip news-chip--${item.topic}`}>{TOPIC_LABEL[item.topic] ?? 'News'}</span>
                     <span class="font-display text-sm font-medium text-ink-800 group-hover:text-accent transition-colors">{item.title}</span>
+                    {faviconFor(item.link) && (
+                      <img
+                        src={faviconFor(item.link)}
+                        alt=""
+                        width="16"
+                        height="16"
+                        loading="lazy"
+                        decoding="async"
+                        referrerpolicy="no-referrer"
+                        class="w-4 h-4 rounded-sm shrink-0"
+                        onerror="this.remove()"
+                      />
+                    )}
                     <span class="font-sans text-xs text-ink-400">{item.source}</span>
                   </a>
                 </li>

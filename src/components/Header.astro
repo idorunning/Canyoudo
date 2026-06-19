@@ -4,8 +4,8 @@ import SearchModal from './SearchModal.astro';
 // Desktop nav is two rows: the writing sections plus the two interactive tools
 // on top, and the about/contact pages underneath. The interactive tools sit
 // right after the two policy sections and are rendered bold so they read as
-// functions to use, not just more places to read. The mobile menu flattens
-// everything into one list.
+// functions to use, not just more places to read. The mobile menu is two
+// columns: every other destination on the left, the tools (in red) on the right.
 const primaryLinks = [
   { href: '/police-policy', label: 'Police Policy' },
   { href: '/public-policy', label: 'Public Policy' },
@@ -116,51 +116,63 @@ const currentPath = Astro.url.pathname;
     </div>
 
     <nav id="mobile-menu" class="hidden md:hidden pb-4">
-      <ul class="flex flex-col gap-1">
-        {primaryLinks.map(link => (
-          <li>
-            <a
-              href={link.href}
-              class={`block py-2 font-sans text-sm ${
-                link.tool
-                  ? 'font-semibold text-accent hover:text-accent-dark'
-                  : 'text-ink-700 hover:text-accent'
-              }`}
+      <div class="grid grid-cols-[1fr_auto] gap-x-8">
+        {/* Left column: every other destination, as it was. */}
+        <ul class="flex flex-col gap-1">
+          {primaryLinks.filter(link => !link.tool).map(link => (
+            <li>
+              <a
+                href={link.href}
+                class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+          {metaLinks.map(link => (
+            <li>
+              <a
+                href={link.href}
+                class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+          <li class="pt-2 mt-2 border-t border-ink-200">
+            <button
+              type="button"
+              data-search-open
+              class="block w-full text-left py-2 font-sans text-sm text-ink-700 hover:text-accent"
             >
-              {link.label}
-            </a>
+              Search
+            </button>
           </li>
-        ))}
-        {metaLinks.map(link => (
-          <li>
-            <a
-              href={link.href}
-              class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-        <li class="pt-2 mt-2 border-t border-ink-200">
-          <button
-            type="button"
-            data-search-open
-            class="block w-full text-left py-2 font-sans text-sm text-ink-700 hover:text-accent"
-          >
-            Search
-          </button>
-        </li>
-        {moreLinks.map(link => (
-          <li>
-            <a
-              href={link.href}
-              class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+          {moreLinks.map(link => (
+            <li>
+              <a
+                href={link.href}
+                class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        {/* Right column: the interactive tools, in the red accent. */}
+        <ul class="flex flex-col gap-1 text-right">
+          {primaryLinks.filter(link => link.tool).map(link => (
+            <li>
+              <a
+                href={link.href}
+                class="block py-2 font-sans text-sm font-semibold text-accent hover:text-accent-dark"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   </div>
 </header>
