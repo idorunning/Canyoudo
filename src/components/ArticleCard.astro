@@ -10,6 +10,10 @@ interface Props {
   section?: 'police-policy' | 'public-policy' | 'influential-people' | 'other' | 'data-stories';
   showSection?: boolean;
   variant?: 'default' | 'feature';
+  // 'row' (the default) puts the image beside the text — good for lists and the
+  // feature card. 'stack' puts the image on top, for cards in a multi-column
+  // grid where a side-by-side thumbnail would be too cramped.
+  layout?: 'row' | 'stack';
   // A portrait (Influential People) takes priority for the card thumbnail;
   // otherwise the article's hero image is used. When neither is a committed
   // image, the card shows a generated initial tile so every card has a visual.
@@ -25,6 +29,7 @@ const {
   section,
   showSection = false,
   variant = 'default',
+  layout = 'row',
   portrait,
   heroImage,
 } = Astro.props;
@@ -36,27 +41,36 @@ const formattedDate = pubDate.toLocaleDateString('en-GB', {
 });
 
 const isFeature = variant === 'feature';
+const isStack = layout === 'stack';
 const cardImage = portrait ?? heroImage;
 const initial = (title.match(/[A-Za-z0-9]/)?.[0] ?? '·').toUpperCase();
 // Bigger, more prominent card images: a full-width banner on mobile, and a
-// larger square thumbnail beside the text from `sm` up.
-const thumbSize = isFeature
-  ? 'w-full h-56 sm:h-44 sm:w-44 md:h-52 md:w-52'
-  : 'w-full h-48 sm:h-32 sm:w-32 md:h-40 md:w-40';
+// larger square thumbnail beside the text from `sm` up. Stacked cards use a
+// full-width banner of a fixed height so a grid row stays even.
+const thumbSize = isStack
+  ? 'w-full h-44 md:h-48'
+  : isFeature
+    ? 'w-full h-56 sm:h-44 sm:w-44 md:h-52 md:w-52'
+    : 'w-full h-48 sm:h-32 sm:w-32 md:h-40 md:w-40';
+
+const articleClass = isStack
+  ? 'group flex h-full flex-col'
+  : `group ${isFeature ? 'py-10' : 'py-7'} border-b border-ink-200`;
+const linkClass = isStack ? 'flex h-full flex-col' : 'block sm:flex sm:gap-6 sm:items-start';
 ---
 
-<article class={`group ${isFeature ? 'py-10' : 'py-7'} border-b border-ink-200`}>
-  <a href={href} class="block sm:flex sm:gap-6 sm:items-start">
+<article class={articleClass}>
+  <a href={href} class={linkClass}>
     {cardImage ? (
       <img
         src={cardImage}
         alt=""
         loading="lazy"
-        class={`mb-4 sm:mb-0 shrink-0 rounded-md object-cover bg-paper-200 ring-1 ring-ink-200 ${thumbSize}`}
+        class={`${isStack ? 'mb-5' : 'mb-4 sm:mb-0'} shrink-0 rounded-md object-cover bg-paper-200 ring-1 ring-ink-200 ${thumbSize}`}
       />
     ) : (
       <div
-        class={`mb-4 sm:mb-0 shrink-0 rounded-md bg-ink-900 ring-1 ring-ink-200 flex flex-col items-center justify-center text-center overflow-hidden px-1 ${thumbSize}`}
+        class={`${isStack ? 'mb-5' : 'mb-4 sm:mb-0'} shrink-0 rounded-md bg-ink-900 ring-1 ring-ink-200 flex flex-col items-center justify-center text-center overflow-hidden px-1 ${thumbSize}`}
         aria-hidden="true"
       >
         <span class={`font-display font-semibold text-paper-100 leading-none ${isFeature ? 'text-5xl' : 'text-3xl md:text-4xl'}`}>{initial}</span>
@@ -66,7 +80,7 @@ const thumbSize = isFeature
       </div>
     )}
 
-    <div class="min-w-0">
+    <div class={isStack ? 'min-w-0 flex flex-1 flex-col' : 'min-w-0'}>
       {showSection && section && (
         <div class="mb-3">
           <SectionBadge section={section} size="sm" />
@@ -74,18 +88,18 @@ const thumbSize = isFeature
       )}
 
       <h2 class={`font-display font-semibold text-ink-900 leading-tight tracking-tight group-hover:text-accent transition-colors ${
-        isFeature ? 'text-3xl md:text-4xl' : 'text-2xl md:text-[1.7rem]'
+        isFeature ? 'text-3xl md:text-4xl' : isStack ? 'text-xl md:text-2xl' : 'text-2xl md:text-[1.7rem]'
       }`}>
         {title}
       </h2>
 
       <p class={`font-serif text-ink-700 leading-relaxed mt-3 ${
-        isFeature ? 'text-lg md:text-xl max-w-2xl' : 'text-base max-w-2xl'
+        isFeature ? 'text-lg md:text-xl max-w-2xl' : isStack ? 'text-base' : 'text-base max-w-2xl'
       }`}>
         {description}
       </p>
 
-      <div class="mt-4 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
+      <div class={`font-sans text-xs uppercase tracking-[0.15em] text-ink-500 ${isStack ? 'mt-auto pt-4' : 'mt-4'}`}>
         <time datetime={pubDate.toISOString()}>{formattedDate}</time>
         <span class="mx-2">·</span>
         <span class="group-hover:text-accent transition-colors">Read article →</span>

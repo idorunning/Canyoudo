@@ -2,6 +2,11 @@
 title: 'When Police Stop Investigating Crime: The Fuel Theft Crisis hurting British Policing'
 section: police-policy
 description: Clear CCTV, a registration plate, precise timestamps — and still “case closed, no suspect identified”. How fuel theft became effectively decriminalised.
+keyTakeaways:
+  - Some 99% of fuel-theft crimes end without a prosecution, even when retailers hand police clear CCTV, ANPR data and payment records.
+  - Forecourts are "islands of enquiry" — continuously monitored, evidence-rich sites on the road network whose investigative value is being squandered.
+  - 'Non-response is breaking the relationship: retailers increasingly stop cooperating and turn to £35m-a-year private recovery instead of the police.'
+  - The real issue is bigger than the £100m of lost fuel — when police openly abandon a solvable category of crime, policing by consent erodes.
 pubDate: 2025-06-17
 updatedDate: ''
 author: ''
@@ -81,9 +86,7 @@ If petrol station workforces reflect broader retail demographics, and particular
 
 The absence of demographic data is itself instructive. Vulnerable workforces often remain invisible in policy discussions precisely because nobody collects the information that would make their vulnerability apparent.
 
-What it means when police stop policing
-
-### The diversity dimension: a critical evidence gap
+### What it means when police stop policing
 
 The central issue here is not really fuel theft. The £100 million cost matters to the industry, but the deeper problem is what happens when law enforcement openly abandons entire categories of crime despite clear evidence and solvability.
 

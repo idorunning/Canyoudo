@@ -74,46 +74,75 @@ const jsonLd = [
 ---
 
 <BaseLayout title="Thinking About Policing" jsonLd={jsonLd}>
-  {/* Welcome / hero */}
+  {/* Masthead — the hero headline paired with the latest piece as a lead story,
+      so the front page opens like a magazine cover rather than a wall of text. */}
   <section class="border-b border-ink-200">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-16 md:py-24">
-      <div class="max-w-3xl">
-        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">
-          A weblog by Nathan Tracey
-        </p>
-        <h1 class="font-display text-4xl md:text-6xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
-          Evidence-based writing on <span class="italic">policing</span>, public policy, and the occasional historical puzzle.
-        </h1>
-        <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-7 max-w-2xl">
-          Aimed at senior leaders, policymakers, and anyone who cares whether what we do in policing actually works.
-        </p>
-        <div class="mt-8 flex flex-wrap items-center gap-3">
-          <a
-            href="/subscribe"
-            class="font-sans text-sm font-medium bg-accent text-paper-50 px-4 py-2 rounded hover:bg-accent-dark transition-colors"
-          >
-            Subscribe by email →
-          </a>
-          <a
-            href="/rss.xml"
-            class="font-sans text-sm font-medium text-ink-700 border border-ink-200 px-4 py-2 rounded hover:text-accent hover:border-ink-300 transition-colors"
-          >
-            RSS feed
-          </a>
-          <a
-            href="/ai"
-            class="font-sans text-sm text-ink-500 hover:text-accent transition-colors"
-          >
-            What this site covers →
-          </a>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <div class="lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 xl:gap-20 lg:items-center">
+        <div class="max-w-2xl">
+          <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">
+            A weblog by Nathan Tracey
+          </p>
+          <h1 class="font-display text-4xl md:text-6xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+            Evidence-based writing on <span class="italic">policing</span>, public policy, and the occasional historical puzzle.
+          </h1>
+          <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-7 max-w-2xl">
+            Aimed at senior leaders, policymakers, and anyone who cares whether what we do in policing actually works.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href="/subscribe"
+              class="font-sans text-sm font-medium bg-accent text-paper-50 px-4 py-2 rounded hover:bg-accent-dark transition-colors"
+            >
+              Subscribe by email →
+            </a>
+            <a
+              href="/rss.xml"
+              class="font-sans text-sm font-medium text-ink-700 border border-ink-200 px-4 py-2 rounded hover:text-accent hover:border-ink-300 transition-colors"
+            >
+              RSS feed
+            </a>
+            <a
+              href="/ai"
+              class="font-sans text-sm text-ink-500 hover:text-accent transition-colors"
+            >
+              What this site covers →
+            </a>
+          </div>
         </div>
+
+        {feature && (
+          <div class="mt-12 lg:mt-0">
+            <p class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-4">Latest</p>
+            <div class="border border-ink-200 rounded-lg p-5 md:p-6 bg-paper-50 hover:border-ink-300 transition-colors">
+              <ArticleCard
+                href={`/${feature.section}/${feature.slug}`}
+                title={feature.data.title}
+                description={feature.data.description}
+                pubDate={feature.data.pubDate}
+                section={feature.section}
+                showSection={true}
+                variant="feature"
+                layout="stack"
+                portrait={feature.data.portrait}
+                heroImage={feature.data.heroImage}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   </section>
 
+  {/* Popular — a short, hand-picked reading list */}
+  <PopularArticles />
+
+  {/* Browse the site — sections + tools overview */}
+  <SiteOverview />
+
   {/* Pull quotes — framing the site's editorial mission */}
   <section class="border-b border-ink-200 bg-paper-100">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-8 md:py-10">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-12">
       <div class="grid md:grid-cols-2 gap-6 md:gap-12">
         <blockquote class="border-l-2 border-accent pl-6">
           <p class="font-serif text-base md:text-lg text-ink-800 leading-relaxed italic">
@@ -135,44 +164,16 @@ const jsonLd = [
     </div>
   </section>
 
-  {/* Popular — a short, hand-picked reading list */}
-  <PopularArticles />
-
-  {/* Browse the site — sections + tools overview */}
-  <SiteOverview />
-
-  {/* Featured article */}
-  {feature && (
-    <section class="border-b border-ink-200">
-      <div class="max-w-wide mx-auto px-6 lg:px-10 py-4">
-        <div class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 pt-8 pb-2">
-          Latest
-        </div>
-        <ArticleCard
-          href={`/${feature.section}/${feature.slug}`}
-          title={feature.data.title}
-          description={feature.data.description}
-          pubDate={feature.data.pubDate}
-          section={feature.section}
-          showSection={true}
-          variant="feature"
-          portrait={feature.data.portrait}
-          heroImage={feature.data.heroImage}
-        />
-      </div>
-    </section>
-  )}
-
-  {/* Recent articles + Explore rail */}
+  {/* Recent articles, as a scannable card grid + Explore rail */}
   {recent.length > 0 && (
     <section class="border-b border-ink-200">
       <div class="max-w-wide mx-auto px-6 lg:px-10">
         <div class="lg:flex lg:gap-12 xl:gap-16">
           <div class="min-w-0 lg:flex-1">
-            <div class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 pt-12 pb-2">
+            <div class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 pt-12 pb-6">
               More writing
             </div>
-            <div>
+            <div class="grid sm:grid-cols-2 gap-x-10 gap-y-10">
               {recent.map(article => (
                 <ArticleCard
                   href={`/${article.section}/${article.slug}`}
@@ -181,12 +182,13 @@ const jsonLd = [
                   pubDate={article.data.pubDate}
                   section={article.section}
                   showSection={true}
+                  layout="stack"
                   portrait={article.data.portrait}
                   heroImage={article.data.heroImage}
                 />
               ))}
             </div>
-            <div class="py-8">
+            <div class="py-10">
               <a href="/sitemap" class="font-sans text-sm font-medium text-accent hover:text-accent-dark transition-colors">
                 Browse every article →
               </a>

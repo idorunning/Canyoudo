@@ -1,0 +1,134 @@
+---
+// "On this page" — a compact contents list for longer articles, built from the
+// headings Astro extracts when it renders the article (each already carries a
+// slug id in the body). Lives in the article's sticky sidebar. Highlights the
+// section in view as the reader scrolls, reusing the interaction model proven in
+// StickyNav (header-offset measurement + IntersectionObserver + reduced motion).
+//
+// The caller passes the section headings to list (already reduced to a single
+// level — see ArticleLayout, which picks whichever of h2/h3 an article actually
+// uses for its sections) and decides whether to render at all. It also no-ops if
+// fewer than two headings come through.
+interface Item {
+  slug: string;
+  text: string;
+}
+interface Props {
+  items: Item[];
+}
+const { items: raw } = Astro.props;
+const items = (raw ?? []).filter((h) => h.slug && h.text);
+---
+
+{items.length >= 2 && (
+  <nav class="tap-toc" data-toc aria-label="On this page">
+    <p class="tap-toc-label">On this page</p>
+    <ul class="tap-toc-list" role="list">
+      {items.map((h) => (
+        <li>
+          <a href={`#${h.slug}`} class="tap-toc-link" data-toc-link>{h.text}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .tap-toc {
+    margin-bottom: 2.5rem;
+  }
+  .tap-toc-label {
+    font-family: theme('fontFamily.sans');
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: theme('colors.ink.500');
+    margin: 0 0 0.75rem;
+  }
+  .tap-toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 1px solid theme('colors.ink.200');
+  }
+  .tap-toc-link {
+    display: block;
+    font-family: theme('fontFamily.sans');
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: theme('colors.ink.500');
+    text-decoration: none;
+    padding: 0.3rem 0 0.3rem 0.85rem;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .tap-toc-link:hover {
+    color: theme('colors.ink.800');
+  }
+  .tap-toc-link[aria-current='true'] {
+    color: theme('colors.accent.DEFAULT');
+    font-weight: 600;
+    border-left-color: theme('colors.accent.DEFAULT');
+  }
+</style>
+
+<script>
+  function initToc(nav: HTMLElement) {
+    const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-toc-link]'));
+    const byId = new Map<string, HTMLAnchorElement>();
+    const targets: HTMLElement[] = [];
+    links.forEach((l) => {
+      const id = decodeURIComponent((l.getAttribute('href') || '').replace(/^#/, ''));
+      const el = id ? document.getElementById(id) : null;
+      if (el) {
+        byId.set(el.id, l);
+        targets.push(el);
+      }
+    });
+    if (!targets.length) return;
+
+    function setHeaderOffset() {
+      const header = document.querySelector('header');
+      const h = header ? Math.round(header.getBoundingClientRect().height) : 0;
+      document.documentElement.style.setProperty('--co-header-h', h + 'px');
+    }
+
+    function applyScrollMargin() {
+      const headerH =
+        parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--co-header-h')) || 0;
+      const offset = Math.ceil(headerH + 18);
+      targets.forEach((t) => {
+        t.style.scrollMarginTop = offset + 'px';
+      });
+    }
+
+    setHeaderOffset();
+    applyScrollMargin();
+    window.addEventListener('resize', () => {
+      setHeaderOffset();
+      applyScrollMargin();
+    });
+
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              const active = byId.get((e.target as HTMLElement).id);
+              if (active) {
+                links.forEach((l) => l.removeAttribute('aria-current'));
+                active.setAttribute('aria-current', 'true');
+              }
+            }
+          });
+        },
+        { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
+      );
+      targets.forEach((t) => obs.observe(t));
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-toc]').forEach(initToc);
+</script>

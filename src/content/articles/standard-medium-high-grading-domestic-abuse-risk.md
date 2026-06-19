@@ -2,6 +2,11 @@
 title: Why Medium Risk Is the Safe Option — and How Do We Learn to Accurately Grade Risk With Confidence?
 section: police-policy
 description: On a domestic abuse call, medium is the grade we reach for when we are not sure — it feels safer than standard, which triggers nothing, and less exposed than high. But a grade chosen to protect the officer protects no victim. Understanding what standard, medium and high actually mean is how we learn to grade with confidence, and act on the medium-risk victims we are currently missing.
+keyTakeaways:
+  - 'Officers too often default to "medium" when unsure — safer-feeling than "standard" and less exposed than "high" — but a grade chosen to protect the officer protects no victim.'
+  - Knowing what standard, medium and high are actually defined to mean is the first step to grading with confidence.
+  - The grade is itself a weak predictor of harm, so it must support structured judgement rather than stand in for it.
+  - The National Decision Model offers a repeatable way to reach — and justify — a grade, including for the medium-risk victims currently being missed.
 pubDate: 2026-06-17
 updatedDate: ''
 author: ''

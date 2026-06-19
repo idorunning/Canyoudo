@@ -1,0 +1,50 @@
+---
+// A large serif pull quote that breaks out of the narrow text measure to give a
+// long article a visual beat. Use it to lift a line the author has already
+// written (it restates the prose, it does not add new argument). Optional
+// attribution via `cite`. Content is the quote text, passed as children.
+interface Props {
+  cite?: string;
+}
+const { cite } = Astro.props;
+---
+
+<figure class="tap-pullquote">
+  <blockquote class="tap-pullquote-q"><slot /></blockquote>
+  {cite && <figcaption class="tap-pullquote-cite">{cite}</figcaption>}
+</figure>
+
+<style>
+  /* Break out past the measure (and a touch beyond) without exceeding the
+     column. The body sets `--measure`; we widen to it plus a small margin. */
+  .tap-pullquote {
+    margin: 2.5rem 0;
+    max-width: calc(var(--measure, 36rem) + 6rem);
+    border-top: 2px solid theme('colors.accent.DEFAULT');
+    border-bottom: 1px solid theme('colors.ink.200');
+    padding: 1.4rem 0;
+  }
+  .tap-pullquote-q {
+    margin: 0;
+    font-family: theme('fontFamily.serif');
+    font-weight: 600;
+    font-size: 1.6rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: theme('colors.ink.900');
+  }
+  .tap-pullquote-cite {
+    margin-top: 0.85rem;
+    font-family: theme('fontFamily.sans');
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: theme('colors.ink.500');
+  }
+  @media (min-width: 768px) {
+    .tap-pullquote-q {
+      font-size: 1.9rem;
+    }
+  }
+</style>

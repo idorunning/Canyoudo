@@ -2,6 +2,11 @@
 title: The Legal Aid Paradox - when "I don't need a solicitor, I've done nothing wrong" undermines procedural fairness
 section: police-policy
 description: The suspects who most need legal advice in police custody are the least likely to ask for it — and that undermines one of PACE 1984's core protections.
+keyTakeaways:
+  - About 40% of adult suspects decline free legal advice in custody, and the people who need it most — first-timers and those who believe they are innocent — are the least likely to take it.
+  - The "I've got nothing to hide" instinct, the pressure to be released quickly, and the way the offer is framed all push vulnerable suspects to waive a core PACE 1984 protection.
+  - Formal equality of rights is producing substantive inequality of protection — the same offer lands very differently for the sophisticated and the naive.
+  - The fix is to change how the right is presented and to remove the structural disincentives, not simply to restate that the right exists.
 pubDate: 2025-10-21
 updatedDate: ''
 author: ''

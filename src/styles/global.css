@@ -33,8 +33,17 @@
 }
 
 @layer components {
-  /* Article body styling — designed for sustained reading */
+  /* Article body styling — designed for sustained reading.
+
+     The "measure" (max line length) is the single biggest lever on the reading
+     experience. The body element itself stays full-column so wide media —
+     figures, tables, code blocks, SVG diagrams, the route-map explorer — can
+     span the column (and break out further where asked). Only the *text-level*
+     children below are capped to `--measure`, giving the magazine pattern of a
+     narrow text column beside full-width media. `--measure` mirrors the
+     `maxWidth.prose` design token in tailwind.config.mjs. */
   .prose-article {
+    --measure: 36rem;
     font-family: theme('fontFamily.serif');
     font-size: 1.125rem;
     line-height: 1.7;
@@ -45,25 +54,69 @@
     margin-top: 1.4em;
   }
 
+  /* Cap the line length on the text-level elements only. */
+  .prose-article > p,
+  .prose-article > h2,
+  .prose-article > h3,
+  .prose-article > h4,
+  .prose-article > ul,
+  .prose-article > ol,
+  .prose-article > dl,
+  .prose-article > blockquote {
+    max-width: var(--measure);
+  }
+
+  /* The lead: ease the reader in with a larger, darker opening paragraph and a
+     serif drop cap. Scoped to a paragraph that is the article's first child so
+     it never lands on a callout, figure or list that happens to open a piece. */
+  .prose-article > p:first-child {
+    font-size: 1.25rem;
+    line-height: 1.55;
+    color: theme('colors.ink.900');
+  }
+
+  .prose-article > p:first-child::first-letter {
+    float: left;
+    font-family: theme('fontFamily.serif');
+    font-weight: 600;
+    font-size: 3.6em;
+    line-height: 0.82;
+    padding-right: 0.08em;
+    margin-top: 0.02em;
+    color: theme('colors.accent.DEFAULT');
+  }
+
   .prose-article h2 {
     font-family: theme('fontFamily.display');
-    font-size: 1.875rem;
-    font-weight: 600;
-    line-height: 1.2;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.15;
     color: theme('colors.ink.900');
-    margin-top: 2.5em;
+    margin-top: 2.2em;
     margin-bottom: 0.6em;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+  }
+
+  /* A short accent rule above each h2 gives the page a magazine cadence and
+     signals a new section before the reader even reads the heading. */
+  .prose-article h2::before {
+    content: '';
+    display: block;
+    width: 2.5rem;
+    height: 3px;
+    margin-bottom: 0.9rem;
+    background: theme('colors.accent.DEFAULT');
   }
 
   .prose-article h3 {
     font-family: theme('fontFamily.display');
-    font-size: 1.375rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 700;
     line-height: 1.3;
     color: theme('colors.ink.900');
-    margin-top: 2em;
+    margin-top: 1.9em;
     margin-bottom: 0.5em;
+    letter-spacing: -0.01em;
   }
 
   .prose-article p {

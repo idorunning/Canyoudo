@@ -105,6 +105,8 @@ const currentPath = Astro.url.pathname;
           id="mobile-menu-button"
           class="md:hidden text-ink-900 p-2 -mr-2"
           aria-label="Toggle menu"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <line x1="3" y1="6" x2="21" y2="6"/>
@@ -182,5 +184,30 @@ const currentPath = Astro.url.pathname;
 <script>
   const btn = document.getElementById('mobile-menu-button');
   const menu = document.getElementById('mobile-menu');
-  btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+
+  function setOpen(open: boolean) {
+    if (!menu || !btn) return;
+    menu.classList.toggle('hidden', !open);
+    btn.setAttribute('aria-expanded', String(open));
+  }
+
+  btn?.addEventListener('click', () => {
+    const open = menu?.classList.contains('hidden') ?? false;
+    setOpen(open);
+  });
+
+  // Close on Escape and on a click outside the menu/button, so the open menu
+  // never traps the reader.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !menu?.classList.contains('hidden')) {
+      setOpen(false);
+      btn?.focus();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!menu || menu.classList.contains('hidden')) return;
+    const target = e.target as Node;
+    if (!menu.contains(target) && !btn?.contains(target)) setOpen(false);
+  });
 </script>

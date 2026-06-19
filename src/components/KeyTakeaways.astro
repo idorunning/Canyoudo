@@ -1,0 +1,66 @@
+---
+// A scannable summary box for longer essays: the three-to-five points a reader
+// should leave with. Populated from the article's `keyTakeaways` frontmatter, so
+// it adds structure without touching the prose. Rendered by ArticleLayout just
+// above the body. Shares the callout visual language (accent rule, paper fill).
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+const points = (items ?? []).filter((s) => s && s.trim());
+---
+
+{points.length > 0 && (
+  <aside class="tap-takeaways" aria-label="Key takeaways">
+    <p class="tap-takeaways-label">Key takeaways</p>
+    <ul class="tap-takeaways-list" role="list">
+      {points.map((p) => <li>{p}</li>)}
+    </ul>
+  </aside>
+)}
+
+<style>
+  .tap-takeaways {
+    margin: 0 0 2.5rem;
+    max-width: 36rem;
+    border: 1px solid theme('colors.ink.200');
+    border-left: 4px solid theme('colors.accent.DEFAULT');
+    border-radius: 6px;
+    background: theme('colors.paper.50');
+    padding: 1.25rem 1.4rem;
+  }
+  .tap-takeaways-label {
+    font-family: theme('fontFamily.sans');
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: theme('colors.accent.DEFAULT');
+    margin: 0 0 0.75rem;
+  }
+  .tap-takeaways-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .tap-takeaways-list li {
+    position: relative;
+    font-family: theme('fontFamily.serif');
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: theme('colors.ink.800');
+    padding-left: 1.4rem;
+  }
+  .tap-takeaways-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: theme('colors.accent.light');
+  }
+</style>

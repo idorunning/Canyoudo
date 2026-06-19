@@ -31,7 +31,9 @@ export default {
         },
       },
       maxWidth: {
-        prose: '38rem',
+        // The article reading measure. Kept in step with the `--measure` custom
+        // property on `.prose-article` in global.css (the magazine text column).
+        prose: '36rem',
         wide: '72rem',
       },
       typography: ({ theme }) => ({

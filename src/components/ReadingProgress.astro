@@ -1,0 +1,80 @@
+---
+// A thin reading-progress bar that fills as the reader moves down an article.
+// It pins flush beneath the sticky site header (whose live height the existing
+// StickyNav script also measures into --co-header-h) and is purely decorative,
+// so it is hidden from assistive tech. Dependency-free; honours reduced motion.
+---
+
+<div class="tap-progress" aria-hidden="true">
+  <span class="tap-progress-bar" data-reading-progress></span>
+</div>
+
+<style>
+  .tap-progress {
+    position: sticky;
+    top: var(--co-header-h, 0px);
+    z-index: 40;
+    height: 3px;
+    width: 100%;
+    background: transparent;
+    pointer-events: none;
+  }
+  .tap-progress-bar {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: theme('colors.accent.DEFAULT');
+    transform-origin: left center;
+    transition: width 80ms linear;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tap-progress-bar {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  function initReadingProgress() {
+    const bar = document.querySelector<HTMLElement>('[data-reading-progress]');
+    const article = document.querySelector<HTMLElement>('article[data-pagefind-body]');
+    if (!bar || !article) return;
+
+    // Keep the header-height variable fresh so the bar sits flush under the
+    // header on any breakpoint (StickyNav sets the same var when present).
+    function setHeaderOffset() {
+      const header = document.querySelector('header');
+      const h = header ? Math.round(header.getBoundingClientRect().height) : 0;
+      document.documentElement.style.setProperty('--co-header-h', h + 'px');
+    }
+
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const rect = article.getBoundingClientRect();
+      const viewport = window.innerHeight || document.documentElement.clientHeight;
+      // How far the article has travelled past the top of the viewport, as a
+      // fraction of its scrollable length. Clamped to [0, 1].
+      const total = rect.height - viewport;
+      const scrolled = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 0;
+      bar!.style.width = (scrolled * 100).toFixed(2) + '%';
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    }
+
+    setHeaderOffset();
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      setHeaderOffset();
+      update();
+    });
+  }
+
+  initReadingProgress();
+</script>

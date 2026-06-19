@@ -30,6 +30,10 @@ const articleSchema = z.object({
   // each person is presented by their face rather than text alone.
   portrait: z.string().optional(),
   tags: z.array(z.string()).optional(),
+  // A short, scannable summary shown in a box above the article body — the
+  // three-to-five points a reader should leave with. Optional; adds structure
+  // to longer essays without changing the prose. Three to five lines reads best.
+  keyTakeaways: z.array(z.string()).optional(),
   // Old paths to 301-redirect to this article — fill in when you move an
   // article between sections so the previous URL doesn't break.
   redirectFrom: z.array(z.string()).optional(),

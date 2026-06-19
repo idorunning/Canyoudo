@@ -7,11 +7,20 @@ import Sidebar from '../components/Sidebar.astro';
 import NewsWidget from '../components/NewsWidget.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
 import BookCTA from '../components/BookCTA.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import ArticleContents from '../components/ArticleContents.astro';
+import KeyTakeaways from '../components/KeyTakeaways.astro';
 import { getTopics, topicForTag } from '../lib/topics';
 import { SECTION_LABELS } from '../content/config';
 import readingTime from 'reading-time';
 
 const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
 
 interface Props {
   title: string;
@@ -20,10 +29,12 @@ interface Props {
   updatedDate?: Date;
   heroImage?: string;
   tags?: string[];
+  keyTakeaways?: string[];
   author: string;
   section: 'police-policy' | 'public-policy' | 'influential-people' | 'other' | 'data-stories';
   slug: string;
   rawContent: string;
+  headings?: Heading[];
 }
 
 const {
@@ -33,11 +44,22 @@ const {
   updatedDate,
   heroImage,
   tags,
+  keyTakeaways,
   author,
   section,
   slug,
   rawContent,
+  headings = [],
 } = Astro.props;
+
+// Build the in-page contents rail. Articles here split their sections with
+// either ## or ### (most use ###), so pick the shallowest level that actually
+// carries the sections — the first of h2 then h3 with three or more headings —
+// and list those. Pieces with too few sections get no rail.
+const h2s = headings.filter((h) => h.depth === 2 && h.slug && h.text);
+const h3s = headings.filter((h) => h.depth === 3 && h.slug && h.text);
+const tocHeadings = h2s.length >= 3 ? h2s : h3s.length >= 3 ? h3s : [];
+const showToc = tocHeadings.length >= 3;
 
 const formattedPubDate = pubDate.toLocaleDateString('en-GB', {
   day: 'numeric',
@@ -112,6 +134,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
   publishedTime={pubDate.toISOString()}
 >
   <script type="application/ld+json" set:html={jsonLd} />
+  <ReadingProgress />
   <div class="max-w-6xl mx-auto px-6 lg:px-10">
     <div class="lg:flex lg:gap-12 xl:gap-16">
       <article class="mx-auto w-full max-w-3xl min-w-0 lg:mx-0 lg:flex-1" data-pagefind-body>
@@ -172,6 +195,12 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
 
         {/* Body */}
         <div class="py-12 md:py-16">
+          {keyTakeaways && keyTakeaways.length > 0 && (
+            <div data-pagefind-ignore>
+              <KeyTakeaways items={keyTakeaways} />
+            </div>
+          )}
+
           <div class="prose-article">
             <slot />
           </div>
@@ -209,6 +238,11 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
       {/* More articles sidebar */}
       <aside class="mx-auto w-full max-w-3xl border-t border-ink-200 pt-10 pb-16 lg:mx-0 lg:max-w-none lg:w-64 xl:w-72 lg:shrink-0 lg:border-t-0 lg:border-l lg:pl-12 lg:pt-16">
         <div class="lg:sticky lg:top-24">
+          {showToc && (
+            <div data-pagefind-ignore class="hidden lg:block">
+              <ArticleContents items={tocHeadings} />
+            </div>
+          )}
           <Sidebar currentSlug={slug} section={section} />
           <NewsWidget />
         </div>

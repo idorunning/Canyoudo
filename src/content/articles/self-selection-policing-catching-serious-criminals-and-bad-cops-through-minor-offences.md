@@ -2,6 +2,11 @@
 title: "Self-Selection Policing: Catching Serious Criminals — and Bad Cops — Through the Small Offences They Can't Help Committing"
 section: police-policy
 description: "Serious offenders don't only commit serious offences — burglars shoplift on their days off, drive while disqualified, and dodge fares too. And the worst officers bend small rules long before they break big ones. Self-selection policing turns that insight into a practical, evidence-based way of finding active criminals — and the bad cops in your own ranks."
+keyTakeaways:
+  - Serious offenders rarely confine themselves to serious crime — they also commit minor offences, like disqualified driving and fare evasion, that are far easier to detect.
+  - 'The same logic applies inside policing: the worst officers tend to bend small rules long before they break big ones.'
+  - Targeting those telltale minor offences is a cheap, evidence-based way to find active criminals and to spot misconduct risk early.
+  - It works as a deliberate, data-backed tactic — not an occasional lucky stop.
 pubDate: 2026-06-17
 updatedDate: ''
 author: ''
