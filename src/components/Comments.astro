@@ -44,13 +44,14 @@ const CUSDIS_APP_ID = import.meta.env.PUBLIC_CUSDIS_APP_ID;
 {CUSDIS_APP_ID && (
   <>
     <style is:global>
-      /* Cusdis injects its iframe at runtime, so these need to be global.
-         Full width + a generous height floor keeps the thread prominent and
-         fully open on mobile — no cramped, internally-scrolling box. */
-      #cusdis_thread,
+      /* Cusdis injects its iframe at runtime, so this needs to be global.
+         Full width, plus a height floor tall enough to show the comment form
+         AND the top comments — Cusdis under-reports its height on mobile and
+         leaves the thread clipped, so this guarantees the form + first comments
+         are visible. The resize handler below still grows it for longer threads. */
       #cusdis_thread iframe {
         width: 100% !important;
-        min-height: 420px;
+        min-height: 600px;
       }
     </style>
 
