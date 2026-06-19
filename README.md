@@ -35,6 +35,8 @@ To switch it on:
 
 If you skip this, the comments section shows a small "not configured" notice locally and just won't appear on production until you set the env var in Netlify.
 
+New comments are held for moderation; you approve them from the Cusdis dashboard.
+
 ---
 
 ## Running locally
