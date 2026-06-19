@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-19T08:22:55.108Z",
+    "fetchedAt": "2026-06-19T12:38:41.977Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,12 +16,20 @@
   },
   "items": [
     {
-      "title": "Zoo worker jumped in crocodile enclosure to save injured boy",
+      "title": "Boy, 3, hurt at zoo was attacked by a crocodile, BBC understands",
       "link": "https://www.bbc.com/news/articles/cp9l2278m8no?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-19T08:12:54.000Z",
-      "summary": "Police say the boy remains in a \"critical but stable\" condition in hospital."
+      "isoDate": "2026-06-19T12:15:34.000Z",
+      "summary": "Police say a man arrested on suspicion of attempted murder has been bailed."
+    },
+    {
+      "title": "UK's top data and AI regulator quits after 'inappropriate' humour",
+      "link": "https://www.bbc.com/news/articles/c0eyq7rnn22o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-06-19T11:19:31.000Z",
+      "summary": "Edwards has been the boss of the data watchdog since January 2022, and said he had made inappropriate attempts at humour."
     },
     {
       "title": "Police legal head disbarred over sexual comments to junior female colleagues",
@@ -32,28 +40,12 @@
       "summary": "'Inappropriate' WhatsApps too The post Police legal head disbarred over sexual comments to junior female colleagues appeared first on Legal Cheek ."
     },
     {
-      "title": "Man arrested on suspicion of attempted murder after boy injured in crocodile enclosure",
-      "link": "https://www.bbc.com/news/articles/czx50n2vj74o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-19T07:08:22.000Z",
-      "summary": "A three-year-old boy was taken to Addenbrooke's Hospital with critical injuries and is in a stable condition, Cambridgeshire Police said."
-    },
-    {
-      "title": "UK actress charged with importing meth worth almost A$300m into Australia",
+      "title": "UK actress charged with importing meth worth almost £157m into Australia",
       "link": "https://www.bbc.com/news/articles/ckg5nq0172no?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
       "isoDate": "2026-06-19T01:04:14.000Z",
       "summary": "Emaa Hussen, 34, faces life in prison for allegedly trying to smuggle 320kg of meth hidden in bags of charcoal."
-    },
-    {
-      "title": "Two teenagers on trial for murder of 15-year-old Amen Teklay",
-      "link": "https://www.bbc.com/news/articles/cvgj7exmzjzo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-18T16:06:28.000Z",
-      "summary": "Prosecutors claim the boys chased and struck him with a sword, leaving him so severely hurt that he died on street in Glasgow."
     },
     {
       "title": "Reappointment of member of the Tribunal Procedure Committee",
@@ -182,22 +174,6 @@
       "topic": "policing",
       "isoDate": "2026-06-15T09:21:40.000Z",
       "summary": "DBS has launched Series 2 of its podcast, with 6 new episodes covering topics such as DBS check levels, <mark>police</mark> disclosure, and safer recruitment."
-    },
-    {
-      "title": "When AI Leaves the Lab: Testing Frontier Models in Government Cyber Defence",
-      "link": "https://www.gov.uk/government/case-studies/when-ai-leaves-the-lab-testing-frontier-models-in-government-cyber-defence",
-      "source": "DSIT",
-      "topic": "ai",
-      "isoDate": "2026-06-12T14:42:00.000Z",
-      "summary": "The Government Cyber Action Plan aims to boost cyber resilience across the UK public sector by using emerging technologies to manage risk. The Government Cyber Coordination…"
-    },
-    {
-      "title": "Britain powers ahead on AI with billions of pounds of new investment and thousands of jobs secured as London Tech Week wraps up",
-      "link": "https://www.gov.uk/government/news/britain-powers-ahead-on-ai-with-billions-of-pounds-of-new-investment-and-thousands-of-jobs-secured-as-london-tech-week-wraps-up",
-      "source": "DSIT",
-      "topic": "ai",
-      "isoDate": "2026-06-12T11:42:47.000Z",
-      "summary": "More than £6 billion of new investment and around 8,000 new jobs have been announced this week, as companies from around the world choose to build, hire and scale here."
     },
     {
       "title": "Appointment of Lord and Lady Justices of Appeal",
