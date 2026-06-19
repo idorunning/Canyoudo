@@ -10,6 +10,8 @@ import { getTopics, topicForTag } from '../lib/topics';
 import { SECTION_LABELS } from '../content/config';
 import readingTime from 'reading-time';
 
+const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
+
 interface Props {
   title: string;
   description: string;
@@ -51,19 +53,48 @@ const pageId = `${section}-${slug}`;
 // Topics let the tag badges link through to their archive pages.
 const topics = await getTopics();
 
-// schema.org Article markup for rich results in search.
-const jsonLd = JSON.stringify({
+// schema.org Article markup for rich results in search. The image always
+// resolves to something (the per-page hero, or the site default) so the Article
+// stays eligible for image-bearing rich results; author links to /about so the
+// search engine ties this back to the one Person entity declared on the home
+// page (an E-E-A-T signal).
+const articleImage = new URL(heroImage ?? '/og-default.png', Astro.site).toString();
+const wordCount = (rawContent || '').trim().split(/\s+/).filter(Boolean).length;
+
+const articleLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: title,
   description,
   datePublished: pubDate.toISOString(),
   ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
-  ...(heroImage ? { image: new URL(heroImage, Astro.site).toString() } : {}),
-  author: { '@type': 'Person', name: author },
-  publisher: { '@type': 'Organization', name: 'Thinking About Policing', url: Astro.site?.toString() },
+  image: articleImage,
+  articleSection: SECTION_LABELS[section],
+  ...(tags && tags.length ? { keywords: tags.join(', ') } : {}),
+  ...(wordCount ? { wordCount } : {}),
+  inLanguage: 'en-GB',
+  author: { '@type': 'Person', name: author, url: `${site}/about` },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Thinking About Policing',
+    url: `${site}/`,
+    logo: { '@type': 'ImageObject', url: `${site}/logo.png`, width: 512, height: 512 },
+  },
   mainEntityOfPage: pageUrl,
-});
+};
+
+// BreadcrumbList so search results can show Home › Section › Article.
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${site}/` },
+    { '@type': 'ListItem', position: 2, name: SECTION_LABELS[section], item: `${site}/${section}` },
+    { '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+  ],
+};
+
+const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
 ---
 
 <BaseLayout

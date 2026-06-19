@@ -9,7 +9,16 @@ export default defineConfig({
   site: 'https://thinkingaboutpolicing.org',
   integrations: [
     tailwind({ applyBaseStyles: false }),
-    sitemap(),
+    // Stamp every sitemap entry with a build-time `lastmod` so Google gets a
+    // freshness hint and reschedules crawls after each deploy. (A per-page
+    // lastmod would be richer, but the integration doesn't expose page content
+    // here; the build date is a safe, honest floor.)
+    sitemap({
+      serialize(item) {
+        item.lastmod = new Date().toISOString();
+        return item;
+      },
+    }),
     mdx(),
   ],
   markdown: {

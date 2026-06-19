@@ -13,6 +13,9 @@ interface Props {
   // Optional schema.org JSON-LD graph(s) for this page (WebSite, Organization,
   // Person, FAQPage, …). Rendered in <head> when present.
   jsonLd?: object | object[];
+  // Keep a low-value/thin page out of the search index while still letting
+  // crawlers follow its links (e.g. /search, /subscribe, /contact, 404).
+  noindex?: boolean;
 }
 
 const {
@@ -22,6 +25,7 @@ const {
   type = 'website',
   publishedTime,
   jsonLd,
+  noindex = false,
 } = Astro.props;
 
 const jsonLdGraph = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : null;
@@ -39,6 +43,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
 
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
