@@ -101,6 +101,12 @@ sloppy signal. The homepage in particular has no image card today.
 - *Optional, better:* generate per-page OG images at build time (e.g. with
   `satori`/`@vercel/og`-style rendering or Astro's `astro-og-canvas`) so every
   article gets its own card. Start with the static fallback; automate later.
+  **✅ Done:** every article now gets its own branded 1200×630 card, generated
+  at build time from hand-authored SVG rasterised with `sharp` (the same
+  technique as the static default), served from `/og/<section>/<slug>.png`
+  (`src/pages/og/[section]/[slug].png.ts`) and wired as `og:image` /
+  `twitter:image` in `ArticleLayout.astro`. The card is decoupled from the hero
+  photo, so it's used for all articles regardless of whether they have a hero.
 
 **Verify:** Rich Results Test + the
 [OpenGraph debugger](https://www.opengraph.xyz/) on the homepage.
@@ -254,6 +260,13 @@ Most content images lack explicit dimensions. Add `width`/`height` (or a fixed
 aspect ratio via Tailwind) to images in articles and cards so the browser
 reserves space before they load.
 
+**✅ Done for article-body images:** `src/plugins/rehype-image-dimensions.mjs`
+stamps intrinsic `width`/`height` (plus `loading="lazy"`/`decoding="async"`) on
+in-body images at build time — covering Markdown `![]()` images, hand-written
+`<img>` HTML, and MDX JSX `<img>` — reading sizes with `image-size`. Images not
+present at build (awaiting a fetch) or remote are skipped. Card/sidebar
+thumbnails already reserve space via fixed Tailwind sizes.
+
 ### 5.2 Optimise font loading
 `BaseLayout.astro` loads DM Sans + Source Serif 4 from Google Fonts. You already
 `preconnect`. To cut render-blocking and FOUT:
@@ -293,7 +306,8 @@ confirm CWV stay "Good" on mobile.
 - [ ] 4.2 Rewrite low-CTR titles/descriptions
 - [ ] 4.3 Add internal links + flesh out topic descriptions
 - [ ] 4.4 Descriptive alt text
-- [ ] 5.x Image dimensions, font loading, re-test CWV
+- [x] 5.1 Image dimensions on in-body article images (rehype-image-dimensions)
+- [ ] 5.x Font loading, re-test CWV
 
 ---
 

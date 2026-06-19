@@ -1,7 +1,7 @@
 ---
 title: “Do you understand?” - Does this question serve a purpose?
 section: police-policy
-description: When comprehension, shame, and social pressure hinder a fair process
+description: '"Do you understand?" — asked after the caution, at booking-in, before a plea — sounds like fairness but often works as a ritual rather than a test: it invites a yes that keeps the system moving while quietly failing the people who most need clarity. Why we should stop asking and start explaining.'
 pubDate: 2026-01-07
 updatedDate: ''
 author: ''

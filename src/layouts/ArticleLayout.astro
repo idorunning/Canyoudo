@@ -51,6 +51,12 @@ const minutes = Math.max(1, Math.ceil(stats.minutes));
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const pageId = `${section}-${slug}`;
 
+// Every article shares a generated, branded title-card (src/pages/og/…) as its
+// social-preview image — readable at feed-thumbnail size and independent of
+// whether the article has a hero photo. The hero, when present, stays the
+// in-page visual below.
+const ogCard = `/og/${section}/${slug}.png`;
+
 // Topics let the tag badges link through to their archive pages.
 const topics = await getTopics();
 
@@ -59,7 +65,7 @@ const topics = await getTopics();
 // stays eligible for image-bearing rich results; author links to /about so the
 // search engine ties this back to the one Person entity declared on the home
 // page (an E-E-A-T signal).
-const articleImage = new URL(heroImage ?? '/og-default.png', Astro.site).toString();
+const articleImage = new URL(heroImage ?? ogCard, Astro.site).toString();
 const wordCount = (rawContent || '').trim().split(/\s+/).filter(Boolean).length;
 
 const articleLd = {
@@ -101,7 +107,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
 <BaseLayout
   title={title}
   description={description}
-  image={heroImage}
+  image={ogCard}
   type="article"
   publishedTime={pubDate.toISOString()}
 >

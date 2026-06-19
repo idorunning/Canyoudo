@@ -1,7 +1,7 @@
 ---
 title: 'The Officers We’re Losing: Why British Policing Must Rethink Cognitive Diversity'
 section: police-policy
-description: British policing faces a talent paradox rarely discussed at command level.
+description: British policing invests heavily in recruitment and training, then systematically loses officers whose cognitive profiles — ADHD, autism, dyslexia — do not fit institutional assumptions about what "good" looks like. Why cognitive diversity is a strategic capability senior leaders cannot afford to manage out.
 pubDate: 2025-05-06
 updatedDate: ''
 author: ''

@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import rehypeTopicLinks from './src/plugins/rehype-topic-links.mjs';
 import rehypeResponsiveTables from './src/plugins/rehype-responsive-tables.mjs';
+import rehypeImageDimensions from './src/plugins/rehype-image-dimensions.mjs';
 
 export default defineConfig({
   site: 'https://thinkingaboutpolicing.org',
@@ -25,7 +26,7 @@ export default defineConfig({
     // Auto-link dictionary topics in article bodies (MDX inherits this), then
     // make data tables responsive (scroll wrapper + per-cell labels for the
     // mobile card layout).
-    rehypePlugins: [rehypeTopicLinks, rehypeResponsiveTables],
+    rehypePlugins: [rehypeTopicLinks, rehypeResponsiveTables, rehypeImageDimensions],
     shikiConfig: {
       theme: 'github-light',
       wrap: true,

@@ -157,6 +157,10 @@
   .prose-article img {
     border-radius: 4px;
     margin: 2em 0;
+    /* With explicit width/height attributes (added by rehype-image-dimensions
+       to cut layout shift), height:auto keeps the image responsive and
+       undistorted as it scales down to the column width. */
+    height: auto;
   }
 
   /* Portrait photo on the About page — centred, max-width, rounded. */
