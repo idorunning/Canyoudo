@@ -1,21 +1,19 @@
 ---
 import SearchModal from './SearchModal.astro';
 
-// Desktop nav is three rows: the writing sections on top, the two interactive
-// tools in the middle (highlighted, since they're the things to try), and the
-// about/contact pages underneath. The mobile menu flattens them into one list.
+// Desktop nav is two rows: the writing sections plus the two interactive tools
+// on top, and the about/contact pages underneath. The interactive tools sit
+// right after the two policy sections and are rendered bold so they read as
+// functions to use, not just more places to read. The mobile menu flattens
+// everything into one list.
 const primaryLinks = [
   { href: '/police-policy', label: 'Police Policy' },
   { href: '/public-policy', label: 'Public Policy' },
+  { href: '/research', label: 'Research Assistant', tool: true },
+  { href: '/data', label: 'Crime Dashboard', tool: true },
   { href: '/influential-people', label: 'Influential People' },
   { href: '/data-stories', label: 'Data Stories' },
   { href: '/other', label: 'Interesting Distractions' },
-];
-
-// The interactive tools — given a standout accent colour so they catch the eye.
-const toolLinks = [
-  { href: '/research', label: 'Research Assistant' },
-  { href: '/data', label: 'Crime Dashboard' },
 ];
 
 const metaLinks = [
@@ -23,14 +21,10 @@ const metaLinks = [
   { href: '/contact', label: 'Contact' },
 ];
 
-const navLinks = [...primaryLinks, ...toolLinks, ...metaLinks];
-
 // Secondary destinations, surfaced in the mobile menu (and the footer / Explore
 // panel on desktop) to keep the top bar uncluttered.
 const moreLinks = [
-  { href: '/data/explore', label: 'Data Explorer' },
   { href: '/topics', label: 'Topics' },
-  { href: '/books', label: 'Books' },
   { href: '/resources', label: 'Further reading' },
 ];
 
@@ -54,33 +48,18 @@ const currentPath = Astro.url.pathname;
           <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1">
             {primaryLinks.map(link => {
               const isActive = currentPath.startsWith(link.href) && link.href !== '/';
+              const toolClass = isActive
+                ? 'text-accent-dark font-semibold underline underline-offset-4'
+                : 'text-accent font-semibold hover:text-accent-dark';
+              const writingClass = isActive
+                ? 'text-accent font-medium'
+                : 'text-ink-700 hover:text-ink-900';
               return (
                 <li>
                   <a
                     href={link.href}
                     class={`font-sans text-sm tracking-wide transition-colors ${
-                      isActive
-                        ? 'text-accent font-medium'
-                        : 'text-ink-700 hover:text-ink-900'
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-          <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1 mt-1.5">
-            {toolLinks.map(link => {
-              const isActive = currentPath.startsWith(link.href) && link.href !== '/';
-              return (
-                <li>
-                  <a
-                    href={link.href}
-                    class={`font-sans text-sm font-medium tracking-wide transition-colors ${
-                      isActive
-                        ? 'text-accent-dark underline underline-offset-4'
-                        : 'text-accent hover:text-accent-dark'
+                      link.tool ? toolClass : writingClass
                     }`}
                   >
                     {link.label}
@@ -142,17 +121,11 @@ const currentPath = Astro.url.pathname;
           <li>
             <a
               href={link.href}
-              class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
-            >
-              {link.label}
-            </a>
-          </li>
-        ))}
-        {toolLinks.map(link => (
-          <li>
-            <a
-              href={link.href}
-              class="block py-2 font-sans text-sm font-medium text-accent hover:text-accent-dark"
+              class={`block py-2 font-sans text-sm ${
+                link.tool
+                  ? 'font-semibold text-accent hover:text-accent-dark'
+                  : 'text-ink-700 hover:text-accent'
+              }`}
             >
               {link.label}
             </a>
