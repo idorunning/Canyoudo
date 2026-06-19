@@ -2,6 +2,7 @@
 import BaseLayout from './BaseLayout.astro';
 import SectionBadge from '../components/SectionBadge.astro';
 import Comments from '../components/Comments.astro';
+import CommentsCTA from '../components/CommentsCTA.astro';
 import Sidebar from '../components/Sidebar.astro';
 import NewsWidget from '../components/NewsWidget.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
@@ -135,6 +136,8 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
               </>
             )}
           </div>
+
+          <CommentsCTA pageId={pageId} />
         </header>
 
         {/* Hero image. A generated title-card banner stands in when there is no
@@ -188,11 +191,11 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
           )}
 
           <div data-pagefind-ignore>
+            <Comments pageId={pageId} pageTitle={title} pageUrl={pageUrl} />
             <BookCTA tags={tags} />
             <div class="mt-12">
               <NewsletterForm variant="inline" />
             </div>
-            <Comments pageId={pageId} pageTitle={title} pageUrl={pageUrl} />
           </div>
         </div>
       </article>

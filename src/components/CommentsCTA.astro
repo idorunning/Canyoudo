@@ -1,0 +1,45 @@
+---
+interface Props {
+  pageId: string;
+}
+
+const { pageId } = Astro.props;
+const CUSDIS_APP_ID = import.meta.env.PUBLIC_CUSDIS_APP_ID;
+---
+
+{CUSDIS_APP_ID && (
+  <a
+    href="#comments"
+    data-comments-jump
+    class="group mt-8 flex items-center gap-3 rounded-md border border-ink-200 bg-paper-200 px-4 py-3 font-sans text-sm text-ink-700 transition-colors hover:border-accent hover:bg-paper-100"
+  >
+    <span aria-hidden="true" class="text-base">💬</span>
+    <span>
+      <strong class="font-semibold text-ink-900"><span data-cusdis-count-page-id={pageId}>0</span> comments</strong>
+      <span class="text-ink-500"> — join the conversation</span>
+    </span>
+    <span aria-hidden="true" class="ml-auto text-accent transition-transform group-hover:translate-y-0.5">
+      Take me to comments ↓
+    </span>
+  </a>
+
+  <script
+    async
+    defer
+    is:inline
+    data-app-id={CUSDIS_APP_ID}
+    data-host="https://cusdis.com"
+    src="https://cusdis.com/js/cusdis-count.umd.js"
+  ></script>
+
+  <script is:inline>
+    document.querySelectorAll('[data-comments-jump]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        var target = document.getElementById('comments');
+        if (!target) return;
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+)}
