@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-19T12:38:41.977Z",
+    "fetchedAt": "2026-06-19T17:07:33.014Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,19 +16,59 @@
   },
   "items": [
     {
+      "title": "Court and tribunal fees: updates from July 2026",
+      "link": "https://www.gov.uk/government/news/court-and-tribunal-fees-updates-from-july-2026",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-06-19T15:43:05.000Z",
+      "summary": "The Ministry of Justice plans to make a series of changes to court and tribunal fees payable in HM Courts and Tribunals Service."
+    },
+    {
+      "title": "Thirty rioters sentenced for disorder which saw police officer set on fire",
+      "link": "https://www.bbc.com/news/articles/cvgl9z8l271o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-19T15:32:10.000Z",
+      "summary": "The deaths of teenagers Kyrees Sullivan and Harvey Evans sparked a night of violence in Cardiff in 2023."
+    },
+    {
+      "title": "Rapist who 'catfished' Muslim men on Snapchat and Grindr jailed",
+      "link": "https://www.bbc.com/news/articles/cwyenemwnd9o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-19T15:15:42.000Z",
+      "summary": "Police now believe Waleed Saeed had dozens more victims, who they are now appealing to come forward."
+    },
+    {
+      "title": "Scottish guidance on trans prisoners ruled unlawful",
+      "link": "https://www.bbc.com/news/articles/cz7502eq5lro?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-19T15:05:48.000Z",
+      "summary": "Judge Lady Ross said sex segregation in prisons must be based on biological sex, based on a Supreme Court ruling last year."
+    },
+    {
       "title": "Boy, 3, hurt at zoo was attacked by a crocodile, BBC understands",
       "link": "https://www.bbc.com/news/articles/cp9l2278m8no?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-19T12:15:34.000Z",
+      "isoDate": "2026-06-19T14:59:10.000Z",
       "summary": "Police say a man arrested on suspicion of attempted murder has been bailed."
+    },
+    {
+      "title": "Cardiff Prison",
+      "link": "https://www.gov.uk/guidance/cardiff-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-06-19T14:51:56.000Z",
+      "summary": "Cardiff Prison is a men’s prison in the centre of Cardiff, Wales."
     },
     {
       "title": "UK's top data and AI regulator quits after 'inappropriate' humour",
       "link": "https://www.bbc.com/news/articles/c0eyq7rnn22o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
-      "isoDate": "2026-06-19T11:19:31.000Z",
+      "isoDate": "2026-06-19T12:45:06.000Z",
       "summary": "Edwards has been the boss of the data watchdog since January 2022, and said he had made inappropriate attempts at humour."
     },
     {
@@ -38,14 +78,6 @@
       "topic": "law",
       "isoDate": "2026-06-19T07:51:51.000Z",
       "summary": "'Inappropriate' WhatsApps too The post Police legal head disbarred over sexual comments to junior female colleagues appeared first on Legal Cheek ."
-    },
-    {
-      "title": "UK actress charged with importing meth worth almost £157m into Australia",
-      "link": "https://www.bbc.com/news/articles/ckg5nq0172no?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-19T01:04:14.000Z",
-      "summary": "Emaa Hussen, 34, faces life in prison for allegedly trying to smuggle 320kg of meth hidden in bags of charcoal."
     },
     {
       "title": "Reappointment of member of the Tribunal Procedure Committee",
@@ -142,22 +174,6 @@
       "topic": "ai",
       "isoDate": "2026-06-16T19:30:00.000Z",
       "summary": "The prompt that made ChatGPT generate disturbing images. What does this tell us about AI?"
-    },
-    {
-      "title": "Featherstone Prison",
-      "link": "https://www.gov.uk/guidance/featherstone-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-16T18:26:31.000Z",
-      "summary": "Featherstone is a men’s prison in the village of Featherstone, near Wolverhampton."
-    },
-    {
-      "title": "Criminal justice system: data standards forum guidance",
-      "link": "https://www.gov.uk/guidance/criminal-justice-system-data-standards-forum-guidance",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-16T15:25:01.000Z",
-      "summary": "How to use the common data standards for the criminal justice system (CJS) in England and Wales."
     },
     {
       "title": "Solicitor General refers Vickrum Digwa to Court of Appeal",
