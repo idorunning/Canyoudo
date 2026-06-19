@@ -9,7 +9,10 @@ const { pageId, pageTitle, pageUrl } = Astro.props;
 const CUSDIS_APP_ID = import.meta.env.PUBLIC_CUSDIS_APP_ID;
 ---
 
-<section id="comments" class="scroll-mt-24 mt-16 pt-10 border-t border-ink-200">
+<section
+  id="comments"
+  class="scroll-mt-24 mt-16 rounded-lg border border-ink-200 bg-paper-200 p-5 sm:p-8"
+>
   <h2 class="font-display text-2xl font-semibold text-ink-900 mb-2">
     Comments
   </h2>
@@ -25,18 +28,48 @@ const CUSDIS_APP_ID = import.meta.env.PUBLIC_CUSDIS_APP_ID;
       data-page-id={pageId}
       data-page-url={pageUrl}
       data-page-title={pageTitle}
+      data-theme="light"
     ></div>
   ) : (
-    <div class="bg-paper-200 border border-ink-200 rounded-md p-5 font-sans text-sm text-ink-700">
+    <div class="bg-paper-100 border border-ink-200 rounded-md p-5 font-sans text-sm text-ink-700">
       <p class="font-medium text-ink-900 mb-1">Comments not configured.</p>
       <p>
         Sign up at <a href="https://cusdis.com" class="text-accent underline">cusdis.com</a>,
-        create a site, and add your App ID to the <code class="bg-paper-100 px-1.5 py-0.5 rounded text-xs">PUBLIC_CUSDIS_APP_ID</code> environment variable.
+        create a site, and add your App ID to the <code class="bg-paper-200 px-1.5 py-0.5 rounded text-xs">PUBLIC_CUSDIS_APP_ID</code> environment variable.
       </p>
     </div>
   )}
 </section>
 
 {CUSDIS_APP_ID && (
-  <script src="https://cusdis.com/js/cusdis.es.js" async defer is:inline></script>
+  <>
+    <style is:global>
+      /* Cusdis injects its iframe at runtime, so these need to be global.
+         Full width + a generous height floor keeps the thread prominent and
+         fully open on mobile — no cramped, internally-scrolling box. */
+      #cusdis_thread,
+      #cusdis_thread iframe {
+        width: 100% !important;
+        min-height: 420px;
+      }
+    </style>
+
+    <script src="https://cusdis.com/js/cusdis.es.js" async defer is:inline></script>
+
+    <script is:inline>
+      // Belt-and-braces: mirror Cusdis's own auto-resize. Cusdis posts
+      // { from:'cusdis', event:'resize', data:<height> } and sets the iframe
+      // height itself; we re-apply it (origin-checked) so the thread always
+      // grows to its full content height and never scrolls internally, even if
+      // the widget's own handler misses a resize on mobile.
+      window.addEventListener('message', function (e) {
+        if (e.origin !== 'https://cusdis.com') return;
+        var msg = e.data;
+        if (msg && msg.from === 'cusdis' && msg.event === 'resize' && msg.data) {
+          var frame = document.querySelector('#cusdis_thread iframe');
+          if (frame) frame.style.height = parseInt(msg.data, 10) + 'px';
+        }
+      });
+    </script>
+  </>
 )}
