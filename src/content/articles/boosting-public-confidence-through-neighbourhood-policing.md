@@ -2,6 +2,11 @@
 section: "police-policy"
 title: "Boosting Public Confidence Through Neighbourhood Policing"
 description: "Delivered well, neighbourhood policing produces “quick, large and sustained” gains in public confidence. The evidence behind that claim, weighed."
+keyTakeaways:
+  - Done to a high standard, neighbourhood policing produces "quick, large and sustained" gains in public confidence, and the College of Policing's systematic reviews back the claim.
+  - The gains depend on delivery — problem-solving, partnerships and statutory tools used well — not on the label, and implementation across forces is uneven.
+  - Protecting neighbourhood capacity from constant abstraction to response is the precondition for any of it to work.
+  - "This is not a departure from British policing tradition but the fulfilment of Peel's founding test: the absence of crime and disorder."
 pubDate: 2025-02-18
 heroImage: "/images/neighbourhood-pcso.jpg"
 thumbnail: "/images/neighbourhood-pcso.jpg"

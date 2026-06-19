@@ -2,6 +2,11 @@
 title: 'The Officers We’re Losing: Why British Policing Must Rethink Cognitive Diversity'
 section: police-policy
 description: British policing invests heavily in recruitment and training, then systematically loses officers whose cognitive profiles — ADHD, autism, dyslexia — do not fit institutional assumptions about what "good" looks like. Why cognitive diversity is a strategic capability senior leaders cannot afford to manage out.
+keyTakeaways:
+  - Policing recruits and trains hard, then loses officers whose cognitive profiles — ADHD, autism, dyslexia — do not match institutional assumptions about what "good" looks like.
+  - Performance systems are good at spotting visible weaknesses and poor at seeing invisible strengths like pattern recognition and crisis performance.
+  - Cognitive diversity is a strategic capability, not a welfare concession — the very traits being managed out are operationally valuable.
+  - "The fix is a leadership and culture question: judge officers on the strengths they bring, not only on the boxes they tick."
 pubDate: 2025-05-06
 updatedDate: ''
 author: ''

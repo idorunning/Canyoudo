@@ -19,20 +19,20 @@ const { label, tone = 'default' } = Astro.props;
     margin: 2rem 0;
     border-radius: 6px;
     padding: 1.1rem 1.35rem;
-    border: 1px solid theme('colors.ink.200');
-    background: theme('colors.paper.100');
+    border: 1px solid rgb(var(--ink-200));
+    background: rgb(var(--paper-100));
   }
   .co-callout--note {
-    border-left: 4px solid theme('colors.accent.DEFAULT');
-    background: theme('colors.paper.200');
+    border-left: 4px solid rgb(var(--accent));
+    background: rgb(var(--paper-200));
   }
   .co-callout--warning {
-    border-left: 4px solid theme('colors.accent.dark');
+    border-left: 4px solid rgb(var(--accent-dark));
     background: #fbf3ef;
   }
   .co-callout--template {
-    border: 1px dashed theme('colors.ink.300');
-    background: theme('colors.paper.200');
+    border: 1px dashed rgb(var(--ink-300));
+    background: rgb(var(--paper-200));
   }
   .co-callout-label {
     font-family: theme('fontFamily.sans');
@@ -40,11 +40,11 @@ const { label, tone = 'default' } = Astro.props;
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: theme('colors.accent.DEFAULT');
+    color: rgb(var(--accent));
     margin: 0 0 0.55rem;
   }
   .co-callout--warning .co-callout-label {
-    color: theme('colors.accent.dark');
+    color: rgb(var(--accent-dark));
   }
   .co-callout-body :global(> :first-child) {
     margin-top: 0;

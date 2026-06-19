@@ -4,6 +4,58 @@
 
 /* Fonts loaded in BaseLayout via Google Fonts link */
 
+/* ------------------------------------------------------------------ */
+/* Theme palette as CSS variables (space-separated RGB channels, so the */
+/* Tailwind colour tokens can apply opacity via rgb(var(--x)/<alpha>)). */
+/* The .dark block flips backgrounds dark and text light; a no-flash    */
+/* inline script in BaseLayout sets the class before first paint.       */
+/* ------------------------------------------------------------------ */
+:root {
+  --paper-50: 251 248 241;
+  --paper-100: 247 243 235;
+  --paper-200: 237 229 211;
+  --ink-900: 26 24 23;
+  --ink-800: 42 39 36;
+  --ink-700: 61 57 54;
+  --ink-600: 90 84 78;
+  --ink-500: 122 114 104;
+  --ink-400: 156 147 137;
+  --ink-300: 196 188 174;
+  --ink-200: 221 214 200;
+  --accent: 124 40 40;
+  --accent-dark: 90 28 28;
+  --accent-light: 161 69 69;
+}
+
+.dark {
+  /* Backgrounds: warm near-blacks, lightly stepped for elevation. */
+  --paper-100: 28 25 23;
+  --paper-50: 38 34 31;
+  --paper-200: 48 43 39;
+  /* Text: warm off-whites, stepping down to muted/borders. */
+  --ink-900: 244 239 230;
+  --ink-800: 230 223 211;
+  --ink-700: 206 198 184;
+  --ink-600: 176 167 153;
+  --ink-500: 143 134 121;
+  --ink-400: 112 104 93;
+  /* 300/200 read as borders/dividers in the UI — keep them dark. */
+  --ink-300: 78 72 65;
+  --ink-200: 58 53 48;
+  /* Accent lightened for contrast on dark; the "dark" (hover) step goes
+     lighter, the "light" step a touch deeper, mirroring the light theme. */
+  --accent: 209 130 130;
+  --accent-dark: 230 170 170;
+  --accent-light: 178 96 96;
+}
+
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
@@ -17,8 +69,8 @@
   }
 
   ::selection {
-    background-color: theme('colors.accent.DEFAULT');
-    color: theme('colors.paper.50');
+    background-color: rgb(var(--accent));
+    color: rgb(var(--paper-50));
   }
 
   /* Visible keyboard focus on links and buttons. Inputs keep their own
@@ -26,7 +78,7 @@
   a:focus-visible,
   button:focus-visible,
   summary:focus-visible {
-    outline: 2px solid theme('colors.accent.DEFAULT');
+    outline: 2px solid rgb(var(--accent));
     outline-offset: 2px;
     border-radius: 2px;
   }
@@ -47,7 +99,7 @@
     font-family: theme('fontFamily.serif');
     font-size: 1.125rem;
     line-height: 1.7;
-    color: theme('colors.ink.800');
+    color: rgb(var(--ink-800));
   }
 
   .prose-article > * + * {
@@ -72,7 +124,7 @@
   .prose-article > p:first-child {
     font-size: 1.25rem;
     line-height: 1.55;
-    color: theme('colors.ink.900');
+    color: rgb(var(--ink-900));
   }
 
   .prose-article > p:first-child::first-letter {
@@ -83,7 +135,7 @@
     line-height: 0.82;
     padding-right: 0.08em;
     margin-top: 0.02em;
-    color: theme('colors.accent.DEFAULT');
+    color: rgb(var(--accent));
   }
 
   .prose-article h2 {
@@ -91,7 +143,7 @@
     font-size: 2rem;
     font-weight: 700;
     line-height: 1.15;
-    color: theme('colors.ink.900');
+    color: rgb(var(--ink-900));
     margin-top: 2.2em;
     margin-bottom: 0.6em;
     letter-spacing: -0.02em;
@@ -105,7 +157,7 @@
     width: 2.5rem;
     height: 3px;
     margin-bottom: 0.9rem;
-    background: theme('colors.accent.DEFAULT');
+    background: rgb(var(--accent));
   }
 
   .prose-article h3 {
@@ -113,7 +165,7 @@
     font-size: 1.4rem;
     font-weight: 700;
     line-height: 1.3;
-    color: theme('colors.ink.900');
+    color: rgb(var(--ink-900));
     margin-top: 1.9em;
     margin-bottom: 0.5em;
     letter-spacing: -0.01em;
@@ -124,7 +176,7 @@
   }
 
   .prose-article a {
-    color: theme('colors.accent.DEFAULT');
+    color: rgb(var(--accent));
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
@@ -132,12 +184,12 @@
   }
 
   .prose-article a:hover {
-    color: theme('colors.accent.dark');
+    color: rgb(var(--accent-dark));
   }
 
   .prose-article strong {
     font-weight: 600;
-    color: theme('colors.ink.900');
+    color: rgb(var(--ink-900));
   }
 
   .prose-article em {
@@ -145,11 +197,11 @@
   }
 
   .prose-article blockquote {
-    border-left: 3px solid theme('colors.accent.DEFAULT');
+    border-left: 3px solid rgb(var(--accent));
     padding-left: 1.25rem;
     margin-left: 0;
     font-style: italic;
-    color: theme('colors.ink.700');
+    color: rgb(var(--ink-700));
   }
 
   .prose-article ul,
@@ -171,21 +223,21 @@
   }
 
   .prose-article li::marker {
-    color: theme('colors.ink.500');
+    color: rgb(var(--ink-500));
   }
 
   .prose-article code {
     font-family: ui-monospace, 'SF Mono', Menlo, monospace;
     font-size: 0.9em;
-    background-color: theme('colors.paper.200');
+    background-color: rgb(var(--paper-200));
     padding: 0.1em 0.35em;
     border-radius: 3px;
-    color: theme('colors.ink.900');
+    color: rgb(var(--ink-900));
   }
 
   .prose-article pre {
-    background-color: theme('colors.ink.900');
-    color: theme('colors.paper.50');
+    background-color: rgb(var(--ink-900));
+    color: rgb(var(--paper-50));
     padding: 1.25rem;
     border-radius: 6px;
     overflow-x: auto;
@@ -200,9 +252,16 @@
     color: inherit;
   }
 
+  /* In dark mode the token-driven pre would invert to a bright block; keep code
+     blocks on a dark surface in both themes so syntax stays comfortable. */
+  .dark .prose-article pre {
+    background-color: rgb(18 16 15);
+    color: rgb(var(--ink-800));
+  }
+
   .prose-article hr {
     border: none;
-    border-top: 1px solid theme('colors.ink.200');
+    border-top: 1px solid rgb(var(--ink-200));
     margin: 2.5em auto;
     width: 4rem;
   }
@@ -233,7 +292,7 @@
   .prose-article figcaption {
     font-family: theme('fontFamily.sans');
     font-size: 0.875rem;
-    color: theme('colors.ink.600');
+    color: rgb(var(--ink-600));
     text-align: center;
     margin-top: 0.5em;
   }
@@ -298,14 +357,14 @@
     padding: 0.5em 0.8em;
     text-align: left;
     vertical-align: top;
-    border-bottom: 1px solid theme('colors.ink.200');
+    border-bottom: 1px solid rgb(var(--ink-200));
   }
 
   .prose-article table.data-table thead th {
     font-weight: 600;
-    color: theme('colors.ink.700');
+    color: rgb(var(--ink-700));
     white-space: nowrap;
-    border-bottom: 2px solid theme('colors.ink.300');
+    border-bottom: 2px solid rgb(var(--ink-300));
   }
 
   /* Below the phone breakpoint each row becomes a self-labelled card. */
@@ -338,9 +397,9 @@
     .prose-article table.data-table tr {
       margin: 0 0 1em;
       padding: 0.35em 0.85em;
-      border: 1px solid theme('colors.ink.200');
+      border: 1px solid rgb(var(--ink-200));
       border-radius: 6px;
-      background-color: theme('colors.paper.50');
+      background-color: rgb(var(--paper-50));
     }
 
     .prose-article table.data-table td {
@@ -349,7 +408,7 @@
       align-items: baseline;
       gap: 1.5em;
       padding: 0.3em 0;
-      border-bottom: 1px solid theme('colors.ink.200');
+      border-bottom: 1px solid rgb(var(--ink-200));
       text-align: right;
     }
 
@@ -362,7 +421,7 @@
       flex: 0 0 auto;
       font-family: theme('fontFamily.sans');
       font-weight: 600;
-      color: theme('colors.ink.600');
+      color: rgb(var(--ink-600));
       text-align: left;
     }
 
@@ -375,7 +434,7 @@
 
 /* Subtle paper texture for editorial feel */
 .paper-grain {
-  background-color: theme('colors.paper.100');
+  background-color: rgb(var(--paper-100));
   background-image:
     radial-gradient(circle at 25% 25%, rgba(122, 114, 104, 0.025) 1px, transparent 1px),
     radial-gradient(circle at 75% 75%, rgba(122, 114, 104, 0.02) 1px, transparent 1px);
@@ -534,23 +593,76 @@
   text-decoration: underline;
   text-decoration-style: dotted;
   text-decoration-thickness: 1px;
-  text-decoration-color: theme('colors.ink.300');
+  text-decoration-color: rgb(var(--ink-300));
   text-underline-offset: 3px;
 }
 .prose-article a.topic-link:hover {
-  color: theme('colors.accent.DEFAULT');
-  text-decoration-color: theme('colors.accent.light');
+  color: rgb(var(--accent));
+  text-decoration-color: rgb(var(--accent-light));
+}
+
+/* ------------------------------------------------------------------ */
+/* Footnote citations (GFM). Superscript references in the body, and a  */
+/* generated notes section at the foot of the article.                  */
+/* ------------------------------------------------------------------ */
+.prose-article a[data-footnote-ref] {
+  font-weight: 600;
+  color: rgb(var(--accent));
+  text-decoration: none;
+  padding: 0 0.1em;
+}
+.prose-article a[data-footnote-ref]:hover {
+  text-decoration: underline;
+}
+.prose-article section.footnotes {
+  max-width: var(--measure);
+  margin-top: 3em;
+  padding-top: 1.25em;
+  border-top: 1px solid rgb(var(--ink-200));
+  font-family: theme('fontFamily.sans');
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgb(var(--ink-600));
+}
+/* The generated heading is visually hidden (kept for assistive tech); show a
+   discreet label of our own so the section reads as "Notes" on the page. */
+.prose-article section.footnotes::before {
+  content: 'Notes';
+  display: block;
+  font-family: theme('fontFamily.display');
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgb(var(--ink-800));
+  margin-bottom: 0.85em;
+}
+.prose-article section.footnotes ol {
+  padding-left: 1.25rem;
+}
+.prose-article section.footnotes li {
+  margin-top: 0.55em;
+}
+.prose-article section.footnotes li::marker {
+  color: rgb(var(--ink-400));
+}
+.prose-article section.footnotes a {
+  color: rgb(var(--accent));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-article a[data-footnote-backref] {
+  text-decoration: none;
+  margin-left: 0.3em;
 }
 
 /* ------------------------------------------------------------------ */
 /* Pagefind search UI — themed to the site's palette and type          */
 /* ------------------------------------------------------------------ */
 .tap-search {
-  --pagefind-ui-primary: theme('colors.accent.DEFAULT');
-  --pagefind-ui-text: theme('colors.ink.900');
-  --pagefind-ui-background: theme('colors.paper.50');
-  --pagefind-ui-border: theme('colors.ink.200');
-  --pagefind-ui-tag: theme('colors.paper.200');
+  --pagefind-ui-primary: rgb(var(--accent));
+  --pagefind-ui-text: rgb(var(--ink-900));
+  --pagefind-ui-background: rgb(var(--paper-50));
+  --pagefind-ui-border: rgb(var(--ink-200));
+  --pagefind-ui-tag: rgb(var(--paper-200));
   --pagefind-ui-border-width: 1px;
   --pagefind-ui-border-radius: 6px;
   --pagefind-ui-font: theme('fontFamily.sans');
@@ -569,21 +681,21 @@
   padding: 0.1rem 0.4rem;
   border-radius: 4px;
   line-height: 1.3;
-  background: theme('colors.paper.200');
-  color: theme('colors.ink.600');
+  background: rgb(var(--paper-200));
+  color: rgb(var(--ink-600));
   flex-shrink: 0;
 }
 .news-chip--policing {
   background: rgba(124, 40, 40, 0.1);
-  color: theme('colors.accent.DEFAULT');
+  color: rgb(var(--accent));
 }
 .news-chip--ai {
   background: rgba(90, 84, 78, 0.12);
-  color: theme('colors.ink.700');
+  color: rgb(var(--ink-700));
 }
 .news-chip--law {
   background: rgba(161, 69, 69, 0.12);
-  color: theme('colors.accent.light');
+  color: rgb(var(--accent-light));
 }
 
 /* ------------------------------------------------------------------ */

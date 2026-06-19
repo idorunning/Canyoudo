@@ -109,43 +109,57 @@ What was added, and where each device belongs:
 | **Lead paragraph + drop cap** | all articles | shipped |
 | **Reading progress bar** | all articles | shipped (`ReadingProgress.astro`) |
 | **"On this page" contents** | articles with ≥3 sections | shipped (`ArticleContents.astro`); auto-detects whether sections are `##` or `###` |
-| **Key takeaways box** | long essays, via `keyTakeaways` frontmatter | shipped on 4 essays; roll out to more |
-| **Pull quote** | mid-article beats | component shipped (`PullQuote.astro`), used in 1 MDX piece; extend to others |
+| **Key takeaways box** | long essays, via `keyTakeaways` frontmatter | shipped on 8 essays |
+| **Pull quote** | mid-article beats | shipped (`PullQuote.astro`), used in 4 MDX pieces |
+| **Dark mode** | whole site | shipped — CSS-variable palette + class toggle |
+| **Footnote citations** | articles with numeric refs | GFM footnotes styled; flagship piece converted |
 
 **Heading levels.** Most articles split their sections with `###` (h3) rather than
 `##` (h2). The contents rail handles both, but standardising on `##` for top-level
 sections would be cleaner long-term and make the TOC logic trivial.
 
-**Rolling out key takeaways.** It is a pure-frontmatter field (`keyTakeaways: []`)
-that touches no prose. Good next candidates: the neighbourhood-policing pieces,
-the burnout essay, the cognitive-diversity essay, Palantir, and nitazenes.
+**Key takeaways** is a pure-frontmatter field (`keyTakeaways: []`) that touches no
+prose. It is now on eight essays (legal aid, fuel theft, risk grading,
+self-selection, neighbourhood policing, cognitive diversity, Palantir, burnout);
+extend to any remaining long pieces the same way.
 
-**Pull quotes.** `<PullQuote>` works in `.mdx` today. To use it in the many `.md`
-essays, those files would need converting to `.mdx` (a mechanical change) — worth
-doing for the flagship essays, recommended rather than done this pass.
+**Pull quotes.** `<PullQuote>` works in `.mdx` today and is used in the AI guide,
+PoliceAI, the deepfakes piece and the civil-orders guide. To use it in the many
+`.md` essays, those files need converting to `.mdx` (a mechanical change) — worth
+doing for the flagship essays.
+
+**Dark mode.** Colours are now CSS variables (RGB channels) in `global.css`, with
+the Tailwind tokens compiled to `rgb(var(--x) / <alpha-value>)` so opacity
+modifiers keep working. A `.dark` class on `<html>` reskins everything; a
+no-flash inline script in `BaseLayout` sets it pre-paint from saved choice or OS
+preference, and a header toggle (desktop + mobile) flips and persists it. Code
+blocks are pinned to a dark surface in both themes for legibility.
+
+**Footnotes.** GFM footnotes (`[^1]` … `[^1]: …`) are styled across the site
+(superscript refs, a "Notes" section, backrefs). `the-murder-of-henry-nowak`
+was converted from inline `[n]` + a manual Sources list as the flagship. Note
+that some `[n]` patterns are law-report years (e.g. `Boness [2005]`,
+`Cadder … [2010]`) and must be left alone.
 
 ---
 
 ## 4. Prioritised backlog (deferred)
 
-**High value**
-1. **Dark mode** — theme tokens + a toggle; needs every component checked, hence
-   deferred from this pass.
-2. **Roll out key takeaways and pull quotes** to the remaining flagship essays.
-3. **Footnote-style citations** to replace inline numeric markers.
-
 **Medium**
-4. **Related articles by tag** at the foot of each article (the data — tags +
+1. **Convert remaining flagship `.md` essays to `.mdx`** so pull quotes can be
+   placed mid-article, and **convert any further numeric-citation articles** to
+   GFM footnotes (e.g. the draft self-selection precursor) once out of draft.
+2. **Related articles by tag** at the foot of each article (the data — tags +
    topics — already exists) to lift in-site engagement.
-5. **Breadcrumbs on `/data` subpages** (JSON-LD breadcrumbs already exist; surface
+3. **Breadcrumbs on `/data` subpages** (JSON-LD breadcrumbs already exist; surface
    them visually).
-6. **Data Explorer discoverability** — `/data/explore` is only linked from inside
+4. **Data Explorer discoverability** — `/data/explore` is only linked from inside
    the dashboard; promote it.
 
 **Lower**
-7. Author archive pages (matters only if the site goes multi-author).
-8. Research page: the briefing/search dual-mode UI could be simplified.
-9. Standardise heading levels to `##` across articles.
+5. Author archive pages (matters only if the site goes multi-author).
+6. Research page: the briefing/search dual-mode UI could be simplified.
+7. Standardise heading levels to `##` across articles.
 
 ---
 
