@@ -1,0 +1,28 @@
+{
+  "changelog": [
+    {
+      "date": "2026-06-20",
+      "type": "new",
+      "title": "Added this page — \"How I built this website\"",
+      "description": "Created an open, plain-English explainer of every service the site uses and why, with this running change log beneath it. The idea: show the whole thing being learned in the open, mistakes and all, and invite suggestions."
+    },
+    {
+      "date": "2026-06-06",
+      "type": "update",
+      "title": "Monthly police data refresh",
+      "description": "The crime dashboard pulled in the latest stop-and-search and recorded-crime figures from data.police.uk. This happens automatically each month — I don't touch it by hand."
+    },
+    {
+      "date": "2026-01-07",
+      "type": "article",
+      "title": "Published \"Do you understand?\"",
+      "description": "A piece questioning whether the standard custody question actually serves a purpose. Written in the browser editor and published with one click."
+    },
+    {
+      "date": "2025-12-01",
+      "type": "new",
+      "title": "Research Assistant and Crime Dashboard went live",
+      "description": "Two interactive tools — a plain-language search over millions of academic papers, and a live crime-data explorer. The biggest things I've built so far, and the point where this stopped being just a blog."
+    }
+  ]
+}

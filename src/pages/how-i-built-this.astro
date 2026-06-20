@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Comments from '../components/Comments.astro';
+import CommentsCTA from '../components/CommentsCTA.astro';
+import { getEntry, getCollection } from 'astro:content';
+
+const page = await getEntry('pages', 'how-i-built-this');
+const { Content } = await page!.render();
+
+// The change log is a single-file data collection: one entry whose data holds
+// the list. Sort newest-first so the latest change is always on top.
+const changelogEntry = await getEntry('changelog', 'changelog');
+const entries = [...(changelogEntry?.data.changelog ?? [])].sort(
+  (a, b) => b.date.getTime() - a.date.getTime()
+);
+
+// Friendly label + badge styling per type. Full class strings (not built up
+// dynamically) so Tailwind keeps them in the build.
+const TYPE_META: Record<string, { label: string; badge: string }> = {
+  new: { label: 'New', badge: 'bg-accent/10 text-accent-dark border-accent/30' },
+  fix: { label: 'Fix', badge: 'bg-emerald-500/10 text-emerald-700 border-emerald-500/30' },
+  update: { label: 'Update', badge: 'bg-sky-500/10 text-sky-700 border-sky-500/30' },
+  article: { label: 'Article', badge: 'bg-amber-500/10 text-amber-700 border-amber-500/30' },
+  note: { label: 'Note', badge: 'bg-ink-500/10 text-ink-600 border-ink-300' },
+};
+
+const dateFmt = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const pageId = 'how-i-built-this';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<BaseLayout title={page!.data.title} description={page!.data.description}>
+  <article>
+    <header class="border-b border-ink-200">
+      <div class="max-w-3xl mx-auto px-6 lg:px-10 py-14 md:py-20">
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">
+          How this is built
+        </p>
+        <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+          {page!.data.title}
+        </h1>
+      </div>
+    </header>
+
+    <div class="max-w-3xl mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <div class="prose-article">
+        <Content />
+      </div>
+
+      <CommentsCTA pageId={pageId} />
+
+      {/* --- Change log ------------------------------------------------ */}
+      <section id="changelog" class="scroll-mt-24 mt-16 pt-12 border-t border-ink-200">
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-3">
+          Change log
+        </p>
+        <h2 class="font-display text-3xl font-semibold text-ink-900 leading-tight">
+          Every change, logged
+        </h2>
+        <p class="font-serif text-ink-700 leading-relaxed mt-3 max-w-xl">
+          A running record of what's changed and why — fixes, new pieces, tweaks
+          and lessons learned. Newest first.
+        </p>
+
+        {entries.length === 0 ? (
+          <p class="font-sans text-sm text-ink-500 mt-8">No entries yet.</p>
+        ) : (
+          <ol class="mt-10 space-y-8">
+            {entries.map(entry => {
+              const meta = entry.type ? TYPE_META[entry.type] : undefined;
+              return (
+                <li class="relative pl-6 border-l-2 border-ink-200">
+                  <span
+                    aria-hidden="true"
+                    class="absolute -left-[5px] top-1.5 h-2 w-2 rounded-full bg-accent"
+                  ></span>
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <time
+                      datetime={entry.date.toISOString().slice(0, 10)}
+                      class="font-sans text-xs uppercase tracking-wider text-ink-500"
+                    >
+                      {dateFmt.format(entry.date)}
+                    </time>
+                    {meta && (
+                      <span
+                        class={`font-sans text-[0.65rem] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${meta.badge}`}
+                      >
+                        {meta.label}
+                      </span>
+                    )}
+                  </div>
+                  <h3 class="font-display text-lg font-semibold text-ink-900 mt-1.5 leading-snug">
+                    {entry.title}
+                  </h3>
+                  <p class="font-serif text-ink-700 leading-relaxed mt-1">
+                    {entry.description}
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+      </section>
+
+      {/* --- Suggestions / contact ------------------------------------- */}
+      <aside class="mt-16 rounded-lg border border-ink-200 bg-paper-200 p-6 sm:p-8">
+        <h2 class="font-display text-xl font-semibold text-ink-900">
+          Spotted something, or have an idea?
+        </h2>
+        <p class="font-serif text-ink-700 leading-relaxed mt-2 max-w-xl">
+          I'm learning as I go, so suggestions are genuinely welcome — a fix, a
+          better way of doing something, or just a question. Leave a comment
+          below, or
+          <a href="/contact" class="text-accent underline underline-offset-2 hover:text-accent-dark">get in touch</a>.
+        </p>
+      </aside>
+
+      <Comments pageId={pageId} pageTitle={page!.data.title} pageUrl={pageUrl} />
+    </div>
+  </article>
+</BaseLayout>

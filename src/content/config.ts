@@ -192,6 +192,28 @@ const pagesSchema = z.object({
   description: z.string(),
 });
 
+// --- Change log -------------------------------------------------------------
+// A running, plain-English record of changes to the site — fixes, new
+// articles, content updates and learning notes — shown beneath the "How I
+// built this" explainer. Curated by hand (not auto-generated from git) and
+// editable in the CMS as a single-file list, so each entry can say in human
+// terms what changed and why. One `changelog.json` carries the whole list.
+const changelogSchema = z.object({
+  changelog: z.array(
+    z.object({
+      date: z.coerce.date(),
+      title: z.string(),
+      description: z.string(),
+      // Optional category, used only for the small coloured badge on each
+      // entry. Blank is fine — the editor serialises a cleared field as ''.
+      type: z.preprocess(
+        blankAsUndefined,
+        z.enum(['new', 'fix', 'update', 'article', 'note']).optional()
+      ),
+    })
+  ),
+});
+
 export const collections = {
   articles: defineCollection({ type: 'content', schema: articleSchema }),
   pages: defineCollection({ type: 'content', schema: pagesSchema }),
@@ -200,4 +222,5 @@ export const collections = {
   resources: defineCollection({ type: 'data', schema: resourcesSchema }),
   policedata: defineCollection({ type: 'data', schema: policeDataSchema }),
   news: defineCollection({ type: 'data', schema: newsSchema }),
+  changelog: defineCollection({ type: 'data', schema: changelogSchema }),
 };

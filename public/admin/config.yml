@@ -322,6 +322,18 @@ collections:
               widget: "markdown",
               hint: "The email address display at the top of the page is managed by the site template, not here.",
             }
+      - name: "how-i-built-this"
+        label: "How I built this"
+        file: "src/content/pages/how-i-built-this.md"
+        fields:
+          - { name: "title", label: "Page heading", widget: "string" }
+          - { name: "description", label: "Meta description (search/social summary)", widget: "text" }
+          - {
+              name: "body",
+              label: "Content",
+              widget: "markdown",
+              hint: "The explainer article. The change log beneath it on the page is edited separately under the Change log collection.",
+            }
 
   # Topics dictionary — the single source of truth behind tag suggestions, the
   # in-body auto-links, and the /topics pages. Add a topic, list the phrasings
@@ -379,3 +391,37 @@ collections:
               - { name: "url", label: "URL (full)", widget: "string", hint: "Include https://" }
               - { name: "note", label: "Note (optional)", widget: "text", required: false }
               - { name: "category", label: "Category (optional)", widget: "string", required: false, hint: "Groups links on the page, e.g. 'Evidence and research'." }
+
+  # Change log — the running list of changes shown beneath the "How I built
+  # this" page. Add an entry whenever something changes; newest is shown first.
+  - name: "changelog"
+    label: "Change log"
+    description: "The running list of site changes shown on the 'How I built this' page. Add a new entry at the top whenever something changes."
+    files:
+      - name: "changelog"
+        label: "Change log entries"
+        file: "src/content/changelog/changelog.json"
+        fields:
+          - name: "changelog"
+            label: "Entries"
+            widget: "list"
+            label_singular: "Entry"
+            summary: "{{fields.date}} — {{fields.title}}"
+            fields:
+              - { name: "date", label: "Date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+              - { name: "title", label: "Title", widget: "string", hint: "A short headline for the change, e.g. 'Fixed a broken link in the stop & search piece'." }
+              - { name: "description", label: "What changed and why", widget: "text" }
+              - {
+                  name: "type",
+                  label: "Type (optional)",
+                  widget: "select",
+                  required: false,
+                  options:
+                    [
+                      { label: "New — a new page or feature", value: "new" },
+                      { label: "Fix — something corrected", value: "fix" },
+                      { label: "Update — content refreshed", value: "update" },
+                      { label: "Article — a new piece published", value: "article" },
+                      { label: "Note — a learning note", value: "note" },
+                    ],
+                }
