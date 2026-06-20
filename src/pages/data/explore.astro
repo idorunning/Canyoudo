@@ -18,14 +18,14 @@ const tools = [
 ];
 ---
 <BaseLayout
-  title="Data Explorer"
+  title="Crime Data Explorer"
   description="Explore years of England & Wales policing data from data.police.uk — crime and outcome trends, stop & search disproportionality, neighbourhood priorities, and data-quality tracking."
 >
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
       <div class="max-w-3xl">
-        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Data Explorer' }]} />
-        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Data Explorer · built on data.police.uk</p>
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Crime Data Explorer' }]} />
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Crime Data Explorer · built on data.police.uk</p>
         <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">The numbers, over the long run.</h1>
         <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-7">
           The <a href="/data" class="text-accent hover:text-accent-dark">Crime Dashboard</a> reads the latest snapshot. These tools go deeper — into
@@ -37,7 +37,7 @@ const tools = [
 
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
-     <MemberGate hasAuth={hasAuth} feature="the Data Explorer">
+     <MemberGate hasAuth={hasAuth} feature="the Crime Data Explorer">
       <div class="grid md:grid-cols-2 gap-6 max-w-4xl">
         {tools.map((t) => (
           <a href={t.href} class="block border border-ink-200 rounded-lg p-6 hover:border-accent transition-colors group">

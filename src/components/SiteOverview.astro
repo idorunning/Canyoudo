@@ -26,7 +26,7 @@ const SECTION_DESC: Record<string, string> = {
 // `badge` flags a recently improved tool (shown as a small pill on the card).
 const tools = [
   { href: '/research', label: 'Research Assistant', badge: 'Expanded', desc: 'State a policing problem and get a cited briefing — now searching more research catalogues plus UK official sources.' },
-  { href: '/data', label: 'Crime Dashboard', desc: 'Explore stop & search and recorded crime by force and area.' },
+  { href: '/data', label: 'Crime Dashboard', desc: 'The latest month of stop & search and recorded crime, read for you by force and area.', subLink: { href: '/data/explore', label: 'Go deeper → Crime Data Explorer' } },
   { href: '/topics', label: `Topics (${topics.length})`, desc: 'Browse every theme the site covers, from VAWG to AI.' },
 ];
 ---
@@ -57,21 +57,28 @@ const tools = [
       ))}
 
       {tools.map((t) => (
-        <a
-          href={t.href}
-          class="group block border border-accent/30 bg-accent/[0.04] rounded-md p-6 hover:bg-accent/[0.08] hover:border-accent/50 transition-colors"
-        >
-          <h3 class="font-display text-xl font-semibold text-accent group-hover:text-accent-dark transition-colors leading-snug">
-            {t.label}
-            {t.badge && (
-              <span class="align-middle ml-2 font-sans text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-accent bg-accent/10 border border-accent/30 rounded-full px-2 py-0.5">
-                {t.badge}
-              </span>
-            )}
-          </h3>
-          <p class="font-serif text-base text-ink-700 leading-relaxed mt-2">{t.desc}</p>
-          <p class="font-sans text-xs uppercase tracking-[0.15em] text-accent/80 mt-4">Tool →</p>
-        </a>
+        <div class="flex flex-col">
+          <a
+            href={t.href}
+            class="group block flex-1 border border-accent/30 bg-accent/[0.04] rounded-md p-6 hover:bg-accent/[0.08] hover:border-accent/50 transition-colors"
+          >
+            <h3 class="font-display text-xl font-semibold text-accent group-hover:text-accent-dark transition-colors leading-snug">
+              {t.label}
+              {t.badge && (
+                <span class="align-middle ml-2 font-sans text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-accent bg-accent/10 border border-accent/30 rounded-full px-2 py-0.5">
+                  {t.badge}
+                </span>
+              )}
+            </h3>
+            <p class="font-serif text-base text-ink-700 leading-relaxed mt-2">{t.desc}</p>
+            <p class="font-sans text-xs uppercase tracking-[0.15em] text-accent/80 mt-4">Tool →</p>
+          </a>
+          {t.subLink && (
+            <a href={t.subLink.href} class="mt-2 font-sans text-xs font-medium text-accent/90 hover:text-accent-dark transition-colors pl-1">
+              {t.subLink.label}
+            </a>
+          )}
+        </div>
       ))}
     </div>
   </div>

@@ -156,8 +156,11 @@ that some `[n]` patterns are law-report years (e.g. `Boness [2005]`,
   trail the JSON-LD already described.
 
 **Medium**
-1. **Data Explorer discoverability** — `/data/explore` is only linked from inside
-   the dashboard; promote it.
+1. **Data Explorer discoverability — done.** Reframed as the **Crime Data
+   Explorer**, an explicit deeper dive of the Crime Dashboard: renamed across the
+   explorer + sub-tool pages and breadcrumbs, a "go deeper" hand-off on `/data`,
+   and a sub-link beneath the Crime Dashboard card on the homepage Browse grid
+   (kept as one tool family, not a separate pillar).
 2. **Convert further numeric-citation articles** to GFM footnotes (e.g. the draft
    self-selection precursor) once out of draft.
 
