@@ -143,23 +143,28 @@ that some `[n]` patterns are law-report years (e.g. `Boness [2005]`,
 
 ---
 
-## 4. Prioritised backlog (deferred)
+## 4. Prioritised backlog
+
+**Shipped since**
+- **Five flagship essays converted `.md` → `.mdx`** (legal aid, risk grading,
+  self-selection, Peel, Sherman) with a mid-article `PullQuote` in each. Note
+  the gotcha: MDX rejects `<https://…>` autolinks — rewrite them as
+  `[url](url)` when converting.
+- **Related reading** — `RelatedArticles.astro` shows up to three tag-matched
+  articles at the foot of each piece (wired into `ArticleLayout`).
+- **Breadcrumbs** — `Breadcrumbs.astro` on all eight `/data` pages, surfacing the
+  trail the JSON-LD already described.
 
 **Medium**
-1. **Convert remaining flagship `.md` essays to `.mdx`** so pull quotes can be
-   placed mid-article, and **convert any further numeric-citation articles** to
-   GFM footnotes (e.g. the draft self-selection precursor) once out of draft.
-2. **Related articles by tag** at the foot of each article (the data — tags +
-   topics — already exists) to lift in-site engagement.
-3. **Breadcrumbs on `/data` subpages** (JSON-LD breadcrumbs already exist; surface
-   them visually).
-4. **Data Explorer discoverability** — `/data/explore` is only linked from inside
+1. **Data Explorer discoverability** — `/data/explore` is only linked from inside
    the dashboard; promote it.
+2. **Convert further numeric-citation articles** to GFM footnotes (e.g. the draft
+   self-selection precursor) once out of draft.
 
 **Lower**
-5. Author archive pages (matters only if the site goes multi-author).
-6. Research page: the briefing/search dual-mode UI could be simplified.
-7. Standardise heading levels to `##` across articles.
+3. Author archive pages (matters only if the site goes multi-author).
+4. Research page: the briefing/search dual-mode UI could be simplified.
+5. Standardise heading levels to `##` across articles.
 
 ---
 

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import MemberGate from '../../components/MemberGate.astro';
 
 const hasAuth = Boolean(
@@ -23,6 +24,7 @@ const tools = [
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
       <div class="max-w-3xl">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Data Explorer' }]} />
         <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Data Explorer · built on data.police.uk</p>
         <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">The numbers, over the long run.</h1>
         <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-7">

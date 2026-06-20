@@ -1,0 +1,54 @@
+---
+// "Related reading" — up to three other articles that share the most tags with
+// the current one, shown at the foot of an article. Tag overlap is a cheap,
+// editor-controlled signal (the sidebar already covers same-section browsing),
+// so this surfaces thematic neighbours across sections. Renders nothing when no
+// other article shares a tag.
+import { getCollection } from 'astro:content';
+import { SECTION_LABELS } from '../content/config';
+
+interface Props {
+  currentSlug: string;
+  section: string;
+  tags?: string[];
+}
+const { currentSlug, section, tags = [] } = Astro.props;
+
+const norm = (t: string) => t.trim().toLowerCase();
+const mine = new Set(tags.map(norm));
+
+const scored = mine.size
+  ? (await getCollection('articles', ({ data }) => !data.draft))
+      .filter((a) => !(a.slug === currentSlug && a.data.section === section))
+      .map((a) => {
+        const shared = (a.data.tags ?? []).reduce((n, t) => n + (mine.has(norm(t)) ? 1 : 0), 0);
+        return { a, shared };
+      })
+      .filter((x) => x.shared > 0)
+      .sort((x, y) => y.shared - x.shared || y.a.data.pubDate.getTime() - x.a.data.pubDate.getTime())
+      .slice(0, 3)
+  : [];
+
+const fmt = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+---
+
+{scored.length > 0 && (
+  <section data-pagefind-ignore class="mt-14 pt-8 border-t border-ink-200">
+    <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-6">Related reading</h2>
+    <ul class="grid sm:grid-cols-3 gap-6">
+      {scored.map(({ a }) => (
+        <li>
+          <a href={`/${a.data.section}/${a.slug}`} class="group block h-full">
+            <span class="block font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500 mb-2">
+              {SECTION_LABELS[a.data.section]}
+            </span>
+            <span class="block font-display text-base font-semibold text-ink-900 leading-snug group-hover:text-accent transition-colors">
+              {a.data.title}
+            </span>
+            <span class="block font-sans text-xs text-ink-500 mt-2">{fmt(a.data.pubDate)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import ProvenanceStamp from '../../../components/data/ProvenanceStamp.astro';
 import BarChart from '../../../components/data/BarChart.astro';
 import Sparkline from '../../../components/data/Sparkline.astro';
@@ -44,8 +45,8 @@ const monthLabel = (m: string) => {
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-3xl">
-        <a href="/data" class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 hover:text-accent">← All forces</a>
-        <h1 class="font-display text-3xl md:text-5xl font-semibold text-ink-900 leading-tight tracking-tight mt-4">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: force.name }]} />
+        <h1 class="font-display text-3xl md:text-5xl font-semibold text-ink-900 leading-tight tracking-tight">
           {force.name}
         </h1>
         <p class="font-serif text-lg text-ink-700 mt-3">Stop &amp; search over the last 12 months — what the figures actually say.</p>

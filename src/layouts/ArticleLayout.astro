@@ -10,6 +10,7 @@ import BookCTA from '../components/BookCTA.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import ArticleContents from '../components/ArticleContents.astro';
 import KeyTakeaways from '../components/KeyTakeaways.astro';
+import RelatedArticles from '../components/RelatedArticles.astro';
 import { getTopics, topicForTag } from '../lib/topics';
 import { SECTION_LABELS } from '../content/config';
 import readingTime from 'reading-time';
@@ -224,6 +225,8 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
               })}
             </div>
           )}
+
+          <RelatedArticles currentSlug={slug} section={section} tags={tags} />
 
           <div data-pagefind-ignore>
             <Comments pageId={pageId} pageTitle={title} pageUrl={pageUrl} />
