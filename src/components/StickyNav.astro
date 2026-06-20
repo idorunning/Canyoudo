@@ -40,9 +40,9 @@ const { items, label = 'Jump to' } = Astro.props;
     gap: 0.9rem;
     margin: 2.5rem 0;
     padding: 0.55rem 0.2rem;
-    background: theme('colors.paper.100');
-    border-top: 1px solid theme('colors.ink.200');
-    border-bottom: 1px solid theme('colors.ink.200');
+    background: rgb(var(--paper-100));
+    border-top: 1px solid rgb(var(--ink-200));
+    border-bottom: 1px solid rgb(var(--ink-200));
     overflow-x: auto;
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
@@ -53,7 +53,7 @@ const { items, label = 'Jump to' } = Astro.props;
     font-size: 0.7rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: theme('colors.ink.500');
+    color: rgb(var(--ink-500));
     padding-top: 0.2rem;
   }
   .co-nav-list {
@@ -71,7 +71,7 @@ const { items, label = 'Jump to' } = Astro.props;
     font-weight: 600;
     line-height: 1.2;
     white-space: nowrap;
-    color: theme('colors.ink.500');
+    color: rgb(var(--ink-500));
     text-decoration: none;
     border-bottom: 2px solid transparent;
     padding: 0.35rem 0.55rem;
@@ -79,12 +79,12 @@ const { items, label = 'Jump to' } = Astro.props;
     transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
   }
   .co-nav-link:hover {
-    color: theme('colors.ink.800');
-    background: theme('colors.paper.200');
+    color: rgb(var(--ink-800));
+    background: rgb(var(--paper-200));
   }
   .co-nav-link[aria-current='true'] {
-    color: theme('colors.accent.DEFAULT');
-    border-bottom-color: theme('colors.accent.DEFAULT');
+    color: rgb(var(--accent));
+    border-bottom-color: rgb(var(--accent));
   }
   :global(html) {
     scroll-behavior: smooth;

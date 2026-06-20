@@ -5,6 +5,11 @@ description: A CIA-seeded American data firm has moved from the edge of UK
   public-sector IT to a structural position inside defence, health and,
   increasingly, policing. What has actually been bought, what the software does,
   and why it is contested.
+keyTakeaways:
+  - Palantir has moved from the edge of UK public-sector IT to a structural position inside defence, health and, increasingly, policing.
+  - Its software integrates and searches data others already hold — powerful precisely because it joins the dots, not because it is a single surveillance camera.
+  - The real concern is capability and dependence over time, not only what the tools are used for today.
+  - For leaders the questions are governance ones — what data is shared, who can see it, how it is audited, and how easily the force could walk away.
 pubDate: 2026-06-05
 heroImage: "/images/palantir-logo.webp"
 thumbnail: "/images/palantir-logo.webp"

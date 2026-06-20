@@ -1,5 +1,12 @@
 /** @type {import('tailwindcss').Config} */
+// Colours are driven by CSS variables (space-separated RGB channels defined in
+// src/styles/global.css), so a single `.dark` class on <html> reskins the whole
+// site. The `<alpha-value>` placeholder lets opacity modifiers (bg-accent/10,
+// bg-paper-100/80, …) keep working against the variable-based colours.
+const withAlpha = (v) => `rgb(var(${v}) / <alpha-value>)`;
+
 export default {
+  darkMode: 'class',
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
@@ -10,24 +17,24 @@ export default {
       },
       colors: {
         paper: {
-          50: '#fbf8f1',
-          100: '#f7f3eb',
-          200: '#ede5d3',
+          50: withAlpha('--paper-50'),
+          100: withAlpha('--paper-100'),
+          200: withAlpha('--paper-200'),
         },
         ink: {
-          900: '#1a1817',
-          800: '#2a2724',
-          700: '#3d3936',
-          600: '#5a544e',
-          500: '#7a7268',
-          400: '#9c9389',
-          300: '#c4bcae',
-          200: '#ddd6c8',
+          900: withAlpha('--ink-900'),
+          800: withAlpha('--ink-800'),
+          700: withAlpha('--ink-700'),
+          600: withAlpha('--ink-600'),
+          500: withAlpha('--ink-500'),
+          400: withAlpha('--ink-400'),
+          300: withAlpha('--ink-300'),
+          200: withAlpha('--ink-200'),
         },
         accent: {
-          DEFAULT: '#7c2828',
-          dark: '#5a1c1c',
-          light: '#a14545',
+          DEFAULT: withAlpha('--accent'),
+          dark: withAlpha('--accent-dark'),
+          light: withAlpha('--accent-light'),
         },
       },
       maxWidth: {

@@ -2,6 +2,11 @@
 title: 'The Hidden Crisis: How Police Burnout Threatens Officer Safety and Public Trust'
 section: police-policy
 description: Burnout raises the risk of excessive force and corrodes public trust. What the evidence says about exhausted officers, and what forces can do about it.
+keyTakeaways:
+  - Police burnout is not ordinary tiredness — chronic stress measurably degrades impulse control, judgement and risk assessment.
+  - That degradation raises the risk of excessive force, which in turn corrodes the public trust policing depends on.
+  - Sleep deprivation can impair officers to a degree comparable to intoxication, yet it is normalised rather than managed.
+  - Forces can act — recognising burnout early, equipping supervisors, and building real early-warning systems rather than relying on individual resilience.
 pubDate: 2025-07-29
 updatedDate: ''
 author: ''

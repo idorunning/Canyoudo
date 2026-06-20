@@ -91,6 +91,22 @@ const currentPath = Astro.url.pathname;
 
         <button
           type="button"
+          data-theme-toggle
+          class="hidden md:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
+          aria-label="Toggle dark mode"
+        >
+          {/* Moon when light (tap for dark); sun when dark (tap for light). */}
+          <svg class="dark:hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg class="hidden dark:block" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5" />
+            <path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8" />
+          </svg>
+        </button>
+
+        <button
+          type="button"
           data-search-open
           class="hidden md:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
           aria-label="Search"
@@ -148,6 +164,16 @@ const currentPath = Astro.url.pathname;
               class="block w-full text-left py-2 font-sans text-sm text-ink-700 hover:text-accent"
             >
               Search
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              data-theme-toggle
+              class="block w-full text-left py-2 font-sans text-sm text-ink-700 hover:text-accent"
+            >
+              <span class="dark:hidden">Dark mode</span>
+              <span class="hidden dark:inline">Light mode</span>
             </button>
           </li>
           {moreLinks.map(link => (
@@ -209,5 +235,17 @@ const currentPath = Astro.url.pathname;
     if (!menu || menu.classList.contains('hidden')) return;
     const target = e.target as Node;
     if (!menu.contains(target) && !btn?.contains(target)) setOpen(false);
+  });
+
+  // Dark-mode toggle. The initial class is set pre-paint in BaseLayout; here we
+  // just flip it and remember the choice. Both the desktop and mobile buttons
+  // carry data-theme-toggle.
+  document.querySelectorAll('[data-theme-toggle]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try {
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      } catch (e) {}
+    });
   });
 </script>

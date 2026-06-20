@@ -46,7 +46,7 @@ const uid = id ?? 'tabs-' + Math.random().toString(36).slice(2, 8);
     font-size: 0.7rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: theme('colors.ink.500');
+    color: rgb(var(--ink-500));
     margin: 0 0 0.65rem;
   }
   .tap-tablist {
@@ -54,7 +54,7 @@ const uid = id ?? 'tabs-' + Math.random().toString(36).slice(2, 8);
     gap: 0.4rem;
     overflow-x: auto;
     scrollbar-width: thin;
-    border-bottom: 1px solid theme('colors.ink.200');
+    border-bottom: 1px solid rgb(var(--ink-200));
     padding-bottom: 0;
     -webkit-overflow-scrolling: touch;
   }
@@ -67,7 +67,7 @@ const uid = id ?? 'tabs-' + Math.random().toString(36).slice(2, 8);
     font-size: 0.9rem;
     font-weight: 600;
     line-height: 1.2;
-    color: theme('colors.ink.500');
+    color: rgb(var(--ink-500));
     background: transparent;
     border: 0;
     border-bottom: 2px solid transparent;
@@ -78,20 +78,20 @@ const uid = id ?? 'tabs-' + Math.random().toString(36).slice(2, 8);
     transition: color 0.15s ease, border-color 0.15s ease;
   }
   .tap-tab:hover {
-    color: theme('colors.ink.800');
+    color: rgb(var(--ink-800));
   }
   .tap-tab[aria-selected='true'] {
-    color: theme('colors.accent.DEFAULT');
-    border-bottom-color: theme('colors.accent.DEFAULT');
+    color: rgb(var(--accent));
+    border-bottom-color: rgb(var(--accent));
   }
   .tap-tab-num {
     font-size: 0.7rem;
     font-weight: 700;
-    color: theme('colors.ink.300');
+    color: rgb(var(--ink-300));
     font-variant-numeric: tabular-nums;
   }
   .tap-tab[aria-selected='true'] .tap-tab-num {
-    color: theme('colors.accent.light');
+    color: rgb(var(--accent-light));
   }
   .tap-tabpanels {
     padding-top: 0.5rem;

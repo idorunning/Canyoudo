@@ -23,10 +23,10 @@ const points = (items ?? []).filter((s) => s && s.trim());
   .tap-takeaways {
     margin: 0 0 2.5rem;
     max-width: 36rem;
-    border: 1px solid theme('colors.ink.200');
-    border-left: 4px solid theme('colors.accent.DEFAULT');
+    border: 1px solid rgb(var(--ink-200));
+    border-left: 4px solid rgb(var(--accent));
     border-radius: 6px;
-    background: theme('colors.paper.50');
+    background: rgb(var(--paper-50));
     padding: 1.25rem 1.4rem;
   }
   .tap-takeaways-label {
@@ -35,7 +35,7 @@ const points = (items ?? []).filter((s) => s && s.trim());
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: theme('colors.accent.DEFAULT');
+    color: rgb(var(--accent));
     margin: 0 0 0.75rem;
   }
   .tap-takeaways-list {
@@ -50,7 +50,7 @@ const points = (items ?? []).filter((s) => s && s.trim());
     font-family: theme('fontFamily.serif');
     font-size: 1.0625rem;
     line-height: 1.55;
-    color: theme('colors.ink.800');
+    color: rgb(var(--ink-800));
     padding-left: 1.4rem;
   }
   .tap-takeaways-list li::before {
@@ -61,6 +61,6 @@ const points = (items ?? []).filter((s) => s && s.trim());
     width: 0.5rem;
     height: 0.5rem;
     border-radius: 9999px;
-    background: theme('colors.accent.light');
+    background: rgb(var(--accent-light));
   }
 </style>

@@ -43,21 +43,21 @@ const items = (raw ?? []).filter((h) => h.slug && h.text);
     font-weight: 600;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: theme('colors.ink.500');
+    color: rgb(var(--ink-500));
     margin: 0 0 0.75rem;
   }
   .tap-toc-list {
     list-style: none;
     margin: 0;
     padding: 0;
-    border-left: 1px solid theme('colors.ink.200');
+    border-left: 1px solid rgb(var(--ink-200));
   }
   .tap-toc-link {
     display: block;
     font-family: theme('fontFamily.sans');
     font-size: 0.85rem;
     line-height: 1.35;
-    color: theme('colors.ink.500');
+    color: rgb(var(--ink-500));
     text-decoration: none;
     padding: 0.3rem 0 0.3rem 0.85rem;
     margin-left: -1px;
@@ -65,12 +65,12 @@ const items = (raw ?? []).filter((h) => h.slug && h.text);
     transition: color 0.15s ease, border-color 0.15s ease;
   }
   .tap-toc-link:hover {
-    color: theme('colors.ink.800');
+    color: rgb(var(--ink-800));
   }
   .tap-toc-link[aria-current='true'] {
-    color: theme('colors.accent.DEFAULT');
+    color: rgb(var(--accent));
     font-weight: 600;
-    border-left-color: theme('colors.accent.DEFAULT');
+    border-left-color: rgb(var(--accent));
   }
 </style>
 
