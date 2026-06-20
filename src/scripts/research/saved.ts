@@ -506,7 +506,7 @@ export async function initSaved(
     }
     for (const f of folders) {
       const label = el('label', 'flex items-center gap-2 px-1 py-0.5 rounded cursor-pointer hover:bg-paper-200');
-      const box = el('input', 'accent-[#7c2828]') as HTMLInputElement;
+      const box = el('input', 'accent-accent') as HTMLInputElement;
       box.type = 'checkbox';
       box.checked = row.folderIds.includes(f.id);
       box.addEventListener('change', async () => {

@@ -28,7 +28,8 @@ const { label, tone = 'default' } = Astro.props;
   }
   .co-callout--warning {
     border-left: 4px solid rgb(var(--accent-dark));
-    background: #fbf3ef;
+    /* A faint accent wash instead of a fixed light pink, so it themes in dark. */
+    background: rgb(var(--accent) / 0.08);
   }
   .co-callout--template {
     border: 1px dashed rgb(var(--ink-300));
