@@ -4,6 +4,7 @@ import ArticleCard from '../../components/ArticleCard.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 import { getTopics, buildEntries, articleMatchesEntry } from '../../lib/topics';
+import { relatedTopics } from '../../lib/related-topics.mjs';
 
 export async function getStaticPaths() {
   const topics = await getTopics();
@@ -12,14 +13,24 @@ export async function getStaticPaths() {
     (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
   );
 
+  // For each article, the slugs of every topic it matches — the input to the
+  // co-occurrence ranking used for "Related topics".
+  const articleTopicSlugs = articles.map((a) =>
+    entries.filter((e) => articleMatchesEntry(a.body, a.data.tags, e)).map((e) => e.slug)
+  );
+  const labelBySlug = new Map(topics.map((t) => [t.slug, t.label]));
+
   return entries.map((entry) => {
     const topic = topics.find((t) => t.slug === entry.slug);
     const matches = articles.filter((a) => articleMatchesEntry(a.body, a.data.tags, entry));
-    return { params: { slug: entry.slug }, props: { topic, matches } };
+    const related = relatedTopics(entry.slug, articleTopicSlugs, 6)
+      .map((r) => ({ slug: r.slug, label: labelBySlug.get(r.slug) }))
+      .filter((r) => r.label);
+    return { params: { slug: entry.slug }, props: { topic, matches, related } };
   });
 }
 
-const { topic, matches } = Astro.props;
+const { topic, matches, related } = Astro.props;
 
 const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
 const breadcrumbLd = {
@@ -53,6 +64,22 @@ const breadcrumbLd = {
       <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mt-6">
         {matches.length} {matches.length === 1 ? 'article' : 'articles'} · <a href="/topics" class="hover:text-accent">All topics →</a>
       </p>
+
+      {related && related.length > 0 && (
+        <div class="mt-7">
+          <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Related topics</p>
+          <div class="flex flex-wrap gap-2">
+            {related.map((r) => (
+              <a
+                href={`/topics/${r.slug}`}
+                class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+              >
+                {r.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   </section>
 
