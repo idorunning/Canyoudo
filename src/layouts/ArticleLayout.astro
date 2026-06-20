@@ -53,13 +53,10 @@ const {
   headings = [],
 } = Astro.props;
 
-// Build the in-page contents rail. Articles here split their sections with
-// either ## or ### (most use ###), so pick the shallowest level that actually
-// carries the sections — the first of h2 then h3 with three or more headings —
-// and list those. Pieces with too few sections get no rail.
-const h2s = headings.filter((h) => h.depth === 2 && h.slug && h.text);
-const h3s = headings.filter((h) => h.depth === 3 && h.slug && h.text);
-const tocHeadings = h2s.length >= 3 ? h2s : h3s.length >= 3 ? h3s : [];
+// Build the in-page contents rail from the article's top-level (##) sections.
+// Every article now uses ## for sections (### is reserved for subsections), so
+// no level-guessing is needed. Pieces with fewer than three sections get no rail.
+const tocHeadings = headings.filter((h) => h.depth === 2 && h.slug && h.text);
 const showToc = tocHeadings.length >= 3;
 
 const formattedPubDate = pubDate.toLocaleDateString('en-GB', {

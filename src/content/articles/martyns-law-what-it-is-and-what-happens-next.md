@@ -25,7 +25,7 @@ redirectFrom:
 
 This is a plain-English guide to what it actually says, where it is right now on the road from Act to enforcement, and what it will ask of the people who run venues, the officers who police them, and the leaders who sit in between. The second half is a practical starting point — are you in scope, what you will actually have to do, where the free official help lives, and a provisional checklist to work from while the duties are not yet switched on.
 
-### What Martyn's Law actually is
+## What Martyn's Law actually is
 
 Strip away the legal architecture and the idea is simple: **if you are responsible for a place where lots of people gather, you must have thought about what you would do if a terrorist attacked it.**
 
@@ -44,7 +44,7 @@ Martyn's Law closes that gap with a duty that scales by size. It applies to prem
 
 Two carve-outs matter for community life: [places of worship and schools sit in the standard tier regardless of capacity](https://praxis42.com/martyns-law-faqs/), a deliberate decision to ask preparedness of them without the enhanced tier's weight.
 
-### Where it is right now
+## Where it is right now
 
 An Act that has received Royal Assent is law, but Martyn's Law's duties are not yet *in force* — and the gap is by design. The government committed to an implementation period of [at least 24 months](https://homeofficemedia.blog.gov.uk/2025/04/03/martyns-law-factsheet/) so that venues could prepare and the regulator could be built.
 
@@ -62,7 +62,7 @@ The current state of play, as of June 2026:
 
 So if you run a venue: nothing is enforceable against you yet, the official guidance now exists to plan against, and you have roughly a year. That is the whole point of the runway — the venues that wait for commencement day to start reading will be the ones who find it stressful.
 
-### What it means for businesses
+## What it means for businesses
 
 The honest answer for most premises is: **less than the more excitable headlines suggested, but not nothing.**
 
@@ -74,7 +74,7 @@ The incentive to take it seriously is also now concrete. The SIA will be able to
 
 The practical "how do I actually start?" toolkit is the [second half of this guide](#a-practical-starting-point-for-businesses).
 
-### What it means for the police
+## What it means for the police
 
 Here is the detail most coverage misses: **Martyn's Law gives the police no new powers and no enforcement role.** The regulator is the SIA. No officer will be inspecting pubs for invacuation plans, and that is deliberate — the [government's framing](https://www.gov.uk/government/publications/martyns-law-the-sias-new-regulatory-role/martyns-law-the-sias-new-regulatory-role) keeps regulatory enforcement away from local policing relationships.
 
@@ -86,7 +86,7 @@ Second, **the quality of what police find on arrival should improve.** The opera
 
 Third, **expect demand at the seams.** Lockdown drills generate calls. Suspicious-behaviour training generates reports, most of them well-meant and unfounded. Forces will want to think now about how Protect-driven reporting is triaged, because the legislation will manufacture more of it.
 
-### What it means for police leaders
+## What it means for police leaders
 
 For chief officers and PCCs, Martyn's Law is the Protect strand of CONTEST finally acquiring a statutory skeleton — and it arrives needing local leadership even though the enforcement duty sits elsewhere.
 
@@ -226,7 +226,7 @@ This site owes readers the limits as well as the case.
 
 ---
 
-### Sources and further reading
+## Sources and further reading
 
 - Home Office, [Martyn's Law Factsheet](https://homeofficemedia.blog.gov.uk/2025/04/03/martyns-law-factsheet/), 3 April 2025, and [Martyn's Law myth-buster](https://assets.publishing.service.gov.uk/media/69281f35b3b9afff34e960f0/martyns-law-mythbuster.pdf) (PDF).
 - ProtectUK, [Martyn's Law hub](https://www.protectuk.police.uk/martyns-law), [overview and what you need to know](https://www.protectuk.police.uk/martyns-law/martyns-law-overview-and-what-you-need-know), and [resources](https://www.protectuk.police.uk/martyns-law/resources).

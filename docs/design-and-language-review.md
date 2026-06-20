@@ -169,11 +169,10 @@ that some `[n]` patterns are law-report years (e.g. `Boness [2005]`,
    or not it is opened. The briefing/search mode toggle was left as-is — it
    already reads as a filled-primary / outlined-secondary pair, not two equal
    tabs.
-5. **Heading levels — mostly done.** Top-level sections are now `##` everywhere
-   except two articles (`martyns-law`, `the-hidden-crisis` burnout) that carry a
-   genuine but inconsistent two-level structure and need an authorial pass before
-   flattening. The `ArticleContents` TOC still infers the section level, so it
-   keeps working for those two; the heuristic can be dropped once they're fixed.
+5. **Heading levels — done.** Top-level sections are `##` across every article
+   (`martyns-law` and the burnout piece were restructured to a clean two-level
+   outline and the burnout empty heading removed). With no article relying on the
+   h3 fallback, the `ArticleContents` TOC was simplified to read `##` only.
 
 ---
 
