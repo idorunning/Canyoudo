@@ -161,8 +161,10 @@ that some `[n]` patterns are law-report years (e.g. `Boness [2005]`,
    explorer + sub-tool pages and breadcrumbs, a "go deeper" hand-off on `/data`,
    and a sub-link beneath the Crime Dashboard card on the homepage Browse grid
    (kept as one tool family, not a separate pillar).
-2. **Convert further numeric-citation articles** to GFM footnotes (e.g. the draft
-   self-selection precursor) once out of draft.
+2. **Numeric-citation footnotes — done.** The remaining candidate
+   (`policing-the-police`, still a draft) was converted from inline `[n]` + a
+   grouped source list to GFM footnotes. No other published article uses raw
+   `[n]` citation markers (the rest are law-report years, left alone).
 
 **Lower**
 3. Author archive pages (matters only if the site goes multi-author).

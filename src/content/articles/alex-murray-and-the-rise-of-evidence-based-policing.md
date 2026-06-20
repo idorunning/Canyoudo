@@ -2,6 +2,11 @@
 section: "influential-people"
 title: "Alex Murray and the Society That Asked Policing to Prove What Works"
 description: "Alex Murray spent a career investigating murders and running counter-terrorism operations, then built the institution that asked British policing a harder question: does any of this actually work? A profile of the founder of the Society of Evidence-Based Policing."
+keyTakeaways:
+  - Alex Murray, a homicide detective and counter-terrorism commander, founded the Society of Evidence-Based Policing in 2010, the first organisation of its kind in the world.
+  - 'He brought Lawrence Sherman''s Triple-T framework — target, test, track — back from Cambridge and built the machinery to put it into practice inside the service.'
+  - 'His case carried weight because he made it as an operational officer, holding that an officer''s instinct is a hypothesis to be tested, not a fact to be acted on.'
+  - In 2024 he became British policing's first national lead for artificial intelligence before moving to the National Crime Agency.
 pubDate: 2026-06-07
 heroImage: "/images/murray-ebp-hero.jpg"
 thumbnail: "/images/alex-murray-portrait.jpg"

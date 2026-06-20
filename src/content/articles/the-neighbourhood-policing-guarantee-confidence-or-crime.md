@@ -2,8 +2,12 @@
 title: 'The Neighbourhood Policing Guarantee: Confidence or Crime?'
 section: police-policy
 description: The Guarantee borrows the language of evidence — data-guided presence, hotspot patrolling. But it folds together two different jobs. A named officer per ward builds confidence. Hotspot patrolling cuts crime. The evidence for each is strong and specific, and the design honours it in some places and departs from it in others.
+keyTakeaways:
+  - The Guarantee folds together two different jobs — a named ward officer builds confidence, while hotspot patrolling cuts crime — and the evidence for each is strong but specific.
+  - 'Hotspot patrolling works only with dosage discipline: short, repeated, roughly 15-minute bursts in tight places, and diluting the dose into everyday presence buys no crime effect.'
+  - 'Spreading 13,000 personnel thinly across 8,000-plus wards is a sound confidence model but leaves too little in any place to be a crime-reduction dose.'
+  - The mistake to avoid is the scoreboard — judging a confidence programme against crime figures it was never designed to move, then being surprised when it appears to fail.
 pubDate: 2026-06-06
-updatedDate: ''
 author: ''
 thumbnail: /images/11545.webp
 heroImage: /images/11545.webp

@@ -2,8 +2,12 @@
 title: Nitazenes - What This New drug Means For British Policing
 section: police-policy
 description: Synthetic opioids have landed in the UK. What nitazenes are, why they are more dangerous than the heroin they are displacing, and the strategic, tactical and operational picture for policing.
+keyTakeaways:
+  - 'Nitazenes are fully synthetic opioids far more potent than heroin, linked to roughly 1,000 UK deaths since 2023, and the recorded toll is almost certainly an undercount.'
+  - 'They often reach opioid-naïve victims through counterfeit pills sold as diazepam, oxycodone or Xanax, bypassing the usual harm-reduction infrastructure.'
+  - Naloxone works but frequently needs multiple or prolonged doses, so the single-dose-and-walk-away model is wrong and re-narcotisation is a real risk.
+  - The fear that officers can be poisoned by casual contact is not supported by toxicology, and overstating it delays life-saving first aid.
 pubDate: 2026-06-05
-updatedDate: ''
 author: ''
 thumbnail: /images/11553.webp
 heroImage: /images/11553.webp

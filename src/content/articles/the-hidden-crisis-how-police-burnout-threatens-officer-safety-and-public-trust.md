@@ -8,7 +8,6 @@ keyTakeaways:
   - Sleep deprivation can impair officers to a degree comparable to intoxication, yet it is normalised rather than managed.
   - Forces can act — recognising burnout early, equipping supervisors, and building real early-warning systems rather than relying on individual resilience.
 pubDate: 2025-07-29
-updatedDate: ''
 author: ''
 thumbnail: /images/11538.webp
 heroImage: /images/11538.webp

@@ -2,6 +2,11 @@
 title: "Martyn's Law: An overview for Police, Business owners and Local Authorities"
 section: public-policy
 description: A mother's six-year campaign turned the Manchester Arena attack into the Terrorism (Protection of Premises) Act 2025 — Martyn's Law. A plain-English guide to what the law says, where it is on the road to enforcement, what it means for businesses, police officers and police leaders — and a practical, provisional checklist for getting a venue ready.
+keyTakeaways:
+  - 'Martyn''s Law requires premises expecting 200 or more people to prepare for a terrorist attack, splitting them into a standard tier (200–799) and an enhanced tier (800+).'
+  - For most standard-tier premises the duty costs time not money — a plan and a trained team — with no requirement to buy scanners, barriers or guards.
+  - 'Enforcement goes to the Security Industry Authority, not the police: no officer will inspect venues, and the SIA''s stated posture is advice-first.'
+  - The Act has Royal Assent but its duties are not yet in force, with commencement expected around spring 2027, giving venues a genuine runway to prepare.
 pubDate: 2026-06-12
 updatedDate: 2026-06-17
 author: ''

@@ -8,7 +8,6 @@ keyTakeaways:
   - Cognitive diversity is a strategic capability, not a welfare concession — the very traits being managed out are operationally valuable.
   - "The fix is a leadership and culture question: judge officers on the strengths they bring, not only on the boxes they tick."
 pubDate: 2025-05-06
-updatedDate: ''
 author: ''
 thumbnail: /images/cognitive-diversity-jigsaw.jpg
 heroImage: /images/cognitive-diversity-jigsaw.jpg

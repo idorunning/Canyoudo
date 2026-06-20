@@ -8,7 +8,6 @@ keyTakeaways:
   - 'Non-response is breaking the relationship: retailers increasingly stop cooperating and turn to £35m-a-year private recovery instead of the police.'
   - The real issue is bigger than the £100m of lost fuel — when police openly abandon a solvable category of crime, policing by consent erodes.
 pubDate: 2025-06-17
-updatedDate: ''
 author: ''
 thumbnail: /images/11543.webp
 heroImage: /images/11543.webp

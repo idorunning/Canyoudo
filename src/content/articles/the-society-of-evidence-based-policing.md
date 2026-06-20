@@ -2,8 +2,12 @@
 title: 'The Society of Evidence-Based Policing: Nurturing the Idea That Every Officer Can Test What Works'
 section: influential-people
 description: The SEBP's real value isn't lobbying or publishing — it's lowering the bar so that any officer with a good idea can test it, get support to do so properly, and share what they find. Here is what it is, what it actually does, and why that matters.
+keyTakeaways:
+  - The SEBP's most important achievement is making ordinary officers feel entitled to ask whether what they do actually works — radical in British policing culture.
+  - 'Evidence-based policing does not require a randomised controlled trial: reviewing your own data or reading existing evidence before acting also counts, and the shift from nothing to evidence is the biggest one.'
+  - The Society's real value is the infrastructure — free membership, a conference, an open publishing route and informal mentorship — that supports a frontline officer with an idea.
+  - 'Writing up and sharing findings, including negative results, is what turns individual learning into organisational learning and changes cultures rather than projects.'
 pubDate: 2026-06-11
-updatedDate: ''
 author: ''
 thumbnail: /images/11540.webp
 heroImage: /images/11540.webp

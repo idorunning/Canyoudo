@@ -3,7 +3,6 @@ title: 'The Quiet Data of the Missing: What Open-Source Research Can and Cannot 
 section: police-policy
 description: Around 170,000 people are reported missing in the UK each year, yet most of what the public sees is a thin, skewed sliver of that total. This piece assesses what open-source research can actually offer—and where it misleads.
 pubDate: 2026-06-05
-updatedDate: ''
 author: ''
 thumbnail: /images/missing-foggy-road.jpg
 heroImage: /images/missing-foggy-road.jpg

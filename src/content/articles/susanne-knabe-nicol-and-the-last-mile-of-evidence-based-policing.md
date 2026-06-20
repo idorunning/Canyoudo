@@ -3,7 +3,6 @@ title: Susanne Knabe-Nicol and the Last Mile of Evidence-Based Policing
 section: influential-people
 description: "A profile of Dr Susanne Knabe-Nicol — the 'Police Science Dr' — who left a decade inside policing to fix the problem that holds evidence-based practice back: the research that could change how officers work, but that almost no officer knows exists"
 pubDate: 2026-06-08
-updatedDate: ''
 author: ''
 thumbnail: /images/knabe-nicol-portrait.jpg
 heroImage: /images/knabe-nicol-hero.jpg

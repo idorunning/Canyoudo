@@ -2,6 +2,11 @@
 title: Somerton Man code - Did I crack an 80 year mystery?
 section: other
 description: An updated reading of the Somerton Man code.  The code has remained unanswered for almost 80 years. Military analysts, ex detectives and amateur code breakers have all tried. Maybe now I've cracked it?
+keyTakeaways:
+  - 2022 DNA work identified the Somerton Man as Carl Webb and demolished the long-held paternity and espionage theories rather than confirming them.
+  - 'Cryptographers in 1949 and later Adelaide researchers agree the five lines are most likely an initialism — the first letters of words — not a recoverable cipher.'
+  - 'The author''s hypothesis is that the letters record a travel itinerary around 1948 Adelaide, but concedes it is only consistent with the evidence, not yet tested against a real route.'
+  - 'A test that cannot fail proves nothing: with a huge pool of place names, every letter finds a match, so set-membership matching is a warning rather than a vindication.'
 pubDate: 2025-12-19
 updatedDate: 2026-06-12
 author: ''
