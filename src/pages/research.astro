@@ -296,52 +296,62 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
               ></p>
             )}
 
-            <div class="mt-5 flex flex-wrap gap-2" role="radiogroup" aria-label="Search source">
-              {sources.map((s, i) => (
-                <label class="cursor-pointer">
-                  <input
-                    type="radio"
-                    name="research-source"
-                    value={s.id}
-                    checked={i === 0}
-                    class="peer sr-only"
-                  />
-                  <span class="inline-block font-sans text-xs px-3 py-1.5 rounded-full border border-ink-300 text-ink-700 peer-checked:bg-ink-900 peer-checked:text-paper-50 peer-checked:border-ink-900 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-accent transition-colors hover:border-ink-500">
-                    {s.label}
-                  </span>
-                </label>
-              ))}
-            </div>
+            {/* Source + filters tuck behind a disclosure so the search box leads;
+                the sensible defaults (all sources, free-to-read) apply whether or
+                not it is opened. */}
+            <details data-research-refine class="mt-5 group">
+              <summary class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 cursor-pointer list-none select-none inline-flex items-center gap-2 hover:text-ink-800">
+                Refine sources &amp; filters
+                <span class="text-ink-400 group-open:hidden" aria-hidden="true">+</span><span class="text-ink-400 hidden group-open:inline" aria-hidden="true">−</span>
+              </summary>
 
-            <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-ink-700 items-center">
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" data-filter-oa checked class="accent-[#7c2828]" />
-                Free-to-read only
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" data-filter-review class="accent-[#7c2828]" />
-                Reviews only
-              </label>
-              <label class="flex items-center gap-2">
-                Since
-                <select data-filter-from class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
-                  <option value="">any year</option>
-                  <option value="2020">2020</option>
-                  <option value="2015">2015</option>
-                  <option value="2010">2010</option>
-                  <option value="2000">2000</option>
-                </select>
-              </label>
-              <label class="flex items-center gap-2">
-                Sort by
-                <select data-filter-sort class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
-                  <option value="relevance">most relevant</option>
-                  <option value="recent">newest</option>
-                  <option value="cited">most popular (cited)</option>
-                  {hasAi && <option value="suggested">suggested (AI picks)</option>}
-                </select>
-              </label>
-            </div>
+              <div class="mt-4 flex flex-wrap gap-2" role="radiogroup" aria-label="Search source">
+                {sources.map((s, i) => (
+                  <label class="cursor-pointer">
+                    <input
+                      type="radio"
+                      name="research-source"
+                      value={s.id}
+                      checked={i === 0}
+                      class="peer sr-only"
+                    />
+                    <span class="inline-block font-sans text-xs px-3 py-1.5 rounded-full border border-ink-300 text-ink-700 peer-checked:bg-ink-900 peer-checked:text-paper-50 peer-checked:border-ink-900 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-accent transition-colors hover:border-ink-500">
+                      {s.label}
+                    </span>
+                  </label>
+                ))}
+              </div>
+
+              <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-ink-700 items-center">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" data-filter-oa checked class="accent-[#7c2828]" />
+                  Free-to-read only
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" data-filter-review class="accent-[#7c2828]" />
+                  Reviews only
+                </label>
+                <label class="flex items-center gap-2">
+                  Since
+                  <select data-filter-from class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
+                    <option value="">any year</option>
+                    <option value="2020">2020</option>
+                    <option value="2015">2015</option>
+                    <option value="2010">2010</option>
+                    <option value="2000">2000</option>
+                  </select>
+                </label>
+                <label class="flex items-center gap-2">
+                  Sort by
+                  <select data-filter-sort class="border border-ink-300 rounded px-2 py-1 bg-paper-50 font-sans text-sm focus:outline-none focus:border-accent">
+                    <option value="relevance">most relevant</option>
+                    <option value="recent">newest</option>
+                    <option value="cited">most popular (cited)</option>
+                    {hasAi && <option value="suggested">suggested (AI picks)</option>}
+                  </select>
+                </label>
+              </div>
+            </details>
 
             <div data-research-topics class="mt-8">
               <details class="group">
