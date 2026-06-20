@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 import { getTopics, buildEntries, articleMatchesEntry } from '../../lib/topics';
 
@@ -39,6 +40,7 @@ const breadcrumbLd = {
 >
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Topics', href: '/topics' }, { label: topic.label }]} />
       <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Topic</p>
       <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
         {topic.label}

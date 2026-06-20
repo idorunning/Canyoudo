@@ -11,6 +11,7 @@ import ReadingProgress from '../components/ReadingProgress.astro';
 import ArticleContents from '../components/ArticleContents.astro';
 import KeyTakeaways from '../components/KeyTakeaways.astro';
 import RelatedArticles from '../components/RelatedArticles.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getTopics, topicForTag } from '../lib/topics';
 import { SECTION_LABELS } from '../content/config';
 import readingTime from 'reading-time';
@@ -138,6 +139,11 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
       <article class="mx-auto w-full max-w-3xl min-w-0 lg:mx-0 lg:flex-1" data-pagefind-body>
         {/* Title block */}
         <header class="border-b border-ink-200 py-14 md:py-20">
+          <Breadcrumbs items={[
+            { label: 'Home', href: '/' },
+            { label: SECTION_LABELS[section], href: `/${section}` },
+            { label: title.length > 48 ? title.slice(0, 47) + '…' : title },
+          ]} />
           <div class="mb-6">
             <SectionBadge section={section} />
           </div>
