@@ -55,11 +55,6 @@ const { hasAuth, feature = 'this' } = Astro.props;
         <slot />
       </div>
     </div>
-
-    <script>
-      import { initMembersGate } from '../scripts/members/gate';
-      initMembersGate();
-    </script>
   </Fragment>
 ) : (
   <Fragment>
@@ -69,3 +64,15 @@ const { hasAuth, feature = 'this' } = Astro.props;
     <slot />
   </Fragment>
 )}
+
+{/* This processed (bundled) script MUST live at the top level of the template,
+    not inside the {hasAuth ? …} expression above: Astro only hoists and bundles
+    <script> tags that are direct template children, so a copy nested inside a
+    conditional expression is silently dropped from the build — which left the
+    gate showing with no sign-in buttons. initMembersGate() no-ops when there's
+    no [data-members] gate on the page (the keyless/hasAuth=false path), so
+    rendering it unconditionally is safe. */}
+<script>
+  import { initMembersGate } from '../scripts/members/gate';
+  initMembersGate();
+</script>
