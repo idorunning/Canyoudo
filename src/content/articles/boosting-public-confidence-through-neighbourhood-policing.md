@@ -21,7 +21,7 @@ tags: ["crime", "evidence-based", "evidence-based-policing", "mental-health", "n
 
 The research points to one central finding: effective neighbourhood policing requires three components delivered **in combination** — targeted visible presence, community engagement, and problem-solving. Forces that implement these together consistently outperform those that treat them as separate activities. Hot spots policing combined with problem-oriented approaches produces **larger, more sustainable effects** than either alone. The frameworks exist, the evidence is strong, and UK forces have demonstrated what success looks like. The remaining task is systematic adoption rather than isolated excellence.
 
-### The evidence base for neighbourhood policing
+## The evidence base for neighbourhood policing
 
 [Professor Lawrence Sherman](/influential-people/lawrence-sherman-and-the-invention-of-evidence-based-policing)’s finding that **50% of all crime concentrates in less than 4% of addresses** reshaped policing science. This “hot spots” finding, replicated across cities worldwide, establishes that crime is not randomly distributed but follows predictable patterns amenable to targeted intervention. The College of Policing reports that **58% of all crime** occurs in the top 10% of places with most serious crime, which makes geographic targeting not merely efficient but essential.
 
@@ -33,7 +33,7 @@ The Cambridge Crime Harm Index, developed by Sherman and Peter Neyroud, enables 
 
 The What Works Centre for Crime Reduction — operated by the College of Policing as part of the UK Government’s What Works Network — provides the Crime Reduction Toolkit for practitioners. This interactive resource rates interventions using the EMMIE framework (Effect, Mechanism, Moderators, Implementation, Economics), enabling evidence-informed decisions about what approaches to deploy. Lancashire Police and Crime Commissioner now uses EMMIE to assess funding bid rigour, a model other forces should consider.
 
-### UK case studies in problem-solving practice
+## UK case studies in problem-solving practice
 
 **Operation Blink (Surrey Police)** illustrates rigorous problem-solving methodology. Facing catalytic converter thefts rising from 0.32 to **4.49 per day** between 2018 and early 2021, with only 5.3% of thefts reported in progress, the Problem Solving Team identified the root cause: public unawareness of what theft looks like. The average victim age of 52 meant social media campaigns missed the target demographic.
 
@@ -49,7 +49,7 @@ Using a “Clear, Hold, Build” strategy, the multi-agency team achieved substa
 
 The common success factors across these cases are: rigorous use of SARA methodology, multi-agency partnerships from the outset, community intelligence as a primary source, measurable outcomes tracked throughout, and PCC funding and championship for sustainability.
 
-### Partnerships and shared powers
+## Partnerships and shared powers
 
 Community Safety Partnerships, established under the Crime and Disorder Act 1998, provide the statutory framework for multi-agency working. Responsible authorities include police, local authorities, fire and rescue services, Integrated Care Boards, and probation services. Their statutory duties encompass Community Safety Strategic Assessments, three-year Community Safety Plans, ASB Case Reviews, Domestic Homicide Reviews, and the Serious Violence Duty introduced in 2022.
 
@@ -63,7 +63,7 @@ Local Focus Hubs, exemplified in Avon and Somerset, embrace joint problem-solvin
 
 Public health approaches, particularly Adverse Childhood Experiences and trauma-informed practice, are reshaping how forces understand and respond to vulnerability. The Welsh Early Action Together programme trained all four forces in ACEs between 2018–2020, with research showing significantly improved understanding of trauma impacts and more empathic decision-making. Northamptonshire’s trauma-informed custody modifications and Police Scotland’s “Act Don’t React” training demonstrate operational applications.
 
-### Statutory powers under the Anti-Social Behaviour Act 2014
+## Statutory powers under the Anti-Social Behaviour Act 2014
 
 The Anti-Social Behaviour, Crime and Policing Act 2014 replaced 19 complex, overlapping powers with six streamlined tools designed to be quicker, more flexible, and victim-focused. Most powers use the civil standard of proof (balance of probabilities), enabling intervention where the criminal threshold is not met, which is valuable for persistent low-level ASB.
 
@@ -81,7 +81,7 @@ The Anti-Social Behaviour, Crime and Policing Act 2014 replaced 19 complex, over
 
 The forthcoming Crime and Policing Bill 2025 will introduce Respect Orders (a new civil behavioural order), extend dispersal powers from 48 to 72 hours, and require mandatory reporting on ASB powers usage by non-police agencies.
 
-### Cultural and structural barriers
+## Cultural and structural barriers
 
 Academic research consistently identifies tension between police “craft” culture and evidence-based approaches. Surveys show officers prioritise experience over research evidence as a guide to practice, with only **2% of officers** reporting they often discuss problems with university researchers, and 73% having never done so. Direct line managers often consider engagement with research evidence a “poor use of time.”
 
@@ -99,7 +99,7 @@ Authorised Professional Practice provides the “official source of professional
 
 The Society of Evidence-Based Policing, founded in 2010 and now a registered charity, has grown membership by **1,500+ in one year** through partnership with the Youth Endowment Fund. Over **85% of event participants** report sessions add real value to their roles. The society’s implementation workshops on hotspots, focused deterrence, and problem-solving represent grassroots evidence adoption.
 
-### The Peelian foundation and modern practice
+## The Peelian foundation and modern practice
 
 Sir Robert Peel’s first principle — “to prevent crime and disorder, as an alternative to their repression by military force and severity of legal punishment” — establishes prevention as the original mission of British policing. The ninth principle — “the test of police efficiency is the absence of crime and disorder, and not the visible evidence of police action in dealing with them” — directly anticipates evidence-based policing’s emphasis on outcomes over outputs.
 
@@ -111,7 +111,7 @@ The procedural justice research of Jackson, Hough, and Bradford at LSE confirms 
 
 Evidence-based neighbourhood policing is therefore not an imported management fad but the fulfilment of British policing’s founding philosophy. When NPTs use SARA methodology to prevent crime before it occurs, when they measure success by harm reduction rather than arrests, when they build partnerships that enhance community cooperation, they are doing precisely what Peel envisioned nearly two centuries ago, with the added advantage of rigorous evidence about what works.
 
-### Conclusion: From evidence to implementation
+## Conclusion: From evidence to implementation
 
 The research synthesis reveals a field with strong foundations and clear evidence but inconsistent implementation. Hot spots policing is “the crime reduction strategy with strongest evidence” according to the Policing Minister, yet deployment varies considerably across forces. SARA methodology is endorsed by the College of Policing, yet HMICFRS inspections consistently find “Use SARA, not SAR!” — assessment remains the neglected fourth stage. Partnership structures exist at every level, yet multi-agency working remains challenging to coordinate effectively.
 

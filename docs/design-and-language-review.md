@@ -164,7 +164,11 @@ that some `[n]` patterns are law-report years (e.g. `Boness [2005]`,
 **Lower**
 3. Author archive pages (matters only if the site goes multi-author).
 4. Research page: the briefing/search dual-mode UI could be simplified.
-5. Standardise heading levels to `##` across articles.
+5. **Heading levels — mostly done.** Top-level sections are now `##` everywhere
+   except two articles (`martyns-law`, `the-hidden-crisis` burnout) that carry a
+   genuine but inconsistent two-level structure and need an authorial pass before
+   flattening. The `ArticleContents` TOC still infers the section level, so it
+   keeps working for those two; the heuristic can be dropped once they're fixed.
 
 ---
 

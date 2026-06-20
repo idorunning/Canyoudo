@@ -19,13 +19,13 @@ That institution is the Society of Evidence-Based Policing, which Murray founded
   <figcaption>Alex Murray, founder of the Society of Evidence-Based Policing and British policing's first national lead for artificial intelligence.</figcaption>
 </figure>
 
-### From army child to homicide detective
+## From army child to homicide detective
 
 Murray grew up around the world as the child of an army family, an upbringing that tends to produce either restlessness or adaptability, and in his case seems to have produced both. He read for a degree in criminology and geography at the [University of Birmingham](https://cebcp.org/hall-of-fame/alex-murray/), graduating in 1996, and then joined West Midlands Police.
 
 The early career was conventional in the best sense. He worked CID and uniform across Birmingham, Coventry and Wolverhampton, became a senior investigating officer running murder inquiries, and moved into counter-terrorism. He qualified as a commander for specialist firearms operations, public order and counter-terrorism, the kind of roles where decisions are made fast and the cost of getting them wrong is measured in lives. None of this is the biography you would expect from someone who would go on to be policing's most prominent advocate for randomised controlled trials. That is rather the point. Murray's case for evidence has always carried more weight precisely because he made it as an operational officer, not as an academic looking in.
 
-### Cambridge, and the question that would not go away
+## Cambridge, and the question that would not go away
 
 The turn came at Cambridge. In 2008 Murray completed a [Master's degree at the University's Institute of Criminology](https://www.bi.team/blogs/innovation-in-policing-a-guest-blog-from-chief-superintendent-alex-murray/), on the Police Executive Programme run by [Professor Lawrence Sherman](/influential-people/lawrence-sherman-and-the-invention-of-evidence-based-policing), the American criminologist who more or less invented the modern field of evidence-based policing. His thesis examined police legitimacy within Muslim communities, work he later developed into a peer-reviewed paper, [*Evidence-Based Policing of U.K. Muslim Communities*](https://journals.sagepub.com/doi/abs/10.1177/1057567715574384), co-authored with Katrin Mueller-Johnson and Sherman and published in the *International Criminal Justice Review* in 2015.
 
@@ -39,7 +39,7 @@ Sherman's argument, which Murray absorbed and then carried back into operational
   <figcaption>The framework Murray brought back from Cambridge: target the harm, test what works, track whether it holds.</figcaption>
 </figure>
 
-### Founding the Society
+## Founding the Society
 
 In 2010 Murray and a small group of like-minded officers [founded the Society of Evidence-Based Policing](https://www.sebp.police.uk/about). Sherman was elected its honorary president; Murray served as its founding chair. The aim, then as now, was to help officers and staff use, produce and communicate the best available evidence about what actually reduces crime and harm.
 
@@ -56,7 +56,7 @@ He has been candid about what that means in practice, including the discomfort o
 
 The Society did not stay small. It grew into a registered charity with thousands of members, and it stopped being uniquely British. Sister organisations now operate in the United States, Canada, Australia and New Zealand, the Netherlands, Denmark and Sweden, most of them modelled on the body Murray started. The annual Cambridge conference on evidence-based policing, where Murray has briefed everyone from the Home Secretary to the Indian National Police Academy at Hyderabad, has become the field's main gathering. The Society has not been above a stunt to make the point: it once ran a 24-hour evidence-based policing conference, a relay of talks handed around the globe through every time zone so an officer anywhere could always find a session running — research as something the police do together, rather than something done to them. In 2013 he was [elected to the Hall of Fame of the Center for Evidence-Based Crime Policy](https://cebcp.org/hall-of-fame/alex-murray/) at George Mason University in Virginia, the discipline's closest thing to formal recognition. Sherman, not a man given to loose praise, has described him as a "tireless advocate of evidence-based policing".
 
-### What it looked like on the ground
+## What it looked like on the ground
 
 The risk with a figure like Murray is that the advocacy floats free of practice. It did not. In partnership with Cambridge he ran a randomised controlled trial in Birmingham that set up dedicated teams to manage repeat victims of anti-social behaviour, the sort of low-level but relentless harm that wears communities down and that traditional policing has always struggled to take seriously. The point of doing it as a trial, rather than simply rolling it out because it sounded sensible, was to find out whether it worked rather than to assume it. That is the discipline Murray has spent his career trying to make ordinary.
 
@@ -67,7 +67,7 @@ The risk with a figure like Murray is that the advocacy floats free of practice.
 
 He carried the same instinct upward as he was promoted. He served three years as temporary Assistant Chief Constable for crime in the West Midlands, with responsibility for investigations, forensics, criminal justice and intelligence. He moved to the Metropolitan Police as a Commander, leading specialist crime teams working on cyber, human trafficking, child abuse and economic crime, and later took the Met's brief for serious violence. He spent time attached to the Home Office. In each role the question he brought to the table was the same one he had brought back from Cambridge: how do we know this works, and how would we find out if it did not?
 
-### The AI lead, and the National Crime Agency
+## The AI lead, and the National Crime Agency
 
 By the 2020s Murray had risen to temporary Chief Constable of West Mercia Police. Then, in March 2024, the [National Police Chiefs' Council appointed him](https://www.rocu.police.uk/news/2024/march/npcc-welcomes-first-ever-lead-for-artificial-intelligence-ai/) to a job that had never existed before: the first national policing lead for artificial intelligence. The logic was not hard to follow. A service learning to ask "does this work?" needed someone to ask it of the most consequential new technology in a generation, and Murray's whole record was that question made flesh.
 
@@ -80,7 +80,7 @@ Later in 2024 Murray left West Mercia to become Director of Threat Leadership at
   <figcaption>Murray's career at a glance — from a West Midlands beat to British policing's first national lead for artificial intelligence.</figcaption>
 </figure>
 
-### The influence, in proportion
+## The influence, in proportion
 
 It would be easy to overclaim here, and the subject of this profile would be the first to object. Murray did not invent evidence-based policing; Sherman and a generation of experimental criminologists did. The Society he founded does not run British forces, and plenty of policing still proceeds on hunch and habit, as anyone who has read an inspectorate report knows. The culture he set out to change in 2010 has shifted, but it has not been remade.
 
@@ -90,7 +90,7 @@ That is the quieter kind of influence, and the more lasting. The detective who o
 
 ---
 
-### Sources and further reading
+## Sources and further reading
 
 - Center for Evidence-Based Crime Policy, [Hall of Fame: Alex Murray](https://cebcp.org/hall-of-fame/alex-murray/), George Mason University.
 - Society of Evidence-Based Policing, [About us](https://www.sebp.police.uk/about) and [Our people](https://www.sebp.police.uk/about/people).

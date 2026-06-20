@@ -14,13 +14,13 @@ This article is built on the judge's own sentencing remarks, which the court rel
 
 A note before going further. This case involves race and religion, and it has been seized upon by people with agendas of their own. The judge addressed that directly, and this piece tries to follow his lead: to set out the facts plainly, to keep faith with a grieving family, and to be fair to everyone the evidence touches — including a wider community that did nothing wrong.
 
-### Who Henry was
+## Who Henry was
 
 Judges do not have to describe the people whose deaths they are sentencing. Judge Mousley chose to. Henry, he said, was "a much-loved, kind, hard-working and ambitious young man, devoted to his family and with a bright future." He was a first-year student at Southampton University and the first in his family to go to university — "careful and principled, full of humour, warmth and promise."[^1]
 
 The remarks set out the family's own words at length. Henry's father, Mark Nowak, described the trauma of identifying his son's body and said the family had effectively been handed "a life sentence" of their own. His mother, Lucy Ross, recalled the anguish of having to tell Henry's elderly grandparents. His sister, Olivia, said her world had "fall[en] apart" — she had lost not only a brother but her closest companion. Step-parents David Stevenson and Katie Woodcock described grief reaching into every corner of ordinary life, including younger children left frightened and unsettled.[^1] None of this is incidental. It is the court formally recording the size of the loss.
 
-### What happened that night
+## What happened that night
 
 Shortly after 11pm, Henry was walking north along Belmont Road. Digwa happened to be walking south on the same pavement. The judge was clear that this was "a chance meeting" — not a planned confrontation.[^1]
 
@@ -32,13 +32,13 @@ None of that came close to justifying what Digwa did next, and the judge said so
 
 One finding here is essential to everything that follows. The pathologist, Amanda Jeffrey, found over two pints of blood in Henry's chest cavity and concluded that the wound was unsurvivable: he "would not have survived, however quickly he received first aid, CPR or expert medical treatment."[^1] By contrast, Digwa had little or no injury — no independent evidence of the bruise he later claimed.
 
-### The aftermath, and the lies
+## The aftermath, and the lies
 
 What the judge described next he characterised as "a callous disregard" for Henry's life. As Henry, badly wounded, tried to escape — scaling a fence, climbing onto a bin, landing on a car — Digwa filmed him. He told Henry, and the people nearby, that no stabbing had happened and that Henry was exaggerating. When his brother arrived and asked whether there had been racism, Digwa invented it, falsely claiming Henry had directed a racial slur at him. The judge was unequivocal: "I am sure that Henry had said nothing racist… it is completely at odds with his previous character." (The slur is quoted in the remarks; it is not repeated here.)[^1]
 
 The deception widened. Digwa told his mother to take the murder weapon, its sheath and the belt away — she did, and was later convicted of assisting an offender, an offence covering help given to someone after a crime to evade justice. (She is to be sentenced separately on 17 July 2026, so her case is not pre-judged here.) Digwa kept Henry's phone, which held footage incriminating him, and gave police a false account. In a police van two days later, secretly recorded and speaking Punjabi, he agreed with his brother to pretend he had acted in self-defence — even as he admitted stabbing Henry, including to the chest — and worried aloud about whether CCTV existed that would expose the lie. That self-defence account, finally advanced at trial, was rejected by the jury and, the judge added, "by me too."[^1]
 
-### What the judge found about the police response
+## What the judge found about the police response
 
 This is the part most relevant to policing, and the part where the sentencing remarks differ most sharply from the public narrative. Bodyworn footage of an officer handcuffing a dying young man is genuinely distressing, and it understandably provoked anger. But the judge — who had seen the evidence in full — reached measured conclusions, and fairness requires reporting them.
 
@@ -50,7 +50,7 @@ Two things should be held together honestly. First, the judge's findings are sym
 
 If there is an evidence-based lesson here, it is a difficult and unglamorous one. It is not that the officers were callous; the court found the opposite. It is that a determined, plausible liar can turn the instincts of a reasonable responder against a victim — and that the honest finding that Henry could not have been saved sits alongside, not against, the case for forces continuing to ask how an injured person's own words can be weighed when everything else at a chaotic scene is pointing the wrong way. Both can be true at once. Resisting the urge to collapse them into a simpler, angrier story is itself part of thinking carefully about policing.
 
-### The sentence, explained
+## The sentence, explained
 
 For murder, a life sentence is mandatory. What a judge sets is the *minimum term* — the period that must be served in full before the Parole Board can even consider release. It is not a release date, and any eventual release is on a life-long licence, with recall to prison for any breach.[^1]
 
@@ -60,7 +60,7 @@ He then set out ten aggravating factors, including the three further stab wounds
 
 Three mitigating factors brought it back down to **21 years**: Digwa's age, his previously clean record, and a lack of premeditation — for although the judge was "sure that you intended to kill in the moments before you stabbed Henry," he accepted the killing was not planned. After deducting the 175 days Digwa had already spent on remand, the sentence formally pronounced was life with a minimum term of **20 years and 190 days**, with two years' imprisonment, concurrent, for the bladed-article offence.[^1] The Attorney General's office has indicated it is considering whether to refer the sentence to the Court of Appeal under the Unduly Lenient Sentence scheme — a routine procedural check in cases like this, not a finding that anything went wrong.[^5]
 
-### A word the judge thought worth saying
+## A word the judge thought worth saying
 
 The judge closed part of his remarks on a point that bears repeating in full, because it is the antidote to the worst uses of this tragedy. Digwa, he said, had "brought shame upon your family, your community and your religion," and his actions had "stirred up racial tension in Southampton and across the country which have made many Sikhs worried about their own safety even though they have done absolutely nothing wrong."[^1]
 

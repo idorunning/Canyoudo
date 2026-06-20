@@ -26,7 +26,7 @@ This raises an appealing question for anyone interested in open-source research.
 
 The answer is a qualified yes, but the qualifications matter more than the yes. There is real analytical value here, almost all of it at the level of patterns and systems rather than individuals. There is also a well-documented capacity for this kind of research to mislead, to invade privacy, and in a few notorious cases to cause direct harm. This piece sets out both.
 
-### What the open record actually contains
+## What the open record actually contains
 
 The single most important open source is the National Crime Agency's UK Missing Persons Unit (UKMPU), which publishes an annual _Missing Persons Data Report_ with accompanying statistical tables. It is the closest thing Britain has to a national picture, and it is genuinely open: anyone can download it.
 
@@ -36,7 +36,7 @@ A few things follow that anyone citing these numbers should know. The Office for
 
 With those caveats in place, the headline shape is reasonably firm because it is corroborated across the UKMPU reports, the charity sector and academic work. Children make up roughly two-thirds of all incidents but only around 45 per cent of the individuals involved—the difference, again, being repeat episodes. Teenagers dominate: the single most likely age to be reported missing is seventeen, followed by sixteen and fifteen. Most cases resolve quickly. For children in England and Wales, recent UKMPU figures show around 83 per cent located within 24 hours and over 90 per cent within 48. Fatal outcomes are rare in proportional terms—about three incidents in every thousand—though that still amounted to roughly a thousand deaths in the latest year, the overwhelming majority of them adults.
 
-### The patterns the data already reveals
+## The patterns the data already reveals
 
 This is where open-source analysis earns its keep, because the official and charity data, read carefully, surfaces patterns that are invisible from any individual case.
 
@@ -52,7 +52,7 @@ Finally, there is disproportionality. Charity analysis and peer-reviewed work bo
 
 None of these patterns requires covert technique. They are visible in published reports, FOI returns and academic papers. That is the genuine, defensible core of open-source missing-persons research: aggregate, system-level analysis of who goes missing, how often, and how well the institutions respond.
 
-### The temptation of proxy sources
+## The temptation of proxy sources
 
 The patterns above come from data about the whole population of cases, however imperfectly recorded. The proxy sources—public appeals, charity posts, news stories, Facebook groups, subreddits—are something quite different, and the difference is the single most important methodological point in this whole subject.
 
@@ -66,7 +66,7 @@ Online communities sit at the unreliable end. Websleuths, the missing-persons su
 
 The lesson is not that proxy sources are useless. It is that they answer a narrow question—_which cases became visible, and why_—and cannot answer the broad one—_who goes missing in Britain_. Treating the first as if it were the second is the characteristic error of amateur missing-persons analysis.
 
-### What open-source technique realistically adds
+## What open-source technique realistically adds
 
 Used with discipline, open-source methods do more than describe. The most productive UK examples are investigative rather than technological. ECPAT UK and Missing People have used FOI requests to children's services across the country to show, in hard numbers, how many trafficked and unaccompanied children disappear from care—findings that drove parliamentary scrutiny. The asylum-hotels story was broken the same way, through whistleblowers, sources and document work. This is OSINT in its most legitimate form: assembling the open record to hold a system to account.
 
@@ -76,7 +76,7 @@ And for the live search itself, the mature data tool is not social media but beh
 
 Two things are conspicuously harder in Britain than the headlines suggest. Forensic genetic genealogy, which has solved many cold cases in the United States, is not yet in routine UK use for legal and ethical reasons. And consumer facial-recognition tools such as PimEyes, sometimes pitched as OSINT aids, sit under active regulatory disapproval—the Information Commissioner's Office has repeatedly sanctioned the firm Clearview AI—and carry a serious false-positive and stalking risk. Power and propriety are not the same thing.
 
-### The limits that are not negotiable
+## The limits that are not negotiable
 
 Which brings us to the constraints, because the gap between what is technically possible and what is lawful and ethical is wide.
 
@@ -88,7 +88,7 @@ The cautionary cases are not hypothetical. After the 2013 Boston Marathon bombin
 
 There is, finally, the matter of inference. Public appeals are a biased, survivorship-skewed sample; social-media data is manipulable, decaying and unrepresentative; force definitions and recording differ; and the same person is counted many times across repeat episodes. Above all there is the no-denominator problem. You can count appeals, sightings and posts, but you almost never know the true population they are drawn from, so claims such as "social media found X per cent of missing people" are simply not supportable. Bellingcat's own checklist of bad open-source research warns against exactly these errors, and the Berkeley Protocol on Digital Open Source Investigations sets out the do-no-harm standard the field now expects.
 
-### Where the potential actually lies
+## Where the potential actually lies
 
 So: can open-source research into missing people in the UK offer real insight? Yes—provided one is clear about which question is being asked.
 

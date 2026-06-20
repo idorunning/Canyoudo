@@ -20,7 +20,7 @@ tags:
 
 This is a [More or Less Policing](/data-stories/reading-the-data) piece, so it comes with that strand's habit of mind — a statistic is a claim, with a method behind it, and the method is where the truth lives. Applying that scalpel to a subject this serious is not a way of minimising it. It is a way of making sure that when we say something is true, it *is* true — because a cause this important deserves to be argued from solid ground, not from a number that sounds right.
 
-### Where the famous number comes from
+## Where the famous number comes from
 
 The line you have seen — on posters, in news copy, in campaign hashtags — is usually some version of *domestic abuse rises 38% when England lose.* It is not invented. It traces to a single, specific, real piece of research: a [2014 study by Stuart Kirby, Brian Francis and Rosalie O'Flaherty](https://journals.sagepub.com/doi/abs/10.1177/0022427813494843), published in the *Journal of Research in Crime and Delinquency*, which examined domestic abuse incidents reported to [Lancashire Constabulary across three World Cups](https://www.lancaster.ac.uk/news/articles/2014/world-cup-football-is-a-risk-factor-for-domestic-violence/) — 2002, 2006 and 2010.
 
@@ -33,7 +33,7 @@ Two things about that chart matter, and the second is almost always lost. The fi
 
 It is worth being clear-eyed about the foundation, because the More or Less habit insists on it. This is **one police force, across three tournaments.** That is a genuine finding, carefully done, and it deserves the attention it got. It is not, on its own, the whole evidence base — and a claim repeated for a decade should rest on more than three World Cups in one county. So the right question is not "is the 38% gospel?" but "does the wider evidence point the same way?" That turns out to be where it gets interesting.
 
-### Reported, or occurring? The question under every figure
+## Reported, or occurring? The question under every figure
 
 Here is the trap that swallows most crime statistics, and it is especially sharp here. Police data does not record abuse that happens. It records abuse that is **reported**. And domestic abuse is one of the most under-reported crimes there is — the [Crime Survey for England and Wales has long suggested only around one in five](https://fullfact.org/crime/world-cup-domestic-abuse/) victims report to the police at all.
 
@@ -43,7 +43,7 @@ The reassuring and sobering answer is that the better studies have taken this se
 
 And the under-reporting cuts the other way too, which is the part that should stay with you: because four in five incidents never reach the police at all, every figure in this piece is a **floor, not a ceiling.** The real numbers are larger than the recorded ones. They always are.
 
-### Wins, not losses? The study that complicates the slogan
+## Wins, not losses? The study that complicates the slogan
 
 The single most useful piece of research here is also the one that unsettles the slogan. In 2020, [Anna Trendl, Neil Stewart and Timothy Mullett published an analysis in *Social Science & Medicine*](https://pubmed.ncbi.nlm.nih.gov/33126102/) using ten years of data — 2010 to 2019 — from West Midlands Police, the second-largest force in England. Where Lancashire offered three tournaments in one county, this was [hundreds of thousands of recorded incidents over a decade](https://wrap.warwick.ac.uk/id/eprint/143539/7/WRAP-Alcohol-link-between-national-football-tournaments-domestic-abuse-Stewart-2020.pdf): a far heavier evidential weight.
 
@@ -51,7 +51,7 @@ Their headline finding turns the popular story on its head. The rise was concent
 
 That should change how we hold the claim. "If England gets beaten, so will she" is a powerful campaign line, and the emotional logic of it — disappointment curdling into violence — is intuitive. But the strongest data says the more dangerous evening may be the one when England *win* and the country drinks to it. The truth is less poetic than the slogan and more useful: the risk factor is not the result, it is the alcohol that rides on the occasion.
 
-### Is football actually *causing* it?
+## Is football actually *causing* it?
 
 "Associated with" is the careful researcher's phrase, and a reader trained by More or Less should always notice when a causal claim is being smuggled in behind a correlation. Match days are weekends as often as not; weekends already carry their own drinking, their own baseline of abuse. So is football really doing anything, or is it just sitting on top of a Saturday?
 
@@ -66,7 +66,7 @@ The clinching detail is the shape of it across the hours of the day. The increas
 
 So the honest causal verdict is: stronger than most crime-and-X claims ever get to be. Not a laboratory certainty — nothing about human behaviour at this scale is — but a well-identified, repeatedly-found, mechanistically-coherent effect. That is about as much as social science offers.
 
-### Is it football — or just a drinking day?
+## Is it football — or just a drinking day?
 
 A reader trained by this strand should now press the obvious objection: maybe football is incidental. Maybe any occasion that licenses a long day's drinking — a heatwave Saturday, a bank holiday, a wedding — would move the numbers the same way, and football just happens to be the one we count and campaign about. If that were true, "England play" would be the wrong label on a problem that is really just *alcohol plus a free afternoon* — and the fans would be carrying a blame that belongs to the bottle.
 
@@ -76,13 +76,13 @@ So in one sense your instinct is right: the lever is alcohol, and the occasion i
 
 Which is the fair answer to the unease underneath the question — that all this demonises fans. It should not, and read properly it does not. The overwhelming majority of people who watch England drink, shout, despair or celebrate, and go to bed having harmed no one. The finding is not a verdict on supporters; it is a statement about an occasion and a substance. Naming the match day is not an accusation against the people in the pub. It is how the people who *might* be hurt get help timed to the danger.
 
-### What the recent tournaments show
+## What the recent tournaments show
 
 The peer-reviewed studies are the spine, but forces and charities now watch every tournament, and the operational numbers keep landing in the same place. During Euro 2024, domestic-abuse-related [999 calls ran about 13% above the daily average on England match days](https://www.aol.com/999-calls-domestic-abuse-england-074147387.html); individual forces [logged hundreds of tournament-linked reports](https://feeds.bbci.co.uk/news/articles/cdd7qzd1nmvo). [Women's Aid](https://womensaid.org.uk/womens-aid-launches-no-more-years-of-hurt-campaign-highlighting-the-spike-in-domestic-abuse-during-big-football-games/) and other charities now run dedicated campaigns around major tournaments for exactly this reason.
 
 Read these the way you would read any operational figure: they are not controlled studies, the denominators shift from tournament to tournament, and a rise in *calls* carries the reporting caveat all over again. But they are consistent with the research, year after year, in a direction that no longer looks like noise.
 
-### So what does the evidence actually say?
+## So what does the evidence actually say?
 
 Pulling the threads together, here is what I think a careful reader is entitled to conclude — no more, no less:
 
@@ -95,7 +95,7 @@ Pulling the threads together, here is what I think a careful reader is entitled 
 
 None of that is a reason to repeat the claim less. It is a reason to repeat it *better* — to say "abuse rises around England matches, driven by heavy drinking, and the danger is real whether England win or lose" rather than to lean on a single percentage that the evidence has already moved past.
 
-### Will it fade as Britain drinks less — and who will check?
+## Will it fade as Britain drinks less — and who will check?
 
 If the lever is alcohol, a hopeful thought follows: Britain is drinking less, so perhaps the spike is quietly shrinking. The first half is true. Per-head alcohol consumption has fallen markedly — by some estimates [around a fifth lower than before the pandemic](https://alcoholchange.org.uk/alcohol-facts/fact-sheets/drinking-trends-in-the-uk) — and the change is sharpest among the young: the share of 11- to 15-year-olds in England who have ever drunk alcohol fell from 59% in 2009 to 44% by 2023, and 16- to 24-year-olds are abstaining in numbers that would have seemed strange a generation ago.
 
@@ -103,7 +103,7 @@ But it does not follow that the football spike fades in step, for two reasons th
 
 Which brings us to the last fair question — *when will someone re-run the numbers?* — and here the answer is unusually pointed. The rigorous, controlled spine still stops at 2019 data: the West Midlands studies span 2010 to 2019, and nothing peer-reviewed and quasi-experimental has yet covered Euro 2020, the 2022 World Cup or Euro 2024. We have operational figures from each — the 13% rise in domestic-abuse 999 calls on England match days during [Euro 2024](https://www.aol.com/999-calls-domestic-abuse-england-074147387.html) among them — but operational tallies are not the careful work, and they carry the reporting caveat all over again. Meanwhile the natural experiment that would settle whether a less-drinking Britain still spikes is being generated **right now**: a men's World Cup is under way this very summer. The raw material is landing as you read this. Whether a funded team does the patient analysis on it — and tests the hopeful assumption directly, rather than leaving it to the next decade — is the genuinely open question, and a reasonable thing to ask of the forces, the funders and the researchers alike.
 
-### Don't lose the person in the percentage
+## Don't lose the person in the percentage
 
 There is a reason this piece opened where it did, and it is the same reason it should end there. It is genuinely possible to get so absorbed in denominators and identification strategies and reporting artefacts that the subject quietly disappears — until "a 47% rise in alcohol-related domestic abuse on the day of an England win" becomes a fact you can say calmly, the way you might say it rained. It should not be sayable calmly. Behind that clause are specific evenings, specific kitchens, specific people — overwhelmingly women — for whom a national celebration was the most dangerous night of the season.
 
@@ -115,7 +115,7 @@ Football does not cause domestic abuse. Abusers cause domestic abuse, and they w
 
 ---
 
-### Sources and further reading
+## Sources and further reading
 
 - Stuart Kirby, Brian Francis & Rosalie O'Flaherty, ["Can the FIFA World Cup Football (Soccer) Tournament Be Associated with an Increase in Domestic Abuse?"](https://journals.sagepub.com/doi/abs/10.1177/0022427813494843), *Journal of Research in Crime and Delinquency*, 2014 — the Lancashire study and the 26% / 38% figures. See also [Lancaster University's summary](https://www.lancaster.ac.uk/news/articles/2014/world-cup-football-is-a-risk-factor-for-domestic-violence/).
 - Anna Trendl, Neil Stewart & Timothy L. Mullett, ["The role of alcohol in the link between national football (soccer) tournaments and domestic abuse — evidence from England"](https://pubmed.ncbi.nlm.nih.gov/33126102/), *Social Science & Medicine*, 2020 ([full text](https://wrap.warwick.ac.uk/id/eprint/143539/7/WRAP-Alcohol-link-between-national-football-tournaments-domestic-abuse-Stewart-2020.pdf)); and [Warwick Business School's summary](https://www.wbs.ac.uk/news/domestic-abuse-increases-almost-50-per-cent-after-england-win-at-world-cup/).

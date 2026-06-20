@@ -34,7 +34,7 @@ The figures are striking. Some 99% of fuel theft crimes do not result in prosecu
 
 This blog argues that the policy is not simply a matter of resource prioritisation. It also undermines community trust in policing, particularly among the vulnerable groups who staff these 24/7 operations during high-risk overnight hours. The evidence here is not speculative; it is documented policy.
 
-### The policies are real
+## The policies are real
 
 Several police forces have publicly confirmed that they will not investigate most fuel theft cases. Devon and Cornwall Police drew attention in 2016 when Assistant Chief Constable Paul Netherton announced that officers would no longer attend fuel theft reports unless there was evidence of "linked offending" or "obvious criminal intent" such as false number plates. Freedom of Information data from 2019 showed that 69% of their 897 Making Off Without Payment cases were closed as "investigated as far as reasonably possible, no suspect identified."
 
@@ -46,7 +46,7 @@ The legal reasoning the police cite is technically sound but difficult in practi
 
 The result is an awkward asymmetry: it is easier for a petrol station to sue someone for £50 of fuel than for the police to prosecute them for stealing it.
 
-### The cost of non-enforcement
+## The cost of non-enforcement
 
 Chief Constable Simon Cole, speaking as the National Police Chiefs' Council lead for local policing in 2018, suggested the industry "could design out bilking in 30 seconds by making people pay up front." He noted that stations do not do this "because the walk in their shops is part of their business offer."
 
@@ -56,7 +56,7 @@ The annual cost has reached £100 million across 1.5 million non-payment inciden
 
 Fuel theft increased 362% from 2019 to 2023, with a further 49% jump from early 2024 to early 2025. Crime Science journal research identified a "tipping point" at which fuel price increases trigger theft surges. Notably, 47% of drive-offs in April 2025 were by repeat offenders, people who know they are unlikely to face consequences.
 
-### Islands of enquiry: untapped investigative value
+## Islands of enquiry: untapped investigative value
 
 This is where the underlying argument becomes more interesting. Modern petrol stations represent a sophisticated surveillance infrastructure. They feature high-definition CCTV with facial recognition capabilities, comprehensive ANPR systems integrated with national databases, digital payment transaction records with precise timestamps, and 24/7 staffing. They sit on every major road network in Britain, creating systematic data capture points for vehicle movements across the country.
 
@@ -66,7 +66,7 @@ During the night, when most serious crimes occur and alternative surveillance is
 
 Yet this infrastructure remains underused. The standard 31-day CCTV retention period means evidence disappears if police do not act quickly, which they increasingly do not. Retailers report receiving generic text messages within hours stating "we have not been able to identify the suspect," without officers ever visiting to review the footage.
 
-### The cooperation crisis nobody is measuring
+## The cooperation crisis nobody is measuring
 
 South Yorkshire Police data revealed 75 cases in which retailers withdrew support for police action even after officers had identified suspects. That statistic suggests these relationships have deteriorated beyond frustration into active non-cooperation.
 
@@ -74,7 +74,7 @@ Industry bodies document the breakdown systematically. The Petrol Retailers Asso
 
 Clive Sheppard of Bodmin Moor Services captured the danger when he said police non-response "ultimately puts the public at risk as we are seemingly being encouraged to tackle crime ourselves." When legitimate businesses lose faith in law enforcement, the principle of policing by consent is weakened.
 
-### The diversity dimension: a critical evidence gap
+## The diversity dimension: a critical evidence gap
 
 Here the argument runs into a significant obstacle: no UK-specific data exists on petrol station workforce demographics. Despite approximately 8,000 petrol stations operating in Britain, systematic demographic information about who actually works in these roles, particularly during vulnerable overnight shifts, is not collected or published.
 
@@ -86,7 +86,7 @@ If petrol station workforces reflect broader retail demographics, and particular
 
 The absence of demographic data is itself instructive. Vulnerable workforces often remain invisible in policy discussions precisely because nobody collects the information that would make their vulnerability apparent.
 
-### What it means when police stop policing
+## What it means when police stop policing
 
 The central issue here is not really fuel theft. The £100 million cost matters to the industry, but the deeper problem is what happens when law enforcement openly abandons entire categories of crime despite clear evidence and solvability.
 
