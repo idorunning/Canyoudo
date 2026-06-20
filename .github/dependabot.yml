@@ -1,0 +1,25 @@
+# Dependabot keeps dependencies current and flags security fixes by opening PRs
+# you can review and merge at your leisure. It never merges anything itself.
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates
+version: 2
+updates:
+  # npm packages (Astro, Supabase client, Anthropic SDK, build tooling, …).
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Bundle routine minor/patch bumps into one PR to cut review noise;
+      # major upgrades still arrive as their own PRs.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # The actions pinned in .github/workflows/*.yml (checkout, setup-node, …).
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
