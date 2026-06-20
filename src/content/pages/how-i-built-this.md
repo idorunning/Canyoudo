@@ -1,6 +1,7 @@
 ---
 title: How I built this website — a guide for non-coders (like me!)
 description: An honest, plain-English tour of how this site is put together, why I use each service, and a running log of every change. I'm learning as I go — suggestions welcome.
+draft: true
 ---
 
 I am not a software developer. I came into this with minimal academic qualifications, a career that started in commercial operations, and a policing job. Everything on this site has been built by me, in my spare time, with a lot of help from an AI assistant and a lot of trial and error.

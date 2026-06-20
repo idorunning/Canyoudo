@@ -5,7 +5,15 @@ import CommentsCTA from '../components/CommentsCTA.astro';
 import { getEntry, getCollection } from 'astro:content';
 
 const page = await getEntry('pages', 'how-i-built-this');
-const { Content } = await page!.render();
+
+// When the page is marked draft (held back for rewriting), take it off the live
+// site: returning a 404 here means Astro doesn't emit the route at build time.
+// Flip `draft: false` in the page's front matter (or the CMS toggle) to relaunch.
+if (!page || page.data.draft) {
+  return new Response(null, { status: 404 });
+}
+
+const { Content } = await page.render();
 
 // The change log is a single-file data collection: one entry whose data holds
 // the list. Sort newest-first so the latest change is always on top.

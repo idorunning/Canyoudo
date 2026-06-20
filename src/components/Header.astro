@@ -1,5 +1,6 @@
 ---
 import SearchModal from './SearchModal.astro';
+import { getEntry } from 'astro:content';
 
 // Desktop nav is two rows: the writing sections plus the two interactive tools
 // on top, and the about/contact pages underneath. The interactive tools sit
@@ -16,10 +17,15 @@ const primaryLinks = [
   { href: '/other', label: 'Interesting Distractions' },
 ];
 
+// "How I built this" only appears once it's live: when the page is marked draft
+// (held back for rewriting) the route 404s, so the link is dropped to match.
+const builtThis = await getEntry('pages', 'how-i-built-this');
 const metaLinks = [
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
-  { href: '/how-i-built-this', label: 'How I built this' },
+  ...(builtThis && !builtThis.data.draft
+    ? [{ href: '/how-i-built-this', label: 'How I built this' }]
+    : []),
 ];
 
 // Secondary destinations, surfaced in the mobile menu (and the footer / Explore

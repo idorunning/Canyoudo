@@ -186,10 +186,14 @@ const forceSnapshot = z.object({
 // force-wide stop & search data the explorer reads at build time.
 const policeDataSchema = z.discriminatedUnion('kind', [nationalSnapshot, forceSnapshot]);
 
-// Static pages (About, Contact) — editable in the CMS under Pages.
+// Static pages (About, Contact, How I built this) — editable in the CMS under
+// Pages. `draft` mirrors the articles' flag: on = taken off the live site (the
+// route 404s and any nav link to it is hidden), so a page can be held back for
+// rewriting without deleting its content.
 const pagesSchema = z.object({
   title: z.string(),
   description: z.string(),
+  draft: z.boolean().default(false),
 });
 
 // --- Change log -------------------------------------------------------------

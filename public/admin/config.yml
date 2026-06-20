@@ -329,6 +329,14 @@ collections:
           - { name: "title", label: "Page heading", widget: "string" }
           - { name: "description", label: "Meta description (search/social summary)", widget: "text" }
           - {
+              name: "draft",
+              label: "Keep hidden on the live site",
+              widget: "boolean",
+              default: false,
+              required: false,
+              hint: "On = the page is taken off the live site (it 404s and the nav link disappears) so you can keep rewriting it. Off = live on the next build.",
+            }
+          - {
               name: "body",
               label: "Content",
               widget: "markdown",
