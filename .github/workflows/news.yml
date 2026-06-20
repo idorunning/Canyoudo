@@ -4,11 +4,12 @@ name: Refresh news headlines
 # the snapshot if it changed. Netlify's GitHub integration redeploys the site on
 # the resulting push, so the sidebar "In the news" widget stays current.
 #
-# No API key needed — these are open feeds. Runs every 3 hours (tune the cron to
-# taste; a longer interval means fewer rebuilds), and on demand.
+# No API key needed — these are open feeds. Runs every 12 hours (tune the cron
+# to taste; a longer interval means fewer rebuilds and lower hosting build-minute
+# usage), and on demand via the "Run workflow" button.
 on:
   schedule:
-    - cron: '0 */3 * * *'
+    - cron: '0 */12 * * *'
   workflow_dispatch:
 
 permissions:

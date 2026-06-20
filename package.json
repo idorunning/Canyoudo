@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.1.0",
   "description": "Evidence-based writing on policing and public policy",
+  "engines": {
+    "node": "22"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
