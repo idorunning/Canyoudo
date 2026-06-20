@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-20T01:58:59.654Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-06-20T06:50:59.890Z",
+    "feedCount": 8,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -10,7 +10,6 @@
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
-      "The Register",
       "BBC Technology"
     ]
   },
@@ -168,14 +167,6 @@
       "summary": "Millions of homeowners could benefit from faster planning decisions, as 2 new AI tools are unveiled to modernise England’s planning permission system."
     },
     {
-      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-16T20:47:37.000Z",
-      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
-    },
-    {
       "title": "Tech Life",
       "link": "https://www.bbc.co.uk/sounds/play/w3ct8jy0?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -222,30 +213,6 @@
       "topic": "law",
       "isoDate": "2026-06-10T13:59:54.000Z",
       "summary": "Remote Participation Guidance for the criminal courts will be published soon The post Upcoming Remote Participation Guidance for the criminal courts appeared first on Courts…"
-    },
-    {
-      "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/03/no-longer-just-a-copilot-microsofts-ai-wants-to-take-the-wheel/5250718",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-03T16:49:15.000Z",
-      "summary": "Always-on agent promises to keep work moving, provided you trust it with practically everything"
-    },
-    {
-      "title": "Anthropic, now atop the AI bubble, files for its IPO",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/01/anthropic-now-atop-the-ai-bubble-files-for-its-ipo/5249753",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-01T18:12:22.000Z",
-      "summary": "First it tops OpenAI's valuation, then it beats Altman to the IPO punch"
-    },
-    {
-      "title": "Google has seriously leaned into AI enshittification lately",
-      "link": "https://www.theregister.com/ai-ml/2026/05/25/google-has-seriously-leaned-into-ai-enshittification-lately/5245365",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-05-24T23:00:00.000Z",
-      "summary": "Could the Chocolate Factory's mission to reshape the web backfire?"
     }
   ]
 }
