@@ -33,7 +33,7 @@ A semantic, natural-language search layer operating over the global open-source 
 
 Founder and Editor
 
-![](/images/20191231_210253.webp)
+![](/images/11825.webp)
 
 I am an Acting Inspector with Sussex Police, specializing in neighbourhood policing and data-led operational strategy.  I have been hostage and crisis negotiator during this time as well a a response cop, neighbourhood Sergeant, and my current role is spread between being duty Inspector, response Inspector and investigations inspector. 
 
