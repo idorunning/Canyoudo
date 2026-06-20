@@ -2,9 +2,14 @@
 interface Props {
   section: 'police-policy' | 'public-policy' | 'influential-people' | 'other' | 'data-stories';
   size?: 'sm' | 'md';
+  // When the badge sits inside another link (e.g. an article card whose whole
+  // body is one anchor), it must render as plain text — an <a> nested inside an
+  // <a> is invalid HTML and browsers close the outer link early, leaving the
+  // rest of the card unclickable. Pass link={false} in that case.
+  link?: boolean;
 }
 
-const { section, size = 'md' } = Astro.props;
+const { section, size = 'md', link = true } = Astro.props;
 
 const labels = {
   'police-policy': 'Police Policy',
@@ -20,9 +25,17 @@ const sizeClasses = {
 };
 ---
 
-<a
-  href={`/${section}`}
-  class={`inline-block font-sans font-semibold uppercase tracking-[0.18em] text-accent hover:text-accent-dark transition-colors ${sizeClasses[size]}`}
->
-  {labels[section]}
-</a>
+{link ? (
+  <a
+    href={`/${section}`}
+    class={`inline-block font-sans font-semibold uppercase tracking-[0.18em] text-accent hover:text-accent-dark transition-colors ${sizeClasses[size]}`}
+  >
+    {labels[section]}
+  </a>
+) : (
+  <span
+    class={`inline-block font-sans font-semibold uppercase tracking-[0.18em] text-accent ${sizeClasses[size]}`}
+  >
+    {labels[section]}
+  </span>
+)}
