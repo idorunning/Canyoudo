@@ -1,0 +1,111 @@
+---
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+
+// Pre-encode the shareable bits once so each network link stays readable below.
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+
+const networks = [
+  {
+    name: 'X',
+    label: 'Share on X',
+    href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+  },
+  {
+    name: 'LinkedIn',
+    label: 'Share on LinkedIn',
+    href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+  },
+  {
+    name: 'Facebook',
+    label: 'Share on Facebook',
+    href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+  },
+  {
+    name: 'Email',
+    label: 'Share by email',
+    href: `mailto:?subject=${encodedTitle}&body=${encodedTitle}%0A%0A${encodedUrl}`,
+  },
+];
+---
+
+<div
+  data-pagefind-ignore
+  data-share-buttons
+  data-share-url={url}
+  data-share-title={title}
+  class="mt-12 pt-6 border-t border-ink-200"
+>
+  <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
+    Share this article
+  </p>
+  <div class="flex flex-wrap items-center gap-2">
+    {networks.map(network => (
+      <a
+        href={network.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={network.label}
+        class="font-sans text-xs px-3 py-1.5 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+      >
+        {network.name}
+      </a>
+    ))}
+    <button
+      type="button"
+      data-share-copy
+      aria-label="Copy link to this article"
+      class="font-sans text-xs px-3 py-1.5 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+    >
+      <span data-share-copy-label>Copy link</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Progressive enhancement: use the native share sheet where available
+  // (mobile, Safari) and fall back to copy-to-clipboard everywhere else.
+  document.querySelectorAll<HTMLElement>('[data-share-buttons]').forEach((root) => {
+    const copyBtn = root.querySelector<HTMLButtonElement>('[data-share-copy]');
+    const label = root.querySelector<HTMLElement>('[data-share-copy-label]');
+    if (!copyBtn || !label) return;
+
+    const url = root.dataset.shareUrl ?? window.location.href;
+    const title = root.dataset.shareTitle ?? document.title;
+    const defaultText = label.textContent ?? 'Copy link';
+
+    copyBtn.addEventListener('click', async () => {
+      // Prefer the OS share sheet when the browser exposes it.
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, url });
+          return;
+        } catch {
+          // User dismissed the sheet, or it failed — fall through to copy.
+        }
+      }
+
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        // Older browsers without the async clipboard API.
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        input.remove();
+      }
+
+      label.textContent = 'Copied!';
+      window.setTimeout(() => {
+        label.textContent = defaultText;
+      }, 2000);
+    });
+  });
+</script>

@@ -11,6 +11,7 @@ import ReadingProgress from '../components/ReadingProgress.astro';
 import ArticleContents from '../components/ArticleContents.astro';
 import KeyTakeaways from '../components/KeyTakeaways.astro';
 import RelatedArticles from '../components/RelatedArticles.astro';
+import ShareButtons from '../components/ShareButtons.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getTopics, topicForTag } from '../lib/topics';
 import { SECTION_LABELS } from '../content/config';
@@ -228,6 +229,8 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
               })}
             </div>
           )}
+
+          <ShareButtons title={title} url={pageUrl} />
 
           <RelatedArticles currentSlug={slug} section={section} tags={tags} />
 
