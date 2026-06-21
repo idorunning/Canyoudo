@@ -20,6 +20,14 @@ interface Props {
 
 const { article } = Astro.props;
 const { Content, headings } = await article.render();
+
+// In Influential People, the article opens with the person's face. When a
+// portrait is set, it takes the first-image (hero) slot — any non-portrait
+// hero is swapped out for it, so every profile leads with the portrait.
+const heroImage =
+  article.data.section === 'influential-people' && article.data.portrait
+    ? article.data.portrait
+    : article.data.heroImage;
 ---
 
 <ArticleLayout
@@ -27,7 +35,7 @@ const { Content, headings } = await article.render();
   description={article.data.description}
   pubDate={article.data.pubDate}
   updatedDate={article.data.updatedDate}
-  heroImage={article.data.heroImage}
+  heroImage={heroImage}
   tags={article.data.tags}
   keyTakeaways={article.data.keyTakeaways}
   author={article.data.author}
