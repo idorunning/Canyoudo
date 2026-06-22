@@ -1,0 +1,131 @@
+name: Refresh perception corpus
+
+# Runs the perception fetchers on a GitHub-hosted runner (which HAS the outbound
+# internet access the data pipeline needs), merges all sources, regenerates the
+# word clouds, and commits the result back to the branch you ran it from.
+#
+# This is the no-terminal path: trigger it from the "Run workflow" button in the
+# GitHub web/mobile UI. GDELT and Wayback need no key. Media Cloud and the
+# Guardian only run if you've added their API keys as repository secrets
+# (Settings → Secrets and variables → Actions):
+#   • MEDIACLOUD_API_KEY  — free researcher key from https://search.mediacloud.org/
+#   • GUARDIAN_API_KEY    — free key from https://open-platform.theguardian.com/access/
+#
+# The fetchers store DERIVED COUNTS ONLY (no article text); only the merged
+# aggregates under src/content/perception and public/ are committed.
+on:
+  workflow_dispatch:
+    inputs:
+      gdelt:
+        description: 'GDELT (no key, 2017→now)'
+        type: boolean
+        default: true
+      wayback:
+        description: 'Wayback (no key, 2000–2012)'
+        type: boolean
+        default: true
+      mediacloud:
+        description: 'Media Cloud (needs MEDIACLOUD_API_KEY secret, 2008→now)'
+        type: boolean
+        default: false
+      guardian:
+        description: 'Guardian (needs GUARDIAN_API_KEY secret)'
+        type: boolean
+        default: false
+      from_year:
+        description: 'First year (optional; blank = each source default)'
+        type: string
+        default: ''
+      to_year:
+        description: 'Last year (optional; blank = each source default)'
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+
+# A new run supersedes an in-flight one rather than racing it on git push.
+concurrency:
+  group: perception-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Pass the optional year range via env (not string interpolation) and
+      # build the shared CLI args once.
+      - name: Resolve year-range args
+        id: years
+        env:
+          FROM: ${{ inputs.from_year }}
+          TO: ${{ inputs.to_year }}
+        run: |
+          ARGS=""
+          [ -n "$FROM" ] && ARGS="$ARGS --from $FROM"
+          [ -n "$TO" ] && ARGS="$ARGS --to $TO"
+          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
+          echo "Year args: ${ARGS:-(source defaults)}"
+
+      - name: Fetch GDELT
+        if: ${{ inputs.gdelt }}
+        run: node scripts/perception/fetch-gdelt.mjs ${{ steps.years.outputs.args }}
+
+      - name: Fetch Wayback
+        if: ${{ inputs.wayback }}
+        run: node scripts/perception/fetch-wayback.mjs ${{ steps.years.outputs.args }}
+
+      - name: Fetch Media Cloud
+        if: ${{ inputs.mediacloud }}
+        env:
+          MEDIACLOUD_API_KEY: ${{ secrets.MEDIACLOUD_API_KEY }}
+        run: |
+          if [ -z "$MEDIACLOUD_API_KEY" ]; then
+            echo "::warning::MEDIACLOUD_API_KEY secret not set — skipping Media Cloud."; exit 0
+          fi
+          node scripts/perception/fetch-mediacloud.mjs ${{ steps.years.outputs.args }}
+
+      - name: Fetch Guardian
+        if: ${{ inputs.guardian }}
+        env:
+          GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
+        run: |
+          if [ -z "$GUARDIAN_API_KEY" ]; then
+            echo "::warning::GUARDIAN_API_KEY secret not set — skipping Guardian."; exit 0
+          fi
+          node scripts/perception/fetch-guardian.mjs ${{ steps.years.outputs.args }}
+
+      - name: Merge sources and rebuild clouds
+        run: |
+          npm run build-perception
+          npm run generate-perception-clouds
+
+      - name: Commit if changed
+        run: |
+          git config user.name "perception-bot"
+          git config user.email "actions@users.noreply.github.com"
+          paths="src/content/perception public/images/perception public/perception-data.json"
+          if [ -z "$(git status --porcelain $paths)" ]; then
+            echo "No change in perception corpus."; exit 0
+          fi
+          git add $paths
+          git commit -m "Refresh perception corpus ($(date -u +%Y-%m-%dT%H:%MZ))"
+          # The branch may have advanced while this ran — rebase before pushing,
+          # retry. Only this workflow touches these files, so rebase is clean.
+          for attempt in 1 2 3; do
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}" || git rebase --abort
+            if git push origin "HEAD:${{ github.ref_name }}"; then echo "Pushed on attempt $attempt."; exit 0; fi
+            echo "Push attempt $attempt failed; retrying."; sleep 4
+          done
+          echo "Could not push after retries."; exit 1
