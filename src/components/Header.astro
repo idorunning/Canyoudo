@@ -2,23 +2,14 @@
 import SearchModal from './SearchModal.astro';
 import { getEntry } from 'astro:content';
 
-// Desktop nav is two rows: the writing sections plus the two interactive tools
-// on top, and the about/contact pages underneath. The interactive tools sit
-// right after the two policy sections and are rendered bold so they read as
-// functions to use, not just more places to read. The mobile menu is two
-// columns: every other destination on the left, the tools (in red) on the right.
 const primaryLinks = [
   { href: '/police-policy', label: 'Police Policy' },
   { href: '/public-policy', label: 'Public Policy' },
-  { href: '/research', label: 'Research Assistant', tool: true },
-  { href: '/data', label: 'Crime Dashboard', tool: true },
   { href: '/influential-people', label: 'Influential People' },
-  { href: '/data-stories', label: 'Data Stories' },
-  { href: '/other', label: 'Interesting Distractions' },
+  { href: '/data', label: 'The Data', tool: true },
+  { href: '/research', label: 'Research Tools', tool: true },
 ];
 
-// "How I built this" only appears once it's live: when the page is marked draft
-// (held back for rewriting) the route 404s, so the link is dropped to match.
 const builtThis = await getEntry('pages', 'how-i-built-this');
 const metaLinks = [
   { href: '/about', label: 'About' },
@@ -28,9 +19,9 @@ const metaLinks = [
     : []),
 ];
 
-// Secondary destinations, surfaced in the mobile menu (and the footer / Explore
-// panel on desktop) to keep the top bar uncluttered.
 const moreLinks = [
+  { href: '/data-stories', label: 'The Data Tells a Story' },
+  { href: '/other', label: 'Interesting Distractions' },
   { href: '/topics', label: 'Topics' },
   { href: '/resources', label: 'Further reading' },
 ];
@@ -38,75 +29,53 @@ const moreLinks = [
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="border-b border-ink-200 bg-paper-100/80 backdrop-blur sticky top-0 z-50">
+<header class="sticky top-0 z-50 border-b border-ink-200 bg-paper-50/85 backdrop-blur-md">
   <div class="max-w-wide mx-auto px-6 lg:px-10">
-    <div class="flex items-center justify-between py-5">
-      <a href="/" class="group">
-        <h1 class="font-display text-xl md:text-2xl font-semibold text-ink-900 tracking-tight leading-none">
-          Thinking About <span class="italic text-accent">Policing</span>
-        </h1>
-        <p class="font-sans text-[0.7rem] uppercase tracking-[0.18em] text-ink-500 mt-1">
-          Evidence, integrity, Action.
-        </p>
+    <div class="h-[70px] flex items-center justify-between gap-8">
+
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2.5 shrink-0">
+        <span class="w-8 h-8 rounded-[9px] bg-accent flex items-center justify-center font-extrabold text-base text-paper-50 leading-none select-none">
+          T
+        </span>
+        <span class="font-extrabold text-[1.1rem] tracking-tight text-ink-900 leading-none">
+          Thinking About Policing
+        </span>
       </a>
 
-      <div class="flex items-center gap-5">
-        <nav class="hidden md:block">
-          <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1">
-            {primaryLinks.map(link => {
-              const isActive = currentPath.startsWith(link.href) && link.href !== '/';
-              const toolClass = isActive
-                ? 'text-accent-dark font-semibold underline underline-offset-4'
-                : 'text-accent font-semibold hover:text-accent-dark';
-              const writingClass = isActive
-                ? 'text-accent font-medium'
-                : 'text-ink-700 hover:text-ink-900';
-              return (
-                <li>
-                  <a
-                    href={link.href}
-                    class={`font-sans text-sm tracking-wide transition-colors ${
-                      link.tool ? toolClass : writingClass
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-          <ul class="flex flex-wrap justify-end items-center gap-x-6 gap-y-1 mt-1.5">
-            {metaLinks.map(link => {
-              const isActive = currentPath.startsWith(link.href) && link.href !== '/';
-              return (
-                <li>
-                  <a
-                    href={link.href}
-                    class={`font-sans text-xs tracking-wide transition-colors ${
-                      isActive
-                        ? 'text-accent font-medium'
-                        : 'text-ink-600 hover:text-ink-900'
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-6">
+        {primaryLinks.map(link => {
+          const isActive = currentPath.startsWith(link.href) && link.href !== '/';
+          return (
+            <a
+              href={link.href}
+              class={`font-sans text-sm font-semibold transition-colors ${
+                isActive
+                  ? 'text-accent'
+                  : link.tool
+                    ? 'text-ink-700 hover:text-ink-900'
+                    : 'text-ink-500 hover:text-ink-900'
+              }`}
+            >
+              {link.label}
+            </a>
+          );
+        })}
+      </nav>
 
+      <!-- Desktop actions -->
+      <div class="hidden md:flex items-center gap-3 shrink-0">
         <button
           type="button"
           data-theme-toggle
-          class="hidden md:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
+          class="p-1.5 text-ink-500 hover:text-ink-900 transition-colors"
           aria-label="Toggle dark mode"
         >
-          {/* Moon when light (tap for dark); sun when dark (tap for light). */}
-          <svg class="dark:hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <svg class="dark:hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
-          <svg class="hidden dark:block" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <svg class="hidden dark:block" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <circle cx="12" cy="12" r="4.5" />
             <path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8" />
           </svg>
@@ -115,51 +84,61 @@ const currentPath = Astro.url.pathname;
         <button
           type="button"
           data-search-open
-          class="hidden md:inline-flex text-ink-700 hover:text-ink-900 transition-colors p-1"
+          class="flex items-center gap-1.5 text-sm font-semibold text-ink-500 hover:text-ink-900 transition-colors p-1"
           aria-label="Search"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
             <circle cx="11" cy="11" r="7" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
+          <span class="hidden lg:inline">Search</span>
         </button>
 
-        <button
-          id="mobile-menu-button"
-          class="md:hidden text-ink-900 p-2 -mr-2"
-          aria-label="Toggle menu"
-          aria-controls="mobile-menu"
-          aria-expanded="false"
+        <a
+          href="/subscribe"
+          class="bg-accent text-paper-50 rounded-full px-4 py-2 text-[13.5px] font-bold hover:bg-accent-dark transition-colors"
         >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
+          Subscribe
+        </a>
       </div>
+
+      <!-- Mobile hamburger -->
+      <button
+        id="mobile-menu-button"
+        class="md:hidden text-ink-900 p-2 -mr-2"
+        aria-label="Toggle menu"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
     </div>
 
+    <!-- Mobile menu -->
     <nav id="mobile-menu" class="hidden md:hidden pb-4">
       <div class="grid grid-cols-[1fr_auto] gap-x-8">
-        {/* Left column: every other destination, as it was. */}
         <ul class="flex flex-col gap-1">
-          {primaryLinks.filter(link => !link.tool).map(link => (
+          {primaryLinks.filter(l => !l.tool).map(link => (
             <li>
-              <a
-                href={link.href}
-                class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
-              >
+              <a href={link.href} class="block py-2 font-sans text-sm text-ink-700 hover:text-accent">
+                {link.label}
+              </a>
+            </li>
+          ))}
+          {moreLinks.map(link => (
+            <li>
+              <a href={link.href} class="block py-2 font-sans text-sm text-ink-700 hover:text-accent">
                 {link.label}
               </a>
             </li>
           ))}
           {metaLinks.map(link => (
             <li>
-              <a
-                href={link.href}
-                class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
-              >
+              <a href={link.href} class="block py-2 font-sans text-sm text-ink-700 hover:text-accent">
                 {link.label}
               </a>
             </li>
@@ -183,25 +162,16 @@ const currentPath = Astro.url.pathname;
               <span class="hidden dark:inline">Light mode</span>
             </button>
           </li>
-          {moreLinks.map(link => (
-            <li>
-              <a
-                href={link.href}
-                class="block py-2 font-sans text-sm text-ink-700 hover:text-accent"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
+          <li>
+            <a href="/subscribe" class="block py-2 font-sans text-sm font-semibold text-accent">
+              Subscribe →
+            </a>
+          </li>
         </ul>
-        {/* Right column: the interactive tools, in the red accent. */}
         <ul class="flex flex-col gap-1 text-right">
-          {primaryLinks.filter(link => link.tool).map(link => (
+          {primaryLinks.filter(l => l.tool).map(link => (
             <li>
-              <a
-                href={link.href}
-                class="block py-2 font-sans text-sm font-semibold text-accent hover:text-accent-dark"
-              >
+              <a href={link.href} class="block py-2 font-sans text-sm font-semibold text-accent hover:text-accent-dark">
                 {link.label}
               </a>
             </li>
@@ -229,8 +199,6 @@ const currentPath = Astro.url.pathname;
     setOpen(open);
   });
 
-  // Close on Escape and on a click outside the menu/button, so the open menu
-  // never traps the reader.
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !menu?.classList.contains('hidden')) {
       setOpen(false);
@@ -244,9 +212,11 @@ const currentPath = Astro.url.pathname;
     if (!menu.contains(target) && !btn?.contains(target)) setOpen(false);
   });
 
-  // Dark-mode toggle. The initial class is set pre-paint in BaseLayout; here we
-  // just flip it and remember the choice. Both the desktop and mobile buttons
-  // carry data-theme-toggle.
+  // Close when a link inside the mobile menu is tapped.
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
   document.querySelectorAll('[data-theme-toggle]').forEach((el) => {
     el.addEventListener('click', () => {
       const isDark = document.documentElement.classList.toggle('dark');

@@ -11,42 +11,41 @@
 /* inline script in BaseLayout sets the class before first paint.       */
 /* ------------------------------------------------------------------ */
 :root {
-  --paper-50: 251 248 241;
-  --paper-100: 247 243 235;
-  --paper-200: 237 229 211;
-  --ink-900: 26 24 23;
-  --ink-800: 42 39 36;
-  --ink-700: 61 57 54;
-  --ink-600: 90 84 78;
-  --ink-500: 122 114 104;
-  --ink-400: 156 147 137;
-  --ink-300: 196 188 174;
-  --ink-200: 221 214 200;
-  --accent: 124 40 40;
-  --accent-dark: 90 28 28;
-  --accent-light: 161 69 69;
+  --paper-50: 237 239 250;   /* #edeefa — main background */
+  --paper-100: 224 227 243;  /* #e0e3f3 — band / secondary background */
+  --paper-200: 210 214 236;  /* #d2d6ec — code, inputs, dividers */
+  --ink-900: 27 36 82;       /* #1b2452 — headline navy */
+  --ink-800: 45 56 100;      /* darker body text */
+  --ink-700: 74 80 112;      /* #4a5070 — body text */
+  --ink-600: 100 108 145;    /* medium text */
+  --ink-500: 135 141 166;    /* #878da6 — muted text */
+  --ink-400: 168 174 200;    /* lighter muted */
+  --ink-300: 200 204 224;    /* light borders */
+  --ink-200: 230 232 241;    /* #e6e8f1 — line / border */
+  --accent: 60 84 216;       /* #3c54d8 — blue accent */
+  --accent-dark: 47 70 200;  /* #2f46c8 — hover / active */
+  --accent-light: 92 114 224; /* #5c72e0 — light variant */
 }
 
 .dark {
-  /* Backgrounds: warm near-blacks, lightly stepped for elevation. */
-  --paper-100: 28 25 23;
-  --paper-50: 38 34 31;
-  --paper-200: 48 43 39;
-  /* Text: warm off-whites, stepping down to muted/borders. */
-  --ink-900: 244 239 230;
-  --ink-800: 230 223 211;
-  --ink-700: 206 198 184;
-  --ink-600: 176 167 153;
-  --ink-500: 143 134 121;
-  --ink-400: 112 104 93;
-  /* 300/200 read as borders/dividers in the UI — keep them dark. */
-  --ink-300: 78 72 65;
-  --ink-200: 58 53 48;
-  /* Accent lightened for contrast on dark; the "dark" (hover) step goes
-     lighter, the "light" step a touch deeper, mirroring the light theme. */
-  --accent: 209 130 130;
-  --accent-dark: 230 170 170;
-  --accent-light: 178 96 96;
+  /* Backgrounds: cool blue-tinted darks for elevation. */
+  --paper-100: 15 18 45;
+  --paper-50: 22 26 58;
+  --paper-200: 32 38 74;
+  /* Text: cool off-whites stepping down to borders. */
+  --ink-900: 238 241 252;
+  --ink-800: 210 215 242;
+  --ink-700: 178 186 225;
+  --ink-600: 142 152 200;
+  --ink-500: 108 118 178;
+  --ink-400: 78 90 152;
+  /* 300/200 read as borders/dividers — keep them dark. */
+  --ink-300: 58 68 120;
+  --ink-200: 42 50 98;
+  /* Accent lightened for contrast on dark backgrounds. */
+  --accent: 130 155 245;
+  --accent-dark: 160 183 255;
+  --accent-light: 100 125 235;
 }
 
 html {
@@ -432,12 +431,12 @@ html.dark {
   }
 }
 
-/* Subtle paper texture for editorial feel */
+/* Subtle texture for editorial feel */
 .paper-grain {
-  background-color: rgb(var(--paper-100));
+  background-color: rgb(var(--paper-50));
   background-image:
-    radial-gradient(circle at 25% 25%, rgba(122, 114, 104, 0.025) 1px, transparent 1px),
-    radial-gradient(circle at 75% 75%, rgba(122, 114, 104, 0.02) 1px, transparent 1px);
+    radial-gradient(circle at 25% 25%, rgba(27, 36, 82, 0.018) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(60, 84, 216, 0.012) 1px, transparent 1px);
   background-size: 24px 24px, 32px 32px;
   background-position: 0 0, 12px 16px;
 }
@@ -700,17 +699,45 @@ html.dark {
   flex-shrink: 0;
 }
 .news-chip--policing {
-  background: rgba(124, 40, 40, 0.1);
+  background: rgba(60, 84, 216, 0.1);
   color: rgb(var(--accent));
 }
 .news-chip--ai {
-  background: rgba(90, 84, 78, 0.12);
+  background: rgba(74, 80, 112, 0.12);
   color: rgb(var(--ink-700));
 }
 .news-chip--law {
-  background: rgba(161, 69, 69, 0.12);
+  background: rgba(92, 114, 224, 0.12);
   color: rgb(var(--accent-light));
 }
+
+/* ------------------------------------------------------------------ */
+/* Hero section floating gradient orbs                                  */
+/* ------------------------------------------------------------------ */
+@keyframes hero-float-a {
+  0%, 100% { transform: translate(0, 0); }
+  50%       { transform: translate(-20px, 16px); }
+}
+@keyframes hero-float-b {
+  0%, 100% { transform: translate(0, 0); }
+  50%       { transform: translate(18px, -14px); }
+}
+@keyframes grow-bar {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+.hero-orb-a { animation: hero-float-a 15s ease-in-out infinite; }
+.hero-orb-b { animation: hero-float-b 18s ease-in-out infinite; }
+
+/* Crime dashboard animated bars */
+.dash-bar { transform-origin: bottom; animation: grow-bar 0.7s cubic-bezier(.2,.7,.2,1) both; }
+.dash-bar:nth-child(1) { animation-delay: .5s; }
+.dash-bar:nth-child(2) { animation-delay: .56s; }
+.dash-bar:nth-child(3) { animation-delay: .62s; }
+.dash-bar:nth-child(4) { animation-delay: .68s; }
+.dash-bar:nth-child(5) { animation-delay: .74s; }
+.dash-bar:nth-child(6) { animation-delay: .80s; }
+.dash-bar:nth-child(7) { animation-delay: .86s; }
 
 /* ------------------------------------------------------------------ */
 /* News ticker — a single-line marquee of recent headlines             */

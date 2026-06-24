@@ -1,65 +1,91 @@
 ---
 import NewsletterForm from './NewsletterForm.astro';
-import SupportCTA from './SupportCTA.astro';
 const year = new Date().getFullYear();
+const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
 ---
 
-<footer class="border-t border-ink-200 mt-24 py-12 bg-paper-100">
-  <div class="max-w-wide mx-auto px-6 lg:px-10">
-    <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-      <div>
-        <p class="font-display text-lg font-semibold text-ink-900">
-          Thinking About Policing
+<footer class="bg-ink-900 text-ink-400 mt-24">
+  <div class="max-w-wide mx-auto px-6 lg:px-10 pt-14 pb-10">
+    <div class="flex flex-wrap justify-between items-start gap-12">
+
+      <!-- Brand + about -->
+      <div class="max-w-xs">
+        <div class="flex items-center gap-2.5 mb-4">
+          <span class="w-[30px] h-[30px] rounded-[9px] bg-accent flex items-center justify-center font-extrabold text-sm text-paper-50 leading-none select-none">
+            T
+          </span>
+          <span class="font-extrabold text-[1.1rem] text-paper-50 leading-none">Thinking About Policing</span>
+        </div>
+        <p class="font-sans text-sm leading-relaxed">
+          Evidence-based writing on policing, public policy, and the occasional historical puzzle.
         </p>
-        <p class="font-sans text-sm text-ink-600 mt-2 leading-relaxed max-w-xs">
-          Writing on evidence-based policing, public policy, and the occasional historical puzzle.
-        </p>
-        <SupportCTA variant="footer" />
+        {supportUrl && (
+          <a
+            href={supportUrl}
+            rel="noopener"
+            target="_blank"
+            class="inline-block mt-5 font-sans text-[12.5px] font-bold bg-paper-100/10 hover:bg-paper-100/20 text-paper-50 px-4 py-2.5 rounded-full transition-colors"
+          >
+            Buy me a coffee →
+          </a>
+        )}
       </div>
 
-      <div>
-        <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
-          Sections
-        </p>
-        <ul class="space-y-1.5 font-sans text-sm">
-          <li><a href="/police-policy" class="text-ink-700 hover:text-accent">Police Policy</a></li>
-          <li><a href="/public-policy" class="text-ink-700 hover:text-accent">Public Policy</a></li>
-          <li><a href="/influential-people" class="text-ink-700 hover:text-accent">Influential People</a></li>
-          <li><a href="/data-stories" class="text-ink-700 hover:text-accent">The Data Tells a Story</a></li>
-          <li><a href="/other" class="text-ink-700 hover:text-accent">Interesting Distractions</a></li>
-        </ul>
+      <!-- Links columns -->
+      <div class="flex gap-16">
+        <div>
+          <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.1em] text-ink-500 mb-4">
+            Sections
+          </p>
+          <ul class="space-y-2.5 font-sans text-sm">
+            <li><a href="/police-policy" class="hover:text-paper-50 transition-colors">Police Policy</a></li>
+            <li><a href="/public-policy" class="hover:text-paper-50 transition-colors">Public Policy</a></li>
+            <li><a href="/influential-people" class="hover:text-paper-50 transition-colors">Influential People</a></li>
+            <li><a href="/data-stories" class="hover:text-paper-50 transition-colors">The Data Tells a Story</a></li>
+            <li><a href="/other" class="hover:text-paper-50 transition-colors">Interesting Distractions</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.1em] text-ink-500 mb-4">
+            Browse
+          </p>
+          <ul class="space-y-2.5 font-sans text-sm">
+            <li><a href="/research" class="hover:text-paper-50 transition-colors">Research tools</a></li>
+            <li><a href="/topics" class="hover:text-paper-50 transition-colors">Topics</a></li>
+            <li><a href="/resources" class="hover:text-paper-50 transition-colors">Further reading</a></li>
+            <li><a href="/about" class="hover:text-paper-50 transition-colors">About · Contact</a></li>
+            <li><a href="/sitemap" class="hover:text-paper-50 transition-colors">All articles</a></li>
+          </ul>
+        </div>
       </div>
 
-      <div>
-        <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
-          Browse
+      <!-- Newsletter -->
+      <div class="w-full md:w-auto md:max-w-xs">
+        <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.1em] text-ink-500 mb-4">
+          New articles by email
         </p>
-        <ul class="space-y-1.5 font-sans text-sm">
-          <li><a href="/research" class="text-ink-700 hover:text-accent">Research assistant</a></li>
-          <li><a href="/topics" class="text-ink-700 hover:text-accent">Topics</a></li>
-          <li><a href="/ai" class="text-ink-700 hover:text-accent">AI &amp; search index</a></li>
-          <li><a href="/books" class="text-ink-700 hover:text-accent">Books</a></li>
-          <li><a href="/resources" class="text-ink-700 hover:text-accent">Further reading</a></li>
-          <li><a href="/about" class="text-ink-700 hover:text-accent">About</a></li>
-          <li><a href="/contact" class="text-ink-700 hover:text-accent">Contact</a></li>
-          <li><a href="/sitemap" class="text-ink-700 hover:text-accent">Sitemap</a></li>
-          <li><a href="/rss.xml" class="text-ink-700 hover:text-accent">RSS feed</a></li>
-          <li><a href="/admin/" class="text-ink-600 hover:text-accent">Editor</a></li>
-        </ul>
+        <p class="font-sans text-sm leading-relaxed mb-4">
+          Occasional emails when something new goes up. No spam, unsubscribe anytime.
+        </p>
+        <div class="footer-newsletter">
+          <NewsletterForm variant="compact" />
+        </div>
       </div>
 
-      <div>
-        <NewsletterForm variant="compact" />
-      </div>
     </div>
 
-    <div class="border-t border-ink-200 mt-10 pt-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-      <p class="font-sans text-xs text-ink-500">
-        © {year} Nathan Tracey. Views are personal.
-      </p>
-      <p class="font-sans text-xs text-ink-500">
-        Built with Astro.
-      </p>
+    <!-- Bottom bar -->
+    <div class="border-t border-paper-50/10 mt-10 pt-6 flex flex-wrap justify-between items-center gap-3 font-sans text-[12.5px] text-ink-500">
+      <span>© {year} Nathan Tracey. Views are personal.</span>
+      <span>Evidence · Integrity · Action</span>
     </div>
   </div>
 </footer>
+
+<style>
+  /* Override the newsletter form's light-mode colours inside the dark footer */
+  .footer-newsletter :global(.font-sans.text-xs.uppercase) { color: rgb(var(--ink-500)); }
+  .footer-newsletter :global(h2) { color: rgb(var(--paper-50)); }
+  .footer-newsletter :global(.font-serif) { color: rgb(var(--ink-400)); }
+</style>
