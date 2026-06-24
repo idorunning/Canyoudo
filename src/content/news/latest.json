@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-23T14:24:11.738Z",
+    "fetchedAt": "2026-06-24T02:08:22.190Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,20 +16,44 @@
   },
   "items": [
     {
-      "title": "Major incident declared after bus crash near roundabout",
-      "link": "https://www.bbc.co.uk/news/articles/c20ye768v6lo?at_medium=RSS&at_campaign=rss",
+      "title": "Mugs in drawers and watches in cupboards: What police pictures tell us about Peter Murrell's illicit purchases",
+      "link": "https://www.bbc.co.uk/news/articles/ckg4j1j38nvo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-23T14:19:52.000Z",
-      "summary": "Police said the crash happened on the A484 near the Kidwelly roundabout in Carmarthenshire."
+      "isoDate": "2026-06-23T21:55:05.000Z",
+      "summary": "Dozens of new images released by the Crown Office and Procurator Fiscal Service now show some of the items he purchased illegally."
     },
     {
-      "title": "Donaldson's first night in prison as downfall shakes NI politics",
-      "link": "https://www.bbc.co.uk/news/articles/c0ry792ep5vo?at_medium=RSS&at_campaign=rss",
+      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-23T20:16:34.000Z",
+      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
+    },
+    {
+      "title": "Meta halts worker tracking for AI training due to privacy fears",
+      "link": "https://www.bbc.co.uk/news/articles/cq615g3z36po?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-06-23T17:51:30.000Z",
+      "summary": "The company had started just two months ago tracking workers’ computer usage for AI training data."
+    },
+    {
+      "title": "Campaigners consider appeal after Gatwick bids fail",
+      "link": "https://www.bbc.co.uk/news/articles/cjdg158v185o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-23T13:52:10.000Z",
-      "summary": "Donaldson has been told to expect a \"lengthy sentence\" for a string of child sex crimes, including rape."
+      "isoDate": "2026-06-23T17:44:40.000Z",
+      "summary": "A High Court ruling backs Gatwick Airport's expansion after campaigners raise climate concerns."
+    },
+    {
+      "title": "Teen boy arrested on suspicion of murder after 14-year-old girl reported missing",
+      "link": "https://www.bbc.co.uk/news/articles/cj9gzjn2rk0o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-23T16:18:03.000Z",
+      "summary": "A body is found in the search for Lilly, 14, who was reported missing on Saturday."
     },
     {
       "title": "Speech by the President of the King’s Bench Division – Without Fear or Favour: Judicial Independence, Past, Present and Future",
@@ -37,15 +61,7 @@
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-06-23T13:00:53.000Z",
-      "summary": "Without Fear or Favour: Judicial Independence, Past, Present and Future Dame Victoria SharpPresident of the King’s Bench Division22 June 2026 Introduction It is a great…"
-    },
-    {
-      "title": "Murder investigation after 14-year-old girl reported missing",
-      "link": "https://www.bbc.co.uk/news/articles/cj9gzjn2rk0o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-23T12:54:14.000Z",
-      "summary": "A body is found in the search for Lilly, 14, who was reported missing on Saturday."
+      "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
     },
     {
       "title": "'Our son's killer is posting online from prison'",
@@ -238,22 +254,6 @@
       "topic": "ai",
       "isoDate": "2026-06-03T16:49:15.000Z",
       "summary": "Always-on agent promises to keep work moving, provided you trust it with practically everything"
-    },
-    {
-      "title": "Anthropic, now atop the AI bubble, files for its IPO",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/01/anthropic-now-atop-the-ai-bubble-files-for-its-ipo/5249753",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-01T18:12:22.000Z",
-      "summary": "First it tops OpenAI's valuation, then it beats Altman to the IPO punch"
-    },
-    {
-      "title": "Google has seriously leaned into AI enshittification lately",
-      "link": "https://www.theregister.com/ai-ml/2026/05/25/google-has-seriously-leaned-into-ai-enshittification-lately/5245365",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-05-24T23:00:00.000Z",
-      "summary": "Could the Chocolate Factory's mission to reshape the web backfire?"
     }
   ]
 }
