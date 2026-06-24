@@ -3,7 +3,6 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SupportCTA from '../components/SupportCTA.astro';
-import NewsTicker from '../components/NewsTicker.astro';
 
 interface Props {
   title: string;
@@ -34,8 +33,6 @@ const jsonLdGraph = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : null;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const siteTitle = 'Thinking About Policing';
 
-// The news ticker leads the homepage, sitting above the support banner.
-const isHome = Astro.url.pathname === '/';
 const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
 ---
 
@@ -131,8 +128,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       Skip to content
     </a>
     <Header />
-    {isHome && <NewsTicker />}
-    <SupportCTA variant="banner" />
+<SupportCTA variant="banner" />
     <main id="main" class="flex-1">
       <slot />
     </main>
