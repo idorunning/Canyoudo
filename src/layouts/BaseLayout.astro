@@ -54,6 +54,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       })();
     </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL} />
     {noindex && <meta name="robots" content="noindex, follow" />}
@@ -133,5 +134,23 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       <slot />
     </main>
     <Footer />
+
+    {/* Scroll-reveal: slide elements marked [data-reveal] into view once. */}
+    <script is:inline>
+      (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var targets = document.querySelectorAll('[data-reveal]');
+        if (!targets.length || !('IntersectionObserver' in window)) return;
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
+        targets.forEach(function (el) { io.observe(el); });
+      })();
+    </script>
   </body>
 </html>

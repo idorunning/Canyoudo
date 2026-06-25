@@ -7,7 +7,7 @@ keyTakeaways:
   - 'He brought Lawrence Sherman''s Triple-T framework — target, test, track — back from Cambridge and built the machinery to put it into practice inside the service.'
   - 'His case carried weight because he made it as an operational officer, holding that an officer''s instinct is a hypothesis to be tested, not a fact to be acted on.'
   - In 2024 he became British policing's first national lead for artificial intelligence before moving to the National Crime Agency.
-pubDate: 2026-06-07
+pubDate: 2026-06-16
 heroImage: "/images/murray-ebp-hero.jpg"
 thumbnail: "/images/alex-murray-portrait.jpg"
 portrait: "/images/alex-murray-portrait.jpg"

@@ -39,7 +39,6 @@ const networks = [
   data-share-buttons
   data-share-url={url}
   data-share-title={title}
-  class="mt-12 pt-6 border-t border-ink-200"
 >
   <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
     Share this article
@@ -51,7 +50,7 @@ const networks = [
         target="_blank"
         rel="noopener noreferrer"
         aria-label={network.label}
-        class="font-sans text-xs px-3 py-1.5 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+        class="font-sans text-xs font-semibold px-4 py-2 bg-accent text-paper-50 rounded-full hover:bg-accent-dark transition-colors"
       >
         {network.name}
       </a>
@@ -60,7 +59,7 @@ const networks = [
       type="button"
       data-share-copy
       aria-label="Copy link to this article"
-      class="font-sans text-xs px-3 py-1.5 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+      class="font-sans text-xs font-semibold px-4 py-2 border border-ink-300 text-ink-700 rounded-full hover:border-accent hover:text-accent transition-colors"
     >
       <span data-share-copy-label>Copy link</span>
     </button>

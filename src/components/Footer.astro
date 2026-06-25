@@ -4,30 +4,33 @@ const year = new Date().getFullYear();
 const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
 ---
 
-<footer class="bg-ink-900 text-ink-400 mt-24">
+<footer class="bg-ink-900 dark:bg-paper-200 text-ink-400 mt-24">
   <div class="max-w-wide mx-auto px-6 lg:px-10 pt-14 pb-10">
     <div class="flex flex-wrap justify-between items-start gap-12">
 
       <!-- Brand + about -->
       <div class="max-w-xs">
         <div class="flex items-center gap-2.5 mb-4">
-          <span class="w-[30px] h-[30px] rounded-[9px] bg-accent flex items-center justify-center font-extrabold text-sm text-paper-50 leading-none select-none">
-            T
-          </span>
+          <img src="/logo.png" alt="Thinking About Policing logo" class="h-[30px] w-auto object-contain" />
           <span class="font-extrabold text-[1.1rem] text-paper-50 leading-none">Thinking About Policing</span>
         </div>
         <p class="font-sans text-sm leading-relaxed">
           Evidence-based writing on policing, public policy, and the occasional historical puzzle.
         </p>
         {supportUrl && (
-          <a
-            href={supportUrl}
-            rel="noopener"
-            target="_blank"
-            class="inline-block mt-5 font-sans text-[12.5px] font-bold bg-paper-100/10 hover:bg-paper-100/20 text-paper-50 px-4 py-2.5 rounded-full transition-colors"
-          >
-            Buy me a coffee →
-          </a>
+          <div class="mt-5">
+            <a
+              href={supportUrl}
+              rel="noopener"
+              target="_blank"
+              class="inline-block font-sans text-[12.5px] font-bold bg-paper-100/10 hover:bg-paper-100/20 text-paper-50 px-4 py-2.5 rounded-full transition-colors"
+            >
+              ☕ Buy me a coffee →
+            </a>
+            <p class="font-sans text-xs text-ink-500 mt-2 leading-relaxed">
+              Any donations go towards API costs and time spent on the website. Thank you!
+            </p>
+          </div>
         )}
       </div>
 
@@ -38,11 +41,11 @@ const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
             Sections
           </p>
           <ul class="space-y-2.5 font-sans text-sm">
-            <li><a href="/police-policy" class="hover:text-paper-50 transition-colors">Police Policy</a></li>
-            <li><a href="/public-policy" class="hover:text-paper-50 transition-colors">Public Policy</a></li>
+            <li><a href="/police-policy" class="hover:text-paper-50 transition-colors">Evidence & Practice</a></li>
+            <li><a href="/public-policy" class="hover:text-paper-50 transition-colors">Leadership & Culture</a></li>
             <li><a href="/influential-people" class="hover:text-paper-50 transition-colors">Influential People</a></li>
-            <li><a href="/data-stories" class="hover:text-paper-50 transition-colors">The Data Tells a Story</a></li>
-            <li><a href="/other" class="hover:text-paper-50 transition-colors">Interesting Distractions</a></li>
+            <li><a href="/data-stories" class="hover:text-paper-50 transition-colors">Technology & Innovation</a></li>
+            <li><a href="/other" class="hover:text-paper-50 transition-colors">History & Curiosities</a></li>
           </ul>
         </div>
 

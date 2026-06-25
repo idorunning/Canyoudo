@@ -4,11 +4,11 @@ export const SECTIONS = ['police-policy', 'public-policy', 'influential-people',
 export type Section = (typeof SECTIONS)[number];
 
 export const SECTION_LABELS: Record<Section, string> = {
-  'police-policy': 'Police Policy',
-  'public-policy': 'Public Policy',
+  'police-policy': 'Evidence & Practice',
+  'public-policy': 'Leadership & Culture',
   'influential-people': 'Influential People',
-  other: 'Interesting Distractions',
-  'data-stories': 'The Data Tells a Story',
+  other: 'History & Curiosities',
+  'data-stories': 'Technology & Innovation',
 };
 
 // The browser editor serialises a cleared optional field as '' rather than
@@ -34,6 +34,9 @@ const articleSchema = z.object({
   // three-to-five points a reader should leave with. Optional; adds structure
   // to longer essays without changing the prose. Three to five lines reads best.
   keyTakeaways: z.array(z.string()).optional(),
+  // Up to three questions to spark discussion — shown at the end of the article
+  // to give readers something concrete to think about or share on LinkedIn.
+  discussionQuestions: z.array(z.string()).optional(),
   // Old paths to 301-redirect to this article — fill in when you move an
   // article between sections so the previous URL doesn't break.
   redirectFrom: z.array(z.string()).optional(),

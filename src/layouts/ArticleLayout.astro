@@ -1,8 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import SectionBadge from '../components/SectionBadge.astro';
-import Comments from '../components/Comments.astro';
-import CommentsCTA from '../components/CommentsCTA.astro';
 import Sidebar from '../components/Sidebar.astro';
 import NewsWidget from '../components/NewsWidget.astro';
 import NewsletterForm from '../components/NewsletterForm.astro';
@@ -11,7 +9,6 @@ import ReadingProgress from '../components/ReadingProgress.astro';
 import ArticleContents from '../components/ArticleContents.astro';
 import KeyTakeaways from '../components/KeyTakeaways.astro';
 import RelatedArticles from '../components/RelatedArticles.astro';
-import ShareButtons from '../components/ShareButtons.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getTopics, topicForTag } from '../lib/topics';
 import { SECTION_LABELS } from '../content/config';
@@ -33,6 +30,7 @@ interface Props {
   heroImage?: string;
   tags?: string[];
   keyTakeaways?: string[];
+  discussionQuestions?: string[];
   author: string;
   section: 'police-policy' | 'public-policy' | 'influential-people' | 'other' | 'data-stories';
   slug: string;
@@ -48,6 +46,7 @@ const {
   heroImage,
   tags,
   keyTakeaways,
+  discussionQuestions,
   author,
   section,
   slug,
@@ -71,7 +70,6 @@ const stats = readingTime(rawContent || '');
 const minutes = Math.max(1, Math.ceil(stats.minutes));
 
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
-const pageId = `${section}-${slug}`;
 
 // Every article shares a generated, branded title-card (src/pages/og/…) as its
 // social-preview image — readable at feed-thumbnail size and independent of
@@ -157,21 +155,27 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             {description}
           </p>
 
-          <div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-xs uppercase tracking-[0.15em] text-ink-500">
-            <span>{author}</span>
-            <span aria-hidden="true">·</span>
-            <time datetime={pubDate.toISOString()}>{formattedPubDate}</time>
-            <span aria-hidden="true">·</span>
-            <span>{minutes} min read</span>
-            {updatedDate && (
-              <>
-                <span aria-hidden="true">·</span>
-                <span>Updated {updatedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-              </>
-            )}
+          <div class="mt-8 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-extrabold text-paper-50 text-sm shrink-0 select-none">
+              {author.charAt(0)}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-sans text-sm font-semibold text-ink-900 leading-tight">{author}</p>
+              <p class="font-sans text-xs text-ink-500 leading-tight mt-0.5">UK Police Inspector</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-xs text-ink-500 text-right shrink-0">
+              <time datetime={pubDate.toISOString()}>{formattedPubDate}</time>
+              <span aria-hidden="true">·</span>
+              <span>{minutes} min read</span>
+              {updatedDate && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>Updated {updatedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+                </>
+              )}
+            </div>
           </div>
 
-          <CommentsCTA pageId={pageId} />
         </header>
 
         {/* Hero image. A generated title-card banner stands in when there is no
@@ -189,7 +193,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             />
           )}
           <div
-            class="hero-fallback w-full min-h-[240px] md:min-h-[320px] rounded-md bg-ink-900 px-8 md:px-12 py-12 md:py-16 flex-col justify-center"
+            class="hero-fallback w-full min-h-[240px] md:min-h-[320px] rounded-md bg-ink-900 dark:bg-paper-200 px-8 md:px-12 py-12 md:py-16 flex-col justify-center"
             style={heroImage ? 'display:none' : 'display:flex'}
           >
             <div class="h-1 w-12 bg-accent mb-5"></div>
@@ -210,8 +214,77 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             <slot />
           </div>
 
+          {/* Combined share + star rating panel — amber accent. Rendered here as a
+              fallback; a script relocates it to sit just above the "Sources and
+              further reading" heading so it ends the article body, not the page. */}
+          <div data-share-panel data-pagefind-ignore class="mt-10 bg-[#fdf6ed] border border-[#e8c87a] rounded-[20px] p-7">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+              {/* Share buttons */}
+              <div class="flex-1">
+                <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#a0732a] mb-3">Share this article</p>
+                <div class="flex flex-wrap items-center gap-2">
+                  <a
+                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Share on LinkedIn"
+                    class="font-sans text-xs font-semibold px-4 py-2 bg-[#0A66C2] text-white rounded-full hover:bg-[#004182] transition-colors"
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                    href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(title)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Share on X"
+                    class="font-sans text-xs font-semibold px-4 py-2 bg-accent text-paper-50 rounded-full hover:bg-accent-dark transition-colors"
+                  >
+                    X
+                  </a>
+                  <a
+                    href={`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(title + '\n\n' + pageUrl)}`}
+                    aria-label="Share by email"
+                    class="font-sans text-xs font-semibold px-4 py-2 bg-accent text-paper-50 rounded-full hover:bg-accent-dark transition-colors"
+                  >
+                    Email
+                  </a>
+                  <button
+                    type="button"
+                    data-share-copy
+                    data-share-url={pageUrl}
+                    data-share-title={title}
+                    aria-label="Copy link to this article"
+                    class="font-sans text-xs font-semibold px-4 py-2 border border-[#c8a060] text-[#a0732a] rounded-full hover:bg-[#f5e8cc] transition-colors"
+                  >
+                    <span data-share-copy-label>Copy link</span>
+                  </button>
+                </div>
+              </div>
+              {/* Divider */}
+              <div class="hidden sm:block w-px bg-[#e8c87a] self-stretch"></div>
+              <div class="sm:hidden h-px bg-[#e8c87a]"></div>
+              {/* Star rating */}
+              <div data-star-bar class="sm:text-right">
+                <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#a0732a] mb-3">Rate this article</p>
+                <div data-star-choices class="flex gap-0.5 sm:justify-end">
+                  {[1, 2, 3, 4, 5].map(n => (
+                    <button
+                      type="button"
+                      data-star={n}
+                      aria-label={`Rate ${n} out of 5`}
+                      class="text-[28px] text-[#e0c080] hover:text-[#D4844A] transition-colors leading-none data-[active]:text-[#D4844A]"
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+                <p data-star-thanks class="hidden font-sans text-sm text-[#a0732a] mt-2"></p>
+              </div>
+            </div>
+          </div>
+
           {tags && tags.length > 0 && (
-            <div data-pagefind-ignore class="mt-12 pt-6 border-t border-ink-200 flex flex-wrap gap-2">
+            <div data-pagefind-ignore class="mt-8 pt-6 border-t border-ink-200 flex flex-wrap gap-2">
               {tags.map(tag => {
                 const topic = topicForTag(topics, tag);
                 return topic ? (
@@ -230,12 +303,23 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             </div>
           )}
 
-          <ShareButtons title={title} url={pageUrl} />
+          {discussionQuestions && discussionQuestions.length > 0 && (
+            <div class="mt-12 pt-8 border-t border-ink-200" data-pagefind-ignore>
+              <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-4">Discussion questions</p>
+              <ol class="space-y-4">
+                {discussionQuestions.map((q, i) => (
+                  <li class="flex gap-3">
+                    <span class="font-sans font-bold text-accent text-sm shrink-0 w-4">{i + 1}.</span>
+                    <p class="font-serif text-ink-800 leading-snug">{q}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
 
           <RelatedArticles currentSlug={slug} section={section} tags={tags} />
 
           <div data-pagefind-ignore>
-            <Comments pageId={pageId} pageTitle={title} pageUrl={pageUrl} />
             <BookCTA tags={tags} />
             <div class="mt-12">
               <NewsletterForm variant="inline" />
@@ -259,3 +343,105 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
     </div>
   </div>
 </BaseLayout>
+
+<script>
+  // Relocate the share/star panel to sit directly below the article body and
+  // ABOVE the "Sources and further reading" list. The sources section is the tail
+  // of the markdown prose, so we lift it (its leading <hr>, the heading, and the
+  // list) into its own .prose-article wrapper placed after the panel — keeping the
+  // panel out of prose link styling while the sources keep their prose formatting.
+  {
+    const prose = document.querySelector('.prose-article');
+    const panel = document.querySelector('[data-share-panel]');
+    const heading = prose?.querySelector('#sources-and-further-reading');
+    if (prose && panel && heading) {
+      let start: Element = heading;
+      const prev = heading.previousElementSibling;
+      if (prev && prev.tagName === 'HR') start = prev;
+
+      const sourcesWrap = document.createElement('div');
+      sourcesWrap.className = 'prose-article';
+      sourcesWrap.setAttribute('data-pagefind-ignore', '');
+
+      let node: Node | null = start;
+      while (node) {
+        const next: Node | null = node.nextSibling;
+        sourcesWrap.appendChild(node);
+        node = next;
+      }
+      panel.after(sourcesWrap);
+    }
+  }
+
+  // Copy-link button
+  document.querySelectorAll<HTMLButtonElement>('[data-share-copy]').forEach((btn) => {
+    const label = btn.querySelector<HTMLElement>('[data-share-copy-label]');
+    if (!label) return;
+    const url = btn.dataset.shareUrl ?? window.location.href;
+    const title = btn.dataset.shareTitle ?? document.title;
+    const defaultText = label.textContent ?? 'Copy link';
+
+    btn.addEventListener('click', async () => {
+      if (navigator.share) {
+        try { await navigator.share({ title, url }); return; } catch {}
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        input.remove();
+      }
+      label.textContent = 'Copied!';
+      setTimeout(() => { label.textContent = defaultText; }, 2000);
+    });
+  });
+
+  const bar = document.querySelector('[data-star-bar]');
+  if (bar) {
+    const key = `star-rating:${location.pathname}`;
+    const choices = bar.querySelector('[data-star-choices]') as HTMLElement | null;
+    const thanks = bar.querySelector('[data-star-thanks]') as HTMLElement | null;
+    const buttons = bar.querySelectorAll<HTMLButtonElement>('[data-star]');
+
+    function setStars(rating: number) {
+      buttons.forEach(btn => {
+        const n = Number(btn.dataset.star);
+        if (n <= rating) {
+          btn.setAttribute('data-active', '');
+          btn.style.color = '';
+        } else {
+          btn.removeAttribute('data-active');
+          btn.style.color = '';
+        }
+      });
+    }
+
+    const saved = Number(localStorage.getItem(key));
+    if (saved) {
+      setStars(saved);
+      if (thanks) {
+        thanks.textContent = `Thanks — you rated this ${saved}/5.`;
+        thanks.classList.remove('hidden');
+      }
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('mouseenter', () => setStars(Number(btn.dataset.star)));
+      btn.addEventListener('mouseleave', () => setStars(saved || 0));
+      btn.addEventListener('click', () => {
+        const rating = Number(btn.dataset.star);
+        localStorage.setItem(key, String(rating));
+        (window as any).__starRating = rating;
+        setStars(rating);
+        if (thanks) {
+          thanks.textContent = `Thanks — you rated this ${rating}/5.`;
+          thanks.classList.remove('hidden');
+        }
+      });
+    });
+  }
+</script>

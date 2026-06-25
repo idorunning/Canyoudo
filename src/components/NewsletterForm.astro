@@ -1,9 +1,4 @@
 ---
-// Email signup, powered by MailerLite's embedded form (no server code).
-// Gated like the comments widget: it only renders the real form when both
-// PUBLIC_MAILERLITE_ACCOUNT_ID and PUBLIC_MAILERLITE_FORM_ID are set; otherwise
-// it shows a quiet "not configured" note. New-article emails are set up as an
-// RSS campaign in the MailerLite dashboard against /rss.xml — no code needed.
 interface Props {
   variant?: 'inline' | 'compact' | 'page';
 }
@@ -12,39 +7,84 @@ const { variant = 'inline' } = Astro.props;
 const ACCOUNT = import.meta.env.PUBLIC_MAILERLITE_ACCOUNT_ID;
 const FORM = import.meta.env.PUBLIC_MAILERLITE_FORM_ID;
 const configured = Boolean(ACCOUNT && FORM);
-
-const compact = variant === 'compact';
-const wrapper = compact
-  ? ''
-  : 'border border-ink-200 bg-paper-100 rounded-md p-6 md:p-8';
-const blurb =
-  'Occasional emails when something new goes up — evidence-based writing on policing and public policy. No spam, unsubscribe anytime.';
 ---
 
-<section class={wrapper}>
-  <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-2">Newsletter</p>
-  <h2 class={`font-display font-semibold text-ink-900 ${compact ? 'text-lg' : 'text-2xl'}`}>
-    Get new articles by email
-  </h2>
-  <p class={`font-serif text-ink-700 leading-relaxed mt-2 ${compact ? 'text-sm max-w-xs' : 'text-base max-w-md'}`}>
-    {blurb}
-  </p>
+<style is:global>
+  /* Hide ML's own injected heading/description block entirely — we supply our own above. */
+  .ml-embedded .ml-form-embedContent,
+  .ml-embedded .ml-form-embedHeader {
+    display: none !important;
+  }
 
-  <div class="mt-4">
-    {configured ? (
+  /* Strip ML's white card so the field sits flush on the page background. */
+  .ml-embedded,
+  .ml-embedded .ml-form-embedContainer,
+  .ml-embedded .ml-form-embedWrapper,
+  .ml-embedded .ml-form-embedBody,
+  .ml-embedded .ml-form-successBody {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+
+  /* Normalise the email input + Subscribe button to match the site. */
+  .ml-embedded .ml-form-embedBody .ml-form-fieldRow,
+  .ml-embedded .ml-form-embedBody .ml-form-formContent {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .ml-embedded input[type="email"] {
+    width: 100% !important;
+    background: var(--paper-50) !important;
+    border: 1px solid var(--ink-300) !important;
+    border-radius: 0.375rem !important;
+    padding: 0.625rem 0.75rem !important;
+  }
+  .ml-embedded .ml-form-embedSubmit {
+    margin-top: 0.5rem !important;
+  }
+  .ml-embedded .ml-form-embedSubmit button {
+    background: var(--accent) !important;
+    border-radius: 0.375rem !important;
+    font-weight: 600 !important;
+  }
+</style>
+
+<div>
+  {configured ? (
+    <div>
+      <h2 class="font-display font-semibold text-ink-900 text-xl mb-2">New articles by email</h2>
+      <p class="font-serif text-ink-700 leading-relaxed text-sm mb-4">
+        Occasional emails when something new goes up. No spam, unsubscribe anytime.
+      </p>
       <div class="ml-embedded" data-form={FORM}></div>
-    ) : (
-      <div class="bg-paper-200 border border-ink-200 rounded-md p-4 font-sans text-sm text-ink-700">
-        <p class="font-medium text-ink-900 mb-1">Newsletter not configured.</p>
-        <p>
-          Create a free form at <a href="https://www.mailerlite.com" class="text-accent underline">mailerlite.com</a>
-          and set <code class="bg-paper-100 px-1.5 py-0.5 rounded text-xs">PUBLIC_MAILERLITE_ACCOUNT_ID</code> and
-          <code class="bg-paper-100 px-1.5 py-0.5 rounded text-xs">PUBLIC_MAILERLITE_FORM_ID</code>.
-        </p>
+    </div>
+  ) : (
+    <div>
+      <h2 class="font-display font-semibold text-ink-900 text-xl mb-2">New articles by email</h2>
+      <p class="font-serif text-ink-700 leading-relaxed text-sm mb-4">
+        Occasional emails when something new goes up. No spam, unsubscribe anytime.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input
+          type="email"
+          placeholder="Your email address"
+          class="flex-1 border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
+        />
+        <button
+          type="button"
+          class="font-sans text-sm font-semibold bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors whitespace-nowrap"
+        >
+          Subscribe
+        </button>
       </div>
-    )}
-  </div>
-</section>
+    </div>
+  )}
+</div>
 
 {configured && (
   <script is:inline define:vars={{ ACCOUNT }}>

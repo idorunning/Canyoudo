@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionBadge from '../components/SectionBadge.astro';
-import NewsletterForm from '../components/NewsletterForm.astro';
 import { getCollection } from 'astro:content';
 import { getTopics } from '../lib/topics';
 import { SECTIONS, SECTION_LABELS } from '../content/config';
@@ -21,8 +20,15 @@ const allArticles: Item[] = articles
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const [feature, ...rest] = allArticles;
-const featuredGrid = rest.slice(0, 3);
 const latestThree = allArticles.slice(0, 3);
+
+// Themed section rows — latest 2 articles per primary section
+const bySection: Record<string, Item[]> = {};
+for (const a of allArticles) {
+  if (!bySection[a.section]) bySection[a.section] = [];
+  if (bySection[a.section].length < 2) bySection[a.section].push(a);
+}
+const FEATURED_SECTIONS: Section[] = ['police-policy', 'public-policy', 'influential-people'];
 
 // Hand-curated "most read" list (same as PopularArticles)
 const MOST_READ_SLUGS = [
@@ -42,9 +48,9 @@ for (const a of allArticles) counts[a.section] = (counts[a.section] ?? 0) + 1;
 // Section descriptions (short)
 const SECTION_DESC: Record<string, string> = {
   'police-policy':       'What works, and the evidence behind it.',
-  'public-policy':       'The wider questions that shape policing.',
-  'influential-people':  'Who shaped how we police.',
-  'data-stories':        'Reading the numbers behind crime.',
+  'public-policy':       'Leadership, culture, and the wider questions that shape policing.',
+  'influential-people':  'The figures who shaped how we police.',
+  'data-stories':        'Technology, data, and digital innovation in policing.',
   other:                 'Historical puzzles and tangents.',
 };
 
@@ -124,48 +130,14 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
 
         <!-- Left: headline + CTAs + stats -->
         <div>
-          <!-- "New" badge -->
-          <div class="inline-flex items-center gap-2.5 bg-paper-50 border border-ink-200 rounded-full px-3 py-1.5 text-[12.5px] font-semibold text-ink-700 mb-7 shadow-sm">
-            <span class="bg-[#e8f5f8] text-ink-900 text-[10.5px] font-extrabold tracking-wide uppercase px-2.5 py-0.5 rounded-full">New</span>
-            Research Assistant now searches UK official sources
-          </div>
-
           <h1 class="font-display font-extrabold text-[56px] md:text-[62px] leading-[1.02] tracking-[-0.035em] text-ink-900 text-balance m-0">
             Thinking About Policing
           </h1>
 
           <p class="font-sans text-lg md:text-[19px] leading-relaxed text-ink-700 mt-6 max-w-[31em] font-medium">
-            Evidence-led analysis of policing, public policy, leadership, and the decisions that shape public safety.
+            <span class="mark-orange">Evidence-led</span> analysis of policing, public policy, leadership, and the decisions that shape public safety.
           </p>
 
-          <div class="flex flex-wrap gap-3 mt-8">
-            <a href="/police-policy"
-              class="bg-accent text-paper-50 rounded-full px-6 py-3.5 text-[14.5px] font-bold hover:bg-accent-dark transition-colors">
-              Start reading →
-            </a>
-            <a href="/data"
-              class="bg-paper-50 border border-ink-200 text-ink-900 rounded-full px-6 py-3.5 text-[14.5px] font-bold hover:bg-paper-100 transition-colors">
-              Explore the data tools
-            </a>
-          </div>
-
-          <!-- Stats -->
-          <div class="flex items-center gap-9 mt-11">
-            <div>
-              <div class="font-extrabold text-[34px] leading-none text-ink-900">{allArticles.length}</div>
-              <div class="text-[12.5px] text-ink-500 mt-1.5 font-semibold">Articles</div>
-            </div>
-            <div class="w-px h-8 bg-ink-200"></div>
-            <div>
-              <div class="font-extrabold text-[34px] leading-none text-ink-900">5</div>
-              <div class="text-[12.5px] text-ink-500 mt-1.5 font-semibold">Sections</div>
-            </div>
-            <div class="w-px h-8 bg-ink-200"></div>
-            <div>
-              <div class="font-extrabold text-[34px] leading-none text-ink-900">2</div>
-              <div class="text-[12.5px] text-ink-500 mt-1.5 font-semibold">Free research tools</div>
-            </div>
-          </div>
         </div>
 
         <!-- Right: featured article card -->
@@ -213,58 +185,115 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     </div>
   </section>
 
-  <!-- ============ FEATURED THIS WEEK ============ -->
-  {featuredGrid.length > 0 && (
-    <section class="bg-paper-100 border-y border-ink-200">
-      <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-        <div class="flex items-baseline justify-between mb-8">
-          <h2 class="font-extrabold text-[28px] tracking-[-0.025em] text-ink-900 m-0">Featured this week</h2>
-          <a href="/sitemap" class="text-[14px] font-bold text-accent hover:text-accent-dark transition-colors">
-            View all {allArticles.length} articles →
+  <!-- ============ QUOTE ============ -->
+  <section class="max-w-wide mx-auto px-6 lg:px-10 py-3 md:py-4">
+    <div class="bg-ink-900 dark:bg-paper-200 rounded-[24px] px-10 md:px-16 py-12 md:py-14 text-center relative overflow-hidden">
+      <!-- Decorative large quote marks -->
+      <div class="absolute top-3 left-8 font-serif text-[120px] leading-none text-[#F2994A]/30 select-none pointer-events-none" aria-hidden="true">"</div>
+      <div class="absolute bottom-3 right-8 font-serif text-[120px] leading-none text-[#F2994A]/30 select-none pointer-events-none rotate-180" aria-hidden="true">"</div>
+      <div class="relative">
+        <p class="font-display font-bold text-[26px] md:text-[34px] lg:text-[38px] leading-[1.25] tracking-[-0.025em] text-white text-balance italic m-0">
+          "We are all entitled to our own opinions,<br class="hidden md:block" /> <span class="text-[#F2994A] not-italic font-extrabold">but not to our own facts.</span>"
+        </p>
+        <div class="font-sans text-[12px] font-bold uppercase tracking-[0.12em] text-paper-50/70 mt-6">
+          Lawrence Sherman ·{' '}
+          <a
+            href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
+            rel="noopener"
+            target="_blank"
+            class="underline underline-offset-2 hover:text-paper-50/80 transition-colors"
+          >
+            Ideas in American Policing, 1998
           </a>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="grid md:grid-cols-3 gap-[30px]">
-          {featuredGrid.map(article => (
-            <a
-              href={`/${article.section}/${article.slug}`}
-              class="group block bg-paper-50 border border-ink-200 rounded-[18px] overflow-hidden shadow-sm hover:-translate-y-1 hover:shadow-[0_18px_44px_rgba(27,36,82,0.1)] transition-all duration-200"
-            >
-              {(article.data.heroImage || article.data.portrait) ? (
-                <div class="overflow-hidden h-[194px]">
-                  <img
-                    src={article.data.portrait ?? article.data.heroImage}
-                    alt=""
-                    loading="lazy"
-                    class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.7,.2,1)]"
-                  />
-                </div>
-              ) : (
-                <div class={`h-[194px] flex items-center justify-center ${SECTION_BG[article.section]}`}>
-                  <span class="font-extrabold text-5xl text-ink-900/20">
-                    {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
-                  </span>
-                </div>
-              )}
-              <div class="p-6">
-                <div class={`inline-block text-[10.5px] font-extrabold uppercase tracking-[0.08em] text-ink-900 px-2.5 py-1 rounded-full mb-3 ${SECTION_BG[article.section]}`}>
-                  {SECTION_LABELS[article.section]}
-                </div>
-                <h3 class="font-bold text-[22px] leading-[1.2] tracking-[-0.02em] text-ink-900 group-hover:text-accent transition-colors m-0">
-                  {article.data.title}
-                </h3>
-                <p class="text-[14px] leading-[1.55] text-ink-700 mt-3">{article.data.description}</p>
-              </div>
+  <!-- ============ THEMED SECTION ROWS ============ -->
+  {FEATURED_SECTIONS.map(sectionKey => {
+    const articles = bySection[sectionKey] ?? [];
+    if (!articles.length) return null;
+    return (
+      <section class="border-b border-ink-200">
+        <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
+          <div class="flex items-baseline justify-between mb-7">
+            <div class="flex items-center gap-3">
+              <div class="w-1 h-5 bg-accent rounded-full shrink-0"></div>
+              <h2 class="font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">{SECTION_LABELS[sectionKey]}</h2>
+            </div>
+            <a href={`/${sectionKey}`} class="text-[13px] font-bold text-accent hover:text-accent-dark transition-colors">
+              All {counts[sectionKey]} articles →
             </a>
+          </div>
+          <div class="grid md:grid-cols-2 gap-6">
+            {articles.map(article => (
+              <a
+                href={`/${article.section}/${article.slug}`}
+                class="group flex gap-5 bg-paper-50 border border-ink-200 rounded-[18px] overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(27,36,82,0.09)] transition-all duration-200"
+              >
+                {(article.data.heroImage || article.data.portrait) ? (
+                  <div data-reveal class="overflow-hidden w-[140px] shrink-0">
+                    <img
+                      src={article.data.portrait ?? article.data.heroImage}
+                      alt=""
+                      loading="lazy"
+                      class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.7,.2,1)]"
+                    />
+                  </div>
+                ) : (
+                  <div data-reveal class={`w-[100px] shrink-0 flex items-center justify-center ${SECTION_BG[article.section]}`}>
+                    <span class="font-extrabold text-3xl text-ink-900/20">
+                      {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
+                    </span>
+                  </div>
+                )}
+                <div class="py-5 pr-6">
+                  <div class="text-[11px] font-bold uppercase tracking-[0.06em] text-ink-500 mb-2">
+                    {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </div>
+                  <h3 class="font-bold text-[18px] leading-[1.25] tracking-[-0.015em] text-ink-900 group-hover:text-accent transition-colors m-0">
+                    {article.data.title}
+                  </h3>
+                  <p class="text-[13.5px] leading-[1.5] text-ink-600 mt-2 line-clamp-2">{article.data.description}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  <!-- ============ THIS MONTH'S QUESTION ============ -->
+  <section class="bg-paper-100 border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
+      <div class="max-w-2xl">
+        <div class="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.12em] text-accent mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+          <span class="mark-orange">This month's question</span>
+        </div>
+        <p class="font-display font-extrabold text-[26px] md:text-[30px] leading-[1.2] tracking-[-0.025em] text-ink-900 mb-6">
+          Should police forces publish their internal performance data so the public can make meaningful comparisons between forces?
+        </p>
+        <div data-poll-choices class="flex flex-wrap gap-3">
+          {['Yes', 'No', 'Unsure'].map(v => (
+            <button
+              data-poll={v.toLowerCase()}
+              class="font-sans font-bold text-sm px-6 py-3 rounded-full border-2 border-ink-300 text-ink-700 hover:border-accent hover:text-accent transition-colors"
+            >
+              {v}
+            </button>
           ))}
         </div>
+        <p data-poll-thanks class="hidden font-sans text-sm text-ink-600 mt-3">Thanks — your view has been noted.</p>
       </div>
-    </section>
-  )}
+    </div>
+  </section>
 
   <!-- ============ RESEARCH TOOLS ============ -->
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-    <div class="bg-ink-900 rounded-[26px] p-10 md:p-12 relative overflow-hidden">
+    <div class="bg-ink-900 dark:bg-paper-200 rounded-[26px] p-10 md:p-12 relative overflow-hidden">
       <!-- Decorative glow -->
       <div class="absolute bottom-[-100px] right-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none"
         style="background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);"
@@ -274,7 +303,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
         <div>
           <div class="flex items-center gap-2 text-[12px] font-extrabold uppercase tracking-[0.1em] text-[#b9c6ff] mb-4">
             <span class="w-1.5 h-1.5 rounded-full bg-[#b9c6ff]"></span>
-            Research Tools
+            <span class="mark-orange">Research Tools</span>
           </div>
           <h2 class="font-extrabold text-[34px] tracking-[-0.03em] text-paper-50 m-0">Put the evidence to work</h2>
         </div>
@@ -284,10 +313,10 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
       <div class="relative grid md:grid-cols-2 gap-6">
 
         <!-- Research Assistant -->
-        <a href="/research" class="group block bg-paper-50/[0.06] border border-paper-50/[0.12] rounded-[18px] p-7 hover:bg-paper-50/[0.1] hover:-translate-y-1 transition-all duration-200">
+        <a href="/research" class="group block bg-paper-50/[0.06] dark:bg-paper-50/10 border border-paper-50/[0.12] dark:border-paper-50/20 rounded-[18px] p-7 hover:bg-paper-50/[0.1] hover:-translate-y-1 transition-all duration-200">
           <div class="flex items-start justify-between mb-3">
             <h3 class="font-extrabold text-[21px] tracking-[-0.02em] text-paper-50 m-0">Research Assistant</h3>
-            <span class="text-[10px] font-extrabold uppercase tracking-[0.06em] bg-[#e8f5f8] text-ink-900 px-2.5 py-1 rounded-full shrink-0">Expanded</span>
+            <span class="text-[10px] font-extrabold uppercase tracking-[0.06em] bg-[#e8f5f8] dark:bg-paper-100 dark:text-ink-800 text-ink-900 px-2.5 py-1 rounded-full shrink-0">Expanded</span>
           </div>
           <p class="text-[15px] leading-[1.55] text-[#bdb9e2] mb-5">
             State a policing problem and get a cited briefing — now searching more research catalogues plus UK official sources.
@@ -305,7 +334,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
         </a>
 
         <!-- Crime Dashboard -->
-        <a href="/data" class="group block bg-paper-50/[0.06] border border-paper-50/[0.12] rounded-[18px] p-7 hover:bg-paper-50/[0.1] hover:-translate-y-1 transition-all duration-200">
+        <a href="/research" class="group block bg-paper-50/[0.06] dark:bg-paper-50/10 border border-paper-50/[0.12] dark:border-paper-50/20 rounded-[18px] p-7 hover:bg-paper-50/[0.1] hover:-translate-y-1 transition-all duration-200">
           <div class="flex items-start justify-between mb-5">
             <h3 class="font-extrabold text-[21px] tracking-[-0.02em] text-paper-50 m-0">Crime Dashboard</h3>
             <span class="text-[11px] font-semibold uppercase tracking-[0.04em] text-[#9a96c8]">Latest month</span>
@@ -421,81 +450,24 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     </div>
   </section>
 
-  <!-- ============ QUOTE ============ -->
+  <!-- ============ WRITE FOR US ============ -->
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-    <div class="bg-[#eef0fb] rounded-[24px] px-12 py-16 text-center">
-      <p class="font-bold text-[34px] leading-[1.3] tracking-[-0.025em] text-ink-900 text-balance italic m-0">
-        "We are all entitled to our own opinions, <span class="text-accent not-italic">but not to our own facts.</span>"
+    <div class="bg-paper-50 border border-ink-200 rounded-[22px] p-9 md:p-10 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
+      <span class="inline-block bg-[#faeef2] text-ink-900 text-[11px] font-extrabold uppercase tracking-[0.08em] px-3 py-1.5 rounded-full">
+        Write for us
+      </span>
+      <h2 class="font-extrabold text-[29px] leading-[1.14] tracking-[-0.03em] text-ink-900 mt-4 mb-3">
+        Have an idea for an article?
+      </h2>
+      <p class="font-sans text-[16.5px] leading-relaxed text-ink-700 mb-6 max-w-[34em] font-medium">
+        Share an idea — pieces welcome from serving officers, researchers, practitioners and policymakers.
       </p>
-      <div class="font-sans text-[12px] font-bold uppercase tracking-[0.1em] text-ink-500 mt-6">
-        Lawrence Sherman ·{' '}
-        <a
-          href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
-          rel="noopener"
-          target="_blank"
-          class="underline underline-offset-2 hover:text-accent transition-colors"
-        >
-          Ideas in American Policing, 1998
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ BROWSE BY SECTION ============ -->
-  <section class="bg-paper-100 border-y border-ink-200">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-      <h2 class="font-extrabold text-[28px] tracking-[-0.025em] text-ink-900 m-0 mb-7">Browse by section</h2>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        {SECTIONS.map(s => (
-          <a
-            href={`/${s}`}
-            class={`group block rounded-[18px] p-6 hover:-translate-y-1 hover:shadow-md transition-all duration-200 ${SECTION_BG[s]}`}
-          >
-            <span class="font-extrabold text-[36px] leading-none text-ink-900">{counts[s]}</span>
-            <div class="font-extrabold text-[15px] mt-3.5 mb-1.5 text-ink-900 group-hover:text-accent transition-colors">
-              {SECTION_LABELS[s]}
-            </div>
-            <div class="text-[12.5px] text-ink-700 leading-[1.45]">{SECTION_DESC[s]}</div>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ WRITE FOR US + NEWSLETTER ============ -->
-  <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-    <div class="grid md:grid-cols-[1.25fr_1fr] gap-6">
-
-      <!-- Write for us -->
-      <div class="bg-paper-50 border border-ink-200 rounded-[22px] p-9 md:p-10 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
-        <span class="inline-block bg-[#faeef2] text-ink-900 text-[11px] font-extrabold uppercase tracking-[0.08em] px-3 py-1.5 rounded-full">
-          Write for us
-        </span>
-        <h2 class="font-extrabold text-[29px] leading-[1.14] tracking-[-0.03em] text-ink-900 mt-4 mb-3">
-          Got something worth saying about policing?
-        </h2>
-        <p class="font-sans text-[16.5px] leading-relaxed text-ink-700 mb-6 max-w-[34em] font-medium">
-          Pieces welcome from serving officers, researchers, practitioners and policymakers. You don't need a finished draft — a good idea is plenty to start with. No forms, no hoops, just email.
-        </p>
-        <a
-          href={pitchMailto}
-          class="inline-block bg-accent text-paper-50 rounded-full px-6 py-3 text-[14px] font-bold hover:bg-accent-dark transition-colors"
-        >
-          Pitch an article →
-        </a>
-      </div>
-
-      <!-- Newsletter -->
-      <div class="bg-ink-900 rounded-[22px] p-9 md:p-10 text-paper-50">
-        <h2 class="font-extrabold text-[25px] tracking-[-0.02em] m-0 mb-2.5">New articles by email</h2>
-        <p class="font-sans text-[15.5px] leading-[1.55] text-[#bdb9e2] mb-6">
-          Occasional emails when something new goes up. No spam, unsubscribe anytime.
-        </p>
-        <div class="home-newsletter">
-          <NewsletterForm variant="compact" />
-        </div>
-      </div>
-
+      <a
+        href={pitchMailto}
+        class="share-idea-btn inline-block bg-accent text-paper-50 rounded-full px-6 py-3 text-[14px] font-bold hover:bg-accent-dark transition-colors"
+      >
+        Share an idea <span class="arrow">→</span>
+      </a>
     </div>
   </section>
 
@@ -511,19 +483,23 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
 
 </BaseLayout>
 
-<style>
-  /* Newsletter inside the dark box: invert label and heading colours */
-  .home-newsletter :global(.font-sans.text-xs.uppercase) { color: rgb(var(--ink-400)); }
-  .home-newsletter :global(h2) { color: rgb(var(--paper-50)); }
-  .home-newsletter :global(.font-serif) { color: rgb(185 193 230); }
-  .home-newsletter :global(input) {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.16);
-    color: #aaa6d2;
+<script>
+  const POLL_KEY = 'monthly-question:2026-06';
+  const choices = document.querySelector('[data-poll-choices]');
+  const thanks = document.querySelector('[data-poll-thanks]');
+
+  if (choices && thanks) {
+    if (localStorage.getItem(POLL_KEY)) {
+      (choices as HTMLElement).classList.add('hidden');
+      (thanks as HTMLElement).classList.remove('hidden');
+    }
+    choices.querySelectorAll<HTMLButtonElement>('[data-poll]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        localStorage.setItem(POLL_KEY, btn.dataset.poll ?? 'yes');
+        (choices as HTMLElement).classList.add('hidden');
+        (thanks as HTMLElement).classList.remove('hidden');
+      });
+    });
   }
-  .home-newsletter :global(input::placeholder) { color: #aaa6d2; }
-  .home-newsletter :global(button[type="submit"]) {
-    background: rgb(var(--paper-50));
-    color: rgb(var(--ink-900));
-  }
-</style>
+</script>
+
