@@ -1,0 +1,66 @@
+---
+// A dependency-free inline-SVG line chart for a year-by-year series, with
+// optional dated milestone markers along the x-axis. Used for the sentiment /
+// lexicon trend lines in the perception explorer; renders server-side so the
+// spine of the story is visible without JavaScript. Mirrors the house Sparkline
+// approach (src/components/data/Sparkline.astro) at a larger, labelled size.
+interface Marker {
+  year: number;
+  label: string;
+}
+interface Props {
+  points: { year: number; value: number }[];
+  label?: string;
+  markers?: Marker[];
+  min?: number;
+  max?: number;
+  width?: number;
+  height?: number;
+  zeroLine?: boolean;
+  color?: string;
+}
+const { points, label, markers = [], min, max, width = 720, height = 240, zeroLine = false, color = '#9c5b3b' } = Astro.props;
+
+const pad = { l: 38, r: 12, t: 16, b: 28 };
+const innerW = width - pad.l - pad.r;
+const innerH = height - pad.t - pad.b;
+
+const vals = points.map((p) => p.value);
+const lo = min ?? Math.min(...vals, 0);
+const hi = max ?? Math.max(...vals, 1);
+const span = hi - lo || 1;
+const years = points.map((p) => p.year);
+const yrLo = Math.min(...years);
+const yrHi = Math.max(...years);
+const yrSpan = yrHi - yrLo || 1;
+
+const xf = (yr: number) => pad.l + ((yr - yrLo) / yrSpan) * innerW;
+const yf = (v: number) => pad.t + innerH - ((v - lo) / span) * innerH;
+
+const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${xf(p.year).toFixed(1)},${yf(p.value).toFixed(1)}`).join(' ');
+const zeroY = yf(0);
+const aria = label ?? `Trend from ${yrLo} to ${yrHi}`;
+// Show a year tick every 5 years.
+const ticks = years.filter((y) => y % 5 === 0);
+---
+<figure class="not-prose my-4">
+  {label && <figcaption class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">{label}</figcaption>}
+  <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={aria} class="overflow-visible">
+    {zeroLine && lo < 0 && hi > 0 && (
+      <line x1={pad.l} x2={width - pad.r} y1={zeroY} y2={zeroY} stroke="#d8d2c6" stroke-width="1" stroke-dasharray="3 3" />
+    )}
+    {markers.map((m) => (
+      <g>
+        <line x1={xf(m.year)} x2={xf(m.year)} y1={pad.t} y2={pad.t + innerH} stroke="#cdb9a8" stroke-width="1" stroke-dasharray="2 3" />
+        <text x={xf(m.year)} y={pad.t - 4} font-size="8.5" fill="#9c5b3b" text-anchor="middle" font-family="system-ui, sans-serif">{m.label}</text>
+      </g>
+    ))}
+    <path d={d} fill="none" stroke={color} stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    {points.map((p) => <circle cx={xf(p.year)} cy={yf(p.value)} r="2" fill={color} />)}
+    {ticks.map((y) => (
+      <text x={xf(y)} y={height - 8} font-size="10" fill="#8a857c" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
+    ))}
+    <text x={pad.l - 6} y={yf(hi)} font-size="9" fill="#8a857c" text-anchor="end" font-family="system-ui, sans-serif">{hi.toFixed(2)}</text>
+    <text x={pad.l - 6} y={yf(lo)} font-size="9" fill="#8a857c" text-anchor="end" font-family="system-ui, sans-serif">{lo.toFixed(2)}</text>
+  </svg>
+</figure>

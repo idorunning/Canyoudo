@@ -1,6 +1,12 @@
 {
   "changelog": [
     {
+      "date": "2026-06-22",
+      "type": "article",
+      "title": "Published \"The Perception of the Police in Online Media\"",
+      "description": "A data story reading a quarter-century of UK police coverage through word frequency, tone, themes and named entities — with an interactive year-by-year explorer and word clouds. Ships with illustrative sample data grounded in the documented record; a live build uses a free Guardian Open Platform key. The earliest years are deliberately flagged as thin and single-source."
+    },
+    {
       "date": "2026-06-20",
       "type": "new",
       "title": "Added this page — \"How I built this website\"",

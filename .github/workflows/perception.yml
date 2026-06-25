@@ -1,48 +1,38 @@
 name: Refresh perception corpus
 
-# Runs the perception fetchers on a GitHub-hosted runner (which HAS the outbound
-# internet access the data pipeline needs), merges all sources, regenerates the
-# word clouds, and commits the result back to the branch you ran it from.
-#
-# This is the no-terminal path: trigger it from the "Run workflow" button in the
-# GitHub web/mobile UI. GDELT and Wayback need no key. Media Cloud and the
-# Guardian only run if you've added their API keys as repository secrets
+# Fetches UK police news headlines from the Guardian Open Platform AND the BBC
+# (HuggingFace dataset, 2017→present) on a GitHub-hosted runner, merges them,
+# rebuilds the word clouds, and commits the result back to the branch you ran it
+# from. Trigger it from the "Run workflow" button (web/mobile) — no terminal
+# needed. Requires a free Guardian key saved as a repository secret
 # (Settings → Secrets and variables → Actions):
-#   • MEDIACLOUD_API_KEY  — free researcher key from https://search.mediacloud.org/
 #   • GUARDIAN_API_KEY    — free key from https://open-platform.theguardian.com/access/
+#
+# Each year's job fetches Guardian first, then the BBC dataset — and BBC is added
+# ONLY when that year's Guardian raw exists, so a year is never rebuilt from a
+# single non-Guardian source (which would drop the Guardian backbone). The BBC
+# dataset only covers 2017+, so earlier years are simply Guardian-only.
+#
+# NOT here: the BBC pre-2017 Wayback harvest (scripts/perception/harvest-wayback-bbc.mjs).
+# The Internet Archive blocks/rate-limits datacenter IPs, so that one is an
+# offline, run-on-a-workstation step whose committed counts CI just consumes.
 #
 # The fetchers store DERIVED COUNTS ONLY (no article text); only the merged
 # aggregates under src/content/perception and public/ are committed.
+#
+# Fan the fetch out ONE YEAR AT A TIME via the `years` input, so each job is
+# small and quick. The merge is additive across runs — re-dispatch more years to
+# backfill and coverage only grows.
 on:
   workflow_dispatch:
     inputs:
-      gdelt:
-        description: 'GDELT (no key, 2017→now)'
-        type: boolean
-        default: true
-      wayback:
-        description: 'Wayback (no key, 2000–2012)'
-        type: boolean
-        default: true
-      mediacloud:
-        description: 'Media Cloud (needs MEDIACLOUD_API_KEY secret, 2008→now)'
-        type: boolean
-        default: false
-      guardian:
-        description: 'Guardian (needs GUARDIAN_API_KEY secret)'
-        type: boolean
-        default: false
-      from_year:
-        description: 'First year (optional; blank = each source default)'
+      years:
+        description: 'Year slice to fetch — single (2025), list (2023,2024,2025) or range (2000-2025).'
         type: string
-        default: ''
-      to_year:
-        description: 'Last year (optional; blank = each source default)'
-        type: string
-        default: ''
+        default: '2025'
 
 permissions:
-  contents: write
+  contents: read
 
 # A new run supersedes an in-flight one rather than racing it on git push.
 concurrency:
@@ -50,60 +40,111 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  refresh:
+  # ── Expand the `years` input into a JSON matrix ────────────────────────────
+  setup:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    outputs:
+      years: ${{ steps.m.outputs.years }}
+    steps:
+      - id: m
+        run: |
+          raw="${{ inputs.years }}"
+          years=()
+          IFS=',' read -ra parts <<< "$raw"
+          for p in "${parts[@]}"; do
+            p=$(echo "$p" | tr -d ' ')
+            if [[ "$p" == *-* ]]; then
+              s=${p%-*}; e=${p#*-}
+              for ((y=s; y<=e; y++)); do years+=("$y"); done
+            elif [[ -n "$p" ]]; then
+              years+=("$p")
+            fi
+          done
+          json=$(printf '%s\n' "${years[@]}" | jq -R 'tonumber' | jq -cs .)
+          echo "years=$json" >> "$GITHUB_OUTPUT"
+          echo "Matrix years: $json"
+
+  # ── Parallel fetch, one job per year ───────────────────────────────────────
+  # Each job fetches its year from Guardian, then (2017+, and only if the Guardian
+  # raw landed) adds the BBC dataset, and uploads the year's derived raw counts
+  # (both sources) as a uniquely-named artifact. None commit — the merge job does.
+  # continue-on-error so one year failing never sinks the run.
+  guardian:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    strategy:
+      fail-fast: false
+      matrix:
+        year: ${{ fromJson(needs.setup.outputs.years) }}
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Install dependencies
-        run: npm ci
-
-      # Pass the optional year range via env (not string interpolation) and
-      # build the shared CLI args once.
-      - name: Resolve year-range args
-        id: years
-        env:
-          FROM: ${{ inputs.from_year }}
-          TO: ${{ inputs.to_year }}
-        run: |
-          ARGS=""
-          [ -n "$FROM" ] && ARGS="$ARGS --from $FROM"
-          [ -n "$TO" ] && ARGS="$ARGS --to $TO"
-          echo "args=$ARGS" >> "$GITHUB_OUTPUT"
-          echo "Year args: ${ARGS:-(source defaults)}"
-
-      - name: Fetch GDELT
-        if: ${{ inputs.gdelt }}
-        run: node scripts/perception/fetch-gdelt.mjs ${{ steps.years.outputs.args }}
-
-      - name: Fetch Wayback
-        if: ${{ inputs.wayback }}
-        run: node scripts/perception/fetch-wayback.mjs ${{ steps.years.outputs.args }}
-
-      - name: Fetch Media Cloud
-        if: ${{ inputs.mediacloud }}
-        env:
-          MEDIACLOUD_API_KEY: ${{ secrets.MEDIACLOUD_API_KEY }}
-        run: |
-          if [ -z "$MEDIACLOUD_API_KEY" ]; then
-            echo "::warning::MEDIACLOUD_API_KEY secret not set — skipping Media Cloud."; exit 0
-          fi
-          node scripts/perception/fetch-mediacloud.mjs ${{ steps.years.outputs.args }}
-
-      - name: Fetch Guardian
-        if: ${{ inputs.guardian }}
+          cache: 'npm'
+      - run: npm ci
+      - name: Fetch Guardian ${{ matrix.year }}
+        continue-on-error: true
+        timeout-minutes: 18
         env:
           GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
         run: |
           if [ -z "$GUARDIAN_API_KEY" ]; then
             echo "::warning::GUARDIAN_API_KEY secret not set — skipping Guardian."; exit 0
           fi
-          node scripts/perception/fetch-guardian.mjs ${{ steps.years.outputs.args }}
+          node scripts/perception/fetch-guardian.mjs --year ${{ matrix.year }}
+      - name: Fetch BBC dataset ${{ matrix.year }}
+        continue-on-error: true
+        timeout-minutes: 10
+        run: |
+          # Only add BBC alongside an existing Guardian raw for the year, so the
+          # merge never rebuilds a year from BBC alone (which would drop Guardian).
+          # No-op for pre-2017 years (the dataset starts 2017).
+          if [ ! -f scripts/perception/raw/guardian/${{ matrix.year }}.json ]; then
+            echo "No Guardian raw for ${{ matrix.year }} — skipping BBC."; exit 0
+          fi
+          node scripts/perception/fetch-bbc-dataset.mjs --year ${{ matrix.year }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: raw-${{ matrix.year }}
+          path: scripts/perception/raw
+          if-no-files-found: ignore
+          retention-days: 1
+
+  # ── Single merge + commit ──────────────────────────────────────────────────
+  # Waits for every fetch job (always(), so a failed year doesn't block the
+  # merge), reconstructs raw/ from whatever artifacts exist, builds the corpus
+  # once, and makes a single commit.
+  merge:
+    needs: [guardian]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+
+      # Reassemble the raw/ tree build-perception expects. Each per-year artifact
+      # (raw-<year>) carries that year's guardian/ and bbc/ subdirs; merge-multiple
+      # flattens them back under scripts/perception/raw with their paths intact and
+      # distinct per-year filenames, so nothing collides. continue-on-error
+      # tolerates a year that produced no artifact.
+      - name: Collect raw sources
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with: { pattern: raw-*, path: scripts/perception/raw, merge-multiple: true }
+
+      - name: Show collected raw
+        run: |
+          echo "Collected raw tree:"; find scripts/perception/raw -type f | sort || true
 
       - name: Merge sources and rebuild clouds
         run: |

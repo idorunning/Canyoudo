@@ -1,0 +1,146 @@
+---
+// The centrepiece comparison: measured public confidence in the police (ONS
+// Crime Survey for England & Wales — "the police do a good or excellent job")
+// plotted against the share of police headlines this dataset classes as
+// negative. The point is the DIVERGENCE: confidence is an inverted-U (it rose
+// to a mid-2010s peak, then fell), while headline negativity climbs almost
+// monotonically — so the two series are related but plainly not the same curve.
+// Pure build-time inline SVG (house pattern, cf. ThemeRiver/TrendChart), with a
+// <details> data-table fallback. Reads the committed `perception` collection:
+// the year docs for the headline series, the context doc for the ONS series.
+import { getCollection } from 'astro:content';
+
+interface Props {
+  facet?: 'police-general' | 'forces' | 'leaders-officers-staff';
+  width?: number;
+  height?: number;
+}
+const { facet = 'police-general', width = 820, height = 380 } = Astro.props;
+
+const entries = await getCollection('perception');
+const years = entries
+  .filter((e) => e.data.kind === 'year')
+  .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'year' }>)
+  .sort((a, b) => a.year - b.year);
+const ctx = entries.find((e) => e.data.kind === 'context')?.data as
+  | Extract<(typeof entries)[number]['data'], { kind: 'context' }>
+  | undefined;
+
+// Headline negativity: share of classified headlines that read negative — the
+// same proportion the explorer's Sentiment view shows.
+const negSeries = years.map((y) => {
+  const s = y.facets[facet].sentiment;
+  const total = s.positive + s.neutral + s.negative;
+  return { year: y.year, value: total > 0 ? Math.round((s.negative / total) * 1000) / 10 : null };
+});
+
+// ONS confidence ("good job"), with genuine gaps (2021–22, CSEW suspended).
+const confSeries = (ctx?.confidence ?? []).map((c) => ({ year: c.year, value: c.goodJob }));
+
+const allYears = years.map((y) => y.year);
+const yrLo = Math.min(...allYears, 2000);
+const yrHi = Math.max(...allYears, 2025);
+const yrSpan = yrHi - yrLo || 1;
+
+// Shared, honest percentage axis (0–70) — no dual-axis trickery: both lines are
+// real percentages, so the eye reads the true magnitudes and the closing gap.
+const yLo = 0;
+const yHi = 70;
+const pad = { l: 40, r: 96, t: 24, b: 30 };
+const innerW = width - pad.l - pad.r;
+const innerH = height - pad.t - pad.b;
+const xf = (yr: number) => pad.l + ((yr - yrLo) / yrSpan) * innerW;
+const yf = (v: number) => pad.t + innerH - ((v - yLo) / (yHi - yLo)) * innerH;
+
+// Build SVG path(s) for a series, splitting into separate strokes wherever the
+// value is null so a survey gap is drawn as a break, never a connecting line.
+function paths(series: { year: number; value: number | null }[]): string[] {
+  const out: string[] = [];
+  let run: { year: number; value: number }[] = [];
+  const flush = () => {
+    if (run.length) out.push(run.map((p, i) => `${i ? 'L' : 'M'}${xf(p.year).toFixed(1)},${yf(p.value).toFixed(1)}`).join(' '));
+    run = [];
+  };
+  for (const p of series) {
+    if (p.value == null) flush();
+    else run.push({ year: p.year, value: p.value });
+  }
+  flush();
+  return out;
+}
+
+const CONF = '#3b6ea5'; // calm blue — measured confidence
+const NEG = '#b3402f'; // misconduct red — headline negativity
+const confPaths = paths(confSeries);
+const negPaths = paths(negSeries);
+const confDots = confSeries.filter((p) => p.value != null) as { year: number; value: number }[];
+const negDots = negSeries.filter((p) => p.value != null) as { year: number; value: number }[];
+const yTicks = [0, 10, 20, 30, 40, 50, 60, 70];
+const xTicks = allYears.filter((y) => y % 5 === 0);
+
+// Gap band for the suspended-survey years, so the break is explained, not blank.
+const gapLo = 2021;
+const gapHi = 2022;
+
+// Rows for the accessible fallback table.
+const tableRows = years.map((y) => {
+  const c = (ctx?.confidence ?? []).find((r) => r.year === y.year);
+  const n = negSeries.find((r) => r.year === y.year);
+  return { year: y.year, goodJob: c?.goodJob ?? null, neg: n?.value ?? null };
+});
+---
+<figure class="not-prose my-6">
+  <figcaption class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
+    Two different curves — public confidence vs headline negativity
+  </figcaption>
+  <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img"
+       aria-label="Public confidence that the police do a good job, from the ONS Crime Survey, plotted against the share of police headlines classified as negative, 2000 to 2025. Confidence rises to a mid-2010s peak then falls; headline negativity climbs throughout." class="overflow-visible">
+    <!-- horizontal gridlines + y labels -->
+    {yTicks.map((t) => (
+      <g>
+        <line x1={pad.l} x2={width - pad.r} y1={yf(t)} y2={yf(t)} stroke="#e7e2d8" stroke-width="1" />
+        <text x={pad.l - 6} y={yf(t) + 3} font-size="9" fill="#8a857c" text-anchor="end" font-family="system-ui, sans-serif">{t}%</text>
+      </g>
+    ))}
+    <!-- suspended-survey gap band -->
+    <rect x={xf(gapLo)} y={pad.t} width={xf(gapHi) - xf(gapLo)} height={innerH} fill="#00000008" />
+    <text x={(xf(gapLo) + xf(gapHi)) / 2} y={pad.t + 10} font-size="7.5" fill="#a99" text-anchor="middle" font-family="system-ui, sans-serif">survey</text>
+    <text x={(xf(gapLo) + xf(gapHi)) / 2} y={pad.t + 19} font-size="7.5" fill="#a99" text-anchor="middle" font-family="system-ui, sans-serif">paused</text>
+    <!-- x ticks -->
+    {xTicks.map((y) => (
+      <text x={xf(y)} y={height - 10} font-size="10" fill="#8a857c" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
+    ))}
+    <!-- negativity (red) -->
+    {negPaths.map((d) => <path d={d} fill="none" stroke={NEG} stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />)}
+    {negDots.map((p) => <circle cx={xf(p.year)} cy={yf(p.value)} r="2" fill={NEG} />)}
+    <!-- confidence (blue) -->
+    {confPaths.map((d) => <path d={d} fill="none" stroke={CONF} stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />)}
+    {confDots.map((p) => <circle cx={xf(p.year)} cy={yf(p.value)} r="2" fill={CONF} />)}
+    <!-- end-of-line labels -->
+    <text x={width - pad.r + 6} y={yf(confDots[confDots.length - 1].value) + 3} font-size="9.5" fill={CONF} font-family="system-ui, sans-serif">Confidence</text>
+    <text x={width - pad.r + 6} y={yf(negDots[negDots.length - 1].value) + 3} font-size="9.5" fill={NEG} font-family="system-ui, sans-serif">Negative</text>
+    <text x={width - pad.r + 6} y={yf(negDots[negDots.length - 1].value) + 14} font-size="9.5" fill={NEG} font-family="system-ui, sans-serif">headlines</text>
+  </svg>
+  <div class="mt-2 flex flex-wrap gap-x-5 gap-y-1 font-sans text-xs text-ink-600">
+    <span class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5" style={`background:${CONF}`}></span> Public say police do a "good/excellent job" — ONS Crime Survey (England &amp; Wales)</span>
+    <span class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5" style={`background:${NEG}`}></span> Share of police headlines classified negative — this dataset</span>
+  </div>
+  <details class="mt-3 font-sans text-xs text-ink-500">
+    <summary class="cursor-pointer hover:text-accent">Show the figures</summary>
+    <table class="mt-2 w-full max-w-md border-collapse">
+      <thead>
+        <tr class="text-left text-ink-600"><th class="py-1 pr-4 font-medium">Year</th><th class="py-1 pr-4 font-medium">"Good job" %</th><th class="py-1 font-medium">Negative headlines %</th></tr>
+      </thead>
+      <tbody>
+        {tableRows.map((r) => (
+          <tr class="border-t border-ink-200/60">
+            <td class="py-0.5 pr-4 tabular-nums">{r.year}</td>
+            <td class="py-0.5 pr-4 tabular-nums">{r.goodJob == null ? '—' : r.goodJob.toFixed(1)}</td>
+            <td class="py-0.5 tabular-nums">{r.neg == null ? '—' : r.neg.toFixed(1)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="mt-2 leading-relaxed">ONS confidence: <em>Crime Survey for England &amp; Wales</em>, "the police in this area do a good or excellent job", by year ending March (ONS, Aug 2025). No figure for the years ending March 2021–22 (survey suspended for COVID-19); 2004–05 predate the local-confidence question. Headline figures are derived from this project's corpus.</p>
+  </details>
+</figure>

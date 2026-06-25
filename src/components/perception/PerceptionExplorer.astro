@@ -1,0 +1,186 @@
+---
+// The interactive perception explorer, embedded in the data story. Reads the
+// committed `perception` collection at build time (the established pattern — see
+// src/pages/data/force/[id].astro) to render a static, no-JS fallback: a default
+// year's word cloud, a top-words table, the sentiment spine, and provenance.
+// The client script (src/scripts/perception/explorer.ts) then loads the one-file
+// data bundle (/perception-data.json) and adds the year slider + animation,
+// facet tabs, dimension views, redrawn trend charts and the social-media overlay.
+import { getCollection } from 'astro:content';
+import TrendChart from './TrendChart.astro';
+
+const FACET_LABELS: Record<string, string> = {
+  'police-general': 'The police, generally',
+  forces: 'British police forces',
+  'leaders-officers-staff': 'Leaders, officers & staff',
+};
+
+const entries = await getCollection('perception');
+const yearEntries = entries
+  .filter((e) => e.data.kind === 'year')
+  .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'year' }>)
+  .sort((a, b) => a.year - b.year);
+
+const ctx = entries.find((e) => e.data.kind === 'context')?.data as
+  | Extract<(typeof entries)[number]['data'], { kind: 'context' }>
+  | undefined;
+
+const isSample = yearEntries.some((y) => y.provenance.sample);
+const defaultYear = yearEntries[yearEntries.length - 1];
+const defFacet = 'police-general';
+const defData = defaultYear?.facets[defFacet];
+
+// Sentiment spine (police-general mean per year) + milestone markers.
+const sentimentPoints = yearEntries.map((y) => ({ year: y.year, value: y.facets[defFacet].sentiment.mean }));
+const markers = (ctx?.milestones ?? [])
+  .map((m) => ({ year: Number(String(m.date).slice(0, 4)), label: m.label.split(' ').slice(0, 2).join(' ') }))
+  .filter((m) => Number.isFinite(m.year));
+
+const yMin = Math.min(...sentimentPoints.map((p) => p.value), 0);
+const yMax = Math.max(...sentimentPoints.map((p) => p.value), 0);
+
+// Compute default negative-word % for the stat card (client will update per-year/facet).
+const defSentiment = defData?.sentiment;
+const defSentTotal = defSentiment
+  ? defSentiment.positive + defSentiment.neutral + defSentiment.negative
+  : 0;
+const defNegPct = defSentTotal > 0
+  ? Math.round((defSentiment!.negative / defSentTotal) * 100) + '%'
+  : '—';
+---
+<section class="not-prose my-10 border border-ink-200 rounded-lg overflow-hidden bg-paper-50 dark:bg-ink-900" data-perception aria-label="Police perception explorer">
+  {isSample && (
+    <p class="bg-paper-100 border-b border-ink-200 px-5 py-2.5 font-sans text-xs text-accent">
+      <strong class="font-medium">Illustrative sample data.</strong> The shapes and trends follow the documented record,
+      but the exact figures await a live fetch (a free Guardian Open Platform key — see the method note below).
+    </p>
+  )}
+
+  <div class="p-5 md:p-6 space-y-6">
+    <!-- View toggle (primary navigation) -->
+    <div class="flex flex-wrap gap-2" role="tablist" aria-label="View">
+      {[
+        ['cloud', 'Words'],
+        ['sentiment', 'Sentiment'],
+        ['themes', 'Themes'],
+        ['entities', 'Who & what'],
+      ].map(([v, lbl]) => (
+        <button
+          type="button"
+          data-view-tab={v}
+          class:list={[
+            'font-sans text-xs px-3 py-1.5 rounded-md border transition-colors',
+            v === 'cloud' ? 'bg-ink-900 text-paper-50 border-ink-900' : 'border-ink-300 text-ink-600 hover:border-accent',
+          ]}
+        >{lbl}</button>
+      ))}
+    </div>
+
+    <!-- Year control: Play, prev/next steppers flanking the slider, year label, full screen -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <button type="button" data-play class="font-sans text-xs px-3 py-1.5 rounded-md border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Play through the years">▶ Play</button>
+      <button type="button" data-year-prev class="font-sans text-base leading-none px-2.5 py-1.5 rounded-md border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Previous year">‹</button>
+      <input type="range" data-year-slider min={yearEntries[0]?.year} max={defaultYear?.year} value={defaultYear?.year} step="1" class="flex-1 accent-accent" aria-label="Year" />
+      <button type="button" data-year-next class="font-sans text-base leading-none px-2.5 py-1.5 rounded-md border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Next year">›</button>
+      <span data-year-label class="font-display text-2xl font-semibold text-ink-900 w-14 text-right tabular-nums">{defaultYear?.year}</span>
+      <button type="button" data-fullscreen class="font-sans text-xs px-3 py-1.5 rounded-md border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Toggle full screen">⤢ Full screen</button>
+    </div>
+
+    <!-- Cloud panel (default visible; static fallback) -->
+    <div data-panel="cloud">
+      <!-- Animated bar-chart-race of the most-used words, drawn by the client so
+           words grow/shrink and re-rank smoothly between years. The static SVG
+           below is the no-JS fallback (hidden once the race mounts). -->
+      <div
+        data-wordrace
+        hidden
+        class="relative overflow-y-auto rounded-md border border-ink-200 bg-paper-50 px-3 py-2"
+        role="img"
+        aria-label="Most-used words this year, as animated bars"
+      ></div>
+      <!-- Event bubbles zone: significant policing events appear as animated pills
+           when the slider lands on a year with a notable event. Empty years take
+           no space (no min-height gap). -->
+      <div data-events-zone class="mt-2 flex flex-wrap gap-2 items-start empty:hidden"></div>
+      <img
+        data-cloud
+        src={`/images/perception/${defaultYear?.year}-${defFacet}.svg`}
+        alt={`Word cloud of how the press wrote about ${FACET_LABELS[defFacet]} in ${defaultYear?.year}`}
+        width="820"
+        height="460"
+        class="w-full h-auto rounded-md border border-ink-200 bg-paper-50"
+        loading="lazy"
+      />
+      <div class="mt-4" data-wordlist>
+        <p class="font-sans text-xs uppercase tracking-[0.15em] text-accent mb-2">Every word this year — scroll for more</p>
+        <ul data-topwords class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-1 font-sans text-sm text-ink-700 max-h-72 overflow-y-auto pr-1">
+          {defData?.topWords.slice(0, 40).map((w) => (
+            <li class="flex justify-between gap-2"><span>{w.term}</span><span class="text-ink-400 tabular-nums">{w.ratePer10k}</span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Sentiment / themes / entities panels (drawn by the client) -->
+    <div data-panel="sentiment" hidden>
+      <p class="font-sans text-sm text-ink-600 mb-3">
+        The share of <strong class="font-medium">negative</strong> words (riot, murder, corruption…) and
+        <strong class="font-medium">positive</strong> words (trust, praised, award…) in UK police headlines
+        each year, based on Guardian coverage.
+      </p>
+      <div data-sentiment-fallback>
+        <TrendChart points={sentimentPoints} label="Tone toward the police, per year" markers={markers} min={Math.min(yMin, -0.2)} max={Math.max(yMax, 0.2)} zeroLine={true} />
+      </div>
+      <div data-sentiment-chart hidden></div>
+      <label class="font-sans text-xs text-ink-600 flex items-center gap-2 mt-2">
+        <input type="checkbox" data-context-toggle class="accent-accent" /> Show social-media context (algorithmic-feed milestones)
+      </label>
+    </div>
+    <div data-panel="themes" hidden>
+      <div data-themes-chart class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+    </div>
+    <div data-panel="entities" hidden>
+      <div data-entities-chart class="min-h-[16rem]"></div>
+    </div>
+
+    <!-- Per-year stats + provenance (simplified: Tone and Source diversity removed) -->
+    <div class="border-t border-ink-200 pt-4 flex flex-wrap gap-6 font-sans text-sm" data-stats>
+      <div>
+        <p class="text-xs uppercase tracking-[0.15em] text-ink-500">Headlines analysed</p>
+        <p data-stat-items class="font-display text-xl text-ink-900">{defaultYear?.provenance.itemCount}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[0.15em] text-ink-500">Negative words</p>
+        <p data-stat-neg class="font-display text-xl text-ink-900">{defNegPct}</p>
+      </div>
+    </div>
+    <p data-caveat class="font-sans text-xs text-ink-500 leading-relaxed">
+      {defaultYear?.provenance.sparse && <span class="text-accent">Sparse year — fewer online sources survive; read with caution. </span>}
+      Method: {defaultYear?.provenance.method}. Tone and counts are derived aggregates over the sampled corpus; no article text is stored.
+    </p>
+  </div>
+</section>
+
+<style>
+  /* In full screen the explorer becomes its own scrollable canvas, centred and
+     padded, instead of being clipped by the card's overflow-hidden. */
+  :global([data-perception]:fullscreen) {
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+  }
+  :global([data-perception]:fullscreen > div) {
+    max-width: 1100px;
+    margin-inline: auto;
+    width: 100%;
+  }
+  /* Bubble pop-in for significant policing events. */
+  @keyframes bubbleIn {
+    from { opacity: 0; transform: scale(0.82); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+</style>
+
+<script>
+  import { initPerceptionExplorer } from '../../scripts/perception/explorer';
+  initPerceptionExplorer();
+</script>

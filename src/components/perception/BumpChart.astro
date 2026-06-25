@@ -1,0 +1,129 @@
+---
+// A bump chart tracking how the *rank* of the leading words in police coverage
+// rises and falls across 2000–2025 — the clearest answer to "which words led, and
+// how the league table churned". We take the words that lead the whole period
+// (by total rate per 10,000 words) and, each year, rank those words against one
+// another. Every line therefore runs the full width — a continuous ribbon — so a
+// word climbing or sliding through the order reads at a glance. Pure build-time
+// inline SVG, no client JS, with a <details> fallback. Reads the committed
+// `perception` collection directly (house pattern — see PerceptionExplorer.astro).
+import { getCollection } from 'astro:content';
+
+interface Props {
+  facet?: 'police-general' | 'forces' | 'leaders-officers-staff';
+  title?: string;
+  lines?: number; // how many words to track
+  width?: number;
+  height?: number;
+}
+const {
+  facet = 'police-general',
+  title = 'The churn of the league table — word rank by year',
+  lines = 8,
+  width = 820,
+  height = 360,
+} = Astro.props;
+
+// An earthy categorical palette in the site's register.
+const PALETTE = ['#b3402f', '#2f7d52', '#3b6ea5', '#8a5a2b', '#6d4c91', '#9c5b3b', '#477b6b', '#c24d8a'];
+
+const entries = await getCollection('perception');
+const years = entries
+  .filter((e) => e.data.kind === 'year')
+  .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'year' }>)
+  .filter((y) => y.facets[facet]?.topWords?.length)
+  .sort((a, b) => a.year - b.year);
+
+// Per-year rate lookups, and a period-wide total so we can pick the cohort.
+const rateByYear = years.map((y) => new Map(y.facets[facet].topWords.map((w) => [w.term, w.ratePer10k] as const)));
+const totalRate = new Map<string, number>();
+for (const m of rateByYear) for (const [term, r] of m) totalRate.set(term, (totalRate.get(term) ?? 0) + r);
+
+// The cohort: the words that lead the whole quarter-century.
+const cohort = [...totalRate.entries()]
+  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  .slice(0, lines)
+  .map(([term]) => term);
+const tracked = cohort.map((term, i) => ({ term, color: PALETTE[i % PALETTE.length] }));
+
+// Rank the cohort against itself each year (1 = highest rate that year). Words
+// absent in a year score 0, sinking to the bottom; ties break on period total so
+// ordering is stable and every word has a rank in every year.
+const rankByYear = years.map((_, yi) => {
+  const ranked = [...cohort].sort(
+    (a, b) => (rateByYear[yi].get(b) ?? 0) - (rateByYear[yi].get(a) ?? 0) || totalRate.get(b)! - totalRate.get(a)!
+  );
+  return new Map(ranked.map((term, i) => [term, i + 1] as const));
+});
+
+const pad = { l: 30, r: 128, t: 18, b: 28 };
+const innerW = width - pad.l - pad.r;
+const innerH = height - pad.t - pad.b;
+const yrLo = years[0]?.year ?? 2000;
+const yrHi = years[years.length - 1]?.year ?? 2025;
+const yrSpan = yrHi - yrLo || 1;
+const N = cohort.length;
+const xf = (yr: number) => pad.l + ((yr - yrLo) / yrSpan) * innerW;
+const yf = (rank: number) => pad.t + ((rank - 1) / (N - 1 || 1)) * innerH; // rank 1 at top
+
+interface Pt { year: number; rank: number; }
+const wordLines = tracked.map((w) => {
+  const pts: Pt[] = years.map((y, i) => ({ year: y.year, rank: rankByYear[i].get(w.term)! }));
+  const path = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${xf(p.year).toFixed(1)},${yf(p.rank).toFixed(1)}`).join(' ');
+  return { ...w, pts, path, last: pts[pts.length - 1] };
+});
+
+// Nudge the right-edge labels apart.
+const lab = wordLines
+  .map((w, idx) => ({ idx, y: yf(w.last.rank), term: w.term, color: w.color }))
+  .sort((a, b) => a.y - b.y);
+for (let i = 1; i < lab.length; i++) if (lab[i].y - lab[i - 1].y < 14) lab[i].y = lab[i - 1].y + 14;
+const labelY: Record<number, number> = {};
+for (const l of lab) labelY[l.idx] = l.y;
+
+const ticks = years.map((y) => y.year).filter((y) => y % 5 === 0);
+const rankTicks = Array.from({ length: N }, (_, i) => i + 1);
+const aria = `${title}. Bump chart ranking ${N} leading words in ${facet} coverage from ${yrLo} to ${yrHi}.`;
+---
+<figure class="not-prose my-6">
+  <figcaption class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">{title}</figcaption>
+  <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={aria} class="overflow-visible">
+    {rankTicks.map((r) => (
+      <g>
+        <line x1={pad.l} x2={width - pad.r} y1={yf(r)} y2={yf(r)} stroke="#f0ece3" stroke-width="1" />
+        <text x={pad.l - 6} y={yf(r) + 3} font-size="9" fill="#bcb7ac" text-anchor="end" font-family="system-ui, sans-serif">#{r}</text>
+      </g>
+    ))}
+    {wordLines.map((w) => (
+      <g>
+        <path d={w.path} fill="none" stroke={w.color} stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" />
+        {w.pts.map((p) => <circle cx={xf(p.year)} cy={yf(p.rank)} r="3" fill={w.color} />)}
+      </g>
+    ))}
+    {wordLines.map((w, i) => w.last && (
+      <text
+        x={width - pad.r + 8}
+        y={labelY[i] + 3}
+        font-size="11"
+        fill={w.color}
+        font-family="system-ui, sans-serif"
+        font-weight="600"
+      >{w.term}</text>
+    ))}
+    {ticks.map((y) => (
+      <text x={xf(y)} y={height - 8} font-size="10" fill="#8a857c" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
+    ))}
+  </svg>
+  <details class="mt-2">
+    <summary class="cursor-pointer font-sans text-xs uppercase tracking-[0.15em] text-accent">Tracked words & first→last rank (table)</summary>
+    <ul class="mt-2 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1 font-sans text-sm">
+      {wordLines.map((w) => (
+        <li class="flex items-center gap-2">
+          <span class="inline-block w-2.5 h-2.5 rounded-sm shrink-0" style={`background:${w.color}`}></span>
+          <span class="text-ink-700">{w.term}</span>
+          <span class="text-ink-400 tabular-nums text-xs">#{w.pts[0].rank}→#{w.last.rank}</span>
+        </li>
+      ))}
+    </ul>
+  </details>
+</figure>

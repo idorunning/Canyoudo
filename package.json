@@ -15,6 +15,12 @@
     "preview": "astro preview",
     "suggest-tags": "node scripts/suggest-tags.mjs",
     "fetch-pexels": "node scripts/fetch-pexels.mjs",
+    "seed-perception": "node scripts/perception/seed.mjs",
+    "fetch-perception": "node scripts/perception/fetch-guardian.mjs",
+    "harvest-perception-bbc": "node scripts/perception/harvest-wayback-bbc.mjs",
+    "fetch-perception-bbc-dataset": "node scripts/perception/fetch-bbc-dataset.mjs",
+    "build-perception": "node scripts/build-perception.mjs",
+    "generate-perception-clouds": "node scripts/generate-perception-clouds.mjs",
     "test": "node --test tests/*.test.mjs",
     "astro": "astro"
   },

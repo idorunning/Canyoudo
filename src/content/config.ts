@@ -221,6 +221,136 @@ const changelogSchema = z.object({
   ),
 });
 
+// --- Media perception of policing ------------------------------------------
+// Per-YEAR DERIVED aggregates of UK news coverage about policing (word
+// frequencies, sentiment, themed-lexicon scores, named-entity counts) for the
+// "Perception of the Police in Online Media" data story. Mirrors the news
+// collection's hard rule: ONLY derived numbers plus provenance (headline,
+// source, link, date) are stored — NEVER full article text. Produced by a
+// reproducible fetch/seed step and normalised by scripts/build-perception.mjs.
+// One file per year; index.json is the manifest; context.json is the social-
+// media overlay. The three coexist via a discriminated union on `kind`.
+const perceptionWord = z.object({ term: z.string(), count: z.number(), ratePer10k: z.number() });
+const perceptionLex = z.object({ items: z.number(), ratePer10k: z.number() });
+const perceptionEntity = z.object({
+  name: z.string(),
+  type: z.enum(['force', 'leader', 'officer', 'role']),
+  count: z.number(),
+  ratePer10k: z.number(),
+});
+const perceptionSentiment = z.object({
+  mean: z.number(), // [-1, 1] toward the police
+  positive: z.number(),
+  neutral: z.number(),
+  negative: z.number(),
+  gdeltToneMean: z.number().nullable().default(null),
+});
+const perceptionLexicons = z.object({
+  trust: perceptionLex,
+  misconduct: perceptionLex,
+  reform: perceptionLex,
+  race: perceptionLex,
+  leadership: perceptionLex,
+});
+const perceptionFacet = z.object({
+  corpusTokens: z.number(),
+  topWords: z.array(perceptionWord).default([]),
+  sentiment: perceptionSentiment,
+  lexicons: perceptionLexicons,
+  entities: z.array(perceptionEntity).default([]),
+});
+// A single named force's lighter "journey" aggregate for a year (volume + tone
+// + top words), keyed by force id under a year's optional `forceBreakdown`.
+const perceptionForceTrend = z.object({
+  name: z.string(),
+  volume: z.number().default(0), // total matching articles (coverage volume)
+  tone: z.number().nullable().default(null), // GDELT measured tone mean
+  sentiment: perceptionSentiment,
+  topWords: z.array(perceptionWord).default([]),
+});
+const perceptionProvenance = z.object({
+  generatedAt: z.string(),
+  method: z.string(), // guardian | gdelt | mediacloud | websearch | hybrid | seed
+  sourcesUsed: z.array(z.string()).default([]),
+  itemCount: z.number().default(0),
+  diversityIndex: z.number().nullable().default(null), // normalised entropy 0..1
+  sparse: z.boolean().default(false),
+  sample: z.boolean().default(false), // illustrative data, awaiting a live fetch
+  notes: z.string().default(''),
+});
+const perceptionSource = z.object({
+  title: z.string(),
+  source: z.string(),
+  url: z.string(),
+  date: z.string(),
+  outletType: z.enum(['broadsheet', 'tabloid', 'broadcaster', 'regional', 'trade', 'official', 'other']).default('other'),
+});
+
+// A single YEAR file.
+const perceptionYear = z.object({
+  kind: z.literal('year'),
+  schemaVersion: z.number().default(1),
+  year: z.number(),
+  provenance: perceptionProvenance,
+  sources: z.array(perceptionSource).default([]),
+  facets: z.object({
+    'police-general': perceptionFacet,
+    forces: perceptionFacet,
+    'leaders-officers-staff': perceptionFacet,
+  }),
+  // Optional per-force breakdown (named force id → its journey aggregate). Added
+  // by the GDELT per-force pass; absent on years not yet pulled for forces.
+  forceBreakdown: z.record(z.string(), perceptionForceTrend).optional(),
+});
+
+// The manifest (index.json): year list + global maxima for shared scaling.
+const perceptionIndex = z.object({
+  kind: z.literal('index'),
+  schemaVersion: z.number().default(1),
+  years: z.array(z.number()).default([]),
+  methodologyVersion: z.string(),
+  maxima: z.object({ wordRate: z.number(), lexRate: z.number(), entityRate: z.number(), forceWordRate: z.number().default(0) }),
+  builtAt: z.string(),
+  sample: z.boolean().default(false),
+});
+
+// The social-media overlay (context.json): dated milestone markers + the UK
+// social-news-adoption series, each carrying a source URL. Hand-curated.
+const perceptionContext = z.object({
+  kind: z.literal('context'),
+  schemaVersion: z.number().default(1),
+  milestones: z
+    .array(
+      z.object({
+        date: z.string(), // 'YYYY-MM' or 'YYYY'
+        label: z.string(),
+        detail: z.string().default(''),
+        url: z.string().default(''),
+      })
+    )
+    .default([]),
+  adoption: z
+    .array(z.object({ year: z.number(), share: z.number(), note: z.string().default('') }))
+    .default([]),
+  // Official survey confidence (ONS Crime Survey for England & Wales), so the
+  // tool can plot measured public confidence against the headline-tone series.
+  // goodJob = "police do a good/excellent job"; localConfidence = "confidence in
+  // local police"; both % and nullable (the CSEW was suspended in 2021–22 for
+  // COVID — null years are drawn as a break in the line, never interpolated).
+  confidence: z
+    .array(
+      z.object({
+        year: z.number(),
+        goodJob: z.number().nullable().default(null),
+        localConfidence: z.number().nullable().default(null),
+        note: z.string().default(''),
+      })
+    )
+    .default([]),
+});
+
+const perceptionSchema = z.discriminatedUnion('kind', [perceptionYear, perceptionIndex, perceptionContext]);
+
 export const collections = {
   articles: defineCollection({ type: 'content', schema: articleSchema }),
   pages: defineCollection({ type: 'content', schema: pagesSchema }),
@@ -230,4 +360,5 @@ export const collections = {
   policedata: defineCollection({ type: 'data', schema: policeDataSchema }),
   news: defineCollection({ type: 'data', schema: newsSchema }),
   changelog: defineCollection({ type: 'data', schema: changelogSchema }),
+  perception: defineCollection({ type: 'data', schema: perceptionSchema }),
 };

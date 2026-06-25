@@ -1,0 +1,168 @@
+---
+// A streamgraph / "ThemeRiver" of the five themed lexicons (trust, misconduct,
+// reform, race, leadership) flowing from 2000 to 2025 — the centrepiece view of
+// the perception story. Stacked, centred areas show how the balance of themes in
+// police coverage shifts over time (cf. the NYT "Ebb and Flow of Movies"). All
+// maths runs at build time, so this is pure inline SVG with no client JS and a
+// <details> data-table fallback. Reads the committed `perception` collection
+// directly (the house pattern — see PerceptionExplorer.astro). Rates are per
+// 10,000 words, so dense and sparse years stay comparable.
+import { getCollection } from 'astro:content';
+
+interface Props {
+  facet?: 'police-general' | 'forces' | 'leaders-officers-staff';
+  title?: string;
+  width?: number;
+  height?: number;
+}
+const {
+  facet = 'police-general',
+  title = 'The ebb and flow of themes — items per 10,000 words',
+  width = 820,
+  height = 320,
+} = Astro.props;
+
+const THEME_KEYS = ['trust', 'misconduct', 'reform', 'race', 'leadership'] as const;
+type ThemeKey = (typeof THEME_KEYS)[number];
+const THEME_COLORS: Record<ThemeKey, string> = {
+  trust: '#2f7d52',
+  misconduct: '#b3402f',
+  reform: '#3b6ea5',
+  race: '#8a5a2b',
+  leadership: '#6d4c91',
+};
+const THEME_LABELS: Record<ThemeKey, string> = {
+  trust: 'Trust',
+  misconduct: 'Misconduct',
+  reform: 'Reform',
+  race: 'Race',
+  leadership: 'Leadership',
+};
+
+const entries = await getCollection('perception');
+const years = entries
+  .filter((e) => e.data.kind === 'year')
+  .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'year' }>)
+  .filter((y) => y.facets[facet])
+  .sort((a, b) => a.year - b.year);
+
+// values[k][i] = rate for theme k in year i.
+const series: Record<ThemeKey, number[]> = Object.fromEntries(
+  THEME_KEYS.map((k) => [k, years.map((y) => y.facets[facet].lexicons[k].ratePer10k ?? 0)])
+) as Record<ThemeKey, number[]>;
+const totals = years.map((_, i) => THEME_KEYS.reduce((s, k) => s + series[k][i], 0));
+const maxTotal = Math.max(...totals, 1);
+
+// Inside-out layer ordering (d3's stackOrderInsideOut) for a balanced silhouette:
+// the biggest bands sit in the middle, smaller ones drift to the edges.
+const sums: Record<ThemeKey, number> = Object.fromEntries(
+  THEME_KEYS.map((k) => [k, series[k].reduce((s, v) => s + v, 0)])
+) as Record<ThemeKey, number>;
+const bySum = [...THEME_KEYS].sort((a, b) => sums[b] - sums[a]);
+const tops: ThemeKey[] = [];
+const bottoms: ThemeKey[] = [];
+let topW = 0;
+let botW = 0;
+for (const k of bySum) {
+  if (topW <= botW) {
+    tops.push(k);
+    topW += sums[k];
+  } else {
+    bottoms.push(k);
+    botW += sums[k];
+  }
+}
+const order: ThemeKey[] = [...bottoms.reverse(), ...tops];
+
+const pad = { l: 14, r: 96, t: 18, b: 28 };
+const innerW = width - pad.l - pad.r;
+const innerH = height - pad.t - pad.b;
+const yrLo = years[0]?.year ?? 2000;
+const yrHi = years[years.length - 1]?.year ?? 2025;
+const yrSpan = yrHi - yrLo || 1;
+const xf = (yr: number) => pad.l + ((yr - yrLo) / yrSpan) * innerW;
+// Centre the stack: domain is symmetric about zero so the river "flows".
+const half = maxTotal / 2;
+const yf = (v: number) => pad.t + innerH / 2 - (v / (half || 1)) * (innerH / 2);
+
+// Build each layer's lower and upper boundary across the years (centred baseline).
+interface Band {
+  key: ThemeKey;
+  path: string;
+  labelY: number;
+  total: number;
+}
+const bands: Band[] = order.map((key) => {
+  const lower: number[] = [];
+  const upper: number[] = [];
+  for (let i = 0; i < years.length; i++) {
+    let base = -totals[i] / 2;
+    for (const k of order) {
+      if (k === key) break;
+      base += series[k][i];
+    }
+    lower.push(base);
+    upper.push(base + series[key][i]);
+  }
+  const top = years.map((y, i) => `${i === 0 ? 'M' : 'L'}${xf(y.year).toFixed(1)},${yf(upper[i]).toFixed(1)}`).join(' ');
+  const bottom = years
+    .map((y, i) => `L${xf(y.year).toFixed(1)},${yf(lower[i]).toFixed(1)}`)
+    .reverse()
+    .join(' ');
+  const lastMid = (upper[upper.length - 1] + lower[lower.length - 1]) / 2;
+  return { key, path: `${top} ${bottom} Z`, labelY: yf(lastMid), total: sums[key] };
+});
+
+// Nudge labels apart so they don't overlap at the right edge.
+const sortedLabels = bands.map((b, idx) => ({ idx, y: b.labelY, key: b.key })).sort((a, b) => a.y - b.y);
+for (let i = 1; i < sortedLabels.length; i++) {
+  if (sortedLabels[i].y - sortedLabels[i - 1].y < 14) sortedLabels[i].y = sortedLabels[i - 1].y + 14;
+}
+const labelY: Record<number, number> = {};
+for (const s of sortedLabels) labelY[s.idx] = s.y;
+
+const ticks = years.map((y) => y.year).filter((y) => y % 5 === 0);
+const aria = `${title}. Streamgraph of five themes in ${facet} coverage from ${yrLo} to ${yrHi}.`;
+---
+<figure class="not-prose my-6">
+  <figcaption class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">{title}</figcaption>
+  <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={aria} class="overflow-visible">
+    {bands.map((b, i) => (
+      <g>
+        <path d={b.path} fill={THEME_COLORS[b.key]} fill-opacity="0.82" stroke={THEME_COLORS[b.key]} stroke-width="0.5" />
+        <text
+          x={width - pad.r + 8}
+          y={labelY[i] + 3}
+          font-size="11"
+          fill={THEME_COLORS[b.key]}
+          font-family="system-ui, sans-serif"
+          font-weight="600"
+        >{THEME_LABELS[b.key]}</text>
+      </g>
+    ))}
+    {ticks.map((y) => (
+      <text x={xf(y)} y={height - 8} font-size="10" fill="#8a857c" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
+    ))}
+  </svg>
+  <details class="mt-2">
+    <summary class="cursor-pointer font-sans text-xs uppercase tracking-[0.15em] text-accent">Theme rates by year (table)</summary>
+    <div class="mt-2 overflow-x-auto">
+      <table class="font-sans text-xs text-ink-700 border-collapse">
+        <thead>
+          <tr>
+            <th class="text-left pr-3 py-1 font-medium">Year</th>
+            {THEME_KEYS.map((k) => <th class="text-right px-2 py-1 font-medium" style={`color:${THEME_COLORS[k]}`}>{THEME_LABELS[k]}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {years.map((y) => (
+            <tr class="border-t border-ink-100">
+              <td class="pr-3 py-0.5 tabular-nums">{y.year}</td>
+              {THEME_KEYS.map((k) => <td class="text-right px-2 py-0.5 tabular-nums text-ink-500">{y.facets[facet].lexicons[k].ratePer10k}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+</figure>

@@ -1,0 +1,1946 @@
+{
+  "kind": "year",
+  "schemaVersion": 1,
+  "year": 2020,
+  "provenance": {
+    "generatedAt": "2026-06-23T08:05:32.352Z",
+    "method": "hybrid",
+    "sourcesUsed": [
+      "GDELT DOC 2.0",
+      "The Guardian"
+    ],
+    "itemCount": 2954,
+    "diversityIndex": 0.817,
+    "sparse": false,
+    "sample": false,
+    "notes": "Merged from 2 sources (gdelt, guardian). Built from GDELT DOC 2.0 headlines (titles only; bodies never fetched). Tone is GDELT’s measured tonechart mean. UK-sourced English news, 2017+. Built from Guardian Open Platform HEADLINES only (titles counted, then dropped) — keeps the word analysis on-topic rather than counting whole bodies."
+  },
+  "sources": [
+    {
+      "title": "Scottish Police Federation Calum Steele elected president of EuroCOP",
+      "source": "heraldscotland.com",
+      "url": "https://www.heraldscotland.com/news/18894491.scottish-police-federations-calum-steele-elected-president-eurocop/",
+      "date": "2020-11-24",
+      "outletType": "other"
+    },
+    {
+      "title": "‘I felt like I was born again’: first non-binary person granted UK refugee status",
+      "source": "The Guardian",
+      "url": "https://www.theguardian.com/world/2020/dec/30/i-felt-like-i-was-born-again-first-non-binary-person-granted-uk-refugee-status",
+      "date": "2020-12-30",
+      "outletType": "broadsheet"
+    },
+    {
+      "title": "Cannabis  most commonly  captured drug in Hampshire as seizures rise",
+      "source": "portsmouth.co.uk",
+      "url": "https://www.portsmouth.co.uk/news/crime/cannabis-most-commonly-captured-drug-hampshire-seizures-rise-3066274",
+      "date": "2020-12-13",
+      "outletType": "other"
+    },
+    {
+      "title": "Police in Brecon Beacons turn away visitors breaching Covid restrictions",
+      "source": "The Guardian",
+      "url": "https://www.theguardian.com/uk-news/2020/dec/29/police-in-brecon-beacons-turn-away-visitors-breaching-covid-restrictions",
+      "date": "2020-12-29",
+      "outletType": "broadsheet"
+    },
+    {
+      "title": "Clues about crime - fighting feature Norwich policing courses",
+      "source": "edp24.co.uk",
+      "url": "https://www.edp24.co.uk/news/education/city-college-norwich-launches-two-new-policing-courses-6568392",
+      "date": "2020-11-28",
+      "outletType": "other"
+    },
+    {
+      "title": "Call the cavalry! Horses ride to rescue of an inner city garden",
+      "source": "The Guardian",
+      "url": "https://www.theguardian.com/environment/2020/dec/28/call-the-cavalry-horses-ride-to-rescue-of-an-inner-city-garden-aoe",
+      "date": "2020-12-28",
+      "outletType": "broadsheet"
+    },
+    {
+      "title": "Big increase in drugs seizures in Lancashire",
+      "source": "lep.co.uk",
+      "url": "https://www.lep.co.uk/news/crime/big-increase-drugs-seizures-lancashire-3070660",
+      "date": "2020-12-17",
+      "outletType": "other"
+    },
+    {
+      "title": "The great opportunity: how Covid transformed global crime",
+      "source": "The Guardian",
+      "url": "https://www.theguardian.com/world/2020/dec/27/the-great-opportunity-how-covid-transformed-global",
+      "date": "2020-12-27",
+      "outletType": "broadsheet"
+    },
+    {
+      "title": "Lancashire Constabulary : New preferred Chief Constable confirmed for 2021 by commissioner Clive Grunshaw",
+      "source": "lancashiretelegraph.co.uk",
+      "url": "https://www.lancashiretelegraph.co.uk/news/18965306.lancashire-constabulary-new-preferred-chief-constable-confirmed-2021-commissioner-clive-grunshaw/",
+      "date": "2020-12-24",
+      "outletType": "other"
+    },
+    {
+      "title": "The Brexit deal is done – but many crucial issues are unresolved",
+      "source": "The Guardian",
+      "url": "https://www.theguardian.com/politics/2020/dec/27/the-brexit-deal-is-done-but-many-crucial-issues-are-unresolved",
+      "date": "2020-12-27",
+      "outletType": "broadsheet"
+    },
+    {
+      "title": "Greater Manchester Police failings : Andy Burnham  should resign  ",
+      "source": "bbc.co.uk",
+      "url": "https://www.bbc.co.uk/news/uk-england-manchester-55361452",
+      "date": "2020-12-18",
+      "outletType": "other"
+    },
+    {
+      "title": "British military drone crashes during Cyprus training flight",
+      "source": "The Guardian",
+      "url": "https://www.theguardian.com/world/2020/dec/26/british-military-drone-crashes-during-cyprus-training-flight",
+      "date": "2020-12-26",
+      "outletType": "broadsheet"
+    }
+  ],
+  "facets": {
+    "police-general": {
+      "corpusTokens": 9794,
+      "topWords": [
+        {
+          "term": "met",
+          "count": 81,
+          "ratePer10k": 82.7
+        },
+        {
+          "term": "lockdown",
+          "count": 65,
+          "ratePer10k": 66.4
+        },
+        {
+          "term": "crime",
+          "count": 52,
+          "ratePer10k": 53.1
+        },
+        {
+          "term": "chief",
+          "count": 51,
+          "ratePer10k": 52.1
+        },
+        {
+          "term": "england",
+          "count": 51,
+          "ratePer10k": 52.1
+        },
+        {
+          "term": "covid",
+          "count": 50,
+          "ratePer10k": 51.1
+        },
+        {
+          "term": "coronaviru",
+          "count": 50,
+          "ratePer10k": 51.1
+        },
+        {
+          "term": "black",
+          "count": 50,
+          "ratePer10k": 51.1
+        },
+        {
+          "term": "report",
+          "count": 45,
+          "ratePer10k": 45.9
+        },
+        {
+          "term": "victim",
+          "count": 42,
+          "ratePer10k": 42.9
+        },
+        {
+          "term": "rule",
+          "count": 41,
+          "ratePer10k": 41.9
+        },
+        {
+          "term": "manchester",
+          "count": 40,
+          "ratePer10k": 40.8
+        },
+        {
+          "term": "abuse",
+          "count": 40,
+          "ratePer10k": 40.8
+        },
+        {
+          "term": "stop",
+          "count": 38,
+          "ratePer10k": 38.8
+        },
+        {
+          "term": "wale",
+          "count": 35,
+          "ratePer10k": 35.7
+        },
+        {
+          "term": "special",
+          "count": 33,
+          "ratePer10k": 33.7
+        },
+        {
+          "term": "greater",
+          "count": 31,
+          "ratePer10k": 31.7
+        },
+        {
+          "term": "domestic",
+          "count": 31,
+          "ratePer10k": 31.7
+        },
+        {
+          "term": "arrest",
+          "count": 29,
+          "ratePer10k": 29.6
+        },
+        {
+          "term": "london",
+          "count": 29,
+          "ratePer10k": 29.6
+        },
+        {
+          "term": "case",
+          "count": 28,
+          "ratePer10k": 28.6
+        },
+        {
+          "term": "call",
+          "count": 27,
+          "ratePer10k": 27.6
+        },
+        {
+          "term": "inquiry",
+          "count": 26,
+          "ratePer10k": 26.5
+        },
+        {
+          "term": "record",
+          "count": 25,
+          "ratePer10k": 25.5
+        },
+        {
+          "term": "rise",
+          "count": 25,
+          "ratePer10k": 25.5
+        },
+        {
+          "term": "drug",
+          "count": 24,
+          "ratePer10k": 24.5
+        },
+        {
+          "term": "search",
+          "count": 24,
+          "ratePer10k": 24.5
+        },
+        {
+          "term": "measure",
+          "count": 23,
+          "ratePer10k": 23.5
+        },
+        {
+          "term": "live",
+          "count": 23,
+          "ratePer10k": 23.5
+        },
+        {
+          "term": "protest",
+          "count": 22,
+          "ratePer10k": 22.5
+        },
+        {
+          "term": "warn",
+          "count": 20,
+          "ratePer10k": 20.4
+        },
+        {
+          "term": "death",
+          "count": 20,
+          "ratePer10k": 20.4
+        },
+        {
+          "term": "racism",
+          "count": 20,
+          "ratePer10k": 20.4
+        },
+        {
+          "term": "suffolk",
+          "count": 19,
+          "ratePer10k": 19.4
+        },
+        {
+          "term": "fine",
+          "count": 19,
+          "ratePer10k": 19.4
+        },
+        {
+          "term": "review",
+          "count": 19,
+          "ratePer10k": 19.4
+        },
+        {
+          "term": "face",
+          "count": 19,
+          "ratePer10k": 19.4
+        },
+        {
+          "term": "view",
+          "count": 19,
+          "ratePer10k": 19.4
+        },
+        {
+          "term": "plac",
+          "count": 18,
+          "ratePer10k": 18.4
+        },
+        {
+          "term": "shar",
+          "count": 18,
+          "ratePer10k": 18.4
+        },
+        {
+          "term": "immigration",
+          "count": 18,
+          "ratePer10k": 18.4
+        },
+        {
+          "term": "statu",
+          "count": 18,
+          "ratePer10k": 18.4
+        },
+        {
+          "term": "use",
+          "count": 18,
+          "ratePer10k": 18.4
+        },
+        {
+          "term": "speed",
+          "count": 17,
+          "ratePer10k": 17.4
+        },
+        {
+          "term": "pay",
+          "count": 17,
+          "ratePer10k": 17.4
+        },
+        {
+          "term": "public",
+          "count": 17,
+          "ratePer10k": 17.4
+        },
+        {
+          "term": "rape",
+          "count": 17,
+          "ratePer10k": 17.4
+        },
+        {
+          "term": "extinction",
+          "count": 17,
+          "ratePer10k": 17.4
+        },
+        {
+          "term": "rebellion",
+          "count": 17,
+          "ratePer10k": 17.4
+        },
+        {
+          "term": "fail",
+          "count": 15,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "driver",
+          "count": 15,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "time",
+          "count": 15,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "durham",
+          "count": 15,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "matter",
+          "count": 15,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "watchdog",
+          "count": 15,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "say",
+          "count": 15,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "anti",
+          "count": 14,
+          "ratePer10k": 14.3
+        },
+        {
+          "term": "right",
+          "count": 14,
+          "ratePer10k": 14.3
+        },
+        {
+          "term": "seizure",
+          "count": 13,
+          "ratePer10k": 13.3
+        },
+        {
+          "term": "caught",
+          "count": 13,
+          "ratePer10k": 13.3
+        },
+        {
+          "term": "attack",
+          "count": 13,
+          "ratePer10k": 13.3
+        },
+        {
+          "term": "lancashire",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "cumbria",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "deal",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "stopp",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "conviction",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "child",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "investigate",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "guardian",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "racist",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "cumming",
+          "count": 12,
+          "ratePer10k": 12.3
+        },
+        {
+          "term": "action",
+          "count": 11,
+          "ratePer10k": 11.2
+        },
+        {
+          "term": "need",
+          "count": 11,
+          "ratePer10k": 11.2
+        },
+        {
+          "term": "children",
+          "count": 11,
+          "ratePer10k": 11.2
+        },
+        {
+          "term": "six",
+          "count": 11,
+          "ratePer10k": 11.2
+        },
+        {
+          "term": "racial",
+          "count": 11,
+          "ratePer10k": 11.2
+        },
+        {
+          "term": "taser",
+          "count": 11,
+          "ratePer10k": 11.2
+        },
+        {
+          "term": "undercover",
+          "count": 11,
+          "ratePer10k": 11.2
+        },
+        {
+          "term": "justice",
+          "count": 11,
+          "ratePer10k": 11.2
+        },
+        {
+          "term": "law",
+          "count": 11,
+          "ratePer10k": 11.2
+        }
+      ],
+      "sentiment": {
+        "mean": -0.153,
+        "positive": 21,
+        "neutral": 707,
+        "negative": 152,
+        "gdeltToneMean": -4.188
+      },
+      "lexicons": {
+        "trust": {
+          "items": 9,
+          "ratePer10k": 9.2
+        },
+        "misconduct": {
+          "items": 87,
+          "ratePer10k": 88.8
+        },
+        "reform": {
+          "items": 55,
+          "ratePer10k": 56.2
+        },
+        "race": {
+          "items": 105,
+          "ratePer10k": 107.2
+        },
+        "leadership": {
+          "items": 51,
+          "ratePer10k": 52.1
+        }
+      },
+      "entities": [
+        {
+          "name": "Greater Manchester Police",
+          "type": "force",
+          "count": 54,
+          "ratePer10k": 55.1
+        },
+        {
+          "name": "Chief constable",
+          "type": "role",
+          "count": 32,
+          "ratePer10k": 32.7
+        },
+        {
+          "name": "Lancashire Constabulary",
+          "type": "force",
+          "count": 6,
+          "ratePer10k": 6.1
+        },
+        {
+          "name": "Hertfordshire Constabulary",
+          "type": "force",
+          "count": 6,
+          "ratePer10k": 6.1
+        },
+        {
+          "name": "Commissioner",
+          "type": "role",
+          "count": 6,
+          "ratePer10k": 6.1
+        },
+        {
+          "name": "Cumbria Constabulary",
+          "type": "force",
+          "count": 4,
+          "ratePer10k": 4.1
+        },
+        {
+          "name": "Norfolk Constabulary",
+          "type": "force",
+          "count": 4,
+          "ratePer10k": 4.1
+        },
+        {
+          "name": "South Wales Police",
+          "type": "force",
+          "count": 4,
+          "ratePer10k": 4.1
+        },
+        {
+          "name": "Sergeant",
+          "type": "role",
+          "count": 3,
+          "ratePer10k": 3.1
+        },
+        {
+          "name": "North Wales Police",
+          "type": "force",
+          "count": 2,
+          "ratePer10k": 2
+        },
+        {
+          "name": "Police and crime commissioner",
+          "type": "role",
+          "count": 2,
+          "ratePer10k": 2
+        },
+        {
+          "name": "Lincolnshire Police",
+          "type": "force",
+          "count": 2,
+          "ratePer10k": 2
+        },
+        {
+          "name": "Merseyside Police",
+          "type": "force",
+          "count": 2,
+          "ratePer10k": 2
+        },
+        {
+          "name": "Detective",
+          "type": "role",
+          "count": 2,
+          "ratePer10k": 2
+        },
+        {
+          "name": "West Midlands Police",
+          "type": "force",
+          "count": 2,
+          "ratePer10k": 2
+        }
+      ]
+    },
+    "forces": {
+      "corpusTokens": 11125,
+      "topWords": [
+        {
+          "term": "coronaviru",
+          "count": 123,
+          "ratePer10k": 110.6
+        },
+        {
+          "term": "happen",
+          "count": 118,
+          "ratePer10k": 106.1
+        },
+        {
+          "term": "lockdown",
+          "count": 98,
+          "ratePer10k": 88.1
+        },
+        {
+          "term": "met",
+          "count": 94,
+          "ratePer10k": 84.5
+        },
+        {
+          "term": "london",
+          "count": 84,
+          "ratePer10k": 75.5
+        },
+        {
+          "term": "death",
+          "count": 57,
+          "ratePer10k": 51.2
+        },
+        {
+          "term": "covid",
+          "count": 49,
+          "ratePer10k": 44
+        },
+        {
+          "term": "live",
+          "count": 48,
+          "ratePer10k": 43.1
+        },
+        {
+          "term": "manchester",
+          "count": 44,
+          "ratePer10k": 39.6
+        },
+        {
+          "term": "arrest",
+          "count": 42,
+          "ratePer10k": 37.8
+        },
+        {
+          "term": "england",
+          "count": 39,
+          "ratePer10k": 35.1
+        },
+        {
+          "term": "call",
+          "count": 36,
+          "ratePer10k": 32.4
+        },
+        {
+          "term": "attack",
+          "count": 35,
+          "ratePer10k": 31.5
+        },
+        {
+          "term": "rule",
+          "count": 35,
+          "ratePer10k": 31.5
+        },
+        {
+          "term": "black",
+          "count": 34,
+          "ratePer10k": 30.6
+        },
+        {
+          "term": "protest",
+          "count": 31,
+          "ratePer10k": 27.9
+        },
+        {
+          "term": "murder",
+          "count": 30,
+          "ratePer10k": 27
+        },
+        {
+          "term": "chief",
+          "count": 29,
+          "ratePer10k": 26.1
+        },
+        {
+          "term": "johnson",
+          "count": 27,
+          "ratePer10k": 24.3
+        },
+        {
+          "term": "case",
+          "count": 26,
+          "ratePer10k": 23.4
+        },
+        {
+          "term": "face",
+          "count": 26,
+          "ratePer10k": 23.4
+        },
+        {
+          "term": "anti",
+          "count": 26,
+          "ratePer10k": 23.4
+        },
+        {
+          "term": "inquiry",
+          "count": 24,
+          "ratePer10k": 21.6
+        },
+        {
+          "term": "rise",
+          "count": 23,
+          "ratePer10k": 20.7
+        },
+        {
+          "term": "worker",
+          "count": 23,
+          "ratePer10k": 20.7
+        },
+        {
+          "term": "victim",
+          "count": 23,
+          "ratePer10k": 20.7
+        },
+        {
+          "term": "dead",
+          "count": 22,
+          "ratePer10k": 19.8
+        },
+        {
+          "term": "warn",
+          "count": 22,
+          "ratePer10k": 19.8
+        },
+        {
+          "term": "racism",
+          "count": 22,
+          "ratePer10k": 19.8
+        },
+        {
+          "term": "say",
+          "count": 22,
+          "ratePer10k": 19.8
+        },
+        {
+          "term": "stabb",
+          "count": 22,
+          "ratePer10k": 19.8
+        },
+        {
+          "term": "crime",
+          "count": 21,
+          "ratePer10k": 18.9
+        },
+        {
+          "term": "toll",
+          "count": 20,
+          "ratePer10k": 18
+        },
+        {
+          "term": "review",
+          "count": 20,
+          "ratePer10k": 18
+        },
+        {
+          "term": "liverpool",
+          "count": 19,
+          "ratePer10k": 17.1
+        },
+        {
+          "term": "wale",
+          "count": 18,
+          "ratePer10k": 16.2
+        },
+        {
+          "term": "found",
+          "count": 18,
+          "ratePer10k": 16.2
+        },
+        {
+          "term": "bori",
+          "count": 18,
+          "ratePer10k": 16.2
+        },
+        {
+          "term": "stop",
+          "count": 18,
+          "ratePer10k": 16.2
+        },
+        {
+          "term": "abuse",
+          "count": 18,
+          "ratePer10k": 16.2
+        },
+        {
+          "term": "investigate",
+          "count": 18,
+          "ratePer10k": 16.2
+        },
+        {
+          "term": "home",
+          "count": 18,
+          "ratePer10k": 16.2
+        },
+        {
+          "term": "court",
+          "count": 17,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "record",
+          "count": 17,
+          "ratePer10k": 15.3
+        },
+        {
+          "term": "boy",
+          "count": 16,
+          "ratePer10k": 14.4
+        },
+        {
+          "term": "suspect",
+          "count": 16,
+          "ratePer10k": 14.4
+        },
+        {
+          "term": "kill",
+          "count": 16,
+          "ratePer10k": 14.4
+        },
+        {
+          "term": "use",
+          "count": 16,
+          "ratePer10k": 14.4
+        },
+        {
+          "term": "cumming",
+          "count": 16,
+          "ratePer10k": 14.4
+        },
+        {
+          "term": "plan",
+          "count": 15,
+          "ratePer10k": 13.5
+        },
+        {
+          "term": "child",
+          "count": 15,
+          "ratePer10k": 13.5
+        },
+        {
+          "term": "search",
+          "count": 15,
+          "ratePer10k": 13.5
+        },
+        {
+          "term": "terror",
+          "count": 15,
+          "ratePer10k": 13.5
+        },
+        {
+          "term": "life",
+          "count": 15,
+          "ratePer10k": 13.5
+        },
+        {
+          "term": "tory",
+          "count": 14,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "right",
+          "count": 14,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "still",
+          "count": 14,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "report",
+          "count": 14,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "claim",
+          "count": 14,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "rebellion",
+          "count": 14,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "injur",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "law",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "government",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "rape",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "dominic",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "family",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "mask",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "glasgow",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "britain",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "test",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "extinction",
+          "count": 13,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "charg",
+          "count": 12,
+          "ratePer10k": 10.8
+        },
+        {
+          "term": "scotland",
+          "count": 12,
+          "ratePer10k": 10.8
+        },
+        {
+          "term": "west",
+          "count": 12,
+          "ratePer10k": 10.8
+        },
+        {
+          "term": "jail",
+          "count": 12,
+          "ratePer10k": 10.8
+        },
+        {
+          "term": "nhs",
+          "count": 12,
+          "ratePer10k": 10.8
+        },
+        {
+          "term": "fear",
+          "count": 12,
+          "ratePer10k": 10.8
+        },
+        {
+          "term": "assault",
+          "count": 12,
+          "ratePer10k": 10.8
+        },
+        {
+          "term": "hancock",
+          "count": 12,
+          "ratePer10k": 10.8
+        },
+        {
+          "term": "birmingham",
+          "count": 12,
+          "ratePer10k": 10.8
+        }
+      ],
+      "sentiment": {
+        "mean": -0.129,
+        "positive": 18,
+        "neutral": 806,
+        "negative": 142,
+        "gdeltToneMean": null
+      },
+      "lexicons": {
+        "trust": {
+          "items": 3,
+          "ratePer10k": 2.7
+        },
+        "misconduct": {
+          "items": 61,
+          "ratePer10k": 54.8
+        },
+        "reform": {
+          "items": 51,
+          "ratePer10k": 45.8
+        },
+        "race": {
+          "items": 86,
+          "ratePer10k": 77.3
+        },
+        "leadership": {
+          "items": 34,
+          "ratePer10k": 30.6
+        }
+      },
+      "entities": [
+        {
+          "name": "Greater Manchester Police",
+          "type": "force",
+          "count": 8,
+          "ratePer10k": 7.2
+        },
+        {
+          "name": "West Midlands Police",
+          "type": "force",
+          "count": 2,
+          "ratePer10k": 1.8
+        },
+        {
+          "name": "Chief constable",
+          "type": "role",
+          "count": 2,
+          "ratePer10k": 1.8
+        },
+        {
+          "name": "Commissioner",
+          "type": "role",
+          "count": 1,
+          "ratePer10k": 0.9
+        },
+        {
+          "name": "Detective",
+          "type": "role",
+          "count": 1,
+          "ratePer10k": 0.9
+        }
+      ]
+    },
+    "leaders-officers-staff": {
+      "corpusTokens": 12672,
+      "topWords": [
+        {
+          "term": "coronaviru",
+          "count": 144,
+          "ratePer10k": 113.6
+        },
+        {
+          "term": "happen",
+          "count": 102,
+          "ratePer10k": 80.5
+        },
+        {
+          "term": "lockdown",
+          "count": 94,
+          "ratePer10k": 74.2
+        },
+        {
+          "term": "death",
+          "count": 64,
+          "ratePer10k": 50.5
+        },
+        {
+          "term": "live",
+          "count": 54,
+          "ratePer10k": 42.6
+        },
+        {
+          "term": "covid",
+          "count": 48,
+          "ratePer10k": 37.9
+        },
+        {
+          "term": "black",
+          "count": 44,
+          "ratePer10k": 34.7
+        },
+        {
+          "term": "met",
+          "count": 44,
+          "ratePer10k": 34.7
+        },
+        {
+          "term": "protest",
+          "count": 43,
+          "ratePer10k": 33.9
+        },
+        {
+          "term": "review",
+          "count": 43,
+          "ratePer10k": 33.9
+        },
+        {
+          "term": "call",
+          "count": 41,
+          "ratePer10k": 32.4
+        },
+        {
+          "term": "chief",
+          "count": 37,
+          "ratePer10k": 29.2
+        },
+        {
+          "term": "attack",
+          "count": 36,
+          "ratePer10k": 28.4
+        },
+        {
+          "term": "england",
+          "count": 36,
+          "ratePer10k": 28.4
+        },
+        {
+          "term": "arrest",
+          "count": 34,
+          "ratePer10k": 26.8
+        },
+        {
+          "term": "cumming",
+          "count": 33,
+          "ratePer10k": 26
+        },
+        {
+          "term": "london",
+          "count": 32,
+          "ratePer10k": 25.3
+        },
+        {
+          "term": "george",
+          "count": 32,
+          "ratePer10k": 25.3
+        },
+        {
+          "term": "kill",
+          "count": 31,
+          "ratePer10k": 24.5
+        },
+        {
+          "term": "murder",
+          "count": 31,
+          "ratePer10k": 24.5
+        },
+        {
+          "term": "floyd",
+          "count": 29,
+          "ratePer10k": 22.9
+        },
+        {
+          "term": "johnson",
+          "count": 29,
+          "ratePer10k": 22.9
+        },
+        {
+          "term": "crime",
+          "count": 28,
+          "ratePer10k": 22.1
+        },
+        {
+          "term": "racism",
+          "count": 28,
+          "ratePer10k": 22.1
+        },
+        {
+          "term": "manchester",
+          "count": 27,
+          "ratePer10k": 21.3
+        },
+        {
+          "term": "case",
+          "count": 27,
+          "ratePer10k": 21.3
+        },
+        {
+          "term": "rule",
+          "count": 27,
+          "ratePer10k": 21.3
+        },
+        {
+          "term": "rise",
+          "count": 27,
+          "ratePer10k": 21.3
+        },
+        {
+          "term": "victim",
+          "count": 25,
+          "ratePer10k": 19.7
+        },
+        {
+          "term": "face",
+          "count": 25,
+          "ratePer10k": 19.7
+        },
+        {
+          "term": "say",
+          "count": 24,
+          "ratePer10k": 18.9
+        },
+        {
+          "term": "dominic",
+          "count": 24,
+          "ratePer10k": 18.9
+        },
+        {
+          "term": "toll",
+          "count": 23,
+          "ratePer10k": 18.2
+        },
+        {
+          "term": "warn",
+          "count": 22,
+          "ratePer10k": 17.4
+        },
+        {
+          "term": "thing",
+          "count": 21,
+          "ratePer10k": 16.6
+        },
+        {
+          "term": "inquiry",
+          "count": 20,
+          "ratePer10k": 15.8
+        },
+        {
+          "term": "bori",
+          "count": 20,
+          "ratePer10k": 15.8
+        },
+        {
+          "term": "anti",
+          "count": 19,
+          "ratePer10k": 15
+        },
+        {
+          "term": "home",
+          "count": 19,
+          "ratePer10k": 15
+        },
+        {
+          "term": "wale",
+          "count": 19,
+          "ratePer10k": 15
+        },
+        {
+          "term": "trump",
+          "count": 18,
+          "ratePer10k": 14.2
+        },
+        {
+          "term": "court",
+          "count": 17,
+          "ratePer10k": 13.4
+        },
+        {
+          "term": "hong",
+          "count": 16,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "kong",
+          "count": 16,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "use",
+          "count": 16,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "life",
+          "count": 16,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "protester",
+          "count": 16,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "stop",
+          "count": 16,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "worker",
+          "count": 16,
+          "ratePer10k": 12.6
+        },
+        {
+          "term": "suspect",
+          "count": 15,
+          "ratePer10k": 11.8
+        },
+        {
+          "term": "tell",
+          "count": 15,
+          "ratePer10k": 11.8
+        },
+        {
+          "term": "violence",
+          "count": 15,
+          "ratePer10k": 11.8
+        },
+        {
+          "term": "family",
+          "count": 15,
+          "ratePer10k": 11.8
+        },
+        {
+          "term": "investigate",
+          "count": 15,
+          "ratePer10k": 11.8
+        },
+        {
+          "term": "read",
+          "count": 15,
+          "ratePer10k": 11.8
+        },
+        {
+          "term": "right",
+          "count": 15,
+          "ratePer10k": 11.8
+        },
+        {
+          "term": "race",
+          "count": 14,
+          "ratePer10k": 11
+        },
+        {
+          "term": "abuse",
+          "count": 14,
+          "ratePer10k": 11
+        },
+        {
+          "term": "terror",
+          "count": 14,
+          "ratePer10k": 11
+        },
+        {
+          "term": "obituary",
+          "count": 14,
+          "ratePer10k": 11
+        },
+        {
+          "term": "record",
+          "count": 14,
+          "ratePer10k": 11
+        },
+        {
+          "term": "shot",
+          "count": 14,
+          "ratePer10k": 11
+        },
+        {
+          "term": "britain",
+          "count": 14,
+          "ratePer10k": 11
+        },
+        {
+          "term": "matter",
+          "count": 13,
+          "ratePer10k": 10.3
+        },
+        {
+          "term": "trial",
+          "count": 13,
+          "ratePer10k": 10.3
+        },
+        {
+          "term": "justice",
+          "count": 13,
+          "ratePer10k": 10.3
+        },
+        {
+          "term": "report",
+          "count": 13,
+          "ratePer10k": 10.3
+        },
+        {
+          "term": "view",
+          "count": 13,
+          "ratePer10k": 10.3
+        },
+        {
+          "term": "care",
+          "count": 13,
+          "ratePer10k": 10.3
+        },
+        {
+          "term": "search",
+          "count": 13,
+          "ratePer10k": 10.3
+        },
+        {
+          "term": "died",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "dead",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "charg",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "change",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "law",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "fear",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "hancock",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "guardian",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "public",
+          "count": 12,
+          "ratePer10k": 9.5
+        },
+        {
+          "term": "leader",
+          "count": 12,
+          "ratePer10k": 9.5
+        }
+      ],
+      "sentiment": {
+        "mean": -0.129,
+        "positive": 17,
+        "neutral": 933,
+        "negative": 158,
+        "gdeltToneMean": null
+      },
+      "lexicons": {
+        "trust": {
+          "items": 9,
+          "ratePer10k": 7.1
+        },
+        "misconduct": {
+          "items": 60,
+          "ratePer10k": 47.3
+        },
+        "reform": {
+          "items": 77,
+          "ratePer10k": 60.8
+        },
+        "race": {
+          "items": 107,
+          "ratePer10k": 84.4
+        },
+        "leadership": {
+          "items": 38,
+          "ratePer10k": 30
+        }
+      },
+      "entities": [
+        {
+          "name": "Greater Manchester Police",
+          "type": "force",
+          "count": 6,
+          "ratePer10k": 4.7
+        },
+        {
+          "name": "Dorset Police",
+          "type": "force",
+          "count": 6,
+          "ratePer10k": 4.7
+        },
+        {
+          "name": "South Wales Police",
+          "type": "force",
+          "count": 4,
+          "ratePer10k": 3.2
+        },
+        {
+          "name": "West Midlands Police",
+          "type": "force",
+          "count": 2,
+          "ratePer10k": 1.6
+        },
+        {
+          "name": "Sussex Police",
+          "type": "force",
+          "count": 2,
+          "ratePer10k": 1.6
+        },
+        {
+          "name": "Chief constable",
+          "type": "role",
+          "count": 2,
+          "ratePer10k": 1.6
+        },
+        {
+          "name": "Commissioner",
+          "type": "role",
+          "count": 1,
+          "ratePer10k": 0.8
+        },
+        {
+          "name": "Sergeant",
+          "type": "role",
+          "count": 1,
+          "ratePer10k": 0.8
+        },
+        {
+          "name": "Detective",
+          "type": "role",
+          "count": 1,
+          "ratePer10k": 0.8
+        }
+      ]
+    }
+  },
+  "forceBreakdown": {
+    "metropolitan": {
+      "name": "Metropolitan Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "police-scotland": {
+      "name": "Police Scotland",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "psni": {
+      "name": "Police Service of Northern Ireland",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": -0.376,
+        "positive": 1,
+        "neutral": 154,
+        "negative": 95
+      },
+      "topWords": [
+        {
+          "term": "journalist",
+          "count": 93,
+          "ratePer10k": 362.9
+        },
+        {
+          "term": "threat",
+          "count": 64,
+          "ratePer10k": 249.7
+        },
+        {
+          "term": "condemn",
+          "count": 61,
+          "ratePer10k": 238
+        },
+        {
+          "term": "paramilitary",
+          "count": 60,
+          "ratePer10k": 234.1
+        },
+        {
+          "term": "seriou",
+          "count": 58,
+          "ratePer10k": 226.3
+        },
+        {
+          "term": "arrest",
+          "count": 47,
+          "ratePer10k": 183.4
+        },
+        {
+          "term": "case",
+          "count": 32,
+          "ratePer10k": 124.9
+        },
+        {
+          "term": "pay",
+          "count": 29,
+          "ratePer10k": 113.1
+        },
+        {
+          "term": "psni",
+          "count": 27,
+          "ratePer10k": 105.3
+        },
+        {
+          "term": "million",
+          "count": 26,
+          "ratePer10k": 101.4
+        },
+        {
+          "term": "settl",
+          "count": 24,
+          "ratePer10k": 93.6
+        },
+        {
+          "term": "ireland",
+          "count": 21,
+          "ratePer10k": 81.9
+        },
+        {
+          "term": "murder",
+          "count": 19,
+          "ratePer10k": 74.1
+        },
+        {
+          "term": "northern",
+          "count": 19,
+          "ratePer10k": 74.1
+        },
+        {
+          "term": "birmingham",
+          "count": 18,
+          "ratePer10k": 70.2
+        }
+      ]
+    },
+    "west-midlands": {
+      "name": "West Midlands Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "greater-manchester": {
+      "name": "Greater Manchester Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "west-yorkshire": {
+      "name": "West Yorkshire Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "thames-valley": {
+      "name": "Thames Valley Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "merseyside": {
+      "name": "Merseyside Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "kent": {
+      "name": "Kent Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "essex": {
+      "name": "Essex Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "hampshire": {
+      "name": "Hampshire Constabulary",
+      "volume": 1208,
+      "tone": -3.989,
+      "sentiment": {
+        "mean": -0.272,
+        "positive": 2,
+        "neutral": 178,
+        "negative": 70
+      },
+      "topWords": [
+        {
+          "term": "murder",
+          "count": 88,
+          "ratePer10k": 324
+        },
+        {
+          "term": "report",
+          "count": 69,
+          "ratePer10k": 254.1
+        },
+        {
+          "term": "guilty",
+          "count": 58,
+          "ratePer10k": 213.5
+        },
+        {
+          "term": "teenager",
+          "count": 58,
+          "ratePer10k": 213.5
+        },
+        {
+          "term": "kill",
+          "count": 57,
+          "ratePer10k": 209.9
+        },
+        {
+          "term": "breath",
+          "count": 56,
+          "ratePer10k": 206.2
+        },
+        {
+          "term": "tanker",
+          "count": 55,
+          "ratePer10k": 202.5
+        },
+        {
+          "term": "tak",
+          "count": 55,
+          "ratePer10k": 202.5
+        },
+        {
+          "term": "brutality",
+          "count": 55,
+          "ratePer10k": 202.5
+        },
+        {
+          "term": "hijack",
+          "count": 51,
+          "ratePer10k": 187.8
+        },
+        {
+          "term": "incident",
+          "count": 47,
+          "ratePer10k": 173
+        },
+        {
+          "term": "deal",
+          "count": 41,
+          "ratePer10k": 151
+        },
+        {
+          "term": "amid",
+          "count": 40,
+          "ratePer10k": 147.3
+        },
+        {
+          "term": "vessel",
+          "count": 39,
+          "ratePer10k": 143.6
+        },
+        {
+          "term": "bid",
+          "count": 39,
+          "ratePer10k": 143.6
+        }
+      ]
+    },
+    "avon-somerset": {
+      "name": "Avon and Somerset Police",
+      "volume": 1799,
+      "tone": -3.411,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "lancashire": {
+      "name": "Lancashire Constabulary",
+      "volume": 1443,
+      "tone": -4.161,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "northumbria": {
+      "name": "Northumbria Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "south-yorkshire": {
+      "name": "South Yorkshire Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "surrey": {
+      "name": "Surrey Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    },
+    "sussex": {
+      "name": "Sussex Police",
+      "volume": 0,
+      "tone": null,
+      "sentiment": {
+        "mean": 0,
+        "positive": 0,
+        "neutral": 0,
+        "negative": 0
+      },
+      "topWords": []
+    }
+  }
+}

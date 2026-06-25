@@ -1,0 +1,44 @@
+{
+  "kind": "context",
+  "schemaVersion": 1,
+  "milestones": [
+    { "date": "2004", "label": "Facebook launches", "detail": "The dominant social network is founded (Feb 2004).", "url": "https://en.wikipedia.org/wiki/Feed_(Facebook)" },
+    { "date": "2006-09", "label": "Facebook News Feed", "detail": "The algorithmic feed that organises what users see is introduced (5 Sep 2006).", "url": "https://en.wikipedia.org/wiki/Feed_(Facebook)" },
+    { "date": "2006", "label": "Twitter launches", "detail": "Reverse-chronological microblogging arrives.", "url": "https://en.wikipedia.org/wiki/Twitter" },
+    { "date": "2009-02", "label": "Facebook 'Like' button", "detail": "A lightweight engagement signal that begins to drive ranking (Feb 2009).", "url": "https://en.wikipedia.org/wiki/List_of_Facebook_features" },
+    { "date": "2009-11", "label": "Twitter retweet button", "detail": "Native resharing accelerates viral spread.", "url": "https://en.wikipedia.org/wiki/Twitter" },
+    { "date": "2016-02", "label": "Twitter algorithmic timeline", "detail": "Twitter switches from chronological to engagement-ranked (Feb 2016).", "url": "https://www.nbcnews.com/tech/social-media/twitter-rolls-out-algorithmic-timeline-tool-n515706" },
+    { "date": "2018-01", "label": "Facebook 'Meaningful Social Interactions'", "detail": "A reranking later reported to have boosted divisive, anger-laden content (WSJ 'Facebook Files', 2021).", "url": "https://www.nbcnews.com/tech/social-media/facebooks-2018-algorithm-change-boosted-local-gop-groups-research-find-rcna27503" },
+    { "date": "2020-05", "label": "George Floyd video goes viral", "detail": "A bystander video spreads globally within days, intensifying scrutiny of policing (25 May 2020).", "url": "https://en.wikipedia.org/wiki/George_Floyd_protests" }
+  ],
+  "adoption": [
+    { "year": 2013, "share": 47, "note": "Approx. share of UK adults using social media for news (Ofcom, later baseline)." },
+    { "year": 2023, "share": 47, "note": "UK adults getting news via social media (Ofcom News Consumption 2023)." },
+    { "year": 2024, "share": 52, "note": "UK adults getting news via social media (Ofcom News Consumption 2024/25); 82% among 16–24s." },
+    { "year": 2025, "share": 52, "note": "Reuters Digital News Report 2025: ~20% of Britons name social media as their main news source; UK news trust down ~16 points since 2015." }
+  ],
+  "confidence": [
+    { "year": 2004, "goodJob": 47.4, "localConfidence": null },
+    { "year": 2005, "goodJob": 48.5, "localConfidence": null },
+    { "year": 2006, "goodJob": 50.4, "localConfidence": 63.1 },
+    { "year": 2007, "goodJob": 51.1, "localConfidence": 64.0 },
+    { "year": 2008, "goodJob": 52.6, "localConfidence": 65.2 },
+    { "year": 2009, "goodJob": 53.3, "localConfidence": 66.9 },
+    { "year": 2010, "goodJob": 56.4, "localConfidence": 69.0 },
+    { "year": 2011, "goodJob": 58.8, "localConfidence": 71.9, "note": "From the year ending March 2012, a question-order change means figures are not directly comparable with earlier years." },
+    { "year": 2012, "goodJob": 62.4, "localConfidence": 75.1 },
+    { "year": 2013, "goodJob": 61.5, "localConfidence": 74.5 },
+    { "year": 2014, "goodJob": 62.8, "localConfidence": 76.0 },
+    { "year": 2015, "goodJob": 62.0, "localConfidence": 75.8 },
+    { "year": 2016, "goodJob": 62.9, "localConfidence": 78.7 },
+    { "year": 2017, "goodJob": 62.2, "localConfidence": 78.3 },
+    { "year": 2018, "goodJob": 61.7, "localConfidence": 78.4 },
+    { "year": 2019, "goodJob": 57.5, "localConfidence": 75.3 },
+    { "year": 2020, "goodJob": 55.4, "localConfidence": 74.2 },
+    { "year": 2021, "goodJob": null, "localConfidence": null, "note": "CSEW suspended for COVID-19; no comparable figure for the years ending March 2021 and 2022." },
+    { "year": 2022, "goodJob": null, "localConfidence": null, "note": "CSEW suspended for COVID-19; no comparable figure." },
+    { "year": 2023, "goodJob": 51.2, "localConfidence": 67.7 },
+    { "year": 2024, "goodJob": 48.8, "localConfidence": 65.2 },
+    { "year": 2025, "goodJob": 48.8, "localConfidence": 66.9 }
+  ]
+}

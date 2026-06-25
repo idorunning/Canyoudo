@@ -310,7 +310,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
         <span class="font-sans text-[12.5px] font-semibold text-[#9a96c8]">Built for the site · free to use</span>
       </div>
 
-      <div class="relative grid md:grid-cols-2 gap-6">
+      <div class="relative grid md:grid-cols-3 gap-6">
 
         <!-- Research Assistant -->
         <a href="/research" class="group block bg-paper-50/[0.06] dark:bg-paper-50/10 border border-paper-50/[0.12] dark:border-paper-50/20 rounded-[18px] p-7 hover:bg-paper-50/[0.1] hover:-translate-y-1 transition-all duration-200">
@@ -358,6 +358,31 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           </div>
           <p class="text-[15px] leading-[1.55] text-[#bdb9e2] mb-6">
             The latest month of stop &amp; search and recorded crime, read for you by force and area — refreshed monthly.
+          </p>
+          <span class="inline-block bg-[#e8f5f8] text-ink-900 px-5 py-2.5 rounded-full text-[13px] font-bold group-hover:bg-[#d4edf2] transition-colors">
+            Open tool →
+          </span>
+        </a>
+
+        <!-- Perception -->
+        <a href="/perception" class="group block bg-paper-50/[0.06] dark:bg-paper-50/10 border border-paper-50/[0.12] dark:border-paper-50/20 rounded-[18px] p-7 hover:bg-paper-50/[0.1] hover:-translate-y-1 transition-all duration-200">
+          <div class="flex items-start justify-between mb-5">
+            <h3 class="font-extrabold text-[21px] tracking-[-0.02em] text-paper-50 m-0">Perception</h3>
+            <span class="text-[10px] font-extrabold uppercase tracking-[0.06em] bg-[#e8f5f8] dark:bg-paper-100 dark:text-ink-800 text-ink-900 px-2.5 py-1 rounded-full shrink-0">New</span>
+          </div>
+          <!-- Mini word-race preview: bars tinted by connotation (red/blue/green) -->
+          <div class="flex flex-col gap-1.5 h-[60px] justify-center mb-5">
+            {[
+              { w: '92%', c: '#b3402f' },
+              { w: '72%', c: '#3b6ea5' },
+              { w: '56%', c: '#2f7d52' },
+              { w: '38%', c: '#b3402f' },
+            ].map(b => (
+              <span class="block h-2.5 rounded-sm" style={`width:${b.w};background:${b.c}`}></span>
+            ))}
+          </div>
+          <p class="text-[15px] leading-[1.55] text-[#bdb9e2] mb-6">
+            A quarter-century of UK news about the police as a word race — watch the language grow, shrink and shift in tone, year by year.
           </p>
           <span class="inline-block bg-[#e8f5f8] text-ink-900 px-5 py-2.5 rounded-full text-[13px] font-bold group-hover:bg-[#d4edf2] transition-colors">
             Open tool →

@@ -1,0 +1,83 @@
+---
+section: data-stories
+title: 'The Perception of the Police in Online Media'
+description: Surveys tell us whether public confidence in the police rose or fell. This dataset shows the language that ran alongside it — a quarter-century of UK news headlines about the police, reduced to words, tone and themes. The two curves turn out not to be the same shape.
+keyTakeaways:
+  - Public confidence in the police, measured by the ONS Crime Survey, rose to a peak of around 63% in the mid-2010s and has since fallen to 49% — an inverted-U.
+  - The language of the coverage did not follow that arc. The share of police headlines reading negative climbed almost without pause, from a few percent in the early 2000s to a peak of 23% in 2021–22.
+  - For the first decade the two diverge — confidence rising while coverage darkened — and only converge after about 2015. So the words are not a mirror of public opinion; they are their own signal.
+  - This is a language record, not a poll. It shows the terms the press reached for — overwhelmingly misconduct, reform and leadership, and almost never "trust" — as confidence changed.
+pubDate: 2026-06-25
+tags:
+  - public confidence
+  - media
+  - trust
+  - metropolitan police
+  - stop and search
+  - data
+---
+
+import PerceptionExplorer from '../../components/perception/PerceptionExplorer.astro';
+import ConfidenceVsCoverage from '../../components/perception/ConfidenceVsCoverage.astro';
+import ThemeRiver from '../../components/perception/ThemeRiver.astro';
+import BumpChart from '../../components/perception/BumpChart.astro';
+
+**Surveys tell us *whether* confidence in the police rose or fell. They do not tell us the words that ran alongside it.** Every year the press writes about the police tens of thousands of times — about the institution, about named forces, and about the commissioners and officers who wear the uniform. The terms it reaches for are a record in their own right: not of what the public believes, but of the language in which the story of policing was told. This is an attempt to read a quarter-century of that record at once, and to set it next to the one number we *do* have for public opinion.
+
+That number is the ONS Crime Survey's long-running measure of whether people think their local police do "a good or excellent job." Put it beside the share of police headlines this project classifies as negative, and the first surprise arrives immediately: **the two lines are not the same shape.**
+
+<ConfidenceVsCoverage facet="police-general" />
+
+Public confidence is an arc. It climbed through the late 2000s, settled at a peak around 62–63% in the middle of the last decade, and has fallen since — to 49% by the year ending March 2025, its lowest in the series. The language of the coverage is not an arc at all. The negative share of headlines rises and keeps rising: a few percent in the early 2000s, mid-teens by 2012, and a peak of **23% in 2021 and 2022**, the years of Sarah Everard, Charing Cross and David Carrick.
+
+## Two curves, not one
+
+The gap between those lines is the whole point, so it is worth being precise about what it does and does not mean.
+
+For the first decade of the period the two move in **opposite directions**: confidence rises while the coverage grows steadily more negative. If headlines simply mirrored public mood you would expect the reverse. They don't. Only after about 2015 do the curves point the same way, as confidence turns down to meet a negativity that was already high. The language, in other words, is not a proxy for the survey. It is a related but distinct signal — one that darkened earlier, and more steadily, than public confidence did.
+
+This matters because it disciplines what can honestly be claimed. It is tempting to say media language *reflects* public perception, or even that it *shapes* it. This dataset supports neither. It has no measure of what readers believed, and no way to test what moved what. What it can show — and does — is the third, more modest thing: **the words are part of the information environment people lived in.** A measurable, datable account of how the most-read UK broadsheet worded police coverage as confidence changed around it. That is the claim this piece makes, and the only one it needs.
+
+Open the explorer, press play, and watch that environment change year by year.
+
+<PerceptionExplorer />
+
+## The shape of the language
+
+If the tone line tells you *that* the coverage darkened, the words tell you *how*. Read the early-2010s clouds and the vocabulary of *reform*, *recruitment* and *reassurance* is prominent. Read the 2021–2023 clouds and the words that grow are *misconduct*, *racist*, *misogyny*, *failure* and *crisis*. The period is bookended by two "institutional" verdicts that frame everything between them: the **Macpherson Report** of 1999, which named institutional racism in the Met, and the **Baroness Casey Review** of March 2023, which found the same force "institutionally racist, misogynistic and homophobic." Between those bookends sits the cluster the tone line bottoms out on — the murder of Sarah Everard by a serving officer, the Charing Cross messages, the strip-search of Child Q, the conviction of David Carrick — which the press treated as a single accelerating story.
+
+Read the five themes as one river and the rebalancing is hard to miss: the **misconduct** current widens through the 2010s and floods the channel after 2021, while the **reform** and **leadership** bands ebb. One absence is louder than any of them. Across the entire corpus, *trust* is by far the **rarest** theme — a few hundred mentions against several thousand for misconduct. The quality the surveys spend their time measuring is the one the coverage almost never names out loud.
+
+<ThemeRiver facet="police-general" />
+
+The same story as a league table: each year the words are ranked by how often they appear, and a handful are traced through the ranks. Words like *reform* and *community* that once led the field are overtaken by *misconduct*, *vetting* and *abuse*.
+
+<BumpChart facet="police-general" />
+
+The leaders series carries its own sub-plot. Coverage shifts from the relatively deferential, institutional reporting of the early 2000s to something intensely personalised and removal-driven: commissioners are now individually held to account and frequently leave under a loss of political confidence — Ian Blair in 2008, Cressida Dick in 2022 — or amid scandal, as Paul Stephenson did in 2011.
+
+## How the corpus was built — and what it cannot tell you
+
+The honest part of this analysis is its limits, so they are stated plainly and shown in the tool itself.
+
+**It is, in practice, one newspaper's record.** The deep, free, full-text archive that reaches back to 2000 is essentially the Guardian's, and that is what the word analysis rests on. The pipeline was *designed* to blend several sources, and a per-year **diversity index** travels with every year to make any imbalance visible — but the honest reading of that index is blunt: for almost every year it sits at zero, because one outlet carries the corpus. So this is best understood as a study of how *a* major national title worded police coverage over 25 years, not the whole British press. A centre-left broadsheet's news desk is the lens; the earliest years are also the thinnest, and are flagged accordingly.
+
+To keep years comparable despite very different corpus sizes, every count is normalised to a **rate per 10,000 words** rather than shown raw — otherwise the apparent "rise" in any theme would just track how much journalism survives online. The corpus is **headlines only**: no article body text is fetched or stored, so the words here are the framing a story was given, not its full contents. Common words and the words *police* and *policing* themselves are removed so what remains is what is being said *about* the police.
+
+The tone measure is deliberately simple — a dictionary method that counts hand-picked positive and negative words in each headline. It is a relative signal, good for direction and turning points, not a calibrated instrument. This analysis makes no claim to an authoritative "percentage of negative coverage": no rigorous figure of that kind exists for this period, and a single-source, headline-only sample is the wrong tool to invent one. Read the tone line for its shape, not its decimal places.
+
+## A note on the feed
+
+There is a second timeline often told alongside this one: over the same quarter-century, the way people *encounter* news shifted from the front page to the algorithmic feed — Facebook's News Feed in 2006, the engagement-ranked Twitter timeline in 2016, and reranking changes later reported to have amplified divisive content. It is a real and important change, and the explorer lets you switch the milestones on as context.
+
+But it is the weakest evidential thread in this piece, and it is fenced off deliberately. **This dataset contains no social-media data** — no posts, no engagement metrics — and it measures **no relationship** between the tone line and any feed. The milestones are a hand-curated backdrop, drawn from elsewhere; the experimental evidence that negative headlines earn more clicks is real but concerns clicks and platform internals, not police trust; and the broader "feeds drove the decline" story is correlational, contested, and not something these numbers can speak to. Treat the overlay as scenery to read the data against — never as a cause the data has established.
+
+## Why read the words at all
+
+If the surveys already tell us confidence fell, what does a word analysis add? The vocabulary of the change — and the fact that it is its own curve. A poll gives one number a year; it cannot tell you that coverage moved from *reassurance* to *vetting*, which forces and which named individuals carried the story, or that "trust" is the word the press least often reached for even as trust drained away. Press play on the explorer and you can watch the optimistic mid-2000s vocabulary harden, year by year, into the crisis language of the 2020s, with the named events surfacing exactly where the tone dips.
+
+None of it replaces the survey evidence. But it puts a vocabulary to a number — and shows, in the words themselves, that the story the press told about the police and the confidence the public reported in it were never quite the same story.
+
+---
+
+*Method note: figures and trends are derived aggregates over a sampled news corpus of UK police headlines, normalised per 10,000 words; provenance and a source-diversity index travel with every year. The committed dataset stores only counts and headline-level provenance — never article text. The live build uses a free Guardian Open Platform key (`npm run fetch-perception`). Confidence figures: ONS, Crime Survey for England & Wales, "the police in this area do a good or excellent job", by year ending March (no comparable figure for 2021–22, when the survey was suspended for COVID-19). Bookend reviews: the Macpherson Report (1999) and the Baroness Casey Review (2023). Social-media context (overlay only): Ofcom News Consumption; Reuters Institute Digital News Report.*
