@@ -23,7 +23,7 @@ const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
               href={supportUrl}
               rel="noopener"
               target="_blank"
-              class="inline-block font-sans text-[12.5px] font-bold bg-paper-100/10 hover:bg-paper-100/20 text-paper-50 px-4 py-2.5 rounded-full transition-colors"
+              class="inline-block font-sans text-[12.5px] font-bold bg-[#F2994A] hover:bg-[#e08840] text-white px-4 py-2.5 rounded-full transition-colors"
             >
               ☕ Buy me a coffee →
             </a>
@@ -68,9 +68,6 @@ const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
         <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.1em] text-ink-500 mb-4">
           New articles by email
         </p>
-        <p class="font-sans text-sm leading-relaxed mb-4">
-          Occasional emails when something new goes up. No spam, unsubscribe anytime.
-        </p>
         <div class="footer-newsletter">
           <NewsletterForm variant="compact" />
         </div>
@@ -82,6 +79,7 @@ const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
     <div class="border-t border-paper-50/10 mt-10 pt-6 flex flex-wrap justify-between items-center gap-3 font-sans text-[12.5px] text-ink-500">
       <span>© {year} Nathan Tracey. Views are personal.</span>
       <span>Evidence · Integrity · Action</span>
+      <a href="/admin/" class="hover:text-ink-400 transition-colors">Editor</a>
     </div>
   </div>
 </footer>
