@@ -1,51 +1,73 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-25T02:08:00.740Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-06-25T14:00:59.085Z",
+    "feedCount": 7,
     "sources": [
       "GOV.UK",
       "Home Office",
       "BBC News",
-      "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
-      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Boy, 15, missing after swimming in lake",
-      "link": "https://www.bbc.co.uk/news/articles/cvgeqeqpwyro?at_medium=RSS&at_campaign=rss",
+      "title": "Teenager cleared of murdering nine-year-old girl",
+      "link": "https://www.bbc.co.uk/news/articles/c9320y90lnno?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-24T18:00:54.000Z",
-      "summary": "Police say a nature reserve in Hampshire is currently off limits after the teenager's disappearance."
+      "isoDate": "2026-06-25T14:00:17.000Z",
+      "summary": "A jury at Bristol Crown Court finds a 16-year-old not guilty of murder and manslaughter."
     },
     {
-      "title": "Man who died at summer solstice event named",
-      "link": "https://www.bbc.co.uk/news/articles/cwykl875447o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-24T16:42:26.000Z",
-      "summary": "Police say a 41-year-old man has been arrested on suspicion of murder and remains in custody."
+      "title": "Legal AI giant signs as Chelsea kit sponsor",
+      "link": "https://www.legalcheek.com/2026/06/legal-ai-giant-signs-as-chelsea-kit-sponsor/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-25T13:53:28.000Z",
+      "summary": "Major sporting deal The post Legal AI giant signs as Chelsea kit sponsor appeared first on Legal Cheek ."
     },
     {
-      "title": "Six jailed for life for 'senseless' murder of innocent woman",
-      "link": "https://www.bbc.co.uk/news/articles/c14ygv2glmeo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
+      "title": "Meet the police dogs protecting the UK's critical infrastructure",
+      "link": "https://www.gov.uk/government/news/meet-the-police-dogs-protecting-the-uks-critical-infrastructure",
+      "source": "GOV.UK",
       "topic": "policing",
-      "isoDate": "2026-06-24T15:51:57.000Z",
-      "summary": "The murder of Joanne Penney was planned by Renaldo Baptiste from a prison cell."
+      "isoDate": "2026-06-25T12:59:16.000Z",
+      "summary": "…Meet the CNC&#x27;s specialist <mark>police</mark> dogs, whose skills help deter crime, support <mark>policing</mark> operations, and protect critical national infrastructure.…"
     },
     {
-      "title": "First locations for grooming gang inquiry announced",
-      "link": "https://www.bbc.co.uk/news/articles/c3ryv10l4jxo?at_medium=RSS&at_campaign=rss",
+      "title": "CNC welcomes launch of new Digital Memorial",
+      "link": "https://www.gov.uk/government/news/cnc-welcomes-launch-of-new-digital-memorial",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-06-25T12:39:35.000Z",
+      "summary": "Two Civil Nuclear Constabulary officers among 4,600 remembered through a new national Digital Memorial honouring <mark>police</mark> officers and staff who died in service."
+    },
+    {
+      "title": "TikTok influencer charged with Dubai murder",
+      "link": "https://www.bbc.co.uk/news/articles/cwy0p813jn7o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-24T14:21:15.000Z",
-      "summary": "The inquiry says it will initially focus on Oldham, Bradford and Keighley, and London."
+      "isoDate": "2026-06-25T11:58:44.000Z",
+      "summary": "Influencer Brooke George, 23, from Kent, claims she acted in self defence in stabbing her partner."
+    },
+    {
+      "title": "Shoosmiths teams up with Microsoft to help junior lawyers review contracts faster",
+      "link": "https://www.legalcheek.com/2026/06/shoosmiths-teams-up-with-microsoft-to-help-junior-lawyers-review-contracts-faster/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-25T08:29:06.000Z",
+      "summary": "Project Apollo The post Shoosmiths teams up with Microsoft to help junior lawyers review contracts faster appeared first on Legal Cheek ."
+    },
+    {
+      "title": "‘I got a 2:2 with mitigating circumstances. Can I still make it as a barrister?’",
+      "link": "https://www.legalcheek.com/2026/06/i-got-a-22-with-mitigating-circumstances-can-i-still-make-it-as-a-barrister/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-25T07:42:59.000Z",
+      "summary": "Bar hopeful seeks honest views The post ‘I got a 2:2 with mitigating circumstances. Can I still make it as a barrister?’ appeared first on Legal Cheek ."
     },
     {
       "title": "Clients are barristers’ biggest ethical headache, research finds",
@@ -54,22 +76,6 @@
       "topic": "law",
       "isoDate": "2026-06-24T07:59:39.000Z",
       "summary": "Pressure to bend rules The post Clients are barristers’ biggest ethical headache, research finds appeared first on Legal Cheek ."
-    },
-    {
-      "title": "White-collar jobpocalypse? Is AI really going to cut trainee lawyer numbers or might it end up boosting them?",
-      "link": "https://www.legalcheek.com/2026/06/white-collar-jobpocalypse-is-ai-really-going-to-cut-trainee-lawyer-numbers-or-might-it-end-up-boosting-them/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-24T07:41:39.000Z",
-      "summary": "Mixed messaging The post White-collar jobpocalypse? Is AI really going to cut trainee lawyer numbers or might it end up boosting them? appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-23T20:16:34.000Z",
-      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
     },
     {
       "title": "Meta halts worker tracking for AI training due to privacy fears",
@@ -88,28 +94,12 @@
       "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
     },
     {
-      "title": "Hogan Lovells bumps NQ lawyer pay to £145k in run-up to Cadwalader merger",
-      "link": "https://www.legalcheek.com/2026/06/hogan-lovells-bumps-nq-lawyer-pay-to-145k-in-run-up-to-cadwalader-merger/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-23T08:50:33.000Z",
-      "summary": "Extra £5k The post Hogan Lovells bumps NQ lawyer pay to £145k in run-up to Cadwalader merger appeared first on Legal Cheek ."
-    },
-    {
       "title": "UK backs new AI labs to make technology cheaper, more reliable and easier to use",
       "link": "https://www.gov.uk/government/news/uk-backs-new-ai-labs-to-make-technology-cheaper-more-reliable-and-easier-to-use",
       "source": "DSIT",
       "topic": "ai",
       "isoDate": "2026-06-23T08:00:00.000Z",
       "summary": "Oxford and UCL to host new government-backed labs developing the next generation of AI that more businesses and services can readily use"
-    },
-    {
-      "title": "Ashurst sees partner profits jump to £1.59 million ahead of Perkins Coie merger",
-      "link": "https://www.legalcheek.com/2026/06/ashurst-sees-partner-profits-jump-to-1-59-million-ahead-of-perkins-coie-merger/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-23T07:55:46.000Z",
-      "summary": "Up 15% 📈 The post Ashurst sees partner profits jump to £1.59 million ahead of Perkins Coie merger appeared first on Legal Cheek ."
     },
     {
       "title": "Premises closure orders",
@@ -136,36 +126,12 @@
       "summary": "Streets will be safer as thousands of offenders are to be banned from drinking alcohol during the World Cup this summer as part of the Government’s commitment to cut…"
     },
     {
-      "title": "Court and tribunal fees: updates from July 2026",
-      "link": "https://www.gov.uk/government/news/court-and-tribunal-fees-updates-from-july-2026",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-19T15:43:05.000Z",
-      "summary": "The Ministry of Justice plans to make a series of changes to court and tribunal fees payable in HM Courts and Tribunals Service."
-    },
-    {
-      "title": "Cardiff Prison",
-      "link": "https://www.gov.uk/guidance/cardiff-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-19T14:51:56.000Z",
-      "summary": "Cardiff Prison is a men’s prison in the centre of Cardiff, Wales."
-    },
-    {
       "title": "What new diversion data tells us about cutting crime and protecting the public",
       "link": "https://www.gov.uk/government/news/what-new-diversion-data-tells-us-about-cutting-crime-and-protecting-the-public",
       "source": "GOV.UK",
       "topic": "policing",
       "isoDate": "2026-06-18T08:52:48.000Z",
       "summary": "A blog by Phil Bowen, Interim Chair of the Youth Justice Board"
-    },
-    {
-      "title": "Specialist police units now deployed under new UK-France deal",
-      "link": "https://www.gov.uk/government/news/specialist-police-units-now-deployed-under-new-uk-france-deal",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-06-17T16:15:10.000Z",
-      "summary": "Two new French <mark>police</mark> units are now on the ground in Northern France, marking a significant step in joint UK-France efforts to stop dangerous illegal crossings."
     },
     {
       "title": "AI tool to slash planning decision times as government accelerates push to build 1.5 million homes",
@@ -176,28 +142,12 @@
       "summary": "Millions of homeowners could benefit from faster planning decisions, as 2 new AI tools are unveiled to modernise England’s planning permission system."
     },
     {
-      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-16T20:47:37.000Z",
-      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
-    },
-    {
       "title": "Tech Life",
       "link": "https://www.bbc.co.uk/sounds/play/w3ct8jy0?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
       "isoDate": "2026-06-16T19:30:00.000Z",
       "summary": "The prompt that made ChatGPT generate disturbing images. What does this tell us about AI?"
-    },
-    {
-      "title": "Solicitor General refers Vickrum Digwa to Court of Appeal",
-      "link": "https://www.gov.uk/government/news/solicitor-general-refers-vickrum-digwa-to-court-of-appeal",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-06-15T13:33:33.000Z",
-      "summary": "The Solicitor General Ellie Reeves KC has referred the sentence of Vickrum Digwa, convicted of the murder of Henry Nowak, to the Court of Appeal under the Unduly Lenient…"
     },
     {
       "title": "Appointment of Lord and Lady Justices of Appeal",
@@ -222,22 +172,6 @@
       "topic": "law",
       "isoDate": "2026-06-11T10:55:50.000Z",
       "summary": "Sir Geoffrey Vos delivered his remarks as part of London International Disputes Week The post Speech by the Master of the Rolls: AI in Arbitration – Promises and Pitfalls…"
-    },
-    {
-      "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/03/no-longer-just-a-copilot-microsofts-ai-wants-to-take-the-wheel/5250718",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-03T16:49:15.000Z",
-      "summary": "Always-on agent promises to keep work moving, provided you trust it with practically everything"
-    },
-    {
-      "title": "Anthropic, now atop the AI bubble, files for its IPO",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/01/anthropic-now-atop-the-ai-bubble-files-for-its-ipo/5249753",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-01T18:12:22.000Z",
-      "summary": "First it tops OpenAI's valuation, then it beats Altman to the IPO punch"
     }
   ]
 }
