@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-24T14:04:09.368Z",
+    "fetchedAt": "2026-06-25T02:08:00.740Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,11 +16,19 @@
   },
   "items": [
     {
-      "title": "Murder arrest after death at summer solstice event",
+      "title": "Boy, 15, missing after swimming in lake",
+      "link": "https://www.bbc.co.uk/news/articles/cvgeqeqpwyro?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-24T18:00:54.000Z",
+      "summary": "Police say a nature reserve in Hampshire is currently off limits after the teenager's disappearance."
+    },
+    {
+      "title": "Man who died at summer solstice event named",
       "link": "https://www.bbc.co.uk/news/articles/cwykl875447o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-24T13:32:32.000Z",
+      "isoDate": "2026-06-24T16:42:26.000Z",
       "summary": "Police say a 41-year-old man has been arrested on suspicion of murder and remains in custody."
     },
     {
@@ -28,7 +36,7 @@
       "link": "https://www.bbc.co.uk/news/articles/c14ygv2glmeo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-24T12:27:07.000Z",
+      "isoDate": "2026-06-24T15:51:57.000Z",
       "summary": "The murder of Joanne Penney was planned by Renaldo Baptiste from a prison cell."
     },
     {
@@ -36,7 +44,7 @@
       "link": "https://www.bbc.co.uk/news/articles/c3ryv10l4jxo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-24T11:44:20.000Z",
+      "isoDate": "2026-06-24T14:21:15.000Z",
       "summary": "The inquiry says it will initially focus on Oldham, Bradford and Keighley, and London."
     },
     {
@@ -54,14 +62,6 @@
       "topic": "law",
       "isoDate": "2026-06-24T07:41:39.000Z",
       "summary": "Mixed messaging The post White-collar jobpocalypse? Is AI really going to cut trainee lawyer numbers or might it end up boosting them? appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Police took eight minutes to find Henry Nowak's fatal stab wound",
-      "link": "https://www.bbc.co.uk/news/articles/cx2v02r105jo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-24T05:07:41.000Z",
-      "summary": "The Southampton student died from his injuries, while handcuffed on the ground by Hampshire police officers"
     },
     {
       "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
@@ -134,14 +134,6 @@
       "topic": "policing",
       "isoDate": "2026-06-19T23:01:03.000Z",
       "summary": "Streets will be safer as thousands of offenders are to be banned from drinking alcohol during the World Cup this summer as part of the Government’s commitment to cut…"
-    },
-    {
-      "title": "UK's top data and AI regulator quits after 'inappropriate' humour",
-      "link": "https://www.bbc.co.uk/news/articles/c0eyq7rnn22o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-06-19T20:28:33.000Z",
-      "summary": "Edwards has been the boss of the data watchdog since January 2022, and said he had made inappropriate attempts at humour."
     },
     {
       "title": "Court and tribunal fees: updates from July 2026",
