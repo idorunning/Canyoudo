@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "year": 2025,
   "provenance": {
-    "generatedAt": "2026-06-23T14:40:22.956Z",
+    "generatedAt": "2026-06-26T08:31:54.738Z",
     "method": "hybrid",
     "sourcesUsed": [
       "BBC News",
@@ -116,11 +116,6 @@
           "ratePer10k": 58
         },
         {
-          "term": "say",
-          "count": 39,
-          "ratePer10k": 53.8
-        },
-        {
           "term": "palestine",
           "count": 31,
           "ratePer10k": 42.8
@@ -146,24 +141,14 @@
           "ratePer10k": 35.9
         },
         {
-          "term": "chief",
-          "count": 26,
-          "ratePer10k": 35.9
-        },
-        {
           "term": "action",
           "count": 26,
           "ratePer10k": 35.9
         },
         {
           "term": "happen",
-          "count": 25,
-          "ratePer10k": 34.5
-        },
-        {
-          "term": "report",
-          "count": 22,
-          "ratePer10k": 30.4
+          "count": 24,
+          "ratePer10k": 33.1
         },
         {
           "term": "england",
@@ -191,11 +176,6 @@
           "ratePer10k": 26.2
         },
         {
-          "term": "ban",
-          "count": 19,
-          "ratePer10k": 26.2
-        },
-        {
           "term": "attack",
           "count": 18,
           "ratePer10k": 24.8
@@ -206,27 +186,7 @@
           "ratePer10k": 24.8
         },
         {
-          "term": "home",
-          "count": 17,
-          "ratePer10k": 23.5
-        },
-        {
-          "term": "face",
-          "count": 17,
-          "ratePer10k": 23.5
-        },
-        {
           "term": "crime",
-          "count": 17,
-          "ratePer10k": 23.5
-        },
-        {
-          "term": "call",
-          "count": 17,
-          "ratePer10k": 23.5
-        },
-        {
-          "term": "claim",
           "count": 17,
           "ratePer10k": 23.5
         },
@@ -306,11 +266,6 @@
           "ratePer10k": 16.6
         },
         {
-          "term": "plan",
-          "count": 12,
-          "ratePer10k": 16.6
-        },
-        {
           "term": "death",
           "count": 11,
           "ratePer10k": 15.2
@@ -342,6 +297,11 @@
         },
         {
           "term": "children",
+          "count": 11,
+          "ratePer10k": 15.2
+        },
+        {
+          "term": "claim",
           "count": 11,
           "ratePer10k": 15.2
         },
@@ -386,11 +346,6 @@
           "ratePer10k": 13.8
         },
         {
-          "term": "tell",
-          "count": 10,
-          "ratePer10k": 13.8
-        },
-        {
           "term": "child",
           "count": 10,
           "ratePer10k": 13.8
@@ -416,11 +371,6 @@
           "ratePer10k": 13.8
         },
         {
-          "term": "warn",
-          "count": 10,
-          "ratePer10k": 13.8
-        },
-        {
           "term": "shoot",
           "count": 9,
           "ratePer10k": 12.4
@@ -442,6 +392,11 @@
         },
         {
           "term": "violence",
+          "count": 9,
+          "ratePer10k": 12.4
+        },
+        {
+          "term": "call",
           "count": 9,
           "ratePer10k": 12.4
         },
@@ -481,11 +436,6 @@
           "ratePer10k": 11
         },
         {
-          "term": "stop",
-          "count": 8,
-          "ratePer10k": 11
-        },
-        {
           "term": "investigat",
           "count": 8,
           "ratePer10k": 11
@@ -504,6 +454,56 @@
           "term": "part",
           "count": 8,
           "ratePer10k": 11
+        },
+        {
+          "term": "domestic",
+          "count": 8,
+          "ratePer10k": 11
+        },
+        {
+          "term": "alleg",
+          "count": 8,
+          "ratePer10k": 11
+        },
+        {
+          "term": "scheme",
+          "count": 8,
+          "ratePer10k": 11
+        },
+        {
+          "term": "riot",
+          "count": 8,
+          "ratePer10k": 11
+        },
+        {
+          "term": "show",
+          "count": 7,
+          "ratePer10k": 9.7
+        },
+        {
+          "term": "girl",
+          "count": 7,
+          "ratePer10k": 9.7
+        },
+        {
+          "term": "die",
+          "count": 7,
+          "ratePer10k": 9.7
+        },
+        {
+          "term": "report",
+          "count": 7,
+          "ratePer10k": 9.7
+        },
+        {
+          "term": "three",
+          "count": 7,
+          "ratePer10k": 9.7
+        },
+        {
+          "term": "terrorism",
+          "count": 7,
+          "ratePer10k": 9.7
         }
       ],
       "sentiment": {
@@ -519,20 +519,24 @@
           "ratePer10k": 11
         },
         "misconduct": {
-          "items": 63,
-          "ratePer10k": 86.9
-        },
-        "reform": {
-          "items": 52,
-          "ratePer10k": 71.8
+          "items": 58,
+          "ratePer10k": 80
         },
         "race": {
-          "items": 44,
-          "ratePer10k": 60.7
+          "items": 49,
+          "ratePer10k": 67.6
         },
-        "leadership": {
-          "items": 27,
-          "ratePer10k": 37.3
+        "terrorism": {
+          "items": 15,
+          "ratePer10k": 20.7
+        },
+        "protest": {
+          "items": 41,
+          "ratePer10k": 56.6
+        },
+        "reform": {
+          "items": 62,
+          "ratePer10k": 85.6
         }
       },
       "entities": [
@@ -638,8 +642,8 @@
         },
         {
           "term": "happen",
-          "count": 97,
-          "ratePer10k": 68.2
+          "count": 96,
+          "ratePer10k": 67.5
         },
         {
           "term": "met",
@@ -687,11 +691,6 @@
           "ratePer10k": 30.9
         },
         {
-          "term": "say",
-          "count": 43,
-          "ratePer10k": 30.2
-        },
-        {
           "term": "jail",
           "count": 43,
           "ratePer10k": 30.2
@@ -712,16 +711,6 @@
           "ratePer10k": 24.6
         },
         {
-          "term": "claim",
-          "count": 35,
-          "ratePer10k": 24.6
-        },
-        {
-          "term": "call",
-          "count": 34,
-          "ratePer10k": 23.9
-        },
-        {
           "term": "alleg",
           "count": 33,
           "ratePer10k": 23.2
@@ -735,11 +724,6 @@
           "term": "stabb",
           "count": 31,
           "ratePer10k": 21.8
-        },
-        {
-          "term": "ban",
-          "count": 30,
-          "ratePer10k": 21.1
         },
         {
           "term": "starmer",
@@ -758,6 +742,11 @@
         },
         {
           "term": "liverpool",
+          "count": 26,
+          "ratePer10k": 18.3
+        },
+        {
+          "term": "claim",
           "count": 26,
           "ratePer10k": 18.3
         },
@@ -782,16 +771,6 @@
           "ratePer10k": 16.9
         },
         {
-          "term": "face",
-          "count": 23,
-          "ratePer10k": 16.2
-        },
-        {
-          "term": "report",
-          "count": 23,
-          "ratePer10k": 16.2
-        },
-        {
           "term": "investigation",
           "count": 23,
           "ratePer10k": 16.2
@@ -808,6 +787,11 @@
         },
         {
           "term": "crime",
+          "count": 22,
+          "ratePer10k": 15.5
+        },
+        {
+          "term": "call",
           "count": 22,
           "ratePer10k": 15.5
         },
@@ -838,11 +822,6 @@
         },
         {
           "term": "assault",
-          "count": 22,
-          "ratePer10k": 15.5
-        },
-        {
-          "term": "minister",
           "count": 22,
           "ratePer10k": 15.5
         },
@@ -907,11 +886,6 @@
           "ratePer10k": 14.1
         },
         {
-          "term": "chief",
-          "count": 20,
-          "ratePer10k": 14.1
-        },
-        {
           "term": "reform",
           "count": 20,
           "ratePer10k": 14.1
@@ -962,11 +936,6 @@
           "ratePer10k": 12.7
         },
         {
-          "term": "home",
-          "count": 18,
-          "ratePer10k": 12.7
-        },
-        {
           "term": "release",
           "count": 18,
           "ratePer10k": 12.7
@@ -975,11 +944,6 @@
           "term": "sex",
           "count": 18,
           "ratePer10k": 12.7
-        },
-        {
-          "term": "anti",
-          "count": 17,
-          "ratePer10k": 12
         },
         {
           "term": "pro",
@@ -1007,11 +971,6 @@
           "ratePer10k": 12
         },
         {
-          "term": "warn",
-          "count": 17,
-          "ratePer10k": 12
-        },
-        {
           "term": "teenager",
           "count": 17,
           "ratePer10k": 12
@@ -1030,6 +989,51 @@
           "term": "miss",
           "count": 16,
           "ratePer10k": 11.3
+        },
+        {
+          "term": "link",
+          "count": 16,
+          "ratePer10k": 11.3
+        },
+        {
+          "term": "gaza",
+          "count": 16,
+          "ratePer10k": 11.3
+        },
+        {
+          "term": "phone",
+          "count": 16,
+          "ratePer10k": 11.3
+        },
+        {
+          "term": "live",
+          "count": 16,
+          "ratePer10k": 11.3
+        },
+        {
+          "term": "prince",
+          "count": 16,
+          "ratePer10k": 11.3
+        },
+        {
+          "term": "farage",
+          "count": 14,
+          "ratePer10k": 9.8
+        },
+        {
+          "term": "law",
+          "count": 14,
+          "ratePer10k": 9.8
+        },
+        {
+          "term": "heathrow",
+          "count": 14,
+          "ratePer10k": 9.8
+        },
+        {
+          "term": "minister",
+          "count": 14,
+          "ratePer10k": 9.8
         }
       ],
       "sentiment": {
@@ -1041,24 +1045,28 @@
       },
       "lexicons": {
         "trust": {
-          "items": 5,
-          "ratePer10k": 3.5
+          "items": 4,
+          "ratePer10k": 2.8
         },
         "misconduct": {
-          "items": 95,
-          "ratePer10k": 66.8
-        },
-        "reform": {
-          "items": 93,
-          "ratePer10k": 65.4
+          "items": 87,
+          "ratePer10k": 61.2
         },
         "race": {
-          "items": 48,
-          "ratePer10k": 33.8
+          "items": 52,
+          "ratePer10k": 36.6
         },
-        "leadership": {
-          "items": 25,
-          "ratePer10k": 17.6
+        "terrorism": {
+          "items": 30,
+          "ratePer10k": 21.1
+        },
+        "protest": {
+          "items": 64,
+          "ratePer10k": 45
+        },
+        "reform": {
+          "items": 102,
+          "ratePer10k": 71.7
         }
       },
       "entities": [
@@ -1135,8 +1143,8 @@
       "topWords": [
         {
           "term": "happen",
-          "count": 65,
-          "ratePer10k": 64.8
+          "count": 64,
+          "ratePer10k": 63.8
         },
         {
           "term": "review",
@@ -1169,11 +1177,6 @@
           "ratePer10k": 27.9
         },
         {
-          "term": "chief",
-          "count": 27,
-          "ratePer10k": 26.9
-        },
-        {
           "term": "protest",
           "count": 26,
           "ratePer10k": 25.9
@@ -1187,11 +1190,6 @@
           "term": "murder",
           "count": 24,
           "ratePer10k": 23.9
-        },
-        {
-          "term": "say",
-          "count": 23,
-          "ratePer10k": 22.9
         },
         {
           "term": "gang",
@@ -1254,21 +1252,6 @@
           "ratePer10k": 18.9
         },
         {
-          "term": "call",
-          "count": 19,
-          "ratePer10k": 18.9
-        },
-        {
-          "term": "claim",
-          "count": 19,
-          "ratePer10k": 18.9
-        },
-        {
-          "term": "face",
-          "count": 19,
-          "ratePer10k": 18.9
-        },
-        {
           "term": "death",
           "count": 18,
           "ratePer10k": 17.9
@@ -1314,17 +1297,7 @@
           "ratePer10k": 16
         },
         {
-          "term": "minister",
-          "count": 16,
-          "ratePer10k": 16
-        },
-        {
           "term": "liverpool",
-          "count": 16,
-          "ratePer10k": 16
-        },
-        {
-          "term": "ban",
           "count": 16,
           "ratePer10k": 16
         },
@@ -1369,11 +1342,6 @@
           "ratePer10k": 14
         },
         {
-          "term": "home",
-          "count": 14,
-          "ratePer10k": 14
-        },
-        {
           "term": "reform",
           "count": 14,
           "ratePer10k": 14
@@ -1409,17 +1377,12 @@
           "ratePer10k": 13
         },
         {
-          "term": "report",
+          "term": "call",
           "count": 13,
           "ratePer10k": 13
         },
         {
           "term": "terror",
-          "count": 13,
-          "ratePer10k": 13
-        },
-        {
-          "term": "warn",
           "count": 13,
           "ratePer10k": 13
         },
@@ -1454,7 +1417,7 @@
           "ratePer10k": 12
         },
         {
-          "term": "tell",
+          "term": "claim",
           "count": 12,
           "ratePer10k": 12
         },
@@ -1470,11 +1433,6 @@
         },
         {
           "term": "charg",
-          "count": 11,
-          "ratePer10k": 11
-        },
-        {
-          "term": "amid",
           "count": 11,
           "ratePer10k": 11
         },
@@ -1509,11 +1467,6 @@
           "ratePer10k": 11
         },
         {
-          "term": "anti",
-          "count": 11,
-          "ratePer10k": 11
-        },
-        {
           "term": "boy",
           "count": 11,
           "ratePer10k": 11
@@ -1532,6 +1485,61 @@
           "term": "misconduct",
           "count": 10,
           "ratePer10k": 10
+        },
+        {
+          "term": "shot",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "end",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "far",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "scandal",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "british",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "thriller",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "accus",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "southport",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "survivor",
+          "count": 10,
+          "ratePer10k": 10
+        },
+        {
+          "term": "charge",
+          "count": 9,
+          "ratePer10k": 9
+        },
+        {
+          "term": "stabb",
+          "count": 9,
+          "ratePer10k": 9
         }
       ],
       "sentiment": {
@@ -1547,20 +1555,24 @@
           "ratePer10k": 7
         },
         "misconduct": {
-          "items": 59,
-          "ratePer10k": 58.8
-        },
-        "reform": {
-          "items": 98,
-          "ratePer10k": 97.7
+          "items": 58,
+          "ratePer10k": 57.8
         },
         "race": {
-          "items": 32,
-          "ratePer10k": 31.9
+          "items": 34,
+          "ratePer10k": 33.9
         },
-        "leadership": {
-          "items": 27,
-          "ratePer10k": 26.9
+        "terrorism": {
+          "items": 20,
+          "ratePer10k": 19.9
+        },
+        "protest": {
+          "items": 40,
+          "ratePer10k": 39.9
+        },
+        "reform": {
+          "items": 104,
+          "ratePer10k": 103.7
         }
       },
       "entities": [

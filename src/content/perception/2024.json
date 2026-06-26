@@ -3,24 +3,39 @@
   "schemaVersion": 1,
   "year": 2024,
   "provenance": {
-    "generatedAt": "2026-06-23T07:48:53.512Z",
-    "method": "guardian",
+    "generatedAt": "2026-06-26T08:31:54.737Z",
+    "method": "hybrid",
     "sourcesUsed": [
+      "BBC News",
       "The Guardian"
     ],
-    "itemCount": 2649,
-    "diversityIndex": 0,
+    "itemCount": 765,
+    "diversityIndex": 1,
     "sparse": false,
     "sample": false,
-    "notes": "Built from Guardian Open Platform HEADLINES only (titles counted, then dropped) — keeps the word analysis on-topic rather than counting whole bodies."
+    "notes": "Merged from 2 sources (bbc-dataset, guardian). BBC News headlines from the RealTimeData/bbc_news_alltime dataset on Hugging Face (monthly partitions, 2017→present). Titles counted in memory, then dropped; the dataset body column is never read or stored — only derived aggregates are kept. Built from Guardian Open Platform HEADLINES only (titles counted, then dropped) — keeps the word analysis on-topic rather than counting whole bodies."
   },
   "sources": [
+    {
+      "title": "Norwich: Two of four found dead in house were stabbed, police say",
+      "source": "BBC News",
+      "url": "http://www.bbc.co.uk/news/uk-england-norfolk-68040787",
+      "date": "2024-01-21",
+      "outletType": "broadcaster"
+    },
     {
       "title": "Paddy Hill, one of wrongly convicted Birmingham Six, dies aged 80",
       "source": "The Guardian",
       "url": "https://www.theguardian.com/uk-news/2024/dec/30/birmingham-six-paddy-hill-dies-aged-80",
       "date": "2024-12-30",
       "outletType": "broadsheet"
+    },
+    {
+      "title": "Newham: Newborn girl found in shopping bag less than hour old, police say",
+      "source": "BBC News",
+      "url": "http://www.bbc.co.uk/news/uk-england-london-68025769",
+      "date": "2024-01-19",
+      "outletType": "broadcaster"
     },
     {
       "title": "Forces should cut officer numbers and use tech to fight crime, police chief says",
@@ -30,11 +45,25 @@
       "outletType": "broadsheet"
     },
     {
+      "title": "Gaza war creating a radicalisation moment, senior UK police officer says",
+      "source": "BBC News",
+      "url": "http://www.bbc.co.uk/news/uk-68035172",
+      "date": "2024-01-19",
+      "outletType": "broadcaster"
+    },
+    {
       "title": "Police forces report sharp rise in religious hate crimes across UK",
       "source": "The Guardian",
       "url": "https://www.theguardian.com/society/2024/dec/30/police-forces-report-sharp-rise-in-religious-hate-crimes-across-uk",
       "date": "2024-12-30",
       "outletType": "broadsheet"
+    },
+    {
+      "title": "Medics told not to report illegal abortions to police",
+      "source": "BBC News",
+      "url": "http://www.bbc.co.uk/news/health-68036171",
+      "date": "2024-01-22",
+      "outletType": "broadcaster"
     },
     {
       "title": "Angela Greener obituary",
@@ -44,6 +73,13 @@
       "outletType": "broadsheet"
     },
     {
+      "title": "Aberystwyth: 'Go back to Brummyland' note a hate crime - police",
+      "source": "BBC News",
+      "url": "http://www.bbc.co.uk/news/uk-wales-67935426",
+      "date": "2024-01-12",
+      "outletType": "broadcaster"
+    },
+    {
       "title": "Met police pays out after arrest of teenager wrongly linked to protest",
       "source": "The Guardian",
       "url": "https://www.theguardian.com/uk-news/2024/dec/29/met-police-arrest-teenager-wrongly-linked-to-palestine-protest",
@@ -51,1337 +87,456 @@
       "outletType": "broadsheet"
     },
     {
+      "title": "Newport man Shaun Wakefield fired air rifle at police",
+      "source": "BBC News",
+      "url": "http://www.bbc.co.uk/news/uk-wales-68314476",
+      "date": "2024-02-16",
+      "outletType": "broadcaster"
+    },
+    {
       "title": "Police surveillance of journalists in Northern Ireland",
       "source": "The Guardian",
       "url": "https://www.theguardian.com/uk-news/2024/dec/26/police-surveillance-of-journalists-in-northern-ireland",
       "date": "2024-12-26",
       "outletType": "broadsheet"
-    },
-    {
-      "title": "Sara Sharif’s murder should lead to better protection of home-schooled children",
-      "source": "The Guardian",
-      "url": "https://www.theguardian.com/education/2024/dec/25/sara-sharif-murder-should-lead-to-better-protection-of-home-schooled-children",
-      "date": "2024-12-25",
-      "outletType": "broadsheet"
-    },
-    {
-      "title": "Teenager dies after car crashes during Sheffield police chase",
-      "source": "The Guardian",
-      "url": "https://www.theguardian.com/uk-news/2024/dec/24/teenager-dies-after-car-crashes-during-sheffield-police-chase",
-      "date": "2024-12-24",
-      "outletType": "broadsheet"
-    },
-    {
-      "title": "Burglar who stole £10m worth of jewellery from London mansion broke in through bathroom window",
-      "source": "The Guardian",
-      "url": "https://www.theguardian.com/uk-news/2024/dec/31/burglar-who-stole-10m-worth-of-jewellery-from-london-mansion-broke-in-through-bathroom-window",
-      "date": "2024-12-31",
-      "outletType": "broadsheet"
-    },
-    {
-      "title": "Killed women count: 80 women allegedly killed by men in UK in 2024",
-      "source": "The Guardian",
-      "url": "https://www.theguardian.com/uk-news/ng-interactive/2024/dec/31/killed-women-count-a-project-highlighting-the-toll-and-tragedy-of-violence-against-women-in-the-uk",
-      "date": "2024-12-31",
-      "outletType": "broadsheet"
-    },
-    {
-      "title": "Jewellery worth £10.4m stolen from London home in one of Britain’s biggest burglaries",
-      "source": "The Guardian",
-      "url": "https://www.theguardian.com/uk-news/2024/dec/30/jewellery-worth-104m-stolen-from-london-home-in-one-of-britains-biggest-burglaries",
-      "date": "2024-12-30",
-      "outletType": "broadsheet"
-    },
-    {
-      "title": "Fugitive members of people-smuggling gang arrested in UK",
-      "source": "The Guardian",
-      "url": "https://www.theguardian.com/uk-news/2024/dec/30/people-traffickers-behind-extremely-cruel-abuse-of-migrants-arrested-in-uk",
-      "date": "2024-12-30",
-      "outletType": "broadsheet"
     }
   ],
   "facets": {
     "police-general": {
-      "corpusTokens": 6192,
+      "corpusTokens": 8564,
       "topWords": [
         {
           "term": "met",
-          "count": 69,
-          "ratePer10k": 111.4
+          "count": 73,
+          "ratePer10k": 85.2
+        },
+        {
+          "term": "attack",
+          "count": 35,
+          "ratePer10k": 40.9
+        },
+        {
+          "term": "riot",
+          "count": 33,
+          "ratePer10k": 38.5
+        },
+        {
+          "term": "murder",
+          "count": 32,
+          "ratePer10k": 37.4
         },
         {
           "term": "inquiry",
-          "count": 30,
-          "ratePer10k": 48.4
-        },
-        {
-          "term": "chief",
-          "count": 28,
-          "ratePer10k": 45.2
+          "count": 32,
+          "ratePer10k": 37.4
         },
         {
           "term": "crime",
+          "count": 29,
+          "ratePer10k": 33.9
+        },
+        {
+          "term": "arrest",
+          "count": 28,
+          "ratePer10k": 32.7
+        },
+        {
+          "term": "family",
           "count": 26,
-          "ratePer10k": 42
+          "ratePer10k": 30.4
+        },
+        {
+          "term": "find",
+          "count": 26,
+          "ratePer10k": 30.4
+        },
+        {
+          "term": "protest",
+          "count": 26,
+          "ratePer10k": 30.4
         },
         {
           "term": "england",
           "count": 26,
-          "ratePer10k": 42
+          "ratePer10k": 30.4
+        },
+        {
+          "term": "death",
+          "count": 25,
+          "ratePer10k": 29.2
+        },
+        {
+          "term": "car",
+          "count": 24,
+          "ratePer10k": 28
+        },
+        {
+          "term": "suspect",
+          "count": 24,
+          "ratePer10k": 28
         },
         {
           "term": "right",
           "count": 24,
-          "ratePer10k": 38.8
+          "ratePer10k": 28
         },
         {
-          "term": "riot",
+          "term": "london",
           "count": 23,
-          "ratePer10k": 37.1
-        },
-        {
-          "term": "murder",
-          "count": 21,
-          "ratePer10k": 33.9
+          "ratePer10k": 26.9
         },
         {
           "term": "violence",
-          "count": 21,
-          "ratePer10k": 33.9
+          "count": 23,
+          "ratePer10k": 26.9
+        },
+        {
+          "term": "victim",
+          "count": 22,
+          "ratePer10k": 25.7
+        },
+        {
+          "term": "call",
+          "count": 22,
+          "ratePer10k": 25.7
+        },
+        {
+          "term": "review",
+          "count": 22,
+          "ratePer10k": 25.7
         },
         {
           "term": "women",
           "count": 21,
-          "ratePer10k": 33.9
+          "ratePer10k": 24.5
         },
         {
-          "term": "london",
-          "count": 21,
-          "ratePer10k": 33.9
-        },
-        {
-          "term": "protest",
+          "term": "kill",
           "count": 20,
-          "ratePer10k": 32.3
+          "ratePer10k": 23.4
+        },
+        {
+          "term": "view",
+          "count": 20,
+          "ratePer10k": 23.4
         },
         {
           "term": "far",
           "count": 20,
-          "ratePer10k": 32.3
-        },
-        {
-          "term": "call",
-          "count": 19,
-          "ratePer10k": 30.7
-        },
-        {
-          "term": "review",
-          "count": 19,
-          "ratePer10k": 30.7
-        },
-        {
-          "term": "find",
-          "count": 18,
-          "ratePer10k": 29.1
-        },
-        {
-          "term": "view",
-          "count": 18,
-          "ratePer10k": 29.1
-        },
-        {
-          "term": "report",
-          "count": 17,
-          "ratePer10k": 27.5
-        },
-        {
-          "term": "britain",
-          "count": 17,
-          "ratePer10k": 27.5
+          "ratePer10k": 23.4
         },
         {
           "term": "starmer",
-          "count": 17,
-          "ratePer10k": 27.5
+          "count": 19,
+          "ratePer10k": 22.2
         },
         {
-          "term": "death",
-          "count": 17,
-          "ratePer10k": 27.5
-        },
-        {
-          "term": "family",
-          "count": 17,
-          "ratePer10k": 27.5
-        },
-        {
-          "term": "spy",
-          "count": 16,
-          "ratePer10k": 25.8
-        },
-        {
-          "term": "guardian",
-          "count": 16,
-          "ratePer10k": 25.8
-        },
-        {
-          "term": "victim",
-          "count": 16,
-          "ratePer10k": 25.8
-        },
-        {
-          "term": "wale",
-          "count": 16,
-          "ratePer10k": 25.8
-        },
-        {
-          "term": "arrest",
-          "count": 15,
-          "ratePer10k": 24.2
-        },
-        {
-          "term": "stop",
-          "count": 15,
-          "ratePer10k": 24.2
-        },
-        {
-          "term": "labour",
-          "count": 15,
-          "ratePer10k": 24.2
-        },
-        {
-          "term": "children",
-          "count": 14,
-          "ratePer10k": 22.6
-        },
-        {
-          "term": "black",
-          "count": 14,
-          "ratePer10k": 22.6
-        },
-        {
-          "term": "fail",
-          "count": 14,
-          "ratePer10k": 22.6
-        },
-        {
-          "term": "attack",
-          "count": 14,
-          "ratePer10k": 22.6
-        },
-        {
-          "term": "undercover",
-          "count": 13,
+          "term": "manchester",
+          "count": 18,
           "ratePer10k": 21
         },
         {
           "term": "case",
-          "count": 13,
+          "count": 18,
           "ratePer10k": 21
         },
         {
-          "term": "say",
-          "count": 13,
+          "term": "children",
+          "count": 18,
           "ratePer10k": 21
+        },
+        {
+          "term": "found",
+          "count": 16,
+          "ratePer10k": 18.7
+        },
+        {
+          "term": "jail",
+          "count": 16,
+          "ratePer10k": 18.7
+        },
+        {
+          "term": "search",
+          "count": 16,
+          "ratePer10k": 18.7
+        },
+        {
+          "term": "spy",
+          "count": 16,
+          "ratePer10k": 18.7
+        },
+        {
+          "term": "guardian",
+          "count": 16,
+          "ratePer10k": 18.7
+        },
+        {
+          "term": "wale",
+          "count": 16,
+          "ratePer10k": 18.7
+        },
+        {
+          "term": "shoot",
+          "count": 15,
+          "ratePer10k": 17.5
+        },
+        {
+          "term": "show",
+          "count": 15,
+          "ratePer10k": 17.5
+        },
+        {
+          "term": "accus",
+          "count": 15,
+          "ratePer10k": 17.5
+        },
+        {
+          "term": "labour",
+          "count": 15,
+          "ratePer10k": 17.5
+        },
+        {
+          "term": "investigation",
+          "count": 14,
+          "ratePer10k": 16.3
+        },
+        {
+          "term": "law",
+          "count": 14,
+          "ratePer10k": 16.3
+        },
+        {
+          "term": "black",
+          "count": 14,
+          "ratePer10k": 16.3
+        },
+        {
+          "term": "fail",
+          "count": 14,
+          "ratePer10k": 16.3
+        },
+        {
+          "term": "girl",
+          "count": 13,
+          "ratePer10k": 15.2
+        },
+        {
+          "term": "watchdog",
+          "count": 13,
+          "ratePer10k": 15.2
+        },
+        {
+          "term": "hear",
+          "count": 13,
+          "ratePer10k": 15.2
+        },
+        {
+          "term": "claim",
+          "count": 13,
+          "ratePer10k": 15.2
+        },
+        {
+          "term": "everard",
+          "count": 13,
+          "ratePer10k": 15.2
+        },
+        {
+          "term": "undercover",
+          "count": 13,
+          "ratePer10k": 15.2
         },
         {
           "term": "justice",
           "count": 13,
-          "ratePer10k": 21
+          "ratePer10k": 15.2
         },
         {
-          "term": "claim",
+          "term": "killer",
           "count": 12,
-          "ratePer10k": 19.4
+          "ratePer10k": 14
         },
         {
-          "term": "investigation",
+          "term": "southport",
           "count": 12,
-          "ratePer10k": 19.4
+          "ratePer10k": 14
         },
         {
-          "term": "law",
+          "term": "court",
           "count": 12,
-          "ratePer10k": 19.4
+          "ratePer10k": 14
         },
         {
-          "term": "search",
-          "count": 12,
-          "ratePer10k": 19.4
-        },
-        {
-          "term": "home",
+          "term": "help",
           "count": 11,
-          "ratePer10k": 17.8
+          "ratePer10k": 12.8
+        },
+        {
+          "term": "shot",
+          "count": 11,
+          "ratePer10k": 12.8
+        },
+        {
+          "term": "office",
+          "count": 11,
+          "ratePer10k": 12.8
+        },
+        {
+          "term": "guilty",
+          "count": 11,
+          "ratePer10k": 12.8
+        },
+        {
+          "term": "thousand",
+          "count": 11,
+          "ratePer10k": 12.8
         },
         {
           "term": "abuse",
           "count": 11,
-          "ratePer10k": 17.8
+          "ratePer10k": 12.8
         },
         {
-          "term": "jail",
-          "count": 11,
-          "ratePer10k": 17.8
+          "term": "three",
+          "count": 10,
+          "ratePer10k": 11.7
         },
         {
-          "term": "everard",
-          "count": 11,
-          "ratePer10k": 17.8
+          "term": "four",
+          "count": 10,
+          "ratePer10k": 11.7
         },
         {
-          "term": "suspect",
-          "count": 11,
-          "ratePer10k": 17.8
+          "term": "die",
+          "count": 10,
+          "ratePer10k": 11.7
         },
         {
-          "term": "kill",
-          "count": 11,
-          "ratePer10k": 17.8
+          "term": "father",
+          "count": 10,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "lawrence",
+          "count": 10,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "end",
+          "count": 10,
+          "ratePer10k": 11.7
+        },
+        {
+          "term": "chris",
+          "count": 10,
+          "ratePer10k": 11.7
         },
         {
           "term": "misconduct",
           "count": 10,
-          "ratePer10k": 16.1
+          "ratePer10k": 11.7
         },
         {
-          "term": "manchester",
-          "count": 10,
-          "ratePer10k": 16.1
+          "term": "watch",
+          "count": 9,
+          "ratePer10k": 10.5
         },
         {
-          "term": "accus",
-          "count": 10,
-          "ratePer10k": 16.1
+          "term": "boy",
+          "count": 9,
+          "ratePer10k": 10.5
         },
         {
-          "term": "hear",
-          "count": 10,
-          "ratePer10k": 16.1
+          "term": "died",
+          "count": 9,
+          "ratePer10k": 10.5
         },
         {
-          "term": "sarah",
-          "count": 10,
-          "ratePer10k": 16.1
+          "term": "protester",
+          "count": 9,
+          "ratePer10k": 10.5
         },
         {
-          "term": "face",
-          "count": 10,
-          "ratePer10k": 16.1
+          "term": "fear",
+          "count": 9,
+          "ratePer10k": 10.5
+        },
+        {
+          "term": "kaba",
+          "count": 9,
+          "ratePer10k": 10.5
+        },
+        {
+          "term": "son",
+          "count": 9,
+          "ratePer10k": 10.5
         },
         {
           "term": "rise",
           "count": 9,
-          "ratePer10k": 14.5
-        },
-        {
-          "term": "car",
-          "count": 9,
-          "ratePer10k": 14.5
+          "ratePer10k": 10.5
         },
         {
           "term": "cop",
           "count": 9,
-          "ratePer10k": 14.5
+          "ratePer10k": 10.5
         },
         {
           "term": "sexual",
           "count": 9,
-          "ratePer10k": 14.5
-        },
-        {
-          "term": "found",
-          "count": 9,
-          "ratePer10k": 14.5
-        },
-        {
-          "term": "warn",
-          "count": 9,
-          "ratePer10k": 14.5
+          "ratePer10k": 10.5
         },
         {
           "term": "racist",
           "count": 9,
-          "ratePer10k": 14.5
-        },
-        {
-          "term": "minister",
-          "count": 9,
-          "ratePer10k": 14.5
-        },
-        {
-          "term": "happen",
-          "count": 9,
-          "ratePer10k": 14.5
+          "ratePer10k": 10.5
         },
         {
           "term": "child",
           "count": 9,
-          "ratePer10k": 14.5
-        },
-        {
-          "term": "thousand",
-          "count": 9,
-          "ratePer10k": 14.5
+          "ratePer10k": 10.5
         },
         {
           "term": "prison",
           "count": 9,
-          "ratePer10k": 14.5
+          "ratePer10k": 10.5
         },
         {
-          "term": "guilty",
-          "count": 9,
-          "ratePer10k": 14.5
-        },
-        {
-          "term": "domestic",
+          "term": "moment",
           "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "court",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "keir",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "mother",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "duty",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "end",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "chri",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "scotland",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "show",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "investigate",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "risk",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "office",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "lawrence",
-          "count": 8,
-          "ratePer10k": 12.9
-        },
-        {
-          "term": "hate",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "live",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "away",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "son",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "reveal",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "watchdog",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "amid",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "street",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "kaba",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "fear",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "rioter",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "plan",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "stephen",
-          "count": 7,
-          "ratePer10k": 11.3
-        },
-        {
-          "term": "die",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "journalist",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "still",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "action",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "public",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "service",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "father",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "act",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "four",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "conviction",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "girl",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "men",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "tell",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "line",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "threat",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "shot",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "detective",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "chair",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "national",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "racism",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "sex",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "strip",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "violent",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "campaigner",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "sunak",
-          "count": 6,
-          "ratePer10k": 9.7
-        },
-        {
-          "term": "six",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "across",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "better",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "unlawfully",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "spi",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "target",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "allegedly",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "train",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "scandal",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "crisi",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "wait",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "killer",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "greater",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "role",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "fay",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "alleg",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "return",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "life",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "work",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "since",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "file",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "died",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "failure",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "five",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "mental",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "health",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "shoot",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "southport",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "assault",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "british",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "campaign",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "drug",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "pro",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "record",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "protester",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "need",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "emergency",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "leed",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "anti",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "unrest",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "stakeknife",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "never",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "post",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "full",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "tory",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "war",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "nottingham",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "rayner",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "mps",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "couzen",
-          "count": 5,
-          "ratePer10k": 8.1
-        },
-        {
-          "term": "angela",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "pay",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "teenager",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "northern",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "ireland",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "tier",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "doubt",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "know",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "apologise",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "three",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "legal",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "forc",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "young",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "miss",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "psni",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "like",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "don",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "expect",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "promise",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "ramm",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "cow",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "government",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "demand",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "incident",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "novichok",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "pearson",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "cps",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "criminal",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "biggest",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "begin",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "gross",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "defend",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "change",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "trust",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "used",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "yvette",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "cooper",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "evidence",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "charg",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "boy",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "admit",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "activist",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "join",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "due",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "help",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "counter",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "open",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "head",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "civil",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "left",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "offence",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "andrew",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "held",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "fund",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "nine",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "social",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "answer",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "race",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "gett",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "crash",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "time",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "key",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "system",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "putt",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "break",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "disorder",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "rally",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "worse",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "led",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "decision",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "strike",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "terror",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "march",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "wayne",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "emma",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "caldwell",
-          "count": 4,
-          "ratePer10k": 6.5
-        },
-        {
-          "term": "hill",
-          "count": 3,
-          "ratePer10k": 4.8
-        },
-        {
-          "term": "wrongly",
-          "count": 3,
-          "ratePer10k": 4.8
-        },
-        {
-          "term": "birmingham",
-          "count": 3,
-          "ratePer10k": 4.8
-        },
-        {
-          "term": "cut",
-          "count": 3,
-          "ratePer10k": 4.8
-        },
-        {
-          "term": "use",
-          "count": 3,
-          "ratePer10k": 4.8
-        },
-        {
-          "term": "fight",
-          "count": 3,
-          "ratePer10k": 4.8
-        },
-        {
-          "term": "obituary",
-          "count": 3,
-          "ratePer10k": 4.8
+          "ratePer10k": 9.3
         }
       ],
       "sentiment": {
-        "mean": -0.176,
-        "positive": 14,
-        "neutral": 384,
-        "negative": 97,
+        "mean": -0.165,
+        "positive": 21,
+        "neutral": 574,
+        "negative": 138,
         "gdeltToneMean": null
       },
       "lexicons": {
         "trust": {
           "items": 8,
-          "ratePer10k": 12.9
+          "ratePer10k": 9.3
         },
         "misconduct": {
-          "items": 44,
-          "ratePer10k": 71.1
-        },
-        "reform": {
-          "items": 56,
-          "ratePer10k": 90.4
+          "items": 47,
+          "ratePer10k": 54.9
         },
         "race": {
-          "items": 36,
-          "ratePer10k": 58.1
+          "items": 43,
+          "ratePer10k": 50.2
         },
-        "leadership": {
-          "items": 30,
-          "ratePer10k": 48.4
+        "terrorism": {
+          "items": 13,
+          "ratePer10k": 15.2
+        },
+        "protest": {
+          "items": 40,
+          "ratePer10k": 46.7
+        },
+        "reform": {
+          "items": 82,
+          "ratePer10k": 95.7
         }
       },
       "entities": [
@@ -1389,2819 +544,663 @@
           "name": "Chief constable",
           "type": "role",
           "count": 8,
-          "ratePer10k": 12.9
+          "ratePer10k": 9.3
+        },
+        {
+          "name": "Wayne Couzens",
+          "type": "officer",
+          "count": 6,
+          "ratePer10k": 7
+        },
+        {
+          "name": "Detective",
+          "type": "role",
+          "count": 6,
+          "ratePer10k": 7
         },
         {
           "name": "Greater Manchester Police",
           "type": "force",
           "count": 6,
-          "ratePer10k": 9.7
+          "ratePer10k": 7
         },
         {
-          "name": "Detective",
-          "type": "role",
-          "count": 5,
-          "ratePer10k": 8.1
+          "name": "Wiltshire Police",
+          "type": "force",
+          "count": 4,
+          "ratePer10k": 4.7
         },
         {
-          "name": "Wayne Couzens",
-          "type": "officer",
-          "count": 5,
-          "ratePer10k": 8.1
+          "name": "Essex Police",
+          "type": "force",
+          "count": 4,
+          "ratePer10k": 4.7
         },
         {
           "name": "Surrey Police",
           "type": "force",
           "count": 4,
-          "ratePer10k": 6.5
+          "ratePer10k": 4.7
         },
         {
           "name": "Humberside Police",
           "type": "force",
           "count": 2,
-          "ratePer10k": 3.2
-        },
-        {
-          "name": "Essex Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 3.2
+          "ratePer10k": 2.3
         },
         {
           "name": "City of London Police",
           "type": "force",
           "count": 2,
-          "ratePer10k": 3.2
+          "ratePer10k": 2.3
         },
         {
           "name": "West Midlands Police",
           "type": "force",
           "count": 2,
-          "ratePer10k": 3.2
+          "ratePer10k": 2.3
         },
         {
           "name": "West Mercia Police",
           "type": "force",
           "count": 2,
-          "ratePer10k": 3.2
+          "ratePer10k": 2.3
         },
         {
           "name": "Nottinghamshire Police",
           "type": "force",
           "count": 2,
-          "ratePer10k": 3.2
+          "ratePer10k": 2.3
         },
         {
           "name": "Leicestershire Police",
           "type": "force",
           "count": 2,
-          "ratePer10k": 3.2
-        },
-        {
-          "name": "Wiltshire Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 3.2
+          "ratePer10k": 2.3
         },
         {
           "name": "Commissioner",
           "type": "role",
           "count": 1,
-          "ratePer10k": 1.6
+          "ratePer10k": 1.2
         },
         {
           "name": "David Carrick",
           "type": "officer",
           "count": 1,
-          "ratePer10k": 1.6
+          "ratePer10k": 1.2
         }
       ]
     },
     "forces": {
-      "corpusTokens": 14223,
+      "corpusTokens": 33,
       "topWords": [
         {
-          "term": "london",
-          "count": 115,
-          "ratePer10k": 80.9
-        },
-        {
           "term": "met",
-          "count": 100,
-          "ratePer10k": 70.3
+          "count": 3,
+          "ratePer10k": 909.1
         },
         {
-          "term": "murder",
-          "count": 83,
-          "ratePer10k": 58.4
+          "term": "corrupt",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "happen",
-          "count": 81,
-          "ratePer10k": 57
+          "term": "hotline",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "arrest",
-          "count": 69,
-          "ratePer10k": 48.5
+          "term": "roll",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "found",
-          "count": 57,
-          "ratePer10k": 40.1
+          "term": "nationally",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "attack",
-          "count": 56,
-          "ratePer10k": 39.4
+          "term": "craig",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "charg",
-          "count": 53,
-          "ratePer10k": 37.3
-        },
-        {
-          "term": "kill",
-          "count": 46,
-          "ratePer10k": 32.3
-        },
-        {
-          "term": "stabb",
-          "count": 42,
-          "ratePer10k": 29.5
-        },
-        {
-          "term": "inquiry",
-          "count": 41,
-          "ratePer10k": 28.8
-        },
-        {
-          "term": "labour",
-          "count": 40,
-          "ratePer10k": 28.1
-        },
-        {
-          "term": "southport",
-          "count": 38,
-          "ratePer10k": 26.7
-        },
-        {
-          "term": "manchester",
-          "count": 36,
-          "ratePer10k": 25.3
-        },
-        {
-          "term": "court",
-          "count": 35,
-          "ratePer10k": 24.6
-        },
-        {
-          "term": "scandal",
-          "count": 35,
-          "ratePer10k": 24.6
-        },
-        {
-          "term": "tory",
-          "count": 35,
-          "ratePer10k": 24.6
-        },
-        {
-          "term": "suspect",
-          "count": 34,
-          "ratePer10k": 23.9
-        },
-        {
-          "term": "office",
-          "count": 34,
-          "ratePer10k": 23.9
-        },
-        {
-          "term": "dead",
-          "count": 33,
-          "ratePer10k": 23.2
+          "term": "carter",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
           "term": "jail",
-          "count": 33,
-          "ratePer10k": 23.2
-        },
-        {
-          "term": "starmer",
-          "count": 33,
-          "ratePer10k": 23.2
-        },
-        {
-          "term": "crime",
-          "count": 32,
-          "ratePer10k": 22.5
-        },
-        {
-          "term": "death",
-          "count": 32,
-          "ratePer10k": 22.5
-        },
-        {
-          "term": "say",
-          "count": 32,
-          "ratePer10k": 22.5
-        },
-        {
-          "term": "call",
-          "count": 32,
-          "ratePer10k": 22.5
-        },
-        {
-          "term": "election",
-          "count": 31,
-          "ratePer10k": 21.8
-        },
-        {
-          "term": "women",
-          "count": 30,
-          "ratePer10k": 21.1
-        },
-        {
-          "term": "boy",
-          "count": 30,
-          "ratePer10k": 21.1
-        },
-        {
-          "term": "right",
-          "count": 30,
-          "ratePer10k": 21.1
-        },
-        {
-          "term": "post",
-          "count": 30,
-          "ratePer10k": 21.1
-        },
-        {
-          "term": "riot",
-          "count": 30,
-          "ratePer10k": 21.1
-        },
-        {
-          "term": "protest",
-          "count": 29,
-          "ratePer10k": 20.4
-        },
-        {
-          "term": "investigation",
-          "count": 29,
-          "ratePer10k": 20.4
-        },
-        {
-          "term": "victim",
-          "count": 28,
-          "ratePer10k": 19.7
-        },
-        {
-          "term": "england",
-          "count": 28,
-          "ratePer10k": 19.7
-        },
-        {
-          "term": "chief",
-          "count": 27,
-          "ratePer10k": 19
-        },
-        {
-          "term": "review",
-          "count": 27,
-          "ratePer10k": 19
-        },
-        {
-          "term": "girl",
-          "count": 27,
-          "ratePer10k": 19
-        },
-        {
-          "term": "assault",
-          "count": 26,
-          "ratePer10k": 18.3
-        },
-        {
-          "term": "search",
-          "count": 25,
-          "ratePer10k": 17.6
-        },
-        {
-          "term": "home",
-          "count": 24,
-          "ratePer10k": 16.9
-        },
-        {
-          "term": "report",
-          "count": 24,
-          "ratePer10k": 16.9
-        },
-        {
-          "term": "car",
-          "count": 24,
-          "ratePer10k": 16.9
-        },
-        {
-          "term": "children",
-          "count": 24,
-          "ratePer10k": 16.9
-        },
-        {
-          "term": "sunak",
-          "count": 24,
-          "ratePer10k": 16.9
-        },
-        {
-          "term": "face",
-          "count": 23,
-          "ratePer10k": 16.2
-        },
-        {
-          "term": "far",
-          "count": 23,
-          "ratePer10k": 16.2
-        },
-        {
-          "term": "brief",
-          "count": 22,
-          "ratePer10k": 15.5
-        },
-        {
-          "term": "law",
-          "count": 22,
-          "ratePer10k": 15.5
-        },
-        {
-          "term": "fay",
-          "count": 22,
-          "ratePer10k": 15.5
-        },
-        {
-          "term": "family",
-          "count": 22,
-          "ratePer10k": 15.5
-        },
-        {
-          "term": "west",
-          "count": 21,
-          "ratePer10k": 14.8
-        },
-        {
-          "term": "claim",
-          "count": 21,
-          "ratePer10k": 14.8
-        },
-        {
-          "term": "east",
-          "count": 20,
-          "ratePer10k": 14.1
-        },
-        {
-          "term": "violence",
-          "count": 20,
-          "ratePer10k": 14.1
-        },
-        {
-          "term": "alleg",
-          "count": 19,
-          "ratePer10k": 13.4
-        },
-        {
-          "term": "rayner",
-          "count": 19,
-          "ratePer10k": 13.4
-        },
-        {
-          "term": "die",
-          "count": 18,
-          "ratePer10k": 12.7
-        },
-        {
-          "term": "injur",
-          "count": 18,
-          "ratePer10k": 12.7
-        },
-        {
-          "term": "guilty",
-          "count": 18,
-          "ratePer10k": 12.7
-        },
-        {
-          "term": "former",
-          "count": 18,
-          "ratePer10k": 12.7
-        },
-        {
-          "term": "accus",
-          "count": 18,
-          "ratePer10k": 12.7
-        },
-        {
-          "term": "hate",
-          "count": 17,
-          "ratePer10k": 12
-        },
-        {
-          "term": "three",
-          "count": 17,
-          "ratePer10k": 12
-        },
-        {
-          "term": "sexual",
-          "count": 17,
-          "ratePer10k": 12
-        },
-        {
-          "term": "shoot",
-          "count": 17,
-          "ratePer10k": 12
-        },
-        {
-          "term": "life",
-          "count": 17,
-          "ratePer10k": 12
-        },
-        {
-          "term": "minister",
-          "count": 17,
-          "ratePer10k": 12
-        },
-        {
-          "term": "abuse",
-          "count": 16,
-          "ratePer10k": 11.2
-        },
-        {
-          "term": "scottish",
-          "count": 16,
-          "ratePer10k": 11.2
-        },
-        {
-          "term": "remain",
-          "count": 16,
-          "ratePer10k": 11.2
-        },
-        {
-          "term": "died",
-          "count": 16,
-          "ratePer10k": 11.2
-        },
-        {
-          "term": "incident",
-          "count": 16,
-          "ratePer10k": 11.2
-        },
-        {
-          "term": "wale",
-          "count": 16,
-          "ratePer10k": 11.2
-        },
-        {
-          "term": "angela",
-          "count": 16,
-          "ratePer10k": 11.2
-        },
-        {
-          "term": "men",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "teenager",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "body",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "warn",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "find",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "moham",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "investigate",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "case",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "criminal",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "scotland",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "chemical",
-          "count": 15,
-          "ratePer10k": 10.5
-        },
-        {
-          "term": "britain",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "birmingham",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "rape",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "view",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "politic",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "son",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "school",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "thousand",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "show",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "plan",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "tell",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "threat",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "justice",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "shot",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "stop",
-          "count": 14,
-          "ratePer10k": 9.8
-        },
-        {
-          "term": "worker",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "black",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "train",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "spy",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "south",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "hear",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "human",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "tribute",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "row",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "daniel",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "amid",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "sarah",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "four",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "five",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "keir",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "pro",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "palestine",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "final",
-          "count": 13,
-          "ratePer10k": 9.1
-        },
-        {
-          "term": "pay",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "prison",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "miss",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "video",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "appear",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "midland",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "crash",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "group",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "security",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "reveal",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "baby",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "fail",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "everard",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "rioter",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "protester",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "grenfell",
-          "count": 12,
-          "ratePer10k": 8.4
-        },
-        {
-          "term": "rise",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "target",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "campaigner",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "image",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "house",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "nine",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "suspicion",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "anti",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "public",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "act",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "racist",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "mother",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "chri",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "trial",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "horizon",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "hainault",
-          "count": 11,
-          "ratePer10k": 7.7
-        },
-        {
-          "term": "sex",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "greater",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "airport",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "child",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "hit",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "north",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "british",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "don",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "government",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "fear",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "change",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "fire",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "andrew",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "violent",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "role",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "activist",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "unit",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "help",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "march",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "campaign",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "gaza",
-          "count": 10,
-          "ratePer10k": 7
-        },
-        {
-          "term": "end",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "action",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "allegation",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "ask",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "storm",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "liverpool",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "offence",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "defend",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "fatal",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "mps",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "evidence",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "plot",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "kaba",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "clear",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "taylor",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "question",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "want",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "left",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "racism",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "rally",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "hospital",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "hunt",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "dog",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "bett",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "clapham",
-          "count": 9,
-          "ratePer10k": 6.3
-        },
-        {
-          "term": "across",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "away",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "league",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "leader",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "bring",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "rotherham",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "online",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "high",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "nam",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "fall",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "driver",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "six",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "record",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "killer",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "sentence",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "name",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "release",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "conviction",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "guardian",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "next",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "counter",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "national",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "launch",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "file",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "street",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "outside",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "terror",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "investigat",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "hotel",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "convict",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "win",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "parent",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "admit",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "detective",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "swift",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "decision",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "david",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "since",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "head",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "obituary",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "hill",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "lawrence",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "rishi",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "term": "member",
-          "count": 7,
-          "ratePer10k": 4.9
-        },
-        {
-          "term": "link",
-          "count": 7,
-          "ratePer10k": 4.9
-        },
-        {
-          "term": "misconduct",
-          "count": 7,
-          "ratePer10k": 4.9
-        },
-        {
-          "term": "without",
-          "count": 7,
-          "ratePer10k": 4.9
-        },
-        {
-          "term": "wife",
-          "count": 7,
-          "ratePer10k": 4.9
-        },
-        {
-          "term": "bus",
-          "count": 7,
-          "ratePer10k": 4.9
-        },
-        {
-          "term": "glasgow",
-          "count": 7,
-          "ratePer10k": 4.9
-        },
-        {
-          "term": "live",
-          "count": 7,
-          "ratePer10k": 4.9
-        },
-        {
-          "term": "like",
-          "count": 7,
-          "ratePer10k": 4.9
-        }
-      ],
-      "sentiment": {
-        "mean": -0.191,
-        "positive": 23,
-        "neutral": 883,
-        "negative": 238,
-        "gdeltToneMean": null
-      },
-      "lexicons": {
-        "trust": {
-          "items": 12,
-          "ratePer10k": 8.4
-        },
-        "misconduct": {
-          "items": 108,
-          "ratePer10k": 75.9
-        },
-        "reform": {
-          "items": 78,
-          "ratePer10k": 54.8
-        },
-        "race": {
-          "items": 39,
-          "ratePer10k": 27.4
-        },
-        "leadership": {
-          "items": 35,
-          "ratePer10k": 24.6
-        }
-      },
-      "entities": [
-        {
-          "name": "West Midlands Police",
-          "type": "force",
-          "count": 8,
-          "ratePer10k": 5.6
-        },
-        {
-          "name": "Greater Manchester Police",
-          "type": "force",
-          "count": 6,
-          "ratePer10k": 4.2
-        },
-        {
-          "name": "Wayne Couzens",
-          "type": "officer",
-          "count": 5,
-          "ratePer10k": 3.5
-        },
-        {
-          "name": "Essex Police",
-          "type": "force",
-          "count": 4,
-          "ratePer10k": 2.8
-        },
-        {
-          "name": "Detective",
-          "type": "role",
-          "count": 4,
-          "ratePer10k": 2.8
-        },
-        {
-          "name": "David Carrick",
-          "type": "officer",
-          "count": 4,
-          "ratePer10k": 2.8
-        },
-        {
-          "name": "Merseyside Police",
-          "type": "force",
-          "count": 4,
-          "ratePer10k": 2.8
-        },
-        {
-          "name": "City of London Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 1.4
-        },
-        {
-          "name": "West Mercia Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 1.4
-        },
-        {
-          "name": "Chief constable",
-          "type": "role",
-          "count": 2,
-          "ratePer10k": 1.4
-        },
-        {
-          "name": "Nottinghamshire Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 1.4
-        },
-        {
-          "name": "Commissioner",
-          "type": "role",
           "count": 1,
-          "ratePer10k": 0.7
+          "ratePer10k": 303
         },
         {
-          "name": "Baroness Casey",
-          "type": "leader",
+          "term": "theft",
           "count": 1,
-          "ratePer10k": 0.7
-        }
-      ]
-    },
-    "leaders-officers-staff": {
-      "corpusTokens": 12846,
-      "topWords": [
-        {
-          "term": "review",
-          "count": 69,
-          "ratePer10k": 53.7
-        },
-        {
-          "term": "happen",
-          "count": 69,
-          "ratePer10k": 53.7
-        },
-        {
-          "term": "murder",
-          "count": 49,
-          "ratePer10k": 38.1
-        },
-        {
-          "term": "met",
-          "count": 47,
-          "ratePer10k": 36.6
-        },
-        {
-          "term": "attack",
-          "count": 47,
-          "ratePer10k": 36.6
-        },
-        {
-          "term": "kill",
-          "count": 41,
-          "ratePer10k": 31.9
-        },
-        {
-          "term": "arrest",
-          "count": 40,
-          "ratePer10k": 31.1
-        },
-        {
-          "term": "right",
-          "count": 40,
-          "ratePer10k": 31.1
-        },
-        {
-          "term": "inquiry",
-          "count": 37,
-          "ratePer10k": 28.8
-        },
-        {
-          "term": "crime",
-          "count": 34,
-          "ratePer10k": 26.5
-        },
-        {
-          "term": "labour",
-          "count": 34,
-          "ratePer10k": 26.5
-        },
-        {
-          "term": "riot",
-          "count": 33,
-          "ratePer10k": 25.7
-        },
-        {
-          "term": "far",
-          "count": 32,
-          "ratePer10k": 24.9
-        },
-        {
-          "term": "women",
-          "count": 30,
-          "ratePer10k": 23.4
-        },
-        {
-          "term": "southport",
-          "count": 30,
-          "ratePer10k": 23.4
-        },
-        {
-          "term": "election",
-          "count": 30,
-          "ratePer10k": 23.4
-        },
-        {
-          "term": "england",
-          "count": 30,
-          "ratePer10k": 23.4
-        },
-        {
-          "term": "chief",
-          "count": 28,
-          "ratePer10k": 21.8
-        },
-        {
-          "term": "death",
-          "count": 28,
-          "ratePer10k": 21.8
-        },
-        {
-          "term": "obituary",
-          "count": 27,
-          "ratePer10k": 21
-        },
-        {
-          "term": "tory",
-          "count": 27,
-          "ratePer10k": 21
-        },
-        {
-          "term": "protest",
-          "count": 26,
-          "ratePer10k": 20.2
-        },
-        {
-          "term": "suspect",
-          "count": 25,
-          "ratePer10k": 19.5
-        },
-        {
-          "term": "court",
-          "count": 25,
-          "ratePer10k": 19.5
-        },
-        {
-          "term": "found",
-          "count": 24,
-          "ratePer10k": 18.7
-        },
-        {
-          "term": "life",
-          "count": 24,
-          "ratePer10k": 18.7
-        },
-        {
-          "term": "violence",
-          "count": 24,
-          "ratePer10k": 18.7
-        },
-        {
-          "term": "london",
-          "count": 24,
-          "ratePer10k": 18.7
-        },
-        {
-          "term": "charg",
-          "count": 23,
-          "ratePer10k": 17.9
-        },
-        {
-          "term": "jail",
-          "count": 23,
-          "ratePer10k": 17.9
-        },
-        {
-          "term": "call",
-          "count": 23,
-          "ratePer10k": 17.9
-        },
-        {
-          "term": "sunak",
-          "count": 22,
-          "ratePer10k": 17.1
-        },
-        {
-          "term": "starmer",
-          "count": 21,
-          "ratePer10k": 16.3
-        },
-        {
-          "term": "family",
-          "count": 21,
-          "ratePer10k": 16.3
-        },
-        {
-          "term": "victim",
-          "count": 20,
-          "ratePer10k": 15.6
-        },
-        {
-          "term": "accus",
-          "count": 20,
-          "ratePer10k": 15.6
-        },
-        {
-          "term": "brief",
-          "count": 20,
-          "ratePer10k": 15.6
-        },
-        {
-          "term": "report",
-          "count": 19,
-          "ratePer10k": 14.8
-        },
-        {
-          "term": "home",
-          "count": 19,
-          "ratePer10k": 14.8
-        },
-        {
-          "term": "three",
-          "count": 19,
-          "ratePer10k": 14.8
-        },
-        {
-          "term": "britain",
-          "count": 18,
-          "ratePer10k": 14
-        },
-        {
-          "term": "boy",
-          "count": 18,
-          "ratePer10k": 14
-        },
-        {
-          "term": "search",
-          "count": 18,
-          "ratePer10k": 14
-        },
-        {
-          "term": "girl",
-          "count": 17,
-          "ratePer10k": 13.2
-        },
-        {
-          "term": "face",
-          "count": 17,
-          "ratePer10k": 13.2
-        },
-        {
-          "term": "guilty",
-          "count": 17,
-          "ratePer10k": 13.2
-        },
-        {
-          "term": "rape",
-          "count": 17,
-          "ratePer10k": 13.2
-        },
-        {
-          "term": "plan",
-          "count": 17,
-          "ratePer10k": 13.2
-        },
-        {
-          "term": "hear",
-          "count": 17,
-          "ratePer10k": 13.2
-        },
-        {
-          "term": "view",
-          "count": 17,
-          "ratePer10k": 13.2
-        },
-        {
-          "term": "justice",
-          "count": 17,
-          "ratePer10k": 13.2
-        },
-        {
-          "term": "office",
-          "count": 16,
-          "ratePer10k": 12.5
-        },
-        {
-          "term": "stabb",
-          "count": 16,
-          "ratePer10k": 12.5
-        },
-        {
-          "term": "show",
-          "count": 16,
-          "ratePer10k": 12.5
-        },
-        {
-          "term": "manchester",
-          "count": 16,
-          "ratePer10k": 12.5
-        },
-        {
-          "term": "like",
-          "count": 16,
-          "ratePer10k": 12.5
-        },
-        {
-          "term": "say",
-          "count": 16,
-          "ratePer10k": 12.5
-        },
-        {
-          "term": "fear",
-          "count": 16,
-          "ratePer10k": 12.5
-        },
-        {
-          "term": "spy",
-          "count": 15,
-          "ratePer10k": 11.7
-        },
-        {
-          "term": "find",
-          "count": 15,
-          "ratePer10k": 11.7
-        },
-        {
-          "term": "tell",
-          "count": 15,
-          "ratePer10k": 11.7
-        },
-        {
-          "term": "shoot",
-          "count": 15,
-          "ratePer10k": 11.7
-        },
-        {
-          "term": "men",
-          "count": 14,
-          "ratePer10k": 10.9
+          "ratePer10k": 303
         },
         {
           "term": "dead",
-          "count": 14,
-          "ratePer10k": 10.9
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "abuse",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "rise",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "live",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "children",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "tonight",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "fail",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "trial",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "post",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "stop",
-          "count": 14,
-          "ratePer10k": 10.9
-        },
-        {
-          "term": "rioter",
-          "count": 13,
-          "ratePer10k": 10.1
-        },
-        {
-          "term": "best",
-          "count": 13,
-          "ratePer10k": 10.1
-        },
-        {
-          "term": "assault",
-          "count": 13,
-          "ratePer10k": 10.1
-        },
-        {
-          "term": "thing",
-          "count": 13,
-          "ratePer10k": 10.1
-        },
-        {
-          "term": "claim",
-          "count": 13,
-          "ratePer10k": 10.1
-        },
-        {
-          "term": "wale",
-          "count": 13,
-          "ratePer10k": 10.1
-        },
-        {
-          "term": "minister",
-          "count": 13,
-          "ratePer10k": 10.1
-        },
-        {
-          "term": "look",
-          "count": 13,
-          "ratePer10k": 10.1
-        },
-        {
-          "term": "warn",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "scandal",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "undercover",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "thriller",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "four",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "guardian",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "war",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "mother",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "british",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "left",
-          "count": 12,
-          "ratePer10k": 9.3
-        },
-        {
-          "term": "story",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "alleg",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "never",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "case",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "everard",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "crisi",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "state",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "black",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "nottingham",
-          "count": 11,
-          "ratePer10k": 8.6
-        },
-        {
-          "term": "die",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "asylum",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "injur",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "former",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "keir",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "father",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "bill",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "end",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "sarah",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "hunt",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "west",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "french",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "chri",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "leader",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "want",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "protester",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "violent",
-          "count": 10,
-          "ratePer10k": 7.8
-        },
-        {
-          "term": "fight",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "sexual",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "miss",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "cop",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "anti",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "politic",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "pay",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "set",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "gaza",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "kaba",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "change",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "appear",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "charge",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "activist",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "racist",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "local",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "france",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "amid",
-          "count": 9,
-          "ratePer10k": 7
-        },
-        {
-          "term": "win",
-          "count": 9,
-          "ratePer10k": 7
+          "term": "face",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
           "term": "service",
-          "count": 9,
-          "ratePer10k": 7
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "allegedly",
-          "count": 8,
-          "ratePer10k": 6.2
+          "term": "cut",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "ban",
-          "count": 8,
-          "ratePer10k": 6.2
+          "term": "without",
+          "count": 1,
+          "ratePer10k": 303
         },
         {
-          "term": "airport",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "child",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "hit",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "work",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "world",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "threat",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "mps",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "duty",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "misconduct",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "hate",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "thousand",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "seven",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "law",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "novichok",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "six",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "prison",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "india",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "admit",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "film",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "drama",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "investigation",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "sery",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "five",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "turn",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "disorder",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "funeral",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "big",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "campaign",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "bett",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "haiti",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "term": "seeker",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "behind",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "still",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "target",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "many",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "east",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "group",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "role",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "nhs",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "promise",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "reveal",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "public",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "security",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "month",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "national",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "street",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "led",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "final",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "drug",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "daughter",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "line",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "action",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "israeli",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "teenager",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "scotland",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "hull",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "evidence",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "body",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "shot",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "gang",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "row",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "russia",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "chang",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "expect",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "head",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "midland",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "race",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "meet",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "counter",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "inquest",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "criminal",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "rishi",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "euro",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "fan",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "killer",
-          "count": 7,
-          "ratePer10k": 5.4
-        },
-        {
-          "term": "northern",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "rotherham",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "young",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "away",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "island",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "control",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "grow",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "across",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "accuse",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "son",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "give",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "frontline",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "train",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "incident",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "mean",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "israel",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "know",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "wrong",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "used",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "noth",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "fire",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "trust",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "vote",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "begin",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "day",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "horror",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "among",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "special",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "need",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "racism",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "act",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "shock",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "ukraine",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "lawrence",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "bring",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "term": "much",
-          "count": 6,
-          "ratePer10k": 4.7
+          "term": "cash",
+          "count": 1,
+          "ratePer10k": 303
         }
       ],
       "sentiment": {
-        "mean": -0.153,
-        "positive": 19,
-        "neutral": 819,
-        "negative": 172,
+        "mean": 0,
+        "positive": 0,
+        "neutral": 3,
+        "negative": 0,
         "gdeltToneMean": null
       },
       "lexicons": {
         "trust": {
-          "items": 9,
-          "ratePer10k": 7
+          "items": 0,
+          "ratePer10k": 0
         },
         "misconduct": {
-          "items": 76,
-          "ratePer10k": 59.2
-        },
-        "reform": {
-          "items": 119,
-          "ratePer10k": 92.6
+          "items": 1,
+          "ratePer10k": 303
         },
         "race": {
-          "items": 33,
-          "ratePer10k": 25.7
+          "items": 0,
+          "ratePer10k": 0
         },
-        "leadership": {
-          "items": 34,
-          "ratePer10k": 26.5
+        "terrorism": {
+          "items": 0,
+          "ratePer10k": 0
+        },
+        "protest": {
+          "items": 0,
+          "ratePer10k": 0
+        },
+        "reform": {
+          "items": 1,
+          "ratePer10k": 303
+        }
+      },
+      "entities": []
+    },
+    "leaders-officers-staff": {
+      "corpusTokens": 283,
+      "topWords": [
+        {
+          "term": "moment",
+          "count": 3,
+          "ratePer10k": 106
+        },
+        {
+          "term": "charg",
+          "count": 3,
+          "ratePer10k": 106
+        },
+        {
+          "term": "murder",
+          "count": 3,
+          "ratePer10k": 106
+        },
+        {
+          "term": "body",
+          "count": 3,
+          "ratePer10k": 106
+        },
+        {
+          "term": "everard",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "met",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "accus",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "dead",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "arrest",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "camera",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "car",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "craig",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "court",
+          "count": 2,
+          "ratePer10k": 70.7
+        },
+        {
+          "term": "gaza",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "war",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "creat",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "radicalisation",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "senior",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "attempt",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "kent",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "horror",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "staff",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "view",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "nottingham",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "attack",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "material",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "firefighter",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "alight",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "killer",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "wayne",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "couzen",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "never",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "angiolini",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "inquiry",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "corrupt",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "hotline",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "roll",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "nationally",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "detective",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "recall",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "discover",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "suspect",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "chris",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "kaba",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "shoot",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "martyn",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "blake",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "nam",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "paul",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "well",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "family",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "appall",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "shar",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "picture",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "ilkeston",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "injur",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "turn",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "shot",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "inquest",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "former",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "fear",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "miss",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "full",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "pension",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "conservative",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "recruit",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "wiltshire",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "intentionally",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "devize",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "newport",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "call",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "bully",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "footage",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "plead",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "guilty",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "pregnant",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "stabb",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "frankland",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "prison",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "term": "blackpool",
+          "count": 1,
+          "ratePer10k": 35.3
+        }
+      ],
+      "sentiment": {
+        "mean": -0.138,
+        "positive": 0,
+        "neutral": 25,
+        "negative": 4,
+        "gdeltToneMean": null
+      },
+      "lexicons": {
+        "trust": {
+          "items": 0,
+          "ratePer10k": 0
+        },
+        "misconduct": {
+          "items": 2,
+          "ratePer10k": 70.7
+        },
+        "race": {
+          "items": 0,
+          "ratePer10k": 0
+        },
+        "terrorism": {
+          "items": 1,
+          "ratePer10k": 35.3
+        },
+        "protest": {
+          "items": 1,
+          "ratePer10k": 35.3
+        },
+        "reform": {
+          "items": 3,
+          "ratePer10k": 106
         }
       },
       "entities": [
-        {
-          "name": "Chief constable",
-          "type": "role",
-          "count": 8,
-          "ratePer10k": 6.2
-        },
-        {
-          "name": "Wayne Couzens",
-          "type": "officer",
-          "count": 6,
-          "ratePer10k": 4.7
-        },
-        {
-          "name": "Surrey Police",
-          "type": "force",
-          "count": 4,
-          "ratePer10k": 3.1
-        },
-        {
-          "name": "Detective",
-          "type": "role",
-          "count": 4,
-          "ratePer10k": 3.1
-        },
-        {
-          "name": "David Carrick",
-          "type": "officer",
-          "count": 4,
-          "ratePer10k": 3.1
-        },
-        {
-          "name": "West Midlands Police",
-          "type": "force",
-          "count": 4,
-          "ratePer10k": 3.1
-        },
-        {
-          "name": "Greater Manchester Police",
-          "type": "force",
-          "count": 4,
-          "ratePer10k": 3.1
-        },
-        {
-          "name": "Humberside Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 1.6
-        },
-        {
-          "name": "Essex Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 1.6
-        },
-        {
-          "name": "West Mercia Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 1.6
-        },
-        {
-          "name": "Sussex Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 1.6
-        },
-        {
-          "name": "Nottinghamshire Police",
-          "type": "force",
-          "count": 2,
-          "ratePer10k": 1.6
-        },
         {
           "name": "Wiltshire Police",
           "type": "force",
           "count": 2,
-          "ratePer10k": 1.6
+          "ratePer10k": 70.7
+        },
+        {
+          "name": "Wayne Couzens",
+          "type": "officer",
+          "count": 1,
+          "ratePer10k": 35.3
+        },
+        {
+          "name": "Detective",
+          "type": "role",
+          "count": 1,
+          "ratePer10k": 35.3
         }
       ]
     }
