@@ -81,11 +81,11 @@ collections:
           default: "police-policy",
           options:
             [
-              { label: "Police Policy", value: "police-policy" },
-              { label: "Public Policy", value: "public-policy" },
+              { label: "Evidence & Practice", value: "police-policy" },
+              { label: "Leadership & Culture", value: "public-policy" },
               { label: "Influential People", value: "influential-people" },
-              { label: "Interesting Distractions", value: "other" },
-              { label: "The Data Tells a Story", value: "data-stories" },
+              { label: "History & Curiosities", value: "other" },
+              { label: "Technology & Innovation", value: "data-stories" },
             ],
         }
       - {
@@ -204,11 +204,11 @@ collections:
           default: "police-policy",
           options:
             [
-              { label: "Police Policy", value: "police-policy" },
-              { label: "Public Policy", value: "public-policy" },
+              { label: "Evidence & Practice", value: "police-policy" },
+              { label: "Leadership & Culture", value: "public-policy" },
               { label: "Influential People", value: "influential-people" },
-              { label: "Interesting Distractions", value: "other" },
-              { label: "The Data Tells a Story", value: "data-stories" },
+              { label: "History & Curiosities", value: "other" },
+              { label: "Technology & Innovation", value: "data-stories" },
             ],
         }
       - {
