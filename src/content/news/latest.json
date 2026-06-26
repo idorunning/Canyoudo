@@ -1,25 +1,49 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-25T14:00:59.085Z",
+    "fetchedAt": "2026-06-26T02:09:35.492Z",
     "feedCount": 7,
     "sources": [
       "GOV.UK",
-      "Home Office",
       "BBC News",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Teenager cleared of murdering nine-year-old girl",
-      "link": "https://www.bbc.co.uk/news/articles/c9320y90lnno?at_medium=RSS&at_campaign=rss",
+      "title": "Police charge boy with murder in Blaenau Gwent investigation",
+      "link": "https://www.bbc.co.uk/news/articles/cwyd1w958jzo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-25T14:00:17.000Z",
-      "summary": "A jury at Bristol Crown Court finds a 16-year-old not guilty of murder and manslaughter."
+      "isoDate": "2026-06-26T02:08:34.000Z",
+      "summary": "The boy was arrested after a female body was found during the search for a girl missing in south Wales."
+    },
+    {
+      "title": "Teens who hacked TfL were known to police years before cyber-attack",
+      "link": "https://www.bbc.co.uk/news/articles/cx2kx8jr244o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-25T23:19:48.000Z",
+      "summary": "Owen Flowers and Thalha Jubair were convicted for their roles in the attack, which led to large costs for Transport for London."
+    },
+    {
+      "title": "New CCTV footage contradicts prison death evidence",
+      "link": "https://www.bbc.co.uk/news/articles/ce37vkqp29go?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-25T22:01:28.000Z",
+      "summary": "Footage of Allan Marshall, who died after being restrained by prison officers, has been obtained by the BBC."
+    },
+    {
+      "title": "Home Office plan to use more military bases to house asylum seekers",
+      "link": "https://www.bbc.co.uk/news/articles/cvgjm61lkl4o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-25T21:33:33.000Z",
+      "summary": "Three new sites in Oxfordshire, Suffolk, and Yorkshire could house about 3,750 asylum seekers if permission is granted."
     },
     {
       "title": "Legal AI giant signs as Chelsea kit sponsor",
@@ -46,14 +70,6 @@
       "summary": "Two Civil Nuclear Constabulary officers among 4,600 remembered through a new national Digital Memorial honouring <mark>police</mark> officers and staff who died in service."
     },
     {
-      "title": "TikTok influencer charged with Dubai murder",
-      "link": "https://www.bbc.co.uk/news/articles/cwy0p813jn7o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-25T11:58:44.000Z",
-      "summary": "Influencer Brooke George, 23, from Kent, claims she acted in self defence in stabbing her partner."
-    },
-    {
       "title": "Shoosmiths teams up with Microsoft to help junior lawyers review contracts faster",
       "link": "https://www.legalcheek.com/2026/06/shoosmiths-teams-up-with-microsoft-to-help-junior-lawyers-review-contracts-faster/",
       "source": "Legal Cheek",
@@ -76,6 +92,14 @@
       "topic": "law",
       "isoDate": "2026-06-24T07:59:39.000Z",
       "summary": "Pressure to bend rules The post Clients are barristers’ biggest ethical headache, research finds appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-23T20:16:34.000Z",
+      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
     },
     {
       "title": "Meta halts worker tracking for AI training due to privacy fears",
@@ -102,22 +126,6 @@
       "summary": "Oxford and UCL to host new government-backed labs developing the next generation of AI that more businesses and services can readily use"
     },
     {
-      "title": "Premises closure orders",
-      "link": "https://www.gov.uk/government/consultations/premises-closure-orders",
-      "source": "Home Office",
-      "topic": "policing",
-      "isoDate": "2026-06-22T08:15:00.000Z",
-      "summary": "The government is consulting on increasing the length of closure orders under the Anti-social Behaviour, Crime and Policing Act 2014."
-    },
-    {
-      "title": "Why an AI company cleaned my New York City apartment for free",
-      "link": "https://www.bbc.co.uk/news/articles/cpwerjy20kyo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-06-20T23:18:55.000Z",
-      "summary": "An AI company is sending free cleaners door-to-door in a bid to train the robots it hopes one day will replace them."
-    },
-    {
       "title": "World Cup booze ban for 7,300 offenders thanks to crime-cutting alcohol tags",
       "link": "https://www.gov.uk/government/news/world-cup-booze-ban-for-7300-offenders-thanks-to-crime-cutting-alcohol-tags",
       "source": "GOV.UK",
@@ -134,12 +142,12 @@
       "summary": "A blog by Phil Bowen, Interim Chair of the Youth Justice Board"
     },
     {
-      "title": "AI tool to slash planning decision times as government accelerates push to build 1.5 million homes",
-      "link": "https://www.gov.uk/government/news/ai-tool-to-slash-planning-decision-times-as-government-accelerates-push-to-build-15-million-homes",
-      "source": "DSIT",
+      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
+      "source": "The Register",
       "topic": "ai",
-      "isoDate": "2026-06-16T21:30:00.000Z",
-      "summary": "Millions of homeowners could benefit from faster planning decisions, as 2 new AI tools are unveiled to modernise England’s planning permission system."
+      "isoDate": "2026-06-16T20:47:37.000Z",
+      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
     },
     {
       "title": "Tech Life",
@@ -172,6 +180,22 @@
       "topic": "law",
       "isoDate": "2026-06-11T10:55:50.000Z",
       "summary": "Sir Geoffrey Vos delivered his remarks as part of London International Disputes Week The post Speech by the Master of the Rolls: AI in Arbitration – Promises and Pitfalls…"
+    },
+    {
+      "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/03/no-longer-just-a-copilot-microsofts-ai-wants-to-take-the-wheel/5250718",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-03T16:49:15.000Z",
+      "summary": "Always-on agent promises to keep work moving, provided you trust it with practically everything"
+    },
+    {
+      "title": "Anthropic, now atop the AI bubble, files for its IPO",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/01/anthropic-now-atop-the-ai-bubble-files-for-its-ipo/5249753",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-01T18:12:22.000Z",
+      "summary": "First it tops OpenAI's valuation, then it beats Altman to the IPO punch"
     }
   ]
 }
