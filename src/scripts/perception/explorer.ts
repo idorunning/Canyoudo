@@ -212,7 +212,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     if (caveat) {
       caveat.innerHTML =
         (yd.provenance.sparse ? '<span class="text-accent">Sparse year — fewer online sources survive; read with caution. </span>' : '') +
-        `Method: ${esc(yd.provenance.method)}. Tone and counts are derived aggregates over the sampled corpus; no article text is stored.`;
+        `Method: ${esc(yd.provenance.method)}. Tone and counts are derived aggregates over the sampled headlines; no article text is stored.`;
     }
   }
 

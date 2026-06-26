@@ -175,7 +175,6 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                   {feature.data.title}
                 </h2>
                 <p class="text-[14.5px] leading-relaxed text-ink-700 mt-3">{feature.data.description}</p>
-                <div class="mt-5 text-[13px] font-bold text-accent">Read the essay →</div>
               </div>
             </a>
           </div>
@@ -478,27 +477,35 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
   <!-- ============ WRITE FOR US ============ -->
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
     <div class="bg-paper-50 border border-ink-200 rounded-[22px] p-9 md:p-10 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
-      <span class="inline-block bg-[#faeef2] text-ink-900 text-[11px] font-extrabold uppercase tracking-[0.08em] px-3 py-1.5 rounded-full">
-        Write for us
-      </span>
-      <h2 class="font-extrabold text-[29px] leading-[1.14] tracking-[-0.03em] text-ink-900 mt-4 mb-3">
-        Have an idea for an article?
-      </h2>
-      <p class="font-sans text-[16.5px] leading-relaxed text-ink-700 mb-6 max-w-[34em] font-medium">
-        Share an idea — pieces welcome from serving officers, researchers, practitioners and policymakers.
-      </p>
-      <span class="relative inline-block">
+      {/* The whole pitch is roughly circled, like a reader has ringed it in a
+          newspaper to come back to. The SVG overlays the block (header, text and
+          button) without affecting layout; clicks pass through to the button.
+          max-w keeps the ring hugging the content rather than stretching across
+          the whole card on wide screens. */}
+      <div class="relative max-w-2xl">
+        <span class="inline-block bg-[#faeef2] text-ink-900 text-[11px] font-extrabold uppercase tracking-[0.08em] px-3 py-1.5 rounded-full">
+          Write for us
+        </span>
+        <h2 class="font-extrabold text-[29px] leading-[1.14] tracking-[-0.03em] text-ink-900 mt-4 mb-3">
+          Have an idea for an article?
+        </h2>
+        <p class="font-sans text-[16.5px] leading-relaxed text-ink-700 mb-6 max-w-[34em] font-medium">
+          Share an idea — pieces welcome from serving officers, researchers, practitioners and policymakers.
+        </p>
         <a
           href={pitchMailto}
           class="share-idea-btn relative z-10 inline-block bg-accent text-paper-50 rounded-full px-6 py-3 text-[14px] font-bold hover:bg-accent-dark transition-colors"
         >
           Share an idea <span class="arrow">→</span>
         </a>
-        {/* Hand-drawn orange circle — like a magazine annotation */}
-        <svg aria-hidden="true" class="pointer-events-none absolute" style="inset:-14px -18px;width:calc(100% + 36px);height:calc(100% + 28px)" viewBox="0 0 200 70" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18,38 C16,20 34,7 100,6 C166,5 187,18 188,36 C189,54 172,65 100,66 C28,67 20,56 18,38 Z" stroke="#F2994A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+        {/* Rough hand-drawn orange ring around the whole pitch. Two slightly
+            offset passes + an overshooting tail give it the look of a felt-tip
+            circle scrawled on a page, rather than a clean vector ellipse. */}
+        <svg aria-hidden="true" class="circle-pitch pointer-events-none absolute -z-0" style="inset:-22px -26px -16px -24px;width:calc(100% + 50px);height:calc(100% + 38px)" viewBox="0 0 600 300" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M44,150 C36,72 120,30 300,26 C474,22 566,64 566,150 C566,238 470,278 296,274 C128,270 52,232 46,150 C44,118 60,86 120,60" stroke="#F2994A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
+          <path d="M120,58 C72,82 50,116 52,152 C56,232 132,268 298,272 C470,276 562,236 560,150 C558,70 470,30 300,32" stroke="#F2994A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
         </svg>
-      </span>
+      </div>
     </div>
   </section>
 
@@ -531,6 +538,17 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
         (thanks as HTMLElement).classList.remove('hidden');
       });
     });
+  }
+
+  // Draw the hand-drawn pitch circle on as it scrolls into view.
+  const ring = document.querySelector('.circle-pitch');
+  if (ring) {
+    const io = new IntersectionObserver((entries, obs) => {
+      for (const e of entries) {
+        if (e.isIntersecting) { e.target.classList.add('is-drawn'); obs.unobserve(e.target); }
+      }
+    }, { threshold: 0.4 });
+    io.observe(ring);
   }
 </script>
 

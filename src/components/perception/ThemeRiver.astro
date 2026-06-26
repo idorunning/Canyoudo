@@ -2,11 +2,15 @@
 // A streamgraph / "ThemeRiver" of the five themed lexicons (trust, misconduct,
 // reform, race, leadership) flowing from 2000 to 2025 — the centrepiece view of
 // the perception story. Stacked, centred areas show how the balance of themes in
-// police coverage shifts over time (cf. the NYT "Ebb and Flow of Movies"). All
-// maths runs at build time, so this is pure inline SVG with no client JS and a
-// <details> data-table fallback. Reads the committed `perception` collection
-// directly (the house pattern — see PerceptionExplorer.astro). Rates are per
-// 10,000 words, so dense and sparse years stay comparable.
+// police coverage shifts over time (cf. the NYT "Ebb and Flow of Movies").
+//
+// The shape is built at build time (pure inline SVG, no framework). A small
+// progressive-enhancement script then (1) animates the river drawing itself in
+// from the left as it scrolls into view and (2) lets the reader hover any year
+// for a readout of every theme's rate. With JS off it is a static streamgraph
+// with a <details> data-table fallback — nothing is lost. Reads the committed
+// `perception` collection directly. Rates are per 10,000 words, so dense and
+// sparse years stay comparable.
 import { getCollection } from 'astro:content';
 
 interface Props {
@@ -19,7 +23,7 @@ const {
   facet = 'police-general',
   title = 'The ebb and flow of themes — items per 10,000 words',
   width = 820,
-  height = 320,
+  height = 340,
 } = Astro.props;
 
 const THEME_KEYS = ['trust', 'misconduct', 'reform', 'race', 'leadership'] as const;
@@ -74,7 +78,7 @@ for (const k of bySum) {
 }
 const order: ThemeKey[] = [...bottoms.reverse(), ...tops];
 
-const pad = { l: 14, r: 96, t: 18, b: 28 };
+const pad = { l: 14, r: 96, t: 30, b: 28 };
 const innerW = width - pad.l - pad.r;
 const innerH = height - pad.t - pad.b;
 const yrLo = years[0]?.year ?? 2000;
@@ -121,29 +125,63 @@ for (let i = 1; i < sortedLabels.length; i++) {
 const labelY: Record<number, number> = {};
 for (const s of sortedLabels) labelY[s.idx] = s.y;
 
+// The misconduct surge is the story, so mark its peak year as a standing
+// annotation (the moving hover cursor is separate).
+let peakI = 0;
+for (let i = 1; i < series.misconduct.length; i++) if (series.misconduct[i] > series.misconduct[peakI]) peakI = i;
+const peakYear = years[peakI]?.year ?? yrHi;
+
 const ticks = years.map((y) => y.year).filter((y) => y % 5 === 0);
 const aria = `${title}. Streamgraph of five themes in ${facet} coverage from ${yrLo} to ${yrHi}.`;
+
+// Compact data for the hover readout (built at compile time, read by the script).
+const riverData = {
+  yrLo,
+  yrHi,
+  yrSpan,
+  padL: pad.l,
+  padT: pad.t,
+  innerW,
+  innerH,
+  width,
+  height,
+  themes: THEME_KEYS.map((k) => ({ key: k, label: THEME_LABELS[k], color: THEME_COLORS[k] })),
+  years: years.map((y, i) => ({ year: y.year, rates: Object.fromEntries(THEME_KEYS.map((k) => [k, series[k][i]])) })),
+};
 ---
-<figure class="not-prose my-6">
-  <figcaption class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">{title}</figcaption>
-  <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={aria} class="overflow-visible">
-    {bands.map((b, i) => (
-      <g>
-        <path d={b.path} fill={THEME_COLORS[b.key]} fill-opacity="0.82" stroke={THEME_COLORS[b.key]} stroke-width="0.5" />
-        <text
-          x={width - pad.r + 8}
-          y={labelY[i] + 3}
-          font-size="11"
-          fill={THEME_COLORS[b.key]}
-          font-family="system-ui, sans-serif"
-          font-weight="600"
-        >{THEME_LABELS[b.key]}</text>
-      </g>
-    ))}
+<figure class="theme-river not-prose relative my-6" data-theme-river>
+  <figcaption class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">
+    {title} <span class="hover-hint normal-case tracking-normal text-ink-400">· hover any year</span>
+  </figcaption>
+  <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={aria} class="overflow-visible" data-river-svg>
+    {/* Standing annotation: the misconduct peak. */}
+    <line x1={xf(peakYear)} x2={xf(peakYear)} y1={pad.t} y2={pad.t + innerH} stroke={THEME_COLORS.misconduct} stroke-width="1" stroke-dasharray="2 3" opacity="0.35" />
+    <text x={xf(peakYear)} y={14} font-size="9.5" fill={THEME_COLORS.misconduct} text-anchor="middle" font-family="system-ui, sans-serif" font-weight="600">Misconduct peaks {peakYear}</text>
+    {/* The bands, wrapped so they can draw in from the left. */}
+    <g class="river-bands">
+      {bands.map((b, i) => (
+        <g>
+          <path d={b.path} fill={THEME_COLORS[b.key]} fill-opacity="0.82" stroke={THEME_COLORS[b.key]} stroke-width="0.5" data-band={b.key} />
+          <text
+            x={width - pad.r + 8}
+            y={labelY[i] + 3}
+            font-size="11"
+            fill={THEME_COLORS[b.key]}
+            font-family="system-ui, sans-serif"
+            font-weight="600"
+          >{THEME_LABELS[b.key]}</text>
+        </g>
+      ))}
+    </g>
     {ticks.map((y) => (
       <text x={xf(y)} y={height - 8} font-size="10" fill="#8a857c" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
     ))}
+    {/* Interactive year cursor (hidden until hover). */}
+    <line data-river-cursor x1="0" x2="0" y1={pad.t} y2={pad.t + innerH} stroke="#1b2452" stroke-width="1.5" opacity="0" style="transition:opacity .12s" />
   </svg>
+  {/* Hover readout. */}
+  <div data-river-tip class="pointer-events-none absolute z-10 hidden rounded-md border border-ink-200 bg-paper-50 px-3 py-2 text-xs shadow-md" style="min-width:9rem"></div>
+  <script type="application/json" data-river-data set:html={JSON.stringify(riverData)} />
   <details class="mt-2">
     <summary class="cursor-pointer font-sans text-xs uppercase tracking-[0.15em] text-accent">Theme rates by year (table)</summary>
     <div class="mt-2 overflow-x-auto">
@@ -166,3 +204,87 @@ const aria = `${title}. Streamgraph of five themes in ${facet} coverage from ${y
     </div>
   </details>
 </figure>
+
+<style>
+  /* Draw the river in from the left when it scrolls into view. Static (fully
+     visible) without JS — the animation only runs once .is-visible is added,
+     and `both` applies the clipped start state only then, so no-JS users still
+     see the full chart. */
+  @keyframes river-flow {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0 0 0); }
+  }
+  .theme-river.is-visible .river-bands {
+    animation: river-flow 1.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  .hover-hint { font-size: 10px; }
+  @media (prefers-reduced-motion: reduce) {
+    .theme-river.is-visible .river-bands { animation: none; }
+  }
+</style>
+
+<script>
+  // Progressive enhancement: reveal-on-scroll + hover readout for every
+  // [data-theme-river] on the page.
+  function initThemeRivers() {
+    document.querySelectorAll<HTMLElement>('[data-theme-river]').forEach((root) => {
+      if (root.dataset.riverReady) return;
+      root.dataset.riverReady = '1';
+
+      // Reveal on scroll.
+      const io = new IntersectionObserver((es, obs) => {
+        es.forEach((e) => {
+          if (e.isIntersecting) { root.classList.add('is-visible'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.25 });
+      io.observe(root);
+
+      // Hover readout.
+      const dataEl = root.querySelector('[data-river-data]');
+      const svg = root.querySelector<SVGSVGElement>('[data-river-svg]');
+      const cursor = root.querySelector<SVGLineElement>('[data-river-cursor]');
+      const tip = root.querySelector<HTMLElement>('[data-river-tip]');
+      if (!dataEl || !svg || !cursor || !tip) return;
+      let d: any;
+      try { d = JSON.parse(dataEl.textContent || '{}'); } catch { return; }
+      if (!d.years?.length) return;
+
+      const xForYear = (yr: number) => d.padL + ((yr - d.yrLo) / d.yrSpan) * d.innerW;
+
+      const move = (clientX: number) => {
+        const rect = svg.getBoundingClientRect();
+        const frac = (clientX - rect.left) / rect.width;
+        const vbx = frac * d.width;
+        let yr = Math.round(d.yrLo + ((vbx - d.padL) / d.innerW) * d.yrSpan);
+        yr = Math.max(d.yrLo, Math.min(d.yrHi, yr));
+        const rec = d.years.find((y: any) => y.year === yr);
+        if (!rec) return;
+        // Move the SVG cursor (viewBox units).
+        const cx = xForYear(yr);
+        cursor.setAttribute('x1', String(cx));
+        cursor.setAttribute('x2', String(cx));
+        cursor.setAttribute('opacity', '0.55');
+        // Fill + place the tooltip (sorted high→low so the leading theme reads first).
+        const rows = [...d.themes]
+          .map((t: any) => ({ ...t, v: rec.rates[t.key] ?? 0 }))
+          .sort((a: any, b: any) => b.v - a.v)
+          .map((t: any) => `<div class="flex items-center justify-between gap-3"><span class="flex items-center gap-1.5"><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${t.color}"></span>${t.label}</span><span class="tabular-nums text-ink-500">${t.v.toFixed(1)}</span></div>`)
+          .join('');
+        tip.innerHTML = `<div class="font-semibold text-ink-900 mb-1">${yr}</div>${rows}`;
+        tip.classList.remove('hidden');
+        const figRect = root.getBoundingClientRect();
+        const snappedScreenX = rect.left + (cx / d.width) * rect.width;
+        let left = snappedScreenX - figRect.left + 12;
+        if (left + tip.offsetWidth > figRect.width) left = snappedScreenX - figRect.left - tip.offsetWidth - 12;
+        tip.style.left = `${Math.max(0, left)}px`;
+        tip.style.top = `28px`;
+      };
+      const hide = () => { cursor.setAttribute('opacity', '0'); tip.classList.add('hidden'); };
+
+      svg.addEventListener('pointermove', (e) => move(e.clientX));
+      svg.addEventListener('pointerleave', hide);
+    });
+  }
+  initThemeRivers();
+  document.addEventListener('astro:page-load', initThemeRivers);
+</script>

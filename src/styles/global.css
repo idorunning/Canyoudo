@@ -195,12 +195,18 @@ html.dark {
     font-style: italic;
   }
 
+  /* Pull-quotes read as something a reader has marked up: an orange rule and
+     a faint orange wash, matching the hand-drawn annotations elsewhere on the
+     site (the pitch circle, the ==highlight== stripe). Site-wide, so every
+     article's quotes get the treatment, not just one. */
   .prose-article blockquote {
-    border-left: 3px solid rgb(var(--accent));
-    padding-left: 1.25rem;
+    border-left: 3px solid #f2994a;
+    padding: 0.4rem 0 0.4rem 1.25rem;
     margin-left: 0;
     font-style: italic;
     color: rgb(var(--ink-700));
+    background: linear-gradient(90deg, rgba(242, 153, 74, 0.08), rgba(242, 153, 74, 0));
+    border-radius: 0 6px 6px 0;
   }
 
   .prose-article ul,
@@ -778,13 +784,38 @@ html.dark {
 }
 
 /* ------------------------------------------------------------------ */
-/* Orange hand-drawn highlighter mark                                   */
+/* Rough hand-drawn "circled in a newspaper" ring (the pitch block).    */
+/* Static by default (works with no JS); when JS adds .is-drawn as it    */
+/* scrolls into view, the two passes draw themselves on like a felt-tip. */
 /* ------------------------------------------------------------------ */
-.mark-orange {
+@keyframes draw-circle {
+  from { stroke-dasharray: 2000; stroke-dashoffset: 2000; }
+  to   { stroke-dasharray: 2000; stroke-dashoffset: 0; }
+}
+.circle-pitch.is-drawn path { animation: draw-circle 1s ease-out both; }
+.circle-pitch.is-drawn path:nth-child(2) { animation-duration: 0.85s; animation-delay: 0.3s; }
+@media (prefers-reduced-motion: reduce) {
+  .circle-pitch.is-drawn path { animation: none; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Orange hand-drawn highlighter mark                                   */
+/* Used as a utility (.mark-orange) and applied automatically to <mark> */
+/* in article prose, so an author can highlight a key line with         */
+/* ==important== and it reads as a felt-tip stripe in the site's orange.*/
+/* ------------------------------------------------------------------ */
+.mark-orange,
+.prose-article mark {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 12'%3E%3Cpath d='M1,9 C8,6 20,10 38,7 C56,4 72,9 88,7 C93,6 97,8 99,7' stroke='%23F2994A' stroke-width='3.5' fill='none' stroke-linecap='round' opacity='0.65'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: 0 calc(100% + 2px);
   background-size: 100% 12px;
   padding-bottom: 4px;
+}
+/* <mark> defaults to a yellow block in browsers — clear it so only the */
+/* orange stripe shows, and keep the text colour unchanged.            */
+.prose-article mark {
+  background-color: transparent;
+  color: inherit;
 }
 
