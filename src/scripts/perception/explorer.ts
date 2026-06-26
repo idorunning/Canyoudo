@@ -4,11 +4,7 @@
 // play/animate, facet tabs, dimension views, client-redrawn trend/entity charts
 // and the social-media context overlay. All data comes from the one-file bundle.
 
-import { loadBundle, FACETS, THEME_KEYS, milestoneYear, type Bundle, type FacetKey, type YearData } from './data';
-
-const THEME_COLORS: Record<string, string> = {
-  trust: '#2f7d52', misconduct: '#b3402f', reform: '#3b6ea5', race: '#8a5a2b', leadership: '#6d4c91',
-};
+import { loadBundle, FACETS, THEME_META, themesPresent, milestoneYear, type Bundle, type FacetKey, type YearData } from './data';
 
 const CHART_W = 720;
 const CHART_H = 300;
@@ -352,11 +348,11 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     const xfm = (y: number) => MP.l + ((y - minYear) / (maxYear - minYear || 1)) * mW;
 
     let html = '';
-    for (const key of THEME_KEYS) {
-      const pts = years.map((y) => ({ year: y.year, value: y.facets[state.facet].lexicons[key].ratePer10k }));
+    for (const key of themesPresent(years, state.facet)) {
+      const pts = years.map((y) => ({ year: y.year, value: y.facets[state.facet].lexicons[key]?.ratePer10k ?? 0 }));
       const maxVal = Math.max(...pts.map((p) => p.value), 0.01);
       const hiVal = maxVal * 1.15;
-      const color = THEME_COLORS[key];
+      const color = THEME_META[key]?.color ?? '#8a857c';
 
       const yfm = (v: number) => MP.t + mH - (v / hiVal) * mH;
 
@@ -389,7 +385,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
         // Y axis line
         `<line x1="${MP.l}" x2="${MP.l}" y1="${MP.t}" y2="${MP.t + mH}" stroke="#d8d2c6" stroke-width="1"/>` +
         // Theme label
-        `<text x="${MP.l + 2}" y="${MP.t - 9}" font-size="10" fill="${color}" font-weight="600" font-family="system-ui,sans-serif">${key.charAt(0).toUpperCase() + key.slice(1)}</text>` +
+        `<text x="${MP.l + 2}" y="${MP.t - 9}" font-size="10" fill="${color}" font-weight="600" font-family="system-ui,sans-serif">${esc(THEME_META[key]?.label ?? key)}</text>` +
         yearAxis;
 
       html += `<div><svg width="100%" viewBox="0 0 ${MINI_W} ${MINI_H}" role="img" aria-label="${esc(key + ' theme mentions per 10k words over time')}">${svgInner}</svg></div>`;

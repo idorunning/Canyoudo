@@ -10,7 +10,7 @@ export interface Facet {
   corpusTokens: number;
   topWords: Word[];
   sentiment: Sentiment;
-  lexicons: Record<'trust' | 'misconduct' | 'reform' | 'race' | 'leadership', Lex>;
+  lexicons: Record<string, Lex>;
   entities: Entity[];
 }
 export interface Provenance {
@@ -51,7 +51,29 @@ export interface Bundle {
 
 export const FACETS = ['police-general', 'forces', 'leaders-officers-staff'] as const;
 export type FacetKey = (typeof FACETS)[number];
-export const THEME_KEYS = ['trust', 'misconduct', 'reform', 'race', 'leadership'] as const;
+
+// Display metadata for every theme key the data may carry — the current six plus
+// the legacy "leadership" (so older data still renders during a re-fetch). Short
+// labels keep charts legible; the lexicon scope (e.g. "& corruption") lives in
+// the prose. THEME_ORDER is the preferred draw order; callers filter to keys
+// actually present in the data via themesPresent().
+export const THEME_META: Record<string, { label: string; color: string }> = {
+  trust: { label: 'Trust', color: '#2f7d52' },
+  misconduct: { label: 'Misconduct', color: '#b3402f' },
+  race: { label: 'Race', color: '#8a5a2b' },
+  terrorism: { label: 'Terrorism', color: '#6d4c91' },
+  protest: { label: 'Protest', color: '#c97e2b' },
+  reform: { label: 'Reform', color: '#3b6ea5' },
+  leadership: { label: 'Leadership', color: '#8a6fae' }, // legacy data only
+};
+export const THEME_ORDER = ['trust', 'misconduct', 'race', 'terrorism', 'protest', 'reform', 'leadership'] as const;
+
+// The theme keys actually present across the given years for a facet, in draw order.
+export function themesPresent(years: YearData[], facet: string): string[] {
+  const present = new Set<string>();
+  for (const y of years) for (const k of Object.keys(y.facets?.[facet]?.lexicons ?? {})) present.add(k);
+  return THEME_ORDER.filter((k) => present.has(k) && THEME_META[k]);
+}
 
 let cache: Bundle | null = null;
 

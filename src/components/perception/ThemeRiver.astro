@@ -26,22 +26,20 @@ const {
   height = 340,
 } = Astro.props;
 
-const THEME_KEYS = ['trust', 'misconduct', 'reform', 'race', 'leadership'] as const;
-type ThemeKey = (typeof THEME_KEYS)[number];
-const THEME_COLORS: Record<ThemeKey, string> = {
-  trust: '#2f7d52',
-  misconduct: '#b3402f',
-  reform: '#3b6ea5',
-  race: '#8a5a2b',
-  leadership: '#6d4c91',
+type ThemeKey = string;
+// Display metadata for every theme key the data may carry — the current six plus
+// legacy "leadership", so older data still renders. The chart shows whichever
+// keys are present (the original five or the current six).
+const THEME_META: Record<string, { label: string; color: string }> = {
+  trust: { label: 'Trust', color: '#2f7d52' },
+  misconduct: { label: 'Misconduct', color: '#b3402f' },
+  race: { label: 'Race', color: '#8a5a2b' },
+  terrorism: { label: 'Terrorism', color: '#6d4c91' },
+  protest: { label: 'Protest', color: '#c97e2b' },
+  reform: { label: 'Reform', color: '#3b6ea5' },
+  leadership: { label: 'Leadership', color: '#8a6fae' },
 };
-const THEME_LABELS: Record<ThemeKey, string> = {
-  trust: 'Trust',
-  misconduct: 'Misconduct',
-  reform: 'Reform',
-  race: 'Race',
-  leadership: 'Leadership',
-};
+const THEME_ORDER = ['trust', 'misconduct', 'race', 'terrorism', 'protest', 'reform', 'leadership'];
 
 const entries = await getCollection('perception');
 const years = entries
@@ -50,9 +48,17 @@ const years = entries
   .filter((y) => y.facets[facet])
   .sort((a, b) => a.year - b.year);
 
+// Theme keys actually present in this facet's data, in draw order.
+const present = new Set<string>();
+for (const y of years) for (const k of Object.keys(y.facets[facet]?.lexicons ?? {})) present.add(k);
+const THEME_KEYS: ThemeKey[] = THEME_ORDER.filter((k) => present.has(k) && THEME_META[k]);
+const THEME_COLORS: Record<string, string> = Object.fromEntries(THEME_KEYS.map((k) => [k, THEME_META[k].color]));
+const THEME_LABELS: Record<string, string> = Object.fromEntries(THEME_KEYS.map((k) => [k, THEME_META[k].label]));
+const hasMisconduct = THEME_KEYS.includes('misconduct');
+
 // values[k][i] = rate for theme k in year i.
 const series: Record<ThemeKey, number[]> = Object.fromEntries(
-  THEME_KEYS.map((k) => [k, years.map((y) => y.facets[facet].lexicons[k].ratePer10k ?? 0)])
+  THEME_KEYS.map((k) => [k, years.map((y) => y.facets[facet].lexicons[k]?.ratePer10k ?? 0)])
 ) as Record<ThemeKey, number[]>;
 const totals = years.map((_, i) => THEME_KEYS.reduce((s, k) => s + series[k][i], 0));
 const maxTotal = Math.max(...totals, 1);
@@ -128,11 +134,11 @@ for (const s of sortedLabels) labelY[s.idx] = s.y;
 // The misconduct surge is the story, so mark its peak year as a standing
 // annotation (the moving hover cursor is separate).
 let peakI = 0;
-for (let i = 1; i < series.misconduct.length; i++) if (series.misconduct[i] > series.misconduct[peakI]) peakI = i;
+if (hasMisconduct) for (let i = 1; i < series.misconduct.length; i++) if (series.misconduct[i] > series.misconduct[peakI]) peakI = i;
 const peakYear = years[peakI]?.year ?? yrHi;
 
 const ticks = years.map((y) => y.year).filter((y) => y % 5 === 0);
-const aria = `${title}. Streamgraph of five themes in ${facet} coverage from ${yrLo} to ${yrHi}.`;
+const aria = `${title}. Streamgraph of themed coverage in ${facet} from ${yrLo} to ${yrHi}.`;
 
 // Compact data for the hover readout (built at compile time, read by the script).
 const riverData = {
@@ -155,8 +161,12 @@ const riverData = {
   </figcaption>
   <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={aria} class="overflow-visible" data-river-svg>
     {/* Standing annotation: the misconduct peak. */}
-    <line x1={xf(peakYear)} x2={xf(peakYear)} y1={pad.t} y2={pad.t + innerH} stroke={THEME_COLORS.misconduct} stroke-width="1" stroke-dasharray="2 3" opacity="0.35" />
-    <text x={xf(peakYear)} y={14} font-size="9.5" fill={THEME_COLORS.misconduct} text-anchor="middle" font-family="system-ui, sans-serif" font-weight="600">Misconduct peaks {peakYear}</text>
+    {hasMisconduct && (
+      <g>
+        <line x1={xf(peakYear)} x2={xf(peakYear)} y1={pad.t} y2={pad.t + innerH} stroke={THEME_COLORS.misconduct} stroke-width="1" stroke-dasharray="2 3" opacity="0.35" />
+        <text x={xf(peakYear)} y={14} font-size="9.5" fill={THEME_COLORS.misconduct} text-anchor="middle" font-family="system-ui, sans-serif" font-weight="600">Misconduct peaks {peakYear}</text>
+      </g>
+    )}
     {/* The bands, wrapped so they can draw in from the left. */}
     <g class="river-bands">
       {bands.map((b, i) => (
@@ -196,7 +206,7 @@ const riverData = {
           {years.map((y) => (
             <tr class="border-t border-ink-100">
               <td class="pr-3 py-0.5 tabular-nums">{y.year}</td>
-              {THEME_KEYS.map((k) => <td class="text-right px-2 py-0.5 tabular-nums text-ink-500">{y.facets[facet].lexicons[k].ratePer10k}</td>)}
+              {THEME_KEYS.map((k) => <td class="text-right px-2 py-0.5 tabular-nums text-ink-500">{y.facets[facet].lexicons[k]?.ratePer10k ?? 0}</td>)}
             </tr>
           ))}
         </tbody>

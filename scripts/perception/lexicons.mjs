@@ -1,32 +1,47 @@
 // Themed lexicons and the sentiment word lists for the perception analysis.
 // Plain ESM, shared by the build/merge script and any agent tooling.
 //
-// THEMES — five curated topic lexicons. The build step counts, per facet/year,
-// the items mentioning each theme and the rate per 10k tokens.
+// THEMES — six enduring threads in how the press covers policing, 2000–2025.
+// The build step counts, per facet/year, the items mentioning each theme and the
+// rate per 10k tokens. Threads were chosen to span the whole period (the terror
+// attacks of 2005 and 2017; the protest waves from the G20 and 2011 riots to
+// 2020's Black Lives Matter; the Macpherson→Casey arc on race), and to fold
+// adjacent ideas in: corruption and brutality sit under misconduct, every kind
+// of discrimination under race, and oversight/inquiry/funding under reform &
+// accountability. Multi-word entries are matched as phrases.
 export const THEMES = {
   trust: [
     'trust', 'confidence', 'legitimacy', 'consent', 'faith', 'respect', 'reassurance',
-    'transparency', 'accountability', 'integrity', 'public confidence',
+    'credibility', 'public confidence', 'trusted', 'distrust', 'mistrust',
   ],
   misconduct: [
-    'misconduct', 'corruption', 'scandal', 'abuse', 'brutality', 'cover-up', 'coverup',
-    'wrongdoing', 'malpractice', 'racist', 'misogyny', 'misogynistic', 'homophobic',
-    'rape', 'rapist', 'assault', 'sacked', 'dismissed', 'gross misconduct', 'vetting',
-    'predator', 'disgraced', 'lying', 'lied',
-  ],
-  reform: [
-    'reform', 'review', 'overhaul', 'change', 'restructure', 'modernise', 'modernisation',
-    'recommendation', 'recommendations', 'transformation', 'uplift', 'recruitment',
-    'funding', 'cuts', 'austerity', 'inquiry', 'training', 'standards',
+    'misconduct', 'corruption', 'corrupt', 'scandal', 'brutality', 'cover-up', 'coverup',
+    'wrongdoing', 'malpractice', 'sacked', 'dismissed', 'gross misconduct', 'vetting',
+    'predator', 'disgraced', 'bribery', 'abuse', 'assault', 'rape', 'rapist',
+    'excessive force', 'perverting the course', 'dishonesty', 'lying', 'lied',
   ],
   race: [
     'race', 'racism', 'racist', 'institutional racism', 'ethnicity', 'ethnic', 'black',
     'minority', 'disproportionate', 'disproportionality', 'stop and search', 'discrimination',
-    'profiling', 'macpherson', 'diversity',
+    'profiling', 'macpherson', 'misogyny', 'misogynistic', 'sexism', 'homophobic',
+    'homophobia', 'prejudice', 'bias',
   ],
-  leadership: [
-    'commissioner', 'chief constable', 'leadership', 'resign', 'resigned', 'resignation',
-    'appointed', 'appointment', 'mayor', 'home secretary', 'oversight', 'command', 'chief',
+  terrorism: [
+    'terror', 'terrorism', 'terrorist', 'extremism', 'extremist', 'radicalisation',
+    'radicalised', 'jihadi', 'jihadist', 'islamist', 'counter-terror', 'counter-terrorism',
+    'al-qaeda', 'isis', 'bomb plot', 'suicide bomb', 'arena attack', '7/7',
+  ],
+  protest: [
+    'protest', 'protester', 'protestor', 'demonstration', 'march', 'rally', 'vigil',
+    'riot', 'rioting', 'disorder', 'unrest', 'clashes', 'looting', 'kettling',
+    'public order', 'picket', 'extinction rebellion', 'black lives matter', 'just stop oil',
+    'insulate britain',
+  ],
+  reform: [
+    'reform', 'review', 'overhaul', 'inquiry', 'inquest', 'watchdog', 'ipcc', 'iopc',
+    'oversight', 'accountability', 'recommendation', 'restructure', 'modernise',
+    'transformation', 'uplift', 'recruitment', 'funding', 'cuts', 'austerity',
+    'training', 'standards', 'inspectorate', 'scrutiny',
   ],
 };
 

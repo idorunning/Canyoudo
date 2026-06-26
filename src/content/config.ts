@@ -245,13 +245,11 @@ const perceptionSentiment = z.object({
   negative: z.number(),
   gdeltToneMean: z.number().nullable().default(null),
 });
-const perceptionLexicons = z.object({
-  trust: perceptionLex,
-  misconduct: perceptionLex,
-  reform: perceptionLex,
-  race: perceptionLex,
-  leadership: perceptionLex,
-});
+// Themed-lexicon counts, keyed by theme. A flexible record (rather than a fixed
+// object) so the committed data validates whether it carries the original five
+// themes or the current six (trust, misconduct, race, terrorism, protest,
+// reform) — the front-end renders whichever keys are present.
+const perceptionLexicons = z.record(z.string(), perceptionLex);
 const perceptionFacet = z.object({
   corpusTokens: z.number(),
   topWords: z.array(perceptionWord).default([]),
