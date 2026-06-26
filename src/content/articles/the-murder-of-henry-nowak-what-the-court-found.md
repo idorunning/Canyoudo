@@ -1,13 +1,24 @@
 ---
-section: "police-policy"
-title: "The Murder of Henry Nowak: What the Sentencing Remarks Reveal"
-description: "On 1 June 2026, a judge sentenced Vickrum Digwa to life for the murder of 18-year-old Henry Nowak. Working from the judge's own sentencing remarks rather than the headlines, this is a careful, evidence-based account of what the court actually found — including what it found about the police response."
+title: 'The Murder of Henry Nowak: What the Sentencing Remarks Reveal'
+section: public-policy
+description: On 1 June 2026, a judge sentenced Vickrum Digwa to life for the murder of 18-year-old Henry Nowak. Working from the judge's own sentencing remarks rather than the headlines, this is a careful, evidence-based account of what the court actually found — including what it found about the police response.
 pubDate: 2026-06-07
-heroImage: "/images/henry-nowak.jpg"
-thumbnail: "/images/henry-nowak.jpg"
-tags: ["crime", "courts", "evidence-based-policing", "law", "news", "police", "policing", "accountability"]
+updatedDate: ''
+author: ''
+thumbnail: /images/henry-nowak.jpg
+heroImage: /images/henry-nowak.jpg
+tags:
+  - crime
+  - courts
+  - evidence-based-policing
+  - law
+  - news
+  - police
+  - policing
+  - accountability
 draft: false
 ---
+
 On the night of 3 December 2025, 18-year-old Henry Nowak was walking home to his university accommodation in Portswood, Southampton, after an evening out. He was alone, unarmed, and a little over half a mile from his bed. He never arrived. On 1 June 2026, at Southampton Crown Court, His Honour Judge William Mousley KC — the Honorary Recorder of Southampton — sentenced 23-year-old Vickrum Singh Digwa to life imprisonment for his murder.[^1]
 
 This article is built on the judge's own sentencing remarks, which the court released and which are linked at the end. That matters, because a great deal has been written and said about this case, some of it inaccurate, and the remarks are the most careful and authoritative account available of what the court actually found. They are also, in places, very different from the impression left by the headlines — including on the question that most concerns a site about policing: how the officers who reached Henry first behaved.
