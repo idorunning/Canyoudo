@@ -77,10 +77,10 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     facetMax[f] = m || 1;
   }
   const raceRows = new Map<string, HTMLElement>();
-  // Single neutral colour for every word — the red/green/blue sentiment tint was
-  // removed. Label ink + a muted bar fill, so the race reads as one calm palette.
+  // Dark label ink + the site's light-orange bar fill (matching the hand-drawn
+  // annotations elsewhere), so the year-by-year race reads in one warm palette.
   const LABEL_INK = '#3a3733';
-  const BAR_FILL = '#8a8178';
+  const BAR_FILL = '#F2994A';
   // Noise words to drop, and display casing (met→MET, hague→Hague), shared with
   // the static SVG via the bundle.
   const hideSet = new Set(bundle.wordHide ?? []);
