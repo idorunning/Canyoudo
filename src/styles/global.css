@@ -565,7 +565,7 @@ html.dark {
 
 .smce-progress {
   margin-top: 8px;
-  height: 7px;
+  height: 6px;
   background: var(--smce-control);
   border: 1px solid var(--smce-line);
   border-radius: 999px;
@@ -574,7 +574,7 @@ html.dark {
 .smce-progress-inner {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #ef4444, #f97316);
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.7), rgba(249, 115, 22, 0.7));
   transition: width 120ms linear;
 }
 
