@@ -1,10 +1,11 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-26T02:09:35.492Z",
-    "feedCount": 7,
+    "fetchedAt": "2026-06-26T14:00:15.718Z",
+    "feedCount": 8,
     "sources": [
       "GOV.UK",
       "BBC News",
+      "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
@@ -14,36 +15,52 @@
   },
   "items": [
     {
-      "title": "Police charge boy with murder in Blaenau Gwent investigation",
-      "link": "https://www.bbc.co.uk/news/articles/cwyd1w958jzo?at_medium=RSS&at_campaign=rss",
+      "title": "Pilot dies after plane crash near airfield",
+      "link": "https://www.bbc.co.uk/news/articles/cp8ryxjzd4zo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-26T02:08:34.000Z",
-      "summary": "The boy was arrested after a female body was found during the search for a girl missing in south Wales."
+      "isoDate": "2026-06-26T13:02:34.000Z",
+      "summary": "Police say the pilot believed to be a woman in her 40s was pronounced deceased at the scene."
     },
     {
-      "title": "Teens who hacked TfL were known to police years before cyber-attack",
-      "link": "https://www.bbc.co.uk/news/articles/cx2kx8jr244o?at_medium=RSS&at_campaign=rss",
+      "title": "Court rules 13 men who allegedly helped rapist drug and abuse wife can be named",
+      "link": "https://www.bbc.co.uk/news/articles/cnv9er181lno?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-25T23:19:48.000Z",
-      "summary": "Owen Flowers and Thalha Jubair were convicted for their roles in the attack, which led to large costs for Transport for London."
+      "isoDate": "2026-06-26T12:51:21.000Z",
+      "summary": "13 men are accused of helping a man abuse his wife over a period of years."
     },
     {
-      "title": "New CCTV footage contradicts prison death evidence",
-      "link": "https://www.bbc.co.uk/news/articles/ce37vkqp29go?at_medium=RSS&at_campaign=rss",
+      "title": "Body found in search for teenage boy who entered lake",
+      "link": "https://www.bbc.co.uk/news/articles/c17yp1r2nl8o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-25T22:01:28.000Z",
-      "summary": "Footage of Allan Marshall, who died after being restrained by prison officers, has been obtained by the BBC."
+      "isoDate": "2026-06-26T12:20:30.000Z",
+      "summary": "Police confirm the body is of the teenager who went into the lake on Thursday afternoon."
     },
     {
-      "title": "Home Office plan to use more military bases to house asylum seekers",
-      "link": "https://www.bbc.co.uk/news/articles/cvgjm61lkl4o?at_medium=RSS&at_campaign=rss",
+      "title": "Murder arrest as girl, 3, found dead",
+      "link": "https://www.bbc.co.uk/news/articles/cx23y6p3p41o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-25T21:33:33.000Z",
-      "summary": "Three new sites in Oxfordshire, Suffolk, and Yorkshire could house about 3,750 asylum seekers if permission is granted."
+      "isoDate": "2026-06-26T11:44:39.000Z",
+      "summary": "A man was taken to hospital with a serious injury and will be in custody once treated, say police."
+    },
+    {
+      "title": "SRA charges first solicitors tied to Post Office scandal",
+      "link": "https://www.legalcheek.com/2026/06/sra-charges-first-solicitors-tied-to-post-office-scandal/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-26T07:52:27.000Z",
+      "summary": "Pair referred to disciplinary tribunal The post SRA charges first solicitors tied to Post Office scandal appeared first on Legal Cheek ."
+    },
+    {
+      "title": "High Down Prison",
+      "link": "https://www.gov.uk/guidance/high-down-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-06-26T07:48:17.000Z",
+      "summary": "High Down is a men’s prison and young offender institution (YOI) near Sutton in Surrey."
     },
     {
       "title": "Legal AI giant signs as Chelsea kit sponsor",
@@ -66,7 +83,7 @@
       "link": "https://www.gov.uk/government/news/cnc-welcomes-launch-of-new-digital-memorial",
       "source": "GOV.UK",
       "topic": "policing",
-      "isoDate": "2026-06-25T12:39:35.000Z",
+      "isoDate": "2026-06-25T12:39:00.000Z",
       "summary": "Two Civil Nuclear Constabulary officers among 4,600 remembered through a new national Digital Memorial honouring <mark>police</mark> officers and staff who died in service."
     },
     {
@@ -84,14 +101,6 @@
       "topic": "law",
       "isoDate": "2026-06-25T07:42:59.000Z",
       "summary": "Bar hopeful seeks honest views The post ‘I got a 2:2 with mitigating circumstances. Can I still make it as a barrister?’ appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Clients are barristers’ biggest ethical headache, research finds",
-      "link": "https://www.legalcheek.com/2026/06/clients-are-barristers-biggest-ethical-headache-research-finds/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-24T07:59:39.000Z",
-      "summary": "Pressure to bend rules The post Clients are barristers’ biggest ethical headache, research finds appeared first on Legal Cheek ."
     },
     {
       "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
