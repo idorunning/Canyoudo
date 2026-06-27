@@ -19,7 +19,8 @@ const allArticles: Item[] = articles
   .map(a => ({ slug: a.slug, data: a.data, section: a.data.section }))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const [feature, ...rest] = allArticles;
+const HERO_SLUG = 'self-selection-policing-catching-serious-criminals-and-bad-cops-through-minor-offences';
+const feature = allArticles.find(a => a.slug === HERO_SLUG) ?? allArticles[0];
 const latestThree = allArticles.slice(0, 3);
 
 // Themed section rows — latest 2 articles per primary section
@@ -482,22 +483,16 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           button) without affecting layout; clicks pass through to the button.
           max-w keeps the ring hugging the content rather than stretching across
           the whole card on wide screens. */}
-      <div class="relative max-w-2xl pb-8">
+      <div class="relative max-w-md">
         <span class="inline-block bg-[#faeef2] text-ink-900 text-[11px] font-extrabold uppercase tracking-[0.08em] px-3 py-1.5 rounded-full">
           Write for us
         </span>
         <h2 class="font-extrabold text-[29px] leading-[1.14] tracking-[-0.03em] text-ink-900 mt-4 mb-3">
           Have an idea for an article?
         </h2>
-        <p class="font-sans text-[16.5px] leading-relaxed text-ink-700 mb-8 max-w-[34em] font-medium">
-          Share an idea — pieces welcome from serving officers, researchers, practitioners and policymakers.
+        <p class="font-sans text-[16.5px] leading-relaxed text-ink-700 font-medium">
+          <a href={pitchMailto} class="text-accent font-bold hover:underline transition-colors">Share an idea →</a> — pieces welcome from serving officers, researchers, practitioners and policymakers.
         </p>
-        <a
-          href={pitchMailto}
-          class="share-idea-btn relative z-10 inline-block bg-accent text-paper-50 rounded-full px-6 py-3 text-[14px] font-bold hover:bg-accent-dark transition-colors"
-        >
-          Share an idea <span class="arrow">→</span>
-        </a>
         {/* Rough hand-drawn orange ring around the whole pitch. Two slightly
             offset passes + an overshooting tail give it the look of a felt-tip
             circle scrawled on a page, rather than a clean vector ellipse. */}
