@@ -497,9 +497,9 @@ html.dark {
 .smce-card {
   position: absolute;
   left: 12px;
-  width: min(360px, calc(100% - 24px));
+  width: min(720px, calc(100% - 24px));
   background: var(--smce-panel);
-  border: 1px solid var(--smce-line);
+  border: 3px solid #f97316;
   border-radius: var(--smce-radius);
   box-shadow: var(--smce-shadow);
   z-index: 1000;
