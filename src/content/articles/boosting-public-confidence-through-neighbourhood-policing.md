@@ -1,17 +1,28 @@
 ---
-section: "police-policy"
-title: "Boosting Public Confidence Through Neighbourhood Policing"
-description: "Delivered well, neighbourhood policing produces “quick, large and sustained” gains in public confidence. The evidence behind that claim, weighed."
+title: Boosting Public Confidence Through Neighbourhood Policing
+section: police-policy
+description: Delivered well, neighbourhood policing produces “quick, large and sustained” gains in public confidence. The evidence behind that claim, weighed.
+pubDate: 2025-02-18
+updatedDate: ''
+author: ''
+thumbnail: /images/neighbourhood-pcso.jpg
+heroImage: /images/neighbourhood-pcso.jpg
+tags:
+  - crime
+  - evidence-based
+  - evidence-based-policing
+  - mental-health
+  - news
+  - police
+  - policing
+  - politics
 keyTakeaways:
   - Done to a high standard, neighbourhood policing produces "quick, large and sustained" gains in public confidence, and the College of Policing's systematic reviews back the claim.
   - The gains depend on delivery — problem-solving, partnerships and statutory tools used well — not on the label, and implementation across forces is uneven.
   - Protecting neighbourhood capacity from constant abstraction to response is the precondition for any of it to work.
   - "This is not a departure from British policing tradition but the fulfilment of Peel's founding test: the absence of crime and disorder."
-pubDate: 2025-02-18
-heroImage: "/images/neighbourhood-pcso.jpg"
-thumbnail: "/images/neighbourhood-pcso.jpg"
-tags: ["crime", "evidence-based", "evidence-based-policing", "mental-health", "news", "police", "policing", "politics"]
 ---
+
 **Neighbourhood policing, when delivered to a high standard, produces “quick, large and sustained increases” in public confidence** and demonstrates measurable crime reduction outcomes. The College of Policing’s systematic reviews confirm this, yet implementation across UK forces remains inconsistent, a gap that represents both a challenge and an opportunity for senior leaders. Evidence-based policing is not a departure from British policing traditions but their fulfilment: Sir Robert Peel’s founding principle that “the test of police efficiency is the absence of crime and disorder” directly anticipates modern outcome-focused approaches. This paper synthesises the evidence base, case studies, statutory tools, and partnership models that enable Neighbourhood Policing Teams to deliver on their preventive mission.
 
 <figure>
