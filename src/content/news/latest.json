@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-27T13:06:32.004Z",
+    "fetchedAt": "2026-06-28T02:15:12.155Z",
     "feedCount": 8,
     "sources": [
       "GOV.UK",
@@ -15,28 +15,52 @@
   },
   "items": [
     {
-      "title": "PSNI officer 'had intelligence on Donaldson abuse a year before complaint'",
-      "link": "https://www.bbc.co.uk/news/articles/cly947gp9z8o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-27T09:47:09.000Z",
-      "summary": "A BBC investigation has been told a detective and a child safeguarding expert identified Donaldson after speaking to a victim."
+      "title": "Tech firms are blaming AI for mega device and console price rises",
+      "link": "https://www.bbc.co.uk/news/articles/cd95k584pzqo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-06-27T23:10:47.000Z",
+      "summary": "Xbox consoles, Nintendo's new Switch 2 and Valve's Steam Deck are just some of the gadgets seeing price hikes in recent months."
     },
     {
-      "title": "Body of missing man found in river by police",
-      "link": "https://www.bbc.co.uk/news/articles/c4gy47w37wjo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
+      "title": "Rough sleeping no longer a crime as Vagrancy Act repealed",
+      "link": "https://www.gov.uk/government/news/rough-sleeping-no-longer-a-crime-as-vagrancy-act-repealed",
+      "source": "GOV.UK",
       "topic": "policing",
-      "isoDate": "2026-06-27T09:00:30.000Z",
-      "summary": "West Mercia Police say Brody Leach was reported to have got into difficulty in the water."
+      "isoDate": "2026-06-27T23:09:04.000Z",
+      "summary": "The government will repeal the Vagrancy Act on Monday 29 June 2026, ending nearly two centuries of legislation that has criminalised rough sleeping and begging."
     },
     {
-      "title": "The kind-hearted newsagent murdered for his takings - could a review find his killer?",
-      "link": "https://www.bbc.co.uk/news/articles/clye9xej0yjo?at_medium=RSS&at_campaign=rss",
+      "title": "Man arrested on suspicion of attempted murder after car hits shoppers",
+      "link": "https://www.bbc.co.uk/news/articles/cdjk8m33p0mo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-27T06:23:43.000Z",
-      "summary": "Police are re-looking at exhibits from the night Philip Saunders was killed using modern forensics."
+      "isoDate": "2026-06-27T21:03:18.000Z",
+      "summary": "Police say five people were injured in Ealing and the incident is not being treated as terror-related."
+    },
+    {
+      "title": "Thousands join anti-racism demo after terrorism-linked murder bids",
+      "link": "https://www.bbc.co.uk/news/articles/cql1k9z5gk3o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-27T16:51:31.000Z",
+      "summary": "The Reclaim Our Streets rally drew support from politicians, trade unions, local people and community groups."
+    },
+    {
+      "title": "Man charged with rape and murder after girl's death",
+      "link": "https://www.bbc.co.uk/news/articles/cd6ex3dge8go?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-27T15:22:41.000Z",
+      "summary": "Kevin Kerjean, 31, remains in custody after the body of a two-year-old was found on Thursday."
+    },
+    {
+      "title": "Welsh teens arrested in Thailand prompting police probe",
+      "link": "https://www.bbc.co.uk/news/articles/crkv7jn8nd7o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-27T13:50:12.000Z",
+      "summary": "Their arrests in Thailand have prompted an investigation into the \"circumstances\" behind the trip."
     },
     {
       "title": "Swinfen Hall Prison",
@@ -77,14 +101,6 @@
       "topic": "law",
       "isoDate": "2026-06-26T07:48:17.000Z",
       "summary": "High Down is a men’s prison and young offender institution (YOI) near Sutton in Surrey."
-    },
-    {
-      "title": "Watch: Driver gives lift to armed officer chasing suspect",
-      "link": "https://www.bbc.co.uk/news/articles/clyxg76527po?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-25T21:09:16.000Z",
-      "summary": "The chase was caught on camera as the motorist pulled over to help in Margate."
     },
     {
       "title": "Legal AI giant signs as Chelsea kit sponsor",
@@ -165,14 +181,6 @@
       "topic": "policing",
       "isoDate": "2026-06-19T23:01:03.000Z",
       "summary": "Streets will be safer as thousands of offenders are to be banned from drinking alcohol during the World Cup this summer as part of the Government’s commitment to cut…"
-    },
-    {
-      "title": "What new diversion data tells us about cutting crime and protecting the public",
-      "link": "https://www.gov.uk/government/news/what-new-diversion-data-tells-us-about-cutting-crime-and-protecting-the-public",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-06-18T08:52:48.000Z",
-      "summary": "A blog by Phil Bowen, Interim Chair of the Youth Justice Board"
     },
     {
       "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
