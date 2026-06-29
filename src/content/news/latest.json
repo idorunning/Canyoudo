@@ -1,9 +1,10 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-29T02:14:47.930Z",
-    "feedCount": 8,
+    "fetchedAt": "2026-06-29T15:27:28.877Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
+      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "Courts & Tribunals Judiciary",
@@ -15,6 +16,86 @@
   },
   "items": [
     {
+      "title": "Circular 004/2026: Crime and Policing Act 2026",
+      "link": "https://www.gov.uk/government/publications/circular-0042026-crime-and-policing-act-2026",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-06-29T15:24:36.000Z",
+      "summary": "This circular is issued to inform partners of certain provisions of the Crime and <mark>Policing</mark> Act 2026 which came into force on 29 June 2026."
+    },
+    {
+      "title": "Statutory guidance: Unauthorised encampments: guidance for police",
+      "link": "https://www.gov.uk/government/publications/unauthorised-encampments-guidance-for-police",
+      "source": "Home Office",
+      "topic": "policing",
+      "isoDate": "2026-06-29T14:13:05.000Z",
+      "summary": "Sets out the suite of powers available for police to respond to unauthorised encampments and to tackle a range of harms proportionately."
+    },
+    {
+      "title": "Mother blows kiss to son, 14, charged with murder of teenage girl",
+      "link": "https://www.bbc.co.uk/news/articles/cqx1yq43ze2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-29T13:55:34.000Z",
+      "summary": "Police believe a body found in south Wales last week is Lilly Jones, 14, who was reported missing."
+    },
+    {
+      "title": "Ford rehires human engineers after AI fails to match quality checks",
+      "link": "https://www.bbc.co.uk/news/articles/cgrkd41n2v9o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-06-29T11:58:01.000Z",
+      "summary": "The car-maker found AI quality checks failed to match the skill of veteran technicians."
+    },
+    {
+      "title": "Murder accused in court over summer solstice death",
+      "link": "https://www.bbc.co.uk/news/articles/c7vymvm1qpgo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-29T09:48:53.000Z",
+      "summary": "Isaac Clare-Watts was pronounced dead after police were called to the Nine Ladies Stone Circle area."
+    },
+    {
+      "title": "Shoosmiths hits record £80 million profit",
+      "link": "https://www.legalcheek.com/2026/06/shoosmiths-hits-record-80-million-profit/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-29T09:35:25.000Z",
+      "summary": "PEP holds above £1m as firm leans into tech The post Shoosmiths hits record £80 million profit appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Ashurst Perkins Coie merger goes live",
+      "link": "https://www.legalcheek.com/2026/06/ashurst-perkins-coie-merger-goes-live/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-29T09:02:51.000Z",
+      "summary": "The £2 billion giant is officially here The post Ashurst Perkins Coie merger goes live appeared first on Legal Cheek ."
+    },
+    {
+      "title": "‘Rude’ judge disciplined for throwing barrister out of court",
+      "link": "https://www.legalcheek.com/2026/06/rude-judge-disciplined-for-throwing-barrister-out-of-court/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-29T08:15:06.000Z",
+      "summary": "Formal advice The post ‘Rude’ judge disciplined for throwing barrister out of court appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Sudbury Prison",
+      "link": "https://www.gov.uk/guidance/sudbury-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-06-29T07:26:37.000Z",
+      "summary": "Sudbury Prison is a men’s prison near Ashbourne in Derbyshire."
+    },
+    {
+      "title": "Monday morning round-up",
+      "link": "https://www.legalcheek.com/2026/06/monday-morning-round-up-155/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-29T06:14:27.000Z",
+      "summary": "The top legal affairs news stories from this morning and the weekend The post Monday morning round-up appeared first on Legal Cheek ."
+    },
+    {
       "title": "Man due in court charged with attempted murder after car hit pedestrians",
       "link": "https://www.bbc.co.uk/news/articles/cp36713d29lo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
@@ -23,28 +104,12 @@
       "summary": "The man has been remanded in custody following a collision in Ealing, west London, on Saturday."
     },
     {
-      "title": "Body of missing boy, 15, found in reservoir",
-      "link": "https://www.bbc.co.uk/news/articles/c621lp8ev29o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-28T15:40:01.000Z",
-      "summary": "Police say the boy's body was recovered from Cowbury Reservoir in Stalybridge on Saturday night."
-    },
-    {
       "title": "Family 'fight for justice' after murder acquittal",
       "link": "https://www.bbc.co.uk/news/articles/c0jyejngg4eo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
       "isoDate": "2026-06-28T13:48:09.000Z",
       "summary": "The girl's family say the verdict leaves the public \"wondering what consequences truly exist\"."
-    },
-    {
-      "title": "Harry reconsiders bringing Meghan and children on UK trip",
-      "link": "https://www.bbc.co.uk/news/articles/c4gy6ywg73wo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-28T08:44:25.000Z",
-      "summary": "It comes after his request for police protection was rejected days before the family is due to arrive."
     },
     {
       "title": "Tech firms are blaming AI for mega device and console price rises",
@@ -87,30 +152,6 @@
       "summary": "Styal is a prison and young offender institution (YOI) in Wilmslow, Cheshire, for women aged 18 and over."
     },
     {
-      "title": "SRA charges first solicitors tied to Post Office scandal",
-      "link": "https://www.legalcheek.com/2026/06/sra-charges-first-solicitors-tied-to-post-office-scandal/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-26T07:52:27.000Z",
-      "summary": "Pair referred to disciplinary tribunal The post SRA charges first solicitors tied to Post Office scandal appeared first on Legal Cheek ."
-    },
-    {
-      "title": "High Down Prison",
-      "link": "https://www.gov.uk/guidance/high-down-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-26T07:48:17.000Z",
-      "summary": "High Down is a men’s prison and young offender institution (YOI) near Sutton in Surrey."
-    },
-    {
-      "title": "Legal AI giant signs as Chelsea kit sponsor",
-      "link": "https://www.legalcheek.com/2026/06/legal-ai-giant-signs-as-chelsea-kit-sponsor/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-25T13:53:28.000Z",
-      "summary": "Major sporting deal The post Legal AI giant signs as Chelsea kit sponsor appeared first on Legal Cheek ."
-    },
-    {
       "title": "Meet the police dogs protecting the UK's critical infrastructure",
       "link": "https://www.gov.uk/government/news/meet-the-police-dogs-protecting-the-uks-critical-infrastructure",
       "source": "GOV.UK",
@@ -125,22 +166,6 @@
       "topic": "policing",
       "isoDate": "2026-06-25T12:39:00.000Z",
       "summary": "Two Civil Nuclear Constabulary officers among 4,600 remembered through a new national Digital Memorial honouring <mark>police</mark> officers and staff who died in service."
-    },
-    {
-      "title": "Shoosmiths teams up with Microsoft to help junior lawyers review contracts faster",
-      "link": "https://www.legalcheek.com/2026/06/shoosmiths-teams-up-with-microsoft-to-help-junior-lawyers-review-contracts-faster/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-25T08:29:06.000Z",
-      "summary": "Project Apollo The post Shoosmiths teams up with Microsoft to help junior lawyers review contracts faster appeared first on Legal Cheek ."
-    },
-    {
-      "title": "‘I got a 2:2 with mitigating circumstances. Can I still make it as a barrister?’",
-      "link": "https://www.legalcheek.com/2026/06/i-got-a-22-with-mitigating-circumstances-can-i-still-make-it-as-a-barrister/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-25T07:42:59.000Z",
-      "summary": "Bar hopeful seeks honest views The post ‘I got a 2:2 with mitigating circumstances. Can I still make it as a barrister?’ appeared first on Legal Cheek ."
     },
     {
       "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
@@ -173,14 +198,6 @@
       "topic": "ai",
       "isoDate": "2026-06-23T08:00:00.000Z",
       "summary": "Oxford and UCL to host new government-backed labs developing the next generation of AI that more businesses and services can readily use"
-    },
-    {
-      "title": "World Cup booze ban for 7,300 offenders thanks to crime-cutting alcohol tags",
-      "link": "https://www.gov.uk/government/news/world-cup-booze-ban-for-7300-offenders-thanks-to-crime-cutting-alcohol-tags",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-06-19T23:01:03.000Z",
-      "summary": "Streets will be safer as thousands of offenders are to be banned from drinking alcohol during the World Cup this summer as part of the Government’s commitment to cut…"
     },
     {
       "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
