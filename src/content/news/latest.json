@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-06-30T02:10:06.025Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-06-30T13:53:05.438Z",
+    "feedCount": 8,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -9,19 +9,66 @@
       "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
-      "DSIT",
       "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Domestic killers could face extra 10 years in prison under new plans",
-      "link": "https://www.bbc.co.uk/news/articles/cvgqnzpwrpzo?at_medium=RSS&at_campaign=rss",
+      "title": "Man denies murder of Scottish woman on Greek island in 2009",
+      "link": "https://www.bbc.co.uk/news/articles/ce8j2d0y0j5o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-29T21:37:09.000Z",
-      "summary": "The changes mean the 15-year starting sentence could be increased to 25 years to be in line with other murders."
+      "isoDate": "2026-06-30T12:34:19.000Z",
+      "summary": "Jean Hanlon was found dead in the water off the coast of Heraklion 17 years ago."
+    },
+    {
+      "title": "Man charged with attempted murder and arson following Belfast disorder",
+      "link": "https://www.bbc.co.uk/news/articles/c5yzqw9erq0o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-30T12:05:29.000Z",
+      "summary": "The 29-year-old was arrested on Monday in connection with a glider bus which was set on fire on 9 June."
+    },
+    {
+      "title": "Government 'cannot deport' grooming gang ringleader",
+      "link": "https://www.bbc.co.uk/news/articles/cx2wl6ynn2no?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-30T11:36:13.000Z",
+      "summary": "A 55-year-old law means the government has no legal powers to remove Shabir Ahmed from the UK."
+    },
+    {
+      "title": "Refugees would be told to repay around £10,000 under new asylum bill",
+      "link": "https://www.bbc.co.uk/news/articles/cddlgqlm7q2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-06-30T09:00:25.000Z",
+      "summary": "The Home Office will be given powers to recover costs from adults who have received asylum support under new laws."
+    },
+    {
+      "title": "Bar Council calls for age of criminal responsibility to be raised",
+      "link": "https://www.legalcheek.com/2026/06/bar-council-calls-for-age-of-criminal-responsibility-to-be-raised/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-30T07:48:07.000Z",
+      "summary": "10 to 14 The post Bar Council calls for age of criminal responsibility to be raised appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Former Shoosmiths PA wins car after building AI tool for top client",
+      "link": "https://www.legalcheek.com/2026/06/former-shoosmiths-pa-wins-car-after-building-ai-tool-for-top-client/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-06-30T07:47:50.000Z",
+      "summary": "Now innovation advisor The post Former Shoosmiths PA wins car after building AI tool for top client appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
+      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-30T06:11:03.000Z",
+      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
     },
     {
       "title": "Justice for victims as domestic killers to face longer behind bars",
@@ -30,30 +77,6 @@
       "topic": "law",
       "isoDate": "2026-06-29T21:30:01.000Z",
       "summary": "People who kill their partner, or ex, to face a 25-year sentencing start point under a change announced today by the Deputy Prime Minister."
-    },
-    {
-      "title": "Student gets almost four years for bomb threat",
-      "link": "https://www.bbc.co.uk/news/articles/cp8l7de068jo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-29T17:18:52.000Z",
-      "summary": "Jagger Strang, 18, had idolised serial killers, including the Sandy Hook shooter, the court heard."
-    },
-    {
-      "title": "Top Boy actor Micheal Ward raped woman in car, court told",
-      "link": "https://www.bbc.co.uk/news/articles/cdr4en37yk8o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-29T17:16:27.000Z",
-      "summary": "The award-winning actor goes on trial on charges of rape and sexual assault, which he denies."
-    },
-    {
-      "title": "Double murder accused is sex offender, jury told",
-      "link": "https://www.bbc.co.uk/news/articles/clye11ggr80o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-29T16:37:38.000Z",
-      "summary": "Simon Levy, 40, from Tottenham denies murdering Carmenza Valencia-Trujillo and Sheryl Wilkins."
     },
     {
       "title": "Circular 004/2026: Crime and Policing Act 2026",
@@ -96,28 +119,12 @@
       "summary": "The £2 billion giant is officially here The post Ashurst Perkins Coie merger goes live appeared first on Legal Cheek ."
     },
     {
-      "title": "‘Rude’ judge disciplined for throwing barrister out of court",
-      "link": "https://www.legalcheek.com/2026/06/rude-judge-disciplined-for-throwing-barrister-out-of-court/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-29T08:15:06.000Z",
-      "summary": "Formal advice The post ‘Rude’ judge disciplined for throwing barrister out of court appeared first on Legal Cheek ."
-    },
-    {
       "title": "Sudbury Prison",
       "link": "https://www.gov.uk/guidance/sudbury-prison",
       "source": "Ministry of Justice",
       "topic": "law",
       "isoDate": "2026-06-29T07:26:37.000Z",
       "summary": "Sudbury Prison is a men’s prison near Ashbourne in Derbyshire."
-    },
-    {
-      "title": "Monday morning round-up",
-      "link": "https://www.legalcheek.com/2026/06/monday-morning-round-up-155/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-29T06:14:27.000Z",
-      "summary": "The top legal affairs news stories from this morning and the weekend The post Monday morning round-up appeared first on Legal Cheek ."
     },
     {
       "title": "Tech firms are blaming AI for mega device and console price rises",
@@ -192,14 +199,6 @@
       "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
     },
     {
-      "title": "UK backs new AI labs to make technology cheaper, more reliable and easier to use",
-      "link": "https://www.gov.uk/government/news/uk-backs-new-ai-labs-to-make-technology-cheaper-more-reliable-and-easier-to-use",
-      "source": "DSIT",
-      "topic": "ai",
-      "isoDate": "2026-06-23T08:00:00.000Z",
-      "summary": "Oxford and UCL to host new government-backed labs developing the next generation of AI that more businesses and services can readily use"
-    },
-    {
       "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
       "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
       "source": "The Register",
@@ -246,14 +245,6 @@
       "topic": "ai",
       "isoDate": "2026-06-03T16:49:15.000Z",
       "summary": "Always-on agent promises to keep work moving, provided you trust it with practically everything"
-    },
-    {
-      "title": "Anthropic, now atop the AI bubble, files for its IPO",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/01/anthropic-now-atop-the-ai-bubble-files-for-its-ipo/5249753",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-01T18:12:22.000Z",
-      "summary": "First it tops OpenAI's valuation, then it beats Altman to the IPO punch"
     }
   ]
 }
