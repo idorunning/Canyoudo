@@ -1,49 +1,81 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-01T02:14:42.186Z",
+    "fetchedAt": "2026-07-01T14:04:50.794Z",
     "feedCount": 7,
     "sources": [
       "GOV.UK",
-      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Government 'cannot deport' grooming gang ringleader",
-      "link": "https://www.bbc.co.uk/news/articles/cx2wl6ynn2no?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-30T20:38:32.000Z",
-      "summary": "A 55-year-old law means the government has no legal powers to remove Shabir Ahmed from the UK."
+      "title": "Wonka Netflix show faces backlash for AI-generated Gene Wilder voice",
+      "link": "https://www.bbc.co.uk/news/articles/cdxdgpgn0zwo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-01T14:01:06.000Z",
+      "summary": "The actor, who died in 2016, appears in the Netflix show with the consent of his estate."
     },
     {
-      "title": "Refugees would be told to repay around £10,000 under new asylum bill",
-      "link": "https://www.bbc.co.uk/news/articles/cddlgqlm7q2o?at_medium=RSS&at_campaign=rss",
+      "title": "Judge wrong to spare rapists from custody, court told",
+      "link": "https://www.bbc.co.uk/news/articles/clye2enp0lxo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-30T18:52:35.000Z",
-      "summary": "The Home Office will be given powers to recover costs from adults who have received asylum support under new laws."
+      "isoDate": "2026-07-01T13:51:41.000Z",
+      "summary": "Three teenage boys convicted of rape should have been detained, the Court of Appeal hears."
     },
     {
-      "title": "Sycamore Gap sapling stolen from castle grounds",
-      "link": "https://www.bbc.co.uk/news/articles/ce954g9pnv2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-06-30T14:38:42.000Z",
-      "summary": "The theft from Wray Castle in the Lake District is believed to have taken place earlier this month."
+      "title": "Lindholme Prison",
+      "link": "https://www.gov.uk/guidance/lindholme-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-01T11:43:26.000Z",
+      "summary": "Lindholme is an adult male prison, near Doncaster, South Yorkshire."
     },
     {
-      "title": "Man denies murder of Scottish woman on Greek island in 2009",
-      "link": "https://www.bbc.co.uk/news/articles/ce8j2d0y0j5o?at_medium=RSS&at_campaign=rss",
+      "title": "Up to 150 ex-WHSmith High Street stores to close as rescue deal approved",
+      "link": "https://www.bbc.co.uk/news/articles/cn751pkmgyxo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-06-30T12:34:19.000Z",
-      "summary": "Jean Hanlon was found dead in the water off the coast of Heraklion 17 years ago."
+      "isoDate": "2026-07-01T11:31:16.000Z",
+      "summary": "The sweeping restructuring, approved by a court, will see steep rent cuts on most remaining stores."
+    },
+    {
+      "title": "Leeds Prison",
+      "link": "https://www.gov.uk/guidance/leeds-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-01T09:21:30.000Z",
+      "summary": "Leeds is an adult male prison in the Armley area of Leeds, West Yorkshire."
+    },
+    {
+      "title": "Hogan Lovells Cadwalader is BigLaw’s newest heavyweight",
+      "link": "https://www.legalcheek.com/2026/07/hogan-lovells-cadwalader-mega-merger-goes-live/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-01T08:37:12.000Z",
+      "summary": "Merger goes live The post Hogan Lovells Cadwalader is BigLaw’s newest heavyweight appeared first on Legal Cheek ."
+    },
+    {
+      "title": "ULaw expands SQE reach with Lancaster Uni deal",
+      "link": "https://www.legalcheek.com/2026/07/ulaw-expands-sqe-reach-with-lancaster-uni-deal/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-01T07:47:06.000Z",
+      "summary": "From September The post ULaw expands SQE reach with Lancaster Uni deal appeared first on Legal Cheek ."
+    },
+    {
+      "title": "How did Keir Starmer become a top barrister when he was so bad as Prime Minister?",
+      "link": "https://www.legalcheek.com/2026/07/how-did-keir-starmer-become-a-top-barrister-when-he-was-so-bad-as-prime-minister/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-01T07:46:48.000Z",
+      "summary": "No rizz Keir The post How did Keir Starmer become a top barrister when he was so bad as Prime Minister? appeared first on Legal Cheek ."
     },
     {
       "title": "Bar Council calls for age of criminal responsibility to be raised",
@@ -54,12 +86,12 @@
       "summary": "10 to 14 The post Bar Council calls for age of criminal responsibility to be raised appeared first on Legal Cheek ."
     },
     {
-      "title": "Former Shoosmiths PA wins car after building AI tool for top client",
-      "link": "https://www.legalcheek.com/2026/06/former-shoosmiths-pa-wins-car-after-building-ai-tool-for-top-client/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-30T07:47:50.000Z",
-      "summary": "Now innovation advisor The post Former Shoosmiths PA wins car after building AI tool for top client appeared first on Legal Cheek ."
+      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
+      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-30T06:11:03.000Z",
+      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
     },
     {
       "title": "Justice for victims as domestic killers to face longer behind bars",
@@ -78,36 +110,12 @@
       "summary": "This circular is issued to inform partners of certain provisions of the Crime and <mark>Policing</mark> Act 2026 which came into force on 29 June 2026."
     },
     {
-      "title": "Statutory guidance: Unauthorised encampments: guidance for police",
-      "link": "https://www.gov.uk/government/publications/unauthorised-encampments-guidance-for-police",
-      "source": "Home Office",
-      "topic": "policing",
-      "isoDate": "2026-06-29T14:13:05.000Z",
-      "summary": "Sets out the suite of powers available for police to respond to unauthorised encampments and to tackle a range of harms proportionately."
-    },
-    {
       "title": "Ford rehires human engineers after AI fails to match quality checks",
       "link": "https://www.bbc.co.uk/news/articles/cgrkd41n2v9o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
       "isoDate": "2026-06-29T11:58:01.000Z",
       "summary": "The car-maker found AI quality checks failed to match the skill of veteran technicians."
-    },
-    {
-      "title": "Shoosmiths hits record £80 million profit",
-      "link": "https://www.legalcheek.com/2026/06/shoosmiths-hits-record-80-million-profit/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-29T09:35:25.000Z",
-      "summary": "PEP holds above £1m as firm leans into tech The post Shoosmiths hits record £80 million profit appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Ashurst Perkins Coie merger goes live",
-      "link": "https://www.legalcheek.com/2026/06/ashurst-perkins-coie-merger-goes-live/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-29T09:02:51.000Z",
-      "summary": "The £2 billion giant is officially here The post Ashurst Perkins Coie merger goes live appeared first on Legal Cheek ."
     },
     {
       "title": "Sudbury Prison",
@@ -134,22 +142,6 @@
       "summary": "The government will repeal the Vagrancy Act on Monday 29 June 2026, ending nearly two centuries of legislation that has criminalised rough sleeping and begging."
     },
     {
-      "title": "Swinfen Hall Prison",
-      "link": "https://www.gov.uk/guidance/swinfen-hall-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-26T14:38:53.000Z",
-      "summary": "Swinfen Hall is a closed young offender institute (YOI), category C training prison, specialising in supporting young adults (18 to 25)."
-    },
-    {
-      "title": "Swansea Prison",
-      "link": "https://www.gov.uk/guidance/swansea-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-06-26T14:28:39.000Z",
-      "summary": "Swansea Prison is a men’s prison in the centre of Swansea, Wales."
-    },
-    {
       "title": "Meet the police dogs protecting the UK's critical infrastructure",
       "link": "https://www.gov.uk/government/news/meet-the-police-dogs-protecting-the-uks-critical-infrastructure",
       "source": "GOV.UK",
@@ -166,12 +158,28 @@
       "summary": "Two Civil Nuclear Constabulary officers among 4,600 remembered through a new national Digital Memorial honouring <mark>police</mark> officers and staff who died in service."
     },
     {
+      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-23T20:16:34.000Z",
+      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
+    },
+    {
       "title": "Speech by the President of the King’s Bench Division – Without Fear or Favour: Judicial Independence, Past, Present and Future",
       "link": "https://www.judiciary.uk/speech-by-the-president-of-the-kings-bench-division-without-fear-or-favour-judicial-independence-past-present-and-future/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-06-23T13:00:53.000Z",
       "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
+    },
+    {
+      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-16T20:47:37.000Z",
+      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
     },
     {
       "title": "Tech Life",
@@ -204,6 +212,14 @@
       "topic": "law",
       "isoDate": "2026-06-11T10:55:50.000Z",
       "summary": "Sir Geoffrey Vos delivered his remarks as part of London International Disputes Week The post Speech by the Master of the Rolls: AI in Arbitration – Promises and Pitfalls…"
+    },
+    {
+      "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/03/no-longer-just-a-copilot-microsofts-ai-wants-to-take-the-wheel/5250718",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-03T16:49:15.000Z",
+      "summary": "Always-on agent promises to keep work moving, provided you trust it with practically everything"
     }
   ]
 }
