@@ -26,9 +26,9 @@ const entries = [...(changelogEntry?.data.changelog ?? [])].sort(
 // dynamically) so Tailwind keeps them in the build.
 const TYPE_META: Record<string, { label: string; badge: string }> = {
   new: { label: 'New', badge: 'bg-accent/10 text-accent-dark border-accent/30' },
-  fix: { label: 'Fix', badge: 'bg-emerald-500/10 text-emerald-700 border-emerald-500/30' },
-  update: { label: 'Update', badge: 'bg-sky-500/10 text-sky-700 border-sky-500/30' },
-  article: { label: 'Article', badge: 'bg-amber-500/10 text-amber-700 border-amber-500/30' },
+  fix: { label: 'Fix', badge: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30' },
+  update: { label: 'Update', badge: 'bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/30' },
+  article: { label: 'Article', badge: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30' },
   note: { label: 'Note', badge: 'bg-ink-500/10 text-ink-600 border-ink-300' },
 };
 

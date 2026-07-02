@@ -98,17 +98,17 @@ const tableRows = years.map((y) => {
     <!-- horizontal gridlines + y labels -->
     {yTicks.map((t) => (
       <g>
-        <line x1={pad.l} x2={width - pad.r} y1={yf(t)} y2={yf(t)} stroke="#e7e2d8" stroke-width="1" />
-        <text x={pad.l - 6} y={yf(t) + 3} font-size="9" fill="#8a857c" text-anchor="end" font-family="system-ui, sans-serif">{t}%</text>
+        <line x1={pad.l} x2={width - pad.r} y1={yf(t)} y2={yf(t)} stroke="rgb(var(--ink-200))" stroke-width="1" />
+        <text x={pad.l - 6} y={yf(t) + 3} font-size="9" fill="rgb(var(--ink-500))" text-anchor="end" font-family="system-ui, sans-serif">{t}%</text>
       </g>
     ))}
     <!-- suspended-survey gap band -->
-    <rect x={xf(gapLo)} y={pad.t} width={xf(gapHi) - xf(gapLo)} height={innerH} fill="#00000008" />
-    <text x={(xf(gapLo) + xf(gapHi)) / 2} y={pad.t + 10} font-size="7.5" fill="#a99" text-anchor="middle" font-family="system-ui, sans-serif">survey</text>
-    <text x={(xf(gapLo) + xf(gapHi)) / 2} y={pad.t + 19} font-size="7.5" fill="#a99" text-anchor="middle" font-family="system-ui, sans-serif">paused</text>
+    <rect x={xf(gapLo)} y={pad.t} width={xf(gapHi) - xf(gapLo)} height={innerH} fill="rgb(var(--ink-900) / 0.03)" />
+    <text x={(xf(gapLo) + xf(gapHi)) / 2} y={pad.t + 10} font-size="7.5" fill="rgb(var(--ink-600))" text-anchor="middle" font-family="system-ui, sans-serif">survey</text>
+    <text x={(xf(gapLo) + xf(gapHi)) / 2} y={pad.t + 19} font-size="7.5" fill="rgb(var(--ink-600))" text-anchor="middle" font-family="system-ui, sans-serif">paused</text>
     <!-- x ticks -->
     {xTicks.map((y) => (
-      <text x={xf(y)} y={height - 10} font-size="10" fill="#8a857c" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
+      <text x={xf(y)} y={height - 10} font-size="10" fill="rgb(var(--ink-500))" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
     ))}
     <!-- negativity (red) -->
     {negPaths.map((d) => <path d={d} fill="none" stroke={NEG} stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />)}

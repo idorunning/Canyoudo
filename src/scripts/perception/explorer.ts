@@ -73,10 +73,10 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     facetMax[f] = m || 1;
   }
   const raceRows = new Map<string, HTMLElement>();
-  // Dark label ink + the site's light-orange bar fill (matching the hand-drawn
-  // annotations elsewhere), so the year-by-year race reads in one warm palette.
-  const LABEL_INK = '#3a3733';
-  const BAR_FILL = '#F2994A';
+  // Label ink + the site's one accent colour for the bar fill, so the
+  // year-by-year race reads in the same palette as the rest of the site.
+  const LABEL_INK = 'rgb(var(--ink-900))';
+  const BAR_FILL = 'rgb(var(--accent))';
   // Noise words to drop, and display casing (met→MET, hague→Hague), shared with
   // the static SVG via the bundle.
   const hideSet = new Set(bundle.wordHide ?? []);
@@ -218,7 +218,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     for (let y = minYear; y <= maxYear; y++) {
       if (y % 5 !== 0) continue;
       const x = PAD.l + ((y - minYear) / (maxYear - minYear)) * innerW;
-      out += `<text x="${x}" y="${CHART_H - 8}" font-size="10" fill="#8a857c" text-anchor="middle" font-family="system-ui,sans-serif">${y}</text>`;
+      out += `<text x="${x}" y="${CHART_H - 8}" font-size="10" fill="rgb(var(--ink-500))" text-anchor="middle" font-family="system-ui,sans-serif">${y}</text>`;
     }
     return out;
   }
@@ -253,15 +253,15 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     milestoneGroups().forEach((g, i) => {
       const x = xf(g.year);
       out +=
-        `<line x1="${x}" x2="${x}" y1="${PAD.t + 9}" y2="${PAD.t + innerH}" stroke="#cdb9a8" stroke-width="1" stroke-dasharray="2 3"/>` +
-        `<circle cx="${x}" cy="${PAD.t + 2}" r="7.5" fill="#9c5b3b"/>` +
+        `<line x1="${x}" x2="${x}" y1="${PAD.t + 9}" y2="${PAD.t + innerH}" stroke="rgb(var(--ink-300))" stroke-width="1" stroke-dasharray="2 3"/>` +
+        `<circle cx="${x}" cy="${PAD.t + 2}" r="7.5" fill="rgb(var(--ink-700))"/>` +
         `<text x="${x}" y="${PAD.t + 5.2}" font-size="9.5" fill="#fff" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700">${i + 1}</text>`;
     });
     const adopt = bundle.context.adoption.filter((a) => a.year >= minYear && a.year <= maxYear);
     if (adopt.length > 1) {
       const yf = (v: number) => PAD.t + innerH - (v / 100) * innerH;
       const d = adopt.map((a, i) => `${i ? 'L' : 'M'}${xf(a.year).toFixed(1)},${yf(a.share).toFixed(1)}`).join(' ');
-      out += `<path d="${d}" fill="none" stroke="#b08968" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+      out += `<path d="${d}" fill="none" stroke="rgb(var(--ink-400))" stroke-width="1.5" stroke-dasharray="4 3"/>`;
     }
     return out;
   }
@@ -279,13 +279,13 @@ function wire(root: HTMLElement, bundle: Bundle): void {
       `<div class="mt-3 font-sans text-xs text-ink-700">` +
       `<p class="uppercase tracking-[0.15em] text-ink-500 mb-1.5">Social-media milestones</p>` +
       `<ol class="space-y-1.5">${items}</ol>` +
-      `<p class="mt-2 text-ink-500 flex items-center gap-1.5"><span style="width:18px;height:0;border-top:2px dashed #b08968;display:inline-block"></span> Share of Britons getting news via social media (%)</p>` +
+      `<p class="mt-2 text-ink-500 flex items-center gap-1.5"><span style="width:18px;height:0;border-top:2px dashed rgb(var(--ink-400));display:inline-block"></span> Share of Britons getting news via social media (%)</p>` +
       `</div>`
     );
   }
 
   function nowMarker(): string {
-    return `<line x1="${xf(state.year)}" x2="${xf(state.year)}" y1="${PAD.t}" y2="${PAD.t + innerH}" stroke="#44423d" stroke-width="1.5"/>`;
+    return `<line x1="${xf(state.year)}" x2="${xf(state.year)}" y1="${PAD.t}" y2="${PAD.t + innerH}" stroke="rgb(var(--ink-900))" stroke-width="1.5"/>`;
   }
 
   function svgWrap(inner: string, label: string): string {
@@ -314,8 +314,8 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     const gridSteps = [25, 50, 75, 100].filter((g) => g <= hi * 1.05);
     for (const g of gridSteps) {
       const gy = PAD.t + innerH - (g / hi) * innerH;
-      inner += `<line x1="${PAD.l}" x2="${CHART_W - PAD.r}" y1="${gy}" y2="${gy}" stroke="#ece7dd" stroke-width="1"/>`;
-      inner += `<text x="${PAD.l - 3}" y="${gy + 3}" font-size="8" fill="#8a857c" text-anchor="end" font-family="system-ui,sans-serif">${g}%</text>`;
+      inner += `<line x1="${PAD.l}" x2="${CHART_W - PAD.r}" y1="${gy}" y2="${gy}" stroke="rgb(var(--ink-200))" stroke-width="1"/>`;
+      inner += `<text x="${PAD.l - 3}" y="${gy + 3}" font-size="8" fill="rgb(var(--ink-500))" text-anchor="end" font-family="system-ui,sans-serif">${g}%</text>`;
     }
 
     inner += contextLayer();
@@ -352,7 +352,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
       const pts = years.map((y) => ({ year: y.year, value: y.facets[state.facet].lexicons[key]?.ratePer10k ?? 0 }));
       const maxVal = Math.max(...pts.map((p) => p.value), 0.01);
       const hiVal = maxVal * 1.15;
-      const color = THEME_META[key]?.color ?? '#8a857c';
+      const color = THEME_META[key]?.color ?? 'rgb(var(--ink-500))';
 
       const yfm = (v: number) => MP.t + mH - (v / hiVal) * mH;
 
@@ -368,8 +368,8 @@ function wire(root: HTMLElement, bundle: Bundle): void {
 
       // Year axis ticks (start + end only, to keep it uncluttered)
       const yearAxis =
-        `<text x="${xfm(minYear)}" y="${MINI_H - 5}" font-size="8" fill="#8a857c" text-anchor="middle" font-family="system-ui,sans-serif">${minYear}</text>` +
-        `<text x="${xfm(maxYear)}" y="${MINI_H - 5}" font-size="8" fill="#8a857c" text-anchor="middle" font-family="system-ui,sans-serif">${maxYear}</text>`;
+        `<text x="${xfm(minYear)}" y="${MINI_H - 5}" font-size="8" fill="rgb(var(--ink-500))" text-anchor="middle" font-family="system-ui,sans-serif">${minYear}</text>` +
+        `<text x="${xfm(maxYear)}" y="${MINI_H - 5}" font-size="8" fill="rgb(var(--ink-500))" text-anchor="middle" font-family="system-ui,sans-serif">${maxYear}</text>`;
 
       const svgInner =
         // Filled area
@@ -379,11 +379,11 @@ function wire(root: HTMLElement, bundle: Bundle): void {
         // "Now" marker
         `<line x1="${nowX}" x2="${nowX}" y1="${MP.t}" y2="${MP.t + mH}" stroke="${color}" stroke-width="1.5" stroke-opacity="0.45"/>` +
         // Y axis max label
-        `<text x="${MP.l - 3}" y="${MP.t + 3}" font-size="7.5" fill="#8a857c" text-anchor="end" font-family="system-ui,sans-serif">${maxLabel}</text>` +
+        `<text x="${MP.l - 3}" y="${MP.t + 3}" font-size="7.5" fill="rgb(var(--ink-500))" text-anchor="end" font-family="system-ui,sans-serif">${maxLabel}</text>` +
         // Zero label
-        `<text x="${MP.l - 3}" y="${MP.t + mH + 1}" font-size="7.5" fill="#8a857c" text-anchor="end" font-family="system-ui,sans-serif">0</text>` +
+        `<text x="${MP.l - 3}" y="${MP.t + mH + 1}" font-size="7.5" fill="rgb(var(--ink-500))" text-anchor="end" font-family="system-ui,sans-serif">0</text>` +
         // Y axis line
-        `<line x1="${MP.l}" x2="${MP.l}" y1="${MP.t}" y2="${MP.t + mH}" stroke="#d8d2c6" stroke-width="1"/>` +
+        `<line x1="${MP.l}" x2="${MP.l}" y1="${MP.t}" y2="${MP.t + mH}" stroke="rgb(var(--ink-200))" stroke-width="1"/>` +
         // Theme label
         `<text x="${MP.l + 2}" y="${MP.t - 9}" font-size="10" fill="${color}" font-weight="600" font-family="system-ui,sans-serif">${esc(THEME_META[key]?.label ?? key)}</text>` +
         yearAxis;
@@ -410,7 +410,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     return items
       .map((i) => {
         const w = Math.round((i.value / max) * 100);
-        return `<div class="flex items-center gap-2 text-sm"><span class="w-44 shrink-0 truncate text-ink-700">${esc(i.label)}</span><span class="h-3 rounded-sm" style="width:${w}%;background:#9c5b3b"></span><span class="text-ink-400 tabular-nums text-xs">${i.value}</span></div>`;
+        return `<div class="flex items-center gap-2 text-sm"><span class="w-44 shrink-0 truncate text-ink-700">${esc(i.label)}</span><span class="h-3 rounded-sm" style="width:${w}%;background:rgb(var(--ink-700))"></span><span class="text-ink-400 tabular-nums text-xs">${i.value}</span></div>`;
       })
       .join('');
   }
@@ -498,8 +498,8 @@ function wire(root: HTMLElement, bundle: Bundle): void {
       const pill = document.createElement('span');
       pill.style.cssText =
         'display:inline-block;padding:0.3rem 0.75rem;border-radius:9999px;' +
-        'background:rgba(60,55,50,0.06);border:1px solid rgba(60,55,50,0.22);' +
-        'color:#3a3733;font-size:0.78rem;font-family:system-ui,sans-serif;' +
+        'background:rgb(var(--ink-900) / 0.06);border:1px solid rgb(var(--ink-900) / 0.22);' +
+        'color:rgb(var(--ink-900));font-size:0.78rem;font-family:system-ui,sans-serif;' +
         'line-height:1.4;animation:bubbleIn 0.35s ease both;';
       pill.textContent = label;
       zone.appendChild(pill);

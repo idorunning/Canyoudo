@@ -15,6 +15,7 @@ export default defineConfig({
     // lastmod would be richer, but the integration doesn't expose page content
     // here; the build date is a safe, honest floor.)
     sitemap({
+      filter: (page) => !page.includes('/design-preview'),
       serialize(item) {
         item.lastmod = new Date().toISOString();
         return item;

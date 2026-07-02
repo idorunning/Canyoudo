@@ -184,10 +184,10 @@ const riverData = {
       ))}
     </g>
     {ticks.map((y) => (
-      <text x={xf(y)} y={height - 8} font-size="10" fill="#8a857c" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
+      <text x={xf(y)} y={height - 8} font-size="10" fill="rgb(var(--ink-500))" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
     ))}
     {/* Interactive year cursor (hidden until hover). */}
-    <line data-river-cursor x1="0" x2="0" y1={pad.t} y2={pad.t + innerH} stroke="#1b2452" stroke-width="1.5" opacity="0" style="transition:opacity .12s" />
+    <line data-river-cursor x1="0" x2="0" y1={pad.t} y2={pad.t + innerH} stroke="rgb(var(--ink-900))" stroke-width="1.5" opacity="0" style="transition:opacity .12s" />
   </svg>
   {/* Hover readout. */}
   <div data-river-tip class="pointer-events-none absolute z-10 hidden rounded-md border border-ink-200 bg-paper-50 px-3 py-2 text-xs shadow-md" style="min-width:9rem"></div>
