@@ -1,18 +1,49 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-01T14:04:50.794Z",
-    "feedCount": 7,
+    "fetchedAt": "2026-07-02T02:06:41.885Z",
+    "feedCount": 6,
     "sources": [
       "GOV.UK",
       "BBC News",
       "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
-      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
+    {
+      "title": "Teenage boy injured after shooting in Birmingham",
+      "link": "https://www.bbc.co.uk/news/articles/ce37g3p4dlqo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-01T22:00:07.000Z",
+      "summary": "The boy was taken to hospital to be treated for \"potentially life-threatening\" gunshot injuries, police said in a statement."
+    },
+    {
+      "title": "More than 300 arrests in organised immigration crime crackdown",
+      "link": "https://www.bbc.co.uk/news/articles/cgev8ey9wrwo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-01T21:41:40.000Z",
+      "summary": "The National Police Chiefs' Council says said the five-day operation led to hundreds of arrests and seizures of more than £1m in cash."
+    },
+    {
+      "title": "Man dies after van falls from cliff edge",
+      "link": "https://www.bbc.co.uk/news/articles/c79y52q4g8do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-01T19:40:30.000Z",
+      "summary": "Sussex Police says the van driver died at the scene of the incident in Peacehaven on Wednesday."
+    },
+    {
+      "title": "18-year-old dies on Duke of Edinburgh expedition",
+      "link": "https://www.bbc.co.uk/news/articles/c5yz643r5x2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-01T19:10:20.000Z",
+      "summary": "Police, mountain rescue volunteers and firefighters were called to the search in Glasbury, Powys."
+    },
     {
       "title": "Wonka Netflix show faces backlash for AI-generated Gene Wilder voice",
       "link": "https://www.bbc.co.uk/news/articles/cdxdgpgn0zwo?at_medium=RSS&at_campaign=rss",
@@ -22,28 +53,12 @@
       "summary": "The actor, who died in 2016, appears in the Netflix show with the consent of his estate."
     },
     {
-      "title": "Judge wrong to spare rapists from custody, court told",
-      "link": "https://www.bbc.co.uk/news/articles/clye2enp0lxo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-01T13:51:41.000Z",
-      "summary": "Three teenage boys convicted of rape should have been detained, the Court of Appeal hears."
-    },
-    {
       "title": "Lindholme Prison",
       "link": "https://www.gov.uk/guidance/lindholme-prison",
       "source": "Ministry of Justice",
       "topic": "law",
       "isoDate": "2026-07-01T11:43:26.000Z",
       "summary": "Lindholme is an adult male prison, near Doncaster, South Yorkshire."
-    },
-    {
-      "title": "Up to 150 ex-WHSmith High Street stores to close as rescue deal approved",
-      "link": "https://www.bbc.co.uk/news/articles/cn751pkmgyxo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-01T11:31:16.000Z",
-      "summary": "The sweeping restructuring, approved by a court, will see steep rent cuts on most remaining stores."
     },
     {
       "title": "Leeds Prison",
@@ -84,14 +99,6 @@
       "topic": "law",
       "isoDate": "2026-06-30T07:48:07.000Z",
       "summary": "10 to 14 The post Bar Council calls for age of criminal responsibility to be raised appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
-      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-30T06:11:03.000Z",
-      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
     },
     {
       "title": "Justice for victims as domestic killers to face longer behind bars",
@@ -158,28 +165,12 @@
       "summary": "Two Civil Nuclear Constabulary officers among 4,600 remembered through a new national Digital Memorial honouring <mark>police</mark> officers and staff who died in service."
     },
     {
-      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-23T20:16:34.000Z",
-      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
-    },
-    {
       "title": "Speech by the President of the King’s Bench Division – Without Fear or Favour: Judicial Independence, Past, Present and Future",
       "link": "https://www.judiciary.uk/speech-by-the-president-of-the-kings-bench-division-without-fear-or-favour-judicial-independence-past-present-and-future/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-06-23T13:00:53.000Z",
       "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
-    },
-    {
-      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-16T20:47:37.000Z",
-      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
     },
     {
       "title": "Tech Life",
@@ -212,14 +203,6 @@
       "topic": "law",
       "isoDate": "2026-06-11T10:55:50.000Z",
       "summary": "Sir Geoffrey Vos delivered his remarks as part of London International Disputes Week The post Speech by the Master of the Rolls: AI in Arbitration – Promises and Pitfalls…"
-    },
-    {
-      "title": "No longer just a Copilot, Microsoft's AI wants to take the wheel",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/03/no-longer-just-a-copilot-microsofts-ai-wants-to-take-the-wheel/5250718",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-03T16:49:15.000Z",
-      "summary": "Always-on agent promises to keep work moving, provided you trust it with practically everything"
     }
   ]
 }
