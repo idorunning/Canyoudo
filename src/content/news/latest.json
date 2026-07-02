@@ -1,48 +1,89 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-02T02:06:41.885Z",
-    "feedCount": 6,
+    "fetchedAt": "2026-07-02T13:27:03.063Z",
+    "feedCount": 7,
     "sources": [
       "GOV.UK",
       "BBC News",
       "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Teenage boy injured after shooting in Birmingham",
+      "title": "Electric motorbike rider given 12-month suspended sentence after 'brutal' hit-and-run",
+      "link": "https://www.bbc.co.uk/news/articles/cvgqlvj71jko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-02T13:18:21.000Z",
+      "summary": "Jordan Willetts drove off after the incident before handing himself in to police two days later."
+    },
+    {
+      "title": "Donaldson commentary 'utterly irresponsible', says police chief",
+      "link": "https://www.bbc.co.uk/news/articles/cvg539rle7mo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-02T13:02:40.000Z",
+      "summary": "Jon Boutcher says it is important that public commentary and journalism recognise the \"integrity of the criminal justice process\"."
+    },
+    {
+      "title": "Grooming gang leader released from prison",
+      "link": "https://www.bbc.co.uk/news/articles/c4gyx0vldrlo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-02T12:01:15.000Z",
+      "summary": "Shabir Ahmed, known as 'Daddy' by his victims, was jailed for a total of 22 years in August 2012."
+    },
+    {
+      "title": "Attempted murder arrest over shooting of boy, 16",
       "link": "https://www.bbc.co.uk/news/articles/ce37g3p4dlqo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-01T22:00:07.000Z",
-      "summary": "The boy was taken to hospital to be treated for \"potentially life-threatening\" gunshot injuries, police said in a statement."
+      "isoDate": "2026-07-02T11:18:49.000Z",
+      "summary": "A 17-year-old is in custody as a boy, 16, remains in a critical condition in hospital, say police."
     },
     {
-      "title": "More than 300 arrests in organised immigration crime crackdown",
-      "link": "https://www.bbc.co.uk/news/articles/cgev8ey9wrwo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-01T21:41:40.000Z",
-      "summary": "The National Police Chiefs' Council says said the five-day operation led to hundreds of arrests and seizures of more than £1m in cash."
+      "title": "Health, Education and Social Care Chamber: Resident Judges Pre-Application Seminar 2026",
+      "link": "https://www.judiciary.uk/health-education-and-social-care-chamber-resident-judges-pre-application-seminar-2026/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-02T10:25:55.000Z",
+      "summary": "The pre-application seminar will take place online via Microsoft Teams on Tuesday 21 July from 5 to 6pm The post Health, Education and Social Care Chamber: Resident Judges…"
     },
     {
-      "title": "Man dies after van falls from cliff edge",
-      "link": "https://www.bbc.co.uk/news/articles/c79y52q4g8do?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
+      "title": "Dame Vera Baird DBE KC further appointed as Interim Chair of the CCRC",
+      "link": "https://www.gov.uk/government/news/dame-vera-baird-dbe-kc-further-appointed-as-interim-chair-of-the-ccrc",
+      "source": "GOV.UK",
       "topic": "policing",
-      "isoDate": "2026-07-01T19:40:30.000Z",
-      "summary": "Sussex Police says the van driver died at the scene of the incident in Peacehaven on Wednesday."
+      "isoDate": "2026-07-02T08:30:07.000Z",
+      "summary": "Dame Vera Baird DBE KC further appointed as Interim Chair of the Criminal Cases Review Commission (CCRC)."
     },
     {
-      "title": "18-year-old dies on Duke of Edinburgh expedition",
-      "link": "https://www.bbc.co.uk/news/articles/c5yz643r5x2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-01T19:10:20.000Z",
-      "summary": "Police, mountain rescue volunteers and firefighters were called to the search in Glasbury, Powys."
+      "title": "‘Can my firm claw back training fees if I leave on qualification?’",
+      "link": "https://www.legalcheek.com/2026/07/can-my-firm-claw-back-training-fees-if-i-leave-on-qualification/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-02T06:27:19.000Z",
+      "summary": "Soon-to-be NQ questions firm's demand to repay professional skills course costs The post ‘Can my firm claw back training fees if I leave on qualification?’ appeared first on…"
+    },
+    {
+      "title": "Reed Smith keeps 11 of 12 trainees in latest retention round",
+      "link": "https://www.legalcheek.com/2026/07/reed-smith-keeps-11-of-12-trainees-in-latest-retention-round/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-02T06:26:54.000Z",
+      "summary": "92% The post Reed Smith keeps 11 of 12 trainees in latest retention round appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Godot says bye bye AI, bans vibe-coded contributions",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/01/godot-says-bye-bye-ai-bans-vibe-coded-contributions/5265344",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-01T20:29:07.000Z",
+      "summary": "'We can’t trust heavy users of AI to understand their code enough to fix it,' say maintainers who previously called the flood of vibe-coded pull requests 'demoralizing'"
     },
     {
       "title": "Wonka Netflix show faces backlash for AI-generated Gene Wilder voice",
@@ -85,20 +126,12 @@
       "summary": "From September The post ULaw expands SQE reach with Lancaster Uni deal appeared first on Legal Cheek ."
     },
     {
-      "title": "How did Keir Starmer become a top barrister when he was so bad as Prime Minister?",
-      "link": "https://www.legalcheek.com/2026/07/how-did-keir-starmer-become-a-top-barrister-when-he-was-so-bad-as-prime-minister/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-01T07:46:48.000Z",
-      "summary": "No rizz Keir The post How did Keir Starmer become a top barrister when he was so bad as Prime Minister? appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Bar Council calls for age of criminal responsibility to be raised",
-      "link": "https://www.legalcheek.com/2026/06/bar-council-calls-for-age-of-criminal-responsibility-to-be-raised/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-06-30T07:48:07.000Z",
-      "summary": "10 to 14 The post Bar Council calls for age of criminal responsibility to be raised appeared first on Legal Cheek ."
+      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
+      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-30T06:11:03.000Z",
+      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
     },
     {
       "title": "Justice for victims as domestic killers to face longer behind bars",
@@ -157,12 +190,12 @@
       "summary": "…Meet the CNC&#x27;s specialist <mark>police</mark> dogs, whose skills help deter crime, support <mark>policing</mark> operations, and protect critical national infrastructure.…"
     },
     {
-      "title": "CNC welcomes launch of new Digital Memorial",
-      "link": "https://www.gov.uk/government/news/cnc-welcomes-launch-of-new-digital-memorial",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-06-25T12:39:00.000Z",
-      "summary": "Two Civil Nuclear Constabulary officers among 4,600 remembered through a new national Digital Memorial honouring <mark>police</mark> officers and staff who died in service."
+      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-23T20:16:34.000Z",
+      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
     },
     {
       "title": "Speech by the President of the King’s Bench Division – Without Fear or Favour: Judicial Independence, Past, Present and Future",
@@ -171,6 +204,14 @@
       "topic": "law",
       "isoDate": "2026-06-23T13:00:53.000Z",
       "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
+    },
+    {
+      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-16T20:47:37.000Z",
+      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
     },
     {
       "title": "Tech Life",
@@ -195,14 +236,6 @@
       "topic": "law",
       "isoDate": "2026-06-11T14:46:13.000Z",
       "summary": "In her annual evidence session, Baroness Carr of Walton-on-the-Hill covered the courts and tribunals backlogs, paid tribute to retiring senior judiciary, and more The post Lady…"
-    },
-    {
-      "title": "Speech by the Master of the Rolls: AI in Arbitration – Promises and Pitfalls",
-      "link": "https://www.judiciary.uk/speech-by-the-master-of-the-rolls-ai-in-arbitration-promises-and-pitfalls/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-06-11T10:55:50.000Z",
-      "summary": "Sir Geoffrey Vos delivered his remarks as part of London International Disputes Week The post Speech by the Master of the Rolls: AI in Arbitration – Promises and Pitfalls…"
     }
   ]
 }
