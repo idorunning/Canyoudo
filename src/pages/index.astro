@@ -294,104 +294,39 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
 
   <!-- ============ RESEARCH TOOLS ============ -->
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-    <div class="bg-ink-900 dark:bg-paper-200 rounded-[26px] p-10 md:p-12 relative overflow-hidden">
+    <a
+      href="/research-tools"
+      class="group block bg-ink-900 dark:bg-paper-200 rounded-[26px] p-10 md:p-12 relative overflow-hidden hover:-translate-y-1 transition-all duration-200"
+    >
       <!-- Decorative glow -->
       <div class="absolute bottom-[-100px] right-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none"
         style="background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);"
       ></div>
 
-      <div class="relative flex flex-wrap items-center justify-between gap-4 mb-8">
-        <div>
+      <div class="relative flex flex-wrap items-center justify-between gap-8">
+        <div class="max-w-xl">
           <div class="flex items-center gap-2 text-[12px] font-extrabold uppercase tracking-[0.1em] text-accent mb-4">
             <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
             <span>Research Tools</span>
           </div>
           <h2 class="font-extrabold text-[34px] tracking-[-0.03em] text-white m-0">Put the evidence to work</h2>
-        </div>
-        <span class="font-sans text-[12.5px] font-semibold text-white/60">Built for the site · free to use</span>
-      </div>
-
-      <div class="relative grid md:grid-cols-3 gap-6">
-
-        <!-- Research Assistant -->
-        <a href="/research" class="group block bg-white/[0.06] dark:bg-white/10 border border-white/[0.12] dark:border-white/20 rounded-[18px] p-7 hover:bg-white/[0.1] hover:-translate-y-1 transition-all duration-200">
-          <div class="flex items-start justify-between mb-3">
-            <h3 class="font-extrabold text-[21px] tracking-[-0.02em] text-white m-0">Research Assistant</h3>
-            <span class="text-[10px] font-extrabold uppercase tracking-[0.06em] bg-[#cdf5ea] dark:bg-paper-100 dark:text-ink-800 text-ink-900 px-2.5 py-1 rounded-full shrink-0">Expanded</span>
-          </div>
-          <p class="text-[15px] leading-[1.55] text-white/70 mb-5">
-            State a policing problem and get a cited briefing — now searching more research catalogues plus UK official sources.
+          <p class="text-[15px] leading-[1.55] text-white/70 mt-4">
+            Three free tools built for this site — a research assistant, a live crime dashboard, and a
+            media-perception explorer. Sign in once to unlock all three.
           </p>
-          <div class="flex flex-wrap gap-2 mb-6">
-            {['College of Policing', 'gov.uk', 'Cambridge CEBP'].map(tag => (
+          <div class="flex flex-wrap gap-2 mt-6">
+            {['Research Assistant', 'Crime Dashboard', 'Perception'].map(name => (
               <span class="text-[11px] font-semibold bg-white/[0.07] border border-white/[0.12] text-white/80 px-2.5 py-1.5 rounded-full">
-                {tag}
+                {name}
               </span>
             ))}
           </div>
-          <span class="inline-block bg-[#cdf5ea] text-[#101626] px-5 py-2.5 rounded-full text-[13px] font-bold group-hover:bg-[#b3ecdb] transition-colors">
-            Open tool →
-          </span>
-        </a>
-
-        <!-- Crime Dashboard -->
-        <a href="/research" class="group block bg-white/[0.06] dark:bg-white/10 border border-white/[0.12] dark:border-white/20 rounded-[18px] p-7 hover:bg-white/[0.1] hover:-translate-y-1 transition-all duration-200">
-          <div class="flex items-start justify-between mb-5">
-            <h3 class="font-extrabold text-[21px] tracking-[-0.02em] text-white m-0">Crime Dashboard</h3>
-            <span class="text-[11px] font-semibold uppercase tracking-[0.04em] text-white/60">Latest month</span>
-          </div>
-          <!-- Animated bar chart -->
-          <div class="flex items-end gap-1.5 h-[60px] mb-5">
-            {[
-              { h: '40%', op: '0.14' },
-              { h: '54%', op: '0.20' },
-              { h: '46%', op: '0.16' },
-              { h: '68%', op: '0.50', tinted: true },
-              { h: '58%', op: '0.62', tinted: true },
-              { h: '80%', op: '0.82', tinted: true },
-              { h: '100%', op: '1',   tinted: true },
-            ].map(bar => (
-              <div
-                class={`dash-bar flex-1 rounded-t-[3px] ${bar.tinted ? 'bg-accent' : 'bg-white'}`}
-                style={`height:${bar.h}; opacity:${bar.tinted ? '1' : bar.op};`}
-              ></div>
-            ))}
-          </div>
-          <p class="text-[15px] leading-[1.55] text-white/70 mb-6">
-            The latest month of stop &amp; search and recorded crime, read for you by force and area — refreshed monthly.
-          </p>
-          <span class="inline-block bg-[#cdf5ea] text-[#101626] px-5 py-2.5 rounded-full text-[13px] font-bold group-hover:bg-[#b3ecdb] transition-colors">
-            Open tool →
-          </span>
-        </a>
-
-        <!-- Perception -->
-        <a href="/perception" class="group block bg-white/[0.06] dark:bg-white/10 border border-white/[0.12] dark:border-white/20 rounded-[18px] p-7 hover:bg-white/[0.1] hover:-translate-y-1 transition-all duration-200">
-          <div class="flex items-start justify-between mb-5">
-            <h3 class="font-extrabold text-[21px] tracking-[-0.02em] text-white m-0">Perception</h3>
-            <span class="text-[10px] font-extrabold uppercase tracking-[0.06em] bg-[#cdf5ea] dark:bg-paper-100 dark:text-ink-800 text-ink-900 px-2.5 py-1 rounded-full shrink-0">New</span>
-          </div>
-          <!-- Mini word-race preview: bars tinted by connotation (red/blue/green) -->
-          <div class="flex flex-col gap-1.5 h-[60px] justify-center mb-5">
-            {[
-              { w: '92%', c: '#b3402f' },
-              { w: '72%', c: '#3b6ea5' },
-              { w: '56%', c: '#2f7d52' },
-              { w: '38%', c: '#b3402f' },
-            ].map(b => (
-              <span class="block h-2.5 rounded-sm" style={`width:${b.w};background:${b.c}`}></span>
-            ))}
-          </div>
-          <p class="text-[15px] leading-[1.55] text-white/70 mb-6">
-            A quarter-century of UK news about the police as a word race — watch the language grow, shrink and shift in tone, year by year.
-          </p>
-          <span class="inline-block bg-[#cdf5ea] text-[#101626] px-5 py-2.5 rounded-full text-[13px] font-bold group-hover:bg-[#b3ecdb] transition-colors">
-            Open tool →
-          </span>
-        </a>
-
+        </div>
+        <span class="shrink-0 inline-block bg-[#cdf5ea] text-[#101626] px-6 py-3 rounded-full text-[14px] font-bold group-hover:bg-[#b3ecdb] transition-colors">
+          Explore the tools →
+        </span>
       </div>
-    </div>
+    </a>
   </section>
 
   <!-- ============ MOST READ + LATEST WRITING ============ -->
