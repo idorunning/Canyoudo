@@ -4,6 +4,7 @@ import SectionBadge from '../components/SectionBadge.astro';
 import { getCollection } from 'astro:content';
 import { getTopics } from '../lib/topics';
 import { SECTIONS, SECTION_LABELS } from '../content/config';
+import engagement from '../lib/engagement-bundle.json';
 
 import type { Section } from '../content/config';
 
@@ -31,15 +32,28 @@ for (const a of allArticles) {
 }
 const FEATURED_SECTIONS: Section[] = ['police-policy', 'public-policy', 'influential-people'];
 
-// Hand-curated "most read" list (same as PopularArticles)
-const MOST_READ_SLUGS = [
+// "Most read" is driven by real page views, tallied via the
+// article_engagement table (see supabase/migrations/0002_article_engagement.sql)
+// and baked in at build time by scripts/bundle-engagement.mjs. Before the site
+// has accumulated any views (a fresh deploy, or Supabase not configured), the
+// bundle is empty and we fall back to a hand-picked list so the section still
+// has something to show.
+const FALLBACK_MOST_READ_SLUGS = [
   'sir-robert-peel-and-the-invention-of-policing-by-consent',
   'policeai-a-police-leaders-guide',
   'self-selection-policing-catching-serious-criminals-and-bad-cops-through-minor-offences',
   'what-palantirs-advance-means-for-british-policing-and-should-we-trust-them',
 ];
 const bySlug = new Map(allArticles.map(a => [a.slug, a]));
-const mostRead = MOST_READ_SLUGS.map(s => bySlug.get(s)).filter((a): a is Item => Boolean(a));
+const byViews = allArticles
+  .map(a => ({ article: a, views: (engagement as Record<string, { views: number }>)[a.slug]?.views ?? 0 }))
+  .filter(a => a.views > 0)
+  .sort((a, b) => b.views - a.views)
+  .slice(0, 4)
+  .map(a => a.article);
+const mostRead = byViews.length > 0
+  ? byViews
+  : FALLBACK_MOST_READ_SLUGS.map(s => bySlug.get(s)).filter((a): a is Item => Boolean(a));
 
 // Section article counts
 const counts: Record<string, number> = {};

@@ -272,7 +272,7 @@ thinkingaboutpolicing/
 
 The visual theme lives in two places.
 
-**`tailwind.config.mjs`** controls colours and fonts. Change the `accent` colours to retune the editorial accent (currently a muted crimson). Change the font families if you want a different typeface.
+**`tailwind.config.mjs`** controls colours and fonts. Change the `accent` colours to retune the editorial accent (currently a muted teal). Change the font families if you want a different typeface.
 
 **`src/styles/global.css`** has the article body styling — the `.prose-article` class. Change line-height, heading sizes, link styling, blockquote treatment.
 

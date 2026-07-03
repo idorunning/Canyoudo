@@ -177,15 +177,17 @@ html.dark {
   }
 
   .prose-article a {
-    color: rgb(var(--accent));
+    color: inherit;
     text-decoration: underline;
     text-decoration-thickness: 1px;
+    text-decoration-color: rgb(var(--ink-400));
     text-underline-offset: 3px;
-    transition: color 0.15s ease;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
   }
 
   .prose-article a:hover {
     color: rgb(var(--accent-dark));
+    text-decoration-color: rgb(var(--accent-dark));
   }
 
   .prose-article strong {
@@ -606,20 +608,23 @@ html.dark {
 
 /* ------------------------------------------------------------------ */
 /* Auto-linked topic terms in article bodies (rehype-topic-links)      */
-/* Subtler than authored citations: ink-coloured with a dotted accent  */
-/* underline, so the prose stays readable but topics are discoverable. */
+/* Marked rather than underlined — a soft highlighter band, the same    */
+/* visual language as the site's ==highlight== mark, so a topic term    */
+/* reads as flagged-for-more-reading rather than just another link.     */
 /* ------------------------------------------------------------------ */
 .prose-article a.topic-link {
   color: inherit;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-decoration-thickness: 1px;
-  text-decoration-color: rgb(var(--ink-300));
-  text-underline-offset: 3px;
+  text-decoration: none;
+  background-image: linear-gradient(rgb(var(--accent-light) / 0.3), rgb(var(--accent-light) / 0.3));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0.3em;
+  padding-bottom: 0.05em;
+  transition: background-size 0.15s ease, background-image 0.15s ease;
 }
 .prose-article a.topic-link:hover {
-  color: rgb(var(--accent));
-  text-decoration-color: rgb(var(--accent-light));
+  background-image: linear-gradient(rgb(var(--accent) / 0.4), rgb(var(--accent) / 0.4));
+  background-size: 100% 0.55em;
 }
 
 /* ------------------------------------------------------------------ */
@@ -628,11 +633,12 @@ html.dark {
 /* ------------------------------------------------------------------ */
 .prose-article a[data-footnote-ref] {
   font-weight: 600;
-  color: rgb(var(--accent));
+  color: rgb(var(--ink-800));
   text-decoration: none;
   padding: 0 0.1em;
 }
 .prose-article a[data-footnote-ref]:hover {
+  color: rgb(var(--accent-dark));
   text-decoration: underline;
 }
 .prose-article section.footnotes {
@@ -666,9 +672,14 @@ html.dark {
   color: rgb(var(--ink-400));
 }
 .prose-article section.footnotes a {
-  color: rgb(var(--accent));
+  color: rgb(var(--ink-800));
   text-decoration: underline;
+  text-decoration-color: rgb(var(--ink-400));
   text-underline-offset: 2px;
+}
+.prose-article section.footnotes a:hover {
+  color: rgb(var(--accent-dark));
+  text-decoration-color: rgb(var(--accent-dark));
 }
 .prose-article a[data-footnote-backref] {
   text-decoration: none;
