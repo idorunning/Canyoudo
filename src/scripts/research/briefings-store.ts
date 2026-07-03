@@ -15,11 +15,11 @@
 // owner.
 
 import type { Work } from './cards';
-import type { BriefingResult } from './briefing';
+import type { ReviewResult } from './review';
 
 export type Visibility = 'private' | 'unlisted';
 
-export interface StoredBriefing extends BriefingResult {
+export interface StoredBriefing extends ReviewResult {
   id: string;
   shareToken: string;
   visibility: Visibility;
@@ -29,9 +29,15 @@ export interface StoredBriefing extends BriefingResult {
 // A gentle ceiling so a single account can't fill the table.
 const PER_USER_CAP = 200;
 
+/** Why a save failed — so the UI never blames the wrong thing (a missing
+ *  `briefings` table or an RLS error is not "you reached the limit"). */
+export type SaveOutcome =
+  | { ok: true; id: string; shareToken: string }
+  | { ok: false; reason: 'limit' | 'error' };
+
 export interface BriefingsStore {
-  /** Insert a new briefing (private). Returns its id + share token, or null. */
-  saveBriefing: (result: BriefingResult) => Promise<{ id: string; shareToken: string } | null>;
+  /** Insert a new briefing (private). Accurate failure reason on ok:false. */
+  saveBriefing: (result: ReviewResult) => Promise<SaveOutcome>;
   /** The signed-in user's briefings, newest first. */
   listBriefings: () => Promise<StoredBriefing[]>;
   /** Flip a briefing between private and unlisted (owner only). */
@@ -66,14 +72,16 @@ function rowToBriefing(row: any): StoredBriefing {
 }
 
 export function initBriefings(supabase: any, getUser: () => any): BriefingsStore {
-  async function saveBriefing(result: BriefingResult) {
+  async function saveBriefing(result: ReviewResult): Promise<SaveOutcome> {
     const user = getUser();
-    if (!user) return null;
+    if (!user) return { ok: false, reason: 'error' };
     // Cap storage per account (cheap head count, RLS scopes it to the owner).
-    const { count } = await supabase
+    // Only report 'limit' when the count actually succeeded — a failed count
+    // (e.g. the briefings table was never migrated) is not "you're full".
+    const { count, error: countError } = await supabase
       .from('briefings')
       .select('id', { count: 'exact', head: true });
-    if ((count ?? 0) >= PER_USER_CAP) return null;
+    if (!countError && (count ?? 0) >= PER_USER_CAP) return { ok: false, reason: 'limit' };
 
     const { data, error } = await supabase
       .from('briefings')
@@ -91,8 +99,14 @@ export function initBriefings(supabase: any, getUser: () => any): BriefingsStore
       })
       .select('id, share_token')
       .single();
-    if (error || !data) return null;
-    return { id: data.id, shareToken: data.share_token };
+    if (error || !data) {
+      // Surface the real cause for the site owner — the most common one is
+      // the `briefings` table migration never being run (Part 4⅞ of
+      // docs/google-login-setup.md), which reads as "relation does not exist".
+      if (error) console.warn('[research] saving the review failed:', error.message ?? error);
+      return { ok: false, reason: 'error' };
+    }
+    return { ok: true, id: data.id, shareToken: data.share_token };
   }
 
   async function listBriefings(): Promise<StoredBriefing[]> {

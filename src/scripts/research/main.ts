@@ -2,53 +2,60 @@
 //
 // The page has three regions, gated client-side after the Supabase session
 // resolves: a logged-out marketing LANDING, the signed-in TOOL, and a
-// read-only SHARED briefing view (opened via /research?b=<token>). The tool
-// leads with the problem→briefing flow (briefing.ts) and keeps the original
-// keyword/question search as a secondary mode. All network data renders via
-// createElement/textContent.
+// read-only SHARED review view (opened via /research?b=<token>). The tool has
+// three modes, and each mode's machinery matches its job:
+//
+//   SEARCH          no AI at all — the coded catalogue search, instant and
+//                   free, with filters, topics and saved papers.
+//   OVERVIEW        one quick mid-tier model call on top of a search: what the
+//                   results add up to, which to read first, what to search next.
+//   RESEARCH REVIEW the deep end — plan → multi-angle search → curate →
+//                   a full research-assistant report STREAMED from Sonnet 5
+//                   (review.ts), rendered live as it's written, downloadable
+//                   as a branded PDF.
+//
+// All network data renders via createElement/textContent.
 
 import { SOURCE_CAPS } from '../../lib/research-sources.mjs';
 import { workMergeKey } from '../../lib/research-merge.mjs';
 import { card, el, type Work, type CardHooks } from './cards';
 import { readStateFromUrl, writeStateToUrl, type SearchState } from './state';
-import { translateQuestion, renderOverview, renderAnswer, clearOverview } from './assist';
 import {
-  runBriefingPipeline,
-  renderBriefing,
-  cancelBriefing,
-  type BriefingPlan,
-  type BriefingOutcome,
-} from './briefing';
-import type { BriefingDepth } from '../../lib/research-assist-prompts';
-
-// The depth slider's three stops, in order — its integer value indexes this.
-// Each carries the chip label and the live description shown under the slider.
-const DEPTH_STOPS: { key: BriefingDepth; name: string; desc: string }[] = [
-  {
-    key: 'low',
-    name: 'Quick scan',
-    desc: 'A fast read of the open record — the headline findings and whether the problem is worth a deeper dig. A few cited paragraphs, in seconds.',
-  },
-  {
-    key: 'mid',
-    name: 'Overview',
-    desc: 'A balanced summary — what the evidence says and how strong it is, cited to the studies. The default. About half a minute.',
-  },
-  {
-    key: 'high',
-    name: 'Full review',
-    desc: 'A full evidence review — the problem framed, what the research shows, its strengths and gaps, and evidence-based approaches to try. Searches widest, so it takes a little longer.',
-  },
-];
+  translateQuestion,
+  renderOverview,
+  clearOverview,
+  OVERVIEW_RESULT_ID_PREFIX,
+} from './assist';
+import { spinner, setSpinnerLabel } from './spinner';
+import {
+  runReviewPipeline,
+  renderReview,
+  renderDraft,
+  cancelReview,
+  type ReviewPlan,
+  type ReviewOutcome,
+} from './review';
 import type { SavedStore } from './saved';
 import type { BriefingsStore } from './briefings-store';
 
 interface PageConfig {
   hasAi: boolean;
   hasAuth: boolean;
-  hasBriefing: boolean;
   sources: string[];
 }
+
+type Mode = 'search' | 'overview' | 'review';
+
+// What each mode is for — shown under the mode switcher so the reader picks by
+// function, not by guesswork.
+const MODE_DESCRIPTIONS: Record<Mode, string> = {
+  search:
+    'Straight keyword search across the open research catalogues and UK official sources — no AI, instant, with filters and saved papers.',
+  overview:
+    'Ask in plain English. The assistant searches the catalogues, summarises what came back, and suggests which studies to open first. Seconds, not minutes.',
+  review:
+    'The deep end. The assistant researches your question from several angles, curates the strongest studies, and writes a full research review — cited throughout, with legal pointers and next steps — which you can download as a PDF. Takes a few minutes.',
+};
 
 export async function initResearch() {
   const root = document.querySelector<HTMLElement>('[data-research]');
@@ -62,14 +69,14 @@ export async function initResearch() {
   const shared = root.querySelector<HTMLElement>('[data-research-shared]');
   const skeleton = root.querySelector<HTMLElement>('[data-research-skeleton]');
 
-  // ---- shared briefing route (/research?b=token), ahead of the gate ---------
+  // ---- shared review route (/research?b=token), ahead of the gate ----------
   const shareToken = new URLSearchParams(location.search).get('b');
   if (shareToken && config.hasAuth && shared) {
     document.documentElement.removeAttribute('data-maybe-authed');
     if (landing) landing.hidden = true;
     if (tool) tool.hidden = true;
     if (skeleton) skeleton.hidden = true;
-    await showSharedBriefing(shared, shareToken);
+    await showSharedReview(shared, shareToken);
     return;
   }
 
@@ -92,9 +99,13 @@ export async function initResearch() {
     }
   }
 
-  // Wire both modes up-front; they live in the (possibly hidden) tool region.
-  wireSearch(root, config, savedStore);
-  if (config.hasBriefing) wireBriefing(root, config, savedStore, briefingsStore);
+  // Wire all modes up-front; they live in the (possibly hidden) tool region.
+  const setMode = wireModes(root, config);
+  wireSearch(root, config, savedStore, setMode);
+  if (config.hasAi) {
+    wireOverview(root, savedStore);
+    wireReview(root, config, savedStore, briefingsStore);
+  }
 
   // ---- gating: landing for logged-out, tool for signed-in -------------------
   const landingSignin = root.querySelector<HTMLElement>('[data-landing-signin]');
@@ -124,22 +135,58 @@ export async function initResearch() {
     savedStore?.onChange(applyGate);
   }
   // Without auth there's no gate — the tool renders visible (astro), and the
-  // briefing flow still works, just without save/share.
+  // AI modes still work, just without save/share.
 }
 
-// ---- shared read-only briefing --------------------------------------------
+// ---- mode switcher ----------------------------------------------------------
 
-async function showSharedBriefing(container: HTMLElement, token: string) {
+function wireModes(root: HTMLElement, config: PageConfig): (mode: Mode) => void {
+  const nav = root.querySelector<HTMLElement>('[data-research-mode]');
+  const desc = root.querySelector<HTMLElement>('[data-mode-desc]');
+  const panes: Record<Mode, HTMLElement | null> = {
+    search: root.querySelector<HTMLElement>('[data-search-mode]'),
+    overview: root.querySelector<HTMLElement>('[data-overview-mode]'),
+    review: root.querySelector<HTMLElement>('[data-review-mode]'),
+  };
+
+  function setMode(mode: Mode) {
+    (Object.keys(panes) as Mode[]).forEach((m) => {
+      if (panes[m]) panes[m]!.hidden = m !== mode;
+    });
+    if (desc) desc.textContent = MODE_DESCRIPTIONS[mode];
+    nav?.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => {
+      const active = b.dataset.mode === mode;
+      b.classList.toggle('bg-ink-900', active);
+      b.classList.toggle('text-paper-50', active);
+      b.classList.toggle('border-transparent', active);
+      b.classList.toggle('border-ink-300', !active);
+      b.classList.toggle('text-ink-700', !active);
+      b.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  if (config.hasAi) {
+    nav?.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) =>
+      b.addEventListener('click', () => setMode(b.dataset.mode as Mode))
+    );
+    setMode('review'); // the flagship; normalises button styling on load
+  }
+  return setMode;
+}
+
+// ---- shared read-only review ------------------------------------------------
+
+async function showSharedReview(container: HTMLElement, token: string) {
   container.hidden = false;
   container.replaceChildren();
-  container.appendChild(el('p', 'font-sans text-sm text-ink-600 py-8', 'Loading shared briefing…'));
+  container.appendChild(el('p', 'font-sans text-sm text-ink-600 py-8', 'Loading shared review…'));
 
   const notShared = () => {
     container.replaceChildren();
     const box = el('div', 'py-10 max-w-xl');
-    box.appendChild(el('h2', 'font-display text-2xl font-semibold text-ink-900', 'This briefing isn’t available'));
+    box.appendChild(el('h2', 'font-display text-2xl font-semibold text-ink-900', 'This review isn’t available'));
     box.appendChild(
-      el('p', 'font-serif text-ink-700 leading-relaxed mt-3', 'The link may be wrong, or the briefing has been made private. Ask whoever shared it for an up-to-date link.')
+      el('p', 'font-serif text-ink-700 leading-relaxed mt-3', 'The link may be wrong, or the review has been made private. Ask whoever shared it for an up-to-date link.')
     );
     const a = el('a', 'inline-block mt-5 font-sans text-sm uppercase tracking-[0.12em] text-accent hover:text-accent-dark', 'Go to the research assistant →') as HTMLAnchorElement;
     a.href = '/research';
@@ -154,14 +201,14 @@ async function showSharedBriefing(container: HTMLElement, token: string) {
       import.meta.env.PUBLIC_SUPABASE_ANON_KEY
     );
     const { loadSharedBriefing } = await import('./briefings-store');
-    const briefing = await loadSharedBriefing(supabase, token);
-    if (!briefing) return notShared();
+    const review = await loadSharedBriefing(supabase, token);
+    if (!review) return notShared();
 
-    renderBriefing(container, briefing, { readOnly: true });
+    renderReview(container, review, { readOnly: true });
 
     // A quiet "make your own" footer — the share link is also a funnel.
     const cta = el('div', 'mt-10 border-t border-ink-200 pt-6');
-    const a = el('a', 'inline-block font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors', 'Build your own briefing →') as HTMLAnchorElement;
+    const a = el('a', 'inline-block font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors', 'Build your own research review →') as HTMLAnchorElement;
     a.href = '/research';
     cta.appendChild(a);
     container.appendChild(cta);
@@ -170,74 +217,40 @@ async function showSharedBriefing(container: HTMLElement, token: string) {
   }
 }
 
-// ---- briefing mode ---------------------------------------------------------
+// ---- research review mode ----------------------------------------------------
 
-function wireBriefing(
+function wireReview(
   root: HTMLElement,
   config: PageConfig,
   savedStore: SavedStore | null,
   briefingsStore: BriefingsStore | null
 ) {
-  const modeNav = root.querySelector<HTMLElement>('[data-research-mode]');
-  const briefingMode = root.querySelector<HTMLElement>('[data-briefing-mode]');
-  const searchMode = root.querySelector<HTMLElement>('[data-search-mode]');
-  const form = root.querySelector<HTMLFormElement>('[data-briefing-form]');
-  const input = root.querySelector<HTMLTextAreaElement>('[data-briefing-input]');
-  const send = root.querySelector<HTMLButtonElement>('[data-briefing-send]');
-  const progress = root.querySelector<HTMLElement>('[data-briefing-progress]');
-  const result = root.querySelector<HTMLElement>('[data-briefing-result]');
-  if (!briefingMode || !form || !input || !send || !progress || !result) return;
-
-  // ---- research depth slider ----
-  const depthSlider = root.querySelector<HTMLInputElement>('[data-briefing-depth]');
-  const depthName = root.querySelector<HTMLElement>('[data-depth-name]');
-  const depthDesc = root.querySelector<HTMLElement>('[data-depth-desc]');
-  function currentDepthStop() {
-    const i = depthSlider ? Number(depthSlider.value) : 1;
-    return DEPTH_STOPS[i] ?? DEPTH_STOPS[1];
-  }
-  function syncDepthLabels() {
-    const stop = currentDepthStop();
-    if (depthName) depthName.textContent = stop.name;
-    if (depthDesc) depthDesc.textContent = stop.desc;
-  }
-  depthSlider?.addEventListener('input', syncDepthLabels);
-  syncDepthLabels();
-
-  // ---- mode toggle ----
-  function setMode(mode: 'briefing' | 'search') {
-    if (briefingMode) briefingMode.hidden = mode !== 'briefing';
-    if (searchMode) searchMode.hidden = mode !== 'search';
-    modeNav?.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) => {
-      const active = b.dataset.mode === mode;
-      b.classList.toggle('bg-ink-900', active);
-      b.classList.toggle('text-paper-50', active);
-      b.classList.toggle('border', !active);
-      b.classList.toggle('border-ink-300', !active);
-      b.classList.toggle('text-ink-700', !active);
-    });
-  }
-  modeNav?.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach((b) =>
-    b.addEventListener('click', () => setMode(b.dataset.mode as 'briefing' | 'search'))
-  );
+  const form = root.querySelector<HTMLFormElement>('[data-review-form]');
+  const input = root.querySelector<HTMLTextAreaElement>('[data-review-input]');
+  const send = root.querySelector<HTMLButtonElement>('[data-review-send]');
+  const progress = root.querySelector<HTMLElement>('[data-review-progress]');
+  const result = root.querySelector<HTMLElement>('[data-review-result]');
+  if (!form || !input || !send || !progress || !result) return;
 
   const cardHooks: CardHooks = savedStore?.hooks ?? {};
-  const briefingSource = config.sources.includes('all') ? 'all' : 'openalex';
+  const reviewSource = config.sources.includes('all') ? 'all' : 'openalex';
 
-  // ---- progress + angle checklist ----
+  // ---- progress: spinner + framing + angle checklist ----
   function startProgress() {
     progress!.replaceChildren();
     progress!.hidden = false;
-    const status = el('p', 'font-sans text-sm text-ink-700');
-    status.dataset.role = 'status';
-    status.textContent = 'Framing the problem…';
-    progress!.appendChild(status);
+    const row = el('div', '');
+    row.dataset.role = 'status';
+    row.appendChild(spinner('Framing the question…'));
+    progress!.appendChild(row);
   }
   function setProgressText(text: string) {
-    const s = progress!.querySelector<HTMLElement>('[data-role="status"]');
-    if (s) s.textContent = text;
+    // Update the label in place: the ring keeps spinning smoothly and the
+    // aria-live region announces only the changed text, not a rebuilt widget.
+    const spin = progress!.querySelector<HTMLElement>('[data-role="status"] [role="status"]');
+    if (spin) setSpinnerLabel(spin, text);
   }
-  function renderPlan(plan: BriefingPlan) {
+  function renderPlan(plan: ReviewPlan) {
     if (plan.framing && !progress!.querySelector('[data-role="framing"]')) {
       const f = el('p', 'font-serif text-sm text-ink-700 leading-relaxed mt-2 italic', plan.framing);
       f.dataset.role = 'framing';
@@ -288,13 +301,10 @@ function wireBriefing(
     progress!.appendChild(el('p', 'font-serif text-sm text-ink-700', text));
   }
 
-  async function handleOutcome(outcome: BriefingOutcome) {
+  async function handleOutcome(outcome: ReviewOutcome) {
     if (outcome.status === 'stale') return;
-    if (outcome.status === 'budget') {
-      showMessage(outcome.message);
-      return;
-    }
-    if (outcome.status === 'error') {
+    if (outcome.status === 'budget' || outcome.status === 'error') {
+      result!.replaceChildren();
       showMessage(outcome.message);
       return;
     }
@@ -304,26 +314,28 @@ function wireBriefing(
         outcome.framing,
         outcome.references,
         outcome.references.length
-          ? 'The open record is thin on this one — not enough to synthesise a confident briefing, but here’s what came back. Read the studies and try a sharper problem statement.'
-          : 'Nothing usable came back. Try rephrasing the problem, or broaden it.'
+          ? 'The open record is thin on this one — not enough to review with any confidence, but here’s what came back. Read the studies and try a sharper question.'
+          : 'Nothing usable came back. Try rephrasing the question, or broaden it.'
       );
       return;
     }
     if (outcome.status === 'failed') {
-      // A healthy evidence base came back, but writing the briefing failed —
-      // an assistant-side problem, not a thin record. Say so plainly and show
-      // the studies it would have drawn on.
+      // A healthy evidence base came back, but writing the review failed —
+      // an assistant-side problem, not a thin record. Prefer the specific
+      // server reason (e.g. model access) when there is one; otherwise say so
+      // plainly. Either way, show the studies it would have drawn on.
       progress!.hidden = true;
       renderStudyList(
         outcome.framing,
         outcome.references,
-        'The studies came back fine — but the briefing couldn’t be written this time. That’s on the assistant, not the evidence. Here’s the evidence base it found; try again in a moment.'
+        outcome.message ??
+          'The studies came back fine — but the review couldn’t be written this time. That’s on the assistant, not the evidence. Here’s the evidence base it found; try again in a moment.'
       );
       return;
     }
     // status === 'ok'
     progress!.hidden = true;
-    renderBriefing(result!, outcome.result, { hooks: cardHooks });
+    renderReview(result!, outcome.result, { hooks: cardHooks });
     // Save + share (only when signed in and storage is configured).
     if (savedStore?.signedIn() && briefingsStore) {
       const bar = el('div', 'mt-8 border-t border-ink-200 pt-5');
@@ -339,43 +351,58 @@ function wireBriefing(
       showMessage('Describe the problem in a sentence or two — a few words isn’t enough to research.');
       return;
     }
-    cancelBriefing(); // supersede any in-flight run
+    cancelReview(); // supersede any in-flight run
     send.disabled = true;
     result.replaceChildren();
     startProgress();
-    let outcome: BriefingOutcome;
+    let draftStarted = false;
+    let outcome: ReviewOutcome;
     try {
-      outcome = await runBriefingPipeline(problem, {
-        source: briefingSource,
-        depth: currentDepthStop().key,
+      outcome = await runReviewPipeline(problem, {
+        source: reviewSource,
         onProgress: setProgressText,
         onPlan: renderPlan,
         onAngleDone: (i) => tickAngle(i),
+        // The report streams onto the page as it's written — the best
+        // possible "something is happening" indicator for the long step.
+        onDraft: (markdown, references) => {
+          if (!draftStarted) {
+            draftStarted = true;
+            setProgressText('Writing the review — it appears below as it’s written…');
+          }
+          renderDraft(result, markdown, references);
+        },
       });
     } catch {
-      outcome = { status: 'error', message: 'Something went wrong building the briefing. Try again.' };
+      outcome = { status: 'error', message: 'Something went wrong building the review. Try again.' };
     }
-    send.disabled = false;
+    // A stale outcome belongs to a superseded run — the newer run owns the
+    // button now, so don't re-enable it from under that run's feet.
+    if (outcome.status !== 'stale') send.disabled = false;
     await handleOutcome(outcome);
   });
-
-  // Default to briefing; the search-mode region is hidden by astro when
-  // hasBriefing, so this only normalises the toggle styling.
-  setMode('briefing');
 }
 
-/** The save state + share-link control beneath a finished briefing. */
+/** The save state + share-link control beneath a finished review. */
 async function renderSaveBar(
   bar: HTMLElement,
-  outcome: Extract<BriefingOutcome, { status: 'ok' }>,
+  outcome: Extract<ReviewOutcome, { status: 'ok' }>,
   briefingsStore: BriefingsStore
 ) {
   bar.replaceChildren();
   bar.appendChild(el('p', 'font-sans text-sm text-ink-600', 'Saving to your account…'));
   const saved = await briefingsStore.saveBriefing(outcome.result);
   bar.replaceChildren();
-  if (!saved) {
-    bar.appendChild(el('p', 'font-sans text-sm text-ink-600', 'Couldn’t save this briefing (you may have reached the saved limit). It’s still on screen.'));
+  if (!saved.ok) {
+    bar.appendChild(
+      el(
+        'p',
+        'font-sans text-sm text-ink-600',
+        saved.reason === 'limit'
+          ? 'Couldn’t save — you’ve reached the saved-review limit. Delete some older ones to make room. This review is still on screen, and you can download it as a PDF.'
+          : 'Couldn’t save this review — saving isn’t available right now (if this keeps happening, the site’s saved-reviews storage may need setting up). It’s still on screen, and you can download it as a PDF.'
+      )
+    );
     return;
   }
 
@@ -402,7 +429,7 @@ async function renderSaveBar(
     }
     try {
       await navigator.clipboard.writeText(url);
-      note.textContent = `Link copied — anyone with it can view this briefing (read-only): ${url}`;
+      note.textContent = `Link copied — anyone with it can view this review (read-only): ${url}`;
     } catch {
       note.textContent = `Share this read-only link: ${url}`;
     }
@@ -415,7 +442,7 @@ async function renderSaveBar(
         const ok = await briefingsStore.setVisibility(saved.id, 'private');
         if (ok) {
           shared = false;
-          note.textContent = 'This briefing is private again — the share link no longer works.';
+          note.textContent = 'This review is private again — the share link no longer works.';
           revoke.remove();
         }
       });
@@ -424,19 +451,151 @@ async function renderSaveBar(
   });
 }
 
-// ---- search mode (the original keyword/question search) --------------------
+// ---- overview mode -----------------------------------------------------------
 
-function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStore | null) {
+function wireOverview(root: HTMLElement, savedStore: SavedStore | null) {
+  const form = root.querySelector<HTMLFormElement>('[data-overview-form]');
+  const input = root.querySelector<HTMLInputElement>('[data-overview-input]');
+  const send = root.querySelector<HTMLButtonElement>('[data-overview-send]');
+  const status = root.querySelector<HTMLElement>('[data-overview-status]');
+  const note = root.querySelector<HTMLElement>('[data-overview-note]');
+  const panel = root.querySelector<HTMLElement>('[data-overview-panel]');
+  const list = root.querySelector<HTMLElement>('[data-overview-results]');
+  if (!form || !input || !send || !status || !panel || !list) return;
+
+  const cardHooks: CardHooks = savedStore?.hooks ?? {};
+  let seq = 0;
+
+  function setStatus(label: string | null) {
+    status!.replaceChildren();
+    if (label) status!.appendChild(spinner(label));
+  }
+
+  /** Numbered result cards — the anchors the "read these first" picks link to. */
+  function renderNumberedResults(works: Work[]) {
+    list!.replaceChildren();
+    works.forEach((w, i) => {
+      const n = i + 1;
+      const row = el('div', 'flex gap-3 scroll-mt-24');
+      row.id = `${OVERVIEW_RESULT_ID_PREFIX}${n}`;
+      row.appendChild(
+        el('span', 'font-sans text-sm font-medium text-ink-500 pt-6 shrink-0 w-7 text-right', `[${n}]`)
+      );
+      const c = card(w, cardHooks);
+      c.classList.add('flex-1', 'min-w-0');
+      row.appendChild(c);
+      list!.appendChild(row);
+    });
+  }
+
+  async function runOverview(raw: string) {
+    const mySeq = ++seq;
+    const stale = () => mySeq !== seq;
+    send!.disabled = true;
+    if (note) note.hidden = true;
+    clearOverview(panel!);
+    list!.replaceChildren();
+
+    // 1. Read the question into the literature's vocabulary (when it looks
+    //    like a question — plain keywords search as typed).
+    let query = raw;
+    let filters: { review: boolean; from: number | null } = { review: false, from: null };
+    if (/\?|^(what|how|why|does|do|is|are|can|could|should|would|which|who|when|where|will)\b/i.test(raw) || raw.split(/\s+/).length >= 6) {
+      setStatus('Reading the question…');
+      const t = await translateQuestion(raw);
+      if (stale()) return;
+      if (t) {
+        query = t.query;
+        filters = { review: t.filters.review, from: t.filters.from };
+        if (note) {
+          note.replaceChildren(el('span', '', `Interpreted as: “${t.query}”${t.note ? ` — ${t.note}` : ''}`));
+          note.hidden = false;
+        }
+      }
+    }
+
+    // 2. One merged search — free-to-read leads, and the translator's
+    //    filters (reviews-only, recency) actually shape it.
+    setStatus('Searching the research catalogues…');
+    let works: Work[] = [];
+    let searchFailed = false;
+    try {
+      const params = new URLSearchParams({ q: query, source: 'all', oa: '1' });
+      if (filters.review) params.set('review', '1');
+      if (filters.from) params.set('from', String(filters.from));
+      const res = await fetch(`/api/research?${params}`);
+      const data = await res.json().catch(() => null);
+      if (res.ok && Array.isArray(data?.results)) works = data.results as Work[];
+      else searchFailed = true;
+    } catch {
+      searchFailed = true;
+    }
+    if (stale()) return;
+    if (works.length === 0) {
+      setStatus(null);
+      status!.appendChild(
+        el(
+          'p',
+          'font-sans text-sm text-ink-600',
+          searchFailed
+            ? 'Couldn’t reach the research catalogues just now — try again in a moment.'
+            : 'Nothing found. Try different words, or switch to Search for filters.'
+        )
+      );
+      send!.disabled = false;
+      return;
+    }
+
+    works = works.slice(0, 10);
+    renderNumberedResults(works);
+
+    // 3. The assistant reads what came back and suggests a reading order.
+    setStatus('Reading the results and writing an overview…');
+    await renderOverview(panel!, query, works, (refined) => {
+      input!.value = refined;
+      submitOverview(refined);
+    });
+    if (stale()) return;
+    setStatus(null);
+    send!.disabled = false;
+  }
+
+  // One entry point for submit + refinement chips: whatever happens inside
+  // the run, a failure can never leave the button wedged disabled.
+  function submitOverview(raw: string) {
+    runOverview(raw).catch(() => {
+      setStatus(null);
+      status!.appendChild(
+        el('p', 'font-sans text-sm text-ink-600', 'Something went wrong building the overview. Try again.')
+      );
+      send!.disabled = false;
+    });
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const raw = input.value.trim();
+    if (!raw) return;
+    submitOverview(raw);
+  });
+}
+
+// ---- search mode (the coded catalogue search — no AI) -------------------------
+
+function wireSearch(
+  root: HTMLElement,
+  config: PageConfig,
+  savedStore: SavedStore | null,
+  setMode: (mode: Mode) => void
+) {
   const $ = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
   const form = $<HTMLFormElement>('[data-research-form]');
   const input = $<HTMLInputElement>('[data-research-input]');
   const send = $<HTMLButtonElement>('[data-research-send]');
-  const interpreted = root.querySelector<HTMLElement>('[data-research-interpreted]');
   const status = $('[data-research-status]');
   const list = $('[data-research-results]');
   const more = $<HTMLButtonElement>('[data-research-more]');
   const topics = $('[data-research-topics]');
-  const overviewPanel = root.querySelector<HTMLElement>('[data-research-overview]');
   const oaBox = $<HTMLInputElement>('[data-filter-oa]');
   const reviewBox = $<HTMLInputElement>('[data-filter-review]');
   const fromSel = $<HTMLSelectElement>('[data-filter-from]');
@@ -446,13 +605,11 @@ function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStor
 
   let page = 1;
   let lastQuery = '';
-  let lastQuestion: string | null = null;
   let shown = 0;
   let total = 0;
   let totalApproximate = false;
   const seenKeys = new Set<string>();
   let activeTab: 'results' | 'saved' = 'results';
-  let aiSort: 'cited' | 'recent' | null = null;
   let cardHooks: CardHooks = savedStore?.hooks ?? {};
 
   // ---- saved papers wiring (when configured) -------------------------------
@@ -465,6 +622,7 @@ function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStor
       }
     });
     root.addEventListener('research:show-signin', () => {
+      setMode('search');
       showTab('saved');
       (tabs ?? savedView)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
@@ -537,8 +695,7 @@ function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStor
     if (!q) return;
     send.disabled = true;
     more.disabled = true;
-    status.textContent = append ? 'Loading more…' : 'Searching…';
-    if (!append && overviewPanel) clearOverview(overviewPanel);
+    status.replaceChildren(spinner(append ? 'Loading more…' : 'Searching…'));
 
     const s = currentState();
     const params = new URLSearchParams({ q, page: String(page) });
@@ -546,8 +703,7 @@ function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStor
     if (s.oa) params.set('oa', '1');
     if (s.review) params.set('review', '1');
     if (s.from) params.set('from', s.from);
-    const effectiveSort = s.sort === 'suggested' ? aiSort ?? 'relevance' : s.sort;
-    if (effectiveSort !== 'relevance') params.set('sort', effectiveSort);
+    if (s.sort !== 'relevance') params.set('sort', s.sort);
 
     let res: Response;
     try {
@@ -608,17 +764,6 @@ function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStor
     more.hidden = shown >= total || data.results!.length === 0;
     unlock();
     writeStateToUrl(s);
-
-    if (!append && config.hasAi && overviewPanel && data.results.length > 0) {
-      if (lastQuestion) {
-        renderAnswer(overviewPanel, lastQuestion, data.results);
-      } else {
-        renderOverview(overviewPanel, q, data.results, (refined) => {
-          input.value = refined;
-          startSearch();
-        });
-      }
-    }
   }
 
   function unlock() {
@@ -626,87 +771,23 @@ function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStor
     more.disabled = false;
   }
 
-  function startSearch(question: string | null = null) {
+  function startSearch() {
     const q = input.value.trim();
     if (!q) return;
     lastQuery = q;
-    lastQuestion = question;
     page = 1;
     search(false);
-  }
-
-  function looksLikeQuestion(s: string) {
-    return (
-      s.includes('?') ||
-      /^(what|how|why|does|do|is|are|can|could|should|would|which|who|when|where|will)\b/i.test(s) ||
-      s.split(/\s+/).length >= 6
-    );
-  }
-
-  async function submitQuery() {
-    const raw = input.value.trim();
-    if (!raw) return;
-    aiSort = null;
-    if (!config.hasAi || !(sortSel.value === 'suggested' || looksLikeQuestion(raw))) {
-      if (interpreted) interpreted.hidden = true;
-      startSearch();
-      return;
-    }
-    send.disabled = true;
-    status.textContent = 'Reading the question…';
-    const t = await translateQuestion(raw);
-    if (!t) {
-      status.textContent = 'Couldn’t interpret that — searching for it as typed.';
-      unlock();
-      startSearch();
-      return;
-    }
-    input.value = t.query;
-    reviewBox.checked = t.filters.review && !reviewBox.disabled;
-    if (t.filters.from) {
-      const options = [...fromSel.options].map((o) => Number(o.value)).filter(Boolean);
-      const pick = options.filter((y) => y <= t.filters.from!).sort((a, b) => b - a)[0];
-      fromSel.value = pick ? String(pick) : '';
-    }
-    aiSort = t.filters.sort;
-    if (t.filters.sort && !sortSel.disabled && sortSel.value !== 'suggested') {
-      sortSel.value = t.filters.sort;
-    }
-    showInterpreted(t.query, t.filters, t.note);
-    unlock();
-    startSearch(looksLikeQuestion(raw) ? raw : null);
-  }
-
-  function showInterpreted(query: string, t: { review: boolean; from: number | null; sort: string | null }, note: string | null) {
-    if (!interpreted) return;
-    interpreted.replaceChildren();
-    const bits = [`Interpreted as: “${query}”`];
-    if (t.review) bits.push('reviews only');
-    if (t.from) bits.push(`since ${t.from}`);
-    if (t.sort === 'cited') bits.push('most cited first');
-    if (t.sort === 'recent') bits.push('newest first');
-    interpreted.appendChild(el('span', '', bits.join(' · ')));
-    if (note) interpreted.appendChild(el('span', 'text-ink-500', ` — ${note}`));
-    const x = el('button', 'ml-3 underline underline-offset-2 hover:text-accent', 'dismiss') as HTMLButtonElement;
-    x.type = 'button';
-    x.addEventListener('click', () => (interpreted.hidden = true));
-    interpreted.appendChild(x);
-    interpreted.hidden = false;
   }
 
   // ---- wiring ---------------------------------------------------------------
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    submitQuery();
+    startSearch();
   });
 
   [oaBox, reviewBox, fromSel, sortSel].forEach((c) =>
     c.addEventListener('change', () => {
       if (!lastQuery) return;
-      if (c === sortSel && sortSel.value === 'suggested' && config.hasAi) {
-        submitQuery();
-        return;
-      }
       page = 1;
       search(false);
     })
@@ -732,7 +813,6 @@ function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStor
       input.value = b.dataset.topicQ || '';
       if (b.dataset.topicReview === '1' && !reviewBox.disabled) reviewBox.checked = true;
       if (b.dataset.topicFrom) fromSel.value = b.dataset.topicFrom;
-      if (interpreted) interpreted.hidden = true;
       startSearch();
     })
   );
@@ -750,8 +830,18 @@ function wireSearch(root: HTMLElement, config: PageConfig, savedStore: SavedStor
   if (initial.oa === false && !oaBox.disabled) oaBox.checked = false;
   if (initial.review && !reviewBox.disabled) reviewBox.checked = true;
   if (initial.from) fromSel.value = initial.from;
-  if (initial.sort && !sortSel.disabled) sortSel.value = initial.sort;
+  // Only restore a sort the select still offers — an old shared URL may carry
+  // the retired 'suggested' value, which would blank the select.
+  if (
+    initial.sort &&
+    !sortSel.disabled &&
+    [...sortSel.options].some((o) => o.value === initial.sort)
+  ) {
+    sortSel.value = initial.sort;
+  }
   if (initial.q) {
+    // A shared search link lands straight in Search mode with the results up.
+    setMode('search');
     input.value = initial.q;
     startSearch();
   }

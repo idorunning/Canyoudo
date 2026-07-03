@@ -52,6 +52,21 @@ export function workKey(w: Work): string | null {
   return w.doi || w.oaUrl || w.pdfUrl || null;
 }
 
+/**
+ * Only http(s) URLs may become links. Work URLs arrive from external
+ * catalogues — and, on the shared review view, from a stored row another
+ * account wrote — so a `javascript:` (or any other scheme) must never reach
+ * an href. Returns the URL when safe, else null.
+ */
+export function safeHttpUrl(url: unknown): string | null {
+  if (typeof url !== 'string' || !url) return null;
+  try {
+    const u = new URL(url);
+    if (u.protocol === 'http:' || u.protocol === 'https:') return url;
+  } catch {}
+  return null;
+}
+
 export function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
   className: string,
@@ -93,7 +108,7 @@ export function card(w: Work, hooks: CardHooks = {}) {
 
   const head = el('div', 'flex items-start justify-between gap-3');
   const h = el('h3', 'font-display text-xl font-semibold text-ink-900 leading-snug');
-  const href = w.oaUrl || w.doi;
+  const href = safeHttpUrl(w.oaUrl) || safeHttpUrl(w.doi);
   if (href) h.appendChild(link(href, 'hover:text-accent transition-colors', w.title));
   else h.textContent = w.title;
   head.appendChild(h);
@@ -127,16 +142,19 @@ export function card(w: Work, hooks: CardHooks = {}) {
   }
 
   const links = el('p', 'font-sans text-xs mt-3 flex flex-wrap gap-x-4 gap-y-1');
-  if (w.pdfUrl) {
-    links.appendChild(link(w.pdfUrl, 'text-accent font-medium hover:text-accent-dark', 'Free PDF →'));
-  } else if (w.oaUrl) {
-    links.appendChild(link(w.oaUrl, 'text-accent font-medium hover:text-accent-dark', 'Free copy →'));
+  const pdfUrl = safeHttpUrl(w.pdfUrl);
+  const oaUrl = safeHttpUrl(w.oaUrl);
+  const doiUrl = safeHttpUrl(w.doi);
+  if (pdfUrl) {
+    links.appendChild(link(pdfUrl, 'text-accent font-medium hover:text-accent-dark', 'Free PDF →'));
+  } else if (oaUrl) {
+    links.appendChild(link(oaUrl, 'text-accent font-medium hover:text-accent-dark', 'Free copy →'));
   }
-  if (w.doi) {
+  if (doiUrl) {
     // The DOI resolves to the version of record — label it with where it
     // lands (publisher, else journal) rather than the acronym "DOI".
     const at = w.publisher || w.venue || 'Publisher site';
-    links.appendChild(link(w.doi, 'text-ink-600 hover:text-accent', `${at} →`));
+    links.appendChild(link(doiUrl, 'text-ink-600 hover:text-accent', `${at} →`));
   }
   if (links.childNodes.length) art.appendChild(links);
   return art;

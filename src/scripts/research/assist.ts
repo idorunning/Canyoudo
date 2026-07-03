@@ -1,11 +1,14 @@
-// AI assistance on /research: plain-English question translation (Sonnet,
-// server-side), the evidence-overview panel + refinement chips (Haiku), and
-// the cited evidence answer for question searches (Sonnet; references built
-// here from the real retrieved works, never by the model).
+// AI assistance for the Overview mode on /research: plain-English question
+// translation (server-side Sonnet) and the overview panel — a mid-tier model's
+// read of what a search found, with a suggested reading order pointing at the
+// numbered results on screen and refinement chips for the next search.
 // All rendered via textContent; failures suppress the panel, never the search.
 
 import { el, type Work } from './cards';
-import { citationParagraph, referenceList, CONFIDENCE_LABELS } from './citation-render';
+
+// The numbered result cards the overview's "read first" picks link to —
+// main.ts stamps these ids on the Overview pane's cards.
+export const OVERVIEW_RESULT_ID_PREFIX = 'overview-result-';
 
 export interface Translation {
   query: string;
@@ -30,97 +33,25 @@ export async function translateQuestion(question: string): Promise<Translation |
 
 interface Overview {
   overview: string;
-  caveat: string;
+  readFirst: { n: number; why: string }[];
   refinements: string[];
+  caveat: string;
 }
 
 let overviewSeq = 0;
 
 /**
- * Fetch and render the evidence overview for a fresh set of results.
- * Stale responses (a newer search started meanwhile) are dropped.
+ * Fetch and render the assistant's overview for a fresh set of results:
+ * what they add up to, which to open first (linked to the numbered cards),
+ * and sharper searches to run next. Stale responses (a newer search started
+ * meanwhile) are dropped.
  */
 export async function renderOverview(
   panel: HTMLElement,
   query: string,
   results: Work[],
   onRefine: (q: string) => void
-) {
-  const seq = ++overviewSeq;
-  panel.replaceChildren();
-  panel.hidden = true;
-
-  const items = results.slice(0, 8).map((w) => ({
-    title: w.title,
-    year: w.year,
-    abstract: w.tldr || w.abstract || '',
-  }));
-  if (items.length === 0) return;
-
-  let data: Overview | null = null;
-  try {
-    const res = await fetch('/api/research-assist', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ mode: 'overview', query, items }),
-    });
-    if (res.ok) {
-      const body = await res.json();
-      if (typeof body?.overview === 'string' && body.overview) data = body as Overview;
-    }
-  } catch {}
-  if (!data || seq !== overviewSeq) return; // failed, or a newer search superseded us
-
-  const box = el('div', 'bg-paper-100 border-l-2 border-accent rounded-r-md px-5 py-4');
-  box.appendChild(
-    el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500 mb-2', 'Assistant’s overview — read the studies, not the summary')
-  );
-  box.appendChild(el('p', 'font-serif text-sm text-ink-800 leading-relaxed', data.overview));
-  box.appendChild(el('p', 'font-serif text-xs italic text-ink-600 mt-2', data.caveat));
-
-  if (data.refinements.length) {
-    const rail = el('div', 'flex flex-wrap gap-2 mt-3');
-    for (const r of data.refinements) {
-      const b = el('button', 'font-sans text-xs px-2.5 py-1 bg-paper-50 border border-ink-200 text-ink-700 rounded hover:text-accent hover:border-accent transition-colors', r) as HTMLButtonElement;
-      b.type = 'button';
-      b.addEventListener('click', () => onRefine(r));
-      rail.appendChild(b);
-    }
-    box.appendChild(rail);
-  }
-
-  panel.appendChild(box);
-  panel.hidden = false;
-}
-
-/** Hide any pending/visible overview (e.g. when a new search starts). */
-export function clearOverview(panel: HTMLElement) {
-  overviewSeq++;
-  panel.replaceChildren();
-  panel.hidden = true;
-}
-
-// ---- cited evidence answers ------------------------------------------------
-
-interface Answer {
-  answer: string;
-  used: number[];
-  caveat: string;
-  confidence: 'strong' | 'mixed' | 'thin';
-}
-
-/**
- * Fetch and render the cited evidence answer for a question search. The
- * numbered reference list is built locally from the retrieved Work objects —
- * the model only ever points at them by index. Failures hide the panel
- * (except an explicit server message, e.g. the monthly budget pause, which
- * is shown quietly); the result list is never affected.
- */
-export async function renderAnswer(
-  panel: HTMLElement,
-  question: string,
-  results: Work[]
-) {
+): Promise<void> {
   const seq = ++overviewSeq;
   panel.replaceChildren();
   panel.hidden = true;
@@ -135,58 +66,86 @@ export async function renderAnswer(
   }));
   if (items.length === 0) return;
 
-  panel.hidden = false;
-  panel.appendChild(el('p', 'font-sans text-xs text-ink-500 italic', 'Synthesising an evidence answer…'));
-
-  let data: Answer | null = null;
+  let data: Overview | null = null;
   let serverMessage: string | null = null;
   try {
     const res = await fetch('/api/research-assist', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ mode: 'answer', question, items }),
+      body: JSON.stringify({ mode: 'overview', query, items }),
     });
     const body = await res.json().catch(() => null);
-    if (res.ok && typeof body?.answer === 'string' && body.answer && Array.isArray(body?.used)) {
-      data = body as Answer;
+    if (res.ok && typeof body?.overview === 'string' && body.overview) {
+      data = {
+        overview: body.overview,
+        readFirst: Array.isArray(body.readFirst) ? body.readFirst : [],
+        refinements: Array.isArray(body.refinements) ? body.refinements : [],
+        caveat: typeof body.caveat === 'string' ? body.caveat : '',
+      };
     } else if (res.status === 503 && typeof body?.error === 'string') {
       serverMessage = body.error; // e.g. the monthly budget pause
     }
   } catch {}
   if (seq !== overviewSeq) return; // a newer search superseded us
   if (!data) {
-    panel.replaceChildren();
     if (serverMessage) {
-      panel.appendChild(el('p', 'font-serif text-xs italic text-ink-600', serverMessage));
-    } else {
-      panel.hidden = true;
+      panel.replaceChildren(el('p', 'font-serif text-xs italic text-ink-600', serverMessage));
+      panel.hidden = false;
     }
     return;
   }
 
-  const valid = new Set(data.used.filter((n) => Number.isInteger(n) && n >= 1 && n <= works.length));
-  panel.replaceChildren();
-
   const box = el('div', 'bg-paper-100 border-l-2 border-accent rounded-r-md px-5 py-4');
-  const kicker = el('div', 'flex flex-wrap items-baseline justify-between gap-2 mb-2');
-  kicker.appendChild(
-    el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500', 'Evidence answer — every claim cites a study below')
+  box.appendChild(
+    el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500 mb-2', 'Assistant’s overview — read the studies, not the summary')
   );
-  kicker.appendChild(
-    el('span', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-500 border border-ink-200 rounded px-1.5 py-0.5', CONFIDENCE_LABELS[data.confidence] ?? CONFIDENCE_LABELS.mixed)
-  );
-  box.appendChild(kicker);
+  box.appendChild(el('p', 'font-serif text-sm text-ink-800 leading-relaxed', data.overview));
 
-  for (const para of data.answer.split(/\n{2,}/)) {
-    if (para.trim()) box.appendChild(citationParagraph(para.trim(), valid));
+  // The reading order: which numbered results to open first, and why. Indices
+  // were validated server-side against the list the model saw; re-check here
+  // against the cards actually on screen anyway.
+  const picks = data.readFirst.filter(
+    (r) => Number.isInteger(r?.n) && r.n >= 1 && r.n <= works.length && typeof r?.why === 'string' && r.why
+  );
+  if (picks.length) {
+    box.appendChild(
+      el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500 mt-4 mb-1', 'Read these first')
+    );
+    const ol = el('ol', 'space-y-1.5');
+    for (const pick of picks) {
+      const work = works[pick.n - 1];
+      const li = el('li', 'font-serif text-sm text-ink-800 leading-relaxed');
+      const a = el('a', 'font-medium text-accent hover:text-accent-dark no-underline') as HTMLAnchorElement;
+      a.href = `#${OVERVIEW_RESULT_ID_PREFIX}${pick.n}`;
+      a.textContent = `[${pick.n}] ${work.title}`;
+      li.appendChild(a);
+      li.appendChild(document.createTextNode(` — ${pick.why}`));
+      ol.appendChild(li);
+    }
+    box.appendChild(ol);
   }
-  box.appendChild(el('p', 'font-serif text-xs italic text-ink-600 mt-3', data.caveat));
 
-  // References: built from the actual retrieved works, numbered to match the
-  // markers. Each line links nothing the model wrote — only real records.
-  const refs = referenceList(works, valid);
-  if (refs) box.appendChild(refs);
+  if (data.caveat) box.appendChild(el('p', 'font-serif text-xs italic text-ink-600 mt-3', data.caveat));
 
-  panel.appendChild(box);
+  const refinements = data.refinements.map((r) => (typeof r === 'string' ? r.trim() : '')).filter(Boolean);
+  if (refinements.length) {
+    const rail = el('div', 'flex flex-wrap gap-2 mt-3');
+    for (const r of refinements) {
+      const b = el('button', 'font-sans text-xs px-2.5 py-1 bg-paper-50 border border-ink-200 text-ink-700 rounded hover:text-accent hover:border-accent transition-colors', r) as HTMLButtonElement;
+      b.type = 'button';
+      b.addEventListener('click', () => onRefine(r));
+      rail.appendChild(b);
+    }
+    box.appendChild(rail);
+  }
+
+  panel.replaceChildren(box);
   panel.hidden = false;
+}
+
+/** Hide any pending/visible overview (e.g. when a new search starts). */
+export function clearOverview(panel: HTMLElement) {
+  overviewSeq++;
+  panel.replaceChildren();
+  panel.hidden = true;
 }

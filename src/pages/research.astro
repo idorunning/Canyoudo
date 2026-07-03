@@ -22,9 +22,6 @@ const hasAi = Boolean(process.env.ANTHROPIC_API_KEY);
 const hasAuth = Boolean(
   import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
-// The problem→briefing flow is the primary experience; it needs AI to plan and
-// synthesise. Without AI we fall back to plain search only.
-const hasBriefing = hasAi;
 
 // Crime dashboard data (same as /data/index.astro)
 let recordedCrime: any = null;
@@ -60,7 +57,7 @@ const sources = [
   { id: 'govuk', label: 'UK official (GOV.UK)' },
 ];
 
-const pageConfig = { hasAi, hasAuth, hasBriefing, sources: sources.map((s) => s.id) };
+const pageConfig = { hasAi, hasAuth, sources: sources.map((s) => s.id) };
 
 // Curated evidence databases, maintained in the resources collection so the
 // CMS stays the single source of truth (also rendered on /resources).
@@ -72,7 +69,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 
 <BaseLayout
   title="Research assistant"
-  description="State a policing problem in plain English — the research assistant searches the open scholarly record from several angles, curates the strongest studies, and returns a cited evidence briefing with next steps."
+  description="Three research tools in one: a straight search of the open scholarly record, an AI overview that tells you what to read first, and a full research review — a cited report on your policing question you can download as a PDF."
 >
   {/* Flash mitigation: a returning signed-in reader shouldn't see the marketing
       landing before the Supabase session resolves. If an auth token is in
@@ -105,11 +102,14 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
         Research assistant
       </h1>
       <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
-        State a problem you're trying to solve and the assistant researches it for you:
-        it breaks the problem into a few angles, searches across several open research
-        catalogues — and UK official sources — from each, curates the strongest studies,
-        and writes a short evidence briefing — what the research says, how strong it is,
-        and concrete next steps to try. Every claim is pinned to a study you can open and read.
+        One tool, three depths. <strong>Search</strong> the open research record straight —
+        no AI, instant. Get an <strong>overview</strong> — the assistant reads what a search
+        found and tells you what to open first. Or commission a full
+        <strong>research review</strong>: the assistant researches your question from several
+        angles, curates the strongest studies, and writes a cited report — what the prior
+        research says, how strong it is, real-world examples, the legal context to check,
+        and next steps — downloadable as a PDF. Every claim is pinned to a study you can
+        open and read.
       </p>
     </div>
   </section>
@@ -120,7 +120,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
         <script is:inline type="application/json" id="research-config" set:html={JSON.stringify(pageConfig)}></script>
 
         {/* ============================ SHARED VIEW ============================ */}
-        {/* A read-only briefing opened via /research?b=<token>. Shown ahead of
+        {/* A read-only review opened via /research?b=<token>. Shown ahead of
             the gate; works whether or not the viewer is signed in. */}
         {hasAuth && (
           <div data-research-shared hidden class="max-w-3xl"></div>
@@ -145,9 +145,9 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
           <div data-research-landing class="max-w-3xl">
             <div class="grid sm:grid-cols-3 gap-6 mb-12">
               {[
-                { n: '1', h: 'State the problem', p: 'Describe what you’re trying to solve, in plain English — “cut repeat burglary on an estate”, “improve trust after a use-of-force incident”.' },
-                { n: '2', h: 'It does the legwork', p: 'The assistant splits the problem into angles and searches several research catalogues — OpenAlex, Crossref, Europe PMC and more — plus UK official sources, curating the strongest studies with free copies where they exist.' },
-                { n: '3', h: 'Get a cited briefing', p: 'A short briefing: what the evidence says, how strong it is, and next steps to try — every claim pinned to a study you can open.' },
+                { n: '1', h: 'Pick your depth', p: 'A straight search of the research catalogues, a quick AI overview of what a search found, or a full research review — you choose how deep to go.' },
+                { n: '2', h: 'It does the legwork', p: 'For a review, the assistant splits your question into angles, searches several catalogues — OpenAlex, Crossref, Europe PMC and more — plus UK official sources, and curates the strongest studies.' },
+                { n: '3', h: 'Get a cited report', p: 'What the prior research says, how strong it is, real-world examples, the legal and policy context to check, and next steps — every claim pinned to a study, downloadable as a branded PDF.' },
               ].map((s) => (
                 <div>
                   <div class="font-display text-2xl font-semibold text-accent mb-2">{s.n}</div>
@@ -158,15 +158,15 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             </div>
 
             {/* Worked example — static HTML, always present (no AI call). */}
-            <p class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-3">An example briefing</p>
+            <p class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-3">From an example review</p>
             <div class="rounded-lg border border-ink-200 bg-paper-50 px-6 py-7">
-              <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-2">Evidence briefing</p>
+              <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-2">Research review</p>
               <h2 class="font-display text-xl md:text-2xl font-semibold text-ink-900 leading-tight">
                 How do we cut repeat domestic-abuse victimisation in our area?
               </h2>
               <span class="inline-block mt-3 font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-500 border border-ink-200 rounded px-1.5 py-0.5">Evidence: mixed</span>
 
-              <h3 class="font-display text-base font-semibold text-ink-900 mt-6 mb-1">What the evidence says</h3>
+              <h3 class="font-display text-base font-semibold text-ink-900 mt-6 mb-1">What the prior research says</h3>
               <p class="font-serif text-sm text-ink-800 leading-relaxed">
                 Repeat victimisation is concentrated and predictable: a small share of
                 victims account for a large share of calls, and risk is highest in the
@@ -175,7 +175,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                 but trials are few and effects vary by how faithfully they’re delivered
                 <sup class="text-accent font-sans font-medium">[2]</sup><sup class="text-accent font-sans font-medium">[3]</sup>.
               </p>
-              <h3 class="font-display text-base font-semibold text-ink-900 mt-6 mb-1">Next steps and ideas to try</h3>
+              <h3 class="font-display text-base font-semibold text-ink-900 mt-6 mb-1">Next steps and ideas to think about</h3>
               <p class="font-serif text-sm text-ink-800 leading-relaxed">
                 Target the post-incident window with a named contact and a clear safety
                 plan; measure repeat calls at 4 and 8 weeks rather than arrests alone
@@ -184,7 +184,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                 <sup class="text-accent font-sans font-medium">[3]</sup>.
               </p>
               <p class="font-serif text-xs italic text-ink-600 mt-5">
-                Example only — synthesised from abstracts, not full papers. Your briefing cites the real studies it finds.
+                Example only — synthesised from abstracts, not full papers. Your review cites the real studies it finds, and downloads as a PDF.
               </p>
             </div>
 
@@ -193,7 +193,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
               <h2 class="font-display text-xl font-semibold text-ink-900">Sign in to use the research assistant</h2>
               <p class="font-serif text-ink-700 leading-relaxed mt-2 max-w-xl">
                 It’s free. The email link is password-free and works with any address,
-                including a work one (e.g. police.gov.uk). Your briefings save to your
+                including a work one (e.g. police.gov.uk). Your reviews save to your
                 account, and you can share any of them with a read-only link.
               </p>
               <div class="mt-5" data-landing-signin></div>
@@ -230,87 +230,97 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
           {/* -------- Research Assistant pane -------- */}
           <div data-tool-pane="assistant">
 
-          {/* Mode toggle: briefing is primary, plain search is secondary. */}
-          {hasBriefing && (
-            <nav data-research-mode class="mb-7 flex gap-2 font-sans text-sm" aria-label="Mode">
-              <button type="button" data-mode="briefing" class="px-4 py-2 rounded-md bg-ink-900 text-paper-50">
-                Build a briefing
-              </button>
-              <button type="button" data-mode="search" class="px-4 py-2 rounded-md border border-ink-300 text-ink-700 hover:border-ink-500">
-                Just search
-              </button>
-            </nav>
+          {/* Mode switcher: three depths, function first. Ascending depth
+              left-to-right; the review is the flagship and the default. */}
+          {hasAi && (
+            <div class="mb-7">
+              <nav data-research-mode class="flex flex-wrap gap-2 font-sans text-sm" aria-label="Assistant mode">
+                <button type="button" data-mode="search" class="px-4 py-2 rounded-md border border-ink-300 text-ink-700 hover:border-ink-500">
+                  Search
+                </button>
+                <button type="button" data-mode="overview" class="px-4 py-2 rounded-md border border-ink-300 text-ink-700 hover:border-ink-500">
+                  Overview
+                </button>
+                <button type="button" data-mode="review" class="px-4 py-2 rounded-md bg-ink-900 text-paper-50 border border-transparent">
+                  Research review
+                </button>
+              </nav>
+              <p data-mode-desc class="font-sans text-xs text-ink-600 mt-2 leading-relaxed max-w-2xl"></p>
+            </div>
           )}
 
-          {/* ---- briefing mode ---- */}
-          {hasBriefing && (
-            <div data-briefing-mode>
-              <form data-briefing-form class="space-y-3">
-                <label for="briefing-q" class="block font-sans text-sm font-medium text-ink-900">
-                  What problem are you trying to solve?
+          {/* ---- research review mode (default) ---- */}
+          {hasAi && (
+            <div data-review-mode>
+              <form data-review-form class="space-y-3">
+                <label for="review-q" class="block font-sans text-sm font-medium text-ink-900">
+                  What problem or question should the assistant research?
                 </label>
                 <textarea
-                  id="briefing-q"
-                  data-briefing-input
+                  id="review-q"
+                  data-review-input
                   rows="3"
                   placeholder="e.g. How do we reduce repeat burglary on a single estate without simply displacing it?"
                   class="w-full border border-ink-300 rounded-md px-4 py-3 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent resize-y"
                 ></textarea>
-
-                {/* Research depth: a 3-stop slider from a quick scan to a full
-                    review. Defaults to the middle (overview). The description
-                    below updates live so each level explains itself. */}
-                <div data-depth-control class="border border-ink-200 rounded-md bg-paper-100 px-4 py-3">
-                  <div class="flex items-baseline justify-between gap-3">
-                    <label for="briefing-depth" class="font-sans text-sm font-medium text-ink-900">
-                      Research depth
-                    </label>
-                    <span data-depth-name class="font-sans text-xs uppercase tracking-[0.12em] text-accent">
-                      Overview
-                    </span>
-                  </div>
-                  <input
-                    id="briefing-depth"
-                    data-briefing-depth
-                    type="range"
-                    min="0"
-                    max="2"
-                    step="1"
-                    value="1"
-                    aria-describedby="briefing-depth-desc"
-                    class="w-full mt-3 accent-accent cursor-pointer"
-                  />
-                  <div class="flex justify-between font-sans text-xs text-ink-500 mt-1" aria-hidden="true">
-                    <span>Quick scan</span>
-                    <span>Overview</span>
-                    <span>Full review</span>
-                  </div>
-                  <p id="briefing-depth-desc" data-depth-desc class="font-sans text-xs text-ink-600 mt-2 leading-relaxed">
-                    A balanced summary — what the evidence says and how strong it is, cited to the studies. The default.
-                  </p>
-                </div>
-
                 <div class="flex flex-wrap items-center gap-3">
                   <button
                     type="submit"
-                    data-briefing-send
+                    data-review-send
                     class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50"
                   >
-                    Build briefing
+                    Build research review
                   </button>
                   <p class="font-sans text-xs text-ink-600">
-                    Searches several angles, then writes a cited briefing at the depth you choose above.
+                    Searches several angles, curates the strongest studies, then writes the review live on the page.
                   </p>
                 </div>
               </form>
 
-              <div data-briefing-progress hidden class="mt-6" aria-live="polite"></div>
-              <div data-briefing-result class="mt-8"></div>
+              <div data-review-progress hidden class="mt-6" aria-live="polite"></div>
+              <div data-review-result class="mt-8"></div>
             </div>
           )}
 
-          {/* ---- search mode (secondary) ---- */}
-          <div data-search-mode hidden={hasBriefing}>
+          {/* ---- overview mode ---- */}
+          {hasAi && (
+            <div data-overview-mode hidden>
+              <form data-overview-form class="flex flex-wrap gap-3 items-stretch">
+                <label for="overview-q" class="sr-only">Ask about the research</label>
+                <input
+                  id="overview-q"
+                  data-overview-input
+                  type="search"
+                  autocomplete="off"
+                  placeholder="e.g. does extra patrol cut burglary?"
+                  class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
+                />
+                <button
+                  type="submit"
+                  data-overview-send
+                  class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50"
+                >
+                  Get overview
+                </button>
+              </form>
+              <p class="mt-2 font-sans text-xs text-ink-600 max-w-2xl leading-relaxed">
+                Ask it like a question. The assistant turns it into a scholarly search, reads what
+                comes back, and tells you what it adds up to — and which studies to open first.
+              </p>
+              <p
+                data-overview-note
+                hidden
+                class="mt-3 font-sans text-xs text-ink-700 bg-paper-200 rounded px-3 py-2"
+                aria-live="polite"
+              ></p>
+              <div data-overview-status class="mt-6" aria-live="polite"></div>
+              <div data-overview-panel hidden class="mt-4"></div>
+              <div data-overview-results class="mt-4"></div>
+            </div>
+          )}
+
+          {/* ---- search mode (the coded search — no AI) ---- */}
+          <div data-search-mode hidden={hasAi}>
             <form data-research-form class="flex flex-wrap gap-3 items-stretch">
               <label for="research-q" class="sr-only">Search the scholarly record</label>
               <input
@@ -318,7 +328,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                 data-research-input
                 type="search"
                 autocomplete="off"
-                placeholder={hasAi ? 'e.g. does extra patrol cut burglary?' : 'e.g. hot spots policing'}
+                placeholder="e.g. hot spots policing"
                 class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
               />
               <button
@@ -331,19 +341,9 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             </form>
 
             <p class="mt-2 font-sans text-xs text-ink-600 max-w-2xl leading-relaxed">
-              {hasAi
-                ? 'Ask it like a question — what works, what does the evidence say? The assistant turns it into a scholarly search, then reviews what came back. Plain keywords work too.'
-                : 'Search by keywords — e.g. hot spots policing, body-worn cameras, procedural justice.'}
+              Search by keywords — e.g. hot spots policing, body-worn cameras, procedural
+              justice. Results come straight from the catalogues{hasAi && ' — for a plain-English question, use Overview instead'}.
             </p>
-
-            {hasAi && (
-              <p
-                data-research-interpreted
-                hidden
-                class="mt-3 font-sans text-xs text-ink-700 bg-paper-200 rounded px-3 py-2"
-                aria-live="polite"
-              ></p>
-            )}
 
             {/* Source + filters tuck behind a disclosure so the search box leads;
                 the sensible defaults (all sources, free-to-read) apply whether or
@@ -396,7 +396,6 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                     <option value="relevance">most relevant</option>
                     <option value="recent">newest</option>
                     <option value="cited">most popular (cited)</option>
-                    {hasAi && <option value="suggested">suggested (AI picks)</option>}
                   </select>
                 </label>
               </div>
@@ -444,7 +443,6 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             <p data-research-status class="font-sans text-sm text-ink-600 mt-8" aria-live="polite"></p>
 
             <div data-results-pane>
-              {hasAi && <div data-research-overview hidden class="mt-4"></div>}
               <div data-research-results class="mt-2"></div>
               <div class="mt-8">
                 <button
@@ -473,7 +471,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             — open catalogues of the scholarly record plus UK official publications. Free-copy
             availability is topped up via <a href="https://unpaywall.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Unpaywall</a>.
             "Free copy" links go to publisher or repository versions; quality varies and
-            inclusion here is not endorsement. Weigh the study, not the headline.{hasAi && ' Briefings and AI summaries are sketches from abstracts, not verdicts — read the studies.'}
+            inclusion here is not endorsement. Weigh the study, not the headline.{hasAi && ' Overviews and reviews are synthesised from abstracts, not verdicts — and their legal pointers need verifying. Read the studies.'}
           </p>
 
           </div>{/* end data-tool-pane="assistant" */}

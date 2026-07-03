@@ -76,6 +76,7 @@ export const PROMPT_VERSION = 'v6';
 // most careful).
 export const INTERPRET_MODELS = {
   'claude-opus-4-8': 'Claude Opus 4.8',
+  'claude-sonnet-5': 'Claude Sonnet 5',
   'claude-sonnet-4-6': 'Claude Sonnet 4.6',
   'claude-haiku-4-5': 'Claude Haiku 4.5',
 } as const;
@@ -95,12 +96,14 @@ export function resolveModel(env?: string | null, fallback: ModelId = LIVE_MODEL
 }
 
 // Per-model request params. Haiku 4.5 doesn't accept the `effort` parameter (and
-// we want it lean and fast anyway), so it runs without thinking/effort. Opus 4.8
-// and Sonnet 4.6 use adaptive thinking at low effort — a little reasoning for the
-// caveats without the latency of deep thinking.
-export function modelParams(id: ModelId) {
+// we want it lean and fast anyway), so it runs without thinking/effort. The
+// others use adaptive thinking; `effort` defaults to low — a little reasoning
+// for the caveats without the latency of deep thinking — but callers doing
+// heavyweight synthesis (the research review on Sonnet 5) pass a higher level.
+export type Effort = 'low' | 'medium' | 'high';
+export function modelParams(id: ModelId, effort: Effort = 'low') {
   if (id === 'claude-haiku-4-5') return {};
-  return { thinking: { type: 'adaptive' as const }, output_config: { effort: 'low' as const } };
+  return { thinking: { type: 'adaptive' as const }, output_config: { effort } };
 }
 
 // The shared, non-negotiable rules — the site's evidence-based discipline.
