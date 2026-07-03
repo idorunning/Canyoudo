@@ -1,57 +1,52 @@
 ---
 title: Purpose and Editorial Scope
-description: Evidence-based writing,  live crime dashboard and a free research search
+description: Evidence-based writing, a live crime dashboard, and a free research assistant — built and written by a serving police inspector.
 ---
 
-_Thinking About Policing_ is an independent analytical platform dedicated to evidence-based policing (EBP), public policy, and institutional reform. It is written specifically for those who shape, study, and execute modern policing strategy: senior executives, operational leaders, policymakers, and academic researchers.
+My phone rang in the middle of the school run. It was Alex Murray — then Assistant Chief Constable for West Midlands Police, now interim director of Police AI — asking about a small, non-academic project I'd knocked together at work. Within a few months I was presenting it at the College of Policing and at a Whitehall AI conference, of all places. That project had used ChatGPT to check some maths, back in 2022, when that was a stranger thing to do than it is now. This site grew out of the same instinct: check whether what we think works actually works, and say so plainly if the evidence disagrees.
 
-Rather than offering passive literature reviews or broad surveys of the field, every analysis published here takes a definitive, data-led position. The editorial ethos is grounded in empirical rigor: where robust empirical evidence exists, it forms the foundation of the argument; where data is sparse, fragmented, or structurally contested, that limitation is explicitly stated and evaluated.
+_Thinking About Policing_ is an independent site about evidence-based policing (EBP), public policy, and institutional reform, written for the people who shape and carry out policing strategy: operational leaders, policymakers, academics, and officers doing the job. Every piece takes a position rather than surveying the field from a safe distance. Where the evidence is solid, it carries the argument. Where it is thin, contested, or simply missing, that gets said outright rather than papered over.
 
-The publication operates across five primary thematic streams:
+The writing sits in five areas:
 
-* Police Policy: Critical examinations of internal operational mechanics, including systemic misconduct prevention, organizational wellbeing metrics, the proportionality of use-of-force frameworks, and the efficacy of localized neighbourhood policing models.
-* Public Policy: A broader structural look at the intersection of criminal justice, legislative mandates, and the socio-political environments that dictate the demands placed upon the police service.
-* Influential People: Analytical profiles of the theoretical architects and researchers whose work has fundamentally shifted the paradigm of modern law enforcement.
-* Data Stories: Brief, targeted empirical analyses where quantitative datasets drive the hypothesis and carry the core argument.
-* Interesting Distractions: A dedicated space for analytical curiosity outside of standard public policy—spanning historical cryptanalysis (such as the 1948 Somerton Man cipher) to critical reviews of statistical communication.
+* **Evidence & Practice** — what works, and the evidence behind it: misconduct prevention, officer wellbeing, use-of-force proportionality, neighbourhood policing.
+* **Leadership & Culture** — the wider structural questions: criminal justice, legislation, and the political pressures that shape demand on the police.
+* **Influential People** — profiles of the researchers and practitioners who have shifted how policing is done.
+* **Technology & Innovation** — short, data-led pieces where the numbers carry the argument.
+* **History & Curiosities** — analytical detours that have nothing to do with public policy, from the 1948 Somerton Man cipher to how the press writes about crime.
 
-## Applied Analytics: Integrated Tools
+## Three free tools
 
-To move beyond theoretical commentary and actively support the democratization of evidence and data, the platform hosts two live, functional resources designed to bridge the gap between academic research and operational application.
+Alongside the writing, the site hosts three tools built to put evidence directly in front of the people who need it, not just describe it.
 
-### The Crime Dashboard
+**The Research Assistant** searches over 250 million academic works and returns a cited briefing rather than a wall of paywalled abstracts. Most policing research sits behind institutional access that a shift-working sergeant will never have, so the tool does the digging and links back to the legal, open-access version of each paper.
 
-An automated, accessible interface that ingests live, granular, street-level data from open-source repositories (including data.police.uk and Home Office recorded-crime indices). It is engineered to allow practitioners and analysts to query localized longitudinal trends, examine force-wide outcomes, and interrogate raw figures directly without the administrative friction of bespoke spreadsheet synthesis.
+**The Crime Dashboard** pulls live, street-level data from data.police.uk and the Home Office recorded-crime series, so you can check a force's or a neighbourhood's actual trend rather than take someone's word for it.
 
-### The Research Assistant
+**Perception** turns a quarter-century of UK news coverage of the police into a word race — watching the language shift, year by year, is a faster way to see how the story has changed than reading the archive yourself.
 
-A semantic, natural-language search layer operating over the global open-source scholarly record (comprising over 250 million academic works). Recognizing that a vast proportion of empirical policing literature is locked behind institutional paywalls inaccessible to front-line practitioners, this tool extracts, synthesizes, and outputs relevant evidence summaries alongside direct links to legal, open-access versions of peer-reviewed papers.
+All three are free. Sign in once — no password, just an email link — and all three unlock. [Open the research tools →](/research-tools)
 
-## Author Profile
+## Author profile
 
 ### Nathan Tracey
 
-Founder and Editor
+Founder and editor
 
 ![](/images/11825.webp)
 
-I am an Acting Inspector with Sussex Police, specializing in neighbourhood policing and data-led operational strategy.  I have been hostage and crisis negotiator during this time as well a a response cop, neighbourhood Sergeant, and my current role is spread between being duty Inspector, response Inspector and investigations inspector. 
+I'm an Acting Inspector with Sussex Police, working in neighbourhood policing and data-led operational strategy. Over the years I've been a hostage and crisis negotiator, a response officer, and a neighbourhood sergeant; my current role splits across duty inspector, response inspector, and investigations inspector shifts.
 
-My thoughts on policing are defined by an unconventional but common trajectory into the service: minimal academic qualifications, entering policing in my thirties following a career managing commercial operations within a corporate environment.  Subsequently I was also diagnosed with of Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven. - This diagnosis literally saved my life, (maybe Ill write about that another day....)
+I came into policing by an unconventional route: minimal academic qualifications, joining in my thirties after a career managing commercial operations. I was diagnosed with Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven — a diagnosis that genuinely saved my life (maybe I'll write about that properly another day).
 
-I was drawn into evidence based policing via a small project at work that ended up with a school run phone call from Alex Murray OBE the interim director of Police Ai (was the ACC for West Midlands police at the time) and invited to present my tiny none academic research at the college of policing and also at Whitehall at an AI conference - yes using Chat GPT back in 2022 for maths was less common back then!
+That background is why a lot of what I write about comes back to the same question: the friction between cognitive diversity, organisational design, and what an institution assumes about human behaviour versus what the evidence actually shows. I'm particularly interested in the predictive side of that — assaults on officers, use-of-force proportionality, misconduct trends — and in building early-detection and intervention frameworks rather than waiting for the annual report to notice a pattern. Jerry Ratcliffe's work on intelligence-led policing and the Society of Evidence-Based Policing's founding principles have shaped that thinking more than anything else, alongside a fairly constant relistening to old episodes of BBC radio (thanks, [Tim Harford](https://twitter.com/TimHarford)).
 
-This background informs a central analytical focus of my work: examining the friction between cognitive diversity, organisational design, and institutional assumptions regarding human behaviour versus empirical reality and actually checking what we think works, works. 
+This site started as a personal blog and a project for my days off. As my coding got better — vibe-coded, not properly trained — so did the site, and the research assistant and crime dashboard got built along the way.
 
-My operational interests focus heavily on data application—specifically the predictive analysis of officer assaults, use-of-force proportionality, and misconduct trends—with a strong structural bias toward early detection and intervention frameworks. My methodology has been fundamentally shaped by statistical communication theory, Jerry Ratcliffe’s frameworks for intelligence-led policing, and the foundational principles of evidence-based practice championed by the Society of Evidence-Based Policing (SEBP). - As well as a constant relistening to more or less episodes on BBC radio (Thanks  [@TimHarford](https://t.co/20kzyGEfSM) )
+## Disclaimers and integrity
 
-The underlying purpose of this platform has changed: Initially it was planned to be a kind of personal blog related to things that interest me whilst also giving me a project to work on during my days off,  but as my coding (vibe coded not "proper" coding) has developed so has the website, with research assistants and crime dashboards being built as we speak.
+Everything here is written in a personal capacity. The views are mine alone and do not represent the official position of Sussex Police, the Home Office, or any other body I work with or reference.
 
-## Disclaimers and Integrity
+Where the argument rests on external research or data, the source is named in the prose or cited in full. Where it rests on judgement or experience instead, that distinction is made explicit rather than left implied. Comments are open on every article, and disagreement — methodological or otherwise — is the point, not an inconvenience.
 
-All content, commentary, and analysis published on this site are compiled and articulated purely in a personal capacity. The views expressed herein belong solely to the author and do not represent the official policy, strategic position, or endorsement of Sussex Police, the Home Office, or any associated professional bodies or academic institutions.
-
-* Academic Integrity: Where external research, datasets, or literature are referenced, full citations are provided. Where arguments rely on qualitative interpretation or experiential deduction, this distinction is explicitly demarcated.
-* Peer Review & Engagement: An open-access comment architecture is maintained across all articles to encourage scholarly dissent, methodological critique, and operational peer review.
-
-For direct academic correspondence, collaboration inquiries, or data queries, contact: hello@thinkingaboutpolicing.org
+For academic correspondence, collaboration, or data queries: hello@thinkingaboutpolicing.org
