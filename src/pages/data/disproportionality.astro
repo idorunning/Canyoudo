@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CaveatBanner from '../../components/data/CaveatBanner.astro';
+import DataChat from '../../components/data/DataChat.astro';
 import MemberGate from '../../components/MemberGate.astro';
 import { getCollection } from 'astro:content';
 
@@ -52,7 +53,7 @@ const forces = entries
           <p class="font-sans text-xs uppercase tracking-[0.18em] text-accent mb-3">The reading</p>
           <div class="prose-article min-h-[6rem]" data-interpretation aria-live="polite"></div>
           <p class="mt-4 font-sans text-xs text-ink-500 leading-relaxed">
-            Interpreted by <strong class="font-medium text-ink-600" data-model>Claude</strong> from
+            Interpreted by <strong class="font-medium text-ink-600" data-model>the site&rsquo;s AI</strong> from
             <a href="https://data.police.uk" class="hover:text-accent underline underline-offset-2">data.police.uk</a>
             (OGL v3.0) — AI-generated, read with care.<span data-month></span>
           </p>
@@ -77,9 +78,25 @@ const forces = entries
             <h3 class="font-display text-lg font-semibold text-ink-900 mb-3">Searches over time</h3>
             <div data-chart-trend></div>
           </div>
+
+          <div class="border-t border-ink-200 pt-6 space-y-3">
+            <div>
+              <button type="button" data-csv class="font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-accent hover:text-accent transition-colors">
+                Download the data (CSV)
+              </button>
+              <span class="font-sans text-xs text-ink-500 ml-3">Search shares, find rates and disparity ratios by ethnicity, for this area.</span>
+            </div>
+            <p class="font-sans text-sm">
+              <a data-evidence-link href="/research?mode=review" class="text-accent hover:text-accent-dark underline underline-offset-2">What does the evidence say about fair, effective stop &amp; search? →</a>
+              <span class="text-ink-500">The Research Assistant researches it and writes a cited briefing.</span>
+            </p>
+          </div>
         </div>
 
         <p class="font-serif text-ink-500 italic" data-empty hidden>The database is still filling — check back once the first ingest has run.</p>
+        <p class="text-accent font-sans text-sm" data-error hidden></p>
+
+        <DataChat scope="disproportionality" endpoint="/api/db-interpret" forceSelect="#force-pick" />
         </div>
        </MemberGate>
       </div>
@@ -87,18 +104,20 @@ const forces = entries
   </section>
 
   <script>
-    import { fetchJson, barTable, lineChart, streamInterpret, pct } from '../../scripts/data/explorer';
+    import { fetchJson, barTable, lineChart, streamInterpret, pct, downloadCsv } from '../../scripts/data/explorer';
     import { onMembersUnlock } from '../../scripts/members/gate';
 
     const pick = document.getElementById('force-pick') as HTMLSelectElement;
     const charts = document.querySelector<HTMLElement>('[data-charts]')!;
     const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+    const errorEl = document.querySelector<HTMLElement>('[data-error]')!;
     const out = document.querySelector<HTMLElement>('[data-interpretation]')!;
     const modelEl = document.querySelector<HTMLElement>('[data-model]');
     const monthEl = document.querySelector<HTMLElement>('[data-month]');
 
     async function load(force: string) {
       streamInterpret(`/api/db-interpret?scope=disproportionality&force=${force}`, out, { modelEl, monthEl });
+      empty.hidden = true; errorEl.hidden = true;
       try {
         const [disp, object, trend] = await Promise.all([
           fetchJson(`/api/police-db?view=disproportionality&force=${force}`),
@@ -106,7 +125,7 @@ const forces = entries
           fetchJson(`/api/police-db?view=ss-trend&force=${force}`),
         ]);
         if (!disp.groups?.length) { charts.hidden = true; empty.hidden = false; return; }
-        empty.hidden = true; charts.hidden = false;
+        charts.hidden = false;
 
         // Search share vs population share, side by side where population exists.
         const eth = charts.querySelector('[data-chart-ethnicity]')!;
@@ -124,23 +143,56 @@ const forces = entries
         // are comparable at a glance).
         barTable(charts.querySelector('[data-chart-findrate]')!,
           disp.groups.filter((g: any) => g.findRate != null)
-            .map((g: any) => ({ label: g.ethnicity, count: Math.round((g.findRate || 0) * 100), note: '%' })),
-          { max: 100 });
+            .map((g: any) => ({ label: g.ethnicity, count: (g.findRate || 0) * 100 })),
+          { max: 100, format: (v) => `${v.toFixed(0)}%` });
 
         const obj = (object.values || []).slice(0, 8).map((v: any) => ({ label: v.value, count: v.count }));
         if (obj.length) barTable(charts.querySelector('[data-chart-object]')!, obj, { asPercent: true });
 
         if (trend.series?.length) {
           lineChart(charts.querySelector('[data-chart-trend]')!, trend.series.map((s: any) => s.month),
-            [{ label: 'Searches per month', values: trend.series.map((s: any) => s.total) }]);
+            [{ label: 'Searches per month', values: trend.series.map((s: any) => s.total) }],
+            { label: 'Searches over time' });
         }
-      } catch {
-        charts.hidden = true; empty.hidden = false;
+
+        // The evidence handoff, area in hand.
+        const areaName = pick.options[pick.selectedIndex]?.text || 'England & Wales';
+        const evidenceLink = document.querySelector<HTMLAnchorElement>('[data-evidence-link]')!;
+        evidenceLink.href = `/research?mode=review&problem=${encodeURIComponent(
+          `Fair and effective use of stop and search in ${areaName} — what does the evidence say about disproportionality, find rates and community trust?`
+        )}`;
+
+        // CSV: the by-ethnicity table behind the charts.
+        const csvBtn = document.querySelector<HTMLButtonElement>('[data-csv]')!;
+        csvBtn.onclick = () => downloadCsv(
+          `stop-search-disproportionality-${force}.csv`,
+          ['ethnicity', 'searches', 'search_share', 'population_share', 'disparity_ratio', 'find_rate'],
+          disp.groups.map((g: any) => [
+            g.ethnicity, g.searches,
+            Math.round(g.searchShare * 1000) / 1000,
+            g.populationShare != null ? Math.round(g.populationShare * 1000) / 1000 : null,
+            g.disparityRatio != null ? Math.round(g.disparityRatio * 100) / 100 : null,
+            g.findRate != null ? Math.round(g.findRate * 1000) / 1000 : null,
+          ])
+        );
+      } catch (err: any) {
+        // A real failure is not the same as an empty database — say which.
+        charts.hidden = true;
+        errorEl.textContent = `Couldn’t load the data: ${err?.message || 'unknown error'}. Try again in a moment.`;
+        errorEl.hidden = false;
       }
     }
 
-    pick.addEventListener('change', () => load(pick.value));
+    // The chosen force lives in the URL, so a view can be shared or bookmarked.
+    const urlForce = new URLSearchParams(location.search).get('force');
+    if (urlForce && [...pick.options].some((o) => o.value === urlForce)) pick.value = urlForce;
+    pick.addEventListener('change', () => {
+      const u = new URL(location.href);
+      if (pick.value === '_all') u.searchParams.delete('force'); else u.searchParams.set('force', pick.value);
+      history.replaceState(null, '', u);
+      load(pick.value);
+    });
     // Hold the first (billable) read until the members area unlocks.
-    onMembersUnlock(() => load('_all'));
+    onMembersUnlock(() => load(pick.value || '_all'));
   </script>
 </BaseLayout>

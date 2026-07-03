@@ -1,8 +1,10 @@
 import type { Config } from '@netlify/functions';
+import { classifyOutcome } from '../../src/lib/outcomes.mjs';
+import { buildBriefingDigest } from '../../src/lib/briefing-digest';
 import {
   configured, ALL,
   crimeByMonth, outcomesByMonth, lsoaHotspots,
-  ssByMonth, ssDim, populationByEthnicity,
+  ssByMonth, ssDim, populationByEthnicity, forcePopulation,
   force, forcePeople, allForces,
   neighbourhood, neighbourhoodPriorities, dataCoverage,
   type CrimeRow, type OutcomeRow,
@@ -23,9 +25,6 @@ const json = (status: number, body: unknown, cache = false) =>
       'cache-control': cache ? 'public, max-age=600, s-maxage=86400' : 'no-store',
     },
   });
-
-const CHARGED = /charged|caution|community resolution|penalty notice|summons|out-of-court/i;
-const NO_SUSPECT = /no suspect identified/i;
 
 // Pivot rollup rows into aligned monthly series the charts can plot directly.
 function pivot<T extends { month: string; count: number }>(rows: T[], keyOf: (r: T) => string) {
@@ -63,20 +62,31 @@ export default async (req: Request) => {
         return json(200, await dataCoverage(), true);
 
       case 'crime-trend': {
-        const rows: CrimeRow[] = await crimeByMonth(forceId);
+        // Population (when seeded — migration 0002) rides along so the client
+        // can offer counts as rates per 1,000 residents.
+        const [rows, pop]: [CrimeRow[], Awaited<ReturnType<typeof forcePopulation>>] = await Promise.all([
+          crimeByMonth(forceId),
+          forcePopulation(forceId),
+        ]);
         const p = pivot(rows, (r) => r.category);
-        return json(200, { force: forceId, months: p.months, categories: p.items, totalByMonth: p.totalByMonth }, true);
+        return json(200, {
+          force: forceId, months: p.months, categories: p.items, totalByMonth: p.totalByMonth,
+          population: pop?.population ?? null, populationYear: pop?.year ?? null,
+        }, true);
       }
 
       case 'outcomes': {
         const rows: OutcomeRow[] = await outcomesByMonth(forceId);
         const p = pivot(rows, (r) => r.outcome_category);
         // The "justice gap": share charged vs share closed with no suspect.
+        // Classification is shared with the AI reading (src/lib/outcomes.mjs)
+        // so the chart and the interpretation can never disagree.
         const chargeRate = p.months.map((_, i) => {
           let charged = 0, noSuspect = 0, total = p.totalByMonth[i];
           for (const it of p.items) {
-            if (CHARGED.test(it.key)) charged += it.byMonth[i];
-            if (NO_SUSPECT.test(it.key)) noSuspect += it.byMonth[i];
+            const kind = classifyOutcome(it.key);
+            if (kind === 'charged') charged += it.byMonth[i];
+            else if (kind === 'noSuspect') noSuspect += it.byMonth[i];
           }
           return { charged: total ? charged / total : 0, noSuspect: total ? noSuspect / total : 0 };
         });
@@ -132,6 +142,16 @@ export default async (req: Request) => {
 
       case 'hotspots':
         return json(200, { month: month ?? null, lsoas: await lsoaHotspots(month, 50) }, true);
+
+      case 'briefing-digest': {
+        // The Force Briefing's aggregate-only input. The edge function fetches
+        // this server-side (so a briefing is always generated from the real
+        // data, never a client-supplied digest), and the client reads it too —
+        // for the key-figures panel and to verify the briefing's numbers.
+        const built = await buildBriefingDigest(forceId);
+        if (!built) return json(404, { error: 'No data for that force yet.' });
+        return json(200, built, true);
+      }
 
       case 'force-profile': {
         if (forceId === ALL) return json(400, { error: 'A force id is required.' });

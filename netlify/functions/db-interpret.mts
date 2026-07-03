@@ -11,6 +11,7 @@ import {
 import {
   ALL, crimeByMonth, outcomesByMonth, ssDim, populationByEthnicity, force,
 } from '../../src/lib/police-db';
+import { classifyOutcome } from '../../src/lib/outcomes.mjs';
 
 // Evidence-based interpretation of the historical police DATABASE (distinct from
 // interpret.mts, which reads the committed snapshot). Same contract: aggregate
@@ -34,24 +35,65 @@ async function buildDigest(scope: string, forceId: string) {
     const [crime, outcomes] = await Promise.all([crimeByMonth(forceId), outcomesByMonth(forceId)]);
     if (!crime.length) return null;
     const months = [...new Set(crime.map((r) => r.month))].sort();
+
+    // The page is "over time", so the digest must carry the movement, not
+    // just the latest window: each category's last 12 months vs the previous
+    // 12, and the total + justice gap per aligned 12-month block back to the
+    // start of the data. All still aggregate-only, a few hundred tokens.
     const window = months.slice(-12);
-    const byCat = new Map<string, number>();
-    for (const r of crime) if (window.includes(r.month)) byCat.set(r.category, (byCat.get(r.category) ?? 0) + r.count);
-    const topCats = [...byCat].map(([category, count]) => ({ category: titleCase(category), count })).sort((a, b) => b.count - a.count).slice(0, 8);
-    // Charge / no-suspect rate, latest 12 months.
-    let charged = 0, noSuspect = 0, total = 0;
-    for (const o of outcomes) if (window.includes(o.month)) {
-      total += o.count;
-      if (/charged|caution|community resolution|penalty notice|summons/i.test(o.outcome_category)) charged += o.count;
-      if (/no suspect identified/i.test(o.outcome_category)) noSuspect += o.count;
+    const prevWindow = months.slice(-24, -12);
+    const catIn = (win: string[]) => {
+      const by = new Map<string, number>();
+      for (const r of crime) if (win.includes(r.month)) by.set(r.category, (by.get(r.category) ?? 0) + r.count);
+      return by;
+    };
+    const byCat = catIn(window);
+    const byCatPrev = catIn(prevWindow);
+    const topCats = [...byCat]
+      .map(([category, count]) => {
+        const prev = byCatPrev.get(category) ?? null;
+        return {
+          category: titleCase(category), count12mo: count,
+          previous12mo: prevWindow.length === 12 ? prev ?? 0 : null,
+          changePct: prevWindow.length === 12 && prev ? Math.round(((count - prev) / prev) * 1000) / 10 : null,
+        };
+      })
+      .sort((a, b) => b.count12mo - a.count12mo)
+      .slice(0, 8);
+
+    // Justice gap per aligned 12-month block (latest block last) — same
+    // classifier as the charts (src/lib/outcomes.mjs), so the reading matches
+    // what's on screen.
+    const gapIn = (win: string[]) => {
+      let charged = 0, noSuspect = 0, total = 0;
+      for (const o of outcomes) if (win.includes(o.month)) {
+        total += o.count;
+        const kind = classifyOutcome(o.outcome_category);
+        if (kind === 'charged') charged += o.count;
+        else if (kind === 'noSuspect') noSuspect += o.count;
+      }
+      return { total, chargedShare: pct(total ? charged / total : null), noSuspectShare: pct(total ? noSuspect / total : null) };
+    };
+    const blocks: any[] = [];
+    for (let end = months.length; end > 0 && blocks.length < 3; end -= 12) {
+      const win = months.slice(Math.max(0, end - 12), end);
+      if (win.length < 12 && blocks.length > 0) break; // drop an incomplete oldest block (the latest one is kept even when the data is short)
+      blocks.unshift({
+        from: win[0], to: win[win.length - 1], monthsCovered: win.length,
+        totalCrimes: win.reduce((s, m) => s + crime.filter((r) => r.month === m).reduce((a, r) => a + r.count, 0), 0),
+        ...gapIn(win),
+      });
     }
+
+    const latest = gapIn(window);
     return {
       cacheId: `crime-history:${forceId}`, dataMonth: months[months.length - 1],
       digest: {
         scope: forceId === ALL ? 'England & Wales' : forceId, windowMonths: 12, latestMonth: months[months.length - 1],
-        totalCrimes12mo: window.reduce((s, m) => s + crime.filter((r) => r.month === m).reduce((a, r) => a + r.count, 0), 0),
+        totalCrimes12mo: blocks.length ? blocks[blocks.length - 1].totalCrimes : 0,
         topCategories: topCats,
-        outcomes12mo: { total, chargedShare: pct(total ? charged / total : null), noSuspectShare: pct(total ? noSuspect / total : null) },
+        outcomes12mo: latest,
+        twelveMonthBlocks: blocks,
         firstMonth: months[0],
       },
     };
@@ -156,10 +198,24 @@ export default async (req: Request) => {
   } catch { store = null; }
 
   if (await budgetExceeded()) return json(503, { error: BUDGET_MESSAGE });
+
+  // The reading sits directly above named charts — let it end by pointing the
+  // reader at the most informative one, the way the research assistant's
+  // overview suggests what to read first.
+  const chartsOnPage: Record<string, string[]> = {
+    'crime-history': ['Recorded crime, monthly total', 'By crime type', 'The justice gap', 'Where crime concentrates'],
+    disproportionality: ['Searches by officer-defined ethnicity', 'Find rate by ethnicity', 'What officers were looking for', 'Searches over time'],
+  };
+  const pointer = chartsOnPage[scope]
+    ? `\n\nThe reader sees these charts directly below this reading: ${chartsOnPage[scope].map((c) => `"${c}"`).join(', ')}. You may end with one short sentence pointing them at the single most informative chart for this data, naming it by its title.`
+    : '';
+
   const aiStream = client.messages.stream({
-    model, max_tokens: 3000, ...modelParams(model),
+    // Cached per data month, so a little extra thinking amortises across every
+    // reader for a month — medium effort here, low stays for the live chat.
+    model, max_tokens: 3000, ...modelParams(model, 'medium'),
     system: persona ? systemFor(persona) : systemGeneral(),
-    messages: [{ role: 'user', content: `Interpret this police data${persona ? ' for the reader described' : ''}. Aggregate figures only:\n\n${JSON.stringify(digest, null, 2)}` }],
+    messages: [{ role: 'user', content: `Interpret this police data${persona ? ' for the reader described' : ''}. Aggregate figures only:\n\n${JSON.stringify(digest, null, 2)}${pointer}` }],
   });
   return streamMarkdown(aiStream, { store, key, model, modelLabel, dataMonth });
 };

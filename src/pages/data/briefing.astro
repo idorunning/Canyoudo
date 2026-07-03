@@ -1,0 +1,234 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CaveatBanner from '../../components/data/CaveatBanner.astro';
+import MemberGate from '../../components/MemberGate.astro';
+import { getCollection } from 'astro:content';
+
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+
+// The Force Briefing — the dashboard's deep tier. A streamed, structured data
+// briefing per force (or England & Wales), written by the strongest reasoning
+// tier from an aggregate-only digest of the police database, cached per force
+// × data month, checkable figure by figure, and downloadable as a PDF. The
+// direct analogue of the research assistant's research review.
+const entries = await getCollection('policedata');
+const forces = entries
+  .filter((e) => e.data.kind === 'force')
+  .map((e) => e.data as Extract<(typeof entries)[number]['data'], { kind: 'force' }>)
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+<BaseLayout
+  title="Force briefing"
+  description="A structured, printable data briefing on any England & Wales police force — recorded crime trends, the justice gap and stop & search, written by AI from the police database with every figure checkable against the source."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <div class="max-w-3xl">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Crime Data Explorer', href: '/data/explore' }, { label: 'Force briefing' }]} />
+        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Force briefing</p>
+        <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">The force briefing</h1>
+        <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
+          A short, structured data briefing on one force — what's moving, the justice gap, stop &amp; search,
+          and the questions the data raises — written for a tasking meeting or a problem profile, and
+          printable as a PDF. Questions, not verdicts: the judgement stays yours.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10">
+      <div class="max-w-3xl">
+       <MemberGate hasAuth={hasAuth} feature="the force briefing">
+        <div class="space-y-8">
+        <CaveatBanner />
+
+        <form data-briefing-form class="flex flex-wrap gap-3 items-end">
+          <div>
+            <label for="force-pick" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Choose an area</label>
+            <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
+              <option value="_all">England &amp; Wales (all forces)</option>
+              {forces.map((f) => <option value={f.id}>{f.name}</option>)}
+            </select>
+          </div>
+          <button type="submit" data-generate class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50">
+            Write the briefing
+          </button>
+        </form>
+        <p class="font-sans text-xs text-ink-500 leading-relaxed -mt-4">
+          The deep end: the strongest reasoning model thinks hard about three years of data, so a first
+          run takes a minute or two. Once written, a force's briefing replays instantly until the next data month.
+        </p>
+
+        <div data-briefing-result hidden class="space-y-6">
+          <div class="flex flex-wrap items-center gap-3">
+            <span data-confidence class="inline-block font-sans text-xs font-semibold uppercase tracking-[0.08em] border border-ink-300 text-ink-700 rounded-full px-3 py-1" hidden></span>
+            <span data-figure-check class="font-sans text-xs text-ink-500" hidden></span>
+            <button type="button" data-download hidden class="ml-auto font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-accent hover:text-accent transition-colors">
+              Download PDF
+            </button>
+          </div>
+          <div class="prose-article" data-briefing-out aria-live="polite"></div>
+          <p class="font-sans text-sm">
+            <a href="/research?mode=review" class="text-accent hover:text-accent-dark underline underline-offset-2">Take a question to the Research Assistant →</a>
+            <span class="text-ink-500">It researches the open literature and writes a cited briefing on what works.</span>
+          </p>
+          <p class="font-sans text-xs text-ink-500 leading-relaxed border-t border-ink-200 pt-5">
+            Written by <strong class="font-medium text-ink-600" data-model>the site&rsquo;s AI</strong> from aggregate figures from
+            <a href="https://data.police.uk" class="hover:text-accent underline underline-offset-2">data.police.uk</a>
+            (OGL v3.0) — AI-generated, not reviewed by a human editor; verify before acting on it.<span data-month></span>
+          </p>
+        </div>
+
+        <p class="text-accent font-sans text-sm" data-error hidden></p>
+        </div>
+       </MemberGate>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { renderMarkdown } from '../../lib/md';
+    import { verifyFigures } from '../../lib/figures.mjs';
+    import { BRIEFING_CONFIDENCE_PREFIX } from '../../lib/dashboard-prompts';
+
+    const form = document.querySelector<HTMLFormElement>('[data-briefing-form]')!;
+    const pick = document.getElementById('force-pick') as HTMLSelectElement;
+    const generate = document.querySelector<HTMLButtonElement>('[data-generate]')!;
+    const result = document.querySelector<HTMLElement>('[data-briefing-result]')!;
+    const out = document.querySelector<HTMLElement>('[data-briefing-out]')!;
+    const confidenceEl = document.querySelector<HTMLElement>('[data-confidence]')!;
+    const figureEl = document.querySelector<HTMLElement>('[data-figure-check]')!;
+    const download = document.querySelector<HTMLButtonElement>('[data-download]')!;
+    const modelEl = document.querySelector<HTMLElement>('[data-model]')!;
+    const monthEl = document.querySelector<HTMLElement>('[data-month]')!;
+    const errorEl = document.querySelector<HTMLElement>('[data-error]')!;
+
+    let finished: {
+      markdown: string;
+      confidence: string;
+      forceName: string;
+      dataMonth: string;
+      model: string;
+      figureNote: string;
+    } | null = null;
+
+    // Strip the trailing wire-protocol line for display; return it separately.
+    function splitConfidence(text: string): { body: string; confidence: string } {
+      const lines = text.trimEnd().split('\n');
+      const last = lines[lines.length - 1]?.trim() ?? '';
+      if (last.toUpperCase().startsWith(BRIEFING_CONFIDENCE_PREFIX)) {
+        return { body: lines.slice(0, -1).join('\n'), confidence: last.slice(BRIEFING_CONFIDENCE_PREFIX.length).trim().toLowerCase() };
+      }
+      return { body: text, confidence: '' };
+    }
+
+    async function run(force: string) {
+      errorEl.hidden = true;
+      finished = null;
+      download.hidden = true;
+      confidenceEl.hidden = true;
+      figureEl.hidden = true;
+      result.hidden = false;
+      generate.disabled = true;
+      out.innerHTML = '<p class="text-ink-400 font-serif italic">Reading three years of data and thinking — a first run takes a minute or two…</p>';
+
+      try {
+        // The digest first: it's what the briefing is generated from, and what
+        // every figure is checked against afterwards.
+        const digestRes = await fetch(`/api/police-db?view=briefing-digest&force=${force}`);
+        const digestBody = await digestRes.json().catch(() => null);
+        if (!digestRes.ok) throw new Error((digestBody && digestBody.error) || 'No data for that force yet.');
+        const digest = digestBody.digest;
+
+        const res = await fetch('/api/force-briefing', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ force }),
+        });
+        if (!res.ok || !res.body) {
+          const b = await res.json().catch(() => null);
+          throw new Error((b && b.error) || 'The briefing is unavailable right now.');
+        }
+        const model = res.headers.get('x-model') || 'the site’s AI';
+        const dataMonth = res.headers.get('x-data-month') || digest.latestMonth || '';
+        modelEl.textContent = model;
+        monthEl.textContent = dataMonth ? ` Data to ${dataMonth}.` : '';
+
+        const reader = res.body.getReader();
+        const dec = new TextDecoder();
+        let text = '';
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          text += dec.decode(value, { stream: true });
+          out.innerHTML = renderMarkdown(splitConfidence(text).body);
+        }
+
+        const { body, confidence } = splitConfidence(text);
+        if (!/###\s/.test(body)) throw new Error('The briefing came back empty — please try again.');
+        out.innerHTML = renderMarkdown(body);
+
+        if (confidence) {
+          confidenceEl.textContent = `Data completeness: ${confidence}`;
+          confidenceEl.hidden = false;
+        }
+
+        // The figure check — the numeric sibling of the research review's
+        // citation discipline: every number in the briefing is matched against
+        // the digest it was generated from (rounding tolerated).
+        const { checked, unmatched } = verifyFigures(body, digest);
+        const figureNote = unmatched.length === 0
+          ? `All ${checked} figures matched the source dataset.`
+          : `${unmatched.length} of ${checked} figures (${unmatched.slice(0, 4).join(', ')}${unmatched.length > 4 ? '…' : ''}) couldn’t be matched to the source dataset — treat those as the model’s arithmetic and verify before quoting.`;
+        figureEl.textContent = figureNote;
+        figureEl.hidden = false;
+
+        finished = {
+          markdown: body,
+          confidence,
+          forceName: digest.scope || pick.options[pick.selectedIndex]?.text || force,
+          dataMonth,
+          model,
+          figureNote,
+        };
+        download.hidden = false;
+      } catch (err: any) {
+        result.hidden = true;
+        errorEl.textContent = err?.message || 'Something went wrong — please try again.';
+        errorEl.hidden = false;
+      } finally {
+        generate.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      run(pick.value);
+    });
+
+    download.addEventListener('click', async () => {
+      if (!finished) return;
+      download.disabled = true;
+      try {
+        const { downloadBriefingPdf } = await import('../../scripts/data/briefing-pdf');
+        await downloadBriefingPdf(finished);
+      } finally {
+        download.disabled = false;
+      }
+    });
+
+    // Deep link: ?force= preselects (generation stays behind the button — this
+    // is the one deliberately click-to-run AI call on the dashboard).
+    const urlForce = new URLSearchParams(location.search).get('force');
+    if (urlForce && [...pick.options].some((o) => o.value === urlForce)) pick.value = urlForce;
+    pick.addEventListener('change', () => {
+      const u = new URL(location.href);
+      if (pick.value === '_all') u.searchParams.delete('force'); else u.searchParams.set('force', pick.value);
+      history.replaceState(null, '', u);
+    });
+  </script>
+</BaseLayout>

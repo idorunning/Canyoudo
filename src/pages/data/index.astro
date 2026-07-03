@@ -19,7 +19,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
           The Crime Dashboard is now part of the Research Tools page — both tools in one place, behind a single sign-in.
         </p>
         <a
-          href="/research"
+          href="/research?tool=dashboard"
           class="inline-block mt-8 bg-accent text-paper-50 rounded-full px-6 py-3 font-sans text-sm font-bold hover:bg-accent-dark transition-colors"
         >
           Go to Research Tools →
@@ -31,5 +31,5 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 <script>
   // Auto-redirect after a short delay so the message is readable.
-  setTimeout(() => { window.location.replace('/research'); }, 3000);
+  setTimeout(() => { window.location.replace('/research?tool=dashboard'); }, 3000);
 </script>

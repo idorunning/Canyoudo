@@ -3,14 +3,22 @@
 // are grounded in the same figures the overview uses, in the site's voice, and
 // run on the fast LIVE model. For the area scope it reads the postcode entered in
 // the PersonaInterpreter above.
+//
+// Two backends share this one component: the snapshot interpreter
+// (/api/interpret — scopes national/force/area) and the police-database
+// interpreter (/api/db-interpret — scopes crime-history/disproportionality,
+// with `forceSelect` naming the page's force picker so the chat follows it).
 interface Props {
-  scope: 'national' | 'force' | 'area';
+  scope: 'national' | 'force' | 'area' | 'crime-history' | 'disproportionality';
   id?: string;
   postcode?: string;
+  endpoint?: '/api/interpret' | '/api/db-interpret';
+  /** CSS selector of a force <select> to read at ask time (db scopes). */
+  forceSelect?: string;
 }
-const { scope, id = '', postcode = '' } = Astro.props;
+const { scope, id = '', postcode = '', endpoint = '/api/interpret', forceSelect = '' } = Astro.props;
 ---
-<div class="data-chat border-t border-ink-200 pt-8" data-scope={scope} data-id={id} data-postcode={postcode}>
+<div class="data-chat border-t border-ink-200 pt-8" data-scope={scope} data-id={id} data-postcode={postcode} data-endpoint={endpoint} data-force-select={forceSelect}>
   <h2 class="font-display text-xl font-semibold text-ink-900 mb-1">Ask a question</h2>
   <p class="font-sans text-sm text-ink-500 mb-5">
     Anything about this data — it answers from the figures, and tells you when they can't say.
@@ -40,6 +48,8 @@ const { scope, id = '', postcode = '' } = Astro.props;
   document.querySelectorAll<HTMLElement>('.data-chat').forEach((root) => {
     const scope = root.dataset.scope!;
     const id = root.dataset.id || '';
+    const endpoint = root.dataset.endpoint || '/api/interpret';
+    const forceSelect = root.dataset.forceSelect || '';
     const log = root.querySelector<HTMLElement>('[data-chat-log]')!;
     const form = root.querySelector<HTMLFormElement>('[data-chat-form]')!;
     const input = root.querySelector<HTMLInputElement>('[data-chat-input]')!;
@@ -70,12 +80,17 @@ const { scope, id = '', postcode = '' } = Astro.props;
       }
       send.disabled = true;
 
+      // The db interpreter keys on `force` (read live from the page's picker
+      // so the chat follows it); the snapshot one on `id`/`postcode`.
+      const force = forceSelect
+        ? (document.querySelector<HTMLSelectElement>(forceSelect)?.value || '_all')
+        : undefined;
       let res: Response;
       try {
-        res = await fetch('/api/interpret', {
+        res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ scope, id, postcode, question: q, history: history.slice(-8) }),
+          body: JSON.stringify({ scope, id, postcode, force, question: q, history: history.slice(-8) }),
         });
       } catch {
         a.innerHTML = '<p class="text-accent">Couldn’t reach the assistant. Try again.</p>';

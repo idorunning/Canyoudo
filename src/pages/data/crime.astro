@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CaveatBanner from '../../components/data/CaveatBanner.astro';
+import DataChat from '../../components/data/DataChat.astro';
 import MemberGate from '../../components/MemberGate.astro';
 import { getCollection } from 'astro:content';
 
@@ -56,7 +57,7 @@ const forces = entries
           <p class="font-sans text-xs uppercase tracking-[0.18em] text-accent mb-3">The reading</p>
           <div class="prose-article min-h-[6rem]" data-interpretation aria-live="polite"></div>
           <p class="mt-4 font-sans text-xs text-ink-500 leading-relaxed">
-            Interpreted by <strong class="font-medium text-ink-600" data-model>Claude</strong> from
+            Interpreted by <strong class="font-medium text-ink-600" data-model>the site&rsquo;s AI</strong> from
             <a href="https://data.police.uk" class="hover:text-accent underline underline-offset-2">data.police.uk</a>
             (OGL v3.0) — AI-generated, read with care.<span data-month></span>
           </p>
@@ -64,7 +65,13 @@ const forces = entries
 
         <div class="border-t border-ink-200 pt-8 space-y-10" data-charts hidden>
           <div>
-            <h3 class="font-display text-lg font-semibold text-ink-900 mb-1">Recorded crime, monthly total</h3>
+            <div class="flex items-baseline justify-between flex-wrap gap-2 mb-1">
+              <h3 class="font-display text-lg font-semibold text-ink-900">Recorded crime, monthly total</h3>
+              <label class="font-sans text-xs text-ink-600 inline-flex items-center gap-1.5 cursor-pointer" data-rate-toggle hidden>
+                <input type="checkbox" data-rate-check class="accent-current" />
+                per 1,000 residents<span data-rate-year class="text-ink-400"></span>
+              </label>
+            </div>
             <div data-chart-total></div>
           </div>
           <div>
@@ -72,17 +79,42 @@ const forces = entries
             <div data-chart-categories></div>
           </div>
           <div>
+            <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+              <h3 class="font-display text-lg font-semibold text-ink-900">One crime type over time</h3>
+              <label class="font-sans text-xs text-ink-600">
+                <span class="sr-only">Crime type</span>
+                <select data-cat-pick class="border border-ink-300 rounded-md px-2 py-1.5 font-sans text-xs text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"></select>
+              </label>
+            </div>
+            <div data-chart-category></div>
+            <p class="font-sans text-sm mt-3">
+              <a data-evidence-link href="/research?mode=review" class="text-accent hover:text-accent-dark underline underline-offset-2">What does the evidence say about tackling this? →</a>
+              <span class="text-ink-500">The Research Assistant researches it and writes a cited briefing.</span>
+            </p>
+          </div>
+          <div>
             <h3 class="font-display text-lg font-semibold text-ink-900 mb-1">The justice gap</h3>
             <p class="font-serif text-sm text-ink-600 mb-3">Share of outcomes that were a charge/sanction vs closed with no suspect identified.</p>
             <div data-chart-justice></div>
           </div>
-          <div>
-            <h3 class="font-display text-lg font-semibold text-ink-900 mb-3">Where crime concentrates <span class="font-sans text-sm font-normal text-ink-500">(top neighbourhoods, latest month)</span></h3>
+          <div data-hotspots-section>
+            <h3 class="font-display text-lg font-semibold text-ink-900 mb-1">Where crime concentrates <span class="font-sans text-sm font-normal text-ink-500">(top neighbourhoods, latest month)</span></h3>
+            <p class="font-serif text-sm text-ink-600 mb-3">Across England &amp; Wales as a whole — the underlying data isn't broken down by force yet, so this list doesn't change with the picker above.</p>
             <div data-chart-hotspots></div>
+          </div>
+
+          <div class="border-t border-ink-200 pt-6">
+            <button type="button" data-csv class="font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-accent hover:text-accent transition-colors">
+              Download the data (CSV)
+            </button>
+            <span class="font-sans text-xs text-ink-500 ml-3">Monthly counts by crime type plus the justice-gap shares, for this area.</span>
           </div>
         </div>
 
         <p class="font-serif text-ink-500 italic" data-empty hidden>The database is still filling — check back once the first ingest has run.</p>
+        <p class="text-accent font-sans text-sm" data-error hidden></p>
+
+        <DataChat scope="crime-history" endpoint="/api/db-interpret" forceSelect="#force-pick" />
         </div>
        </MemberGate>
       </div>
@@ -90,12 +122,13 @@ const forces = entries
   </section>
 
   <script>
-    import { fetchJson, barTable, lineChart, streamInterpret, monthLabel, pct } from '../../scripts/data/explorer';
+    import { fetchJson, barTable, lineChart, streamInterpret, pct, downloadCsv } from '../../scripts/data/explorer';
     import { onMembersUnlock } from '../../scripts/members/gate';
 
     const pick = document.getElementById('force-pick') as HTMLSelectElement;
     const charts = document.querySelector<HTMLElement>('[data-charts]')!;
     const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+    const errorEl = document.querySelector<HTMLElement>('[data-error]')!;
     const out = document.querySelector<HTMLElement>('[data-interpretation]')!;
     const modelEl = document.querySelector<HTMLElement>('[data-model]');
     const monthEl = document.querySelector<HTMLElement>('[data-month]');
@@ -103,40 +136,109 @@ const forces = entries
 
     async function load(force: string) {
       streamInterpret(`/api/db-interpret?scope=crime-history&force=${force}`, out, { modelEl, monthEl });
+      empty.hidden = true; errorEl.hidden = true;
       try {
         const [crime, outcomes, hot] = await Promise.all([
           fetchJson(`/api/police-db?view=crime-trend&force=${force}`),
           fetchJson(`/api/police-db?view=outcomes&force=${force}`),
-          fetchJson(`/api/police-db?view=hotspots`),
+          // Hotspots are only stored nationally (the LSOA rollup has no force
+          // column yet) — don't fetch them per force and pretend otherwise.
+          force === '_all' ? fetchJson(`/api/police-db?view=hotspots`) : Promise.resolve({ lsoas: [] }),
         ]);
         if (!crime.months?.length) { charts.hidden = true; empty.hidden = false; return; }
-        empty.hidden = true; charts.hidden = false;
+        charts.hidden = false;
 
-        lineChart(charts.querySelector('[data-chart-total]')!, crime.months,
-          [{ label: 'All recorded crime', values: crime.totalByMonth }]);
+        // Counts, or (when the population denominator is seeded) monthly rates
+        // per 1,000 residents — the form that makes forces comparable.
+        const rateToggle = document.querySelector<HTMLElement>('[data-rate-toggle]')!;
+        const rateCheck = document.querySelector<HTMLInputElement>('[data-rate-check]')!;
+        const rateYear = document.querySelector<HTMLElement>('[data-rate-year]')!;
+        rateToggle.hidden = !crime.population;
+        rateYear.textContent = crime.populationYear ? ` (${crime.populationYear})` : '';
+        const drawTotal = () => {
+          const asRate = Boolean(crime.population) && rateCheck.checked;
+          lineChart(charts.querySelector('[data-chart-total]')!, crime.months,
+            [{
+              label: asRate ? 'Recorded crime per 1,000 residents' : 'All recorded crime',
+              values: crime.totalByMonth.map((v: number) => (asRate ? (v / crime.population) * 1000 : v)),
+            }],
+            { label: 'Recorded crime, monthly total', format: asRate ? (v) => v.toFixed(1) : undefined });
+        };
+        rateCheck.onchange = drawTotal;
+        drawTotal();
 
         barTable(charts.querySelector('[data-chart-categories]')!,
           crime.categories.slice(0, 10).map((c: any) => ({ label: titleCase(c.key), count: c.total })), { asPercent: true });
+
+        // One crime type over time — the per-category trend the API already
+        // returns (categories[].byMonth), with the evidence handoff into the
+        // Research Assistant's review pipeline for whatever's chosen.
+        const catPick = charts.querySelector<HTMLSelectElement>('[data-cat-pick]')!;
+        const evidenceLink = charts.querySelector<HTMLAnchorElement>('[data-evidence-link]')!;
+        const areaName = pick.options[pick.selectedIndex]?.text || 'England & Wales';
+        catPick.innerHTML = crime.categories.slice(0, 14)
+          .map((c: any, i: number) => `<option value="${i}">${titleCase(c.key)}</option>`).join('');
+        const drawCategory = () => {
+          const c = crime.categories[Number(catPick.value) || 0];
+          if (!c) return;
+          lineChart(charts.querySelector('[data-chart-category]')!, crime.months,
+            [{ label: titleCase(c.key), values: c.byMonth }],
+            { label: `${titleCase(c.key)} over time` });
+          const problem = `Reducing ${titleCase(c.key).toLowerCase()} in ${areaName} — what works?`;
+          evidenceLink.href = `/research?mode=review&problem=${encodeURIComponent(problem)}`;
+        };
+        catPick.onchange = drawCategory;
+        drawCategory();
+
+        // CSV: the monthly matrix behind every chart on this page.
+        const csvBtn = document.querySelector<HTMLButtonElement>('[data-csv]')!;
+        csvBtn.onclick = () => {
+          const cats = crime.categories.slice(0, 15);
+          const gap = new Map((outcomes.months || []).map((m: string, i: number) => [m, outcomes.chargeRate[i]]));
+          downloadCsv(
+            `crime-outcomes-${force}.csv`,
+            ['month', 'all_recorded_crime', ...cats.map((c: any) => c.key), 'charged_share', 'no_suspect_share'],
+            crime.months.map((m: string, i: number) => {
+              const g: any = gap.get(m);
+              return [m, crime.totalByMonth[i], ...cats.map((c: any) => c.byMonth[i]),
+                g ? Math.round(g.charged * 1000) / 1000 : null,
+                g ? Math.round(g.noSuspect * 1000) / 1000 : null];
+            })
+          );
+        };
 
         if (outcomes.months?.length) {
           lineChart(charts.querySelector('[data-chart-justice]')!, outcomes.months, [
             { label: 'Charged / sanctioned', values: outcomes.chargeRate.map((r: any) => r.charged) },
             { label: 'No suspect identified', values: outcomes.chargeRate.map((r: any) => r.noSuspect) },
-          ]);
+          ], { label: 'The justice gap', format: (v) => pct(v) });
         }
 
+        const hotSection = charts.querySelector<HTMLElement>('[data-hotspots-section]')!;
         const lsoas = (hot.lsoas || []).slice(0, 12);
+        hotSection.hidden = lsoas.length === 0;
         if (lsoas.length) {
           barTable(charts.querySelector('[data-chart-hotspots]')!,
             lsoas.map((l: any) => ({ label: l.lsoa_name || l.lsoa_code, count: l.count })), {});
         }
-      } catch {
-        charts.hidden = true; empty.hidden = false;
+      } catch (err: any) {
+        // A real failure is not the same as an empty database — say which.
+        charts.hidden = true;
+        errorEl.textContent = `Couldn’t load the data: ${err?.message || 'unknown error'}. Try again in a moment.`;
+        errorEl.hidden = false;
       }
     }
 
-    pick.addEventListener('change', () => load(pick.value));
+    // The chosen force lives in the URL, so a view can be shared or bookmarked.
+    const urlForce = new URLSearchParams(location.search).get('force');
+    if (urlForce && [...pick.options].some((o) => o.value === urlForce)) pick.value = urlForce;
+    pick.addEventListener('change', () => {
+      const u = new URL(location.href);
+      if (pick.value === '_all') u.searchParams.delete('force'); else u.searchParams.set('force', pick.value);
+      history.replaceState(null, '', u);
+      load(pick.value);
+    });
     // Hold the first (billable) read until the members area unlocks.
-    onMembersUnlock(() => load('_all'));
+    onMembersUnlock(() => load(pick.value || '_all'));
   </script>
 </BaseLayout>

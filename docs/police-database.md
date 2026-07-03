@@ -27,6 +27,7 @@ bounded **rollups**, not raw rows:
 | `police_forces`, `police_force_people` | force metadata, senior officers | JSON API |
 | `neighbourhoods`, `neighbourhood_priorities` | local teams + priorities | JSON API |
 | `force_population_ethnicity` | ethnicity denominator (optional seed) | ONS census |
+| `force_population` | total residents per force (optional seed, migration 0002) | ONS mid-year estimates |
 | `ingest_runs` | provenance / idempotency | — |
 
 Every per-force rollup also gets an aggregate row with `force_id = '_all'`, so
@@ -91,12 +92,42 @@ vice versa). Both gate on a shared `guard` job that checks the Supabase secrets.
 The ingest is **idempotent** — every write is an upsert keyed on the rollup grain,
 so re-running a month overwrites rather than duplicates.
 
-## Disproportionality denominator (optional)
+## Population denominators (optional, high value)
 
-True stop-&-search disproportionality needs resident population by ethnicity per
-force area (ONS census). Seed `force_population_ethnicity` (broad groups: White,
-Black, Asian, Mixed, Other) to unlock disparity ratios; until then the tool shows
-search-volume shares + find rates, which are still informative but not proof of bias.
+Two small ONS seeds unlock the dashboard's rate-based features. Both are loaded
+from a locally-downloaded ONS CSV by `scripts/seed-population.mjs` (column
+matching is by header name; see the script's header comment for usage):
+
+- **`force_population`** (migration `0002_force_population.sql`) — total
+  residents per police force area (ONS mid-year estimates). Unlocks *per-1,000
+  residents* rates on the crime charts and in the force briefing — the form
+  that makes forces comparable at all.
+  ```bash
+  node scripts/seed-population.mjs --totals pfa-population.csv --year mid-2023
+  ```
+- **`force_population_ethnicity`** — resident population by broad ethnic group
+  (ONS census). True stop-&-search disproportionality needs this
+  population-at-risk denominator; seeding it unlocks the disparity ratios.
+  Until then the tool shows search-volume shares + find rates, which are still
+  informative but not proof of bias.
+  ```bash
+  node scripts/seed-population.mjs --ethnicity pfa-ethnicity.csv
+  ```
+
+Both accept `--dry-run` to parse and report without writing.
+
+## The force briefing
+
+`/data/briefing` is the dashboard's deep tier: a streamed, structured briefing
+per force written by the strongest reasoning model from an aggregate-only
+digest (`/api/police-db?view=briefing-digest`, built in
+`src/lib/briefing-digest.ts`). The generation runs in
+`netlify/edge-functions/force-briefing.ts` (same Deno/edge reasoning as the
+research review — see docs/research-assistant-v4.md), is cached per force ×
+data month in the `force-briefings` Blobs store, and every figure in the
+output is verified client-side against the digest (`src/lib/figures.mjs`).
+The prompt/heading/label contract lives in `src/lib/dashboard-prompts.ts` and
+is asserted by `tests/dashboard-prompts.test.mjs`.
 
 ## Parsing/rollup logic
 

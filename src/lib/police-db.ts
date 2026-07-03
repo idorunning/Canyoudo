@@ -91,6 +91,20 @@ export async function populationByEthnicity(forceId: string): Promise<{ ethnicit
   return rows(sb.from('force_population_ethnicity').select('ethnicity,population').eq('force_id', forceId));
 }
 
+// Total resident population for a force area (ONS mid-year estimate; the
+// per-1,000 rate denominator — migration 0002, seeded by
+// scripts/seed-population.mjs). Null until seeded; tolerated if the table
+// doesn't exist yet so pages degrade quietly.
+export async function forcePopulation(forceId: string): Promise<{ population: number; year: string } | null> {
+  const sb = db(); if (!sb) return null;
+  try {
+    const r = await rows(sb.from('force_population').select('population,year').eq('force_id', forceId).limit(1));
+    return r[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
 // --- forces + neighbourhoods -------------------------------------------------
 export async function force(id: string) {
   const sb = db(); if (!sb) return null;

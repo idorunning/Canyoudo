@@ -239,7 +239,9 @@ export default async (req: Request) => {
   const aiStream = client.messages.stream({
     model,
     max_tokens: 3000,
-    ...modelParams(model),
+    // Cached per data month — extra thinking amortises across a month of
+    // readers, so the standing overviews get medium effort (chat stays low).
+    ...modelParams(model, 'medium'),
     system: persona ? systemFor(persona) : systemGeneral(),
     messages: [
       { role: 'user', content: `Interpret this police data${persona ? ' for the reader described' : ''}. Aggregate figures only:\n\n${JSON.stringify(digest, null, 2)}` },

@@ -107,6 +107,22 @@ export async function initResearch() {
     wireReview(root, config, savedStore, briefingsStore);
   }
 
+  // ---- deep links from the crime dashboard ----------------------------------
+  // /research?mode=review&problem=… lands with the review pre-filled — the
+  // "what does the evidence say?" handoff from the dashboard's charts and
+  // briefings. A link, not an auto-run: the reader presses the button.
+  const deepLink = new URLSearchParams(location.search);
+  const wantedMode = deepLink.get('mode');
+  if (wantedMode === 'search' || wantedMode === 'overview' || wantedMode === 'review') {
+    setMode(wantedMode);
+  }
+  const linkedProblem = (deepLink.get('problem') || '').trim().slice(0, 600);
+  if (linkedProblem) {
+    const reviewInput = root.querySelector<HTMLTextAreaElement>('[data-review-input]');
+    if (reviewInput && !reviewInput.value) reviewInput.value = linkedProblem;
+    if (!wantedMode) setMode('review');
+  }
+
   // ---- gating: landing for logged-out, tool for signed-in -------------------
   const landingSignin = root.querySelector<HTMLElement>('[data-landing-signin]');
   function applyGate() {

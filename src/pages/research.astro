@@ -623,6 +623,13 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
     btn.addEventListener('click', () => switchToolTab(btn.dataset.toolTab ?? 'assistant'));
   });
 
+  // Deep link: /research?tool=dashboard opens the Crime Dashboard tab directly
+  // (used by the Research Tools cards and the old /data redirect).
+  const wantedTool = new URLSearchParams(location.search).get('tool');
+  if (wantedTool && [...toolTabs].some(t => t.dataset.toolTab === wantedTool)) {
+    switchToolTab(wantedTool);
+  }
+
   // Force picker in the Crime Dashboard pane
   const pick = document.getElementById('force-pick-r') as HTMLSelectElement | null;
   pick?.addEventListener('change', () => {
