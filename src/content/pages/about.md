@@ -1,19 +1,22 @@
 ---
 title: Purpose and Editorial Scope
-description: Evidence-based writing, a live crime dashboard, and a free research assistant — built and written by a serving police inspector.
+description: Evidence-based writing, a live crime dashboard, and a free research assistant — built and written by a serving police Sergeant.
 ---
 
-My phone rang in the middle of the school run. It was Alex Murray — then Assistant Chief Constable for West Midlands Police, now interim director of Police AI — asking about a small, non-academic project I'd knocked together at work. Within a few months I was presenting it at the College of Policing and at a Whitehall AI conference, of all places. That project had used ChatGPT to check some maths, back in 2022, when that was a stranger thing to do than it is now. This site grew out of the same instinct: check whether what we think works actually works, and say so plainly if the evidence disagrees.
+This website started as a hobby to work on in my spare time and has now grown into something bigger with LLM powered research tools, greater number of articles and overviews of influencial people in the Evidence Based policing community.
 
-_Thinking About Policing_ is an independent site about evidence-based policing (EBP), public policy, and institutional reform, written for the people who shape and carry out policing strategy: operational leaders, policymakers, academics, and officers doing the job. Every piece takes a position rather than surveying the field from a safe distance. Where the evidence is solid, it carries the argument. Where it is thin, contested, or simply missing, that gets said outright rather than papered over.
+The ideas in the articles are my own thoughts derived from reading and listening to other peoples work (who are far more intelligent than me!). 
 
-The writing sits in five areas:
+_Thinking About Policing_ is an independent website about evidence-based policing (EBP), public policy, and institutional reform. 
+
+The articles sit in five areas:
 
 * **Evidence & Practice** — what works, and the evidence behind it: misconduct prevention, officer wellbeing, use-of-force proportionality, neighbourhood policing.
 * **Leadership & Culture** — the wider structural questions: criminal justice, legislation, and the political pressures that shape demand on the police.
 * **Influential People** — profiles of the researchers and practitioners who have shifted how policing is done.
 * **Technology & Innovation** — short, data-led pieces where the numbers carry the argument.
-* **History & Curiosities** — analytical detours that have nothing to do with public policy, from the 1948 Somerton Man cipher to how the press writes about crime.
+* **History & Curiosities** —
+* Somerton Man code mystery. A long standing historical puzzle which has nothing to do with policing but I've spent far too long looking at maps and wanted somewhere to put the work!  
 
 ## Three free tools
 
@@ -31,17 +34,15 @@ All three are free. Sign in once — no password, just an email link — and all
 
 ### Nathan Tracey
 
-Founder and editor
-
 ![](/images/11825.webp)
 
-I'm an Acting Inspector with Sussex Police, working in neighbourhood policing and data-led operational strategy. Over the years I've been a hostage and crisis negotiator, a response officer, and a neighbourhood sergeant; my current role splits across duty inspector, response inspector, and investigations inspector shifts.
+I'm an Acting Inspector with Sussex Police, working in neighbourhood and response policing. Over the years I've been a hostage and crisis negotiator, a response officer, a coach for new police officers and a neighbourhood sergeant.
 
-I came into policing by an unconventional route: minimal academic qualifications, joining in my thirties after a career managing commercial operations. I was diagnosed with Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven — a diagnosis that genuinely saved my life (maybe I'll write about that properly another day).
+I came into policing with minimal academic qualifications, joining in my thirties after a career managing commercial operations. I was diagnosed with Attention Deficit Hyperactivity Disorder (ADHD) at thirty-seven — a diagnosis that genuinely saved my life (maybe I'll write about that properly another day).
 
 That background is why a lot of what I write about comes back to the same question: the friction between cognitive diversity, organisational design, and what an institution assumes about human behaviour versus what the evidence actually shows. I'm particularly interested in the predictive side of that — assaults on officers, use-of-force proportionality, misconduct trends — and in building early-detection and intervention frameworks rather than waiting for the annual report to notice a pattern. Jerry Ratcliffe's work on intelligence-led policing and the Society of Evidence-Based Policing's founding principles have shaped that thinking more than anything else, alongside a fairly constant relistening to old episodes of BBC radio (thanks, [Tim Harford](https://twitter.com/TimHarford)).
 
-This site started as a personal blog and a project for my days off. As my coding got better — vibe-coded, not properly trained — so did the site, and the research assistant and crime dashboard got built along the way.
+This site started as a personal blog and a project for my days off. I have no coding experience so have had to teach myself how to design these tools using llms to do actual coding for me
 
 ## Disclaimers and integrity
 
