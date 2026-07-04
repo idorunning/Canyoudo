@@ -1,17 +1,26 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-04T01:50:13.744Z",
-    "feedCount": 6,
+    "fetchedAt": "2026-07-04T12:57:11.430Z",
+    "feedCount": 7,
     "sources": [
       "GOV.UK",
       "BBC News",
       "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
+    {
+      "title": "Pubs and police brace for England-Mexico 1am kick-off after Fifa U-turn",
+      "link": "https://www.bbc.co.uk/news/articles/cy9r2x4pz1wo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-04T12:13:46.000Z",
+      "summary": "England's last-16 World Cup tie will kick off at 01:00BST on Monday, after Fifa reconsidered bringing it forward."
+    },
     {
       "title": "Two Romanians jailed for stabbing journalist on behalf of Iran regime",
       "link": "https://www.bbc.co.uk/news/articles/c24y2pr3dvyo?at_medium=RSS&at_campaign=rss",
@@ -59,14 +68,6 @@
       "topic": "policing",
       "isoDate": "2026-07-03T14:02:25.000Z",
       "summary": "The prime minister's spokesperson says the government is exploring \"all possible options in this case\"."
-    },
-    {
-      "title": "Man jailed for shooting dead boy in park play area",
-      "link": "https://www.bbc.co.uk/news/articles/c4gyl1wdxkxo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-03T12:45:14.000Z",
-      "summary": "Aderahman Boumzough was jailed for 35 years for murdering Rene Graham and also for attempted murder."
     },
     {
       "title": "White & Case employee who claimed he was photographed naked at firm retreat drops legal action",
@@ -125,6 +126,14 @@
       "summary": "92% The post Reed Smith keeps 11 of 12 trainees in latest retention round appeared first on Legal Cheek ."
     },
     {
+      "title": "Godot says bye bye AI, bans vibe-coded contributions",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/01/godot-says-bye-bye-ai-bans-vibe-coded-contributions/5265344",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-01T20:29:07.000Z",
+      "summary": "'We can’t trust heavy users of AI to understand their code enough to fix it,' say maintainers who previously called the flood of vibe-coded pull requests 'demoralizing'"
+    },
+    {
       "title": "Wonka Netflix show faces backlash for AI-generated Gene Wilder voice",
       "link": "https://www.bbc.co.uk/news/articles/cdxdgpgn0zwo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -147,6 +156,14 @@
       "topic": "law",
       "isoDate": "2026-07-01T09:21:30.000Z",
       "summary": "Leeds is an adult male prison in the Armley area of Leeds, West Yorkshire."
+    },
+    {
+      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
+      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-30T06:11:03.000Z",
+      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
     },
     {
       "title": "Justice for victims as domestic killers to face longer behind bars",
@@ -197,12 +214,28 @@
       "summary": "…Meet the CNC&#x27;s specialist <mark>police</mark> dogs, whose skills help deter crime, support <mark>policing</mark> operations, and protect critical national infrastructure.…"
     },
     {
+      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-23T20:16:34.000Z",
+      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
+    },
+    {
       "title": "Speech by the President of the King’s Bench Division – Without Fear or Favour: Judicial Independence, Past, Present and Future",
       "link": "https://www.judiciary.uk/speech-by-the-president-of-the-kings-bench-division-without-fear-or-favour-judicial-independence-past-present-and-future/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-06-23T13:00:53.000Z",
       "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
+    },
+    {
+      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-16T20:47:37.000Z",
+      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
     }
   ]
 }
