@@ -1,49 +1,72 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-03T13:39:30.355Z",
-    "feedCount": 7,
+    "fetchedAt": "2026-07-04T01:50:13.744Z",
+    "feedCount": 6,
     "sources": [
       "GOV.UK",
       "BBC News",
       "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
-      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Police criticise timing of decision on pubs staying open for England match",
-      "link": "https://www.bbc.co.uk/news/articles/cd95v388k5jo?at_medium=RSS&at_campaign=rss",
+      "title": "Two Romanians jailed for stabbing journalist on behalf of Iran regime",
+      "link": "https://www.bbc.co.uk/news/articles/c24y2pr3dvyo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-03T12:53:45.000Z",
-      "summary": "The \"late announcement\" extending opening hours to 05:00 on Monday means taking officers away from other duties, the National Police Chiefs' Council says."
+      "isoDate": "2026-07-03T20:18:56.000Z",
+      "summary": "The two men will face 12 and eight years in prison for the knife attack in Wimbledon, London in 2024."
     },
     {
-      "title": "Mum of TikToker has murder sentence appeal rejected",
-      "link": "https://www.bbc.co.uk/news/articles/cj6g04y6xg6o?at_medium=RSS&at_campaign=rss",
+      "title": "Three men found not guilty of journalist Lyra McKee's murder",
+      "link": "https://www.bbc.co.uk/news/articles/cpd357j7020o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-03T12:53:19.000Z",
-      "summary": "Ansreen Bukhari was convicted of the murder of Saqib Hussain and Hashim Ijazuddin in February 2022."
+      "isoDate": "2026-07-03T16:12:32.000Z",
+      "summary": "The 29-year-old was shot while observing rioting in Londonderry in April 2019."
     },
     {
-      "title": "Man who killed boy in play park jailed for 35 years",
+      "title": "Parents warned not to publicly share children’s images amid AI abuse risks",
+      "link": "https://www.bbc.co.uk/news/articles/cd7wj7d0jzzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-03T15:57:42.000Z",
+      "summary": "The NCA says there is a growing threat of children's images being used to create child abuse material."
+    },
+    {
+      "title": "Speech by Mrs Justice Eady DBE: Bar Council Law Reform Lecture 2026 – Modern Slavery in 2026",
+      "link": "https://www.judiciary.uk/speech-by-mrs-justice-eady-dbe-bar-council-law-reform-lecture-2026-modern-slavery-in-2026/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-03T14:30:45.000Z",
+      "summary": "Mrs Justice Eady DBE spoke at the Bar Council Law Reform Committee about the approach to the issue of modern slavery in 2026 The post Speech by Mrs Justice Eady DBE: Bar…"
+    },
+    {
+      "title": "Mansion House speech 2026 by the Lady Chief Justice",
+      "link": "https://www.judiciary.uk/mansion-house-speech-by-the-lady-chief-justice-2026/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-03T14:03:57.000Z",
+      "summary": "The Lady Chief Justice, the Baroness Carr of Walton-on-the-Hill, gave her speech at Mansion House in London on Tuesday 1 July 2026. The post Mansion House speech 2026 by the…"
+    },
+    {
+      "title": "UK in talks with Pakistan about deporting grooming gang leader",
+      "link": "https://www.bbc.co.uk/news/articles/c8e2j0z7xgxo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-03T14:02:25.000Z",
+      "summary": "The prime minister's spokesperson says the government is exploring \"all possible options in this case\"."
+    },
+    {
+      "title": "Man jailed for shooting dead boy in park play area",
       "link": "https://www.bbc.co.uk/news/articles/c4gyl1wdxkxo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
       "isoDate": "2026-07-03T12:45:14.000Z",
       "summary": "Aderahman Boumzough was jailed for 35 years for murdering Rene Graham and also for attempted murder."
-    },
-    {
-      "title": "Rapist police officer accused of earlier attack - but case was dropped",
-      "link": "https://www.bbc.co.uk/news/articles/cd6elx2vvjqo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-03T10:28:51.000Z",
-      "summary": "Cameron Ross was able to continue working as a police officer for six years after he was cleared of an earlier rape allegation."
     },
     {
       "title": "White & Case employee who claimed he was photographed naked at firm retreat drops legal action",
@@ -102,14 +125,6 @@
       "summary": "92% The post Reed Smith keeps 11 of 12 trainees in latest retention round appeared first on Legal Cheek ."
     },
     {
-      "title": "Godot says bye bye AI, bans vibe-coded contributions",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/01/godot-says-bye-bye-ai-bans-vibe-coded-contributions/5265344",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-01T20:29:07.000Z",
-      "summary": "'We can’t trust heavy users of AI to understand their code enough to fix it,' say maintainers who previously called the flood of vibe-coded pull requests 'demoralizing'"
-    },
-    {
       "title": "Wonka Netflix show faces backlash for AI-generated Gene Wilder voice",
       "link": "https://www.bbc.co.uk/news/articles/cdxdgpgn0zwo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -132,14 +147,6 @@
       "topic": "law",
       "isoDate": "2026-07-01T09:21:30.000Z",
       "summary": "Leeds is an adult male prison in the Armley area of Leeds, West Yorkshire."
-    },
-    {
-      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
-      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-30T06:11:03.000Z",
-      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
     },
     {
       "title": "Justice for victims as domestic killers to face longer behind bars",
@@ -174,14 +181,6 @@
       "summary": "Sudbury Prison is a men’s prison near Ashbourne in Derbyshire."
     },
     {
-      "title": "Tech firms are blaming AI for mega device and console price rises",
-      "link": "https://www.bbc.co.uk/news/articles/cd95k584pzqo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-06-27T23:10:47.000Z",
-      "summary": "Xbox consoles, Nintendo's new Switch 2 and Valve's Steam Deck are just some of the gadgets seeing price hikes in recent months."
-    },
-    {
       "title": "Rough sleeping no longer a crime as Vagrancy Act repealed",
       "link": "https://www.gov.uk/government/news/rough-sleeping-no-longer-a-crime-as-vagrancy-act-repealed",
       "source": "GOV.UK",
@@ -198,44 +197,12 @@
       "summary": "…Meet the CNC&#x27;s specialist <mark>police</mark> dogs, whose skills help deter crime, support <mark>policing</mark> operations, and protect critical national infrastructure.…"
     },
     {
-      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-23T20:16:34.000Z",
-      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
-    },
-    {
       "title": "Speech by the President of the King’s Bench Division – Without Fear or Favour: Judicial Independence, Past, Present and Future",
       "link": "https://www.judiciary.uk/speech-by-the-president-of-the-kings-bench-division-without-fear-or-favour-judicial-independence-past-present-and-future/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-06-23T13:00:53.000Z",
       "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
-    },
-    {
-      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-16T20:47:37.000Z",
-      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
-    },
-    {
-      "title": "Appointment of Lord and Lady Justices of Appeal",
-      "link": "https://www.judiciary.uk/appointments-and-retirements/appointment-of-lord-and-lady-justices-of-appeal-4/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-06-12T10:42:22.000Z",
-      "summary": "Find out who the new appointees are and read their biographies The post Appointment of Lord and Lady Justices of Appeal appeared first on Courts and Tribunals Judiciary ."
-    },
-    {
-      "title": "Lady Chief Justice gives evidence to House of Lords Constitution Select Committee",
-      "link": "https://www.judiciary.uk/lady-chief-justice-gives-evidence-to-house-of-lords-constitution-select-committee/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-06-11T14:46:13.000Z",
-      "summary": "In her annual evidence session, Baroness Carr of Walton-on-the-Hill covered the courts and tribunals backlogs, paid tribute to retiring senior judiciary, and more The post Lady…"
     }
   ]
 }
