@@ -13,6 +13,7 @@
 
 import { card, el, setStar, workKey, type Work, type CardHooks } from './cards';
 import { formatReferenceList, formatReference, toRis } from '../../lib/reference-format.mjs';
+import { maybeSubscribeOnSignIn, setSubscribePreference } from '../../lib/mailerlite-subscribe';
 
 type SupabaseClient = any;
 
@@ -144,7 +145,12 @@ export async function initSaved(
     }
   }
 
+  // Defaults to on; the checkbox in subscribeToggle() below (rendered inside
+  // renderSignInOptions) lets the reader opt out before either route fires.
+  let subscribeToEmails = true;
+
   function signInWithGoogle() {
+    setSubscribePreference(subscribeToEmails);
     supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: location.origin + '/research' },
@@ -154,6 +160,7 @@ export async function initSaved(
   async function signInWithEmail(email: string) {
     // Passwordless magic link — works for any address, including work
     // emails (police.gov.uk etc.) where personal Google is blocked.
+    setSubscribePreference(subscribeToEmails);
     return supabase.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: location.origin + '/research' },
@@ -168,6 +175,28 @@ export async function initSaved(
     const primary = 'font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50';
     const secondary = 'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors';
     const textLink = 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent';
+
+    function subscribeToggle(): HTMLElement {
+      const wrap = el('div', 'mt-3 max-w-md');
+      wrap.appendChild(
+        el(
+          'p',
+          'font-sans text-xs text-ink-500',
+          'Signing in also adds you to the email list — occasional updates about new articles and research relevant to this site. Nothing else, and your data is never shared.'
+        )
+      );
+      const label = el('label', 'flex items-center gap-2 font-sans text-xs text-ink-600 mt-1 cursor-pointer');
+      const box = el('input', '') as HTMLInputElement;
+      box.type = 'checkbox';
+      box.checked = !subscribeToEmails;
+      box.addEventListener('change', () => {
+        subscribeToEmails = !box.checked;
+      });
+      label.appendChild(box);
+      label.appendChild(el('span', '', 'Don’t add me to the list — just sign me in'));
+      wrap.appendChild(label);
+      return wrap;
+    }
 
     function showButtons() {
       container.replaceChildren();
@@ -184,6 +213,7 @@ export async function initSaved(
       container.appendChild(
         el('p', 'font-sans text-xs text-ink-500 mt-2', 'The email link is password-free and works with any address, including a work one (e.g. police.gov.uk).')
       );
+      container.appendChild(subscribeToggle());
     }
 
     function showEmailForm() {
@@ -216,6 +246,7 @@ export async function initSaved(
         container.appendChild(again);
       });
       container.appendChild(form);
+      container.appendChild(subscribeToggle());
       const cancel = el('button', `mt-2 ${textLink}`, 'Use Google instead') as HTMLButtonElement;
       cancel.type = 'button';
       cancel.addEventListener('click', showButtons);
@@ -688,6 +719,7 @@ export async function initSaved(
       renderAuth();
       loadSaved();
     }
+    maybeSubscribeOnSignIn(_event, session?.user?.email);
   });
 
   return {

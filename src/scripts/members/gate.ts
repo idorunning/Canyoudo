@@ -8,6 +8,10 @@
 // Auth is the same Supabase project as the research assistant, so one sign-in
 // covers the whole members area.
 //
+// The sign-in form also offers to add the reader to the MailerLite list — see
+// src/lib/mailerlite-subscribe.ts for how that choice survives the redirect
+// and gets applied at most once.
+//
 // Contract with the gated page scripts
 // ------------------------------------
 // Once the reader is unlocked (signed in, or no auth configured at all) the
@@ -29,6 +33,8 @@ function unlock(): void {
   document.documentElement.setAttribute('data-members-unlocked', '');
   document.dispatchEvent(new CustomEvent('members:unlock'));
 }
+
+import { maybeSubscribeOnSignIn, setSubscribePreference } from '../../lib/mailerlite-subscribe';
 
 // Minimal element helper (kept local so a data page doesn't pull in the
 // research result-card module just for this).
@@ -130,6 +136,7 @@ export async function initMembersGate(): Promise<void> {
     settled = true;
     clearTimeout(safety);
     applyGate(Boolean(session?.user));
+    maybeSubscribeOnSignIn(_event, session?.user?.email);
   });
 }
 
@@ -145,11 +152,39 @@ function renderSignInOptions(supabase: any, container: HTMLElement): void {
   const textLink = 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent';
   const redirectTo = location.origin + location.pathname + location.search;
 
+  // Defaults to on; the checkbox in subscribeToggle() below lets the reader
+  // opt out before either sign-in route fires.
+  let subscribeToEmails = true;
+
   function signInWithGoogle() {
+    setSubscribePreference(subscribeToEmails);
     supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } });
   }
   function signInWithEmail(email: string) {
+    setSubscribePreference(subscribeToEmails);
     return supabase.auth.signInWithOtp({ email, options: { emailRedirectTo: redirectTo } });
+  }
+
+  function subscribeToggle(): HTMLElement {
+    const wrap = el('div', 'mt-3 max-w-md');
+    wrap.appendChild(
+      el(
+        'p',
+        'font-sans text-xs text-ink-500',
+        'Signing in also adds you to the email list — occasional updates about new articles and research relevant to this site. Nothing else, and your data is never shared.'
+      )
+    );
+    const label = el('label', 'flex items-center gap-2 font-sans text-xs text-ink-600 mt-1 cursor-pointer');
+    const box = el('input', '') as HTMLInputElement;
+    box.type = 'checkbox';
+    box.checked = !subscribeToEmails;
+    box.addEventListener('change', () => {
+      subscribeToEmails = !box.checked;
+    });
+    label.appendChild(box);
+    label.appendChild(el('span', '', 'Don’t add me to the list — just sign me in'));
+    wrap.appendChild(label);
+    return wrap;
   }
 
   function showButtons() {
@@ -171,6 +206,7 @@ function renderSignInOptions(supabase: any, container: HTMLElement): void {
         'The email link is password-free and works with any address, including a work one (e.g. police.gov.uk).'
       )
     );
+    container.appendChild(subscribeToggle());
   }
 
   function showEmailForm() {
@@ -206,6 +242,7 @@ function renderSignInOptions(supabase: any, container: HTMLElement): void {
       container.appendChild(again);
     });
     container.appendChild(form);
+    container.appendChild(subscribeToggle());
     const cancel = el('button', `mt-2 ${textLink}`, 'Use Google instead');
     cancel.type = 'button';
     cancel.addEventListener('click', showButtons);
