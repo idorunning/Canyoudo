@@ -21,16 +21,40 @@ export async function fetchJson<T = any>(url: string): Promise<T> {
   return body as T;
 }
 
+// Small shares round down to a misleading "0%" — and a long tail of them
+// makes a bar table look like a wall of zeroes. Fold anything under 1% of
+// the total into a single "Other" row (summed), so what's shown either
+// rounds to at least 1% or is honestly labelled "<1%".
+export function collapseSmallShares<T extends { label: string; count: number; note?: string }>(
+  data: T[],
+  thresholdPct = 1
+): T[] {
+  const total = data.reduce((s, d) => s + d.count, 0);
+  if (!total) return data;
+  const small = data.filter((d) => (d.count / total) * 100 < thresholdPct);
+  if (small.length < 2) return data; // nothing worth merging just one row
+  const big = data.filter((d) => (d.count / total) * 100 >= thresholdPct);
+  const otherCount = small.reduce((s, d) => s + d.count, 0);
+  return [...big, { ...small[0], label: `Other (${small.length})`, count: otherCount, note: undefined }];
+}
+
+function percentLabel(count: number, total: number): string {
+  const p = (count / total) * 100;
+  if (count > 0 && p < 1) return '<1%';
+  return `${Math.round(p)}%`;
+}
+
 // Horizontal bar table — same markup/classes as components/data/BarChart.astro.
 export function barTable(
   el: HTMLElement,
   data: { label: string; count: number; note?: string }[],
   opts: { asPercent?: boolean; max?: number; caption?: string; format?: (count: number) => string } = {}
 ) {
+  if (opts.asPercent) data = collapseSmallShares(data);
   const total = data.reduce((s, d) => s + d.count, 0) || 1;
   const scaleMax = opts.max ?? Math.max(...data.map((d) => d.count), 1);
   const val = (d: { count: number }) =>
-    opts.format ? opts.format(d.count) : opts.asPercent ? `${Math.round((d.count / total) * 100)}%` : fmt.format(d.count);
+    opts.format ? opts.format(d.count) : opts.asPercent ? percentLabel(d.count, total) : fmt.format(d.count);
   const width = (d: { count: number }) => `${Math.max((d.count / scaleMax) * 100, 0.5)}%`;
   el.innerHTML = `
     <figure class="my-2">

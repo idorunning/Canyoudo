@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/bundle-policedata.mjs && node scripts/bundle-engagement.mjs",
+    "prebuild": "node scripts/bundle-policedata.mjs && node scripts/bundle-engagement.mjs && node scripts/bundle-polls.mjs",
     "build": "astro build",
     "postbuild": "node scripts/generate-redirects.mjs && pagefind --site dist",
     "preview": "astro preview",

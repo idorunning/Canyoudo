@@ -16,12 +16,31 @@ interface Props {
   asPercent?: boolean;
   max?: number; // override the scale max (defaults to the largest value)
 }
-const { data, caption, asPercent = false, max } = Astro.props;
+const { data: rawData, caption, asPercent = false, max } = Astro.props;
+
+// Small shares round down to a misleading "0%", and a long tail of them
+// reads as a wall of zeroes — fold anything under 1% into a single "Other"
+// row (summed) so displayed bars are either ≥1% or honestly labelled "<1%".
+function collapseSmallShares(data: Datum[], thresholdPct = 1): Datum[] {
+  const total = data.reduce((s, d) => s + d.count, 0);
+  if (!total) return data;
+  const small = data.filter((d) => (d.count / total) * 100 < thresholdPct);
+  if (small.length < 2) return data;
+  const big = data.filter((d) => (d.count / total) * 100 >= thresholdPct);
+  const otherCount = small.reduce((s, d) => s + d.count, 0);
+  return [...big, { ...small[0], label: `Other (${small.length})`, count: otherCount, share: undefined }];
+}
+const data = asPercent ? collapseSmallShares(rawData) : rawData;
 
 const total = data.reduce((s, d) => s + d.count, 0) || 1;
 const scaleMax = max ?? Math.max(...data.map((d) => d.count), 1);
 const fmt = new Intl.NumberFormat('en-GB');
-const value = (d: Datum) => (asPercent ? `${Math.round((d.count / total) * 100)}%` : fmt.format(d.count));
+function percentLabel(count: number): string {
+  const p = (count / total) * 100;
+  if (count > 0 && p < 1) return '<1%';
+  return `${Math.round(p)}%`;
+}
+const value = (d: Datum) => (asPercent ? percentLabel(d.count) : fmt.format(d.count));
 const width = (d: Datum) => `${Math.max((d.count / scaleMax) * 100, 0.5)}%`;
 ---
 <figure class="my-2">

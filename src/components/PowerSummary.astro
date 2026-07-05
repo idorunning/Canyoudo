@@ -72,9 +72,15 @@ const rows: [string, string][] = [
     color: rgb(var(--ink-800));
   }
   .co-power dd :global(a) {
-    color: rgb(var(--accent));
+    color: inherit;
     text-decoration: underline;
+    text-decoration-color: rgb(var(--ink-400));
     text-underline-offset: 2px;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+  .co-power dd :global(a:hover) {
+    color: rgb(var(--accent-dark));
+    text-decoration-color: rgb(var(--accent-dark));
   }
   @media (max-width: 540px) {
     .co-power-row {

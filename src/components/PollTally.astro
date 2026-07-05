@@ -1,0 +1,30 @@
+---
+// Vote-tally bars for the homepage's monthly reader poll. Used both for the
+// live (current-month) result, which a client script keeps in sync after a
+// vote, and for the read-only archive of past months' results — see
+// src/pages/index.astro and supabase/migrations/0003_monthly_poll_votes.sql.
+interface Props {
+  poll: { month: string; choices: string[] };
+  tally: { total: number; results: { label: string; votes: number }[] };
+  compact?: boolean;
+}
+const { poll, tally, compact = false } = Astro.props;
+const { total, results } = tally;
+const pctOf = (votes: number) => (total > 0 ? Math.round((votes / total) * 100) : 0);
+---
+<div class={compact ? 'space-y-1.5' : 'space-y-2.5 max-w-md'} data-poll-tally-body data-poll-month={poll.month}>
+  {results.map((r) => (
+    <div data-poll-tally-row data-poll-choice={r.label.toLowerCase()}>
+      <div class={`flex items-center justify-between font-sans ${compact ? 'text-[11px]' : 'text-sm'} text-ink-600 mb-1`}>
+        <span>{r.label}</span>
+        <span class="tabular-nums" data-poll-tally-pct>{pctOf(r.votes)}%</span>
+      </div>
+      <div class={`bg-paper-200 rounded-full overflow-hidden ${compact ? 'h-1.5' : 'h-2'}`}>
+        <div class="h-full bg-accent/70 rounded-full" style={`width:${pctOf(r.votes)}%`} data-poll-tally-bar></div>
+      </div>
+    </div>
+  ))}
+  <p class={`font-sans ${compact ? 'text-[10.5px]' : 'text-xs'} text-ink-400 mt-1`} data-poll-tally-total>
+    {total} vote{total === 1 ? '' : 's'}
+  </p>
+</div>
