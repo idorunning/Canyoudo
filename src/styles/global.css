@@ -797,23 +797,22 @@ html.dark {
 }
 
 /* ------------------------------------------------------------------ */
-/* Orange hand-drawn highlighter mark                                   */
+/* Highlighter mark                                                      */
 /* Used as a utility (.mark-orange) and applied automatically to <mark> */
 /* in article prose, so an author can highlight a key line with         */
-/* ==important== and it reads as a felt-tip stripe in the site's accent.*/
+/* ==important== and it reads as a soft highlighter band in the site's  */
+/* accent colour — the same semi-transparent-wash language as topic     */
+/* auto-links, rather than a hand-drawn underline.                      */
 /* ------------------------------------------------------------------ */
 .mark-orange,
 .prose-article mark {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 12'%3E%3Cpath d='M1,9 C8,6 20,10 38,7 C56,4 72,9 88,7 C93,6 97,8 99,7' stroke='%2314b8a6' stroke-width='4.5' fill='none' stroke-linecap='round' opacity='0.9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: 0 calc(100% + 2px);
-  background-size: 100% 14px;
-  padding-bottom: 4px;
-}
-/* <mark> defaults to a yellow block in browsers — clear it so only the */
-/* orange stripe shows, and keep the text colour unchanged.            */
-.prose-article mark {
   background-color: transparent;
+  background-image: linear-gradient(rgb(var(--accent-light) / 0.4), rgb(var(--accent-light) / 0.4));
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 100% 50%;
   color: inherit;
+  padding: 0 0.05em;
+  border-radius: 2px;
 }
 
