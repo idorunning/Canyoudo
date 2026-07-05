@@ -1,48 +1,49 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-05T01:56:20.231Z",
-    "feedCount": 6,
+    "fetchedAt": "2026-07-05T13:05:00.497Z",
+    "feedCount": 7,
     "sources": [
       "GOV.UK",
       "BBC News",
       "Ministry of Justice",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Farage denies rules broken after reports benefits from ally were undeclared",
+      "title": "Reform denies rules broken by Farage after benefits from ally not declared",
       "link": "https://www.bbc.co.uk/news/articles/cy0424end7vo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-05T01:33:15.000Z",
-      "summary": "The Sunday Times said the Reform UK leader failed to declare benefits from an ally convicted of fraud in the US."
+      "isoDate": "2026-07-05T12:31:39.000Z",
+      "summary": "The Sunday Times says the Reform UK leader failed to register the support supplied by a cryptocurrency entrepreneur who had been convicted of fraud."
     },
     {
-      "title": "Police leadership needs 'ethical reset', Lord Blunkett tells BBC",
-      "link": "https://www.bbc.co.uk/news/articles/cy0429yx1k9o?at_medium=RSS&at_campaign=rss",
+      "title": "Police probe Yes Scotland campaign's 'missing £1.5m' claim",
+      "link": "https://www.bbc.co.uk/news/articles/ce955jp3jz9o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-04T19:36:58.000Z",
-      "summary": "The former home secretary has co-authored a major report that has found the running of forces in England and Wales needs a \"fundamental overhaul\"."
+      "isoDate": "2026-07-05T12:05:45.000Z",
+      "summary": "It is claimed funds raised for the group which campaigned for independence in the 2014 referendum are \"unaccounted for\"."
     },
     {
-      "title": "We spent 17 years fighting for the truth about our mother's murder",
-      "link": "https://www.bbc.co.uk/news/articles/cvg7zxjdy05o?at_medium=RSS&at_campaign=rss",
+      "title": "Two murder arrests made after man dies in stabbing",
+      "link": "https://www.bbc.co.uk/news/articles/c6211568347o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-04T17:36:34.000Z",
-      "summary": "A Greek man stands convicted of killing Jean Hanlon because her three sons refused to accept her death was an accident."
+      "isoDate": "2026-07-05T11:56:19.000Z",
+      "summary": "Haruun Hassan, 22, was fatally stabbed in west London in the early hours of Tuesday morning."
     },
     {
-      "title": "Pubs and police brace for England-Mexico 1am kick-off after Fifa U-turn",
-      "link": "https://www.bbc.co.uk/news/articles/cy9r2x4pz1wo?at_medium=RSS&at_campaign=rss",
+      "title": "I watched grooming victims 'disappear', says social worker",
+      "link": "https://www.bbc.co.uk/news/articles/c0qy9qxdp5eo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-04T12:13:46.000Z",
-      "summary": "England's last-16 World Cup tie will kick off at 01:00 BST on Monday, after Fifa reconsidered bringing it forward."
+      "isoDate": "2026-07-05T09:02:37.000Z",
+      "summary": "A social worker says she witnessed girls being groomed but her calls for action were unheeded."
     },
     {
       "title": "Parents warned not to publicly share children’s images amid AI abuse risks",
@@ -125,6 +126,14 @@
       "summary": "92% The post Reed Smith keeps 11 of 12 trainees in latest retention round appeared first on Legal Cheek ."
     },
     {
+      "title": "Godot says bye bye AI, bans vibe-coded contributions",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/01/godot-says-bye-bye-ai-bans-vibe-coded-contributions/5265344",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-01T20:29:07.000Z",
+      "summary": "'We can’t trust heavy users of AI to understand their code enough to fix it,' say maintainers who previously called the flood of vibe-coded pull requests 'demoralizing'"
+    },
+    {
       "title": "Wonka Netflix show faces backlash for AI-generated Gene Wilder voice",
       "link": "https://www.bbc.co.uk/news/articles/cdxdgpgn0zwo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -147,6 +156,14 @@
       "topic": "law",
       "isoDate": "2026-07-01T09:21:30.000Z",
       "summary": "Leeds is an adult male prison in the Armley area of Leeds, West Yorkshire."
+    },
+    {
+      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
+      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-30T06:11:03.000Z",
+      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
     },
     {
       "title": "Justice for victims as domestic killers to face longer behind bars",
@@ -197,12 +214,28 @@
       "summary": "…Meet the CNC&#x27;s specialist <mark>police</mark> dogs, whose skills help deter crime, support <mark>policing</mark> operations, and protect critical national infrastructure.…"
     },
     {
+      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-23T20:16:34.000Z",
+      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
+    },
+    {
       "title": "Speech by the President of the King’s Bench Division – Without Fear or Favour: Judicial Independence, Past, Present and Future",
       "link": "https://www.judiciary.uk/speech-by-the-president-of-the-kings-bench-division-without-fear-or-favour-judicial-independence-past-present-and-future/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-06-23T13:00:53.000Z",
       "summary": "Read the speech delivered by Dame Victoria Sharp, President of the King’s Bench Division, at Inner Temple The post Speech by the President of the King’s Bench Division –…"
+    },
+    {
+      "title": "The new Siri makes one of Apple's most convenient OS features a cumbersome mess",
+      "link": "https://www.theregister.com/ai-and-ml/2026/06/16/the-new-siri-makes-one-of-apples-most-convenient-os-features-a-cumbersome-mess/5256591",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-06-16T20:47:37.000Z",
+      "summary": "Goodbye, useful Spotlight; hello force-fed Apple intelligence bloatware that feels distressingly like Google AI Overviews"
     }
   ]
 }
