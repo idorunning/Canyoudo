@@ -2,11 +2,6 @@
 title: Somerton Man code - Did I crack an 80 year mystery?
 section: other
 description: An updated reading of the Somerton Man code.  The code has remained unanswered for almost 80 years. Military analysts, ex detectives and amateur code breakers have all tried. Maybe now I've cracked it?
-keyTakeaways:
-  - 2022 DNA work identified the Somerton Man as Carl Webb and demolished the long-held paternity and espionage theories rather than confirming them.
-  - 'Cryptographers in 1949 and later Adelaide researchers agree the five lines are most likely an initialism — the first letters of words — not a recoverable cipher.'
-  - 'The author''s hypothesis is that the letters record a travel itinerary around 1948 Adelaide, but concedes it is only consistent with the evidence, not yet tested against a real route.'
-  - 'A test that cannot fail proves nothing: with a huge pool of place names, every letter finds a match, so set-membership matching is a warning rather than a vindication.'
 pubDate: 2025-12-19
 updatedDate: 2026-06-12
 author: ''
@@ -23,6 +18,12 @@ tags:
   - tamam shud
   - true crime
   - evidence-based
+draft: true
+keyTakeaways:
+  - 2022 DNA work identified the Somerton Man as Carl Webb and demolished the long-held paternity and espionage theories rather than confirming them.
+  - Cryptographers in 1949 and later Adelaide researchers agree the five lines are most likely an initialism — the first letters of words — not a recoverable cipher.
+  - The author's hypothesis is that the letters record a travel itinerary around 1948 Adelaide, but concedes it is only consistent with the evidence, not yet tested against a real route.
+  - 'A test that cannot fail proves nothing: with a huge pool of place names, every letter finds a match, so set-membership matching is a warning rather than a vindication.'
 ---
 
 _This piece updates my earlier analysis of the Somerton Man code. The first version proposed a single base location and a rail-led reading of the letters. What follows widens the transport assumptions to a multimodal model, sets out the search interpretation as the organising idea, tests and rejects the suggestion that Webb's estranged wife explains his presence in South Australia, and then does the thing my first draft did not do properly: it tries to break its own hypothesis. The analysis tools behind it are now public too — see the work-in-progress_ [_Somerton Lab_](/somerton-lab/)_._
