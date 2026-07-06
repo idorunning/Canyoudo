@@ -1,0 +1,119 @@
+---
+// Internal-only admin dashboard: traffic, email subscribers, reader sign-ups
+// in one place. Server-rendered on every request (never prerendered) so the
+// numbers are live and the page can gate on a login check.
+export const prerender = false;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ADMIN_COOKIE, checkPassword, configured as authConfigured, isValidSession, sessionToken } from '../lib/admin-auth';
+import { getTrafficStats, getSubscriberStats, getSignupStats } from '../lib/dashboard-stats';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const password = String(form.get('password') ?? '');
+  if (checkPassword(password)) {
+    Astro.cookies.set(ADMIN_COOKIE, sessionToken(), {
+      path: '/',
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+    });
+    return Astro.redirect('/dashboard');
+  }
+}
+
+if (Astro.url.searchParams.get('logout') === '1') {
+  Astro.cookies.delete(ADMIN_COOKIE, { path: '/' });
+  return Astro.redirect('/dashboard');
+}
+
+const loggedIn = isValidSession(Astro.cookies.get(ADMIN_COOKIE)?.value);
+const loginFailed = Astro.request.method === 'POST' && !loggedIn;
+
+const [traffic, subscribers, signups] = loggedIn
+  ? await Promise.all([getTrafficStats(), getSubscriberStats(), getSignupStats()])
+  : [null, null, null];
+---
+
+<BaseLayout title="Dashboard" description="Internal site dashboard.">
+  <div class="max-w-3xl mx-auto px-6 lg:px-10 py-14 md:py-20">
+    <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 mb-8">Dashboard</h1>
+
+    {!authConfigured() && (
+      <p class="text-sm text-ink-600">
+        Set <code>ADMIN_DASHBOARD_PASSWORD</code> in your environment variables to enable this page.
+      </p>
+    )}
+
+    {authConfigured() && !loggedIn && (
+      <form method="POST" class="max-w-xs space-y-4">
+        <label class="block">
+          <span class="block text-sm font-medium text-ink-700 mb-1">Password</span>
+          <input
+            type="password"
+            name="password"
+            required
+            class="w-full border border-ink-300 rounded px-3 py-2"
+          />
+        </label>
+        {loginFailed && <p class="text-sm text-red-600">Wrong password.</p>}
+        <button type="submit" class="bg-ink-900 text-white rounded px-4 py-2 text-sm font-medium">
+          Sign in
+        </button>
+      </form>
+    )}
+
+    {loggedIn && (
+      <div>
+        <div class="grid gap-6 sm:grid-cols-3 mb-10">
+          <div class="border border-ink-200 rounded-lg p-5">
+            <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Site visits (recent)</p>
+            {traffic?.ok ? (
+              <>
+                <p class="text-2xl font-semibold text-ink-900">{traffic.data.totalPageviews.toLocaleString()}</p>
+                <p class="text-xs text-ink-500">{traffic.data.totalVisitors.toLocaleString()} visitors</p>
+              </>
+            ) : (
+              <p class="text-sm text-ink-500">{traffic?.reason}</p>
+            )}
+          </div>
+
+          <div class="border border-ink-200 rounded-lg p-5">
+            <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Email subscribers</p>
+            {subscribers?.ok ? (
+              <p class="text-2xl font-semibold text-ink-900">{subscribers.data.activeCount.toLocaleString()}</p>
+            ) : (
+              <p class="text-sm text-ink-500">{subscribers?.reason}</p>
+            )}
+          </div>
+
+          <div class="border border-ink-200 rounded-lg p-5">
+            <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Reader sign-ups</p>
+            {signups?.ok ? (
+              <p class="text-2xl font-semibold text-ink-900">{signups.data.totalUsers.toLocaleString()}</p>
+            ) : (
+              <p class="text-sm text-ink-500">{signups?.reason}</p>
+            )}
+          </div>
+        </div>
+
+        {traffic?.ok && traffic.data.topPaths.length > 0 && (
+          <div class="border border-ink-200 rounded-lg p-5 mb-10">
+            <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-visited pages</p>
+            <ol class="space-y-1 text-sm">
+              {traffic.data.topPaths.map((p) => (
+                <li class="flex justify-between gap-4">
+                  <span class="truncate text-ink-700">{p.path}</span>
+                  <span class="text-ink-500 tabular-nums">{p.count.toLocaleString()}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        <a href="/dashboard?logout=1" class="text-sm text-ink-500 underline">Sign out</a>
+      </div>
+    )}
+  </div>
+</BaseLayout>
