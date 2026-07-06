@@ -224,7 +224,10 @@ function drawTable(w: Writer, doc: Doc, header: string[], rows: string[][], refe
     if (!Number.isInteger(n) || n < 1) continue;
     const work = references[n - 1];
     const studyText = row[studyCol] ?? '';
-    const findingText = stripCitations(row[findingCol] ?? '');
+    // The model writes the whole cell on one raw-markdown line, using literal
+    // `<br>` tags where the paragraph breaks into bullets — turn those into
+    // real newlines so splitTextToSize wraps each piece on its own line(s).
+    const findingText = stripCitations(row[findingCol] ?? '').replace(/<br\s*\/?>/gi, '\n');
     const effText = (effCol >= 0 ? row[effCol] : '')?.trim();
 
     doc.setFont('helvetica', 'normal');
@@ -424,7 +427,7 @@ export async function buildReviewPdf(result: ReviewResult): Promise<Doc> {
   const metaBits = [
     CONFIDENCE_LABELS[result.confidence] ?? CONFIDENCE_LABELS.mixed,
     `${studyCount} studies reviewed`,
-    result.model ? `written by ${result.model}` : null,
+    result.model ? `report produced by an AI model (${result.model})` : null,
   ].filter(Boolean);
   w.text(metaBits.join('   ·   ').toUpperCase(), 7.5, 'normal', GREY);
   w.gap(4);

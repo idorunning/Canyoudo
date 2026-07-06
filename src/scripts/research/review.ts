@@ -481,6 +481,26 @@ const EFFECTIVENESS_STYLE: Record<string, string> = {
  *  Study cell links DOWN to the matching card in the evidence base below —
  *  citation markers elsewhere in the prose keep linking to those same cards
  *  (unchanged), so the table never needs its own competing anchor ids. */
+/** Split a "Key finding" cell into its lead paragraph and any bullet points
+ *  below it. The model writes the whole cell on one raw-markdown line (it's
+ *  one row of a pipe table), so it uses literal `<br>` tags rather than real
+ *  line breaks to separate the paragraph from the bullets. */
+function findingCellNodes(raw: string): Node[] {
+  const parts = stripInline(raw)
+    .split(/<br\s*\/?>/i)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (parts.length === 0) return [];
+  const nodes: Node[] = [el('p', '', parts[0])];
+  const bullets = parts.slice(1).map((p) => p.replace(/^[-•]\s*/, ''));
+  if (bullets.length) {
+    const ul = el('ul', 'list-disc pl-4 mt-1.5 space-y-0.5 text-ink-600 text-[0.85em]');
+    for (const b of bullets) ul.appendChild(el('li', '', b));
+    nodes.push(ul);
+  }
+  return nodes;
+}
+
 function renderTable(header: string[], rows: string[][], valid: Set<number>): HTMLElement | null {
   // Tolerate column reordering/renaming by the model: find each column by
   // its expected header text rather than assuming a fixed position.
@@ -535,8 +555,8 @@ function renderTable(header: string[], rows: string[][], valid: Set<number>): HT
     tr.appendChild(studyTd);
 
     const findingTd = document.createElement('td');
-    findingTd.className = 'font-serif text-sm text-ink-800 px-3 py-2.5 leading-snug';
-    findingTd.textContent = stripInline(row[findingCol] ?? '');
+    findingTd.className = 'font-serif text-sm text-ink-800 px-3 py-2.5 leading-snug min-w-[16rem]';
+    for (const child of findingCellNodes(row[findingCol] ?? '')) findingTd.appendChild(child);
     tr.appendChild(findingTd);
 
     const effTd = document.createElement('td');
@@ -781,7 +801,7 @@ export function renderReview(
   // if the intended model isn't reachable, so this must reflect reality.
   if (result.model) {
     meta.appendChild(
-      el('span', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-400', `Written by ${result.model}`)
+      el('span', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-400', `Report produced by an AI model (${result.model})`)
     );
   }
   article.appendChild(meta);
