@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-06T14:55:16.390Z",
+    "fetchedAt": "2026-07-07T01:58:23.370Z",
     "feedCount": 8,
     "sources": [
       "GOV.UK",
@@ -14,6 +14,38 @@
     ]
   },
   "items": [
+    {
+      "title": "Prince Harry begins his UK visit with court verdict",
+      "link": "https://www.bbc.co.uk/news/articles/ce8mmm5v8j0o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-06T23:49:38.000Z",
+      "summary": "The Duke of Sussex begins a week of charity engagements and will hear the outcome of his newspaper court battle."
+    },
+    {
+      "title": "Robots available for rent: But what can they do?",
+      "link": "https://www.bbc.co.uk/news/articles/c4gymkg9lr2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-06T23:48:55.000Z",
+      "summary": "Robotics tech is changing fast, so for many it makes sense to rent a robot."
+    },
+    {
+      "title": "Mum who accused ex-partner of rape wins appeal against family court judge",
+      "link": "https://www.bbc.co.uk/news/articles/cr4779q56yeo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-06T20:26:47.000Z",
+      "summary": "Family Court Judge Robin Tolson KC's decisions have been successfully appealed several times in the last six years."
+    },
+    {
+      "title": "Boy's face showed 'pure hatred' as he attacked teacher with knife, court hears",
+      "link": "https://www.bbc.co.uk/news/articles/c4gyy591v8do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-06T16:26:26.000Z",
+      "summary": "A jury heard the 16-year-old launched at her with a large kitchen knife after following her into a classroom."
+    },
     {
       "title": "Wormwood Scrubs Prison",
       "link": "https://www.gov.uk/guidance/wormwood-scrubs-prison",
@@ -45,14 +77,6 @@
       "topic": "law",
       "isoDate": "2026-07-06T14:35:00.000Z",
       "summary": "Styal is a prison and young offender institution (YOI) in Wilmslow, Cheshire, for women aged 18 and over."
-    },
-    {
-      "title": "Boy's face showed 'pure hatred' as he attacked teacher with knife, court hears",
-      "link": "https://www.bbc.co.uk/news/articles/c4gyy591v8do?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-06T12:58:48.000Z",
-      "summary": "A jury heard the 16-year-old launched at her with a large kitchen knife after following her into a classroom."
     },
     {
       "title": "New statutory guidance from the Lady Chief Justice on Live Links in Criminal Courts",
@@ -103,28 +127,12 @@
       "summary": "The top legal affairs news stories from this morning and the weekend The post Monday morning round-up appeared first on Legal Cheek ."
     },
     {
-      "title": "Centre 'devastated' by death of experienced skydiver",
-      "link": "https://www.bbc.co.uk/news/articles/cvgee45w055o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-06T05:40:18.000Z",
-      "summary": "Police say the woman, 22, was found in a nearby field and pronounced dead at the scene."
-    },
-    {
       "title": "Falsely convicted man who spent £500k clearing his name is rejected for compensation",
       "link": "https://www.bbc.co.uk/news/articles/c8925nd4e59o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
       "isoDate": "2026-07-06T05:02:55.000Z",
       "summary": "Brian Buckle, who was falsely convicted of sex abuse, spent more than five years in prison."
-    },
-    {
-      "title": "Police leadership needs fundamental overhaul, review finds",
-      "link": "https://www.bbc.co.uk/news/articles/crlwwkyg610o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-06T00:17:01.000Z",
-      "summary": "Development and recruitment processes in the service need reforming, an independent report says."
     },
     {
       "title": "Parents warned not to publicly share children’s images amid AI abuse risks",
@@ -148,7 +156,7 @@
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-07-03T14:03:57.000Z",
-      "summary": "The Lady Chief Justice, the Baroness Carr of Walton-on-the-Hill, gave her speech at Mansion House in London on Tuesday 1 July 2026. The post Mansion House speech 2026 by the…"
+      "summary": "The Lady Chief Justice, the Baroness Carr of Walton-on-the-Hill, gave her speech at Mansion House in London on Tuesday 1 July 2026 The post Mansion House speech 2026 by the…"
     },
     {
       "title": "White & Case employee who claimed he was photographed naked at firm retreat drops legal action",
@@ -213,14 +221,6 @@
       "topic": "policing",
       "isoDate": "2026-06-29T15:24:00.000Z",
       "summary": "This circular is issued to inform partners of certain provisions of the Crime and <mark>Policing</mark> Act 2026 which came into force on 29 June 2026."
-    },
-    {
-      "title": "Ford rehires human engineers after AI fails to match quality checks",
-      "link": "https://www.bbc.co.uk/news/articles/cgrkd41n2v9o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-06-29T11:58:01.000Z",
-      "summary": "The car-maker found AI quality checks failed to match the skill of veteran technicians."
     },
     {
       "title": "Rough sleeping no longer a crime as Vagrancy Act repealed",
