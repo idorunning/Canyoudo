@@ -1,9 +1,10 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-07T01:58:23.370Z",
-    "feedCount": 8,
+    "fetchedAt": "2026-07-07T14:04:12.293Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
+      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "CPS",
@@ -15,12 +16,84 @@
   },
   "items": [
     {
-      "title": "Prince Harry begins his UK visit with court verdict",
-      "link": "https://www.bbc.co.uk/news/articles/ce8mmm5v8j0o?at_medium=RSS&at_campaign=rss",
+      "title": "Murder inquiry after mother and children found dead",
+      "link": "https://www.bbc.co.uk/news/articles/cvgdlnvg2n5o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-06T23:49:38.000Z",
-      "summary": "The Duke of Sussex begins a week of charity engagements and will hear the outcome of his newspaper court battle."
+      "isoDate": "2026-07-07T13:37:21.000Z",
+      "summary": "A mother and her two children are found dead in a property, police say."
+    },
+    {
+      "title": "Police and law enforcement access to driver data held by the DVLA",
+      "link": "https://www.gov.uk/government/consultations/police-and-law-enforcement-access-to-driver-data-held-by-the-dvla",
+      "source": "Home Office",
+      "topic": "policing",
+      "isoDate": "2026-07-07T13:04:00.000Z",
+      "summary": "The government is consulting on the statutory framework governing police and law enforcement access to driving licence data held by the Driver and Vehicle Licensing Agency."
+    },
+    {
+      "title": "Sir Andy Marsh announced as preferred candidate for HM Chief Inspector",
+      "link": "https://www.gov.uk/government/news/sir-andy-marsh-announced-as-preferred-candidate-for-hm-chief-inspector",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-07T11:44:51.000Z",
+      "summary": "…College of <mark>Policing</mark> chief executive has 30 years&#x27; <mark>policing</mark> experience and led significant reforms in professional standards, leadership and…"
+    },
+    {
+      "title": "Wife killer who manipulated child has sentence increased",
+      "link": "https://www.bbc.co.uk/news/articles/c70yge0vqd7o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-07T11:27:40.000Z",
+      "summary": "The Court of Appeal increases Robert Rhodes' sentence by four years after deeming it unduly lenient."
+    },
+    {
+      "title": "Suits’ Harvey Specter chats to A&O Shearman partner in surreal interview",
+      "link": "https://www.legalcheek.com/2026/07/suits-harvey-specter-chats-to-ao-shearman-partner-in-surreal-interview/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-07T10:25:10.000Z",
+      "summary": "AI bubble indicator? The post Suits’ Harvey Specter chats to A&O Shearman partner in surreal interview appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Woman accused of killing her baby daughter with a hairdryer",
+      "link": "https://www.bbc.co.uk/news/articles/ckg73rz8r05o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-07T10:08:16.000Z",
+      "summary": "Courtney Gartshore has denied culpable homicide, along with other charges, at the High Court in Aberdeen."
+    },
+    {
+      "title": "'Posh George': Who is aristocrat and convicted criminal at heart of Farage controversy?",
+      "link": "https://www.bbc.co.uk/news/articles/c5yzzw5vk8vo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-07T08:49:07.000Z",
+      "summary": "The 32-year-old reported crypto entrepreneur, once convicted of fraud in the US, is a long-time Farage ally."
+    },
+    {
+      "title": "Ministry of Justice: Data First",
+      "link": "https://www.gov.uk/guidance/ministry-of-justice-data-first",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-07T08:06:27.000Z",
+      "summary": "Data First is a pioneering data-linking, research and academic engagement programme led by the Ministry of Justice and funded by ADR UK."
+    },
+    {
+      "title": "Womble Bond Dickinson slaps £300 levy on business class flights in bid to protect oysters",
+      "link": "https://www.legalcheek.com/2026/07/womble-bond-dickinson-slaps-300-levy-on-business-class-flights-in-bid-to-protect-oysters/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-07T07:54:13.000Z",
+      "summary": "Funds restoration project The post Womble Bond Dickinson slaps £300 levy on business class flights in bid to protect oysters appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Free ‘Rule of Law’ lessons to be offered in schools",
+      "link": "https://www.legalcheek.com/2026/07/free-rule-of-law-lessons-to-be-offered-in-schools/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-07T07:54:03.000Z",
+      "summary": "Backed by Attorney General The post Free ‘Rule of Law’ lessons to be offered in schools appeared first on Legal Cheek ."
     },
     {
       "title": "Robots available for rent: But what can they do?",
@@ -29,22 +102,6 @@
       "topic": "ai",
       "isoDate": "2026-07-06T23:48:55.000Z",
       "summary": "Robotics tech is changing fast, so for many it makes sense to rent a robot."
-    },
-    {
-      "title": "Mum who accused ex-partner of rape wins appeal against family court judge",
-      "link": "https://www.bbc.co.uk/news/articles/cr4779q56yeo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-06T20:26:47.000Z",
-      "summary": "Family Court Judge Robin Tolson KC's decisions have been successfully appealed several times in the last six years."
-    },
-    {
-      "title": "Boy's face showed 'pure hatred' as he attacked teacher with knife, court hears",
-      "link": "https://www.bbc.co.uk/news/articles/c4gyy591v8do?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-06T16:26:26.000Z",
-      "summary": "A jury heard the 16-year-old launched at her with a large kitchen knife after following her into a classroom."
     },
     {
       "title": "Wormwood Scrubs Prison",
@@ -69,14 +126,6 @@
       "topic": "law",
       "isoDate": "2026-07-06T14:35:04.000Z",
       "summary": "Swinfen Hall is a closed young offender institute (YOI), category C training prison, specialising in supporting young adults (18 to 25)."
-    },
-    {
-      "title": "Styal Prison and Young Offender Institution",
-      "link": "https://www.gov.uk/guidance/styal-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-06T14:35:00.000Z",
-      "summary": "Styal is a prison and young offender institution (YOI) in Wilmslow, Cheshire, for women aged 18 and over."
     },
     {
       "title": "New statutory guidance from the Lady Chief Justice on Live Links in Criminal Courts",
@@ -111,30 +160,6 @@
       "summary": "More rises The post DLA Piper bumps NQ lawyer pay to £140k in London and £84k in regions appeared first on Legal Cheek ."
     },
     {
-      "title": "Top KC who lied about attending Oxford Uni wins fight to avoid disbarment",
-      "link": "https://www.legalcheek.com/2026/07/top-kc-who-lied-about-attending-oxford-uni-wins-fight-to-avoid-disbarment/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-06T06:16:51.000Z",
-      "summary": "Suspension enough, says High Court The post Top KC who lied about attending Oxford Uni wins fight to avoid disbarment appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Monday morning round-up",
-      "link": "https://www.legalcheek.com/2026/07/monday-morning-round-up-156/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-06T06:16:16.000Z",
-      "summary": "The top legal affairs news stories from this morning and the weekend The post Monday morning round-up appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Falsely convicted man who spent £500k clearing his name is rejected for compensation",
-      "link": "https://www.bbc.co.uk/news/articles/c8925nd4e59o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-06T05:02:55.000Z",
-      "summary": "Brian Buckle, who was falsely convicted of sex abuse, spent more than five years in prison."
-    },
-    {
       "title": "Parents warned not to publicly share children’s images amid AI abuse risks",
       "link": "https://www.bbc.co.uk/news/articles/cd7wj7d0jzzo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -157,14 +182,6 @@
       "topic": "law",
       "isoDate": "2026-07-03T14:03:57.000Z",
       "summary": "The Lady Chief Justice, the Baroness Carr of Walton-on-the-Hill, gave her speech at Mansion House in London on Tuesday 1 July 2026 The post Mansion House speech 2026 by the…"
-    },
-    {
-      "title": "White & Case employee who claimed he was photographed naked at firm retreat drops legal action",
-      "link": "https://www.legalcheek.com/2026/07/white-case-employee-who-claimed-he-was-photographed-naked-at-firm-retreat-drops-legal-action/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-03T07:45:48.000Z",
-      "summary": "Global law firm branded claims ‘baseless’ The post White & Case employee who claimed he was photographed naked at firm retreat drops legal action appeared first on Legal Cheek ."
     },
     {
       "title": "AI is 'not smart' so what's next in artificial intelligence?",
@@ -221,14 +238,6 @@
       "topic": "policing",
       "isoDate": "2026-06-29T15:24:00.000Z",
       "summary": "This circular is issued to inform partners of certain provisions of the Crime and <mark>Policing</mark> Act 2026 which came into force on 29 June 2026."
-    },
-    {
-      "title": "Rough sleeping no longer a crime as Vagrancy Act repealed",
-      "link": "https://www.gov.uk/government/news/rough-sleeping-no-longer-a-crime-as-vagrancy-act-repealed",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-06-27T23:09:04.000Z",
-      "summary": "The government will repeal the Vagrancy Act on Monday 29 June 2026, ending nearly two centuries of legislation that has criminalised rough sleeping and begging."
     },
     {
       "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
