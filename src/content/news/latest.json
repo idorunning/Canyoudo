@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-08T01:27:57.896Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-07-08T13:27:50.299Z",
+    "feedCount": 8,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -10,18 +10,105 @@
       "CPS",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
-      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Avoid AI atrophy - new tool promises to reverse vibe coding skills decay",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/07/avoid-ai-atrophy-new-tool-promises-to-reverse-vibe-coding-skills-decay/5267913",
-      "source": "The Register",
+      "title": "Police name man wanted over murders of wife and daughters",
+      "link": "https://www.bbc.co.uk/news/articles/c8e2njxnn7jo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-08T12:41:55.000Z",
+      "summary": "An international manhunt is under way for Ndodana Mkhanyisi Tshuma, who left the country via Heathrow Airport."
+    },
+    {
+      "title": "Outcry as Meta lets users make AI images from public Instagram profile pics",
+      "link": "https://www.bbc.co.uk/news/articles/cp9lee19y1yo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
       "topic": "ai",
-      "isoDate": "2026-07-07T20:21:35.000Z",
-      "summary": "Want big muscles? Keep working out. Want big coding skillsets? Flex your dev skills with the Atrophy CLI app before they wither away"
+      "isoDate": "2026-07-08T12:28:03.000Z",
+      "summary": "The tech giant said people can opt out - but privacy campaigners called it a \"recipe for disaster\"."
+    },
+    {
+      "title": "Elmley Prison",
+      "link": "https://www.gov.uk/guidance/elmley-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-08T11:59:37.000Z",
+      "summary": "Elmley is one of 3 prisons on the Isle of Sheppey, Kent, the other two being HMP Standford Hill and HMP Swaleside."
+    },
+    {
+      "title": "Government action so children do not pay for a parent’s crime",
+      "link": "https://www.gov.uk/government/news/government-action-so-children-do-not-pay-for-a-parents-crime",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-08T11:37:00.000Z",
+      "summary": "Children with a parent in prison will be recognised earlier and connected to support under a new government pilot to help them thrive"
+    },
+    {
+      "title": "Circular 006/2026: Amount to be paid under a confiscation order",
+      "link": "https://www.gov.uk/government/publications/circular-0062026-amount-to-be-paid-under-a-confiscation-order",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-08T11:29:29.000Z",
+      "summary": "The Crime and <mark>Policing</mark> Act 2026 introduces reforms to the criminal confiscation regime under Part 2 of POCA."
+    },
+    {
+      "title": "Circular 010/2026: Restraint orders (criminal confiscation)",
+      "link": "https://www.gov.uk/government/publications/circular-0102026-restraint-orders-criminal-confiscation",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-08T11:29:14.000Z",
+      "summary": "The Crime and <mark>Policing</mark> Act 2026 introduces reforms to the criminal confiscation regime under Part 2 of POCA."
+    },
+    {
+      "title": "Circular 009/2026: Early resolution of confiscation meeting (criminal confiscation)",
+      "link": "https://www.gov.uk/government/publications/circular-0092026-early-resolution-of-confiscation-meeting-criminal-confiscation",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-08T11:28:58.000Z",
+      "summary": "The Crime and <mark>Policing</mark> Act 2026 introduces reforms to the criminal confiscation regime under Part 2 of POCA."
+    },
+    {
+      "title": "Judicial Office Business Plan for 2026-27",
+      "link": "https://www.judiciary.uk/judicial-office-business-plan-for-2026-27/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-08T09:56:42.000Z",
+      "summary": "Read the business plan which sets out important priorities for the year ahead The post Judicial Office Business Plan for 2026-27 appeared first on Courts and Tribunals Judiciary ."
+    },
+    {
+      "title": "New protocol sets out an informal resolution route if legal professionals have a concern about a judge’s behaviour",
+      "link": "https://www.judiciary.uk/new-protocol-sets-out-an-informal-resolution-route-if-legal-professionals-have-a-concern-about-a-judges-behaviour/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-08T08:07:41.000Z",
+      "summary": "The protocol aims to give legal professionals clarity in raising concerns informally The post New protocol sets out an informal resolution route if legal professionals have a…"
+    },
+    {
+      "title": "Preston Prison",
+      "link": "https://www.gov.uk/guidance/preston-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-08T07:57:37.000Z",
+      "summary": "Preston Prison is a men’s prison in Preston, Lancashire."
+    },
+    {
+      "title": "Better together? The hidden challenges of mega mergers",
+      "link": "https://www.legalcheek.com/2026/07/better-together-the-hidden-challenges-of-mega-mergers/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-08T07:56:16.000Z",
+      "summary": "What happens when two become one? The post Better together? The hidden challenges of mega mergers appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Junior lawyers split: Is AI ‘eating’ their jobs, or just an above-average paralegal?",
+      "link": "https://www.legalcheek.com/2026/07/junior-lawyers-divided-over-whether-ai-is-eating-their-jobs-or-just-cutting-the-boring-bits/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-08T07:51:21.000Z",
+      "summary": "Hype or threat? The post Junior lawyers split: Is AI ‘eating’ their jobs, or just an above-average paralegal? appeared first on Legal Cheek ."
     },
     {
       "title": "Harry's bad news lands at wrong time, but prince sticks to script",
@@ -56,22 +143,6 @@
       "summary": "Featherstone is a men’s prison in the village of Featherstone, near Wolverhampton."
     },
     {
-      "title": "Erlestoke Prison",
-      "link": "https://www.gov.uk/guidance/erlestoke-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-07T16:57:12.000Z",
-      "summary": "Erlestoke is a men’s prison in the village of Erlestoke, Wiltshire."
-    },
-    {
-      "title": "Coldingley Prison",
-      "link": "https://www.gov.uk/guidance/coldingley-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-07T16:54:58.000Z",
-      "summary": "Coldingley is a prison for adult men in Woking, Surrey."
-    },
-    {
       "title": "Teacher 'feared she would die' after being stabbed in head by pupil, court hears",
       "link": "https://www.bbc.co.uk/news/articles/clyx94y8we1o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
@@ -80,28 +151,12 @@
       "summary": "A jury heard the 16-year-old launched at her with a large kitchen knife and stabbed her in the head."
     },
     {
-      "title": "Murder inquiry after mother and children found dead",
-      "link": "https://www.bbc.co.uk/news/articles/cvgdlnvg2n5o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-07T14:20:43.000Z",
-      "summary": "A mother and her two children are found dead in a property, police say."
-    },
-    {
       "title": "Police and law enforcement access to driver data held by the DVLA",
       "link": "https://www.gov.uk/government/consultations/police-and-law-enforcement-access-to-driver-data-held-by-the-dvla",
       "source": "Home Office",
       "topic": "policing",
       "isoDate": "2026-07-07T13:04:00.000Z",
       "summary": "The government is consulting on the statutory framework governing police and law enforcement access to driving licence data held by the Driver and Vehicle Licensing Agency."
-    },
-    {
-      "title": "Sir Andy Marsh announced as preferred candidate for HM Chief Inspector",
-      "link": "https://www.gov.uk/government/news/sir-andy-marsh-announced-as-preferred-candidate-for-hm-chief-inspector",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-07T11:44:51.000Z",
-      "summary": "…College of <mark>Policing</mark> chief executive has 30 years&#x27; <mark>policing</mark> experience and led significant reforms in professional standards, leadership and…"
     },
     {
       "title": "Suits’ Harvey Specter chats to A&O Shearman partner in surreal interview",
@@ -120,14 +175,6 @@
       "summary": "Funds restoration project The post Womble Bond Dickinson slaps £300 levy on business class flights in bid to protect oysters appeared first on Legal Cheek ."
     },
     {
-      "title": "Free ‘Rule of Law’ lessons to be offered in schools",
-      "link": "https://www.legalcheek.com/2026/07/free-rule-of-law-lessons-to-be-offered-in-schools/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-07T07:54:03.000Z",
-      "summary": "Backed by Attorney General The post Free ‘Rule of Law’ lessons to be offered in schools appeared first on Legal Cheek ."
-    },
-    {
       "title": "Robots available for rent: But what can they do?",
       "link": "https://www.bbc.co.uk/news/articles/c4gymkg9lr2o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -144,28 +191,12 @@
       "summary": "Guidance aims to support access to justice and efficient use of court time and resources The post New statutory guidance from the Lady Chief Justice on Live Links in Criminal…"
     },
     {
-      "title": "UK Forces protect NATO with aircraft carrier operations in High North",
-      "link": "https://www.gov.uk/government/news/uk-forces-protect-nato-with-aircraft-carrier-operations-in-high-north",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-06T10:35:56.000Z",
-      "summary": "NATO air <mark>policing</mark> conducted by F-35 jets from European aircraft carrier for first time in boost to High North security."
-    },
-    {
       "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
       "link": "https://www.gov.uk/government/news/solicitor-general-announces-national-rollout-of-early-victims-right-to-review-scheme",
       "source": "CPS",
       "topic": "law",
       "isoDate": "2026-07-06T09:18:34.000Z",
       "summary": "Following a successful pilot, rape and sexual assault survivors across all of England and Wales will have the right to ask for their cases to be reviewed before a final…"
-    },
-    {
-      "title": "DLA Piper bumps NQ lawyer pay to £140k in London and £84k in regions",
-      "link": "https://www.legalcheek.com/2026/07/dla-piper-bumps-nq-lawyer-pay-to-140k-in-london-and-84000-in-regions/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-06T08:43:16.000Z",
-      "summary": "More rises The post DLA Piper bumps NQ lawyer pay to £140k in London and £84k in regions appeared first on Legal Cheek ."
     },
     {
       "title": "Parents warned not to publicly share children’s images amid AI abuse risks",
@@ -184,76 +215,12 @@
       "summary": "Mrs Justice Eady DBE spoke at the Bar Council Law Reform Committee about the approach to the issue of modern slavery in 2026 The post Speech by Mrs Justice Eady DBE: Bar…"
     },
     {
-      "title": "Mansion House speech 2026 by the Lady Chief Justice",
-      "link": "https://www.judiciary.uk/mansion-house-speech-by-the-lady-chief-justice-2026/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-07-03T14:03:57.000Z",
-      "summary": "The Lady Chief Justice, the Baroness Carr of Walton-on-the-Hill, gave her speech at Mansion House in London on Tuesday 1 July 2026 The post Mansion House speech 2026 by the…"
-    },
-    {
       "title": "AI is 'not smart' so what's next in artificial intelligence?",
       "link": "https://www.bbc.co.uk/news/articles/cj6gr0xkyr3o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
       "isoDate": "2026-07-02T23:02:09.000Z",
       "summary": "Leading AI researcher Yan LeCun has a start-up which is developing a more flexible AI system."
-    },
-    {
-      "title": "Health, Education and Social Care Chamber: Resident Judges Pre-Application Seminar 2026",
-      "link": "https://www.judiciary.uk/health-education-and-social-care-chamber-resident-judges-pre-application-seminar-2026/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-07-02T10:25:55.000Z",
-      "summary": "The pre-application seminar will take place online via Microsoft Teams on Tuesday 21 July from 5 to 6pm The post Health, Education and Social Care Chamber: Resident Judges…"
-    },
-    {
-      "title": "Dame Vera Baird DBE KC further appointed as Interim Chair of the CCRC",
-      "link": "https://www.gov.uk/government/news/dame-vera-baird-dbe-kc-further-appointed-as-interim-chair-of-the-ccrc",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-02T08:30:07.000Z",
-      "summary": "Dame Vera Baird DBE KC further appointed as Interim Chair of the Criminal Cases Review Commission (CCRC)."
-    },
-    {
-      "title": "Godot says bye bye AI, bans vibe-coded contributions",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/01/godot-says-bye-bye-ai-bans-vibe-coded-contributions/5265344",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-01T20:29:07.000Z",
-      "summary": "'We can’t trust heavy users of AI to understand their code enough to fix it,' say maintainers who previously called the flood of vibe-coded pull requests 'demoralizing'"
-    },
-    {
-      "title": "Wonka Netflix show faces backlash for AI-generated Gene Wilder voice",
-      "link": "https://www.bbc.co.uk/news/articles/cdxdgpgn0zwo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-01T14:01:06.000Z",
-      "summary": "The actor, who died in 2016, appears in the Netflix show with the consent of his estate."
-    },
-    {
-      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
-      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-30T06:11:03.000Z",
-      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
-    },
-    {
-      "title": "Circular 004/2026: Crime and Policing Act 2026",
-      "link": "https://www.gov.uk/government/publications/circular-0042026-crime-and-policing-act-2026",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-06-29T15:24:00.000Z",
-      "summary": "This circular is issued to inform partners of certain provisions of the Crime and <mark>Policing</mark> Act 2026 which came into force on 29 June 2026."
-    },
-    {
-      "title": "Anthropic reimagines Claude in Slack as nosy, always-on agentic AI coworker",
-      "link": "https://www.theregister.com/ai-and-ml/2026/06/23/anthropic-reimagines-claude-in-slack-as-nosy-always-on-agentic-ai-coworker/5260422",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-23T20:16:34.000Z",
-      "summary": "The Claude in Slack app is dead, long live Claude in Slack"
     }
   ]
 }
