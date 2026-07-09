@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-08T13:27:50.299Z",
-    "feedCount": 8,
+    "fetchedAt": "2026-07-09T01:50:21.133Z",
+    "feedCount": 10,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -10,17 +10,75 @@
       "CPS",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
+      "DSIT",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Police name man wanted over murders of wife and daughters",
-      "link": "https://www.bbc.co.uk/news/articles/c8e2njxnn7jo?at_medium=RSS&at_campaign=rss",
+      "title": "Wealthy AI workers send San Francisco house prices soaring",
+      "link": "https://www.bbc.co.uk/news/articles/c9q29j47v9ro?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-08T23:11:35.000Z",
+      "summary": "The median cost of a home in the city is now $1.7m, a record high, according to the latest figures."
+    },
+    {
+      "title": "Fresh DNA samples taken from jailed man 30 years after murder of mother and child",
+      "link": "https://www.bbc.co.uk/news/articles/c75ygdgk5v6o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-08T12:41:55.000Z",
-      "summary": "An international manhunt is under way for Ndodana Mkhanyisi Tshuma, who left the country via Heathrow Airport."
+      "isoDate": "2026-07-08T22:15:43.000Z",
+      "summary": "Michael Stone will have his DNA tested 30 years after the murder of a mother and daughter."
+    },
+    {
+      "title": "Government offers to meet woman abused by neo-Nazi MI5 agent",
+      "link": "https://www.bbc.co.uk/news/articles/c9v24wpynv1o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-08T18:19:28.000Z",
+      "summary": "A secret inquiry by MI5's watchdog found the service knew an agent it defended in court was \"obsessed\" with violence, the BBC revealed on Tuesday."
+    },
+    {
+      "title": "Officer in Kaba shooting may not face misconduct case",
+      "link": "https://www.bbc.co.uk/news/articles/c4gyk1e0r2ko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-08T18:09:42.000Z",
+      "summary": "The police watchdog says it will decide soon if Sgt Martyn Blake will face a misconduct panel."
+    },
+    {
+      "title": "UK to change law so ringleader of Rochdale grooming gang can be deported",
+      "link": "https://www.bbc.co.uk/news/articles/cly0ly30384o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-08T18:05:58.000Z",
+      "summary": "The home secretary is expected to set out on Monday how she plans to amend the 1971 Immigration Act."
+    },
+    {
+      "title": "Four sentenced to nearly 15 years combined jail time following major MHRA investigation into illegal online supply of medicines",
+      "link": "https://www.gov.uk/government/news/four-sentenced-to-nearly-15-years-combined-jail-time-following-major-mhra-investigation-into-illegal-online-supply-of-medicines",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-08T15:57:46.000Z",
+      "summary": "The MHRA’s Criminal Enforcement Unit dismantled a multimillion-pound criminal network responsible for illegally supplying medicines."
+    },
+    {
+      "title": "Tool promises to make lazy academics' AI-written papers sound more human",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/08/tool-promises-to-make-lazy-academics-ai-written-papers-sound-more-human/5268460",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-08T15:55:00.000Z",
+      "summary": "Startup insists it's not trying to help anyone cheat the system - honest!"
+    },
+    {
+      "title": "Pro-Worker AI Adoption Prize: how to nominate",
+      "link": "https://www.gov.uk/guidance/pro-worker-ai-adoption-prize-how-to-nominate",
+      "source": "DSIT",
+      "topic": "ai",
+      "isoDate": "2026-07-08T14:23:42.000Z",
+      "summary": "How to nominate a UK organisation for the Pro-Worker AI Adoption Prize, recognising organisations using AI that benefits workers."
     },
     {
       "title": "Outcry as Meta lets users make AI images from public Instagram profile pics",
@@ -60,14 +118,6 @@
       "source": "GOV.UK",
       "topic": "policing",
       "isoDate": "2026-07-08T11:29:14.000Z",
-      "summary": "The Crime and <mark>Policing</mark> Act 2026 introduces reforms to the criminal confiscation regime under Part 2 of POCA."
-    },
-    {
-      "title": "Circular 009/2026: Early resolution of confiscation meeting (criminal confiscation)",
-      "link": "https://www.gov.uk/government/publications/circular-0092026-early-resolution-of-confiscation-meeting-criminal-confiscation",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-08T11:28:58.000Z",
       "summary": "The Crime and <mark>Policing</mark> Act 2026 introduces reforms to the criminal confiscation regime under Part 2 of POCA."
     },
     {
@@ -111,20 +161,12 @@
       "summary": "Hype or threat? The post Junior lawyers split: Is AI ‘eating’ their jobs, or just an above-average paralegal? appeared first on Legal Cheek ."
     },
     {
-      "title": "Harry's bad news lands at wrong time, but prince sticks to script",
-      "link": "https://www.bbc.co.uk/news/articles/ckg5v6n29g6o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-07T19:42:43.000Z",
-      "summary": "The Duke of Sussex has returned to the UK, but his first day of engagements was overshadowed by his defeat in court."
-    },
-    {
-      "title": "Harry loses High Court privacy case against Daily Mail publisher",
-      "link": "https://www.bbc.co.uk/news/articles/c9324nyqwjno?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-07T17:57:40.000Z",
-      "summary": "Judge Mr Justice Nicklin says the claimants had failed to prove the allegations."
+      "title": "Avoid AI atrophy – new tool promises to reverse vibe coding skills decay",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/07/avoid-ai-atrophy-new-tool-promises-to-reverse-vibe-coding-skills-decay/5267913",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-07T20:21:35.000Z",
+      "summary": "Want big muscles? Keep working out. Want big coding skillsets? Flex your dev skills with the Atrophy CLI app before they wither away"
     },
     {
       "title": "Lowdham Grange Prison",
@@ -141,14 +183,6 @@
       "topic": "law",
       "isoDate": "2026-07-07T16:58:48.000Z",
       "summary": "Featherstone is a men’s prison in the village of Featherstone, near Wolverhampton."
-    },
-    {
-      "title": "Teacher 'feared she would die' after being stabbed in head by pupil, court hears",
-      "link": "https://www.bbc.co.uk/news/articles/clyx94y8we1o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-07T15:22:28.000Z",
-      "summary": "A jury heard the 16-year-old launched at her with a large kitchen knife and stabbed her in the head."
     },
     {
       "title": "Police and law enforcement access to driver data held by the DVLA",
@@ -215,12 +249,12 @@
       "summary": "Mrs Justice Eady DBE spoke at the Bar Council Law Reform Committee about the approach to the issue of modern slavery in 2026 The post Speech by Mrs Justice Eady DBE: Bar…"
     },
     {
-      "title": "AI is 'not smart' so what's next in artificial intelligence?",
-      "link": "https://www.bbc.co.uk/news/articles/cj6gr0xkyr3o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
+      "title": "Godot says bye bye AI, bans vibe-coded contributions",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/01/godot-says-bye-bye-ai-bans-vibe-coded-contributions/5265344",
+      "source": "The Register",
       "topic": "ai",
-      "isoDate": "2026-07-02T23:02:09.000Z",
-      "summary": "Leading AI researcher Yan LeCun has a start-up which is developing a more flexible AI system."
+      "isoDate": "2026-07-01T20:29:07.000Z",
+      "summary": "'We can’t trust heavy users of AI to understand their code enough to fix it,' say maintainers who previously called the flood of vibe-coded pull requests 'demoralizing'"
     }
   ]
 }
