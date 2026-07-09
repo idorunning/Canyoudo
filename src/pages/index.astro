@@ -25,13 +25,13 @@ const allArticles: Item[] = articles
 
 const HERO_SLUG = 'self-selection-policing-catching-serious-criminals-and-bad-cops-through-minor-offences';
 const feature = allArticles.find(a => a.slug === HERO_SLUG) ?? allArticles[0];
-const latestThree = allArticles.slice(0, 3);
+const latestArticles = allArticles.slice(0, 8);
 
-// Themed section rows — latest 2 articles per primary section
+// Themed section rows — latest 8 articles per primary section (scrollable row)
 const bySection: Record<string, Item[]> = {};
 for (const a of allArticles) {
   if (!bySection[a.section]) bySection[a.section] = [];
-  if (bySection[a.section].length < 2) bySection[a.section].push(a);
+  if (bySection[a.section].length < 8) bySection[a.section].push(a);
 }
 const FEATURED_SECTIONS: Section[] = ['police-policy', 'public-policy', 'influential-people'];
 
@@ -52,7 +52,7 @@ const byViews = allArticles
   .map(a => ({ article: a, views: (engagement as Record<string, { views: number }>)[a.slug]?.views ?? 0 }))
   .filter(a => a.views > 0)
   .sort((a, b) => b.views - a.views)
-  .slice(0, 4)
+  .slice(0, 8)
   .map(a => a.article);
 const mostRead = byViews.length > 0
   ? byViews
@@ -274,14 +274,14 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
               All {counts[sectionKey]} articles →
             </a>
           </div>
-          <div class="grid md:grid-cols-2 gap-6">
+          <div class="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
             {articles.map(article => (
               <a
                 href={`/${article.section}/${article.slug}`}
-                class="group flex gap-5 bg-paper-50 border border-ink-200 rounded-[18px] overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(27,36,82,0.09)] transition-all duration-200"
+                class="group shrink-0 snap-start w-[280px] flex flex-col bg-paper-50 border border-ink-200 rounded-[18px] overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(27,36,82,0.09)] transition-all duration-200"
               >
                 {(article.data.heroImage || article.data.portrait) ? (
-                  <div data-reveal class="overflow-hidden w-[140px] shrink-0">
+                  <div data-reveal class="overflow-hidden h-[160px]">
                     <img
                       src={article.data.portrait ?? article.data.heroImage}
                       alt=""
@@ -290,13 +290,13 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                     />
                   </div>
                 ) : (
-                  <div data-reveal class={`w-[100px] shrink-0 flex items-center justify-center ${SECTION_BG[article.section]}`}>
+                  <div data-reveal class={`h-[160px] flex items-center justify-center ${SECTION_BG[article.section]}`}>
                     <span class="font-extrabold text-3xl text-ink-900/20">
                       {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
                     </span>
                   </div>
                 )}
-                <div class="py-5 pr-6">
+                <div class="p-5 flex flex-col grow">
                   <div class="text-[11px] font-bold uppercase tracking-[0.06em] text-ink-500 mb-2">
                     {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </div>
@@ -401,82 +401,80 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
   <!-- ============ MOST READ + LATEST WRITING ============ -->
   <section class="bg-paper-100 border-y border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-      <div class="grid md:grid-cols-[0.82fr_1.18fr] gap-14 md:gap-[56px]">
 
-        <!-- Most read -->
-        {mostRead.length > 0 && (
-          <div>
-            <h2 class="font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-5 pb-3.5 border-b-2 border-ink-900">
-              Most read
-            </h2>
-            <div class="flex flex-col">
-              {mostRead.map((article, i) => (
-                <a
-                  href={`/${article.section}/${article.slug}`}
-                  class="group flex gap-4 py-4 border-b border-ink-200 last:border-0 hover:no-underline"
-                >
-                  <span class={`font-extrabold text-[26px] leading-[1.05] min-w-[30px] ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
-                    {i + 1}
-                  </span>
-                  <div>
-                    <h3 class="font-bold text-[18px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
-                      {article.data.title}
-                    </h3>
-                    <div class="text-[11px] font-bold uppercase tracking-[0.06em] text-ink-500 mt-1.5">
-                      {SECTION_LABELS[article.section]}
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <!-- Latest writing -->
-        <div>
-          <div class="flex items-baseline justify-between mb-5 pb-3.5 border-b-2 border-ink-900">
-            <h2 class="font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">Latest writing</h2>
-            <a href="/sitemap" class="text-[13px] font-bold text-accent hover:text-accent-dark transition-colors">
-              Archive →
-            </a>
-          </div>
-          <div class="flex flex-col">
-            {latestThree.map((article, i) => (
+      <!-- Most read -->
+      {mostRead.length > 0 && (
+        <div class="mb-14">
+          <h2 class="font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-5 pb-3.5 border-b-2 border-ink-900">
+            Most read
+          </h2>
+          <div class="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+            {mostRead.map((article, i) => (
               <a
                 href={`/${article.section}/${article.slug}`}
-                class="group grid grid-cols-[160px_1fr] gap-5 py-4 border-b border-ink-200 last:border-0 hover:no-underline items-start"
+                class="group shrink-0 snap-start w-[280px] flex gap-4 bg-paper-50 border border-ink-200 rounded-[18px] p-5 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(27,36,82,0.09)] transition-all duration-200 hover:no-underline"
               >
-                {(article.data.heroImage || article.data.portrait) ? (
-                  <div class="overflow-hidden rounded-[13px] h-[108px]">
-                    <img
-                      src={article.data.portrait ?? article.data.heroImage}
-                      alt=""
-                      loading="lazy"
-                      class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.7,.2,1)]"
-                    />
-                  </div>
-                ) : (
-                  <div class={`rounded-[13px] h-[108px] flex items-center justify-center ${SECTION_BG[article.section]}`}>
-                    <span class="font-extrabold text-4xl text-ink-900/20">
-                      {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
-                    </span>
-                  </div>
-                )}
+                <span class={`font-extrabold text-[26px] leading-[1.05] min-w-[30px] ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
+                  {i + 1}
+                </span>
                 <div>
-                  <div class={`inline-block text-[10.5px] font-extrabold uppercase tracking-[0.06em] text-ink-900 px-2.5 py-1 rounded-full mb-2 ${SECTION_BG[article.section]}`}>
-                    {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                  </div>
-                  <h3 class="font-bold text-[20px] leading-[1.22] text-ink-900 group-hover:text-accent transition-colors m-0">
+                  <h3 class="font-bold text-[18px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
                     {article.data.title}
                   </h3>
-                  <p class="text-[13.5px] leading-[1.5] text-ink-700 mt-1.5">{article.data.description}</p>
+                  <div class="text-[11px] font-bold uppercase tracking-[0.06em] text-ink-500 mt-1.5">
+                    {SECTION_LABELS[article.section]}
+                  </div>
                 </div>
               </a>
             ))}
           </div>
         </div>
+      )}
 
+      <!-- Latest writing -->
+      <div>
+        <div class="flex items-baseline justify-between mb-5 pb-3.5 border-b-2 border-ink-900">
+          <h2 class="font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">Latest writing</h2>
+          <a href="/sitemap" class="text-[13px] font-bold text-accent hover:text-accent-dark transition-colors">
+            Archive →
+          </a>
+        </div>
+        <div class="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+          {latestArticles.map(article => (
+            <a
+              href={`/${article.section}/${article.slug}`}
+              class="group shrink-0 snap-start w-[280px] flex flex-col bg-paper-50 border border-ink-200 rounded-[18px] overflow-hidden hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(27,36,82,0.09)] transition-all duration-200 hover:no-underline"
+            >
+              {(article.data.heroImage || article.data.portrait) ? (
+                <div class="overflow-hidden h-[150px]">
+                  <img
+                    src={article.data.portrait ?? article.data.heroImage}
+                    alt=""
+                    loading="lazy"
+                    class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.7,.2,1)]"
+                  />
+                </div>
+              ) : (
+                <div class={`h-[150px] flex items-center justify-center ${SECTION_BG[article.section]}`}>
+                  <span class="font-extrabold text-3xl text-ink-900/20">
+                    {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
+                  </span>
+                </div>
+              )}
+              <div class="p-5 flex flex-col grow">
+                <div class={`inline-block text-[10.5px] font-extrabold uppercase tracking-[0.06em] text-ink-900 px-2.5 py-1 rounded-full mb-2 w-fit ${SECTION_BG[article.section]}`}>
+                  {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                </div>
+                <h3 class="font-bold text-[18px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
+                  {article.data.title}
+                </h3>
+                <p class="text-[13.5px] leading-[1.5] text-ink-700 mt-2 line-clamp-2">{article.data.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
+
     </div>
   </section>
 
