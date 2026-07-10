@@ -8,6 +8,7 @@ keyTakeaways:
   - The Society's real value is the infrastructure — free membership, a conference, an open publishing route and informal mentorship — that supports a frontline officer with an idea.
   - 'Writing up and sharing findings, including negative results, is what turns individual learning into organisational learning and changes cultures rather than projects.'
 pubDate: 2026-06-11
+updatedDate: 2026-07-10
 author: ''
 thumbnail: /images/11540.webp
 heroImage: /images/11540.webp
@@ -51,7 +52,7 @@ A curious officer with a hypothesis and no institutional support will usually fi
 
 The SEBP's [conference](https://www.sebp.police.uk/about/events), its [CrimRxiv publishing collection](https://www.crimrxiv.com/sebp) and its informal networks are the infrastructure that makes this support available to practitioners who would otherwise have no access to it. The 2024 [Global Societies of Evidence-Based Policing Conference at Cambridge](https://www.sebp.police.uk/event-details/global-societies-of-evidence-based-policing-conference) put serving officers in rooms with researchers from several countries, talking in shared language about what works. That is a genuinely unusual resource for a detective constable who has never published anything and does not plan to, but wants to understand whether their force's knife crime tactic has any evidence behind it.
 
-The leadership dimension matters too. Forces that have embedded EBP most deeply — [Susanne Knabe-Nicol's work at South Yorkshire](/influential-people/susanne-knabe-nicol-and-the-last-mile-of-evidence-based-policing) is the sharpest example on this site — have leaders who created the conditions: time, legitimacy and a clear message that testing and reporting back was part of the job, not a distraction from it. The SEBP is best understood as the vehicle that can carry that message to forces whose leaders have not yet sent it.
+The leadership dimension matters too. Forces that have embedded EBP most deeply have leaders who created the conditions: time, legitimacy and a clear message that testing and reporting back was part of the job, not a distraction from it. It is the same enabling role [Alex Murray](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing) played in founding the Society in the first place — a senior officer using his standing to make the question legitimate. The SEBP is best understood as the vehicle that can carry that message to forces whose leaders have not yet sent it.
 
 ## Write it up. Share it.
 
