@@ -1,0 +1,87 @@
+# Style rewrite progress
+
+Tracks the oldest-first sweep applying `writing-style.md` (all pieces) and, where
+the piece is a genuine news report rather than an essay/argument,
+`police-oracle-style-guide.md` (see that file's "When to use it" test — most
+articles stay in the essay register and only need the `writing-style.md`
+cleanup, not a register switch).
+
+**Two standing instructions from Nathan, apply to every pass:**
+- **Never change the headline/title.** Style, structure and evidence can
+  change; the title frontmatter field doesn't.
+- **Each pass is also a fact-check pass, not just a style pass.** Verify the
+  load-bearing claims and figures with a live search before touching the
+  prose — check whether a cited stat still has a traceable source, whether a
+  named tool/model/policy is still current, and whether anything has moved
+  on since the article's last `updatedDate`. Fix what's wrong or outdated,
+  add a source where a claim currently has none, and note in the commit
+  message what changed and why. Don't invent figures or citations — if a
+  claim can't be verified, flag it rather than silently dropping or altering
+  it.
+
+Queue order = `pubDate` ascending, published articles only (`draft: true`
+articles are excluded — they're not live, nothing to keep consistent with the
+rest of the site until they're published). Regenerate the queue with:
+
+```
+for f in src/content/articles/*.md src/content/articles/*.mdx; do
+  pubdate=$(grep -m1 '^pubDate:' "$f" | sed 's/pubDate:\s*//')
+  draft=$(grep -m1 '^draft:' "$f" | sed 's/draft:\s*//')
+  [ "$draft" = "true" ] && continue
+  echo "$pubdate|$(basename "$f")"
+done | sort
+```
+
+Mark a row done by ticking it and adding the commit that did the rewrite.
+Re-run and re-triage the queue any time `writing-style.md` or
+`police-oracle-style-guide.md` changes materially — an earlier pass may no
+longer match the current guide.
+
+## Queue
+
+- [x] 2025-02-18 — `boosting-public-confidence-through-neighbourhood-policing.md` — essay register, `writing-style.md` cleanup (banned corrective-antithesis/tricolon repeats, academic framing, over-bolding; added a case-study evidence caveat)
+- [x] 2025-03-25 — `when-seeing-is-no-longer-believing-the-ai-generated-content-threat-to-criminal-justice.mdx` — already a strong style match, no prose rewrite needed; fact-check pass corrected an outdated model reference (OpenAI's Sora, named as current, shut down April 2026) and a real gap in C2PA's reliability as a provenance signal (independent 2026 testing found a tampered manifest validating as untampered), and added missing sourcing for the deepfake-volume and CCTV-retention stats plus a newer EU AI Act Omnibus detail
+- [ ] 2025-05-06 — `the-officers-were-losing-why-british-policing-must-rethink-cognitive-diversity.md`
+- [ ] 2025-06-17 — `when-police-stop-investigating-crime-the-fuel-theft-crisis-hurting-british-policing.md`
+- [ ] 2025-07-29 — `the-hidden-crisis-how-police-burnout-threatens-officer-safety-and-public-trust.md`
+- [ ] 2025-10-21 — `the-legal-aid-paradox.mdx`
+- [ ] 2026-01-07 — `do-you-understand.mdx`
+- [ ] 2026-04-29 — `should-britain-drill-baby-drill-the-north-sea-question-in-plain-english.mdx` (already flagged in `writing-style.md` as a strong exemplar — check only, likely no rewrite needed)
+- [ ] 2026-06-05 — `the-drug-thats-already-here-what-nitazenes-mean-for-british-policing.md`
+- [ ] 2026-06-05 — `what-palantirs-advance-means-for-british-policing-and-should-we-trust-them.md`
+- [ ] 2026-06-06 — `the-neighbourhood-policing-guarantee-confidence-or-crime.md`
+- [ ] 2026-06-07 — `jerry-ratcliffe-and-the-case-for-intelligence-led-policing.md`
+- [ ] 2026-06-07 — `lawrence-sherman-and-the-invention-of-evidence-based-policing.mdx`
+- [ ] 2026-06-07 — `more-or-less-and-the-art-of-not-being-fooled-by-numbers.md`
+- [ ] 2026-06-07 — `reading-the-data.md`
+- [ ] 2026-06-07 — `sir-robert-peel-and-the-invention-of-policing-by-consent.mdx`
+- [ ] 2026-06-07 — `the-murder-of-henry-nowak-what-the-court-found.md` (likely a Police Oracle news-register candidate — court outcome, "who did what, when")
+- [ ] 2026-06-08 — `susanne-knabe-nicol-and-the-last-mile-of-evidence-based-policing.md`
+- [ ] 2026-06-11 — `jason-roach-and-the-art-of-catching-criminals-by-their-small-mistakes.md`
+- [ ] 2026-06-11 — `the-society-of-evidence-based-policing.md`
+- [ ] 2026-06-12 — `martyns-law-what-it-is-and-what-happens-next.md` (already flagged in `writing-style.md` as a strong exemplar — check only, likely no rewrite needed)
+- [ ] 2026-06-13 — `does-domestic-abuse-spike-when-england-play.md`
+- [ ] 2026-06-14 — `policeai-a-police-leaders-guide.mdx`
+- [ ] 2026-06-15 — `a-police-leaders-simple-guide-to-ai.mdx`
+- [ ] 2026-06-16 — `alex-murray-and-the-rise-of-evidence-based-policing.md`
+- [x] 2026-06-17 — `self-selection-policing-catching-serious-criminals-and-bad-cops-through-minor-offences.mdx` — news register (Police Oracle), commit `537fa3e` (worked example that shaped the style guide)
+- [ ] 2026-06-17 — `standard-medium-high-grading-domestic-abuse-risk.mdx` (already flagged in `writing-style.md` as a strong exemplar — check only, likely no rewrite needed)
+- [ ] 2026-06-17 — `the-power-of-civil-orders.mdx` (already flagged in `writing-style.md` as a strong exemplar — check only, likely no rewrite needed)
+- [ ] 2026-06-25 — `the-perception-of-the-police-in-online-media.mdx`
+- [ ] 2026-07-10 — `how-worthing-became-the-shoplifting-capital-of-the-uk.md`
+
+## Excluded (draft, not published)
+
+- `policing-the-police-why-the-small-stuff-matters.md` (2025-09-09, `draft: true`)
+- `cracking-the-somerton-man-code.md` (2025-12-19, `draft: true`)
+- `what-open-source-research-can-tell-us-about-missing-people-in-britain.md` (2026-06-05, `draft: true`)
+
+## Narration (OpenAI TTS)
+
+Do **not** hold narration back until the whole queue is done. Regenerate audio
+per article, right after that article's rewrite is published — `pubDate`/body
+hash changes automatically invalidate the cached MP3 in
+`scripts/generate-audio.mjs`, so each rewrite gets fresh narration on the next
+build with `AUDIO_ALLOW_SYNTHESIS=true`, at no extra cost over doing it later.
+Batching it to the end would leave rewritten text paired with stale audio for
+the entire sweep.
