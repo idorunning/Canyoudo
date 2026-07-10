@@ -75,7 +75,7 @@ const linkClass = isStack ? 'flex h-full flex-col' : 'block sm:flex sm:gap-6 sm:
       >
         <span class={`font-display font-bold text-night-ink leading-none ${isFeature ? 'text-5xl' : 'text-3xl md:text-4xl'}`}>{initial}</span>
         {section && (
-          <span class="mt-1.5 font-mono text-[0.5rem] uppercase tracking-[0.12em] text-accent-light leading-tight">{SECTION_LABELS[section]}</span>
+          <span class="mt-1.5 font-sans text-[0.5rem] font-semibold uppercase tracking-[0.12em] text-accent-light leading-tight">{SECTION_LABELS[section]}</span>
         )}
       </div>
     )}
@@ -99,7 +99,7 @@ const linkClass = isStack ? 'flex h-full flex-col' : 'block sm:flex sm:gap-6 sm:
         {description}
       </p>
 
-      <div class={`font-mono text-[0.66rem] font-medium uppercase tracking-[0.12em] text-ink-500 u-tnum ${isStack ? 'mt-auto pt-4' : 'mt-4'}`}>
+      <div class={`font-sans text-[0.66rem] font-semibold uppercase tracking-[0.12em] text-ink-500 u-tnum ${isStack ? 'mt-auto pt-4' : 'mt-4'}`}>
         <time datetime={pubDate.toISOString()}>{formattedDate}</time>
         <span class="mx-2" aria-hidden="true">·</span>
         <span class="group-hover:text-accent transition-colors">Read article →</span>

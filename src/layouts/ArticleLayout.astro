@@ -158,7 +158,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
           <div class="mb-6 flex flex-wrap items-center gap-x-3 gap-y-1">
             <SectionBadge section={section} />
             <span class="text-ink-300" aria-hidden="true">·</span>
-            <span class="font-mono text-[0.68rem] font-medium uppercase tracking-[0.14em] text-ink-500 u-tnum">
+            <span class="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-ink-500 u-tnum">
               <time datetime={pubDate.toISOString()}>{formattedPubDate}</time> · {minutes} min read<span data-live-views></span>
             </span>
           </div>
@@ -180,7 +180,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             </div>
             <div class="flex items-center gap-3 shrink-0">
               {updatedDate && (
-                <div class="hidden sm:block font-mono text-[0.66rem] font-medium uppercase tracking-[0.1em] text-ink-500 text-right u-tnum">
+                <div class="hidden sm:block font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-ink-500 text-right u-tnum">
                   Updated {updatedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </div>
               )}
@@ -209,7 +209,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             style={heroImage ? 'display:none' : 'display:flex'}
           >
             <div class="h-[3px] w-12 bg-accent-light mb-5"></div>
-            <p class="font-mono text-xs font-medium uppercase tracking-[0.16em] text-accent-light mb-4">{SECTION_LABELS[section]}</p>
+            <p class="font-sans text-xs font-semibold uppercase tracking-[0.16em] text-accent-light mb-4">{SECTION_LABELS[section]}</p>
             <p class="font-display text-3xl md:text-5xl font-bold text-night-ink leading-[1.1] max-w-3xl">{title}</p>
           </div>
         </div>

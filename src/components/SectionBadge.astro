@@ -24,13 +24,13 @@ const sizeClasses = {
 {link ? (
   <a
     href={`/${section}`}
-    class={`inline-block font-mono font-semibold uppercase tracking-[0.14em] text-accent hover:text-accent-dark transition-colors ${sizeClasses[size]}`}
+    class={`inline-block font-sans font-semibold uppercase tracking-[0.14em] text-accent hover:text-accent-dark transition-colors ${sizeClasses[size]}`}
   >
     {labels[section]}
   </a>
 ) : (
   <span
-    class={`inline-block font-mono font-semibold uppercase tracking-[0.14em] text-accent ${sizeClasses[size]}`}
+    class={`inline-block font-sans font-semibold uppercase tracking-[0.14em] text-accent ${sizeClasses[size]}`}
   >
     {labels[section]}
   </span>

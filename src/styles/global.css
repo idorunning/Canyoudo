@@ -155,10 +155,12 @@ html.dark {
 }
 
 @layer components {
-  /* The mono microtype voice — section labels, dates, figures, data chrome.
-     One class so the whole site speaks metadata the same way. */
+  /* The eyebrow/label microtype voice — section labels, dates, figures, data
+     chrome. One class so the whole site speaks metadata the same way. Sans,
+     not mono: the monospace treatment read as too "codey" for a small
+     uppercase label repeated on every card and page. */
   .u-kicker {
-    font-family: theme('fontFamily.mono');
+    font-family: theme('fontFamily.sans');
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.14em;
