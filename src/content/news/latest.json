@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-09T14:27:47.137Z",
+    "fetchedAt": "2026-07-10T01:48:38.751Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,12 +16,44 @@
   },
   "items": [
     {
-      "title": "No contact from UK about on-the-run murder suspect, say Zimbabwe police",
-      "link": "https://www.bbc.co.uk/news/articles/clyr4l1p6d4o?at_medium=RSS&at_campaign=rss",
+      "title": "Bonfire with mosque replica placed on top set alight",
+      "link": "https://www.bbc.co.uk/news/articles/cy8wz13924jo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-09T13:57:07.000Z",
-      "summary": "Ndodana Mkhanyisi Tshuma left the country via Heathrow Airport on a British passport on Saturday."
+      "isoDate": "2026-07-10T00:31:11.000Z",
+      "summary": "The Police Service of Northern Ireland (PSNI) said it had \"commenced a significant and complex policing operation\" to remove a \"hate display\"."
+    },
+    {
+      "title": "Murder arrest after man, 18, dies in crash between car and off-road bike",
+      "link": "https://www.bbc.co.uk/news/articles/czx5zk8k5evo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-09T21:23:02.000Z",
+      "summary": "A man from Swansea was pronounced dead at the scene, while another man, aged 19, was taken to hospital."
+    },
+    {
+      "title": "Graham Linehan receives settlement from Met over online post arrest",
+      "link": "https://www.bbc.co.uk/news/articles/cvgdyjeqz8lo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-09T18:29:46.000Z",
+      "summary": "The comedian was arrested at Heathrow Airport in September 2025 and was subsequently taken to hospital."
+    },
+    {
+      "title": "AI tool scours the web for job openings, preps your resume and cover letter",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/09/ai-tool-scours-the-web-for-job-openings-preps-your-resume-and-cover-letter/5269410",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-09T17:40:00.000Z",
+      "summary": "Searching for work sucks; AI combs the internet and sucks it all up. Combine the two and let 'er rip with this Python project"
+    },
+    {
+      "title": "Restore Britain leader describes Dunblane tragedy as 'one murder'",
+      "link": "https://www.bbc.co.uk/news/articles/cj3gdj300lyo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-09T15:02:30.000Z",
+      "summary": "Rupert Lowe criticised the ban of handguns in the UK, saying it was \"because there was a murder in Dunblane\"."
     },
     {
       "title": "Sir Colin Birss appointed Master of the Rolls",
@@ -40,14 +72,6 @@
       "summary": "His Majesty King Charles III has been pleased to approve the appointment of The Rt Hon Lord Justice Warby as the President of the King's Bench Division The post Lord Justice…"
     },
     {
-      "title": "Restore Britain leader describes Dunblane tragedy as 'one murder'",
-      "link": "https://www.bbc.co.uk/news/articles/cj3gdj300lyo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-09T10:03:57.000Z",
-      "summary": "Rupert Lowe criticised the ban of handguns in the UK, saying it was \"because there was a murder in Dunblane\"."
-    },
-    {
       "title": "Judicial diversity statistics 2026 – statement from the Lady Chief Justice",
       "link": "https://www.judiciary.uk/judicial-diversity-statistics-2026-statement-from-the-lady-chief-justice/",
       "source": "Courts & Tribunals Judiciary",
@@ -62,22 +86,6 @@
       "topic": "law",
       "isoDate": "2026-07-09T09:13:18.000Z",
       "summary": "Financial watchdog takes action The post City lawyer charged with insider dealing appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Drug mules carrying cannabis from Thailand face tougher penalties",
-      "link": "https://www.bbc.co.uk/news/articles/cx235xy2ky4o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-09T05:05:10.000Z",
-      "summary": "The National Crime Agency and Thai authorities have launched a crackdown on drug smugglers."
-    },
-    {
-      "title": "HMP Pentonville handed my son a death sentence",
-      "link": "https://www.bbc.co.uk/news/articles/c3wy0xz4018o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-09T05:02:47.000Z",
-      "summary": "Gareth Chumber-Kelly died by suicide at HMP Pentonville just four days after arriving. Now, his mother wants the prison closed down."
     },
     {
       "title": "Four sentenced to nearly 15 years combined jail time following major MHRA investigation into illegal online supply of medicines",
@@ -246,14 +254,6 @@
       "topic": "ai",
       "isoDate": "2026-07-01T20:29:07.000Z",
       "summary": "'We can’t trust heavy users of AI to understand their code enough to fix it,' say maintainers who previously called the flood of vibe-coded pull requests 'demoralizing'"
-    },
-    {
-      "title": "Microsoft builds a bouncer to keep bots out of Teams meetings",
-      "link": "https://www.theregister.com/software/2026/06/30/microsoft-builds-a-bouncer-to-keep-bots-out-of-teams-meetings/5264199",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-06-30T06:11:03.000Z",
-      "summary": "Allows ISVs to put their names on the door so desirable bots always get in"
     }
   ]
 }
