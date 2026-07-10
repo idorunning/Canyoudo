@@ -18,6 +18,9 @@ export type Work = {
   tldr?: string;
   /** Provenance when the "All sources" search merged catalogues. */
   sources?: string[];
+  /** Shared before peer review (CrimRxiv, SSRN…) — set by the review
+   *  pipeline's preprints pass; cleared on merge with a published copy. */
+  preprint?: boolean;
 };
 
 export const SOURCE_LABELS: Record<string, string> = {
@@ -34,6 +37,7 @@ export const SOURCE_LABELS: Record<string, string> = {
 // Compact per-catalogue labels for merged-result provenance badges.
 const SHORT_SOURCE_LABELS: Record<string, string> = {
   openalex: 'OpenAlex',
+  preprints: 'Preprint',
   scholar: 'S2',
   core: 'CORE',
   crossref: 'Crossref',

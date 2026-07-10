@@ -5,6 +5,8 @@
 //
 //   plan     POST /api/research-assist {mode:'plan'}   → framing + ~3 angles
 //   search   GET  /api/research?source=all&q=…         → per-angle studies
+//            plus one page of source=preprints per angle — current, not yet
+//            peer-reviewed work, tagged and capped so it never dominates
 //   curate   src/lib/briefing-curate.mjs (deterministic) → ≤10 studies
 //   review   POST /api/research-review                 → STREAMED markdown briefing
 //                                                        (Sonnet 5, thinking hard)
@@ -28,12 +30,15 @@
 
 import { card, el, safeHttpUrl, type Work, type CardHooks } from './cards';
 import { citationParagraph, CONFIDENCE_LABELS } from './citation-render';
-import { curate } from '../../lib/briefing-curate.mjs';
+import { curate, PREPRINT_CAP } from '../../lib/briefing-curate.mjs';
 import { sanitizeCitations } from '../../lib/citations.mjs';
 import {
   ASSIST_PROMPT_VERSION,
   REVIEW_MODEL,
   REVIEW_CONFIDENCE_PREFIX,
+  STRENGTH_COLUMN,
+  EFFECTIVENESS_EXPLANATIONS,
+  PREPRINT_EXPLANATION,
 } from '../../lib/research-assist-prompts';
 
 const REF_ID_PREFIX = 'briefing-ref-';
@@ -252,6 +257,23 @@ export async function runReviewPipeline(
     if (results.length) foundAny = true;
     hooks.onAngleDone?.(i, plan.angles.length);
   }
+
+  // Preprint pass: one page of not-yet-peer-reviewed work per angle from the
+  // preprints facet (CrimRxiv, SSRN, SocArXiv…), tagged `preprint: true` so
+  // curation can cap them (≤ PREPRINT_CAP of the curated set), the model can
+  // treat them with extra caution, and the renderers can label them. All
+  // angles' hits form ONE pseudo-angle, so the round-robin admits at most one
+  // preprint per round — current work joins the evidence base without ever
+  // leading it. Never escalated: page 1 is plenty for the early rung.
+  hooks.onProgress('Checking recent preprints — not yet peer reviewed…');
+  let preprintList: Work[] = [];
+  for (const a of plan.angles) {
+    const pre = await searchAngle({ ...a, review: false }, 'preprints', { page: 1, oa: true });
+    if (stale()) return { status: 'stale' };
+    preprintList = preprintList.concat(pre.map((w) => ({ ...w, preprint: true })));
+  }
+  if (preprintList.length) foundAny = true;
+
   if (!foundAny) {
     return {
       status: 'error',
@@ -261,8 +283,12 @@ export async function runReviewPipeline(
 
   hooks.onProgress('Curating the strongest studies…');
   // curate lives in untyped lib JS (like research-merge); it preserves the
-  // Work shape it's given, so assert the element type back here.
-  let references = curate(perAngle, TARGET_STUDIES) as Work[];
+  // Work shape it's given, so assert the element type back here. The preprint
+  // pseudo-angle rides along, capped so early work never crowds out the
+  // peer-reviewed base.
+  const curateAll = () =>
+    curate([...perAngle, preprintList], TARGET_STUDIES, { preprintCap: PREPRINT_CAP }) as Work[];
+  let references = curateAll();
 
   // Thin first pass → walk the escalation ladder: dig deeper (further pages)
   // then wider (beyond free-to-read), re-curating after each rung, until the
@@ -279,7 +305,7 @@ export async function runReviewPipeline(
       if (stale()) return { status: 'stale' };
       if (more.length) perAngle[i] = perAngle[i].concat(more);
     }
-    references = curate(perAngle, TARGET_STUDIES) as Work[];
+    references = curateAll();
   }
 
   const framing = plan.framing;
@@ -302,6 +328,9 @@ export async function runReviewPipeline(
     year: w.year,
     venue: w.venue,
     abstract: w.tldr || w.abstract || '',
+    // Not yet peer reviewed — the prompt pins these to the early rung of the
+    // ladder. Only sent when true, so ordinary items are byte-identical.
+    ...(w.preprint ? { preprint: true } : {}),
   }));
 
   let raw = '';
@@ -450,7 +479,9 @@ export function tableRow(line: string): string[] {
  *  "studies reviewed" and the "Read the studies" list only ever show what
  *  actually made the report, not the full curated set behind it. Returns an
  *  empty set if the table can't be found (e.g. a cut-short stream) — callers
- *  should fall back to the full reference list in that case. */
+ *  should fall back to the full reference list in that case. Since v11 the
+ *  rows run strongest-first, so the numbers are deliberately NOT ascending —
+ *  never assume [n] order here or downstream. */
 export function tableStudyNumbers(markdown: string): Set<number> {
   const nums = new Set<number>();
   for (const sec of parseSections(markdown)) {
@@ -501,24 +532,33 @@ function findingCellNodes(raw: string): Node[] {
   return nodes;
 }
 
-function renderTable(header: string[], rows: string[][], valid: Set<number>): HTMLElement | null {
+function renderTable(
+  header: string[],
+  rows: string[][],
+  valid: Set<number>,
+  refs?: Work[]
+): HTMLElement | null {
   // Tolerate column reordering/renaming by the model: find each column by
-  // its expected header text rather than assuming a fixed position.
+  // its expected header text rather than assuming a fixed position. The
+  // strength column matches BOTH names forever — v11 renamed it to "Strength
+  // of evidence", but saved v10 briefings carry "Effectiveness" in their
+  // stored markdown.
   const idx = (name: string) => header.findIndex((h) => h.toLowerCase().includes(name));
   const nCol = idx('#');
   const studyCol = idx('stud');
   const findingCol = idx('finding');
-  const effCol = idx('effective');
+  const effCol = header.findIndex((h) => /strength|effective/i.test(h));
   if (nCol === -1 || studyCol === -1 || findingCol === -1) return null;
 
-  const wrap = el('div', 'mt-4 overflow-x-auto rounded-md border border-ink-200');
+  const outer = el('div', 'mt-4');
+  const wrap = el('div', 'overflow-x-auto rounded-md border border-ink-200');
   const table = document.createElement('table');
   table.className = 'w-full text-left border-collapse';
 
   const thead = document.createElement('thead');
   const headRow = document.createElement('tr');
   headRow.className = 'bg-paper-200';
-  const headLabels = ['#', 'Study', 'Key finding', 'Effectiveness'];
+  const headLabels = ['#', 'Study', 'Key finding', STRENGTH_COLUMN];
   for (const label of headLabels) {
     const th = document.createElement('th');
     th.scope = 'col';
@@ -552,6 +592,15 @@ function renderTable(header: string[], rows: string[][], valid: Set<number>): HT
     } else {
       studyTd.textContent = row[studyCol] ?? '';
     }
+    if (refs?.[n - 1]?.preprint) {
+      studyTd.appendChild(
+        el(
+          'span',
+          'block w-fit mt-1 font-sans text-[0.6rem] uppercase tracking-[0.08em] text-ink-500 border border-dashed border-ink-300 rounded px-1.5 py-0.5',
+          'Preprint — not yet peer reviewed'
+        )
+      );
+    }
     tr.appendChild(studyTd);
 
     const findingTd = document.createElement('td');
@@ -571,7 +620,9 @@ function renderTable(header: string[], rows: string[][], valid: Set<number>): HT
         `inline-block font-sans text-[0.65rem] font-medium px-2 py-0.5 rounded-full border ${EFFECTIVENESS_STYLE[rawLabel] ?? 'bg-paper-100 text-ink-600 border-ink-200'}`,
         rawLabel
       );
-      badge.title = `Effectiveness: ${rawLabel} — the assistant's plain reading of this study's abstract, not a formal rating.`;
+      badge.title =
+        (EFFECTIVENESS_EXPLANATIONS as Record<string, string>)[rawLabel] ??
+        `${rawLabel} — the assistant's plain reading of this study's abstract, not a formal rating.`;
       effTd.appendChild(badge);
     }
     tr.appendChild(effTd);
@@ -580,7 +631,43 @@ function renderTable(header: string[], rows: string[][], valid: Set<number>): HT
   }
   table.appendChild(tbody);
   wrap.appendChild(table);
-  return wrap;
+  outer.appendChild(wrap);
+  const hasPreprint = Boolean(
+    refs &&
+      rows.some((row) => {
+        const n = Number((row[nCol] ?? '').replace(/[^\d]/g, ''));
+        return Number.isInteger(n) && refs[n - 1]?.preprint;
+      })
+  );
+  outer.appendChild(effectivenessLegend(hasPreprint));
+  return outer;
+}
+
+/** The plain-English key under the evidence table: what each strength label
+ *  means and how much weight to give it — fixed text from the prompts module
+ *  (EFFECTIVENESS_EXPLANATIONS), never model-written, so it can't drift. The
+ *  preprint line appears only when a preprint actually made the table. */
+export function effectivenessLegend(hasPreprint: boolean): HTMLElement {
+  const box = el('div', 'mt-3 space-y-1.5');
+  box.appendChild(
+    el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-500', 'How to read the strength labels')
+  );
+  for (const [label, explanation] of Object.entries(EFFECTIVENESS_EXPLANATIONS)) {
+    const row = el('p', 'font-sans text-xs text-ink-600 leading-snug');
+    row.appendChild(
+      el(
+        'span',
+        `inline-block font-sans text-[0.65rem] font-medium px-2 py-0.5 rounded-full border mr-2 ${EFFECTIVENESS_STYLE[label] ?? 'bg-paper-100 text-ink-600 border-ink-200'}`,
+        label
+      )
+    );
+    row.appendChild(document.createTextNode(explanation));
+    box.appendChild(row);
+  }
+  if (hasPreprint) {
+    box.appendChild(el('p', 'font-sans text-xs italic text-ink-600 leading-snug', PREPRINT_EXPLANATION));
+  }
+  return box;
 }
 
 // ---- prose / bullets -------------------------------------------------------
@@ -589,7 +676,7 @@ function renderTable(header: string[], rows: string[][], valid: Set<number>): HT
  *  markdown table, with [n] markers linked to the matching study card. Blocks
  *  may MIX bullets and prose (a list closed by a plain sentence is common),
  *  so group consecutive runs rather than judging a whole block all-or-nothing. */
-function renderSectionBody(body: string, valid: Set<number>): Node[] {
+function renderSectionBody(body: string, valid: Set<number>, refs?: Work[]): Node[] {
   const nodes: Node[] = [];
   const pushPara = (lines: string[]) => {
     if (!lines.length) return;
@@ -612,7 +699,7 @@ function renderSectionBody(body: string, valid: Set<number>): Node[] {
   for (const block of body.split(/\n{2,}/)) {
     const lines = block.split('\n').map((l) => l.trim()).filter(Boolean);
     if (looksLikeTable(lines)) {
-      const t = renderTable(tableRow(lines[0]), lines.slice(2).map(tableRow), valid);
+      const t = renderTable(tableRow(lines[0]), lines.slice(2).map(tableRow), valid, refs);
       if (t) {
         nodes.push(t);
         continue;
@@ -652,10 +739,16 @@ export const ACTION_TIERS: { heading: string; style: string }[] = [
   { heading: 'Long term — higher effort', style: 'border-ink-300 bg-paper-50' },
 ];
 
-function renderActionBox(heading: string, style: string, body: string, valid: Set<number>): HTMLElement {
+function renderActionBox(
+  heading: string,
+  style: string,
+  body: string,
+  valid: Set<number>,
+  refs?: Work[]
+): HTMLElement {
   const box = el('div', `rounded-md border-l-[3px] px-4 py-3.5 ${style}`);
   box.appendChild(el('h4', 'font-sans text-xs font-bold uppercase tracking-[0.08em] text-ink-900 mb-2', heading));
-  for (const node of renderSectionBody(body, valid)) box.appendChild(node);
+  for (const node of renderSectionBody(body, valid, refs)) box.appendChild(node);
   return box;
 }
 
@@ -665,7 +758,7 @@ function renderActionBox(heading: string, style: string, body: string, valid: Se
  *  separate flowing subsections — the visual "distinct recommendation block"
  *  the briefing format is built around. Works correctly with 0–3 of them
  *  present, so a partial live stream renders sensibly mid-write. */
-function renderReportBody(md: string, valid: Set<number>): HTMLElement {
+function renderReportBody(md: string, valid: Set<number>, refs?: Work[]): HTMLElement {
   const body = el('div', 'mt-6');
   const sections = parseSections(md);
   const tierHeadings = new Set(ACTION_TIERS.map((t) => t.heading));
@@ -678,14 +771,14 @@ function renderReportBody(md: string, valid: Set<number>): HTMLElement {
         grid = el('div', 'grid sm:grid-cols-3 gap-3 mt-7');
         body.appendChild(grid);
       }
-      grid.appendChild(renderActionBox(tier.heading, tier.style, sec.body, valid));
+      grid.appendChild(renderActionBox(tier.heading, tier.style, sec.body, valid, refs));
       continue;
     }
     grid = null; // a non-tier heading ends the run, so a repeat later starts a fresh grid
     if (sec.heading && !tierHeadings.has(sec.heading)) {
       body.appendChild(el('h3', 'font-display text-lg font-semibold text-ink-900 mt-7 mb-1', sec.heading));
     }
-    for (const node of renderSectionBody(sec.body, valid)) body.appendChild(node);
+    for (const node of renderSectionBody(sec.body, valid, refs)) body.appendChild(node);
   }
   return body;
 }
@@ -700,7 +793,7 @@ export function renderDraft(container: HTMLElement, markdown: string, references
   container.replaceChildren();
   const article = el('div', 'max-w-3xl');
   article.appendChild(el('p', 'font-sans text-xs uppercase tracking-[0.2em] text-accent mb-3', 'Research review — writing…'));
-  article.appendChild(renderReportBody(markdown, valid));
+  article.appendChild(renderReportBody(markdown, valid, references));
   container.appendChild(article);
 }
 
@@ -729,6 +822,15 @@ function evidenceBase(references: Work[], tableNums: Set<number>, hooks: CardHoo
     );
     const c = card(w, hooks);
     c.classList.add('flex-1', 'min-w-0');
+    if (w.preprint) {
+      c.appendChild(
+        el(
+          'p',
+          'w-fit mt-2 font-sans text-[0.65rem] uppercase tracking-[0.08em] text-ink-500 border border-dashed border-ink-300 rounded px-1.5 py-0.5',
+          'Preprint — not yet peer reviewed'
+        )
+      );
+    }
     row.appendChild(c);
     wrap.appendChild(row);
   });
@@ -806,7 +908,7 @@ export function renderReview(
   }
   article.appendChild(meta);
 
-  article.appendChild(renderReportBody(result.briefing, valid));
+  article.appendChild(renderReportBody(result.briefing, valid, result.references));
 
   if (result.caveat) {
     article.appendChild(el('p', 'font-serif text-xs italic text-ink-600 mt-5', result.caveat));

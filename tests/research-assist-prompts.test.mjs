@@ -12,8 +12,8 @@ const src = readFileSync(
   'utf8'
 );
 
-test('prompt version bumped to v10 (invalidates the assist cache)', () => {
-  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v10'/);
+test('prompt version bumped to v11 (invalidates the assist cache)', () => {
+  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v11'/);
 });
 
 test('models are pinned where client and functions both read them', () => {
@@ -80,7 +80,43 @@ test('EFFECTIVENESS_LABELS exports the four plain-English evidence-strength labe
 
 test('REVIEW_SYSTEM demands the evidence table with the exact GFM header', () => {
   const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
-  assert.match(review, /\| # \| Study \| Key finding \| Effectiveness \|/);
+  assert.match(review, /\| # \| Study \| Key finding \| Strength of evidence \|/);
+});
+
+test('the evidence section walks the ladder, strongest first, table ordered to match', () => {
+  const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
+  assert.match(review, /Walk the reader down the ladder/i);
+  assert.match(review, /strict strength order/i);
+  assert.match(review, /Order the rows strongest first/i);
+  // Ladder ordering keeps original study numbers, so the "#" column is
+  // deliberately non-sequential — the prompt must say so or models renumber.
+  assert.match(review, /do not renumber/i);
+  // Empty rungs are skipped, not padded.
+  assert.match(review, /Skip any rung with no studies/i);
+});
+
+test('preprints are flagged to the model and pinned to the early rung', () => {
+  const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
+  assert.match(review, /"preprint": true/);
+  assert.match(review, /not yet peer reviewed/i);
+  assert.match(review, /ALWAYS "Early or limited evidence"/);
+});
+
+test('the fixed legend text exists for every strength label, plus the preprint note', () => {
+  assert.match(src, /export const EFFECTIVENESS_EXPLANATIONS/);
+  assert.match(src, /export const PREPRINT_EXPLANATION/);
+  assert.match(src, /export const STRENGTH_COLUMN\s*=\s*'Strength of evidence'/);
+  // Each label has an explanation entry (keyed either quoted or bare).
+  for (const label of ['Well-established', 'Promising', 'Mixed evidence', 'Early or limited evidence']) {
+    const explanations = src.slice(src.indexOf('EFFECTIVENESS_EXPLANATIONS'), src.indexOf('PREPRINT_EXPLANATION'));
+    assert.ok(
+      explanations.includes(`'${label}'`) || explanations.includes(`${label}:`),
+      `EFFECTIVENESS_EXPLANATIONS covers "${label}"`
+    );
+  }
+  const preprint = src.slice(src.indexOf('PREPRINT_EXPLANATION'));
+  assert.match(preprint, /before peer review/i);
+  assert.match(preprint, /can change or be withdrawn/i);
 });
 
 test('REVIEW_SYSTEM keeps only studies specific to the problem, table rows are not guaranteed for all 10', () => {
@@ -94,7 +130,7 @@ test('REVIEW_SYSTEM frames the output as a two-page briefing, not an essay', () 
   const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
   assert.match(review, /this is a briefing, not an essay/i);
   assert.match(review, /two A4 pages/i);
-  assert.match(review, /700–950 words/);
+  assert.match(review, /750–1,050 words/);
 });
 
 test('the review is written for a non-academic, in plain English', () => {
@@ -104,6 +140,20 @@ test('the review is written for a non-academic, in plain English', () => {
   // Technical terms must be explained in passing, never dropped in raw.
   assert.match(review, /explain it in a few plain words/i);
   assert.match(review, /No academic jargon/i);
+});
+
+test('the review never assumes research subtext — the trade terms are glossed', () => {
+  const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
+  assert.match(review, /Never assume the reader knows the conventions of research writing/i);
+  for (const term of ['preprint', 'peer review', 'systematic review', 'meta-analysis', 'effect size', 'control group']) {
+    assert.ok(review.includes(term), `gloss list names "${term}"`);
+  }
+  // The reader leaves with a starting point, not just a summary.
+  assert.match(review, /starting point for their own work/i);
+  // Confidence section says what would strengthen the evidence and what the
+  // reader can still do.
+  assert.match(review, /what would make this evidence stronger/i);
+  assert.match(review, /still sensibly do despite the gaps/i);
 });
 
 test('the review is a grounding report, not a verdict', () => {

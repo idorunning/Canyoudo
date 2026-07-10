@@ -26,6 +26,11 @@ import {
   ACTION_TIERS,
   type ReviewResult,
 } from './review';
+import {
+  STRENGTH_COLUMN,
+  EFFECTIVENESS_EXPLANATIONS,
+  PREPRINT_EXPLANATION,
+} from '../../lib/research-assist-prompts';
 
 const SITE_NAME = 'THINKING ABOUT POLICING';
 const SITE_URL = 'thinkingaboutpolicing.org';
@@ -186,20 +191,37 @@ const COL = { n: 9, study: 30, finding: 0, effect: 30 };
 COL.finding = W - COL.n - COL.study - COL.effect;
 const CELL_PAD = 1.8;
 
-/** The evidence-rating table: # / Study / Key finding / Effectiveness. This
- *  IS the document's reference list — each Study cell links out to the real
- *  source URL. Breaks across pages if needed, repeating the header row. */
+/** The evidence-rating table: # / Study / Key finding / Strength of evidence.
+ *  This IS the document's reference list — each Study cell links out to the
+ *  real source URL. Breaks across pages if needed, repeating the header row. */
 function drawTable(w: Writer, doc: Doc, header: string[], rows: string[][], references: ReviewResult['references']) {
   const idx = (name: string) => header.findIndex((h) => h.toLowerCase().includes(name));
   const nCol = idx('#');
   const studyCol = idx('stud');
   const findingCol = idx('finding');
-  const effCol = idx('effective');
+  // v11 renamed the column to "Strength of evidence"; stored v10 briefings
+  // still say "Effectiveness" — match both, forever.
+  const effCol = header.findIndex((h) => /strength|effective/i.test(h));
   if (nCol === -1 || studyCol === -1 || findingCol === -1) return; // unrecognised shape — skip rather than guess
 
   const HEAD_PT = 7.5;
   const BODY_PT = 8.7;
-  const headH = lineHeight(HEAD_PT) + CELL_PAD * 2;
+
+  // The strength header is too long for its 30mm column at one line — wrap
+  // every header cell and size the header row to the tallest.
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(HEAD_PT);
+  const headCells = ([
+    ['#', COL.n],
+    ['STUDY', COL.study],
+    ['KEY FINDING', COL.finding],
+    [STRENGTH_COLUMN.toUpperCase(), COL.effect],
+  ] as const).map(([label, width]) => ({
+    width,
+    lines: doc.splitTextToSize(label, width - 2 * CELL_PAD) as string[],
+  }));
+  const headH =
+    Math.max(...headCells.map((c) => c.lines.length)) * lineHeight(HEAD_PT) + CELL_PAD * 2;
 
   const drawHeader = () => {
     doc.setFillColor(...PAPER_200);
@@ -207,11 +229,12 @@ function drawTable(w: Writer, doc: Doc, header: string[], rows: string[][], refe
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(HEAD_PT);
     doc.setTextColor(...GREY);
-    const ty = w.y + headH / 2 + lineHeight(HEAD_PT) * 0.28;
     let x = MARGIN + CELL_PAD;
-    for (const [label, width] of [['#', COL.n], ['STUDY', COL.study], ['KEY FINDING', COL.finding], ['EFFECTIVENESS', COL.effect]] as const) {
-      doc.text(label, x, ty);
-      x += width;
+    for (const cell of headCells) {
+      cell.lines.forEach((line, li) =>
+        doc.text(line, x, w.y + CELL_PAD + lineHeight(HEAD_PT) * (li + 0.75))
+      );
+      x += cell.width;
     }
     w.y += headH;
   };
@@ -219,6 +242,7 @@ function drawTable(w: Writer, doc: Doc, header: string[], rows: string[][], refe
   w.ensure(headH * 2); // header + at least one row before breaking
   drawHeader();
 
+  let sawPreprint = false;
   for (const row of rows) {
     const n = Number((row[nCol] ?? '').replace(/[^\d]/g, ''));
     if (!Number.isInteger(n) || n < 1) continue;
@@ -233,9 +257,15 @@ function drawTable(w: Writer, doc: Doc, header: string[], rows: string[][], refe
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(BODY_PT);
     const studyLines: string[] = doc.splitTextToSize(studyText, COL.study - 2 * CELL_PAD);
+    // Not-yet-peer-reviewed studies carry a marker line under the study name.
+    const preprintLines: string[] = work?.preprint
+      ? doc.splitTextToSize('preprint — not yet peer reviewed', COL.study - 2 * CELL_PAD)
+      : [];
+    if (preprintLines.length) sawPreprint = true;
     const findingLines: string[] = doc.splitTextToSize(findingText, COL.finding - 2 * CELL_PAD);
     const lh = lineHeight(BODY_PT);
-    const rowH = Math.max(studyLines.length, findingLines.length, 1) * lh + 2 * CELL_PAD;
+    const rowH =
+      Math.max(studyLines.length + preprintLines.length, findingLines.length, 1) * lh + 2 * CELL_PAD;
 
     if (w.y + rowH > PAGE_H - BOTTOM) {
       doc.addPage();
@@ -265,6 +295,15 @@ function drawTable(w: Writer, doc: Doc, header: string[], rows: string[][], refe
       if (url) doc.textWithLink(line, x, ly, { url });
       else doc.text(line, x, ly);
     });
+    if (preprintLines.length) {
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(7.3);
+      doc.setTextColor(...GREY);
+      preprintLines.forEach((line, i) =>
+        doc.text(line, x, rowTop + CELL_PAD + lh * (studyLines.length + i + 0.7))
+      );
+      doc.setFontSize(BODY_PT);
+    }
     x += COL.study;
 
     // Key finding
@@ -290,7 +329,67 @@ function drawTable(w: Writer, doc: Doc, header: string[], rows: string[][], refe
 
     w.y = rowTop + rowH;
   }
+  w.gap(2.5);
+  drawLegend(w, doc, sawPreprint);
   w.gap(3);
+}
+
+/** The plain-English key under the table: what each strength label means and
+ *  how much weight to give it (EFFECTIVENESS_EXPLANATIONS — fixed text, never
+ *  model-written), plus the preprint note when one made the table. Measured
+ *  first and drawn as one unit so it never splits across a page. */
+function drawLegend(w: Writer, doc: Doc, hasPreprint: boolean) {
+  const CHIP_PT = 7.3;
+  const TXT_PT = 7.5;
+  const CHIP_COL = 40; // chip column width; explanations start here
+  const lh = lineHeight(TXT_PT, 1.35);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(TXT_PT);
+  const rows = (Object.entries(EFFECTIVENESS_EXPLANATIONS) as [string, string][]).map(
+    ([label, explanation]) => ({
+      label,
+      lines: doc.splitTextToSize(explanation, W - CHIP_COL) as string[],
+    })
+  );
+  const preLines: string[] = hasPreprint ? doc.splitTextToSize(PREPRINT_EXPLANATION, W) : [];
+  const rowHs = rows.map((r) => Math.max(r.lines.length * lh, lineHeight(CHIP_PT) + 2) + 1);
+  const total =
+    lineHeight(CHIP_PT) + 2.5 + rowHs.reduce((a, b) => a + b, 0) + (preLines.length ? preLines.length * lh + 1.5 : 0);
+  w.ensure(total);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(CHIP_PT);
+  doc.setTextColor(...GREY);
+  doc.text('HOW TO READ THE STRENGTH LABELS', MARGIN, w.y + lineHeight(CHIP_PT) * 0.75);
+  w.y += lineHeight(CHIP_PT) + 2.5;
+
+  rows.forEach((r, i) => {
+    const top = w.y;
+    const style = EFFECTIVENESS_FILL[r.label] ?? EFFECTIVENESS_DEFAULT;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(CHIP_PT);
+    const chipW = doc.getTextWidth(r.label) + 3;
+    doc.setFillColor(...style.bg);
+    doc.roundedRect(MARGIN, top, chipW, lineHeight(CHIP_PT) + 1.6, 1, 1, 'F');
+    doc.setTextColor(...style.text);
+    doc.text(r.label, MARGIN + 1.5, top + 0.8 + lineHeight(CHIP_PT) * 0.75);
+    doc.setFontSize(TXT_PT);
+    doc.setTextColor(...GREY);
+    r.lines.forEach((line, li) => doc.text(line, MARGIN + CHIP_COL, top + lh * (li + 0.75)));
+    w.y = top + rowHs[i];
+  });
+
+  if (preLines.length) {
+    w.gap(0.5);
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(TXT_PT);
+    doc.setTextColor(...GREY);
+    for (const line of preLines) {
+      doc.text(line, MARGIN, w.y + lh * 0.75);
+      w.y += lh;
+    }
+  }
 }
 
 // ---- the three action tiers, side by side ----------------------------------
