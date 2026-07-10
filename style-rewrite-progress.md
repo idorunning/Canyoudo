@@ -37,6 +37,17 @@ Re-run and re-triage the queue any time `writing-style.md` or
 `police-oracle-style-guide.md` changes materially — an earlier pass may no
 longer match the current guide.
 
+## Status: first full sweep complete (2026-07-10)
+
+Every published article in the queue below has now been through a style +
+fact-check pass. Roughly a third needed substantive edits (style rewrites,
+corrected/updated facts, or a fixed citation); the rest were verified accurate
+and in-voice and deliberately left untouched (no cosmetic `updatedDate` bumps).
+Each article was shipped as its own PR to `main`. Re-run and re-triage this
+queue whenever `writing-style.md` or `police-oracle-style-guide.md` changes
+materially, or to refresh the time-sensitive pieces (the AI guides, PoliceAI,
+Martyn's Law, Palantir, and the England-football World Cup note) as events move.
+
 ## Queue
 
 - [x] 2025-02-18 — `boosting-public-confidence-through-neighbourhood-policing.md` — essay register, `writing-style.md` cleanup (banned corrective-antithesis/tricolon repeats, academic framing, over-bolding; added a case-study evidence caveat)
@@ -68,7 +79,7 @@ longer match the current guide.
 - [x] 2026-06-17 — `standard-medium-high-grading-domestic-abuse-risk.mdx` — **verified, no changes needed.** The flagship exemplar (writing-style.md's current best model of the house voice), exhaustively sourced. Fact-check confirmed the two load-bearing policing claims: Turner, Medina-Ariza & Brown (2019, BJC 59(5)) — DASH "at best weakly predictive", officer predictions "little better than random", most repeat-harm victims graded standard/medium not high; and the DARA pilot's 38% increase in officers reaching the same risk decision as a DA expert (piloted in Kent, Bedfordshire, West Midlands). The Kent/CIA 1951 estimate, Mauboussin HBR 2018, Lancet 2002 "common", IPCC and PHIA Probability Yardstick claims are all directly and correctly sourced. No prose change.
 - [x] 2026-06-17 — `the-power-of-civil-orders.mdx` — **verified, no changes needed.** The second flagship exemplar (writing-style.md's other current best model + the "frontline guide" MDX format), exhaustively sourced. Fact-check confirmed its central and most-recent hook: the Sentencing Act 2026 (Royal Assent 22 January 2026, from Gauke's Independent Sentencing Review) expanding the "no real prospect of custody" test for bail/remand — accurate. The ASBCPA 2014 powers (CPW/CPN s.43, civil injunction Part 1, CBO s.22, closure Part 4 Ch 3), their breach penalties, and the Boness [2005] / Maguire [2019] case law on "policeable" terms are all well-established and correctly stated; the Respect Order (Crime and Policing Bill, breach = criminal offence) is right. No prose change.
 - [x] 2026-06-25 — `the-perception-of-the-police-in-online-media.mdx` — **verified, no changes needed.** Sophisticated data-story in strong voice, exemplary in its own honesty about limits (states plainly it is essentially a single-source Guardian-headline analysis, with a per-year diversity index). Fact-check confirmed the externally-checkable anchor: the ONS Crime Survey "good or excellent job" measure = 49% in YE March 2025, down from a 62% peak (~2011/12–2015), lowest in the series — and correctly distinguished from the separate "confidence in local police" measure (68% national avg) used elsewhere on the site, so no contradiction. The Casey Review (March 2023, "institutionally racist, misogynistic and homophobic"), Macpherson 1999, the 2021–23 events, and the commissioner departures (Blair 2008, Dick 2022, Stephenson 2011) all check out. The dataset-specific figures (23% negative-headline peak, theme rivers, "trust" as rarest theme) are the author's own thoroughly-caveated analysis. No prose change. (Title says "online media" but content is "British Press" — left per keep-headlines rule.)
-- [ ] 2026-07-10 — `how-worthing-became-the-shoplifting-capital-of-the-uk.md`
+- [x] 2026-07-10 — `how-worthing-became-the-shoplifting-capital-of-the-uk.md` — **verified, no changes needed.** Nathan's own recent "More or Less Policing" data-story in strong voice, with a correct methodological core (denominator choice drives the headline). Fact-check confirmed the verifiable spine: the Accu Components study (Worthing worst, 23.2 per 1,000, from ONS/NISRA/Scottish Government data), Katy Bourne as Sussex PCC, and One Touch Reporting (2024, Adur & Worthing) which by Sussex Police's own account produced an "expected and significant increase" in recorded shop theft — exactly the reporting-artefact thesis the piece argues — plus the confirmed fall in recorded shoplifting through the period. The granular commercial-ranking figures and PCC-office counts are attributed to named sources. No prose change.
 
 ## Excluded (draft, not published)
 
