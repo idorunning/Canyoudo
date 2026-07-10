@@ -1,46 +1,112 @@
 ---
-// Site search overlay, powered by Pagefind. The index is built into
-// /pagefind/ at deploy time (see the "postbuild" script) and loaded lazily the
-// first time the modal opens. Any element with [data-search-open] triggers it
-// (the header icon, the mobile menu link, the Explore panel, …).
+// Site search, styled as a command palette. Powered by Pagefind: the index is
+// built into /pagefind/ at deploy time (see the "postbuild" script) and loaded
+// lazily the first time the palette opens. Any element with [data-search-open]
+// triggers it (the header button, the mobile menu, the Explore panel, …).
 //
-// Pagefind assets only exist in a built site, so in `astro dev` the modal shows
-// a graceful "available on the built site" message instead.
+// Alongside full-text results the palette offers instant destinations and
+// actions (theme toggle), so ⌘K works as site-wide navigation, not just search.
+//
+// Pagefind assets only exist in a built site, so in `astro dev` the palette
+// shows a graceful "available on the built site" message instead.
+
+const quickLinks = [
+  { href: '/police-policy', label: 'Evidence & Practice', hint: 'Section' },
+  { href: '/public-policy', label: 'Leadership & Culture', hint: 'Section' },
+  { href: '/influential-people', label: 'Influential People', hint: 'Section' },
+  { href: '/research-tools', label: 'Research Tools', hint: 'Tools' },
+  { href: '/graph', label: 'Evidence Graph', hint: 'Map' },
+  { href: '/library', label: 'Your library', hint: 'Saved' },
+  { href: '/topics', label: 'Topics', hint: 'Index' },
+  { href: '/sitemap', label: 'All articles', hint: 'Archive' },
+];
 ---
 
 <div
   id="tap-search-modal"
-  class="hidden fixed inset-0 z-[60] bg-ink-900/40 px-4 pt-20 md:pt-28"
+  class="hidden fixed inset-0 z-[60] bg-night-50/50 backdrop-blur-[2px] px-4 pt-[12vh]"
   aria-hidden="true"
 >
   <div
-    class="mx-auto w-full max-w-2xl bg-paper-50 border border-ink-200 rounded-md overflow-hidden"
+    class="palette mx-auto w-full max-w-xl bg-paper-50 border border-ink-200 rounded-xl overflow-hidden shadow-panel"
     role="dialog"
     aria-modal="true"
-    aria-label="Search"
+    aria-label="Search and navigate"
   >
-    <div class="flex items-center justify-between px-4 py-3 border-b border-ink-200">
-      <span class="font-sans text-xs uppercase tracking-[0.2em] text-accent">Search</span>
-      <button
-        type="button"
-        data-search-close
-        class="text-ink-500 hover:text-ink-900 p-1 -mr-1"
-        aria-label="Close search"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="6" y1="6" x2="18" y2="18" />
-          <line x1="18" y1="6" x2="6" y2="18" />
-        </svg>
-      </button>
+    <div class="flex items-center justify-between px-4 py-2.5 border-b border-ink-200">
+      <span class="u-kicker">Search · Navigate</span>
+      <div class="flex items-center gap-2">
+        <kbd class="font-mono text-[10px] font-semibold text-ink-500 bg-paper-100 border border-ink-200 rounded px-1.5 py-0.5 leading-none">esc</kbd>
+        <button
+          type="button"
+          data-search-close
+          class="text-ink-500 hover:text-ink-900 p-1 -mr-1"
+          aria-label="Close search"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+          </svg>
+        </button>
+      </div>
     </div>
-    <div class="p-4">
+
+    <div class="p-4 max-h-[62vh] overflow-y-auto">
       <div id="tap-search" class="tap-search"></div>
       <p id="tap-search-fallback" class="hidden font-sans text-sm text-ink-600">
         Search is available on the published site (the index is built at deploy time).
       </p>
+
+      <div class="mt-4 pt-4 border-t border-ink-200">
+        <p class="u-kicker u-kicker--dim mb-2">Go to</p>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1">
+          {quickLinks.map(link => (
+            <li>
+              <a
+                href={link.href}
+                class="flex items-center justify-between gap-3 px-3 py-2 rounded-md font-sans text-[13.5px] font-semibold text-ink-800 hover:bg-paper-100 hover:text-ink-900 transition-colors"
+              >
+                <span>{link.label}</span>
+                <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-400">{link.hint}</span>
+              </a>
+            </li>
+          ))}
+          <li>
+            <button
+              type="button"
+              data-theme-toggle
+              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-md font-sans text-[13.5px] font-semibold text-ink-800 hover:bg-paper-100 hover:text-ink-900 transition-colors"
+            >
+              <span>Toggle dark mode</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-400">Action</span>
+            </button>
+          </li>
+          <li>
+            <a
+              href="/subscribe"
+              class="flex items-center justify-between gap-3 px-3 py-2 rounded-md font-sans text-[13.5px] font-semibold text-accent hover:bg-paper-100 transition-colors"
+            >
+              <span>Subscribe</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-400">Email</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    #tap-search-modal:not(.hidden) .palette {
+      animation: palette-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+  }
+  @keyframes palette-in {
+    from { opacity: 0; transform: translateY(10px) scale(0.985); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+</style>
 
 <script is:inline>
   (function () {

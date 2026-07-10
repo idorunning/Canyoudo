@@ -1,5 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
+// One source of truth for section names — never a local copy.
+import { SECTION_LABELS } from '../content/config';
 
 interface Props {
   currentSlug: string;
@@ -8,13 +10,7 @@ interface Props {
 const { currentSlug, section } = Astro.props;
 
 const sections = ['police-policy', 'public-policy', 'influential-people', 'other', 'data-stories'] as const;
-const labels: Record<string, string> = {
-  'police-policy': 'Police Policy',
-  'public-policy': 'Public Policy',
-  'influential-people': 'Influential People',
-  other: 'Interesting Distractions',
-  'data-stories': 'The Data Tells a Story',
-};
+const labels: Record<string, string> = SECTION_LABELS;
 
 type Item = {
   slug: string;
@@ -48,7 +44,7 @@ const list = items.slice(0, 6);
 const fmt = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
 ---
 
-<h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-6">More articles</h2>
+<h2 class="u-kicker mb-6">More articles</h2>
 <ul class="space-y-6">
   {list.map((a) => (
     <li>

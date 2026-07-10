@@ -1,13 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SECTIONS, SECTION_LABELS } from '../content/config';
 
 const sections = [
-  { href: '/police-policy', label: 'Police Policy' },
-  { href: '/public-policy', label: 'Public Policy' },
-  { href: '/influential-people', label: 'Influential People' },
-  { href: '/data-stories', label: 'The Data Tells a Story' },
+  ...SECTIONS.map((s) => ({ href: `/${s}`, label: SECTION_LABELS[s] })),
   { href: '/data', label: 'Crime Dashboard' },
-  { href: '/other', label: 'Interesting Distractions' },
 ];
 ---
 

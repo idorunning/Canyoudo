@@ -28,7 +28,7 @@ const CUSDIS_APP_ID = import.meta.env.PUBLIC_CUSDIS_APP_ID;
       data-page-id={pageId}
       data-page-url={pageUrl}
       data-page-title={pageTitle}
-      data-theme="light"
+      data-theme="auto"
     ></div>
   ) : (
     <div class="bg-paper-100 border border-ink-200 rounded-md p-5 font-sans text-sm text-ink-700">
@@ -56,6 +56,25 @@ const CUSDIS_APP_ID = import.meta.env.PUBLIC_CUSDIS_APP_ID;
     </style>
 
     <script src="https://cusdis.com/js/cusdis.es.js" async defer is:inline></script>
+
+    <script is:inline>
+      // Keep the Cusdis thread on the site's theme (class-based, not OS-based):
+      // stamp the current theme before the widget boots, and follow the header
+      // toggle live via Cusdis's setTheme API.
+      (function () {
+        var thread = document.getElementById('cusdis_thread');
+        if (!thread) return;
+        function siteTheme() {
+          return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        }
+        thread.setAttribute('data-theme', siteTheme());
+        new MutationObserver(function () {
+          var t = siteTheme();
+          thread.setAttribute('data-theme', t);
+          if (window.CUSDIS && window.CUSDIS.setTheme) window.CUSDIS.setTheme(t);
+        }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      })();
+    </script>
 
     <script is:inline>
       // Belt-and-braces: mirror Cusdis's own auto-resize. Cusdis posts

@@ -11,30 +11,26 @@ interface Props {
 
 const { section, size = 'md', link = true } = Astro.props;
 
-const labels = {
-  'police-policy': 'Police Policy',
-  'public-policy': 'Public Policy',
-  'influential-people': 'Influential People',
-  'other': 'Interesting Distractions',
-  'data-stories': 'The Data Tells a Story',
-};
+// One source of truth for section names — never a local copy.
+import { SECTION_LABELS } from '../content/config';
+const labels = SECTION_LABELS;
 
 const sizeClasses = {
-  sm: 'text-[0.68rem]',
-  md: 'text-[0.74rem]',
+  sm: 'text-[0.66rem]',
+  md: 'text-[0.7rem]',
 };
 ---
 
 {link ? (
   <a
     href={`/${section}`}
-    class={`inline-block font-sans font-semibold uppercase tracking-[0.18em] text-accent hover:text-accent-dark transition-colors ${sizeClasses[size]}`}
+    class={`inline-block font-mono font-semibold uppercase tracking-[0.14em] text-accent hover:text-accent-dark transition-colors ${sizeClasses[size]}`}
   >
     {labels[section]}
   </a>
 ) : (
   <span
-    class={`inline-block font-sans font-semibold uppercase tracking-[0.18em] text-accent ${sizeClasses[size]}`}
+    class={`inline-block font-mono font-semibold uppercase tracking-[0.14em] text-accent ${sizeClasses[size]}`}
   >
     {labels[section]}
   </span>

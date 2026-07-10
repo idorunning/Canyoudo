@@ -11,9 +11,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        serif: ['"Source Serif 4"', 'ui-serif', 'Georgia', 'serif'],
-        sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        // Self-hosted via Fontsource (imported in BaseLayout.astro).
+        display: ['"Plus Jakarta Sans Variable"', '"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['"Source Serif 4 Variable"', '"Source Serif 4"', 'ui-serif', 'Georgia', 'serif'],
+        sans: ['"Plus Jakarta Sans Variable"', '"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"IBM Plex Mono"', 'ui-monospace', '"SF Mono"', 'Menlo', 'monospace'],
       },
       colors: {
         paper: {
@@ -36,6 +38,23 @@ export default {
           dark: withAlpha('--accent-dark'),
           light: withAlpha('--accent-light'),
         },
+        // The constant dark panel (footer, quote band, tools CTA) — dark in
+        // both themes. See --night-* in global.css.
+        night: {
+          50: withAlpha('--night-50'),
+          100: withAlpha('--night-100'),
+          line: withAlpha('--night-line'),
+          ink: withAlpha('--night-ink'),
+          dim: withAlpha('--night-ink-dim'),
+        },
+      },
+      boxShadow: {
+        card: '0 1px 2px rgb(var(--shadow-rgb) / 0.04)',
+        'card-hover': '0 14px 32px -12px rgb(var(--shadow-rgb) / 0.18)',
+        panel: '0 24px 48px -16px rgb(var(--shadow-rgb) / 0.22)',
+      },
+      transitionTimingFunction: {
+        swift: 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
       maxWidth: {
         // The article reading measure. Kept in step with the `--measure` custom

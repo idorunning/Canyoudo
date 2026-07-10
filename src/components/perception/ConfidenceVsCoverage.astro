@@ -69,8 +69,8 @@ function paths(series: { year: number; value: number | null }[]): string[] {
   return out;
 }
 
-const CONF = '#3b6ea5'; // calm blue — measured confidence
-const NEG = '#b3402f'; // misconduct red — headline negativity
+const CONF = 'rgb(var(--chart-blue))'; // calm blue — measured confidence
+const NEG = 'rgb(var(--chart-red))'; // misconduct red — headline negativity
 const confPaths = paths(confSeries);
 const negPaths = paths(negSeries);
 const confDots = confSeries.filter((p) => p.value != null) as { year: number; value: number }[];

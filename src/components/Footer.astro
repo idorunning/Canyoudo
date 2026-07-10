@@ -2,19 +2,37 @@
 import NewsletterForm from './NewsletterForm.astro';
 const year = new Date().getFullYear();
 const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
+
+const sectionLinks = [
+  { href: '/police-policy', label: 'Evidence & Practice' },
+  { href: '/public-policy', label: 'Leadership & Culture' },
+  { href: '/influential-people', label: 'Influential People' },
+  { href: '/data-stories', label: 'Technology & Innovation' },
+  { href: '/other', label: 'History & Curiosities' },
+];
+
+const browseLinks = [
+  { href: '/research-tools', label: 'Research tools' },
+  { href: '/graph', label: 'Evidence Graph' },
+  { href: '/library', label: 'Your library' },
+  { href: '/topics', label: 'Topics' },
+  { href: '/resources', label: 'Further reading' },
+  { href: '/about', label: 'About · Contact' },
+  { href: '/sitemap', label: 'All articles' },
+];
 ---
 
-<footer class="bg-ink-900 dark:bg-paper-200 text-ink-400 mt-24">
-  <div class="max-w-wide mx-auto px-6 lg:px-10 pt-14 pb-10">
-    <div class="flex flex-wrap justify-between items-start gap-12">
+<footer class="surface-night mt-24">
+  <div class="max-w-wide mx-auto px-6 lg:px-10 pt-16 pb-10">
+    <div class="grid gap-12 md:grid-cols-[minmax(16rem,1.2fr)_auto_auto_minmax(16rem,1fr)]">
 
       <!-- Brand + about -->
       <div class="max-w-xs">
         <div class="flex items-center gap-2.5 mb-4">
           <img src="/logo.png" alt="Thinking About Policing logo" class="h-[30px] w-auto object-contain" />
-          <span class="font-extrabold text-[1.1rem] text-paper-50 leading-none">Thinking About Policing</span>
+          <span class="font-display font-extrabold text-[1.05rem] text-night-ink leading-none">Thinking About Policing</span>
         </div>
-        <p class="font-sans text-sm leading-relaxed">
+        <p class="font-sans text-sm leading-relaxed text-night-dim">
           Evidence-based writing on policing, public policy, and the occasional historical puzzle.
         </p>
         {supportUrl && (
@@ -23,11 +41,11 @@ const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
               href={supportUrl}
               rel="noopener"
               target="_blank"
-              class="inline-block font-sans text-[12.5px] font-bold bg-accent hover:bg-accent-dark text-paper-50 px-4 py-2.5 rounded-full transition-colors"
+              class="inline-block font-sans text-[12.5px] font-bold bg-accent hover:bg-accent-dark text-paper-50 dark:text-night-50 px-4 py-2.5 rounded-full transition-colors"
             >
               ☕ Buy me a coffee →
             </a>
-            <p class="font-sans text-xs text-ink-500 mt-2 leading-relaxed">
+            <p class="font-sans text-xs text-night-dim/80 mt-2 leading-relaxed">
               Any donations go towards API costs and time spent on the website. Thank you!
             </p>
           </div>
@@ -35,39 +53,30 @@ const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
       </div>
 
       <!-- Links columns -->
-      <div class="flex gap-16">
-        <div>
-          <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.1em] text-ink-500 mb-4">
-            Sections
-          </p>
-          <ul class="space-y-2.5 font-sans text-sm">
-            <li><a href="/police-policy" class="hover:text-paper-50 transition-colors">Evidence & Practice</a></li>
-            <li><a href="/public-policy" class="hover:text-paper-50 transition-colors">Leadership & Culture</a></li>
-            <li><a href="/influential-people" class="hover:text-paper-50 transition-colors">Influential People</a></li>
-            <li><a href="/data-stories" class="hover:text-paper-50 transition-colors">Technology & Innovation</a></li>
-            <li><a href="/other" class="hover:text-paper-50 transition-colors">History & Curiosities</a></li>
-          </ul>
-        </div>
+      <div>
+        <p class="u-kicker mb-4">Sections</p>
+        <ul class="space-y-2.5 font-sans text-sm">
+          {sectionLinks.map(link => (
+            <li><a href={link.href} class="text-night-dim hover:text-night-ink transition-colors">{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
 
-        <div>
-          <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.1em] text-ink-500 mb-4">
-            Browse
-          </p>
-          <ul class="space-y-2.5 font-sans text-sm">
-            <li><a href="/research-tools" class="hover:text-paper-50 transition-colors">Research tools</a></li>
-            <li><a href="/topics" class="hover:text-paper-50 transition-colors">Topics</a></li>
-            <li><a href="/resources" class="hover:text-paper-50 transition-colors">Further reading</a></li>
-            <li><a href="/about" class="hover:text-paper-50 transition-colors">About · Contact</a></li>
-            <li><a href="/sitemap" class="hover:text-paper-50 transition-colors">All articles</a></li>
-          </ul>
-        </div>
+      <div>
+        <p class="u-kicker mb-4">Browse</p>
+        <ul class="space-y-2.5 font-sans text-sm">
+          {browseLinks.map(link => (
+            <li><a href={link.href} class="text-night-dim hover:text-night-ink transition-colors">{link.label}</a></li>
+          ))}
+          <li>
+            <a href="/rss.xml" class="text-night-dim hover:text-night-ink transition-colors">RSS feed</a>
+          </li>
+        </ul>
       </div>
 
       <!-- Newsletter -->
-      <div class="w-full md:w-auto md:max-w-xs">
-        <p class="font-sans text-[11px] font-extrabold uppercase tracking-[0.1em] text-ink-500 mb-4">
-          New articles by email
-        </p>
+      <div class="w-full md:max-w-xs">
+        <p class="u-kicker mb-4">New articles by email</p>
         <div class="footer-newsletter">
           <NewsletterForm variant="compact" />
         </div>
@@ -76,17 +85,17 @@ const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
     </div>
 
     <!-- Bottom bar -->
-    <div class="border-t border-paper-50/10 mt-10 pt-6 flex flex-wrap justify-between items-center gap-3 font-sans text-[12.5px] text-ink-500">
-      <span>© {year} Nathan Tracey. Views are personal.</span>
-      <span>Evidence · Integrity · Action</span>
-      <a href="/admin/" class="hover:text-ink-400 transition-colors">Editor</a>
+    <div class="border-t border-night-line mt-12 pt-6 flex flex-wrap justify-between items-center gap-3 font-mono text-[11px] tracking-[0.06em] text-night-dim/80">
+      <span>© {year} NATHAN TRACEY · VIEWS ARE PERSONAL</span>
+      <span class="uppercase">Evidence · Integrity · Action</span>
+      <a href="/admin/" class="hover:text-night-ink transition-colors uppercase">Editor</a>
     </div>
   </div>
 </footer>
 
 <style>
-  /* Override the newsletter form's light-mode colours inside the dark footer */
-  .footer-newsletter :global(.font-sans.text-xs.uppercase) { color: rgb(var(--ink-500)); }
-  .footer-newsletter :global(h2) { color: rgb(var(--paper-50)); }
-  .footer-newsletter :global(.font-serif) { color: rgb(var(--ink-400)); }
+  /* Override the newsletter form's light-mode colours inside the night footer */
+  .footer-newsletter :global(.font-sans.text-xs.uppercase) { color: rgb(var(--night-ink-dim)); }
+  .footer-newsletter :global(h2) { color: rgb(var(--night-ink)); }
+  .footer-newsletter :global(.font-serif) { color: rgb(var(--night-ink-dim)); }
 </style>

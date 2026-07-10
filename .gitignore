@@ -34,3 +34,5 @@ src/lib/polls-bundle.json
 
 # Perception analysis working dir (regenerate with npm run seed-perception / fetch-perception)
 scripts/perception/raw/
+src/lib/audio-manifest.json
+public/audio/

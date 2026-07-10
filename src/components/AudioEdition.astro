@@ -1,0 +1,241 @@
+---
+// Audio edition, two tiers:
+//
+// 1. NARRATED — when scripts/generate-audio.mjs produced an MP3 for this
+//    article (OpenAI TTS at build time, cached per content hash), a native
+//    audio player streams /audio/<slug>.mp3. Recorded once, costs nothing per
+//    listen, same voice for every reader.
+// 2. ON-DEVICE — otherwise, the browser's built-in speech engine (Web Speech
+//    API) reads the article block by block with live highlighting and
+//    pause/skip/speed controls. Zero cost, nothing leaves the device. Hidden
+//    where unsupported, so the whole card is progressive enhancement.
+import manifest from '../lib/audio-manifest.json';
+
+interface Props {
+  slug: string;
+  title: string;
+  minutes: number;
+}
+const { slug, title, minutes } = Astro.props;
+
+const narrated = (manifest as Record<string, { voice?: string }>)[slug];
+const audioSrc = narrated ? `/audio/${slug}.mp3` : null;
+---
+
+{audioSrc ? (
+  <div class="mb-8 max-w-prose rounded-xl border border-ink-200 bg-paper-100 p-4 sm:p-5">
+    <div class="flex items-center justify-between gap-3 mb-3">
+      <p class="u-kicker m-0">Audio edition</p>
+      <p class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 m-0 u-tnum">
+        ≈ {minutes} min · narrated
+      </p>
+    </div>
+    <audio
+      controls
+      preload="none"
+      src={audioSrc}
+      class="w-full h-10"
+      aria-label={`Listen to “${title}”`}
+    ></audio>
+  </div>
+) : (
+
+<div
+  data-audio-edition
+  data-audio-title={title}
+  hidden
+  class="mb-8 max-w-prose rounded-xl border border-ink-200 bg-paper-100 p-4 sm:p-5"
+>
+  <div class="flex items-center justify-between gap-3 mb-3">
+    <p class="u-kicker m-0">Audio edition</p>
+    <p class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 m-0 u-tnum">
+      ≈ {minutes} min · on-device voice
+    </p>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <button
+      type="button"
+      data-audio-toggle
+      class="shrink-0 w-11 h-11 rounded-full bg-accent text-paper-50 dark:text-night-50 flex items-center justify-center hover:bg-accent-dark transition-colors"
+      aria-label="Listen to this article"
+    >
+      <svg data-audio-icon-play width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5.5v13l11-6.5-11-6.5z" />
+      </svg>
+      <svg data-audio-icon-pause class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <rect x="6.5" y="5" width="4" height="14" rx="1" />
+        <rect x="13.5" y="5" width="4" height="14" rx="1" />
+      </svg>
+    </button>
+
+    <div class="min-w-0 flex-1">
+      <div class="h-1.5 rounded-full bg-paper-200 border border-ink-200 overflow-hidden">
+        <div data-audio-progress class="h-full w-0 bg-accent transition-[width] duration-300"></div>
+      </div>
+      <div class="flex items-center justify-between mt-1.5">
+        <span data-audio-status class="font-mono text-[10.5px] font-medium uppercase tracking-[0.08em] text-ink-500 u-tnum">Ready</span>
+        <div class="flex items-center gap-2">
+          <button type="button" data-audio-back class="font-mono text-[11px] font-semibold text-ink-500 hover:text-ink-900 transition-colors px-1" aria-label="Back one section">‹‹</button>
+          <button type="button" data-audio-fwd class="font-mono text-[11px] font-semibold text-ink-500 hover:text-ink-900 transition-colors px-1" aria-label="Forward one section">››</button>
+          <label class="sr-only" for="audio-rate">Playback speed</label>
+          <select
+            id="audio-rate"
+            data-audio-rate
+            class="font-mono text-[11px] font-semibold text-ink-700 bg-paper-50 border border-ink-200 rounded px-1.5 py-0.5"
+          >
+            <option value="0.9">0.9×</option>
+            <option value="1" selected>1×</option>
+            <option value="1.2">1.2×</option>
+            <option value="1.5">1.5×</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+)}
+
+<style is:global>
+  /* The block currently being read aloud. */
+  .audio-current {
+    background: linear-gradient(90deg, rgb(var(--accent) / 0.08), rgb(var(--accent) / 0));
+    box-shadow: -3px 0 0 0 rgb(var(--accent));
+    border-radius: 0 4px 4px 0;
+  }
+</style>
+
+<script>
+  function initAudioEdition() {
+    const card = document.querySelector<HTMLElement>('[data-audio-edition]');
+    if (!card || !('speechSynthesis' in window)) return;
+
+    const prose = document.querySelector<HTMLElement>('.prose-article');
+    if (!prose) return;
+
+    // The readable blocks, in document order. Skip figures, code and tables —
+    // they don't read aloud sensibly.
+    const blocks = Array.from(
+      prose.querySelectorAll<HTMLElement>(':scope > p, :scope > h2, :scope > h3, :scope > h4, :scope > blockquote, :scope > ul > li, :scope > ol > li')
+    ).filter((el) => (el.textContent || '').trim().length > 0);
+    if (!blocks.length) return;
+
+    const chunks: { el: HTMLElement | null; text: string }[] = [
+      { el: null, text: card.dataset.audioTitle || document.title },
+      ...blocks.map((el) => ({ el, text: (el.textContent || '').replace(/\s+/g, ' ').trim() })),
+    ];
+
+    card.hidden = false;
+
+    const synth = window.speechSynthesis;
+    const toggle = card.querySelector<HTMLButtonElement>('[data-audio-toggle]')!;
+    const iconPlay = card.querySelector<HTMLElement>('[data-audio-icon-play]')!;
+    const iconPause = card.querySelector<HTMLElement>('[data-audio-icon-pause]')!;
+    const progress = card.querySelector<HTMLElement>('[data-audio-progress]')!;
+    const status = card.querySelector<HTMLElement>('[data-audio-status]')!;
+    const rateSel = card.querySelector<HTMLSelectElement>('[data-audio-rate]')!;
+    const back = card.querySelector<HTMLButtonElement>('[data-audio-back]')!;
+    const fwd = card.querySelector<HTMLButtonElement>('[data-audio-fwd]')!;
+
+    let index = 0;
+    let playing = false;
+    let voice: SpeechSynthesisVoice | null = null;
+
+    function pickVoice() {
+      const voices = synth.getVoices();
+      voice =
+        voices.find((v) => v.lang === 'en-GB' && /Google|Natural|Premium/i.test(v.name)) ||
+        voices.find((v) => v.lang === 'en-GB') ||
+        voices.find((v) => v.lang.startsWith('en')) ||
+        null;
+    }
+    pickVoice();
+    synth.addEventListener?.('voiceschanged', pickVoice);
+
+    function highlight(el: HTMLElement | null) {
+      document.querySelectorAll('.audio-current').forEach((e) => e.classList.remove('audio-current'));
+      if (el) el.classList.add('audio-current');
+    }
+
+    function render() {
+      iconPlay.classList.toggle('hidden', playing);
+      iconPause.classList.toggle('hidden', !playing);
+      toggle.setAttribute('aria-label', playing ? 'Pause' : 'Listen to this article');
+      progress.style.width = `${Math.round((index / chunks.length) * 100)}%`;
+      status.textContent = playing
+        ? `Reading ${Math.min(index + 1, chunks.length)} / ${chunks.length}`
+        : index > 0 && index < chunks.length
+          ? `Paused ${index + 1} / ${chunks.length}`
+          : 'Ready';
+    }
+
+    function speakCurrent() {
+      if (index >= chunks.length) {
+        playing = false;
+        index = 0;
+        highlight(null);
+        status.textContent = 'Finished';
+        iconPlay.classList.remove('hidden');
+        iconPause.classList.add('hidden');
+        progress.style.width = '100%';
+        return;
+      }
+      const chunk = chunks[index];
+      highlight(chunk.el);
+      const u = new SpeechSynthesisUtterance(chunk.text);
+      if (voice) u.voice = voice;
+      u.lang = voice?.lang || 'en-GB';
+      u.rate = parseFloat(rateSel.value) || 1;
+      u.onend = () => {
+        if (!playing) return;
+        index += 1;
+        render();
+        speakCurrent();
+      };
+      u.onerror = () => {
+        if (!playing) return;
+        index += 1;
+        speakCurrent();
+      };
+      synth.speak(u);
+    }
+
+    function play() {
+      playing = true;
+      synth.cancel();
+      render();
+      speakCurrent();
+    }
+
+    function pause() {
+      playing = false;
+      synth.cancel(); // cancel + remembered index: reliable across engines
+      render();
+    }
+
+    toggle.addEventListener('click', () => (playing ? pause() : play()));
+    back.addEventListener('click', () => {
+      index = Math.max(0, index - 1);
+      if (playing) play();
+      else render();
+    });
+    fwd.addEventListener('click', () => {
+      index = Math.min(chunks.length - 1, index + 1);
+      if (playing) play();
+      else render();
+    });
+    rateSel.addEventListener('change', () => {
+      if (playing) play(); // restart current block at the new speed
+    });
+
+    // Never leave the engine talking to an empty room.
+    window.addEventListener('pagehide', () => synth.cancel());
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && playing) pause();
+    });
+
+    render();
+  }
+
+  initAudioEdition();
+</script>

@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import MemberGate from '../components/MemberGate.astro';
+
+// The reader's library: articles saved for later. Saves live on the device
+// until the reader signs in (same Supabase auth as the research tools), then
+// sync to their account — see src/scripts/library.ts. Saved pages are also
+// cached by the service worker for offline reading.
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+---
+
+<BaseLayout
+  title="Your library"
+  description="Articles you've saved for later — synced to your account and available offline."
+  noindex={true}
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Library' }]} />
+      <p class="u-kicker mb-5">Reader account</p>
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-ink-900 leading-[1.05] tracking-[-0.025em] text-balance">
+        Your library
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        Articles you've saved for later. Saved pieces are kept for offline reading, and
+        signing in syncs them across your devices.
+      </p>
+    </div>
+  </section>
+
+  <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
+    <div class="lg:grid lg:grid-cols-[1fr_minmax(16rem,20rem)] lg:gap-14 items-start">
+
+      <!-- Saved list (device or account, resolved by the script) -->
+      <div>
+        <div class="flex items-baseline justify-between gap-4 mb-5 pb-3 border-b border-ink-300">
+          <h2 class="font-display font-extrabold text-[20px] tracking-[-0.02em] text-ink-900 m-0">Saved articles</h2>
+          <span data-library-scope class="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-ink-500"></span>
+        </div>
+
+        <ul data-library-list class="grid gap-3 list-none p-0 m-0"></ul>
+
+        <div data-library-empty hidden class="rounded-xl border border-dashed border-ink-300 p-8 text-center">
+          <p class="font-serif text-lg text-ink-700 m-0">Nothing saved yet.</p>
+          <p class="font-sans text-sm text-ink-500 mt-2 m-0">
+            Look for the <span class="font-semibold text-ink-700">Save</span> button at the top of any article.
+          </p>
+          <a href="/police-policy" class="inline-block mt-5 bg-accent text-paper-50 dark:text-night-50 rounded-full px-5 py-2.5 font-sans text-[13.5px] font-bold hover:bg-accent-dark transition-colors">
+            Browse articles
+          </a>
+        </div>
+      </div>
+
+      <!-- Account + tools rail -->
+      <aside class="mt-12 lg:mt-0 grid gap-6">
+        <MemberGate hasAuth={hasAuth} feature="your synced library">
+          <div class="rounded-xl border border-ink-200 bg-paper-100 p-6">
+            <p class="u-kicker mb-2">Account</p>
+            <p class="font-sans text-sm text-ink-700 leading-relaxed m-0">
+              You're signed in — saves on this page sync across your devices, and anything
+              saved on this device before signing in has been moved to your account.
+            </p>
+          </div>
+        </MemberGate>
+
+        <div class="rounded-xl border border-ink-200 p-6">
+          <p class="u-kicker mb-2">Research workspace</p>
+          <p class="font-sans text-sm text-ink-700 leading-relaxed m-0">
+            Your saved <strong>research papers, folders and briefings</strong> live in the
+            Research Assistant, under the same sign-in.
+          </p>
+          <a href="/research" class="inline-block mt-4 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
+            Open the Research Assistant →
+          </a>
+        </div>
+
+        <div class="rounded-xl border border-ink-200 p-6">
+          <p class="u-kicker mb-2">Offline</p>
+          <p class="font-sans text-sm text-ink-700 leading-relaxed m-0">
+            Saved articles are cached on this device, so they open even without a
+            connection — on a train, in a custody suite basement, wherever.
+          </p>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { listSaved, removeArticle, onLibraryChange } from '../scripts/library';
+
+  const list = document.querySelector<HTMLElement>('[data-library-list]');
+  const empty = document.querySelector<HTMLElement>('[data-library-empty]');
+  const scope = document.querySelector<HTMLElement>('[data-library-scope]');
+
+  function fmt(iso: string): string {
+    try {
+      return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    } catch {
+      return '';
+    }
+  }
+
+  async function render() {
+    if (!list || !empty) return;
+    const { items, synced } = await listSaved();
+    if (scope) scope.textContent = synced ? 'Synced to your account' : 'On this device';
+    list.replaceChildren();
+    empty.hidden = items.length > 0;
+    for (const a of items) {
+      const li = document.createElement('li');
+      li.className = 'card-hairline rounded-xl p-5 flex items-start justify-between gap-4';
+
+      const body = document.createElement('a');
+      body.href = `/${a.section}/${a.slug}/`;
+      body.className = 'group min-w-0 block';
+      const meta = document.createElement('p');
+      meta.className = 'font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 m-0 mb-1.5';
+      meta.textContent = `Saved ${fmt(a.savedAt)}`;
+      const h = document.createElement('h3');
+      h.className = 'font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0';
+      h.textContent = a.title;
+      body.appendChild(meta);
+      body.appendChild(h);
+      if (a.description) {
+        const d = document.createElement('p');
+        d.className = 'font-sans text-[13.5px] leading-[1.5] text-ink-600 mt-1.5 m-0';
+        d.textContent = a.description;
+        body.appendChild(d);
+      }
+
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.className = 'shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500 hover:text-accent-dark transition-colors';
+      remove.textContent = 'Remove';
+      remove.setAttribute('aria-label', `Remove “${a.title}” from your library`);
+      remove.addEventListener('click', () => removeArticle(a.slug));
+
+      li.appendChild(body);
+      li.appendChild(remove);
+      list.appendChild(li);
+    }
+  }
+
+  render();
+  onLibraryChange(render);
+  // Re-render once the member gate resolves a session (sign-in mid-visit).
+  document.addEventListener('members:unlock', () => render());
+</script>

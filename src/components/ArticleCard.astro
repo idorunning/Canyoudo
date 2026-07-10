@@ -66,16 +66,16 @@ const linkClass = isStack ? 'flex h-full flex-col' : 'block sm:flex sm:gap-6 sm:
         src={cardImage}
         alt=""
         loading="lazy"
-        class={`${isStack ? 'mb-5' : 'mb-4 sm:mb-0'} shrink-0 rounded-md object-cover bg-paper-200 ring-1 ring-ink-200 ${thumbSize}`}
+        class={`${isStack ? 'mb-5' : 'mb-4 sm:mb-0'} shrink-0 rounded-lg object-cover bg-paper-200 ring-1 ring-ink-200 group-hover:ring-ink-300 transition-shadow ${thumbSize}`}
       />
     ) : (
       <div
-        class={`${isStack ? 'mb-5' : 'mb-4 sm:mb-0'} shrink-0 rounded-md bg-ink-900 ring-1 ring-ink-200 flex flex-col items-center justify-center text-center overflow-hidden px-1 ${thumbSize}`}
+        class={`${isStack ? 'mb-5' : 'mb-4 sm:mb-0'} shrink-0 rounded-lg surface-night ring-1 ring-ink-200 flex flex-col items-center justify-center text-center overflow-hidden px-1 ${thumbSize}`}
         aria-hidden="true"
       >
-        <span class={`font-display font-semibold text-paper-100 leading-none ${isFeature ? 'text-5xl' : 'text-3xl md:text-4xl'}`}>{initial}</span>
+        <span class={`font-display font-bold text-night-ink leading-none ${isFeature ? 'text-5xl' : 'text-3xl md:text-4xl'}`}>{initial}</span>
         {section && (
-          <span class="mt-1.5 font-sans text-[0.5rem] uppercase tracking-[0.15em] text-accent leading-tight">{SECTION_LABELS[section]}</span>
+          <span class="mt-1.5 font-mono text-[0.5rem] uppercase tracking-[0.12em] text-accent-light leading-tight">{SECTION_LABELS[section]}</span>
         )}
       </div>
     )}
@@ -99,9 +99,9 @@ const linkClass = isStack ? 'flex h-full flex-col' : 'block sm:flex sm:gap-6 sm:
         {description}
       </p>
 
-      <div class={`font-sans text-xs uppercase tracking-[0.15em] text-ink-500 ${isStack ? 'mt-auto pt-4' : 'mt-4'}`}>
+      <div class={`font-mono text-[0.66rem] font-medium uppercase tracking-[0.12em] text-ink-500 u-tnum ${isStack ? 'mt-auto pt-4' : 'mt-4'}`}>
         <time datetime={pubDate.toISOString()}>{formattedDate}</time>
-        <span class="mx-2">·</span>
+        <span class="mx-2" aria-hidden="true">·</span>
         <span class="group-hover:text-accent transition-colors">Read article →</span>
       </div>
     </div>

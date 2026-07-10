@@ -1,0 +1,448 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getCollection } from 'astro:content';
+import { getTopics, topicForTag } from '../lib/topics';
+import { SECTIONS, SECTION_LABELS, type Section } from '../content/config';
+
+// The Evidence Graph: every article, topic and section on the site as one
+// navigable map. Built entirely at build time from the content collections —
+// nodes are sections (hubs), topics (from the CMS topics dictionary) and
+// articles; edges are section membership and topic tags. Rendered with a
+// dependency-free canvas force layout (see the script below); the list under
+// the canvas is the accessible, crawlable fallback.
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+const topics = await getTopics();
+
+type GraphNode = {
+  id: string;
+  label: string;
+  kind: 'section' | 'topic' | 'article';
+  url: string;
+  section?: Section;
+  meta?: string;
+};
+
+const nodes: GraphNode[] = [];
+const edges: [string, string][] = [];
+
+for (const s of SECTIONS) {
+  nodes.push({ id: `s:${s}`, label: SECTION_LABELS[s], kind: 'section', url: `/${s}` });
+}
+
+const topicDegree = new Map<string, number>();
+for (const a of articles) {
+  const id = `a:${a.slug}`;
+  nodes.push({
+    id,
+    label: a.data.title,
+    kind: 'article',
+    url: `/${a.data.section}/${a.slug}`,
+    section: a.data.section,
+    meta: `${SECTION_LABELS[a.data.section]} · ${a.data.pubDate.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}`,
+  });
+  edges.push([id, `s:${a.data.section}`]);
+  const seen = new Set<string>();
+  for (const tag of a.data.tags ?? []) {
+    const topic = topicForTag(topics, tag);
+    if (topic && !seen.has(topic.slug)) {
+      seen.add(topic.slug);
+      edges.push([id, `t:${topic.slug}`]);
+      topicDegree.set(topic.slug, (topicDegree.get(topic.slug) ?? 0) + 1);
+    }
+  }
+}
+
+// Only topics that actually connect something.
+for (const t of topics) {
+  if ((topicDegree.get(t.slug) ?? 0) > 0) {
+    nodes.push({
+      id: `t:${t.slug}`,
+      label: t.label,
+      kind: 'topic',
+      url: `/topics/${t.slug}`,
+      meta: `Topic · ${topicDegree.get(t.slug)} article${topicDegree.get(t.slug) === 1 ? '' : 's'}`,
+    });
+  }
+}
+const nodeIds = new Set(nodes.map((n) => n.id));
+const cleanEdges = edges.filter(([a, b]) => nodeIds.has(a) && nodeIds.has(b));
+
+// Fallback / SEO list: topics with their matched articles.
+const topicList = topics
+  .map((t) => ({
+    topic: t,
+    articles: articles.filter((a) =>
+      (a.data.tags ?? []).some((tag) => topicForTag(topics, tag)?.slug === t.slug)
+    ),
+  }))
+  .filter((t) => t.articles.length > 0)
+  .sort((a, b) => b.articles.length - a.articles.length);
+
+const graphData = { nodes, edges: cleanEdges };
+---
+
+<BaseLayout
+  title="The Evidence Graph"
+  description="Every article, topic and section on this site as one navigable map — see how the evidence connects."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Evidence Graph' }]} />
+      <p class="u-kicker mb-5 u-tnum">Site map, the interesting way · {articles.length} articles · {topicList.length} topics</p>
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-ink-900 leading-[1.05] tracking-[-0.025em] text-balance">
+        The Evidence Graph
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        Every article, topic and section on the site as one map. Drag to explore, hover to see
+        connections, click anything to read it.
+      </p>
+    </div>
+  </section>
+
+  <section class="max-w-wide mx-auto px-6 lg:px-10 py-8 md:py-10">
+    <div class="relative rounded-2xl border border-ink-200 bg-paper-100 overflow-hidden">
+      <canvas
+        id="evidence-graph"
+        class="block w-full h-[70vh] min-h-[420px] cursor-grab touch-none"
+        aria-label="Interactive map of articles, topics and sections. The same information is listed below the map."
+      ></canvas>
+
+      <!-- Legend -->
+      <div class="absolute top-4 left-4 rounded-lg border border-ink-200 bg-paper-50/90 backdrop-blur px-4 py-3 pointer-events-none">
+        <p class="u-kicker u-kicker--dim mb-2">Legend</p>
+        <ul class="grid gap-1.5 list-none p-0 m-0 font-mono text-[11px] text-ink-700">
+          <li class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-accent inline-block"></span> Topic</li>
+          <li class="flex items-center gap-2"><span class="w-3.5 h-3.5 rounded-full surface-night inline-block border border-ink-300"></span> Section</li>
+          <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-ink-500 inline-block"></span> Article</li>
+        </ul>
+      </div>
+
+      <!-- Node inspector -->
+      <div
+        id="graph-panel"
+        hidden
+        class="absolute bottom-4 left-4 right-4 sm:right-auto sm:w-[22rem] rounded-lg border border-ink-200 bg-paper-50/95 backdrop-blur px-5 py-4 shadow-panel"
+      >
+        <p id="graph-panel-kicker" class="u-kicker mb-1"></p>
+        <p id="graph-panel-title" class="font-display font-bold text-[16px] leading-snug text-ink-900 m-0"></p>
+        <a id="graph-panel-link" href="#" class="inline-block mt-2 font-mono text-[11.5px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">Open →</a>
+      </div>
+    </div>
+    <p class="font-mono text-[11px] text-ink-500 mt-3 u-tnum">
+      {nodes.length} nodes · {cleanEdges.length} connections · built from the article tags and the topics dictionary
+    </p>
+  </section>
+
+  <!-- Accessible / crawlable fallback -->
+  <section class="max-w-wide mx-auto px-6 lg:px-10 py-8 md:py-12">
+    <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-6 pb-3 border-b border-ink-300">
+      <span class="u-kicker block mb-1.5">The same map, as a list</span>
+      Topics and their articles
+    </h2>
+    <div class="grid gap-3 md:grid-cols-2">
+      {topicList.map(({ topic, articles: matched }) => (
+        <details class="rounded-xl border border-ink-200 p-5 open:bg-paper-100 transition-colors">
+          <summary class="cursor-pointer font-display font-bold text-[16px] text-ink-900 flex items-baseline justify-between gap-3">
+            {topic.label}
+            <span class="font-mono text-[11px] font-medium text-ink-500 u-tnum">{matched.length}</span>
+          </summary>
+          <ul class="mt-3 grid gap-2 list-none p-0 m-0">
+            {matched.map((a) => (
+              <li>
+                <a href={`/${a.data.section}/${a.slug}`} class="font-sans text-sm text-ink-700 hover:text-accent transition-colors">
+                  {a.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <script type="application/json" id="graph-data" set:html={JSON.stringify(graphData)} />
+</BaseLayout>
+
+<script>
+  // Dependency-free force-directed graph on canvas. ~60 nodes, so the O(n²)
+  // repulsion pass is nothing; everything else is springs + damping. Colours
+  // come from the design tokens at render time, so the graph follows the
+  // theme (and any future palette flip) automatically.
+  type GNode = {
+    id: string; label: string; kind: 'section' | 'topic' | 'article';
+    url: string; meta?: string;
+    x: number; y: number; vx: number; vy: number; r: number; degree: number;
+  };
+
+  function initGraph() {
+    const canvas = document.getElementById('evidence-graph') as HTMLCanvasElement | null;
+    const dataEl = document.getElementById('graph-data');
+    if (!canvas || !dataEl) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const raw = JSON.parse(dataEl.textContent || '{}');
+    const degree = new Map<string, number>();
+    for (const [a, b] of raw.edges) {
+      degree.set(a, (degree.get(a) ?? 0) + 1);
+      degree.set(b, (degree.get(b) ?? 0) + 1);
+    }
+
+    const nodes: GNode[] = raw.nodes.map((n: any, i: number) => {
+      const d = degree.get(n.id) ?? 0;
+      const angle = (i / raw.nodes.length) * Math.PI * 2;
+      const spread = n.kind === 'article' ? 320 : 160;
+      return {
+        ...n,
+        degree: d,
+        r: n.kind === 'section' ? 16 + Math.min(d, 20) * 0.35 : n.kind === 'topic' ? 7 + Math.min(d, 14) * 0.8 : 5,
+        x: Math.cos(angle) * spread + (i % 7) * 3,
+        y: Math.sin(angle) * spread + (i % 5) * 3,
+        vx: 0, vy: 0,
+      };
+    });
+    const byId = new Map(nodes.map((n) => [n.id, n]));
+    const links = (raw.edges as [string, string][])
+      .map(([a, b]) => ({ a: byId.get(a)!, b: byId.get(b)! }))
+      .filter((l) => l.a && l.b);
+    const neighbours = new Map<string, Set<string>>();
+    for (const l of links) {
+      if (!neighbours.has(l.a.id)) neighbours.set(l.a.id, new Set());
+      if (!neighbours.has(l.b.id)) neighbours.set(l.b.id, new Set());
+      neighbours.get(l.a.id)!.add(l.b.id);
+      neighbours.get(l.b.id)!.add(l.a.id);
+    }
+
+    // Theme colours, re-read when the theme class flips.
+    let C: Record<string, string> = {};
+    function readTokens() {
+      const s = getComputedStyle(document.documentElement);
+      const rgb = (v: string, a = 1) => `rgba(${s.getPropertyValue(v).trim().split(/\s+/).join(',')},${a})`;
+      C = {
+        line: rgb('--ink-200', 0.9),
+        lineHi: rgb('--accent', 0.55),
+        article: rgb('--ink-500'),
+        articleHi: rgb('--ink-900'),
+        topic: rgb('--accent'),
+        section: rgb('--night-50'),
+        sectionRing: rgb('--ink-300'),
+        label: rgb('--ink-800'),
+        labelDim: rgb('--ink-600'),
+        halo: rgb('--accent', 0.14),
+      };
+    }
+    readTokens();
+    new MutationObserver(readTokens).observe(document.documentElement, {
+      attributes: true, attributeFilter: ['class'],
+    });
+
+    // Camera + interaction state.
+    let scale = 1, ox = 0, oy = 0;
+    let hovered: GNode | null = null;
+    let dragged: GNode | null = null;
+    let panning = false;
+    let lastX = 0, lastY = 0;
+    let width = 0, height = 0, dpr = 1;
+    let energy = 1; // sim cools down; interactions reheat it
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      dpr = window.devicePixelRatio || 1;
+      width = rect.width; height = rect.height;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+    }
+    resize();
+    window.addEventListener('resize', () => { resize(); energy = Math.max(energy, 0.3); });
+
+    function tick() {
+      // Repulsion.
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i], b = nodes[j];
+          let dx = a.x - b.x, dy = a.y - b.y;
+          let d2 = dx * dx + dy * dy;
+          if (d2 < 1) { d2 = 1; dx = Math.random() - 0.5; dy = Math.random() - 0.5; }
+          const f = 900 / d2;
+          const d = Math.sqrt(d2);
+          const fx = (dx / d) * f, fy = (dy / d) * f;
+          a.vx += fx; a.vy += fy;
+          b.vx -= fx; b.vy -= fy;
+        }
+      }
+      // Springs.
+      for (const { a, b } of links) {
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const d = Math.max(1, Math.sqrt(dx * dx + dy * dy));
+        const rest = a.kind === 'section' || b.kind === 'section' ? 120 : 70;
+        const f = (d - rest) * 0.012;
+        const fx = (dx / d) * f, fy = (dy / d) * f;
+        a.vx += fx; a.vy += fy;
+        b.vx -= fx; b.vy -= fy;
+      }
+      // Gravity + integrate.
+      for (const n of nodes) {
+        n.vx -= n.x * 0.004;
+        n.vy -= n.y * 0.004;
+        if (n === dragged) { n.vx = 0; n.vy = 0; continue; }
+        n.vx *= 0.86; n.vy *= 0.86;
+        n.x += n.vx * energy; n.y += n.vy * energy;
+      }
+      energy = Math.max(0, energy - 0.0025);
+    }
+
+    function draw() {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      ctx.translate(width / 2 + ox, height / 2 + oy);
+      ctx.scale(scale, scale);
+
+      const hiSet = hovered ? neighbours.get(hovered.id) : null;
+
+      // Edges.
+      ctx.lineWidth = 1 / scale;
+      for (const { a, b } of links) {
+        const hi = hovered && (a === hovered || b === hovered);
+        ctx.strokeStyle = hi ? C.lineHi : C.line;
+        ctx.globalAlpha = hovered && !hi ? 0.25 : 1;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+
+      // Nodes.
+      for (const n of nodes) {
+        const isHover = n === hovered;
+        const isNeighbour = hiSet?.has(n.id) ?? false;
+        const dim = hovered && !isHover && !isNeighbour;
+        ctx.globalAlpha = dim ? 0.3 : 1;
+        if (isHover) {
+          ctx.beginPath();
+          ctx.fillStyle = C.halo;
+          ctx.arc(n.x, n.y, n.r + 10, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.fillStyle = n.kind === 'topic' ? C.topic : n.kind === 'section' ? C.section : isHover || isNeighbour ? C.articleHi : C.article;
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
+        if (n.kind === 'section') {
+          ctx.strokeStyle = C.sectionRing;
+          ctx.lineWidth = 1.5 / scale;
+          ctx.stroke();
+        }
+      }
+      ctx.globalAlpha = 1;
+
+      // Labels: sections + topics always (topics above a zoom threshold),
+      // hovered node always.
+      ctx.textAlign = 'center';
+      for (const n of nodes) {
+        const show = n === hovered || n.kind === 'section' || (n.kind === 'topic' && (scale > 0.8 || (n.degree >= 3)));
+        if (!show) continue;
+        const dim = hovered && n !== hovered && !(hiSet?.has(n.id) ?? false);
+        ctx.globalAlpha = dim ? 0.35 : 1;
+        ctx.font = `600 ${(n.kind === 'section' ? 12 : 10.5) / scale}px 'IBM Plex Mono', ui-monospace, monospace`;
+        ctx.fillStyle = n === hovered ? C.label : C.labelDim;
+        const text = n.kind === 'article' && n.label.length > 42 ? n.label.slice(0, 41) + '…' : n.label;
+        ctx.fillText(text, n.x, n.y - n.r - 6 / scale);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      // Settle the layout invisibly, then draw static frames on interaction only.
+      for (let i = 0; i < 400; i++) tick();
+      energy = 0;
+    }
+
+    function frame() {
+      if (energy > 0) tick();
+      draw();
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    // --- Interaction -------------------------------------------------------
+    function toWorld(clientX: number, clientY: number) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (clientX - rect.left - width / 2 - ox) / scale,
+        y: (clientY - rect.top - height / 2 - oy) / scale,
+      };
+    }
+    function hit(clientX: number, clientY: number): GNode | null {
+      const p = toWorld(clientX, clientY);
+      let best: GNode | null = null;
+      let bestD = Infinity;
+      for (const n of nodes) {
+        const dx = n.x - p.x, dy = n.y - p.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < Math.max(n.r + 6, 10) && d < bestD) { best = n; bestD = d; }
+      }
+      return best;
+    }
+
+    const panel = document.getElementById('graph-panel')!;
+    const panelKicker = document.getElementById('graph-panel-kicker')!;
+    const panelTitle = document.getElementById('graph-panel-title')!;
+    const panelLink = document.getElementById('graph-panel-link') as HTMLAnchorElement;
+
+    function showPanel(n: GNode) {
+      panelKicker.textContent = n.kind === 'article' ? (n.meta || 'Article') : n.kind === 'topic' ? (n.meta || 'Topic') : 'Section';
+      panelTitle.textContent = n.label;
+      panelLink.href = n.url;
+      panelLink.textContent = n.kind === 'article' ? 'Read the article →' : 'Open →';
+      panel.hidden = false;
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      canvas.setPointerCapture(e.pointerId);
+      const n = hit(e.clientX, e.clientY);
+      lastX = e.clientX; lastY = e.clientY;
+      if (n) { dragged = n; energy = Math.max(energy, 0.25); }
+      else { panning = true; canvas.style.cursor = 'grabbing'; }
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (dragged) {
+        const p = toWorld(e.clientX, e.clientY);
+        dragged.x = p.x; dragged.y = p.y;
+        energy = Math.max(energy, 0.2);
+      } else if (panning) {
+        ox += e.clientX - lastX; oy += e.clientY - lastY;
+        lastX = e.clientX; lastY = e.clientY;
+        if (energy === 0) draw();
+      } else {
+        const h = hit(e.clientX, e.clientY);
+        if (h !== hovered) {
+          hovered = h;
+          canvas.style.cursor = h ? 'pointer' : 'grab';
+          if (energy === 0) draw();
+        }
+      }
+    });
+    canvas.addEventListener('pointerup', (e) => {
+      const n = hit(e.clientX, e.clientY);
+      const moved = Math.abs(e.clientX - lastX) + Math.abs(e.clientY - lastY) > 6;
+      if (n && !moved) showPanel(n);
+      else if (!n && !moved) panel.hidden = true;
+      dragged = null; panning = false;
+      canvas.style.cursor = 'grab';
+    });
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.1 : 0.9;
+      scale = Math.min(3, Math.max(0.35, scale * factor));
+      if (energy === 0) draw();
+    }, { passive: false });
+  }
+
+  initGraph();
+</script>

@@ -19,7 +19,7 @@ interface Props {
   zeroLine?: boolean;
   color?: string;
 }
-const { points, label, markers = [], min, max, width = 720, height = 240, zeroLine = false, color = '#9c5b3b' } = Astro.props;
+const { points, label, markers = [], min, max, width = 720, height = 240, zeroLine = false, color = 'rgb(var(--accent))' } = Astro.props;
 
 const pad = { l: 38, r: 12, t: 16, b: 28 };
 const innerW = width - pad.l - pad.r;

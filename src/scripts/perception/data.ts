@@ -57,14 +57,17 @@ export type FacetKey = (typeof FACETS)[number];
 // labels keep charts legible; the lexicon scope (e.g. "& corruption") lives in
 // the prose. THEME_ORDER is the preferred draw order; callers filter to keys
 // actually present in the data via themesPresent().
+// Colours reference the chart tokens in global.css, so the explorer follows
+// the theme (light/dark, and any future palette flip). The strings work
+// anywhere the explorer injects them: inline styles, SVG attributes, chips.
 export const THEME_META: Record<string, { label: string; color: string }> = {
-  trust: { label: 'Trust', color: '#2f7d52' },
-  misconduct: { label: 'Misconduct', color: '#b3402f' },
-  race: { label: 'Race', color: '#8a5a2b' },
-  terrorism: { label: 'Terrorism', color: '#6d4c91' },
-  protest: { label: 'Protest', color: '#c97e2b' },
-  reform: { label: 'Reform', color: '#3b6ea5' },
-  leadership: { label: 'Leadership', color: '#8a6fae' }, // legacy data only
+  trust: { label: 'Trust', color: 'rgb(var(--chart-green))' },
+  misconduct: { label: 'Misconduct', color: 'rgb(var(--chart-red))' },
+  race: { label: 'Race', color: 'rgb(var(--chart-amber))' },
+  terrorism: { label: 'Terrorism', color: 'rgb(var(--chart-purple))' },
+  protest: { label: 'Protest', color: 'rgb(var(--chart-orange))' },
+  reform: { label: 'Reform', color: 'rgb(var(--chart-blue))' },
+  leadership: { label: 'Leadership', color: 'rgb(var(--chart-violet))' }, // legacy data only
 };
 export const THEME_ORDER = ['trust', 'misconduct', 'race', 'terrorism', 'protest', 'reform', 'leadership'] as const;
 

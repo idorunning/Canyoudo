@@ -1,0 +1,131 @@
+---
+// Footnote previews: hover (or tap, or keyboard-focus) a footnote marker and
+// the note appears in a small popover beside it, instead of forcing a jump to
+// the end of the article. The popover content is cloned from the generated
+// footnotes section, so it's always in step with the note itself — links
+// inside the note stay clickable, and a "Go to note" link keeps the original
+// jump one tap away. Progressive enhancement: without JS the markers keep
+// their normal anchor behaviour.
+---
+
+<div
+  id="fn-preview"
+  hidden
+  role="tooltip"
+  class="fixed z-[58] max-w-[22rem] rounded-xl border border-ink-200 bg-paper-50 shadow-panel px-4 py-3"
+>
+  <p class="u-kicker u-kicker--dim !text-[0.6rem] mb-1.5" data-fn-label></p>
+  <div data-fn-body class="font-serif text-[0.92rem] leading-relaxed text-ink-800"></div>
+  <a data-fn-goto href="#" class="inline-block mt-2 font-mono text-[10.5px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
+    Go to note ↓
+  </a>
+</div>
+
+<style>
+  #fn-preview [data-fn-body] :global(a) {
+    color: rgb(var(--ink-800));
+    text-decoration: underline;
+    text-decoration-color: rgb(var(--ink-400));
+    text-underline-offset: 2px;
+  }
+  #fn-preview [data-fn-body] :global(a:hover) {
+    color: rgb(var(--accent-dark));
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    #fn-preview:not([hidden]) {
+      animation: fn-in 0.16s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+  }
+  @keyframes fn-in {
+    from { opacity: 0; transform: translateY(3px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  function initFootnotePreviews() {
+    const pop = document.getElementById('fn-preview');
+    if (!pop) return;
+    const refs = document.querySelectorAll<HTMLAnchorElement>('.prose-article a[data-footnote-ref]');
+    if (!refs.length) return;
+
+    const label = pop.querySelector<HTMLElement>('[data-fn-label]')!;
+    const body = pop.querySelector<HTMLElement>('[data-fn-body]')!;
+    const goto = pop.querySelector<HTMLAnchorElement>('[data-fn-goto]')!;
+
+    let hideTimer: ReturnType<typeof setTimeout> | undefined;
+    let openFor: HTMLAnchorElement | null = null;
+
+    function noteFor(ref: HTMLAnchorElement): HTMLElement | null {
+      const id = decodeURIComponent((ref.getAttribute('href') || '').replace(/^#/, ''));
+      return id ? document.getElementById(id) : null;
+    }
+
+    function show(ref: HTMLAnchorElement) {
+      clearTimeout(hideTimer);
+      const note = noteFor(ref);
+      if (!note) return;
+
+      // Clone the note's content, minus the back-reference arrow.
+      const clone = note.cloneNode(true) as HTMLElement;
+      clone.querySelectorAll('[data-footnote-backref]').forEach((el) => el.remove());
+      body.replaceChildren(...Array.from(clone.childNodes));
+
+      label.textContent = `Note ${ref.textContent?.trim() ?? ''}`;
+      goto.href = ref.getAttribute('href') ?? '#';
+      openFor = ref;
+      pop.hidden = false;
+
+      const r = ref.getBoundingClientRect();
+      const pw = pop.offsetWidth;
+      const ph = pop.offsetHeight;
+      let top = r.top - ph - 8;
+      if (top < 8) top = r.bottom + 8;
+      let left = r.left + r.width / 2 - pw / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
+      pop.style.top = `${Math.round(top)}px`;
+      pop.style.left = `${Math.round(left)}px`;
+    }
+
+    function scheduleHide() {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        pop.hidden = true;
+        openFor = null;
+      }, 220);
+    }
+
+    refs.forEach((ref) => {
+      ref.addEventListener('mouseenter', () => show(ref));
+      ref.addEventListener('mouseleave', scheduleHide);
+      ref.addEventListener('focus', () => show(ref));
+      ref.addEventListener('blur', scheduleHide);
+      // Touch / click: first activation previews instead of jumping; the
+      // "Go to note" link inside the popover does the jump.
+      ref.addEventListener('click', (e) => {
+        if (openFor !== ref || pop.hidden) {
+          e.preventDefault();
+          show(ref);
+        }
+      });
+    });
+
+    // Keep the popover open while the pointer is inside it (links clickable).
+    pop.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+    pop.addEventListener('mouseleave', scheduleHide);
+
+    window.addEventListener('scroll', () => { pop.hidden = true; openFor = null; }, { passive: true });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { pop.hidden = true; openFor = null; }
+    });
+    document.addEventListener('click', (e) => {
+      const t = e.target as Node;
+      if (!pop.contains(t) && !(t instanceof Element && t.closest('a[data-footnote-ref]'))) {
+        pop.hidden = true;
+        openFor = null;
+      }
+    });
+  }
+
+  initFootnotePreviews();
+</script>

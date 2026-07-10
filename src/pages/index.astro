@@ -8,10 +8,23 @@ import { SECTIONS, SECTION_LABELS } from '../content/config';
 import engagement from '../lib/engagement-bundle.json';
 import polls from '../data/polls.json';
 import pollVotes from '../lib/polls-bundle.json';
+import readingTime from 'reading-time';
 
 import type { Section } from '../content/config';
 
 const articles = await getCollection('articles', ({ data }) => !data.draft);
+
+// Masthead figures — real numbers from the collection, not copy.
+const totalReadingMinutes = articles.reduce(
+  (sum, a) => sum + Math.max(1, Math.ceil(readingTime(a.body ?? '').minutes)),
+  0
+);
+
+// Total article views: baked at build from article_engagement, brought live
+// in the browser by the script at the foot of this page.
+const bakedTotalViews = Object.values(
+  engagement as Record<string, { views?: number }>
+).reduce((sum, e) => sum + (e.views ?? 0), 0);
 
 type Item = {
   slug: string;
@@ -148,6 +161,19 @@ const jsonLd = [
   },
 ];
 
+// Baked view counts per slug (generics stay out of the template — the Astro
+// compiler mis-parses `Record<...>` casts inside JSX expressions).
+const viewsBySlug: Record<string, number> = {};
+for (const a of allArticles) {
+  viewsBySlug[a.slug] = (engagement as Record<string, { views?: number }>)[a.slug]?.views ?? 0;
+}
+
+// Compact slug index for the live most-read refresh (title/section per slug),
+// embedded as JSON so the browser can rebuild the ranking from live counts.
+const articlesIndex = Object.fromEntries(
+  allArticles.map((a) => [a.slug, { t: a.data.title, s: a.section, l: SECTION_LABELS[a.section] }])
+);
+
 const emailSubject = 'Article idea for Thinking About Policing';
 const emailBody = `Hi Nathan,\n\nI'd like to pitch an idea:\n\n- Working title:\n- What it argues / the evidence behind it:\n- A bit about me:\n`;
 const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
@@ -156,74 +182,119 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
 <BaseLayout title="Thinking About Policing" jsonLd={jsonLd}>
 
   <!-- ============ HAVE AN IDEA? ============ -->
-  <div class="bg-accent">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-3.5 text-center">
-      <p class="font-sans text-[13.5px] md:text-sm font-extrabold text-paper-50 leading-snug">
-        Have an idea? — <a href={pitchMailto} class="underline decoration-2 underline-offset-2 hover:text-paper-50/85 transition-colors">contact us Here</a> if you have an article you would like to write about or publish.
+  <div class="bg-paper-100 border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-2.5 flex items-center justify-center gap-3">
+      <span class="u-kicker hidden sm:inline">Contribute</span>
+      <p class="font-sans text-[13px] font-medium text-ink-700 leading-snug m-0">
+        Have an article you'd like to write or publish?
+        <a href={pitchMailto} class="font-semibold text-accent hover:text-accent-dark underline decoration-1 underline-offset-2 transition-colors">Pitch it here →</a>
       </p>
     </div>
   </div>
 
   <!-- ============ HERO ============ -->
-  <section class="relative overflow-hidden">
-    <!-- Floating gradient orbs -->
-    <div class="hero-orb-a absolute top-[-160px] right-[-120px] w-[520px] h-[520px] rounded-full opacity-90 pointer-events-none"
-      style="background: radial-gradient(circle at 30% 30%, rgb(238 240 251), transparent 70%);"
-    ></div>
-    <div class="hero-orb-b absolute top-[40px] left-[-140px] w-[420px] h-[420px] rounded-full opacity-70 pointer-events-none"
-      style="background: radial-gradient(circle at 50% 50%, rgb(237 242 251), transparent 70%);"
+  <section class="relative overflow-hidden border-b border-ink-200">
+    <!-- Technical grid ground: hairlines fading out radially. -->
+    <div
+      class="absolute inset-0 pointer-events-none opacity-[0.55] dark:opacity-[0.35]"
+      aria-hidden="true"
+      style="background-image: linear-gradient(rgb(var(--ink-200)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--ink-200)) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse 90% 80% at 30% 0%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 90% 80% at 30% 0%, #000 30%, transparent 75%);"
     ></div>
 
-    <div class="relative max-w-wide mx-auto px-6 lg:px-10 pt-16 pb-14 md:py-[70px]">
+    <div class="relative max-w-wide mx-auto px-6 lg:px-10 pt-16 pb-14 md:py-[72px]">
       <div class="lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 xl:gap-[60px] lg:items-center">
 
-        <!-- Left: headline + CTAs + stats -->
+        <!-- Left: headline + standfirst + figures -->
         <div>
-          <h1 class="font-display font-extrabold text-[56px] md:text-[62px] leading-[1.02] tracking-[-0.035em] text-ink-900 text-balance m-0">
+          <p class="u-kicker mb-5">Evidence-based analysis · By a serving UK police inspector</p>
+
+          <h1 class="font-display font-extrabold text-[52px] md:text-[62px] leading-[1.02] tracking-[-0.035em] text-ink-900 text-balance m-0">
             Thinking About Policing
           </h1>
 
-          <p class="font-sans text-lg md:text-[19px] leading-relaxed text-ink-700 mt-6 max-w-[31em] font-medium">
-            <span class="mark-orange">Evidence-led</span> analysis of policing, public policy, leadership, and the decisions that shape public safety.
+          <p class="font-serif text-lg md:text-[20px] leading-relaxed text-ink-700 mt-6 max-w-[30em]">
+            <span class="mark-orange">Evidence-led</span> analysis of policing, public policy,
+            leadership, and the decisions that shape public safety.
           </p>
 
+          <div class="flex flex-wrap items-center gap-3 mt-8">
+            <a
+              href="/police-policy"
+              class="bg-accent text-paper-50 dark:text-night-50 rounded-full px-5 py-2.5 font-sans text-[14px] font-bold hover:bg-accent-dark transition-colors"
+            >
+              Start reading
+            </a>
+            <button
+              type="button"
+              data-search-open
+              class="flex items-center gap-2 rounded-full border border-ink-300 px-5 py-2.5 font-sans text-[14px] font-semibold text-ink-700 hover:text-ink-900 hover:border-ink-500 transition-colors"
+            >
+              Search the site
+              <kbd class="font-mono text-[10px] font-semibold text-ink-500 bg-paper-100 border border-ink-200 rounded px-1.5 py-0.5 leading-none">⌘K</kbd>
+            </button>
+          </div>
+
+          <!-- Site figures, in the data voice -->
+          <dl class="flex flex-wrap gap-x-10 gap-y-4 mt-10 pt-7 border-t border-ink-200 m-0">
+            <div>
+              <dt class="u-kicker u-kicker--dim">Articles</dt>
+              <dd class="font-mono font-semibold text-[22px] text-ink-900 u-tnum m-0 mt-1">{allArticles.length}</dd>
+            </div>
+            <div>
+              <dt class="u-kicker u-kicker--dim">Topics</dt>
+              <dd class="font-mono font-semibold text-[22px] text-ink-900 u-tnum m-0 mt-1">{topics.length}</dd>
+            </div>
+            <div>
+              <dt class="u-kicker u-kicker--dim">Minutes of reading</dt>
+              <dd class="font-mono font-semibold text-[22px] text-ink-900 u-tnum m-0 mt-1">{totalReadingMinutes}</dd>
+            </div>
+            <div data-live-reads-stat class:list={[bakedTotalViews > 0 ? '' : 'hidden']}>
+              <dt class="u-kicker u-kicker--dim flex items-center gap-1.5">
+                <span class="w-1 h-1 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
+                Article views
+              </dt>
+              <dd data-live-total-reads class="font-mono font-semibold text-[22px] text-ink-900 u-tnum m-0 mt-1">
+                {bakedTotalViews.toLocaleString('en-GB')}
+              </dd>
+            </div>
+          </dl>
         </div>
 
-        <!-- Right: featured article card -->
+        <!-- Right: lead story -->
         {feature && (
           <div class="mt-12 lg:mt-0">
             <a
               href={`/${feature.section}/${feature.slug}`}
-              class="group block bg-paper-50 border border-ink-200 rounded-[20px] overflow-hidden shadow-[0_12px_36px_rgba(27,36,82,0.09)] hover:-translate-y-1 hover:shadow-[0_18px_44px_rgba(27,36,82,0.13)] transition-all duration-200"
+              class="card-hairline group block rounded-xl overflow-hidden"
             >
               {(feature.data.heroImage || feature.data.portrait) && (
-                <div class="overflow-hidden h-[280px]">
+                <div class="overflow-hidden h-[280px] border-b border-ink-200">
                   <img
                     src={feature.data.portrait ?? feature.data.heroImage}
                     alt=""
                     loading="eager"
-                    class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.7,.2,1)]"
+                    class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[600ms] ease-swift"
                   />
                 </div>
               )}
               {!(feature.data.heroImage || feature.data.portrait) && (
-                <div class="h-[200px] bg-ink-900 flex items-center justify-center">
-                  <span class="font-extrabold text-6xl text-paper-100/80">
+                <div class="h-[200px] surface-night flex items-center justify-center border-b border-ink-200">
+                  <span class="font-display font-extrabold text-6xl text-night-ink/70">
                     {(feature.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
                   </span>
                 </div>
               )}
-              <div class="p-7 md:p-[28px_30px_30px]">
+              <div class="p-7">
                 <div class="flex items-center gap-3 mb-4">
-                  <span class="bg-accent/10 text-accent-dark text-[11px] font-extrabold uppercase tracking-[0.06em] px-3 py-1 rounded-full">Latest</span>
-                  <span class="text-[12px] font-bold uppercase tracking-[0.04em] text-ink-500">
+                  <span class="u-kicker bg-accent/10 px-2.5 py-1 rounded">Lead story</span>
+                  <span class="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500">
                     {SECTION_LABELS[feature.section]} · {feature.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                   </span>
                 </div>
-                <h2 class="font-extrabold text-[26px] leading-[1.18] tracking-[-0.02em] text-ink-900 group-hover:text-accent transition-colors m-0">
+                <h2 class="font-display font-extrabold text-[25px] leading-[1.18] tracking-[-0.02em] text-ink-900 group-hover:text-accent transition-colors m-0">
                   {feature.data.title}
                 </h2>
-                <p class="text-[14.5px] leading-relaxed text-ink-700 mt-3">{feature.data.description}</p>
+                <p class="font-sans text-[14.5px] leading-relaxed text-ink-700 mt-3">{feature.data.description}</p>
               </div>
             </a>
           </div>
@@ -234,28 +305,27 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
   </section>
 
   <!-- ============ QUOTE ============ -->
-  <section class="max-w-wide mx-auto px-6 lg:px-10 py-3 md:py-4">
-    <div class="bg-ink-900 dark:bg-paper-200 rounded-[24px] px-10 md:px-16 py-12 md:py-14 text-center relative overflow-hidden">
-      <!-- Decorative large quote marks -->
-      <div class="absolute top-3 left-8 font-serif text-[120px] leading-none text-accent/25 select-none pointer-events-none" aria-hidden="true">"</div>
-      <div class="absolute bottom-3 right-8 font-serif text-[120px] leading-none text-accent/25 select-none pointer-events-none rotate-180" aria-hidden="true">"</div>
-      <div class="relative">
-        <p class="font-display font-bold text-[26px] md:text-[34px] lg:text-[38px] leading-[1.25] tracking-[-0.025em] text-white text-balance italic m-0">
-          "We are all entitled to our own opinions,<br class="hidden md:block" /> <span class="text-accent-light not-italic font-extrabold">but not to our own facts.</span>"
+  <section class="max-w-wide mx-auto px-6 lg:px-10 py-4 md:py-6">
+    <figure class="surface-night rounded-2xl px-10 md:px-16 py-12 md:py-14 text-center relative overflow-hidden m-0">
+      <div class="absolute left-1/2 -translate-x-1/2 top-0 h-[3px] w-16 bg-accent" aria-hidden="true"></div>
+      <blockquote class="m-0">
+        <p class="font-serif text-[26px] md:text-[34px] lg:text-[36px] leading-[1.3] tracking-[-0.01em] text-night-ink text-balance italic m-0">
+          "We are all entitled to our own opinions,<br class="hidden md:block" />
+          <span class="text-accent-light not-italic font-semibold">but not to our own facts.</span>"
         </p>
-        <div class="font-sans text-[12px] font-bold uppercase tracking-[0.12em] text-white/70 mt-6">
-          Lawrence Sherman ·{' '}
-          <a
-            href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
-            rel="noopener"
-            target="_blank"
-            class="underline underline-offset-2 hover:text-white/90 transition-colors"
-          >
-            Ideas in American Policing, 1998
-          </a>
-        </div>
-      </div>
-    </div>
+      </blockquote>
+      <figcaption class="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-night-dim mt-6">
+        Lawrence Sherman ·{' '}
+        <a
+          href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
+          rel="noopener"
+          target="_blank"
+          class="underline underline-offset-2 hover:text-night-ink transition-colors"
+        >
+          Ideas in American Policing, 1998
+        </a>
+      </figcaption>
+    </figure>
   </section>
 
   <!-- ============ THEMED SECTION ROWS ============ -->
@@ -265,45 +335,45 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     return (
       <section class="border-b border-ink-200">
         <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
-          <div class="flex items-baseline justify-between mb-7">
-            <div class="flex items-center gap-3">
-              <div class="w-1 h-5 bg-accent rounded-full shrink-0"></div>
-              <h2 class="font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">{SECTION_LABELS[sectionKey]}</h2>
-            </div>
-            <a href={`/${sectionKey}`} class="text-[13px] font-bold text-accent hover:text-accent-dark transition-colors">
-              All {counts[sectionKey]} articles →
+          <div class="flex items-baseline justify-between gap-4 mb-7">
+            <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+              <span class="u-kicker block mb-1.5">Section</span>
+              {SECTION_LABELS[sectionKey]}
+            </h2>
+            <a href={`/${sectionKey}`} class="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors whitespace-nowrap u-tnum">
+              All {counts[sectionKey]} →
             </a>
           </div>
-          <div class="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+          <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
             {articles.map(article => (
               <a
                 href={`/${article.section}/${article.slug}`}
-                class="group shrink-0 snap-start w-[280px] flex flex-col bg-paper-50 border border-ink-200 rounded-[18px] overflow-hidden shadow-sm hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(27,36,82,0.09)] transition-all duration-200"
+                class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-xl overflow-hidden"
               >
                 {(article.data.heroImage || article.data.portrait) ? (
-                  <div data-reveal class="overflow-hidden h-[160px]">
+                  <div class="overflow-hidden h-[160px] border-b border-ink-200">
                     <img
                       src={article.data.portrait ?? article.data.heroImage}
                       alt=""
                       loading="lazy"
-                      class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.7,.2,1)]"
+                      class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[600ms] ease-swift"
                     />
                   </div>
                 ) : (
-                  <div data-reveal class={`h-[160px] flex items-center justify-center ${SECTION_BG[article.section]}`}>
-                    <span class="font-extrabold text-3xl text-ink-900/20">
+                  <div class={`h-[160px] flex items-center justify-center border-b border-ink-200 ${SECTION_BG[article.section]}`}>
+                    <span class="font-display font-extrabold text-3xl text-ink-900/20">
                       {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
                     </span>
                   </div>
                 )}
                 <div class="p-5 flex flex-col grow">
-                  <div class="text-[11px] font-bold uppercase tracking-[0.06em] text-ink-500 mb-2">
+                  <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
                     {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </div>
-                  <h3 class="font-bold text-[18px] leading-[1.25] tracking-[-0.015em] text-ink-900 group-hover:text-accent transition-colors m-0">
+                  <h3 class="font-display font-bold text-[17.5px] leading-[1.25] tracking-[-0.015em] text-ink-900 group-hover:text-accent transition-colors m-0">
                     {article.data.title}
                   </h3>
-                  <p class="text-[13.5px] leading-[1.5] text-ink-600 mt-2 line-clamp-2">{article.data.description}</p>
+                  <p class="font-sans text-[13.5px] leading-[1.5] text-ink-600 mt-2 line-clamp-2">{article.data.description}</p>
                 </div>
               </a>
             ))}
@@ -318,11 +388,11 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
       <div class="max-w-2xl">
         <div class="flex items-center justify-between gap-3 mb-4">
-          <div class="flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.12em] text-accent">
-            <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
-            <span class="mark-orange">This month's question</span>
+          <div class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
+            <span class="u-kicker">This month's question</span>
           </div>
-          <span class="font-sans text-[11px] font-bold text-ink-500">{monthLabel(currentPoll.month)}</span>
+          <span class="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500 u-tnum">{monthLabel(currentPoll.month)}</span>
         </div>
         <p class="font-display font-extrabold text-[26px] md:text-[30px] leading-[1.2] tracking-[-0.025em] text-ink-900 mb-6">
           {currentPoll.question}
@@ -346,11 +416,11 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
 
       {pastPolls.length > 0 && (
         <div class="mt-10 pt-8 border-t border-ink-200">
-          <p class="font-sans text-xs font-bold uppercase tracking-[0.12em] text-ink-500 mb-4">Past months</p>
-          <div class="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+          <p class="u-kicker u-kicker--dim mb-4">Past months</p>
+          <div class="row-fade flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
             {pastPolls.map(poll => (
-              <div class="shrink-0 snap-start w-[260px] bg-paper-50 border border-ink-200 rounded-md p-4">
-                <p class="font-sans text-[10.5px] font-bold uppercase tracking-[0.1em] text-ink-500 mb-2">{monthLabel(poll.month)}</p>
+              <div class="shrink-0 snap-start w-[260px] bg-paper-50 border border-ink-200 rounded-lg p-4">
+                <p class="font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">{monthLabel(poll.month)}</p>
                 <p class="font-sans text-sm font-semibold text-ink-900 leading-snug mb-3 line-clamp-3">{poll.question}</p>
                 <PollTally poll={poll} tally={pollTally(poll)} compact />
               </div>
@@ -365,33 +435,35 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
     <a
       href="/research-tools"
-      class="group block bg-ink-900 dark:bg-paper-200 rounded-[26px] p-10 md:p-12 relative overflow-hidden hover:-translate-y-1 transition-all duration-200"
+      class="group block surface-night rounded-2xl p-10 md:p-12 relative overflow-hidden hover:-translate-y-1 transition-transform duration-300 ease-swift"
     >
-      <!-- Decorative glow -->
-      <div class="absolute bottom-[-100px] right-[-60px] w-[360px] h-[360px] rounded-full pointer-events-none"
-        style="background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);"
+      <!-- Technical grid on the night surface -->
+      <div
+        class="absolute inset-0 pointer-events-none opacity-[0.5]"
+        aria-hidden="true"
+        style="background-image: linear-gradient(rgb(var(--night-line)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--night-line)) 1px, transparent 1px); background-size: 48px 48px; -webkit-mask-image: radial-gradient(ellipse 80% 100% at 100% 100%, #000 20%, transparent 70%); mask-image: radial-gradient(ellipse 80% 100% at 100% 100%, #000 20%, transparent 70%);"
       ></div>
 
       <div class="relative flex flex-wrap items-center justify-between gap-8">
         <div class="max-w-xl">
-          <div class="flex items-center gap-2 text-[12px] font-extrabold uppercase tracking-[0.1em] text-accent mb-4">
-            <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
-            <span>Research Tools</span>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-1.5 h-1.5 rounded-full bg-accent-light" aria-hidden="true"></span>
+            <span class="u-kicker !text-accent-light">Research Tools</span>
           </div>
-          <h2 class="font-extrabold text-[34px] tracking-[-0.03em] text-white m-0">Put the evidence to work</h2>
-          <p class="text-[15px] leading-[1.55] text-white/70 mt-4">
+          <h2 class="font-display font-extrabold text-[34px] tracking-[-0.03em] text-night-ink m-0">Put the evidence to work</h2>
+          <p class="font-sans text-[15px] leading-[1.55] text-night-dim mt-4">
             Three free tools built for this site — a research assistant, a live crime dashboard, and a
             media-perception explorer. Sign in once to unlock all three.
           </p>
           <div class="flex flex-wrap gap-2 mt-6">
             {['Research Assistant', 'Crime Dashboard', 'Perception'].map(name => (
-              <span class="text-[11px] font-semibold bg-white/[0.07] border border-white/[0.12] text-white/80 px-2.5 py-1.5 rounded-full">
+              <span class="font-mono text-[10.5px] font-medium uppercase tracking-[0.08em] bg-night-ink/[0.06] border border-night-line text-night-dim px-2.5 py-1.5 rounded-md">
                 {name}
               </span>
             ))}
           </div>
         </div>
-        <span class="shrink-0 inline-block bg-[#cdf5ea] text-[#101626] px-6 py-3 rounded-full text-[14px] font-bold group-hover:bg-[#b3ecdb] transition-colors">
+        <span class="shrink-0 inline-block bg-accent-light text-night-50 px-6 py-3 rounded-full text-[14px] font-bold group-hover:bg-accent transition-colors">
           Explore the tools →
         </span>
       </div>
@@ -402,73 +474,86 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
   <section class="bg-paper-100 border-y border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
 
-      <!-- Most read -->
+      <!-- Most read: baked at build, refreshed live from article_engagement -->
       {mostRead.length > 0 && (
         <div class="mb-14">
-          <h2 class="font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-5 pb-3.5 border-b-2 border-ink-900">
-            Most read
+          <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-5 pb-3.5 border-b border-ink-300 flex items-baseline justify-between gap-4">
+            <span>
+              <span class="u-kicker block mb-1.5">From the engagement data</span>
+              Most read
+            </span>
+            <span data-most-read-live hidden class="u-kicker u-kicker--dim flex items-center gap-1.5">
+              <span class="w-1 h-1 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
+              Live
+            </span>
           </h2>
-          <div class="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
-            {mostRead.map((article, i) => (
-              <a
-                href={`/${article.section}/${article.slug}`}
-                class="group shrink-0 snap-start w-[280px] flex gap-4 bg-paper-50 border border-ink-200 rounded-[18px] p-5 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(27,36,82,0.09)] transition-all duration-200 hover:no-underline"
-              >
-                <span class={`font-extrabold text-[26px] leading-[1.05] min-w-[30px] ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
-                  {i + 1}
-                </span>
-                <div>
-                  <h3 class="font-bold text-[18px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
-                    {article.data.title}
-                  </h3>
-                  <div class="text-[11px] font-bold uppercase tracking-[0.06em] text-ink-500 mt-1.5">
-                    {SECTION_LABELS[article.section]}
+          <div data-most-read-row class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+            {mostRead.map((article, i) => {
+              const views = viewsBySlug[article.slug] ?? 0;
+              return (
+                <a
+                  href={`/${article.section}/${article.slug}`}
+                  class="card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline"
+                >
+                  <span class={`font-mono font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
+                      {article.data.title}
+                    </h3>
+                    <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum">
+                      {SECTION_LABELS[article.section]}{views > 0 ? ` · ${views.toLocaleString('en-GB')} views` : ''}
+                    </div>
                   </div>
-                </div>
-              </a>
-            ))}
+                </a>
+              );
+            })}
           </div>
         </div>
       )}
 
       <!-- Latest writing -->
       <div>
-        <div class="flex items-baseline justify-between mb-5 pb-3.5 border-b-2 border-ink-900">
-          <h2 class="font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">Latest writing</h2>
-          <a href="/sitemap" class="text-[13px] font-bold text-accent hover:text-accent-dark transition-colors">
+        <div class="flex items-baseline justify-between mb-5 pb-3.5 border-b border-ink-300">
+          <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+            <span class="u-kicker block mb-1.5">Newest first</span>
+            Latest writing
+          </h2>
+          <a href="/sitemap" class="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
             Archive →
           </a>
         </div>
-        <div class="flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+        <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
           {latestArticles.map(article => (
             <a
               href={`/${article.section}/${article.slug}`}
-              class="group shrink-0 snap-start w-[280px] flex flex-col bg-paper-50 border border-ink-200 rounded-[18px] overflow-hidden hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(27,36,82,0.09)] transition-all duration-200 hover:no-underline"
+              class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-xl overflow-hidden hover:no-underline"
             >
               {(article.data.heroImage || article.data.portrait) ? (
-                <div class="overflow-hidden h-[150px]">
+                <div class="overflow-hidden h-[150px] border-b border-ink-200">
                   <img
                     src={article.data.portrait ?? article.data.heroImage}
                     alt=""
                     loading="lazy"
-                    class="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.7,.2,1)]"
+                    class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[600ms] ease-swift"
                   />
                 </div>
               ) : (
-                <div class={`h-[150px] flex items-center justify-center ${SECTION_BG[article.section]}`}>
-                  <span class="font-extrabold text-3xl text-ink-900/20">
+                <div class={`h-[150px] flex items-center justify-center border-b border-ink-200 ${SECTION_BG[article.section]}`}>
+                  <span class="font-display font-extrabold text-3xl text-ink-900/20">
                     {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
                   </span>
                 </div>
               )}
               <div class="p-5 flex flex-col grow">
-                <div class={`inline-block text-[10.5px] font-extrabold uppercase tracking-[0.06em] text-ink-900 px-2.5 py-1 rounded-full mb-2 w-fit ${SECTION_BG[article.section]}`}>
+                <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
                   {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                 </div>
-                <h3 class="font-bold text-[18px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
+                <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
                   {article.data.title}
                 </h3>
-                <p class="text-[13.5px] leading-[1.5] text-ink-700 mt-2 line-clamp-2">{article.data.description}</p>
+                <p class="font-sans text-[13.5px] leading-[1.5] text-ink-700 mt-2 line-clamp-2">{article.data.description}</p>
               </div>
             </a>
           ))}
@@ -488,7 +573,89 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     </section>
   )}
 
+  <script type="application/json" id="tap-articles-index" set:html={JSON.stringify(articlesIndex)} />
+
 </BaseLayout>
+
+<script>
+  // Live engagement: once the page is idle, pull current view counts from
+  // article_engagement (public read — see supabase/migrations/0002) and
+  // 1) refresh the total-views masthead figure, 2) rebuild the "Most read"
+  // row in true live order with current counts. The baked-at-build version
+  // stays for no-JS readers and keyless deploys.
+  const supaUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+  const supaKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+
+  function mostReadCard(rank: number, href: string, title: string, metaLine: string): HTMLAnchorElement {
+    const a = document.createElement('a');
+    a.href = href;
+    a.className = 'card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline';
+    const num = document.createElement('span');
+    num.className = `font-mono font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${rank === 1 ? 'text-accent' : 'text-ink-300'}`;
+    num.textContent = String(rank).padStart(2, '0');
+    const body = document.createElement('div');
+    const h = document.createElement('h3');
+    h.className = 'font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0';
+    h.textContent = title;
+    const meta = document.createElement('div');
+    meta.className = 'font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum';
+    meta.textContent = metaLine;
+    body.appendChild(h);
+    body.appendChild(meta);
+    a.appendChild(num);
+    a.appendChild(body);
+    return a;
+  }
+
+  async function refreshEngagement() {
+    try {
+      const indexEl = document.getElementById('tap-articles-index');
+      if (!indexEl || !supaUrl || !supaKey) return;
+      const articles: Record<string, { t: string; s: string; l: string }> = JSON.parse(indexEl.textContent || '{}');
+
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(supaUrl, supaKey, { auth: { persistSession: false } });
+      const { data, error } = await supabase
+        .from('article_engagement')
+        .select('slug, view_count')
+        .order('view_count', { ascending: false });
+      if (error || !Array.isArray(data)) return;
+
+      // Masthead total.
+      const total = data.reduce((s, r) => s + Number(r.view_count || 0), 0);
+      const totalEl = document.querySelector('[data-live-total-reads]');
+      const statWrap = document.querySelector('[data-live-reads-stat]');
+      if (totalEl && total > 0) {
+        totalEl.textContent = total.toLocaleString('en-GB');
+        statWrap?.classList.remove('hidden');
+      }
+
+      // Live most-read order.
+      const row = document.querySelector('[data-most-read-row]');
+      const liveBadge = document.querySelector<HTMLElement>('[data-most-read-live]');
+      const top = data
+        .filter((r) => articles[r.slug] && Number(r.view_count) > 0)
+        .slice(0, 8);
+      if (!row || top.length < 3) return;
+      row.replaceChildren(
+        ...top.map((r, i) => {
+          const a = articles[r.slug];
+          const views = Number(r.view_count);
+          return mostReadCard(i + 1, `/${a.s}/${r.slug}`, a.t, `${a.l} · ${views.toLocaleString('en-GB')} views`);
+        })
+      );
+      if (liveBadge) liveBadge.hidden = false;
+    } catch {}
+  }
+
+  if (supaUrl && supaKey) {
+    if ('requestIdleCallback' in window) {
+      (window as any).requestIdleCallback(refreshEngagement, { timeout: 4000 });
+    } else {
+      setTimeout(refreshEngagement, 1500);
+    }
+  }
+</script>
 
 <script>
   // Monthly reader poll — one vote per month per browser (localStorage),

@@ -319,14 +319,14 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     }
 
     inner += contextLayer();
-    inner += line(pts.map((p) => ({ year: p.year, value: p.negPct })), lo, hi, '#b3402f', 2.2);
-    inner += line(pts.map((p) => ({ year: p.year, value: p.posPct })), lo, hi, '#2f7d52', 2.2);
+    inner += line(pts.map((p) => ({ year: p.year, value: p.negPct })), lo, hi, 'rgb(var(--chart-red))', 2.2);
+    inner += line(pts.map((p) => ({ year: p.year, value: p.posPct })), lo, hi, 'rgb(var(--chart-green))', 2.2);
     inner += nowMarker();
     inner += axisYears();
 
     const legend =
-      `<span class="inline-flex items-center gap-1.5 mr-4"><span style="width:11px;height:11px;background:#b3402f;display:inline-block;border-radius:2px"></span>Negative words %</span>` +
-      `<span class="inline-flex items-center gap-1.5"><span style="width:11px;height:11px;background:#2f7d52;display:inline-block;border-radius:2px"></span>Positive words %</span>`;
+      `<span class="inline-flex items-center gap-1.5 mr-4"><span style="width:11px;height:11px;background:rgb(var(--chart-red));display:inline-block;border-radius:2px"></span>Negative words %</span>` +
+      `<span class="inline-flex items-center gap-1.5"><span style="width:11px;height:11px;background:rgb(var(--chart-green));display:inline-block;border-radius:2px"></span>Positive words %</span>`;
 
     sentChart.innerHTML =
       svgWrap(inner, 'Positive vs negative words in UK police coverage, per year') +
