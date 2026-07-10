@@ -1,8 +1,10 @@
 // Narrated audio editions, generated at build time with OpenAI TTS.
 //
 // For every published article this script:
-//   1. extracts a narration script (title + standfirst + body, stripped of
-//      markdown/MDX syntax, code, tables and footnote plumbing);
+//   1. extracts a "podcast edit" narration script — title, standfirst and the
+//      main body prose only, stripped of markdown/MDX syntax, code, tables,
+//      footnote plumbing, image captions, pull quotes/blockquotes and the
+//      trailing references/sources list;
 //   2. hashes it, and looks for a cached MP3 in node_modules/.cache/tap-audio
 //      (Netlify persists node_modules between builds, so an up-to-date
 //      article is only ever synthesised ONCE — a rebuild costs nothing);
@@ -92,17 +94,20 @@ function parseFrontmatter(src) {
 
 function toNarration(title, description, body) {
   let t = body;
+  t = t.replace(/^#{1,6}\s*(?:references|sources(?: and further reading)?|further reading|bibliography)\s*$[\s\S]*/im, ''); // trailing citations — not part of the read article
   t = t.replace(/```[\s\S]*?```/g, ' ');                    // code fences
   t = t.replace(/^(import|export)\s.*$/gm, ' ');            // MDX plumbing
+  t = t.replace(/<PullQuote\b[^>]*>[\s\S]*?<\/PullQuote>/gi, ' '); // pull quotes (restate prose already narrated)
+  t = t.replace(/<figcaption\b[^>]*>[\s\S]*?<\/figcaption>/gi, ' '); // photo captions/credits
   t = t.replace(/<[A-Za-z][^<>]*\/>/gs, ' ');               // self-closing components
   t = t.replace(/<\/?[A-Za-z][^<>]*>/g, ' ');               // tag lines (inner prose kept)
   t = t.replace(/^\s*\|.*\|\s*$/gm, ' ');                   // table rows
-  t = t.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ');              // images
+  t = t.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ');              // images, including captions in the alt text
   t = t.replace(/\[\^[^\]]+\]:\s?.*$/gm, ' ');              // footnote definitions
   t = t.replace(/\[\^[^\]]+\]/g, '');                       // footnote refs
   t = t.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');            // links → text
   t = t.replace(/^#{1,6}\s*(.+)$/gm, (_, h) => `${h.replace(/[.:]\s*$/, '')}. `); // headings
-  t = t.replace(/^>\s?/gm, '');                             // blockquote marks
+  t = t.replace(/^>.*$/gm, ' ');                            // blockquotes & pulled-out quote boxes
   t = t.replace(/==([^=]+)==/g, '$1');                      // highlights
   t = t.replace(/[*_`]/g, '');                              // emphasis/code marks
   t = t.replace(/^\s*[-*+]\s+/gm, '');                      // list bullets
