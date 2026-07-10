@@ -22,7 +22,7 @@ const forces = entries
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-3xl">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Crime Data Explorer', href: '/data/explore' }, { label: 'Forces & data quality' }]} />
-        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Forces &amp; data quality</p>
+        <p class="u-kicker mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Forces &amp; data quality</p>
         <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">Forces &amp; data quality</h1>
         <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
           Who leads each force, and how complete the data behind every chart on this site actually is.
@@ -40,9 +40,9 @@ const forces = entries
         <div>
           <h2 class="font-display text-xl font-semibold text-ink-900 mb-4">Database coverage</h2>
           <dl class="grid grid-cols-2 sm:grid-cols-3 gap-6" data-coverage>
-            <div><dt class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">Crime data to</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-crime>…</dd></div>
-            <div><dt class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">Stop &amp; search to</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-ss>…</dd></div>
-            <div><dt class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">Last ingest</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-run>…</dd></div>
+            <div><dt class="u-kicker u-kicker--dim">Crime data to</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-crime>…</dd></div>
+            <div><dt class="u-kicker u-kicker--dim">Stop &amp; search to</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-ss>…</dd></div>
+            <div><dt class="u-kicker u-kicker--dim">Last ingest</dt><dd class="font-display text-2xl text-ink-900 mt-1" data-cov-run>…</dd></div>
           </dl>
           <p class="font-serif text-sm text-ink-600 mt-3" data-cov-note></p>
         </div>
@@ -97,9 +97,9 @@ const forces = entries
               ${p.force.description ? `<p class="font-serif text-ink-700 leading-relaxed mt-2">${esc(p.force.description).slice(0, 800)}</p>` : ''}
               ${p.force.url ? `<a href="${esc(p.force.url)}" class="font-sans text-sm text-accent hover:text-accent-dark underline underline-offset-2">Force website →</a>` : ''}
             </div>
-            ${people.length ? `<div><h4 class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Senior officers</h4>
+            ${people.length ? `<div><h4 class="u-kicker u-kicker--dim mb-2">Senior officers</h4>
               <ul class="space-y-1 font-sans text-sm text-ink-700">${people.map((x: any) => `<li>${esc(x.name)}${x.rank ? ` <span class="text-ink-500">— ${esc(x.rank)}</span>` : ''}</li>`).join('')}</ul></div>` : ''}
-            <div data-ss-chart><h4 class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Stop &amp; search, monthly</h4><div data-ss></div></div>
+            <div data-ss-chart><h4 class="u-kicker u-kicker--dim mb-2">Stop &amp; search, monthly</h4><div data-ss></div></div>
           </div>`;
         if (p.ssSeries?.length) {
           lineChart(profile.querySelector('[data-ss]')!, p.ssSeries.map((s: any) => s.month), [{ label: 'Searches', values: p.ssSeries.map((s: any) => s.total) }]);

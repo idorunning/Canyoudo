@@ -15,7 +15,7 @@ const hasAuth = Boolean(
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-3xl">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Crime Data Explorer', href: '/data/explore' }, { label: 'Neighbourhood' }]} />
-        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Neighbourhood</p>
+        <p class="u-kicker mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Neighbourhood</p>
         <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">Your neighbourhood team</h1>
         <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
           Every area in England &amp; Wales has a neighbourhood policing team with priorities they’ve publicly set.
@@ -85,7 +85,7 @@ const hasAuth = Boolean(
       result.innerHTML = `
         <div class="space-y-8">
           <div>
-            <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">${esc(admin_district || '')}</p>
+            <p class="u-kicker u-kicker--dim">${esc(admin_district || '')}</p>
             <h2 class="font-display text-2xl font-semibold text-ink-900 mt-1">${esc(name)}</h2>
             ${detail?.url_force ? `<a href="${esc(detail.url_force)}" class="font-sans text-sm text-accent hover:text-accent-dark underline underline-offset-2">Team page →</a>` : ''}
           </div>

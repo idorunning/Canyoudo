@@ -70,7 +70,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
-      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Evidence</p>
+      <p class="u-kicker mb-5">Evidence</p>
       <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
         Research assistant
       </h1>
@@ -131,9 +131,9 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             </div>
 
             {/* Worked example — static HTML, always present (no AI call). */}
-            <p class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-3">From an example review</p>
+            <p class="u-kicker u-kicker--dim mb-3">From an example review</p>
             <div class="rounded-lg border border-ink-200 bg-paper-50 px-6 py-7">
-              <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-2">Research review</p>
+              <p class="u-kicker mb-2">Research review</p>
               <h2 class="font-display text-xl md:text-2xl font-semibold text-ink-900 leading-tight">
                 How do we cut repeat domestic-abuse victimisation in our area?
               </h2>
@@ -301,7 +301,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                 the sensible defaults (all sources, free-to-read) apply whether or
                 not it is opened. */}
             <details data-research-refine class="mt-5 group">
-              <summary class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 cursor-pointer list-none select-none inline-flex items-center gap-2 hover:text-ink-800">
+              <summary class="u-kicker u-kicker--dim cursor-pointer list-none select-none inline-flex items-center gap-2 hover:text-ink-800">
                 Refine sources &amp; filters
                 <span class="text-ink-400 group-open:hidden" aria-hidden="true">+</span><span class="text-ink-400 hidden group-open:inline" aria-hidden="true">−</span>
               </summary>
@@ -355,13 +355,13 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 
             <div data-research-topics class="mt-8">
               <details class="group">
-                <summary class="md:hidden font-sans text-xs uppercase tracking-[0.15em] text-ink-500 cursor-pointer list-none mb-3">
+                <summary class="md:hidden u-kicker u-kicker--dim cursor-pointer list-none mb-3">
                   Browse topics <span class="group-open:hidden">+</span><span class="hidden group-open:inline">−</span>
                 </summary>
                 <div class="space-y-5">
                   {TOPIC_GROUPS.map((g) => (
                     <div>
-                      <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">{g.group}</p>
+                      <p class="u-kicker u-kicker--dim mb-2">{g.group}</p>
                       <div class="flex flex-wrap gap-2">
                         {g.chips.map((c) => (
                           <button
@@ -440,7 +440,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
     <section class="border-t border-ink-200 bg-paper-50">
       <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
         <div class="max-w-3xl">
-          <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-2">Evidence databases</h2>
+          <h2 class="u-kicker u-kicker--dim mb-2">Evidence databases</h2>
           <p class="font-serif text-ink-700 leading-relaxed mb-8">
             Curated and rated collections — slower than a search, but someone has already
             weighed the studies for you. Most have no machine interface, so they live here

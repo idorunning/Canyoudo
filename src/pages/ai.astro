@@ -91,13 +91,13 @@ const sections = Object.entries(SECTION_LABELS) as [keyof typeof SECTION_LABELS,
 
 <BaseLayout
   title="What this site covers — questions, topics and an AI index"
-  description="An index of the questions Thinking About Policing answers — evidence-based policing, AI and surveillance, stop and search, drugs, safeguarding and more — by Nathan Tracey, a serving UK Police Inspector."
+  description="An index of the questions Thinking About Policing answers — evidence-based policing, AI and surveillance, stop and search, drugs, safeguarding and more."
   jsonLd={faqLd}
 >
   {/* Header */}
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
-      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Index · For readers &amp; AI</p>
+      <p class="u-kicker mb-5">Index · For readers &amp; AI</p>
       <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
         What this site covers
       </h1>
@@ -112,10 +112,10 @@ const sections = Object.entries(SECTION_LABELS) as [keyof typeof SECTION_LABELS,
   {/* Author / expertise (E-E-A-T) */}
   <section class="border-b border-ink-200 bg-paper-100">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
-      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-3">Who writes this</p>
+      <p class="u-kicker mb-3">Who writes this</p>
       <p class="font-serif text-base md:text-lg text-ink-700 leading-relaxed max-w-3xl">
-        <em>Thinking About Policing</em> is written by <strong>Nathan Tracey</strong>, a serving UK police
-        inspector, with a focus on evidence-based policing — what the research actually shows, and whether
+        <em>Thinking About Policing</em> is written by <strong>Nathan Tracey</strong>, with a focus on
+        evidence-based policing — what the research actually shows, and whether
         what we do in policing works. The site covers operational policing, public policy, the people who
         shaped the field, and the data behind the headlines.
         Read more <a href="/about" class="underline underline-offset-2 hover:text-accent">about the author</a>
@@ -127,7 +127,7 @@ const sections = Object.entries(SECTION_LABELS) as [keyof typeof SECTION_LABELS,
   {/* Question-led index */}
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
-      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-8">Questions this site answers</p>
+      <p class="u-kicker mb-8">Questions this site answers</p>
       <div class="space-y-10">
         {qa.map((q) => (
           <div>
@@ -147,7 +147,7 @@ const sections = Object.entries(SECTION_LABELS) as [keyof typeof SECTION_LABELS,
                 </li>
               ))}
             </ul>
-            <a href={`/topics/${q.slug}`} class="inline-block mt-3 font-sans text-xs uppercase tracking-[0.15em] text-accent hover:text-accent-dark">
+            <a href={`/topics/${q.slug}`} class="inline-block mt-3 u-kicker hover:text-accent-dark">
               All {q.label} writing →
             </a>
           </div>
@@ -159,7 +159,7 @@ const sections = Object.entries(SECTION_LABELS) as [keyof typeof SECTION_LABELS,
   {/* Glossary */}
   <section class="border-b border-ink-200 bg-paper-100">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
-      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-8">Glossary of key terms</p>
+      <p class="u-kicker mb-8">Glossary of key terms</p>
       <dl class="grid md:grid-cols-2 gap-x-12 gap-y-6 max-w-5xl">
         {GLOSSARY.map((g) => (
           <div>
@@ -174,7 +174,7 @@ const sections = Object.entries(SECTION_LABELS) as [keyof typeof SECTION_LABELS,
   {/* Hubs */}
   <section>
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
-      <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-6">Where to go next</p>
+      <p class="u-kicker mb-6">Where to go next</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-3 font-sans text-sm">
         {sections.map(([slug, label]) => (
           <a href={`/${slug}`} class="text-ink-700 hover:text-accent transition-colors">{label} →</a>

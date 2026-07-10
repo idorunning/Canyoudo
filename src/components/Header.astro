@@ -241,6 +241,19 @@ const currentPath = Astro.url.pathname;
 <SearchModal />
 
 <style>
+  /* The masthead's height animates as [data-scrolled] toggles (see below). Its
+     height sits inside the viewport at the exact point the browser measures
+     for scroll anchoring, so as it resizes the browser "corrects" scrollY to
+     compensate — fighting the very scroll gesture that triggered the resize
+     and producing a jitter/flicker right at the top of the page (worst when a
+     banner sits just below the header, since that's exactly the scroll range
+     the toggle threshold falls in). Opting out of anchoring here is the fix:
+     the header is the thing changing size, not content we want the page to
+     stay anchored to. */
+  #site-header {
+    overflow-anchor: none;
+  }
+
   /* Compact masthead once the page is scrolled. */
   header[data-scrolled] [data-masthead] {
     height: 56px;

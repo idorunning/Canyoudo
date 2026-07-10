@@ -43,7 +43,7 @@ const monthLabel = (m: string) => {
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
       <div class="max-w-2xl">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Research Tools', href: '/research-tools' }, { label: 'Crime Dashboard' }]} />
-        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-5">Evidence</p>
+        <p class="u-kicker mb-5">Evidence</p>
         <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
           Crime Dashboard
         </h1>
@@ -74,7 +74,7 @@ const monthLabel = (m: string) => {
                     </select>
                   </div>
                   <div>
-                    <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Look up your area</p>
+                    <p class="u-kicker u-kicker--dim mb-2">Look up your area</p>
                     <a href="/data/lookup" class="inline-flex items-center gap-2 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-sm text-ink-700 hover:border-accent hover:text-accent transition-colors">
                       Interpret a postcode →
                     </a>
@@ -82,7 +82,7 @@ const monthLabel = (m: string) => {
                 </div>
 
                 <div class="border-t border-ink-200 pt-8">
-                  <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Go deeper</p>
+                  <p class="u-kicker u-kicker--dim mb-2">Go deeper</p>
                   <a href="/data/explore" class="block border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors group">
                     <span class="font-display text-lg font-semibold text-ink-900 group-hover:text-accent transition-colors">Crime Data Explorer →</span>
                     <span class="block font-serif text-ink-700 leading-relaxed mt-1">The dashboard above reads the latest month. The Crime Data Explorer goes back years — crime &amp; outcome trends, stop &amp; search disproportionality, your neighbourhood, and data-quality tracking, from a queryable database of data.police.uk.</span>
@@ -106,7 +106,7 @@ const monthLabel = (m: string) => {
 
                     <div class="flex items-center gap-4">
                       <div>
-                        <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">12-month searches</p>
+                        <p class="u-kicker u-kicker--dim mb-1">12-month searches</p>
                         <p class="font-display text-3xl font-semibold text-ink-900">{fmt.format(ss.window.total)}</p>
                       </div>
                       <div class="text-accent"><Sparkline points={ss.series} width={160} /></div>

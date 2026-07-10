@@ -40,13 +40,15 @@ const HERO_SLUG = 'self-selection-policing-catching-serious-criminals-and-bad-co
 const feature = allArticles.find(a => a.slug === HERO_SLUG) ?? allArticles[0];
 const latestArticles = allArticles.slice(0, 8);
 
-// Themed section rows — latest 8 articles per primary section (scrollable row)
+// Themed section rows — every article in the section, newest first
+// (scrollable row), so every published article is reachable from the home
+// page rather than just the latest few.
 const bySection: Record<string, Item[]> = {};
 for (const a of allArticles) {
   if (!bySection[a.section]) bySection[a.section] = [];
-  if (bySection[a.section].length < 8) bySection[a.section].push(a);
+  bySection[a.section].push(a);
 }
-const FEATURED_SECTIONS: Section[] = ['police-policy', 'public-policy', 'influential-people'];
+const FEATURED_SECTIONS: Section[] = ['police-policy', 'public-policy', 'influential-people', 'data-stories', 'other'];
 
 // "Most read" is driven by real page views, tallied via the
 // article_engagement table (see supabase/migrations/0002_article_engagement.sql)
@@ -120,7 +122,7 @@ function monthLabel(month: string): string {
 
 const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
 const description =
-  'Evidence-based writing on policing, public policy, and the occasional historical puzzle. By Nathan Tracey, a serving UK Police Inspector.';
+  'Evidence-based writing on policing, public policy, and the occasional historical puzzle.';
 
 const jsonLd = [
   {
@@ -156,7 +158,6 @@ const jsonLd = [
     '@type': 'Person',
     name: 'Nathan Tracey',
     url: `${site}/about`,
-    jobTitle: 'Police Inspector',
     knowsAbout: topics.map(t => t.label),
   },
 ];
@@ -206,7 +207,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
 
         <!-- Left: headline + standfirst + figures -->
         <div>
-          <p class="u-kicker mb-5">Evidence-based analysis · By a serving UK police inspector</p>
+          <p class="u-kicker mb-5">Evidence-based analysis</p>
 
           <h1 class="font-display font-extrabold text-[52px] md:text-[62px] leading-[1.02] tracking-[-0.035em] text-ink-900 text-balance m-0">
             Thinking About Policing
@@ -224,40 +225,24 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
             >
               Start reading
             </a>
-            <button
-              type="button"
-              data-search-open
-              class="flex items-center gap-2 rounded-full border border-ink-300 px-5 py-2.5 font-sans text-[14px] font-semibold text-ink-700 hover:text-ink-900 hover:border-ink-500 transition-colors"
-            >
-              Search the site
-              <kbd class="font-mono text-[10px] font-semibold text-ink-500 bg-paper-100 border border-ink-200 rounded px-1.5 py-0.5 leading-none">⌘K</kbd>
-            </button>
           </div>
 
-          <!-- Site figures, in the data voice -->
-          <dl class="flex flex-wrap gap-x-10 gap-y-4 mt-10 pt-7 border-t border-ink-200 m-0">
-            <div>
-              <dt class="u-kicker u-kicker--dim">Articles</dt>
-              <dd class="font-mono font-semibold text-[22px] text-ink-900 u-tnum m-0 mt-1">{allArticles.length}</dd>
-            </div>
-            <div>
-              <dt class="u-kicker u-kicker--dim">Topics</dt>
-              <dd class="font-mono font-semibold text-[22px] text-ink-900 u-tnum m-0 mt-1">{topics.length}</dd>
-            </div>
-            <div>
-              <dt class="u-kicker u-kicker--dim">Minutes of reading</dt>
-              <dd class="font-mono font-semibold text-[22px] text-ink-900 u-tnum m-0 mt-1">{totalReadingMinutes}</dd>
-            </div>
-            <div data-live-reads-stat class:list={[bakedTotalViews > 0 ? '' : 'hidden']}>
-              <dt class="u-kicker u-kicker--dim flex items-center gap-1.5">
+          <!-- Site figures, in the data voice — one flowing line rather than
+               stacked stat tiles, echoing the "·" separator used elsewhere. -->
+          <p class="font-mono text-[13px] text-ink-600 flex flex-wrap items-center gap-x-2 gap-y-1.5 mt-10 pt-7 border-t border-ink-200 m-0">
+            <span><span class="font-semibold text-ink-900 u-tnum">{allArticles.length}</span> articles</span>
+            <span class="text-ink-300" aria-hidden="true">·</span>
+            <span><span class="font-semibold text-ink-900 u-tnum">{topics.length}</span> topics</span>
+            <span class="text-ink-300" aria-hidden="true">·</span>
+            <span><span class="font-semibold text-ink-900 u-tnum">{totalReadingMinutes}</span> minutes of reading</span>
+            <span data-live-reads-stat class:list={['flex items-center gap-2', bakedTotalViews > 0 ? '' : 'hidden']}>
+              <span class="text-ink-300" aria-hidden="true">·</span>
+              <span class="flex items-center gap-1.5">
                 <span class="w-1 h-1 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
-                Article views
-              </dt>
-              <dd data-live-total-reads class="font-mono font-semibold text-[22px] text-ink-900 u-tnum m-0 mt-1">
-                {bakedTotalViews.toLocaleString('en-GB')}
-              </dd>
-            </div>
-          </dl>
+                <span data-live-total-reads class="font-semibold text-ink-900 u-tnum">{bakedTotalViews.toLocaleString('en-GB')}</span> views
+              </span>
+            </span>
+          </p>
         </div>
 
         <!-- Right: lead story -->
