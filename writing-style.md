@@ -40,6 +40,10 @@ preference.
 | "In conclusion" / "In summary" / "Ultimately, …" as a closer | Summary-restating conclusion; tells the reader you've stopped. | Close on a judgement or image, not a label. |
 | "Furthermore" / "Moreover" / "Additionally" (as default connectors) | Mechanical signposting over-represented in AI text. | "And", "But", "Also", or start a new sentence. |
 | "it's not X, it's Y" / "not just X, but Y" (as a recurring move) | The "corrective antithesis": fine once, an AI tell when it recurs. | Use at most once a piece; otherwise state the point flat. |
+| "core" / "modern" (as vague qualifiers) | The 2026 wave: ChatGPT's use of "core" rose roughly 5x year-on-year and "modern" appeared in over 8% of messages by July 2025, per the Washington Post's analysis, as older tells ("ensure", "crucial", "significant") got trained away. | Name the specific thing instead of the vague qualifier. |
+| "quiet" as an intensifier ("a quiet confidence", "a quiet revolution") | Flagged February 2026 as an unearned, ungrounded intensifier. | Cut it, or name what's actually confident/changing. |
+| "unpack" / "here's the thing" / "here's the kicker" / "but here's what nobody's saying" | A promised payoff that's usually just standard advice restated. | Cut the setup; state the point. |
+| "you're not alone" / "you're not broken" / coaching questions ("Do you want to sit with that?") | Unsolicited therapy-register reassurance, bizarre outside genuine emotional-support writing. | Not applicable to this site's register; should never appear. |
 
 <!-- Add new entries here. Keep the "Why" short and give a replacement. -->
 
@@ -81,6 +85,15 @@ is variety, not abstinence.
   data points); otherwise write developed paragraphs.
 - **One heading per idea.** Don't sub-head every paragraph. Headings mark
   genuinely distinct sections only.
+- **Unnatural perfection.** Human drafts carry traces of the thinking process —
+  a sentence that changes direction, a tangent that doesn't quite pay off, an
+  oddly specific but functionally irrelevant detail that's there because it
+  actually happened. AI prose is clean on the first pass and every example
+  earns its place, which is itself the tell. Leave in the odd loose thread.
+- **Generic-specific examples.** "A busy professional managing multiple
+  projects" is concrete-sounding but interchangeable — true of anyone, so true
+  of no one. Use a named force, a specific date, an actual quoted person
+  instead of an invented type.
 
 > Sanity check before publishing: count the em dashes, the tricolons, the
 > "it's not X, it's Y" lines and the bold runs. If any one of them recurs on a
@@ -321,9 +334,18 @@ manual's "Introduction"/"Conclusion".
   directionally well-corroborated but should not be cited as hard science. The
   most authoritative source in the set is Wikipedia's community-vetted
   "Signs of AI writing".
+- **Vocabulary tells rotate; structural tells don't.** The Washington Post's
+  analysis of 328,744 ChatGPT messages (May 2024–July 2025) found the model had
+  already trained away "ensure", "various", "crucial", "significant" and
+  "approach" by mid-2025 while sharply increasing "core" and "modern" — and
+  found ChatGPT's em-dash usage climbed from under 1 in 10 responses to over
+  half within about a year. Re-check the word list every six months or so;
+  the structural tics above are the more durable signal.
 
 ### Sources
 - [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing)
+- [Washington Post, "What are the clues that ChatGPT wrote something?"](https://www.washingtonpost.com/technology/interactive/2025/how-detect-chatgpt-em-dash/)
+- [Forbes/Jodie Cook, "The 15 New Giveaway Signs Of AI-Generated Content (In February 2026)"](https://www.forbes.com/sites/jodiecook/2026/02/03/the-15-new-giveaway-signs-of-ai-generated-content-in-february-2026/)
 - [Margaret Efron, "Words and Phrases that Make it Obvious You Used ChatGPT"](https://medium.com/learning-data/words-and-phrases-that-make-it-obvious-you-used-chatgpt-2ba374033ac6)
 - [The Conversation, "ChatGPT is changing the way we write"](https://theconversation.com/chatgpt-is-changing-the-way-we-write-heres-how-and-why-its-a-problem-239601)
 - [Colin Gorrie, "Why ChatGPT writes like that"](https://www.deadlanguagesociety.com/p/rhetorical-analysis-ai)
