@@ -1,9 +1,10 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-10T01:48:38.751Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-07-10T13:54:56.893Z",
+    "feedCount": 10,
     "sources": [
       "GOV.UK",
+      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "CPS",
@@ -16,28 +17,108 @@
   },
   "items": [
     {
+      "title": "Probation instructions (PIs)",
+      "link": "https://www.gov.uk/guidance/probation-instructions-pis",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-10T13:37:37.000Z",
+      "summary": "Policy and guidance for prison and probation professionals in England and Wales."
+    },
+    {
+      "title": "Prison service instructions (PSIs)",
+      "link": "https://www.gov.uk/guidance/prison-service-instructions-psis",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-10T13:36:53.000Z",
+      "summary": "Policy and guidance for prison and probation professionals in England and Wales."
+    },
+    {
+      "title": "Enhanced support for police in traumatic and dangerous environments",
+      "link": "https://www.gov.uk/government/news/enhanced-support-for-police-in-traumatic-and-dangerous-environments",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-10T12:25:35.000Z",
+      "summary": "Officers fighting crime in their communities put their lives at risk every day and are repeatedly exposed to traumatic incidents in high-pressure environments."
+    },
+    {
       "title": "Bonfire with mosque replica placed on top set alight",
       "link": "https://www.bbc.co.uk/news/articles/cy8wz13924jo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-10T00:31:11.000Z",
+      "isoDate": "2026-07-10T12:03:07.000Z",
       "summary": "The Police Service of Northern Ireland (PSNI) said it had \"commenced a significant and complex policing operation\" to remove a \"hate display\"."
     },
     {
-      "title": "Murder arrest after man, 18, dies in crash between car and off-road bike",
-      "link": "https://www.bbc.co.uk/news/articles/czx5zk8k5evo?at_medium=RSS&at_campaign=rss",
+      "title": "Met police investigating Reform over election donations - reports",
+      "link": "https://www.bbc.co.uk/news/articles/c3eyq2np7qgo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-09T21:23:02.000Z",
-      "summary": "A man from Swansea was pronounced dead at the scene, while another man, aged 19, was taken to hospital."
+      "isoDate": "2026-07-10T11:46:03.000Z",
+      "summary": "The investigation is looking into donations made to Reform UK by the mother of the convicted fraudster George Cottrell, according to the Times."
     },
     {
-      "title": "Graham Linehan receives settlement from Met over online post arrest",
-      "link": "https://www.bbc.co.uk/news/articles/cvgdyjeqz8lo?at_medium=RSS&at_campaign=rss",
+      "title": "Brothers jailed for 1984 murder after undercover police sting",
+      "link": "https://www.bbc.co.uk/news/articles/cg74e270p13o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-09T18:29:46.000Z",
-      "summary": "The comedian was arrested at Heathrow Airport in September 2025 and was subsequently taken to hospital."
+      "isoDate": "2026-07-10T11:45:08.000Z",
+      "summary": "Two brothers are sentenced for murdering civil servant Anthony Littler 42 years ago."
+    },
+    {
+      "title": "Detective illegally accessed police logs about bouncer she had sex with",
+      "link": "https://www.bbc.co.uk/news/articles/cpq30rpwye4o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-10T11:06:25.000Z",
+      "summary": "Det insp Emma Gardner passed information on to a man who had been a bouncer and accessed logs about him."
+    },
+    {
+      "title": "Four non-judicial members reappointed to the Civil Justice Council",
+      "link": "https://www.gov.uk/government/news/four-non-judicial-members-reappointed-to-the-civil-justice-council--2",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-10T11:00:00.000Z",
+      "summary": "The Lord Chancellor has reappointed John Cuss, Sue Prince, Laurence Shaw and Elizabeth Smart as members of the Civil Justice Council for a further term of 3 years."
+    },
+    {
+      "title": "Honorary King’s Counsel nominations: deadline 18 September 2026",
+      "link": "https://www.gov.uk/government/news/honorary-kings-counsel-nominations-deadline-18-september-2026",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-10T10:00:00.000Z",
+      "summary": "The Ministry of Justice is inviting nominations for the award of King’s Counsel Honoris Causa. Please submit nominations via the digital form below, before the deadline of 18…"
+    },
+    {
+      "title": "Royal Courts of Justice event showcases the work of the Judicial College",
+      "link": "https://www.judiciary.uk/royal-courts-of-justice-event-showcases-the-work-of-the-judicial-college/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-10T09:00:07.000Z",
+      "summary": "Guests from across the justice sector gathered at the Royal Courts of Justice to learn how the Judicial College designs and delivers training for more than 24,000 judicial…"
+    },
+    {
+      "title": "County lines: Record year for gang busts and knife seizures",
+      "link": "https://www.gov.uk/government/news/county-lines-record-year-for-gang-busts-and-knife-seizures",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-10T08:53:05.000Z",
+      "summary": "Largest ever numbers of drug lines closed, gang leaders put behind bars and dangerous weapons seized through county line operations"
+    },
+    {
+      "title": "Lawyers risk being sued for failing to use AI",
+      "link": "https://www.legalcheek.com/2026/07/lawyers-risk-being-sued-for-failing-to-use-ai/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-10T06:17:16.000Z",
+      "summary": "Taskforce warning The post Lawyers risk being sued for failing to use AI appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Sir Colin Birss named next Master of the Rolls",
+      "link": "https://www.legalcheek.com/2026/07/sir-colin-birss-named-next-master-of-the-rolls/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-10T06:16:59.000Z",
+      "summary": "Judge with AI-background appointed to top judicial post The post Sir Colin Birss named next Master of the Rolls appeared first on Legal Cheek ."
     },
     {
       "title": "AI tool scours the web for job openings, preps your resume and cover letter",
@@ -46,14 +127,6 @@
       "topic": "ai",
       "isoDate": "2026-07-09T17:40:00.000Z",
       "summary": "Searching for work sucks; AI combs the internet and sucks it all up. Combine the two and let 'er rip with this Python project"
-    },
-    {
-      "title": "Restore Britain leader describes Dunblane tragedy as 'one murder'",
-      "link": "https://www.bbc.co.uk/news/articles/cj3gdj300lyo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-09T15:02:30.000Z",
-      "summary": "Rupert Lowe criticised the ban of handguns in the UK, saying it was \"because there was a murder in Dunblane\"."
     },
     {
       "title": "Sir Colin Birss appointed Master of the Rolls",
@@ -120,52 +193,12 @@
       "summary": "The tech giant said people can opt out - but privacy campaigners called it a \"recipe for disaster\"."
     },
     {
-      "title": "Elmley Prison",
-      "link": "https://www.gov.uk/guidance/elmley-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-08T11:59:37.000Z",
-      "summary": "Elmley is one of 3 prisons on the Isle of Sheppey, Kent, the other two being HMP Standford Hill and HMP Swaleside."
-    },
-    {
       "title": "Government action so children do not pay for a parent’s crime",
       "link": "https://www.gov.uk/government/news/government-action-so-children-do-not-pay-for-a-parents-crime",
       "source": "GOV.UK",
       "topic": "policing",
       "isoDate": "2026-07-08T11:37:00.000Z",
       "summary": "Children with a parent in prison will be recognised earlier and connected to support under a new government pilot to help them thrive"
-    },
-    {
-      "title": "Circular 006/2026: Amount to be paid under a confiscation order",
-      "link": "https://www.gov.uk/government/publications/circular-0062026-amount-to-be-paid-under-a-confiscation-order",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-08T11:29:29.000Z",
-      "summary": "The Crime and <mark>Policing</mark> Act 2026 introduces reforms to the criminal confiscation regime under Part 2 of POCA."
-    },
-    {
-      "title": "Circular 010/2026: Restraint orders (criminal confiscation)",
-      "link": "https://www.gov.uk/government/publications/circular-0102026-restraint-orders-criminal-confiscation",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-08T11:29:14.000Z",
-      "summary": "The Crime and <mark>Policing</mark> Act 2026 introduces reforms to the criminal confiscation regime under Part 2 of POCA."
-    },
-    {
-      "title": "Judicial Office Business Plan for 2026-27",
-      "link": "https://www.judiciary.uk/judicial-office-business-plan-for-2026-27/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-07-08T09:56:42.000Z",
-      "summary": "Read the business plan which sets out important priorities for the year ahead The post Judicial Office Business Plan for 2026-27 appeared first on Courts and Tribunals Judiciary ."
-    },
-    {
-      "title": "Preston Prison",
-      "link": "https://www.gov.uk/guidance/preston-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-08T07:57:37.000Z",
-      "summary": "Preston Prison is a men’s prison in Preston, Lancashire."
     },
     {
       "title": "Better together? The hidden challenges of mega mergers",
@@ -176,44 +209,12 @@
       "summary": "What happens when two become one? The post Better together? The hidden challenges of mega mergers appeared first on Legal Cheek ."
     },
     {
-      "title": "Junior lawyers split: Is AI ‘eating’ their jobs, or just an above-average paralegal?",
-      "link": "https://www.legalcheek.com/2026/07/junior-lawyers-divided-over-whether-ai-is-eating-their-jobs-or-just-cutting-the-boring-bits/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-08T07:51:21.000Z",
-      "summary": "Hype or threat? The post Junior lawyers split: Is AI ‘eating’ their jobs, or just an above-average paralegal? appeared first on Legal Cheek ."
-    },
-    {
       "title": "Avoid AI atrophy – new tool promises to reverse vibe coding skills decay",
       "link": "https://www.theregister.com/ai-and-ml/2026/07/07/avoid-ai-atrophy-new-tool-promises-to-reverse-vibe-coding-skills-decay/5267913",
       "source": "The Register",
       "topic": "ai",
       "isoDate": "2026-07-07T20:21:35.000Z",
       "summary": "Want big muscles? Keep working out. Want big coding skillsets? Flex your dev skills with the Atrophy CLI app before they wither away"
-    },
-    {
-      "title": "Lowdham Grange Prison",
-      "link": "https://www.gov.uk/guidance/lowdham-grange-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-07T17:01:25.000Z",
-      "summary": "Lowdham Grange is a men's prison located near Nottingham."
-    },
-    {
-      "title": "Featherstone Prison",
-      "link": "https://www.gov.uk/guidance/featherstone-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-07T16:58:48.000Z",
-      "summary": "Featherstone is a men’s prison in the village of Featherstone, near Wolverhampton."
-    },
-    {
-      "title": "Suits’ Harvey Specter chats to A&O Shearman partner in surreal interview",
-      "link": "https://www.legalcheek.com/2026/07/suits-harvey-specter-chats-to-ao-shearman-partner-in-surreal-interview/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-07T10:25:10.000Z",
-      "summary": "AI bubble indicator? The post Suits’ Harvey Specter chats to A&O Shearman partner in surreal interview appeared first on Legal Cheek ."
     },
     {
       "title": "Robots available for rent: But what can they do?",
