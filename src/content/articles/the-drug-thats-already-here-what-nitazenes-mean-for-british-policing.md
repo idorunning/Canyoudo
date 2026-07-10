@@ -8,6 +8,7 @@ keyTakeaways:
   - Naloxone works but frequently needs multiple or prolonged doses, so the single-dose-and-walk-away model is wrong and re-narcotisation is a real risk.
   - The fear that officers can be poisoned by casual contact is not supported by toxicology, and overstating it delays life-saving first aid.
 pubDate: 2026-06-05
+updatedDate: 2026-07-10
 author: ''
 thumbnail: /images/11553.webp
 heroImage: /images/11553.webp
@@ -65,7 +66,7 @@ Third, and most important for understanding the death toll: people often don't k
 
 Most opioid harm-reduction infrastructure is built around a known population: people who use heroin, who are in contact with treatment services, who can be reached with naloxone and messaging. The counterfeit pill route bypasses all of that.
 
-Consider the NCA case of Robert Poleszak, a dark-web vendor sentenced in 2026. He advertised oxycodone — a legitimate, recognisable painkiller — at up to 200 pills per transaction. The pills contained isotonitazene. He made more than 100 sales, with customer reviews noting that buyers had overdosed and ended up in hospital.[^11] The people buying those pills weren't necessarily heroin users. They were people who thought they were buying a known pharmaceutical.
+Consider the NCA case of Robert Poleszak, a dark-web vendor who admitted supplying isotonitazene in 2026 (he is due to be sentenced in July 2026). He advertised oxycodone — a legitimate, recognisable painkiller — at up to 200 pills per transaction. The pills contained isotonitazene. He made more than 100 sales, with customer reviews noting that buyers had overdosed and ended up in hospital, and his supply was linked to the death of a drug user in Cornwall.[^11] The people buying those pills weren't necessarily heroin users. They were people who thought they were buying a known pharmaceutical.
 
 This is the opioid-naïve victim: someone with no tolerance, no naloxone in the house, no reason to think they're at risk, and people around them who have no idea what they've taken when they stop breathing.[^12] A student buying what they believe is Xanax for anxiety. Someone buying oxycodone for pain because they can't get a prescription. The death looks like a sudden collapse with no obvious cause, which is part of why these cases are so easy to miss.
 
