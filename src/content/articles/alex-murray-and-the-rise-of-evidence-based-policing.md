@@ -6,8 +6,9 @@ keyTakeaways:
   - Alex Murray, a homicide detective and counter-terrorism commander, founded the Society of Evidence-Based Policing in 2010, the first organisation of its kind in the world.
   - 'He brought Lawrence Sherman''s Triple-T framework — target, test, track — back from Cambridge and built the machinery to put it into practice inside the service.'
   - 'His case carried weight because he made it as an operational officer, holding that an officer''s instinct is a hypothesis to be tested, not a fact to be acted on.'
-  - In 2024 he became British policing's first national lead for artificial intelligence before moving to the National Crime Agency.
+  - In 2024 he became British policing's first national lead for artificial intelligence; by 2026, after a spell at the National Crime Agency, he was interim director of the new national PoliceAI centre.
 pubDate: 2026-06-16
+updatedDate: 2026-07-10
 heroImage: "/images/murray-ebp-hero.jpg"
 thumbnail: "/images/alex-murray-portrait.jpg"
 portrait: "/images/alex-murray-portrait.jpg"
@@ -78,7 +79,7 @@ By the 2020s Murray had risen to temporary Chief Constable of West Mercia Police
 
 He set out three priorities for the role — improving productivity, making policing more effective at cutting crime, and tackling the criminal use of AI — and he has been notably plain about the politics of it. ["Our use of AI is not about government trying to make us do things,"](https://policinginsight.com/feature/interview/alex-murray-our-use-of-ai-is-not-about-government-trying-to-make-us-do-things-its-about-protecting-people/) he told *Policing Insight*. "It's about protecting people." The framing is characteristic: pragmatic, public-facing, suspicious of technology adopted for its own sake rather than because it demonstrably helps.
 
-Later in 2024 Murray left West Mercia to become Director of Threat Leadership at the National Crime Agency, the body that leads Britain's response to serious and organised crime. He had been awarded the OBE in 2017, by then already a decade into the work for which he is best known.
+Later in 2024 Murray left West Mercia to become Director of Threat Leadership at the National Crime Agency, the body that leads Britain's response to serious and organised crime. And in June 2026 the arc closed on itself: he was named interim director of [PoliceAI](/police-policy/policeai-a-police-leaders-guide/), the new £75m national centre, hosted by the College of Policing, charged with testing, commissioning and governing AI across all 43 forces. The man who spent fifteen years asking policing to prove what works now runs the body that has to ask it of the most consequential technology to reach the service in a generation. He had been awarded the OBE in 2017, by then already a decade into the work for which he is best known.
 
 <figure>
   <img src="/images/murray-ebp-hero.svg" alt="Timeline of Alex Murray's career: criminology degree in 1996, Cambridge Master's in 2008, founding the Society of Evidence-Based Policing in 2010, OBE in 2017, and national AI lead then the National Crime Agency in 2024" loading="lazy" />
