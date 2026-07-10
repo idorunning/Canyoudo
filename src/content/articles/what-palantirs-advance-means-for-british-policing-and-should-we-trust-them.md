@@ -26,6 +26,7 @@ tags:
   - policy
 redirectFrom:
   - /public-policy/joining-the-dots-what-palantir-means-for-british-policing
+updatedDate: 2026-07-10
 ---
 In June 2026 the contract to run the database that holds every firearms and shotgun certificate in England and Wales — together with Home Office records of explosives, explosive precursors and poisons — was awarded to Palantir Technologies. The value, £9m across all 43 forces, was modest by government-IT standards. The significance was not the money. It was that a company co-founded by Peter Thiel and seeded in its early years by the CIA's venture arm, In-Q-Tel, will now hold the national record of who in this country is licensed to own a gun.
 
@@ -64,9 +65,9 @@ The Bedfordshire material is the most revealing, because the force's own data pr
 
 ## The Met block: a precedent worth noting
 
-In May 2026 a larger deal collapsed in public. The Mayor of London, through his deputy for policing, refused to approve a proposed two-year £50m Met contract for AI-driven intelligence analysis, citing what was described as a "clear and serious breach" of procurement rules, value-for-money concerns, and the risk that the force would be "locked into Palantir's technology". Palantir's UK head, Louis Mosley, accused the mayor of putting "politics above public safety". Talks over other Met deployments are reportedly continuing.
+In May 2026 a larger deal collapsed in public. The Mayor of London, through his deputy for policing, refused to approve a proposed two-year £50m Met contract for AI-driven intelligence analysis, citing what was described as a "clear and serious breach" of procurement rules, value-for-money concerns, and the risk that the force would be "locked into Palantir's technology". Palantir's UK head, Louis Mosley, accused the mayor of putting "politics above public safety". The firm has since gone further and taken the mayor's policing office to the High Court to overturn the refusal, arguing the decision turned on its "values and ethics" rather than procurement rules; a trial is listed for January 2027.
 
-The block matters beyond London. It established that procurement-compliance and value-for-money tests are enforceable even against a politically well-connected supplier, which gives other police authorities and commissioners a degree of political cover to ask the same questions.
+The block matters beyond London, and the litigation makes it matter more, not less. It established that procurement-compliance and value-for-money tests can be applied even against a politically well-connected supplier — and the fact that Palantir is now spending money to reverse that decision in court is a measure of how much the precedent is worth. Either way, other police authorities and commissioners now have both the political cover and the case law to ask the same questions.
 
 ## Why the worry is about capability, not just current use
 
