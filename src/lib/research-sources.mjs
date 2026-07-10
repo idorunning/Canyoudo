@@ -452,7 +452,10 @@ export function mapEuropePmcWork(w) {
     oaUrl: pdf ?? oaHtml,
     isOa: w.isOpenAccess === 'Y',
     citedBy: w.citedByCount ?? 0,
-    abstract: clip(w.abstractText),
+    // Europe PMC abstracts can carry JATS/HTML markup (e.g. "<h4>Background</h4>
+    // …") — strip the tags to plain text before clipping, the same way Crossref
+    // abstracts are handled, so no raw tags reach the card.
+    abstract: clip(stripTags(w.abstractText)),
     source: 'europepmc',
   };
 }

@@ -328,7 +328,8 @@ test('mapEuropePmcWork maps authors, OA pdf and citations', () => {
     doi: '10.1016/j.jcj.2019.1',
     isOpenAccess: 'Y',
     citedByCount: 33,
-    abstractText: 'A cohort study.',
+    // JATS/HTML markup, as Europe PMC really returns it — must be stripped.
+    abstractText: '<h4>Background</h4>A cohort study of <i>repeat</i> victimisation.',
     fullTextUrlList: {
       fullTextUrl: [
         { documentStyle: 'html', availabilityCode: 'OA', url: 'https://example.org/html' },
@@ -344,6 +345,7 @@ test('mapEuropePmcWork maps authors, OA pdf and citations', () => {
   assert.equal(w.pdfUrl, 'https://example.org/p.pdf');
   assert.equal(w.isOa, true);
   assert.equal(w.citedBy, 33);
+  assert.equal(w.abstract, 'Background A cohort study of repeat victimisation.');
   assert.equal(w.source, 'europepmc');
 });
 

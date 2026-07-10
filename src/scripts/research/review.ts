@@ -333,96 +333,127 @@ export async function runReviewPipeline(
     ...(w.preprint ? { preprint: true } : {}),
   }));
 
-  let raw = '';
-  // The model that actually wrote the report (the server picks the first its
-  // account can reach, so it may not be the intended one) — reported via the
-  // x-model header and stored so the page and PDF never claim a model that
-  // didn't run.
-  let model = REVIEW_MODEL;
-  try {
-    const res = await fetch('/api/research-review', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ problem, items }),
-    });
-    const headerModel = res.headers.get('x-model');
-    if (headerModel) model = headerModel;
-    if (!res.ok) {
-      const body = await res.json().catch(() => null);
-      if (stale()) return { status: 'stale' };
-      if (res.status === 503 && typeof body?.error === 'string') {
-        return { status: 'budget', message: body.error };
+  // One write attempt against the streaming endpoint. The write is the one
+  // step that can fail transiently for reasons that have nothing to do with
+  // the request (a briefly-overloaded model, a dropped stream, a cold edge
+  // function) — so it returns a discriminated outcome the caller can retry on
+  // rather than surfacing every blip to the reader. `retry` carries any
+  // specific server reason, so a *persistent* failure (e.g. model access)
+  // still shows that reason instead of the generic message.
+  type WriteAttempt =
+    | { kind: 'ok'; result: ReviewResult }
+    | { kind: 'budget'; message: string }
+    | { kind: 'stale' }
+    | { kind: 'retry'; message?: string };
+
+  const attemptWrite = async (): Promise<WriteAttempt> => {
+    let raw = '';
+    // The model that actually wrote the report (the server picks the first its
+    // account can reach, so it may not be the intended one) — reported via the
+    // x-model header and stored so the page and PDF never claim a model that
+    // didn't run.
+    let model = REVIEW_MODEL;
+    try {
+      const res = await fetch('/api/research-review', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ problem, items }),
+      });
+      const headerModel = res.headers.get('x-model');
+      if (headerModel) model = headerModel;
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        if (stale()) return { kind: 'stale' };
+        // A spent monthly budget won't clear on a retry — stop now.
+        if (res.status === 503 && typeof body?.error === 'string') {
+          return { kind: 'budget', message: body.error };
+        }
+        // Any other server error is worth one retry; keep a specific reason
+        // (e.g. model access) to show if it fails again.
+        return { kind: 'retry', message: typeof body?.error === 'string' ? body.error : undefined };
       }
-      // A specific server reason (e.g. model access) is worth showing above the
-      // curated studies rather than the generic "couldn't be written".
-      return {
-        status: 'failed',
+      const reader = res.body?.getReader();
+      if (!reader) return { kind: 'retry' };
+      const decoder = new TextDecoder();
+      let lastDraw = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        raw += decoder.decode(value, { stream: true });
+        if (stale()) {
+          reader.cancel().catch(() => {});
+          return { kind: 'stale' };
+        }
+        // Progressive render, throttled — the report writing itself onto the
+        // page IS the loading state for the long synthesis step.
+        const now = Date.now();
+        if (hooks.onDraft && now - lastDraw > 150) {
+          lastDraw = now;
+          hooks.onDraft(draftDisplayText(raw), references);
+        }
+      }
+      raw += decoder.decode();
+    } catch {
+      if (stale()) return { kind: 'stale' };
+      return { kind: 'retry' };
+    }
+    if (stale()) return { kind: 'stale' };
+
+    // A dropped stream leaves ai-stream's interruption marker in the text. A
+    // report that got most of the way is still worth reading — keep it with an
+    // honest note; a stub is not.
+    let interrupted = false;
+    if (raw.includes(INTERRUPT_MARKER)) {
+      interrupted = true;
+      raw = raw.split(INTERRUPT_MARKER).join('');
+    }
+
+    const { text, confidence, found } = splitConfidence(raw);
+    // Strip out-of-range markers; a "report" citing nothing is unusable.
+    const { text: briefing, used } = sanitizeCitations(text, references.length);
+    const cutShort = interrupted || !found; // no protocol line ⇒ the stream was cut off
+    if (!briefing || used.length === 0 || (cutShort && briefing.length < 500)) {
+      return { kind: 'retry' };
+    }
+
+    return {
+      kind: 'ok',
+      result: {
         problem,
         framing,
+        briefing,
+        used,
+        confidence,
+        caveat: cutShort
+          ? `The stream was cut short, so this report may be incomplete. ${REVIEW_CAVEAT}`
+          : REVIEW_CAVEAT,
         references,
-        message: typeof body?.error === 'string' ? body.error : undefined,
-      };
-    }
-    const reader = res.body?.getReader();
-    if (!reader) return { status: 'failed', problem, framing, references };
-    const decoder = new TextDecoder();
-    let lastDraw = 0;
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      raw += decoder.decode(value, { stream: true });
-      if (stale()) {
-        reader.cancel().catch(() => {});
-        return { status: 'stale' };
-      }
-      // Progressive render, throttled — the report writing itself onto the
-      // page IS the loading state for the long synthesis step.
-      const now = Date.now();
-      if (hooks.onDraft && now - lastDraw > 150) {
-        lastDraw = now;
-        hooks.onDraft(draftDisplayText(raw), references);
-      }
-    }
-    raw += decoder.decode();
-  } catch {
-    if (stale()) return { status: 'stale' };
-    return { status: 'failed', problem, framing, references };
-  }
-  if (stale()) return { status: 'stale' };
-
-  // A dropped stream leaves ai-stream's interruption marker in the text. A
-  // report that got most of the way is still worth reading — keep it with an
-  // honest note; a stub is not.
-  let interrupted = false;
-  if (raw.includes(INTERRUPT_MARKER)) {
-    interrupted = true;
-    raw = raw.split(INTERRUPT_MARKER).join('');
-  }
-
-  const { text, confidence, found } = splitConfidence(raw);
-  // Strip out-of-range markers; a "report" citing nothing is unusable.
-  const { text: briefing, used } = sanitizeCitations(text, references.length);
-  const cutShort = interrupted || !found; // no protocol line ⇒ the stream was cut off
-  if (!briefing || used.length === 0 || (cutShort && briefing.length < 500)) {
-    return { status: 'failed', problem, framing, references };
-  }
-
-  return {
-    status: 'ok',
-    result: {
-      problem,
-      framing,
-      briefing,
-      used,
-      confidence,
-      caveat: cutShort
-        ? `The stream was cut short, so this report may be incomplete. ${REVIEW_CAVEAT}`
-        : REVIEW_CAVEAT,
-      references,
-      model,
-      promptVersion: ASSIST_PROMPT_VERSION,
-    },
+        model,
+        promptVersion: ASSIST_PROMPT_VERSION,
+      },
+    };
   };
+
+  // Write it, and quietly try once more on a transient failure — most of the
+  // "the review couldn't be written" cases are a one-off blip that a second
+  // attempt clears, so the reader rarely sees the fallback.
+  let attempt = await attemptWrite();
+  if (attempt.kind === 'retry') {
+    if (stale()) return { status: 'stale' };
+    hooks.onProgress('The write stalled — trying once more…');
+    attempt = await attemptWrite();
+  }
+
+  switch (attempt.kind) {
+    case 'ok':
+      return { status: 'ok', result: attempt.result };
+    case 'budget':
+      return { status: 'budget', message: attempt.message };
+    case 'stale':
+      return { status: 'stale' };
+    default:
+      return { status: 'failed', problem, framing, references, message: attempt.message };
+  }
 }
 
 // ---- rendering -------------------------------------------------------------
