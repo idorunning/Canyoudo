@@ -90,4 +90,11 @@ get "martyns-law-hero.jpg" "https://images.pexels.com/photos/5193526/pexels-phot
 get "civil-orders-hero.jpg" "https://images.pexels.com/photos/18987904/pexels-photo-18987904.jpeg?auto=compress&cs=tinysrgb&w=1600"
 get "dara-risk-grading-hero.jpg" "https://images.pexels.com/photos/7715105/pexels-photo-7715105.jpeg?auto=compress&cs=tinysrgb&w=1600"
 
+# Free-to-use Pexels photos for the procedural justice guide: an officer in
+# conversation (hero), a roadside breath test (the QCET trial example), and a
+# second street conversation (internal-justice section).
+get "procedural-justice-hero.jpg" "https://images.pexels.com/photos/7714787/pexels-photo-7714787.jpeg?auto=compress&cs=tinysrgb&w=1600"
+get "procedural-justice-breath-test.jpg" "https://images.pexels.com/photos/31154444/pexels-photo-31154444.jpeg?auto=compress&cs=tinysrgb&w=1200"
+get "procedural-justice-conversation.jpg" "https://images.pexels.com/photos/6257632/pexels-photo-6257632.jpeg?auto=compress&cs=tinysrgb&w=1200"
+
 echo "Done. $(ls -1 | wc -l) images in public/images/"
