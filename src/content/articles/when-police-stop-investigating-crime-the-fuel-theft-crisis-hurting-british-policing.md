@@ -8,6 +8,7 @@ keyTakeaways:
   - 'Non-response is breaking the relationship: retailers increasingly stop cooperating and turn to £35m-a-year private recovery instead of the police.'
   - The real issue is bigger than the £100m of lost fuel — when police openly abandon a solvable category of crime, policing by consent erodes.
 pubDate: 2025-06-17
+updatedDate: 2026-07-10
 author: ''
 thumbnail: /images/11543.webp
 heroImage: /images/11543.webp
@@ -31,7 +32,7 @@ Consider a business that reports a crime with clear CCTV footage, the suspect's 
 
 The figures are striking. Some 99% of fuel theft crimes do not result in prosecution, despite stations providing comprehensive evidence including high-definition CCTV, automatic number plate recognition (ANPR) data and payment transaction records. Across multiple UK police forces, what amounts to systematic non-investigation of these crimes has produced a serious breakdown in the relationship between law enforcement and a significant business sector, with implications that reach well beyond missing fuel payments.
 
-This blog argues that the policy is not simply a matter of resource prioritisation. It also undermines community trust in policing, particularly among the vulnerable groups who staff these 24/7 operations during high-risk overnight hours. The evidence here is not speculative; it is documented policy.
+This is not simply a matter of resource prioritisation. It undermines community trust in policing, particularly among the vulnerable groups who staff these 24/7 operations during high-risk overnight hours — and it is documented policy, not speculation.
 
 ## The policies are real
 
@@ -91,10 +92,22 @@ The central issue here is not really fuel theft. The £100 million cost matters 
 
 Her Majesty's Inspectorate of Constabulary found that police response to burglary, robbery and acquisitive crime "is not consistently good enough," with victims facing a "postcode lottery" in investigation quality. The broader pattern is consistent: volume crimes with lower individual values are systematically deprioritised, even where the evidence is strong and technology makes investigation straightforward.
 
-Police forces face genuine resource constraints, including funding cuts of 19% in real terms since 2010 and the loss of more than 20,000 officers. But the decision to direct victims towards civil courts while maintaining that "fuel theft is a crime" creates a logical incoherence that erodes legitimacy.
+It is tempting to file this under resource constraint and move on. It does not fully hold up. Real-terms funding fell sharply through the 2010s, and the roughly 20,000 officers cut over that decade are the figure still quoted in most reporting on police capacity — but the Police Uplift Programme replaced all 20,000 by March 2023, and officer numbers hit an all-time high in March 2024 before dipping slightly since. Whatever is driving forces to text "no suspect identified" on a case with a number plate, a face on camera and a timestamp, it is happening at a point when policing has more officers than it has had in its history, not fewer. That makes this a prioritisation decision, not a staffing shortage — and the decision to direct victims towards civil courts while maintaining that "fuel theft is a crime" creates a logical incoherence that erodes legitimacy regardless of how many officers are on the books.
 
 When businesses that invest heavily in crime prevention technology, operate sophisticated surveillance systems and attempt to cooperate with police are met with template text messages and non-investigation, trust erodes. When those businesses may also employ vulnerable populations already experiencing low confidence in policing, the damage compounds.
 
-Petrol stations as "islands of enquiry", systematically placed, continuously monitored and evidence-rich locations on the transport network, represent an unrealised potential that is squandered by policies that prioritise convenience over capability.
+Petrol stations as "islands of enquiry" — systematically placed, continuously monitored and evidence-rich locations on the transport network — represent an unrealised potential that is squandered by policies that prioritise convenience over capability.
 
-The argument holds up and the evidence is substantial. The remaining question is whether anyone with the power to change this is paying attention to what these empty petrol station tills indicate about the state of British policing.
+The remaining question is whether anyone with the power to change this is paying attention to what these empty petrol station tills indicate about the state of British policing.
+
+***
+
+## Sources and further reading
+
+- The 99% non-prosecution figure and the force-by-force closure rates (Sussex 94% of 2,892 cases, Humberside 83% of 3,008, South Yorkshire 91% of 3,483, 2020–2024) are from a Freedom of Information investigation reported by [Forecourt Trader](https://forecourttrader.co.uk/news/exclusive-65m-of-fuel-stolen-in-drive-offs-as-up-to-94-of-offenders-escape-justice/704134.article) and commissioned via Crown Oil.
+- Devon and Cornwall Police's 2016 non-attendance policy and 2019 FOI closure data — widely reported at the time, including by the BBC and local press.
+- Petrol Retailers Association figures on independent-operator share, retrofitting costs and average annual losses — [Petrol Retailers Association](https://www.petrolretailersassociation.co.uk/).
+- British Oil Security Syndicate (BOSS) Payment Watch recovery figures — [BOSS](https://www.boss-uk.com/).
+- HMICFRS findings on inconsistent investigation of acquisitive crime — His Majesty's Inspectorate of Constabulary and Fire & Rescue Services, PEEL inspection reports.
+- Police workforce figures — [Home Office, "Police workforce, England and Wales"](https://www.gov.uk/government/statistics/police-workforce-england-and-wales-30-september-2025/police-workforce-england-and-wales-30-september-2025) and the [National Audit Office report on the Police Uplift Programme](https://www.nao.org.uk/reports/the-police-uplift-programme/): the 20,000-officer uplift target was met and sustained by March 2023, with officer numbers peaking at an all-time high of 147,745 FTE in March 2024 before a small decline to 145,550 FTE by September 2025.
+- Public confidence in the police by ethnicity — [GOV.UK Ethnicity facts and figures, "Confidence in the local police"](https://www.ethnicity-facts-figures.service.gov.uk/crime-justice-and-the-law/policing/confidence-in-the-local-police/latest/): 49% of people from the Black Caribbean ethnic group reported confidence in their local police in the year ending March 2023, against a 68% national average.
