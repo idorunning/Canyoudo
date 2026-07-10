@@ -41,7 +41,7 @@ longer match the current guide.
 
 - [x] 2025-02-18 — `boosting-public-confidence-through-neighbourhood-policing.md` — essay register, `writing-style.md` cleanup (banned corrective-antithesis/tricolon repeats, academic framing, over-bolding; added a case-study evidence caveat)
 - [x] 2025-03-25 — `when-seeing-is-no-longer-believing-the-ai-generated-content-threat-to-criminal-justice.mdx` — already a strong style match, no prose rewrite needed; fact-check pass corrected an outdated model reference (OpenAI's Sora, named as current, shut down April 2026) and a real gap in C2PA's reliability as a provenance signal (independent 2026 testing found a tampered manifest validating as untampered), and added missing sourcing for the deepfake-volume and CCTV-retention stats plus a newer EU AI Act Omnibus detail
-- [ ] 2025-05-06 — `the-officers-were-losing-why-british-policing-must-rethink-cognitive-diversity.md`
+- [x] 2025-05-06 — `the-officers-were-losing-why-british-policing-must-rethink-cognitive-diversity.md` — essay register, heavy `writing-style.md` cleanup (consultant-speak, broken subheading, run-on paragraphs) plus real evidence corrections: the ENIGMA-ADHD brain-volume claim was misattributed to Barkley and overstated (largest study found differences in children, not adults), the "neurodivergent employees" process-improvement claim was actually about autistic employees specifically (Hartman et al. 2023), added a full Sources section (previously had none despite several specific stats)
 - [ ] 2025-06-17 — `when-police-stop-investigating-crime-the-fuel-theft-crisis-hurting-british-policing.md`
 - [ ] 2025-07-29 — `the-hidden-crisis-how-police-burnout-threatens-officer-safety-and-public-trust.md`
 - [ ] 2025-10-21 — `the-legal-aid-paradox.mdx`
