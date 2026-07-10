@@ -46,6 +46,7 @@ get "neighbourhood-policing-patrol.jpg" "https://commons.wikimedia.org/wiki/Spec
 get "fuel-filling-station.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/A%20modern%20BP%20gas%20station%20or%20filling%20station%20in%20the%20United%20States%2005.jpg"
 get "neurodiversity-symbol.svg" "https://commons.wikimedia.org/wiki/Special:FilePath/Neurodiversity%20Symbol.svg"
 get "police-officer-on-duty.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Slovak%20police%20car%20and%20police%20officer%20on%20duty%20(cropped).JPG"
+get "worthing-montague-street.jpg" "https://commons.wikimedia.org/wiki/Special:FilePath/Shops%20on%20Montague%20Street%2C%20Worthing%2C%20West%20Sussex%20-%20July%202025%20(7).jpg"
 
 # Free-to-use Pexels photos for the Martyn's Law business guide (credited in-page).
 # Pexels serves these from its public CDN; the ?auto=compress query is the format
