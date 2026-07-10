@@ -55,7 +55,7 @@ function richer(a, b) {
 function mergePair(a, b) {
   const base = richer(a, b);
   const other = base === a ? b : a;
-  return {
+  const merged = {
     ...base,
     // Field-level fill: take whatever the leaner record knew that the richer
     // one didn't. PDFs beat landing pages; citation counts take the max.
@@ -72,6 +72,12 @@ function mergePair(a, b) {
     authors: (base.authors?.length ?? 0) >= (other.authors?.length ?? 0) ? base.authors : other.authors,
     moreAuthors: Math.max(base.moreAuthors ?? 0, other.moreAuthors ?? 0),
   };
+  // A merged record is a preprint only when BOTH copies are — if any catalogue
+  // found the published version of the same work, "not yet peer reviewed"
+  // would be wrong (and ...base could leak the flag from a preprint base).
+  if (base.preprint && other.preprint) merged.preprint = true;
+  else delete merged.preprint;
+  return merged;
 }
 
 /**

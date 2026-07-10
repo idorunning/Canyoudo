@@ -90,3 +90,27 @@ test('single-source passthrough keeps order and adds provenance', () => {
   assert.deepEqual(merged.map((w) => w.title), ['First', 'Second']);
   assert.deepEqual(merged[0].sources, ['openalex']);
 });
+
+test('a preprint merged with a published copy loses the flag', () => {
+  // Even when the preprint is the RICHER record (longer abstract, so it wins
+  // as the merge base), finding the published version anywhere means "not yet
+  // peer reviewed" is no longer true.
+  const pre = work({ doi: '10.1/pp', preprint: true, abstract: 'A much longer, richer abstract.' });
+  const pub = work({ doi: '10.1/pp', source: 'crossref' });
+  const merged = mergeWorks([[pre], [pub]]);
+  assert.equal(merged.length, 1);
+  assert.ok(!merged[0].preprint, 'flag cleared when either copy is published');
+});
+
+test('a preprint merged with another preprint copy keeps the flag', () => {
+  const a = work({ doi: '10.1/pq', preprint: true });
+  const b = work({ doi: '10.1/pq', source: 'scholar', preprint: true });
+  const merged = mergeWorks([[a], [b]]);
+  assert.equal(merged.length, 1);
+  assert.equal(merged[0].preprint, true);
+});
+
+test('an unmerged preprint keeps its flag through the single-copy path', () => {
+  const merged = mergeWorks([[work({ title: 'Solo preprint', preprint: true })]]);
+  assert.equal(merged[0].preprint, true);
+});

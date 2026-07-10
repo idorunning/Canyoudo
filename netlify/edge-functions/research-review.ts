@@ -320,7 +320,8 @@ export default async (req: Request) => {
   // The briefing format gives every curated study a row in the evidence
   // table (up to REVIEW_HEADINGS' table), which is what keeps the whole
   // thing to ~2 pages — the client already curates to 10 (review.ts's
-  // TARGET_STUDIES); this is defence in depth against a stray caller.
+  // TARGET_STUDIES, of which at most PREPRINT_CAP are preprints); this is
+  // defence in depth against a stray caller.
   const items = (Array.isArray(body?.items) ? body.items : [])
     .slice(0, 10)
     .map((it: any) => ({
@@ -331,6 +332,10 @@ export default async (req: Request) => {
       year: Number.isInteger(it?.year) ? it.year : null,
       venue: clipStr(it?.venue, 150) || null,
       abstract: clipStr(it?.abstract, 700),
+      // Not yet peer reviewed — the prompt pins these to the ladder's early
+      // rung. Only present when true, so ordinary items stay byte-identical
+      // (and so do their cache keys).
+      ...(it?.preprint === true ? { preprint: true } : {}),
     }))
     .filter((it: any) => it.title);
   if (!problem || items.length === 0) return json(400, { error: 'Nothing to review from.' });

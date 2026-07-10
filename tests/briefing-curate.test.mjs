@@ -1,7 +1,7 @@
 // Unit tests for the briefing evidence curation. Run with: npm test
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { curate, CURATE_LIMIT } from '../src/lib/briefing-curate.mjs';
+import { curate, CURATE_LIMIT, PREPRINT_CAP } from '../src/lib/briefing-curate.mjs';
 import { workMergeKey } from '../src/lib/research-merge.mjs';
 
 const work = (over = {}) => ({
@@ -86,4 +86,45 @@ test('handles empty and missing angle lists', () => {
   assert.deepEqual(curate([]), []);
   assert.deepEqual(curate([[], null, undefined]), []);
   assert.deepEqual(curate(undefined), []);
+});
+
+// ---- the preprint cap (the review pipeline's early-research pseudo-angle) ---
+
+const preprint = (n) => titled(`p${n}`, { doi: `10.1/p${n}`, preprint: true });
+
+test('caps preprints at preprintCap while peer-reviewed picks keep flowing', () => {
+  const reviewed = Array.from({ length: 8 }, (_, i) => titled(`r${i}`, { doi: `10.1/r${i}` }));
+  const preprints = Array.from({ length: 5 }, (_, i) => preprint(i));
+  const out = curate([reviewed, preprints], 10, { preprintCap: PREPRINT_CAP });
+  assert.equal(out.filter((w) => w.preprint).length, PREPRINT_CAP);
+  assert.equal(out.length, 10, 'skipped preprints do not shrink the set');
+  assert.equal(out.filter((w) => !w.preprint).length, 10 - PREPRINT_CAP);
+});
+
+test('no cap by default — existing callers see byte-identical behaviour', () => {
+  const preprints = Array.from({ length: 5 }, (_, i) => preprint(i));
+  const out = curate([preprints], 10);
+  assert.equal(out.filter((w) => w.preprint).length, 5);
+});
+
+test('a preprint deduped against a peer-reviewed copy loses the flag and spares the cap', () => {
+  // The same DOI arrives via a normal angle (published) and the preprint
+  // pseudo-angle: mergeWorks clears the flag, so it must not consume the cap —
+  // leaving room for genuinely unpublished preprints.
+  const shared = { doi: '10.1/both', title: 'Published and preprinted' };
+  const reviewed = [work(shared), titled('r1', { doi: '10.1/r1' })];
+  const preprints = [work({ ...shared, preprint: true }), preprint(1), preprint(2), preprint(3)];
+  const out = curate([reviewed, preprints], 10, { preprintCap: 2 });
+  const merged = out.find((w) => w.doi === '10.1/both');
+  assert.ok(merged, 'the deduped study is present');
+  assert.ok(!merged.preprint, 'merge with a published copy cleared the flag');
+  assert.equal(out.filter((w) => w.preprint).length, 2, 'the cap still admits two real preprints');
+});
+
+test('the cap is deterministic — same inputs, same picks, same order', () => {
+  const reviewed = Array.from({ length: 6 }, (_, i) => titled(`r${i}`, { doi: `10.1/r${i}` }));
+  const preprints = Array.from({ length: 4 }, (_, i) => preprint(i));
+  const a = curate([reviewed, preprints], 8, { preprintCap: 2 });
+  const b = curate([reviewed, preprints], 8, { preprintCap: 2 });
+  assert.deepEqual(a.map((w) => w.doi), b.map((w) => w.doi));
 });

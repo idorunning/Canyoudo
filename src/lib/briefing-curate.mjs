@@ -22,13 +22,20 @@ import { mergeWorks, workMergeKey } from './research-merge.mjs';
 
 export const CURATE_LIMIT = 15;
 
+// The most preprints (works flagged `preprint: true`, not yet peer reviewed)
+// a curated set may carry when the caller asks for a cap — enough to bring in
+// genuinely current work, never enough to dominate the numbered list.
+export const PREPRINT_CAP = 2;
+
 /**
  * @param {Array<Array<object>>} perAngleLists one Work[] per search angle,
  *   each in upstream relevance order.
  * @param {number} limit the most studies to keep (default 15).
+ * @param {{preprintCap?: number}} [opts] cap on `preprint: true` picks
+ *   (default Infinity — no cap unless the caller asks for one).
  * @returns {Array<object>} deduplicated, coverage-balanced, field-enriched Work[].
  */
-export function curate(perAngleLists, limit = CURATE_LIMIT) {
+export function curate(perAngleLists, limit = CURATE_LIMIT, { preprintCap = Infinity } = {}) {
   const lists = (perAngleLists ?? []).map((l) => (Array.isArray(l) ? l : []));
 
   // One enriched, deduped record per identity — keeps the richest fields and
@@ -44,6 +51,7 @@ export function curate(perAngleLists, limit = CURATE_LIMIT) {
   const picked = [];
   const seen = new Set();
   const cursors = lists.map(() => 0);
+  let preprints = 0;
   let progressed = true;
   while (picked.length < limit && progressed) {
     progressed = false;
@@ -53,8 +61,17 @@ export function curate(perAngleLists, limit = CURATE_LIMIT) {
         const w = list[cursors[i]++];
         const key = workMergeKey(w);
         if (!key || seen.has(key)) continue; // keyless or already taken
+        // Cap decisions read the ENRICHED record: a preprint deduped against
+        // a published copy has had its flag cleared by mergeWorks, so it's a
+        // normal pick and never consumes the cap.
+        const record = enriched.get(key) ?? { ...w, sources: [w.source] };
+        if (record.preprint && preprints >= preprintCap) {
+          seen.add(key); // over cap: skip this one, keep the angle moving
+          continue;
+        }
         seen.add(key);
-        picked.push(enriched.get(key) ?? { ...w, sources: [w.source] });
+        if (record.preprint) preprints++;
+        picked.push(record);
         progressed = true;
         break;
       }

@@ -168,6 +168,30 @@ test('policing facet pipe-joins every ISSN', () => {
   assert.ok(POLICING_JOURNAL_ISSNS.every(([, i]) => /^\d{4}-\d{3}[\dX]$/.test(i)));
 });
 
+test('preprints facet filters to the preprint work type', () => {
+  const u = buildOpenAlexUrl(params({ q: 'facial recognition' }), { preprintsOnly: true });
+  assert.equal(u.searchParams.get('filter'), 'type:preprint');
+  // "type" is single-valued, so a stray reviews-only flag must not be ANDed in
+  // (type:review,type:preprint would always return zero results).
+  const r = buildOpenAlexUrl(params({ q: 'x', review: '1', from: '2024' }), { preprintsOnly: true });
+  assert.equal(r.searchParams.get('filter'), 'from_publication_date:2024-01-01,type:preprint');
+});
+
+test('the policing facet carries the SAGE / T&F / EBP journal expansion', () => {
+  const names = POLICING_JOURNAL_ISSNS.map(([name]) => name);
+  for (const expected of [
+    'Cambridge Journal of Evidence-Based Policing',
+    'Policing: An International Journal',
+    'Justice Quarterly',
+    'Criminal Justice and Behavior',
+  ]) {
+    assert.ok(names.includes(expected), expected);
+  }
+  // No duplicate ISSNs — a repeat would silently widen the OR filter.
+  const issns = POLICING_JOURNAL_ISSNS.map(([, i]) => i);
+  assert.equal(new Set(issns).size, issns.length);
+});
+
 test('buildScholarUrl paginates by offset and respects caps', () => {
   const u = buildScholarUrl(params({ q: 'procedural justice', page: '3', oa: '1', review: '1', from: '2010' }));
   assert.equal(u.searchParams.get('offset'), String(2 * PER_PAGE));
@@ -227,7 +251,7 @@ test('isPolicingRelevant drops off-topic work', () => {
 test('SOURCE_CAPS covers every source', () => {
   assert.deepEqual(
     Object.keys(SOURCE_CAPS).sort(),
-    ['all', 'core', 'crossref', 'europepmc', 'govuk', 'openalex', 'policing', 'scholar']
+    ['all', 'core', 'crossref', 'europepmc', 'govuk', 'openalex', 'policing', 'preprints', 'scholar']
   );
   for (const caps of Object.values(SOURCE_CAPS)) {
     assert.deepEqual(Object.keys(caps).sort(), ['from', 'oa', 'review', 'sort']);

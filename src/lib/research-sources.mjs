@@ -7,6 +7,8 @@
 // Sources:
 //   openalex   — OpenAlex (https://docs.openalex.org), no key, the default.
 //   policing   — OpenAlex restricted to the policing journals below.
+//   preprints  — OpenAlex restricted to preprints (CrimRxiv, SSRN, SocArXiv,
+//                OSF and the other early-research servers OpenAlex indexes).
 //   scholar    — Semantic Scholar Graph API (free key, has TL;DR summaries).
 //   core       — CORE v3 (free key, full-text search of open-access repositories).
 //   crossref   — Crossref REST API (no key; polite pool via CROSSREF_MAILTO).
@@ -17,7 +19,10 @@
 // sources" fan-out alongside OpenAlex/Scholar/CORE. GOV.UK is grey literature
 // (Home Office, HMICFRS, College of Policing reports) — it stays a standalone
 // source rather than diluting the peer-reviewed merge, since its records carry
-// no DOI, citations or peer-review status to corroborate against.
+// no DOI, citations or peer-review status to corroborate against. Preprints
+// stay standalone for the same reason in reverse: they're current but not yet
+// peer reviewed, so the reader opts into them knowingly rather than finding
+// them silently mixed into the merged page.
 //
 // Unpaywall is not a search source: buildUnpaywallUrl/applyUnpaywall enrich a
 // work that has a DOI but no free-copy link, gated on UNPAYWALL_EMAIL.
@@ -45,6 +50,23 @@ export const POLICING_JOURNAL_ISSNS = [
   ['Police Practice and Research', '1561-4263'],
   ['Journal of Criminal Justice', '0047-2352'],
   ['Crime Science', '2193-7680'],
+  // Policing / evidence-based-policing journals (SAGE, T&F, Emerald, Springer).
+  // ISSNs verified against Crossref's journal registry, July 2026.
+  ['Cambridge Journal of Evidence-Based Policing', '2520-1344'],
+  ['Policing: An International Journal', '1363-951X'],
+  ['International Journal of Police Science & Management', '1461-3557'],
+  ['The Police Journal: Theory, Practice and Principles', '0032-258X'],
+  ['Journal of Police and Criminal Psychology', '0882-0783'],
+  // Broader criminal-justice journals that regularly carry policing evaluations.
+  ['Justice Quarterly', '0741-8825'],
+  ['Criminology & Criminal Justice', '1748-8958'],
+  ['Crime & Delinquency', '0011-1287'],
+  ['Journal of Research in Crime and Delinquency', '0022-4278'],
+  ['Criminal Justice and Behavior', '0093-8548'],
+  ['The British Journal of Criminology', '0007-0955'],
+  ['Journal of Quantitative Criminology', '0748-4518'],
+  ['Criminal Justice Studies', '1478-601X'],
+  ['Journal of Crime and Justice', '0735-648X'],
 ];
 
 // Which filter controls make sense per source — the page reads this (inlined
@@ -56,6 +78,9 @@ export const SOURCE_CAPS = {
   all: { oa: true, review: true, from: true, sort: false },
   openalex: { oa: true, review: true, from: true, sort: true },
   policing: { oa: true, review: true, from: true, sort: true },
+  // Preprints are one OpenAlex work type, so "reviews only" (a different type)
+  // can't combine with it; nearly everything is free to read anyway.
+  preprints: { oa: true, review: false, from: true, sort: true },
   scholar: { oa: true, review: true, from: true, sort: false },
   core: { oa: false, review: false, from: true, sort: false }, // CORE is all-OA
   // Crossref has no dependable open-access or review-article filter in search;
@@ -222,15 +247,18 @@ export function mapOpenAlexWork(w) {
   };
 }
 
-export function buildOpenAlexUrl(p, { policingOnly = false, mailto = '', perPage = PER_PAGE } = {}) {
+export function buildOpenAlexUrl(p, { policingOnly = false, preprintsOnly = false, mailto = '', perPage = PER_PAGE } = {}) {
   const filters = [];
   if (p.oa) filters.push('is_oa:true');
-  if (p.review) filters.push('type:review');
+  // "type" is single-valued: a work is a review OR a preprint, so the
+  // reviews-only toggle is meaningless on the preprints facet (caps say so too).
+  if (p.review && !preprintsOnly) filters.push('type:review');
   if (p.from) filters.push(`from_publication_date:${p.from}-01-01`);
   if (policingOnly) {
     const issns = POLICING_JOURNAL_ISSNS.map(([, issn]) => issn).join('|');
     filters.push(`primary_location.source.issn:${issns}`);
   }
+  if (preprintsOnly) filters.push('type:preprint');
 
   const sorts = { cited: 'cited_by_count:desc', recent: 'publication_date:desc' };
   const sort = sorts[p.sort]; // anything else → relevance (OpenAlex default for search)
