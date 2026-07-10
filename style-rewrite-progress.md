@@ -96,3 +96,16 @@ hash changes automatically invalidate the cached MP3 in
 build with `AUDIO_ALLOW_SYNTHESIS=true`, at no extra cost over doing it later.
 Batching it to the end would leave rewritten text paired with stale audio for
 the entire sweep.
+
+**Automation (added 2026-07-10):** `npm run narrate` reports which published
+articles need (re)narrating — up-to-date / stale (text changed since recording)
+/ never narrated — read-only, no API key, no cost. `npm run narrate -- --sync`
+regenerates just the pending ones on demand by running the existing
+`generate-audio.mjs` with the breaker flipped on **for that one child process
+only**, so the approval can't leak into a later build (removing the
+set-in-Netlify → redeploy → remember-to-unset dance). Both share
+`scripts/lib/narration.mjs` with the build script, so they always agree on the
+cache key; `tests/narration.test.mjs` guards against hash drift. After this
+sweep, run `npm run narrate` in the dev/deploy environment to see the ~10
+rewritten articles listed as STALE, then `-- --sync` (with `OPENAI_API_KEY`
+set) to refresh them.

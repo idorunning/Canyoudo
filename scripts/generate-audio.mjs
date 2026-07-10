@@ -60,9 +60,11 @@
 // The build NEVER fails because of this script: any error skips that article
 // and the reader gets the on-device voice instead.
 
-import { createHash } from 'node:crypto';
 import { mkdir, readdir, readFile, writeFile, copyFile, stat } from 'node:fs/promises';
 import { join, basename, extname } from 'node:path';
+// Narration extraction and the cache key live in a shared lib so this script
+// and the on-demand narrate.mjs tool hash identically — see scripts/lib/narration.mjs.
+import { parseFrontmatter, toNarration, chunkText, narrationHash, MIN_NARRATION_CHARS } from './lib/narration.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const ARTICLES_DIR = join(ROOT, 'src/content/articles');
@@ -79,59 +81,6 @@ const MAX_NEW = Number(process.env.AUDIO_MAX_NEW || 50);
 const CONCURRENCY = Math.max(1, Number(process.env.AUDIO_CONCURRENCY || 6));
 const TIME_BUDGET_MS = Number(process.env.AUDIO_TIME_BUDGET_MS || 8 * 60 * 1000);
 const REQUEST_TIMEOUT_MS = Number(process.env.AUDIO_REQUEST_TIMEOUT_MS || 45_000);
-const CHUNK_CHARS = 3500;
-
-function parseFrontmatter(src) {
-  const m = src.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-  if (!m) return { data: {}, body: src };
-  const data = {};
-  for (const line of m[1].split(/\r?\n/)) {
-    const kv = line.match(/^(\w[\w-]*):\s*(.*)$/);
-    if (kv) data[kv[1]] = kv[2].trim().replace(/^["']|["']$/g, '');
-  }
-  return { data, body: m[2] };
-}
-
-function toNarration(title, description, body) {
-  let t = body;
-  t = t.replace(/^#{1,6}\s*(?:references|sources(?: and further reading)?|further reading|bibliography)\s*$[\s\S]*/im, ''); // trailing citations — not part of the read article
-  t = t.replace(/```[\s\S]*?```/g, ' ');                    // code fences
-  t = t.replace(/^(import|export)\s.*$/gm, ' ');            // MDX plumbing
-  t = t.replace(/<PullQuote\b[^>]*>[\s\S]*?<\/PullQuote>/gi, ' '); // pull quotes (restate prose already narrated)
-  t = t.replace(/<figcaption\b[^>]*>[\s\S]*?<\/figcaption>/gi, ' '); // photo captions/credits
-  t = t.replace(/<[A-Za-z][^<>]*\/>/gs, ' ');               // self-closing components
-  t = t.replace(/<\/?[A-Za-z][^<>]*>/g, ' ');               // tag lines (inner prose kept)
-  t = t.replace(/^\s*\|.*\|\s*$/gm, ' ');                   // table rows
-  t = t.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ');              // images, including captions in the alt text
-  t = t.replace(/\[\^[^\]]+\]:\s?.*$/gm, ' ');              // footnote definitions
-  t = t.replace(/\[\^[^\]]+\]/g, '');                       // footnote refs
-  t = t.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');            // links → text
-  t = t.replace(/^#{1,6}\s*(.+)$/gm, (_, h) => `${h.replace(/[.:]\s*$/, '')}. `); // headings
-  t = t.replace(/^>.*$/gm, ' ');                            // blockquotes & pulled-out quote boxes
-  t = t.replace(/==([^=]+)==/g, '$1');                      // highlights
-  t = t.replace(/[*_`]/g, '');                              // emphasis/code marks
-  t = t.replace(/^\s*[-*+]\s+/gm, '');                      // list bullets
-  t = t.replace(/^\s*\d+\.\s+/gm, '');                      // ordered bullets
-  t = t.replace(/^-{3,}\s*$/gm, ' ');                       // hr
-  t = t.replace(/\s+/g, ' ').trim();
-  const head = `${title}. ${description ? description + ' ' : ''}`;
-  return (head + t).trim();
-}
-
-function chunkText(text) {
-  const sentences = text.match(/[^.!?]+[.!?]+[\s"']*|[^.!?]+$/g) ?? [text];
-  const chunks = [];
-  let cur = '';
-  for (const s of sentences) {
-    if ((cur + s).length > CHUNK_CHARS && cur) {
-      chunks.push(cur.trim());
-      cur = '';
-    }
-    cur += s;
-  }
-  if (cur.trim()) chunks.push(cur.trim());
-  return chunks;
-}
 
 async function synthesiseChunk(input, model) {
   const controller = new AbortController();
@@ -239,9 +188,9 @@ async function main() {
       if (String(data.draft) === 'true') continue;
 
       const narration = toNarration(data.title ?? slug, data.description ?? '', body);
-      if (narration.length < 400) continue; // nothing worth narrating
+      if (narration.length < MIN_NARRATION_CHARS) continue; // nothing worth narrating
 
-      const hash = createHash('sha256').update(`${VOICE}|${narration}`).digest('hex').slice(0, 16);
+      const hash = narrationHash(VOICE, narration);
       const currentCacheFile = join(CACHE_DIR, `${slug}-${hash}.mp3`);
 
       let exactMatch = false;

@@ -11,6 +11,7 @@
     "start": "astro dev",
     "prebuild": "node scripts/bundle-policedata.mjs && node scripts/bundle-engagement.mjs && node scripts/bundle-polls.mjs && node scripts/generate-audio.mjs",
     "generate-audio": "node scripts/generate-audio.mjs",
+    "narrate": "node scripts/narrate.mjs",
     "build": "astro build",
     "postbuild": "node scripts/generate-redirects.mjs && pagefind --site dist",
     "preview": "astro preview",
