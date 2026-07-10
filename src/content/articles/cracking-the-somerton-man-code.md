@@ -3,7 +3,7 @@ title: Somerton Man code - Did I crack an 80 year mystery?
 section: other
 description: An updated reading of the Somerton Man code.  The code has remained unanswered for almost 80 years. Military analysts, ex detectives and amateur code breakers have all tried. Maybe now I've cracked it?
 pubDate: 2025-12-19
-updatedDate: 2026-06-12
+updatedDate: 2026-07-10
 author: ''
 thumbnail: /images/11541.webp
 heroImage: /images/somerton-man-code.jpg
@@ -103,7 +103,7 @@ Then a gap of several hours that nobody has filled, followed by the witness sigh
 
 Two physical details discipline any geographic theory. The body lay roughly 400 metres south of Jessica Thomson's address. And the address itself is on the public record from the 1948 electoral roll as 90A Moseley Street, Glenelg, not 52 Moseley Street as some secondary accounts state. If Webb was looking for her, he died within easy walking distance of her door.
 
-## The code, - one thing the experts agreed on
+## The code: the one thing the experts agreed on
 
 Here is the transcription I work from, which is the version most consistently reproduced from the police photograph:
 
@@ -164,7 +164,7 @@ I am deliberately not dressing this up with the lurid geometric labels that circ
 
 ## The problem with a test that cannot fail
 
-I've realised that my first run at the theory raised so issues that I didn't think of at first.
+My first run at this theory had a hole in it that I did not see at the time, and it is the most important thing in this article.
 
 I went looking, methodically, for whether each distinct letter in the code has at least one plausible Adelaide-area location behind it. The transcription I use contains seventeen distinct letters. Every single one of them has at least one credible Adelaide-reachable candidate location. On the face of it that sounds like vindication. It is the opposite. It is a warning.
 
