@@ -1,15 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry, getCollection } from 'astro:content';
+import { getEntry } from 'astro:content';
 import { TOPIC_GROUPS } from '../lib/research-topics';
-import CaveatBanner from '../components/data/CaveatBanner.astro';
-import ProvenanceStamp from '../components/data/ProvenanceStamp.astro';
-import BarChart from '../components/data/BarChart.astro';
-import Sparkline from '../components/data/Sparkline.astro';
-import PersonaInterpreter from '../components/data/PersonaInterpreter.astro';
-import DataChat from '../components/data/DataChat.astro';
-import MemberGate from '../components/MemberGate.astro';
-import { readFileSync } from 'node:fs';
 
 // Feature flags, baked in at build time. The page degrades gracefully:
 // without keys there's no AI, no sign-in, and only the OpenAlex sources —
@@ -22,26 +14,6 @@ const hasAi = Boolean(process.env.ANTHROPIC_API_KEY);
 const hasAuth = Boolean(
   import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
-
-// Crime dashboard data (same as /data/index.astro)
-let recordedCrime: any = null;
-try { recordedCrime = JSON.parse(readFileSync('src/data/recorded-crime.json', 'utf8')); } catch {}
-const rcNat = recordedCrime?.national;
-
-const dataEntries = await getCollection('policedata');
-const national = dataEntries.find((e) => e.data.kind === 'national')?.data as
-  | Extract<(typeof dataEntries)[number]['data'], { kind: 'national' }>
-  | undefined;
-const forces = dataEntries
-  .filter((e) => e.data.kind === 'force')
-  .map((e) => e.data as Extract<(typeof dataEntries)[number]['data'], { kind: 'force' }>)
-  .sort((a, b) => a.name.localeCompare(b.name));
-const fmt = new Intl.NumberFormat('en-GB');
-const ss = national?.stopSearch;
-const monthLabel = (m: string) => {
-  const [y, mo] = m.split('-').map(Number);
-  return new Date(y, mo - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-};
 
 // Crossref, Europe PMC and GOV.UK need no key, so they're always available and
 // the merged "All sources" search always leads (and is the default). Scholar
@@ -209,27 +181,6 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
           {hasAuth && (
             <div class="mb-6" data-auth-slot></div>
           )}
-
-          {/* Top-level tab switcher: Research Assistant | Crime Dashboard */}
-          <nav data-tool-tabs class="mb-8 flex gap-2 font-sans text-sm border-b border-ink-200 pb-0" aria-label="Tool">
-            <button
-              type="button"
-              data-tool-tab="assistant"
-              class="pb-3 px-1 -mb-px border-b-2 border-accent text-accent font-semibold"
-            >
-              Research Assistant
-            </button>
-            <button
-              type="button"
-              data-tool-tab="dashboard"
-              class="pb-3 px-1 -mb-px border-b-2 border-transparent text-ink-600 hover:text-ink-900 font-semibold"
-            >
-              Crime Dashboard
-            </button>
-          </nav>
-
-          {/* -------- Research Assistant pane -------- */}
-          <div data-tool-pane="assistant">
 
           {/* Mode switcher: three depths, function first. Ascending depth
               left-to-right; the review is the flagship and the default. */}
@@ -480,92 +431,6 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             inclusion here is not endorsement. Weigh the study, not the headline.{hasAi && ' Overviews and reviews are synthesised from abstracts, not verdicts — and their legal pointers need verifying. Read the studies.'}
           </p>
 
-          </div>{/* end data-tool-pane="assistant" */}
-
-          {/* -------- Crime Dashboard pane -------- */}
-          <div data-tool-pane="dashboard" hidden class="max-w-3xl">
-            <MemberGate hasAuth={hasAuth} feature="the Crime Dashboard">
-              <div class="space-y-10">
-                <CaveatBanner />
-
-                {ss && national ? (
-                  <>
-                    <PersonaInterpreter scope="national" />
-
-                    <div class="border-t border-ink-200 pt-8 grid sm:grid-cols-2 gap-8">
-                      <div>
-                        <label for="force-pick-r" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Read a police force</label>
-                        <select id="force-pick-r" class="w-full border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
-                          <option value="">Choose a force…</option>
-                          {forces.map((f) => <option value={f.id}>{f.name}</option>)}
-                        </select>
-                      </div>
-                      <div>
-                        <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Look up your area</p>
-                        <a href="/data/lookup" class="inline-flex items-center gap-2 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-sm text-ink-700 hover:border-accent hover:text-accent transition-colors">
-                          Interpret a postcode →
-                        </a>
-                      </div>
-                    </div>
-
-                    <div class="border-t border-ink-200 pt-8">
-                      <p class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Go deeper</p>
-                      <a href="/data/explore" class="block border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors group">
-                        <span class="font-display text-lg font-semibold text-ink-900 group-hover:text-accent transition-colors">Crime Data Explorer →</span>
-                        <span class="block font-serif text-ink-700 leading-relaxed mt-1">The dashboard above reads the latest month. The Crime Data Explorer goes back years — crime &amp; outcome trends, stop &amp; search disproportionality, your neighbourhood, and data-quality tracking, from a queryable database of data.police.uk.</span>
-                      </a>
-                    </div>
-
-                    <details class="group border-t border-ink-200 pt-6">
-                      <summary class="cursor-pointer list-none font-sans text-sm uppercase tracking-[0.15em] text-accent hover:text-accent-dark flex items-center gap-2">
-                        <span class="transition-transform group-open:rotate-90">▸</span> See the figures
-                      </summary>
-                      <div class="mt-8 space-y-10">
-                        {rcNat && (
-                          <div>
-                            <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
-                              <h3 class="font-display text-lg font-semibold text-ink-900">Recorded crime · {recordedCrime.period}</h3>
-                              <span class="font-sans text-sm text-ink-500">{fmt.format(rcNat.total)} offences</span>
-                            </div>
-                            <BarChart caption="By offence group (Home Office annual, England & Wales)" data={rcNat.byOffenceGroup} asPercent />
-                          </div>
-                        )}
-
-                        <div class="flex items-center gap-4">
-                          <div>
-                            <p class="font-sans text-xs uppercase tracking-[0.18em] text-ink-500 mb-1">12-month searches</p>
-                            <p class="font-display text-3xl font-semibold text-ink-900">{fmt.format(ss.window.total)}</p>
-                          </div>
-                          <div class="text-accent"><Sparkline points={ss.series} width={160} /></div>
-                        </div>
-
-                        {national.forcesMissing.length > 0 && (
-                          <p class="font-serif text-sm text-ink-600 leading-relaxed">
-                            <strong>{national.forcesMissing.length} of {national.forcesCount} forces</strong> hadn't filed
-                            {' '}{monthLabel(national.provenance.datasetMonth)} yet, so the latest month is an undercount —
-                            which is why the breakdowns use a rolling 12 months.
-                          </p>
-                        )}
-
-                        <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
-                          <BarChart caption="Who gets searched (officer-defined ethnicity)" data={ss.window.byOfficerEthnicity} asPercent />
-                          <BarChart caption="What officers were looking for" data={ss.window.byObjectOfSearch} asPercent />
-                          <BarChart caption="What happened next (outcome)" data={ss.window.byOutcome} asPercent />
-                        </div>
-
-                        <ProvenanceStamp datasetMonth={national.provenance.datasetMonth} fetchedAt={national.provenance.fetchedAt} sample={national.provenance.sample} />
-                      </div>
-                    </details>
-
-                    <DataChat scope="national" />
-                  </>
-                ) : (
-                  <p class="font-serif text-lg text-ink-600">No snapshot found yet.</p>
-                )}
-              </div>
-            </MemberGate>
-          </div>{/* end data-tool-pane="dashboard" */}
-
         </div>
       </div>
     </div>
@@ -607,38 +472,4 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 <script>
   import { initResearch } from '../scripts/research/main';
   initResearch();
-
-  // Tool tab switcher (Research Assistant / Crime Dashboard)
-  const toolTabs = document.querySelectorAll<HTMLButtonElement>('[data-tool-tab]');
-  const toolPanes = document.querySelectorAll<HTMLElement>('[data-tool-pane]');
-
-  function switchToolTab(tabName: string) {
-    toolTabs.forEach(t => {
-      const active = t.dataset.toolTab === tabName;
-      t.classList.toggle('border-accent', active);
-      t.classList.toggle('text-accent', active);
-      t.classList.toggle('border-transparent', !active);
-      t.classList.toggle('text-ink-600', !active);
-    });
-    toolPanes.forEach(p => {
-      p.hidden = p.dataset.toolPane !== tabName;
-    });
-  }
-
-  toolTabs.forEach(btn => {
-    btn.addEventListener('click', () => switchToolTab(btn.dataset.toolTab ?? 'assistant'));
-  });
-
-  // Deep link: /research?tool=dashboard opens the Crime Dashboard tab directly
-  // (used by the Research Tools cards and the old /data redirect).
-  const wantedTool = new URLSearchParams(location.search).get('tool');
-  if (wantedTool && [...toolTabs].some(t => t.dataset.toolTab === wantedTool)) {
-    switchToolTab(wantedTool);
-  }
-
-  // Force picker in the Crime Dashboard pane
-  const pick = document.getElementById('force-pick-r') as HTMLSelectElement | null;
-  pick?.addEventListener('change', () => {
-    if (pick.value) window.location.href = `/data/force/${pick.value}`;
-  });
 </script>

@@ -3,9 +3,10 @@
 // header/footer nav) now link here rather than straight into a specific tool:
 // a signed-out visitor lands on a sign-in prompt (via MemberGate), and a
 // signed-in visitor lands on this page describing all three tools, from
-// which they pick one to open. Each tool page (research.astro, perception.astro)
-// still gates itself independently, so a direct/bookmarked link to a tool
-// keeps working without going through this portal.
+// which they pick one to open. Each tool page (research.astro, data/index.astro,
+// perception.astro) is its own separate page and still gates itself
+// independently, so a direct/bookmarked link to a tool keeps working without
+// going through this portal.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MemberGate from '../components/MemberGate.astro';
 
@@ -58,7 +59,7 @@ const hasAuth = Boolean(
           </a>
 
           <!-- Crime Dashboard -->
-          <a href="/research?tool=dashboard" class="group block bg-paper-100 border border-ink-200 rounded-[18px] p-7 hover:border-accent/50 hover:-translate-y-1 transition-all duration-200">
+          <a href="/data" class="group block bg-paper-100 border border-ink-200 rounded-[18px] p-7 hover:border-accent/50 hover:-translate-y-1 transition-all duration-200">
             <div class="flex items-start justify-between mb-5">
               <h2 class="font-extrabold text-[21px] tracking-[-0.02em] text-ink-900 m-0">Crime Dashboard</h2>
               <span class="text-[11px] font-semibold uppercase tracking-[0.04em] text-ink-500">Latest month</span>
