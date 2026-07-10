@@ -6,6 +6,8 @@
 //   source=openalex   OpenAlex (default; no key; OPENALEX_MAILTO joins the
 //                     polite pool for faster responses)
 //   source=policing   OpenAlex restricted to the policing journals
+//   source=preprints  OpenAlex restricted to preprints (CrimRxiv, SSRN,
+//                     SocArXiv, OSF…) — current work, not yet peer reviewed
 //   source=scholar    Semantic Scholar (needs SEMANTIC_SCHOLAR_API_KEY)
 //   source=core       CORE (needs CORE_API_KEY)
 //   source=crossref   Crossref (no key; CROSSREF_MAILTO joins the polite pool)
@@ -44,7 +46,7 @@ import {
 import { mergeWorks } from '../../src/lib/research-merge.mjs';
 
 const UA = 'thinkingaboutpolicing.org (+https://thinkingaboutpolicing.org)';
-const SOURCES = ['all', 'openalex', 'policing', 'scholar', 'core', 'crossref', 'europepmc', 'govuk'];
+const SOURCES = ['all', 'openalex', 'policing', 'preprints', 'scholar', 'core', 'crossref', 'europepmc', 'govuk'];
 
 const json = (body, status = 200, cache = 'no-store', extra = {}) =>
   new Response(JSON.stringify(body), {
@@ -135,10 +137,12 @@ export default async (req) => {
     return {
       url: buildOpenAlexUrl(p, {
         policingOnly: src === 'policing',
+        preprintsOnly: src === 'preprints',
         mailto: process.env.OPENALEX_MAILTO ?? '',
         // The "policing" facet is already ISSN-locked to policing journals, so
-        // its page is trusted; the open "All research" facet is over-fetched so
-        // the relevance guard can prune strays and still leave a full page.
+        // its page is trusted; the open "All research" and "preprints" facets
+        // are over-fetched so the relevance guard can prune strays and still
+        // leave a full page.
         perPage: src === 'policing' ? PER_PAGE : GUARDED_PER_PAGE,
       }),
       init: { headers: { 'User-Agent': UA, Accept: 'application/json' } },
@@ -192,7 +196,8 @@ export default async (req) => {
     // CORE and Crossref can't honour the reviews-only filter, so they sit that
     // one out rather than polluting a filtered page. Missing keys are skipped —
     // a keyless deploy still merges OpenAlex, Crossref and Europe PMC. GOV.UK
-    // stays out of the scholarly merge (grey literature, nothing to dedupe on).
+    // stays out of the scholarly merge (grey literature, nothing to dedupe on),
+    // and so do preprints (not yet peer reviewed — opt-in via their own facet).
     const subSources = ['openalex', 'scholar', 'europepmc', ...(p.review ? [] : ['core', 'crossref'])];
     const requests = subSources
       .map((src) => ({ src, request: buildRequest(src) }))

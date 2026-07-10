@@ -50,6 +50,7 @@ const sources = [
   { id: 'all', label: 'All sources (merged)' },
   { id: 'openalex', label: 'All research' },
   { id: 'policing', label: 'Policing journals' },
+  { id: 'preprints', label: 'Preprints (early findings)' },
   { id: 'crossref', label: 'Crossref' },
   { id: 'europepmc', label: 'Europe PMC' },
   ...(hasScholar ? [{ id: 'scholar', label: 'Semantic Scholar' }] : []),
@@ -468,7 +469,12 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             )}{hasCore && (
               <Fragment>, <a href="https://core.ac.uk" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">CORE</a></Fragment>
             )} and the <a href="https://www.gov.uk/help/reuse-govuk-content" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">GOV.UK</a> search API
-            — open catalogues of the scholarly record plus UK official publications. Free-copy
+            — open catalogues of the scholarly record plus UK official publications. That
+            includes the journals behind SAGE, Taylor &amp; Francis and the other big publishers
+            (their records and abstracts flow into these catalogues). The Preprints facet
+            searches early-research servers such as <a href="https://www.crimrxiv.com" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">CrimRxiv</a>,
+            SSRN and SocArXiv — the most current work, but <strong>not yet peer reviewed</strong>,
+            so weigh it accordingly. Free-copy
             availability is topped up via <a href="https://unpaywall.org" rel="noopener" target="_blank" class="underline underline-offset-2 hover:text-accent">Unpaywall</a>.
             "Free copy" links go to publisher or repository versions; quality varies and
             inclusion here is not endorsement. Weigh the study, not the headline.{hasAi && ' Overviews and reviews are synthesised from abstracts, not verdicts — and their legal pointers need verifying. Read the studies.'}

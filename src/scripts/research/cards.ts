@@ -23,6 +23,7 @@ export type Work = {
 export const SOURCE_LABELS: Record<string, string> = {
   openalex: 'OpenAlex',
   policing: 'OpenAlex · policing journals',
+  preprints: 'OpenAlex · preprint — not yet peer reviewed',
   scholar: 'Semantic Scholar',
   core: 'CORE',
   crossref: 'Crossref',
