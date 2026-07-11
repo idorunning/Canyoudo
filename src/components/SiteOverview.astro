@@ -3,7 +3,7 @@
 // interactive tools, with a one-line site-stats summary. Self-contained: counts
 // are computed at build from the article collection and the topics dictionary.
 import { getCollection } from 'astro:content';
-import { SECTIONS, SECTION_LABELS } from '../content/config';
+import { SECTIONS, VISIBLE_SECTIONS, SECTION_LABELS } from '../content/config';
 import { getTopics } from '../lib/topics';
 
 const articles = await getCollection('articles', ({ data }) => !data.draft);
@@ -37,12 +37,12 @@ const tools = [
     <div class="flex flex-wrap items-baseline justify-between gap-3 mb-8">
       <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent">Browse the site</p>
       <p class="font-sans text-sm text-ink-500">
-        {articles.length} articles across {SECTIONS.length} sections and {topics.length} topics.
+        {articles.length} articles across {VISIBLE_SECTIONS.length} sections and {topics.length} topics.
       </p>
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {SECTIONS.map((s) => (
+      {VISIBLE_SECTIONS.map((s) => (
         <a
           href={`/${s}`}
           class="group block border border-ink-200 rounded-md p-6 hover:border-ink-300 hover:bg-paper-100 transition-colors"

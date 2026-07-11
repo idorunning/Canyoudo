@@ -21,7 +21,6 @@ const metaLinks = [
 
 const moreLinks = [
   { href: '/data-stories', label: 'Technology & Innovation' },
-  { href: '/other', label: 'History & Curiosities' },
   { href: '/topics', label: 'Topics' },
   { href: '/resources', label: 'Further reading' },
 ];
@@ -112,13 +111,6 @@ const currentPath = Astro.url.pathname;
         </button>
 
         <AccountBar part="trigger-desktop" />
-
-        <a
-          href="/subscribe"
-          class="bg-accent text-paper-50 dark:text-night-50 rounded-full px-4 py-2 text-[13px] font-bold hover:bg-accent-dark transition-colors"
-        >
-          Subscribe
-        </a>
       </div>
 
       <!-- Mobile actions -->
@@ -229,13 +221,6 @@ const currentPath = Astro.url.pathname;
           ))}
         </ul>
       </div>
-
-      <a
-        href="/subscribe"
-        class="block text-center bg-accent text-paper-50 dark:text-night-50 rounded-full px-5 py-3 font-sans text-[15px] font-bold hover:bg-accent-dark transition-colors"
-      >
-        Subscribe for new articles
-      </a>
     </div>
   </nav>
 </header>

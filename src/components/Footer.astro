@@ -1,5 +1,4 @@
 ---
-import NewsletterForm from './NewsletterForm.astro';
 const year = new Date().getFullYear();
 const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
 
@@ -8,7 +7,6 @@ const sectionLinks = [
   { href: '/public-policy', label: 'Leadership & Culture' },
   { href: '/influential-people', label: 'Influential People' },
   { href: '/data-stories', label: 'Technology & Innovation' },
-  { href: '/other', label: 'History & Curiosities' },
 ];
 
 const browseLinks = [
@@ -23,14 +21,15 @@ const browseLinks = [
 
 <footer class="surface-night mt-24">
   <div class="max-w-wide mx-auto px-6 lg:px-10 pt-16 pb-10">
-    <div class="grid gap-12 md:grid-cols-[minmax(16rem,1.2fr)_auto_auto_minmax(16rem,1fr)]">
+    <div class="grid gap-12 md:grid-cols-[minmax(16rem,1.4fr)_auto_auto]">
 
-      <!-- Brand + about -->
+      <!-- Brand + about. The logo is the way into /curiosities — the hidden
+           History & Curiosities page. Unchanged in appearance; just a link. -->
       <div class="max-w-xs">
-        <div class="flex items-center gap-2.5 mb-4">
+        <a href="/curiosities" class="flex items-center gap-2.5 mb-4 group" aria-label="Thinking About Policing">
           <img src="/logo.png" alt="Thinking About Policing logo" class="h-[30px] w-auto object-contain" />
           <span class="font-display font-extrabold text-[1.05rem] text-night-ink leading-none">Thinking About Policing</span>
-        </div>
+        </a>
         <p class="font-sans text-sm leading-relaxed text-night-dim">
           Evidence-based writing on policing, public policy, and the occasional historical puzzle.
         </p>
@@ -73,14 +72,6 @@ const browseLinks = [
         </ul>
       </div>
 
-      <!-- Newsletter -->
-      <div class="w-full md:max-w-xs">
-        <p class="u-kicker mb-4">New articles by email</p>
-        <div class="footer-newsletter">
-          <NewsletterForm variant="compact" />
-        </div>
-      </div>
-
     </div>
 
     <!-- Bottom bar -->
@@ -91,10 +82,3 @@ const browseLinks = [
     </div>
   </div>
 </footer>
-
-<style>
-  /* Override the newsletter form's light-mode colours inside the night footer */
-  .footer-newsletter :global(.font-sans.text-xs.uppercase) { color: rgb(var(--night-ink-dim)); }
-  .footer-newsletter :global(h2) { color: rgb(var(--night-ink)); }
-  .footer-newsletter :global(.font-serif) { color: rgb(var(--night-ink-dim)); }
-</style>

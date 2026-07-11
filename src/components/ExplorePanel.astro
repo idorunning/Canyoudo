@@ -4,7 +4,7 @@
 // Article pages keep their own "More articles" sidebar instead.
 import { getCollection } from 'astro:content';
 import { getTopics, buildEntries, articleMatchesEntry } from '../lib/topics';
-import { SECTIONS, SECTION_LABELS } from '../content/config';
+import { VISIBLE_SECTIONS, SECTION_LABELS } from '../content/config';
 import ResourcesBlock from './ResourcesBlock.astro';
 
 const articles = await getCollection('articles', ({ data }) => !data.draft);
@@ -45,7 +45,7 @@ const fmt = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: '
   <div>
     <h2 class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-4">Sections</h2>
     <ul class="space-y-2">
-      {SECTIONS.map((s) => (
+      {VISIBLE_SECTIONS.map((s) => (
         <li>
           <a href={`/${s}`} class="font-sans text-sm text-ink-700 hover:text-accent transition-colors">
             {SECTION_LABELS[s]}

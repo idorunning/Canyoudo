@@ -7,7 +7,6 @@ import ShareDock from '../components/ShareDock.astro';
 import FootnotePreview from '../components/FootnotePreview.astro';
 import Sidebar from '../components/Sidebar.astro';
 import NewsWidget from '../components/NewsWidget.astro';
-import NewsletterForm from '../components/NewsletterForm.astro';
 import BookCTA from '../components/BookCTA.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import ArticleContents from '../components/ArticleContents.astro';
@@ -356,9 +355,6 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
 
           <div data-pagefind-ignore>
             <BookCTA tags={tags} />
-            <div class="mt-12">
-              <NewsletterForm variant="inline" />
-            </div>
           </div>
         </div>
       </article>
