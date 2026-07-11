@@ -101,6 +101,75 @@ is variety, not abstinence.
 
 ---
 
+## Avoiding Americanisms
+
+This site is written in British English about British policing, for a
+British audience — full stop, not a house-style option. This is a distinct
+failure mode from the AI-writing tells above, and it has a specific trigger
+here: pieces on this site routinely cite American and Australian research
+(Sherman, Wood/Weisburd, Mazerolle) and source stock photography from
+libraries (Pexels and similar) whose default results skew heavily American.
+Both habits leak American vocabulary and imagery into pieces that are
+otherwise correctly written in British English, and it has happened on this
+site (an early draft of the procedural justice guide used "pat-down" and a
+set of stock photos of unbranded, US-style officers before a review caught
+it). Guard against it explicitly, on every piece, not just the obviously
+policing-heavy ones.
+
+**Vocabulary.** When a source (an American paper, a quote, a cited trial) uses
+US policing terminology, translate it into the British equivalent in your own
+prose — quote the source verbatim only where you are actually quoting it.
+
+| American term | British term |
+|---|---|
+| pat-down | search (or "frisk search" only if quoting a source) |
+| stop and frisk | stop and search |
+| precinct | station (or the force area) |
+| cop / cops | officer(s), police |
+| law enforcement (as a noun for "the police") | policing, the police |
+| badge number | collar number |
+| patrol car / cruiser | police car (or a named vehicle, e.g. panda car informally) |
+| sidewalk | pavement |
+| gas station | petrol station |
+| apartment | flat |
+| vacation | holiday |
+| trunk (of a car) | boot |
+| roll call (for a shift briefing) | parade, briefing |
+| DA / district attorney | Crown Prosecution Service, CPS |
+
+This list will not be complete — add to it whenever a new one turns up. Two
+things this rule does **not** ban: quoting a US source's own wording
+(attribute it, don't launder it into British English), and accurately
+describing something as American when it is — "the American psychologist Tom
+Tyler" is a fact, not an Americanism, because it isn't standing in for a
+British term. The rule is about vocabulary substitution, not about erasing
+nationality where it's true and relevant.
+
+**Images.** Stock photo searches for generic terms ("police officer",
+"traffic stop", "stop and search") return mostly North American imagery by
+default — different uniforms, badges instead of collar numbers, campaign
+hats, US-plated cars. Before using a photo of a police officer:
+
+- Search for something specifically British ("Metropolitan Police", "UK
+  police officer", a named force) rather than a generic policing term, and
+  confirm British-ness by a concrete visual detail: force name on a hi-vis
+  jacket or cap badge, a custodian helmet, Battenberg (checkerboard)
+  markings, "POLICE" jacket text, a UK-format number plate.
+- **Download and actually view the image yourself before committing to it.**
+  A text description of a search result (from a fetch tool or a search
+  summary) is not reliable enough to confirm British-ness on its own — it can
+  describe the wrong image, miss the country entirely, or miss context that
+  makes a photo unsuitable for the piece (an otherwise-correct force logo at
+  a protest, for instance, still needs a human read on whether that context
+  fits the article).
+- Prefer a named force (Metropolitan Police, Police Scotland, an English
+  constabulary) over an unbranded, ambiguous uniform — it settles the
+  question outright and often ties usefully to the text (a Greater
+  Manchester Police photo next to a paragraph about a Greater Manchester
+  Police trial, for instance).
+
+---
+
 ## Voice and register (evidenced from the back catalogue)
 
 Drawn from the published articles. Quotes are labelled by piece.
