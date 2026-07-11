@@ -145,119 +145,34 @@ export async function initSaved(
     }
   }
 
-  // Defaults to on; the checkbox in subscribeToggle() below (rendered inside
-  // renderSignInOptions) lets the reader opt out before either route fires.
+  // Defaults to on; toggled by the newsletter checkbox inside renderSignInOptions.
   let subscribeToEmails = true;
 
-  function signInWithGoogle() {
-    setSubscribePreference(subscribeToEmails);
-    supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: location.origin + '/research' },
-    });
-  }
-
-  async function signInWithEmail(email: string) {
-    // Passwordless magic link — works for any address, including work
-    // emails (police.gov.uk etc.) where personal Google is blocked.
-    setSubscribePreference(subscribeToEmails);
-    return supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: location.origin + '/research' },
-    });
-  }
-
-  // The two sign-in routes, shown wherever we offer sign-in (the bar above
-  // the search box and the Saved-tab pitch). Email link is the primary,
-  // password-free route; Google is the alternative. Clicking email expands
-  // an inline form in place; submitting shows a "check your inbox" message.
   function renderSignInOptions(container: HTMLElement) {
-    const primary = 'font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50';
-    const secondary = 'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors';
-    const textLink = 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent';
-
-    function subscribeToggle(): HTMLElement {
-      const wrap = el('div', 'mt-3 max-w-md');
-      wrap.appendChild(
-        el(
-          'p',
-          'font-sans text-xs text-ink-500',
-          'Signing in also adds you to the email list — occasional updates about new articles and research relevant to this site. Nothing else, and your data is never shared.'
-        )
-      );
-      const label = el('label', 'flex items-center gap-2 font-sans text-xs text-ink-600 mt-1 cursor-pointer');
-      const box = el('input', '') as HTMLInputElement;
-      box.type = 'checkbox';
-      box.checked = !subscribeToEmails;
-      box.addEventListener('change', () => {
-        subscribeToEmails = !box.checked;
-      });
-      label.appendChild(box);
-      label.appendChild(el('span', '', 'Don’t add me to the list — just sign me in'));
-      wrap.appendChild(label);
-      return wrap;
-    }
-
-    function showButtons() {
-      container.replaceChildren();
-      // Email leads and Google sits beneath it: the email link is the quick,
-      // password-free route that works on locked-down work machines, so it
-      // gets the primary slot rather than sharing a row.
-      const row = el('div', 'flex flex-col gap-3 max-w-md');
-      const email = el('button', primary, 'Quick sign in with email') as HTMLButtonElement;
-      email.type = 'button';
-      email.addEventListener('click', showEmailForm);
-      row.appendChild(email);
-      const google = el('button', secondary, 'Continue with Google') as HTMLButtonElement;
-      google.type = 'button';
-      google.addEventListener('click', signInWithGoogle);
-      row.appendChild(google);
-      container.appendChild(row);
-      container.appendChild(
-        el('p', 'font-sans text-xs text-ink-500 mt-2', 'No password — we email you a link and you’re in. Works with any address, including a work one (e.g. police.gov.uk).')
-      );
-      container.appendChild(subscribeToggle());
-    }
-
-    function showEmailForm() {
-      container.replaceChildren();
-      const form = el('form', 'flex flex-col sm:flex-row gap-3 max-w-md') as HTMLFormElement;
-      const input = el('input', 'flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent') as HTMLInputElement;
-      input.type = 'email';
-      input.autocomplete = 'email';
-      input.placeholder = 'you@example.com';
-      input.required = true;
-      form.appendChild(input);
-      const send = el('button', primary, 'Send link') as HTMLButtonElement;
-      send.type = 'submit';
-      form.appendChild(send);
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const address = input.value.trim();
-        if (!address) return;
-        send.disabled = true;
-        const { error } = await signInWithEmail(address);
-        container.replaceChildren();
-        container.appendChild(
-          error
-            ? el('p', 'font-sans text-sm text-ink-700', 'That didn’t send — check the address and try again in a minute.')
-            : el('p', 'font-sans text-sm text-ink-700', `Sign-in link sent to ${address}. Check your inbox — it expires after one hour.`)
-        );
-        const again = el('button', `mt-2 ${textLink}`, error ? 'Try again' : 'Use a different email') as HTMLButtonElement;
-        again.type = 'button';
-        again.addEventListener('click', showEmailForm);
-        container.appendChild(again);
-      });
-      container.appendChild(form);
-      container.appendChild(subscribeToggle());
-      const cancel = el('button', `mt-2 ${textLink}`, 'Use Google instead') as HTMLButtonElement;
-      cancel.type = 'button';
-      cancel.addEventListener('click', showButtons);
-      container.appendChild(cancel);
-      input.focus();
-    }
-
-    showButtons();
+    import("../auth/password-auth").then(({ initPasswordAuth }) => {
+      // Wrap supabase to set subscription preference before any auth calls
+      const handler = {
+        get(target: any, prop: string) {
+          if (prop === "auth") {
+            return new Proxy(target.auth, {
+              get(authTarget: any, authProp: string) {
+                const method = authTarget[authProp];
+                if (typeof method === "function" && ["signInWithPassword", "signUp", "signInWithOAuth", "resetPasswordForEmail"].includes(authProp)) {
+                  return async (...args: any[]) => {
+                    setSubscribePreference(subscribeToEmails);
+                    return method.apply(authTarget, args);
+                  };
+                }
+                return method;
+              },
+            });
+          }
+          return target[prop];
+        },
+      };
+      const wrappedSupabase = new Proxy(supabase, handler);
+      initPasswordAuth(wrappedSupabase, container);
+    });
   }
 
   async function toggleSave(w: Work, btn: HTMLButtonElement) {
