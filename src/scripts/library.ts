@@ -197,3 +197,19 @@ export async function removeArticle(slug: string): Promise<void> {
   writeLocal(readLocal().filter((a) => a.slug !== slug));
   emitChange();
 }
+
+/** Empty the whole library — account rows (if signed in) and the device store. */
+export async function clearAll(): Promise<void> {
+  const supabase = await getClient();
+  const user = supabase ? await getUser() : null;
+  if (supabase && user) {
+    try {
+      await supabase.from('saved_articles').delete().eq('user_id', user.id);
+    } catch {}
+  }
+  writeLocal([]);
+  try {
+    localStorage.removeItem('tap-library-mirror');
+  } catch {}
+  emitChange();
+}

@@ -48,7 +48,7 @@ for (const a of allArticles) {
   if (!bySection[a.section]) bySection[a.section] = [];
   bySection[a.section].push(a);
 }
-const FEATURED_SECTIONS: Section[] = ['police-policy', 'public-policy', 'influential-people', 'data-stories', 'other'];
+const FEATURED_SECTIONS: Section[] = ['police-policy', 'public-policy', 'influential-people', 'data-stories'];
 
 // "Most read" is driven by real page views, tallied via the
 // article_engagement table (see supabase/migrations/0002_article_engagement.sql)
