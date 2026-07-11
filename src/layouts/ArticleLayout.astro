@@ -3,7 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import SectionBadge from '../components/SectionBadge.astro';
 import SaveButton from '../components/SaveButton.astro';
 import AudioEdition from '../components/AudioEdition.astro';
-import QuoteShare from '../components/QuoteShare.astro';
+import ShareDock from '../components/ShareDock.astro';
 import FootnotePreview from '../components/FootnotePreview.astro';
 import Sidebar from '../components/Sidebar.astro';
 import NewsWidget from '../components/NewsWidget.astro';
@@ -147,7 +147,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
 >
   <script type="application/ld+json" set:html={jsonLd} />
   <ReadingProgress />
-  <QuoteShare title={title} url={pageUrl} />
+  <ShareDock title={title} url={pageUrl} />
   <FootnotePreview />
   <div class="max-w-6xl mx-auto px-6 lg:px-10">
     <div class="lg:flex lg:gap-12 xl:gap-16">
@@ -525,8 +525,8 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
       el.addEventListener('click', () => bumpShare());
     });
     panel.querySelector('[data-share-copy]')?.addEventListener('click', () => bumpShare());
-    // Quote shares (the floating selection toolbar) count as shares too.
-    document.addEventListener('tap:quote-share', () => bumpShare());
+    // Shares fired from the fixed bottom share dock count too.
+    document.addEventListener('tap:share', () => bumpShare());
   })();
 
   const bar = document.querySelector('[data-star-bar]');

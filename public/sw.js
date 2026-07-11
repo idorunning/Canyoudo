@@ -13,7 +13,7 @@
  * /.netlify — dynamic or authenticated surfaces the cache must never touch.
  */
 
-const VERSION = 'tap-v1';
+const VERSION = 'tap-v2';
 const PAGES = `${VERSION}-pages`;
 const ASSETS = `${VERSION}-assets`;
 const SAVED = 'tap-saved'; // survives version bumps: the reader's offline library
@@ -74,12 +74,17 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return;
   if (BYPASS.some((re) => re.test(url.pathname))) return;
 
-  // Navigations: network first, cache fallback, offline page last.
+  // Navigations: network first, cache fallback, offline page last. `cache:
+  // 'no-store'` bypasses the browser's own HTTP cache so "network first"
+  // really means the network, not a locally cached copy from before the last
+  // deploy — the origin's Cache-Control already asks for this (see
+  // netlify.toml), but a stale copy already sitting in a reader's HTTP cache
+  // from before that header shipped would otherwise still win here.
   if (request.mode === 'navigate') {
     event.respondWith(
       (async () => {
         try {
-          const fresh = await fetch(request);
+          const fresh = await fetch(request, { cache: 'no-store' });
           // Keep a copy so a previously-visited page still opens offline.
           const copy = fresh.clone();
           caches.open(PAGES).then((cache) => cache.put(request, copy));

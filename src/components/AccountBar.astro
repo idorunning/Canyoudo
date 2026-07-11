@@ -1,0 +1,110 @@
+---
+// Signed-in marker + personalised greeting, shown in the header once a
+// reader has signed in (the same magic-link/Google auth already used by
+// MemberGate elsewhere on the site). Two triggers — one for the desktop
+// actions row, one for the mobile actions row — open the same account
+// panel, where a reader can optionally set their name, role, location and
+// area of interest. All of it is progressive enhancement: with no auth
+// configured, or before JS resolves the session, nothing renders.
+//
+// See src/scripts/account/header-account.ts for the controller. Three parts,
+// placed independently so each sits inline in the header row it belongs to —
+// the desktop trigger in the desktop actions row, the mobile trigger in the
+// mobile actions row — while the panel (and welcome-adjacent script) render
+// once. Astro dedupes the identical <script> across all three instances
+// (same mechanism MemberGate relies on), so calling this three times per page
+// is safe.
+interface Props {
+  part: 'trigger-desktop' | 'trigger-mobile' | 'dialogs';
+}
+const { part } = Astro.props;
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+---
+{hasAuth && part === 'trigger-desktop' && (
+  <button
+    type="button"
+    data-account-toggle
+    hidden
+    class="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border border-ink-200 text-ink-700 hover:border-accent hover:text-accent transition-colors"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+  >
+    <span data-account-avatar class="w-6 h-6 rounded-full bg-accent text-paper-50 dark:text-night-50 flex items-center justify-center font-sans text-[11px] font-bold shrink-0" aria-hidden="true">•</span>
+    <span data-account-greeting-short class="font-sans text-[13px] font-semibold whitespace-nowrap">Signed in</span>
+  </button>
+)}
+
+{hasAuth && part === 'trigger-mobile' && (
+  <button
+    type="button"
+    data-account-toggle
+    hidden
+    class="p-1.5 rounded-full text-ink-500 hover:text-ink-900 transition-colors"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-label="Your account"
+  >
+    <span data-account-avatar class="w-7 h-7 rounded-full bg-accent text-paper-50 dark:text-night-50 flex items-center justify-center font-sans text-[12px] font-bold" aria-hidden="true">•</span>
+  </button>
+)}
+
+{hasAuth && part === 'dialogs' && (
+    <div id="tap-account-panel" class="hidden fixed inset-0 z-[59] bg-night-50/50 backdrop-blur-[2px] px-4 pt-[10vh]" aria-hidden="true">
+      <div
+        class="mx-auto w-full max-w-sm bg-paper-50 border border-ink-200 rounded-xl overflow-hidden shadow-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Your account"
+      >
+        <div class="px-5 pt-5 pb-4 border-b border-ink-200">
+          <p data-account-greeting-full class="font-serif text-[15px] text-ink-800 leading-snug">Signed in</p>
+        </div>
+
+        <form data-account-form class="px-5 py-5 space-y-3.5">
+          <p class="u-kicker u-kicker--dim">Tell us a little about you · all optional</p>
+          <div>
+            <label for="account-name" class="block font-sans text-xs font-semibold text-ink-600 mb-1">Name</label>
+            <input id="account-name" name="name" type="text" maxlength="80" autocomplete="name"
+              class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+          </div>
+          <div>
+            <label for="account-role" class="block font-sans text-xs font-semibold text-ink-600 mb-1">Role</label>
+            <input id="account-role" name="role" type="text" maxlength="80" placeholder="e.g. Chief Inspector"
+              class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+          </div>
+          <div>
+            <label for="account-location" class="block font-sans text-xs font-semibold text-ink-600 mb-1">Location</label>
+            <input id="account-location" name="location" type="text" maxlength="80"
+              class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+          </div>
+          <div>
+            <label for="account-interest" class="block font-sans text-xs font-semibold text-ink-600 mb-1">Area of interest</label>
+            <input id="account-interest" name="interest" type="text" maxlength="80" placeholder="e.g. neighbourhood policing"
+              class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+          </div>
+          <div class="flex items-center justify-between pt-1">
+            <button type="submit" class="font-sans text-sm font-bold bg-accent text-paper-50 dark:text-night-50 rounded-full px-4 py-2 hover:bg-accent-dark transition-colors">
+              Save
+            </button>
+            <span data-account-saved class="hidden font-sans text-xs text-ink-500">Saved</span>
+          </div>
+        </form>
+
+        <div class="px-5 pb-5 pt-1 border-t border-ink-200 flex items-center justify-between">
+          <button type="button" data-account-signout class="font-sans text-xs underline underline-offset-2 text-ink-500 hover:text-accent">
+            Sign out
+          </button>
+          <button type="button" data-account-close class="font-sans text-xs font-semibold text-ink-600 hover:text-ink-900">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+)}
+
+<script>
+  import { initHeaderAccount } from '../scripts/account/header-account';
+  initHeaderAccount();
+</script>

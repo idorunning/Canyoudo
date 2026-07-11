@@ -1,0 +1,119 @@
+---
+// A small share dock pinned to the bottom-right of the viewport on article
+// pages: X, LinkedIn, copy link. Replaces the old text-selection popup
+// (QuoteShare), which appeared over the reading column and got in the way.
+// This dock sits clear of the prose at all times instead of popping up over
+// it, and stays put through scroll rather than following the selection.
+interface Props {
+  title: string;
+  url: string;
+}
+const { title, url } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+---
+
+<div
+  data-pagefind-ignore
+  data-share-dock
+  class="fixed z-40 bottom-4 right-4 md:bottom-6 md:right-6 flex items-center gap-1 rounded-full border border-ink-200 bg-paper-50 shadow-lg px-1.5 py-1.5"
+  style="padding-bottom: max(0.375rem, env(safe-area-inset-bottom));"
+>
+  <a
+    href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Share on X"
+    data-share-dock-link
+    class="share-dock-btn"
+  >
+    X
+  </a>
+  <a
+    href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Share on LinkedIn"
+    data-share-dock-link
+    class="share-dock-btn"
+  >
+    in
+  </a>
+  <button
+    type="button"
+    data-share-dock-copy
+    data-share-url={url}
+    data-share-title={title}
+    aria-label="Copy link to this article"
+    class="share-dock-btn"
+  >
+    <span data-share-dock-copy-label aria-hidden="true">🔗</span>
+  </button>
+</div>
+
+<style>
+  .share-dock-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9999px;
+    font-family: theme('fontFamily.sans');
+    font-size: 13px;
+    font-weight: 700;
+    color: rgb(var(--ink-700));
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+  .share-dock-btn:hover {
+    background: rgb(var(--paper-200));
+    color: rgb(var(--accent));
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-share-dock]').forEach((dock) => {
+    const copyBtn = dock.querySelector<HTMLButtonElement>('[data-share-dock-copy]');
+    const label = dock.querySelector<HTMLElement>('[data-share-dock-copy-label]');
+    const links = dock.querySelectorAll<HTMLAnchorElement>('[data-share-dock-link]');
+
+    // Every share action (link click or copy) counts toward the article's
+    // share tally — the engagement script in ArticleLayout listens for this.
+    function bump() {
+      document.dispatchEvent(new CustomEvent('tap:share'));
+    }
+    links.forEach((a) => a.addEventListener('click', bump));
+
+    if (!copyBtn || !label) return;
+    const url = copyBtn.dataset.shareUrl ?? window.location.href;
+    const title = copyBtn.dataset.shareTitle ?? document.title;
+    const defaultText = label.textContent ?? '🔗';
+
+    copyBtn.addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, url });
+          bump();
+          return;
+        } catch {
+          // Dismissed or unsupported for this data — fall through to copy.
+        }
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        input.remove();
+      }
+      bump();
+      label.textContent = '✓';
+      window.setTimeout(() => {
+        label.textContent = defaultText;
+      }, 2000);
+    });
+  });
+</script>

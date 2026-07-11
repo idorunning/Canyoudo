@@ -18,9 +18,13 @@ const hasAuth = Boolean(
   import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
 
+// Influential People profiles carry a practicalSummary too (every article
+// does), but a biography isn't a senior-leader briefing — it doesn't belong
+// in this library, so it's excluded here even though the section itself
+// still appears in SECTIONS/SECTION_LABELS for its own archive page.
 const articles = await getCollection(
   'articles',
-  ({ data }) => !data.draft && Boolean(data.practicalSummary)
+  ({ data }) => !data.draft && data.section !== 'influential-people' && Boolean(data.practicalSummary)
 );
 
 // Tags resolve to topic archives exactly as they do on the article pages.

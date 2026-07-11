@@ -1,5 +1,6 @@
 ---
 import SearchModal from './SearchModal.astro';
+import AccountBar from './AccountBar.astro';
 import { getEntry } from 'astro:content';
 
 const primaryLinks = [
@@ -112,6 +113,8 @@ const currentPath = Astro.url.pathname;
           <span class="hidden lg:inline font-sans text-[13px] font-medium">Search</span>
         </button>
 
+        <AccountBar part="trigger-desktop" />
+
         <a
           href="/subscribe"
           class="bg-accent text-paper-50 dark:text-night-50 rounded-full px-4 py-2 text-[13px] font-bold hover:bg-accent-dark transition-colors"
@@ -122,6 +125,7 @@ const currentPath = Astro.url.pathname;
 
       <!-- Mobile actions -->
       <div class="md:hidden flex items-center gap-1">
+        <AccountBar part="trigger-mobile" />
         <button
           type="button"
           data-theme-toggle
@@ -239,6 +243,7 @@ const currentPath = Astro.url.pathname;
 </header>
 
 <SearchModal />
+<AccountBar part="dialogs" />
 
 <style>
   /* The masthead's height animates as [data-scrolled] toggles (see below). Its

@@ -10,6 +10,7 @@ import '@fontsource/ibm-plex-mono/600.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SupportCTA from '../components/SupportCTA.astro';
+import WelcomeModal from '../components/WelcomeModal.astro';
 
 interface Props {
   title: string;
@@ -48,13 +49,14 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {/* Set the colour theme before first paint to avoid a flash. Honours a
-        saved choice, falling back to the OS preference. */}
+    {/* Set the colour theme before first paint to avoid a flash. Light is the
+        default for every reader; dark only applies once someone has explicitly
+        chosen it via the toggle (saved to localStorage), regardless of OS
+        preference. */}
     <script is:inline>
       (function () {
         try {
-          var t = localStorage.getItem('theme');
-          if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.classList.add('dark');
           }
         } catch (e) {}
@@ -156,6 +158,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
       Skip to content
     </a>
     <Header />
+    <WelcomeModal />
 <SupportCTA variant="banner" />
     <main id="main" class="flex-1">
       <slot />

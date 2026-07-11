@@ -29,3 +29,17 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    # Pages must always be revalidated: a reader who has a page open in a
+    # background tab, or whose browser cached it from before the last deploy,
+    # should never keep seeing it once it's out of date. Costs a round-trip
+    # on every repeat visit; correctness after a fast-turnaround fix wins over
+    # that. Hashed build assets get their own long-lived rule below, which
+    # (being more specific) overrides this for /_astro/*.
+    Cache-Control = "no-cache"
+
+# Astro's hashed JS/CSS bundles are content-addressed — a changed file gets a
+# new filename, so the old one can be cached forever without risk of staleness.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
