@@ -1,0 +1,29 @@
+---
+// Horizontal breakdown bars (referrers, roles, monthly growth…) as plain
+// divs — simpler and more accessible than SVG for labelled categorical data.
+interface Props {
+  items: { name: string; count: number }[];
+  emptyLabel?: string;
+}
+
+const { items, emptyLabel = 'No data yet.' } = Astro.props;
+const max = Math.max(...items.map((i) => i.count), 1);
+---
+
+{items.length === 0 ? (
+  <p class="text-sm text-ink-500">{emptyLabel}</p>
+) : (
+  <ul class="space-y-2">
+    {items.map((item) => (
+      <li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 text-sm">
+        <div class="min-w-0">
+          <span class="block truncate text-ink-700">{item.name}</span>
+          <div class="mt-1 h-2 rounded bg-paper-200">
+            <div class="h-2 rounded bg-accent" style={`width: ${Math.max(2, (item.count / max) * 100)}%`}></div>
+          </div>
+        </div>
+        <span class="text-ink-500 tabular-nums">{item.count.toLocaleString('en-GB')}</span>
+      </li>
+    ))}
+  </ul>
+)}

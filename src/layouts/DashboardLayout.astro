@@ -1,0 +1,81 @@
+---
+// Chrome shared by every /dashboard page: noindex, section nav, and the three
+// non-authenticated states (unconfigured / login form / content slot). Pages
+// call adminGuard() themselves — layouts can't return redirects — and pass
+// the result in, so this only has to render.
+import BaseLayout from './BaseLayout.astro';
+import type { AdminAuth } from '../lib/admin-guard';
+
+interface Props {
+  title: string;
+  active: 'overview' | 'articles' | 'audience' | 'newsletter' | 'traffic';
+  auth: AdminAuth;
+  // The power tables want more room than the site's usual reading column.
+  wide?: boolean;
+}
+
+const { title, active, auth, wide = false } = Astro.props;
+
+const nav = [
+  { key: 'overview', label: 'Overview', href: '/dashboard' },
+  { key: 'articles', label: 'Articles', href: '/dashboard/articles' },
+  { key: 'audience', label: 'Audience', href: '/dashboard/audience' },
+  { key: 'newsletter', label: 'Newsletter', href: '/dashboard/newsletter' },
+  { key: 'traffic', label: 'Traffic', href: '/dashboard/traffic' },
+] as const;
+---
+
+<BaseLayout title={title} description="Internal site dashboard." noindex={true}>
+  <div class={`${wide ? 'max-w-6xl' : 'max-w-3xl'} mx-auto px-6 lg:px-10 py-14 md:py-20`}>
+    <div class="flex flex-wrap items-baseline justify-between gap-4 mb-6">
+      <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900">Dashboard</h1>
+      {auth.state === 'ok' && (
+        <a href="/dashboard?logout=1" class="text-sm text-ink-500 underline">Sign out</a>
+      )}
+    </div>
+
+    {auth.state === 'ok' && (
+      <nav class="flex flex-wrap gap-1 mb-10 border-b border-ink-200 pb-px" aria-label="Dashboard sections">
+        {nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={item.key === active ? 'page' : undefined}
+            class={`font-sans text-sm px-3 py-2 rounded-t border-b-2 transition-colors ${
+              item.key === active
+                ? 'border-accent text-ink-900 font-semibold'
+                : 'border-transparent text-ink-600 hover:text-ink-900 hover:border-ink-300'
+            }`}
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    )}
+
+    {auth.state === 'unconfigured' && (
+      <p class="text-sm text-ink-600">
+        Set <code>ADMIN_DASHBOARD_PASSWORD</code> in your environment variables to enable this page.
+      </p>
+    )}
+
+    {auth.state === 'login' && (
+      <form method="POST" class="max-w-xs space-y-4">
+        <label class="block">
+          <span class="block text-sm font-medium text-ink-700 mb-1">Password</span>
+          <input
+            type="password"
+            name="password"
+            required
+            class="w-full border border-ink-300 rounded px-3 py-2"
+          />
+        </label>
+        {auth.failed && <p class="text-sm text-red-600">Wrong password.</p>}
+        <button type="submit" class="bg-ink-900 text-white rounded px-4 py-2 text-sm font-medium">
+          Sign in
+        </button>
+      </form>
+    )}
+
+    {auth.state === 'ok' && <slot />}
+  </div>
+</BaseLayout>

@@ -1,0 +1,185 @@
+---
+// Admin dashboard overview: headline numbers from every connected service,
+// each tile linking to its detail page. Server-rendered on every request
+// (never prerendered) so the numbers are live and the page can gate on a
+// login check.
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { adminGuard } from '../../lib/admin-guard';
+import { getTrafficStats } from '../../lib/dashboard-data/goatcounter';
+import { getSubscriberStats } from '../../lib/dashboard-data/mailerlite';
+import {
+  getEngagement,
+  getPollResults,
+  getRecentSignups,
+  getSignupStats,
+} from '../../lib/dashboard-data/supabase-admin';
+import { getAiSpend } from '../../lib/dashboard-data/ai-budget';
+
+const auth = await adminGuard(Astro);
+if (auth.state === 'redirect') return auth.response;
+
+const [traffic, subscribers, signups, engagement, recentSignups, aiSpend, polls] =
+  auth.state === 'ok'
+    ? await Promise.all([
+        getTrafficStats(),
+        getSubscriberStats(),
+        getSignupStats(),
+        getEngagement(),
+        getRecentSignups(5),
+        getAiSpend(),
+        getPollResults(),
+      ])
+    : [null, null, null, null, null, null, null];
+
+// Roll the per-article engagement map up into site-wide totals.
+const totals = { views: 0, shares: 0, ratingSum: 0, ratingCount: 0 };
+if (engagement?.ok) {
+  for (const e of engagement.data.values()) {
+    totals.views += e.viewCount;
+    totals.shares += e.shareCount;
+    totals.ratingSum += e.ratingSum;
+    totals.ratingCount += e.ratingCount;
+  }
+}
+const avgRating = totals.ratingCount > 0 ? (totals.ratingSum / totals.ratingCount).toFixed(1) : null;
+
+const latestPoll = polls?.ok && polls.data.length > 0 ? polls.data[0] : null;
+
+function shortDate(iso: string): string {
+  return iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
+}
+---
+
+<DashboardLayout title="Dashboard" active="overview" auth={auth}>
+  <div class="grid gap-6 sm:grid-cols-3 mb-10">
+    <a href="/dashboard/traffic" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Site visits (recent)</p>
+      {traffic?.ok ? (
+        <>
+          <p class="text-2xl font-semibold text-ink-900">{traffic.data.totalPageviews.toLocaleString('en-GB')}</p>
+          <p class="text-xs text-ink-500">{traffic.data.totalVisitors.toLocaleString('en-GB')} visitors</p>
+        </>
+      ) : (
+        <p class="text-sm text-ink-500">{traffic?.reason}</p>
+      )}
+    </a>
+
+    <a href="/dashboard/newsletter" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Email subscribers</p>
+      {subscribers?.ok ? (
+        <p class="text-2xl font-semibold text-ink-900">{subscribers.data.activeCount.toLocaleString('en-GB')}</p>
+      ) : (
+        <p class="text-sm text-ink-500">{subscribers?.reason}</p>
+      )}
+    </a>
+
+    <a href="/dashboard/audience" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Reader sign-ups</p>
+      {signups?.ok ? (
+        <p class="text-2xl font-semibold text-ink-900">{signups.data.totalUsers.toLocaleString('en-GB')}</p>
+      ) : (
+        <p class="text-sm text-ink-500">{signups?.reason}</p>
+      )}
+    </a>
+
+    <a href="/dashboard/articles" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Article views · shares</p>
+      {engagement?.ok ? (
+        <>
+          <p class="text-2xl font-semibold text-ink-900">{totals.views.toLocaleString('en-GB')}</p>
+          <p class="text-xs text-ink-500">{totals.shares.toLocaleString('en-GB')} shares</p>
+        </>
+      ) : (
+        <p class="text-sm text-ink-500">{engagement?.reason}</p>
+      )}
+    </a>
+
+    <a href="/dashboard/articles" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Average rating</p>
+      {engagement?.ok ? (
+        avgRating ? (
+          <>
+            <p class="text-2xl font-semibold text-ink-900">{avgRating} / 5</p>
+            <p class="text-xs text-ink-500">{totals.ratingCount.toLocaleString('en-GB')} ratings</p>
+          </>
+        ) : (
+          <p class="text-sm text-ink-500">No ratings yet.</p>
+        )
+      ) : (
+        <p class="text-sm text-ink-500">{engagement?.reason}</p>
+      )}
+    </a>
+
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">AI spend this month</p>
+      {aiSpend?.ok ? (
+        <>
+          <p class="text-2xl font-semibold text-ink-900">${aiSpend.data.estimatedUsd.toFixed(2)}</p>
+          <p class="text-xs text-ink-500">of ${aiSpend.data.limitUsd.toFixed(0)} budget</p>
+        </>
+      ) : (
+        <p class="text-sm text-ink-500">{aiSpend?.reason}</p>
+      )}
+    </div>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2 mb-10">
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Recent sign-ups</p>
+      {recentSignups?.ok ? (
+        recentSignups.data.length > 0 ? (
+          <ol class="space-y-1 text-sm">
+            {recentSignups.data.map((u) => (
+              <li class="flex justify-between gap-4">
+                <span class="truncate text-ink-700">{u.email}</span>
+                <span class="text-ink-500 whitespace-nowrap">{shortDate(u.createdAt)}</span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="text-sm text-ink-500">No sign-ups yet.</p>
+        )
+      ) : (
+        <p class="text-sm text-ink-500">{recentSignups?.reason}</p>
+      )}
+    </div>
+
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">
+        Homepage poll{latestPoll ? ` — ${latestPoll.month}` : ''}
+      </p>
+      {polls?.ok ? (
+        latestPoll ? (
+          <ol class="space-y-1 text-sm">
+            {latestPoll.choices.map((c) => (
+              <li class="flex justify-between gap-4">
+                <span class="truncate text-ink-700 capitalize">{c.choice}</span>
+                <span class="text-ink-500 tabular-nums">{c.votes.toLocaleString('en-GB')}</span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="text-sm text-ink-500">No poll votes yet.</p>
+        )
+      ) : (
+        <p class="text-sm text-ink-500">{polls?.reason}</p>
+      )}
+    </div>
+  </div>
+
+  {traffic?.ok && traffic.data.topPaths.length > 0 && (
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-visited pages</p>
+      <ol class="space-y-1 text-sm">
+        {traffic.data.topPaths.map((p) => (
+          <li class="flex justify-between gap-4">
+            <span class="truncate text-ink-700">{p.path}</span>
+            <span class="text-ink-500 tabular-nums">{p.count.toLocaleString('en-GB')}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )}
+</DashboardLayout>

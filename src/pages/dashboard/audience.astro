@@ -1,0 +1,124 @@
+---
+// Audience page: every reader account (GoTrue) joined with the optional
+// profile they filled in (reader_profiles: name, role, location, interest,
+// newsletter choice), plus breakdowns and the saved-articles leaderboard.
+// Reader emails are private — this page is admin-only, noindex, behind the
+// password gate, and the data never reaches any client script.
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Bars from '../../components/dashboard/Bars.astro';
+import { adminGuard } from '../../lib/admin-guard';
+import { getSavedArticleCounts, listReaders } from '../../lib/dashboard-data/supabase-admin';
+
+const auth = await adminGuard(Astro);
+if (auth.state === 'redirect') return auth.response;
+
+const [readers, saves] =
+  auth.state === 'ok' ? await Promise.all([listReaders(), getSavedArticleCounts()]) : [null, null];
+
+const summary = readers?.ok ? readers.data.summary : null;
+const list = readers?.ok ? readers.data.readers : [];
+
+const topSaved = saves?.ok
+  ? [...saves.data.entries()]
+      .map(([slug, count]) => ({ name: slug, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10)
+  : [];
+
+function fmtDate(iso: string): string {
+  return iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+}
+---
+
+<DashboardLayout title="Audience" active="audience" auth={auth} wide={true}>
+  {!readers?.ok && <p class="text-sm text-ink-500 mb-6">{readers?.reason}</p>}
+
+  {summary && (
+    <div class="grid gap-6 sm:grid-cols-4 mb-10">
+      <div class="border border-ink-200 rounded-lg p-5">
+        <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Total readers</p>
+        <p class="text-2xl font-semibold text-ink-900">{summary.total.toLocaleString('en-GB')}</p>
+        {summary.truncated && <p class="text-xs text-ink-500">showing first 1,000</p>}
+      </div>
+      <div class="border border-ink-200 rounded-lg p-5">
+        <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">New this month</p>
+        <p class="text-2xl font-semibold text-ink-900">{summary.newThisMonth.toLocaleString('en-GB')}</p>
+      </div>
+      <div class="border border-ink-200 rounded-lg p-5">
+        <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Newsletter opt-in</p>
+        <p class="text-2xl font-semibold text-ink-900">{summary.subscribedPct}%</p>
+      </div>
+      <div class="border border-ink-200 rounded-lg p-5">
+        <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Sign-in method</p>
+        <p class="text-sm text-ink-700">
+          {summary.byProvider.map((p) => `${p.name} ${p.count}`).join(' · ') || '—'}
+        </p>
+      </div>
+    </div>
+  )}
+
+  {summary && (
+    <div class="grid gap-6 md:grid-cols-3 mb-10">
+      <div class="border border-ink-200 rounded-lg p-5">
+        <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">By role</p>
+        <Bars items={summary.byRole} emptyLabel="No roles given yet." />
+      </div>
+      <div class="border border-ink-200 rounded-lg p-5">
+        <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">By interest</p>
+        <Bars items={summary.byInterest} emptyLabel="No interests given yet." />
+      </div>
+      <div class="border border-ink-200 rounded-lg p-5">
+        <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-saved articles</p>
+        {saves?.ok ? (
+          <Bars items={topSaved} emptyLabel="No saved articles yet." />
+        ) : (
+          <p class="text-sm text-ink-500">{saves?.reason}</p>
+        )}
+      </div>
+    </div>
+  )}
+
+  {readers?.ok && (
+    <div class="overflow-x-auto border border-ink-200 rounded-lg">
+      <table data-sortable class="w-full text-sm">
+        <thead class="bg-paper-100 text-left">
+          <tr>
+            <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Email</th>
+            <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Name</th>
+            <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Role</th>
+            <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Location</th>
+            <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Interest</th>
+            <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Newsletter</th>
+            <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 whitespace-nowrap">Joined</th>
+            <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 whitespace-nowrap">Last sign-in</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-ink-100">
+          {list.map((r) => (
+            <tr class="hover:bg-paper-100/60">
+              <td data-sort-value={r.email.toLowerCase()} class="px-3 py-2 text-ink-900">{r.email}</td>
+              <td data-sort-value={r.name.toLowerCase()} class="px-3 py-2 text-ink-700">{r.name || '—'}</td>
+              <td data-sort-value={r.role.toLowerCase()} class="px-3 py-2 text-ink-700">{r.role || '—'}</td>
+              <td data-sort-value={r.location.toLowerCase()} class="px-3 py-2 text-ink-700">{r.location || '—'}</td>
+              <td data-sort-value={r.interest.toLowerCase()} class="px-3 py-2 text-ink-700">{r.interest || '—'}</td>
+              <td data-sort-value={r.subscribed === true ? 1 : 0} class="px-3 py-2 text-ink-700">
+                {r.subscribed === true ? '✓' : '—'}
+              </td>
+              <td data-sort-value={r.createdAt} class="px-3 py-2 whitespace-nowrap text-ink-700">{fmtDate(r.createdAt)}</td>
+              <td data-sort-value={r.lastSignInAt} class="px-3 py-2 whitespace-nowrap text-ink-700">{fmtDate(r.lastSignInAt)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )}
+
+  <p class="text-xs text-ink-500 mt-3">
+    Reader emails are private — this page is admin-only. Profile fields are whatever each reader chose to
+    share in their account panel; blanks mean they left it empty. Click a column heading to sort.
+  </p>
+
+  <script src="../../scripts/dashboard-table-sort.ts"></script>
+</DashboardLayout>

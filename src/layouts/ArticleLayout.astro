@@ -545,7 +545,25 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
       });
     }
 
-    const saved = Number(localStorage.getItem(key));
+    // Community rating tally (supabase/migrations/0007_article_ratings.sql).
+    // Fire-and-forget with the same failure contract as the view/share
+    // counters above: no Supabase config means the stars still work locally
+    // via localStorage. The previous star goes along so re-rating adjusts the
+    // sum instead of counting the same reader twice.
+    const ratedSlug = document.querySelector('[data-share-panel]')?.getAttribute('data-article-slug');
+    function sendRating(rating: number, prev: number | null) {
+      const supaUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+      const anonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+      if (!ratedSlug || !supaUrl || !anonKey) return;
+      import('@supabase/supabase-js')
+        .then(({ createClient }) =>
+          createClient(supaUrl, anonKey, { auth: { persistSession: false } })
+            .rpc('rate_article', { p_slug: ratedSlug, p_rating: rating, p_prev: prev })
+        )
+        .then(() => {}, () => {});
+    }
+
+    let saved = Number(localStorage.getItem(key));
     if (saved) {
       setStars(saved);
       if (thanks) {
@@ -559,6 +577,8 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
       btn.addEventListener('mouseleave', () => setStars(saved || 0));
       btn.addEventListener('click', () => {
         const rating = Number(btn.dataset.star);
+        const prev = saved || null;
+        saved = rating;
         localStorage.setItem(key, String(rating));
         (window as any).__starRating = rating;
         setStars(rating);
@@ -566,6 +586,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
           thanks.textContent = `Thanks — you rated this ${rating}/5.`;
           thanks.classList.remove('hidden');
         }
+        if (rating !== prev) sendRating(rating, prev);
       });
     });
   }
