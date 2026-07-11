@@ -23,6 +23,7 @@
     "fetch-perception-bbc-dataset": "node scripts/perception/fetch-bbc-dataset.mjs",
     "build-perception": "node scripts/build-perception.mjs",
     "generate-perception-clouds": "node scripts/generate-perception-clouds.mjs",
+    "validate:summaries": "node scripts/validate-summaries.mjs",
     "test": "node --test tests/*.test.mjs",
     "astro": "astro"
   },
@@ -49,6 +50,7 @@
     "tailwindcss": "^3.4.15"
   },
   "devDependencies": {
+    "gray-matter": "^4.0.3",
     "image-size": "^2.0.2",
     "pagefind": "^1.5.2",
     "sharp": "^0.33.5",

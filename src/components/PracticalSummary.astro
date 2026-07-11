@@ -1,0 +1,392 @@
+---
+// The Practical Summary card — a briefing for senior leaders distilled from
+// one article: the problem it addresses, what the evidence says (only the
+// strongest, linking only to sources already cited in the piece), and if/then
+// outcomes — if we do X, this is the benefit and who gains.
+//
+// Two variants share the same three-part grammar:
+//  - 'article' (default): the flagship night-panel treatment rendered by
+//    ArticleLayout at the foot of every article body.
+//  - 'hub': a lighter card-hairline treatment for the /practical-summaries
+//    collection page, headed by the article it summarises.
+import SectionBadge from './SectionBadge.astro';
+import SaveButton from './SaveButton.astro';
+import type { Section } from '../content/config';
+import type { PracticalSummary } from '../content/config';
+
+interface Props {
+  summary: PracticalSummary;
+  variant?: 'article' | 'hub';
+  id?: string;
+  // hub variant only:
+  articleTitle?: string;
+  articleUrl?: string;
+  articleDescription?: string;
+  section?: Section;
+  // The article's own tags, resolved by the page (href present when the tag
+  // maps to a topic archive), so a summary is tagged exactly like its article.
+  tags?: { label: string; href?: string }[];
+}
+
+const {
+  summary,
+  variant = 'article',
+  id = variant === 'article' ? 'practical-summary' : undefined,
+  articleTitle,
+  articleUrl,
+  articleDescription,
+  section,
+  tags = [],
+} = Astro.props;
+
+const { problem, evidence, outcomes } = summary;
+
+// A source pill's label falls back to the link's hostname, so a bare URL
+// still reads as a named source rather than a wall of address.
+const hostOf = (url: string) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return url;
+  }
+};
+
+const parts = [
+  { n: '01', label: 'The problem' },
+  { n: '02', label: 'What the evidence says' },
+  { n: '03', label: 'If we act' },
+];
+---
+
+{variant === 'article' ? (
+  <aside
+    id={id}
+    data-reveal
+    data-pagefind-ignore
+    aria-labelledby="ps-heading"
+    class="ps ps--article surface-night rounded-xl mt-12 p-7 md:p-10 overflow-hidden"
+  >
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <div class="ps-rule h-[3px] w-12 bg-accent-light mb-5" aria-hidden="true"></div>
+        <p class="font-sans text-xs font-semibold uppercase tracking-[0.16em] text-accent-light mb-2.5">
+          Practical summary
+        </p>
+        <h2 id="ps-heading" class="ps-heading font-display text-2xl md:text-[1.75rem] font-bold leading-tight m-0">
+          The problem, the evidence, the payoff
+        </h2>
+      </div>
+      <a href="/practical-summaries" class="ps-all-link font-sans text-xs font-semibold text-accent-light whitespace-nowrap shrink-0 mt-1">
+        All summaries <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+
+    <section class="ps-section">
+      <p class="ps-label"><span class="ps-num font-mono u-tnum">{parts[0].n}</span>{parts[0].label}</p>
+      <p class="ps-problem font-serif m-0">{problem}</p>
+    </section>
+
+    <section class="ps-section">
+      <p class="ps-label"><span class="ps-num font-mono u-tnum">{parts[1].n}</span>{parts[1].label}</p>
+      <ol class="ps-evidence" role="list">
+        {evidence.map((item, i) => (
+          <li>
+            <span class="ps-point-num font-mono u-tnum" aria-hidden="true">{i + 1}</span>
+            <div class="min-w-0">
+              <p class="ps-point font-serif m-0">{item.point}</p>
+              {(item.url || item.source) && (
+                item.url ? (
+                  <a href={item.url} target="_blank" rel="noopener noreferrer" class="ps-chip ps-chip--link font-sans">
+                    {item.source || hostOf(item.url)} <span aria-hidden="true">↗</span>
+                  </a>
+                ) : (
+                  <span class="ps-chip font-sans">{item.source}</span>
+                )
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="ps-section">
+      <p class="ps-label"><span class="ps-num font-mono u-tnum">{parts[2].n}</span>{parts[2].label}</p>
+      <ul class="ps-outcomes" role="list">
+        {outcomes.map((o) => (
+          <li>
+            <span class="ps-arrow" aria-hidden="true">→</span>
+            <p class="ps-point font-serif m-0">
+              <strong class="ps-if">If we {o.action},</strong> {o.benefit}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </aside>
+) : (
+  <article id={id} class="ps ps--hub card-hairline rounded-xl p-6 md:p-7 flex flex-col">
+    <div class="h-[3px] w-10 bg-accent mb-4" aria-hidden="true"></div>
+    {section && <div class="mb-2.5"><SectionBadge section={section} /></div>}
+    {articleTitle && (
+      <div class="flex items-start justify-between gap-3 mb-1">
+        <h3 class="font-display text-lg font-bold text-ink-900 leading-snug tracking-[-0.015em] m-0">
+          {articleUrl ? (
+            <a href={articleUrl} class="hover:text-accent transition-colors">{articleTitle}</a>
+          ) : (
+            articleTitle
+          )}
+        </h3>
+        {/* Saves the summary's article to the member's library — same store
+            as the save button in the article header. */}
+        {id && section && (
+          <div class="shrink-0 -mt-1">
+            <SaveButton slug={id} section={section} title={articleTitle} description={articleDescription} />
+          </div>
+        )}
+      </div>
+    )}
+
+    <section class="ps-section">
+      <p class="ps-label u-kicker"><span class="ps-num font-mono u-tnum">{parts[0].n}</span>{parts[0].label}</p>
+      <p class="ps-problem font-serif m-0">{problem}</p>
+    </section>
+
+    <section class="ps-section">
+      <p class="ps-label u-kicker"><span class="ps-num font-mono u-tnum">{parts[1].n}</span>{parts[1].label}</p>
+      <ol class="ps-evidence" role="list">
+        {evidence.map((item, i) => (
+          <li>
+            <span class="ps-point-num font-mono u-tnum" aria-hidden="true">{i + 1}</span>
+            <div class="min-w-0">
+              <p class="ps-point font-serif m-0">{item.point}</p>
+              {(item.url || item.source) && (
+                item.url ? (
+                  <a href={item.url} target="_blank" rel="noopener noreferrer" class="ps-chip ps-chip--link font-sans">
+                    {item.source || hostOf(item.url)} <span aria-hidden="true">↗</span>
+                  </a>
+                ) : (
+                  <span class="ps-chip font-sans">{item.source}</span>
+                )
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="ps-section">
+      <p class="ps-label u-kicker"><span class="ps-num font-mono u-tnum">{parts[2].n}</span>{parts[2].label}</p>
+      <ul class="ps-outcomes" role="list">
+        {outcomes.map((o) => (
+          <li>
+            <span class="ps-arrow" aria-hidden="true">→</span>
+            <p class="ps-point font-serif m-0">
+              <strong class="ps-if">If we {o.action},</strong> {o.benefit}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-1.5 mt-5">
+        {tags.map((tag) =>
+          tag.href ? (
+            <a href={tag.href} class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors">
+              {tag.label}
+            </a>
+          ) : (
+            <span class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded">{tag.label}</span>
+          )
+        )}
+      </div>
+    )}
+
+    {articleUrl && (
+      <p class="mt-auto pt-5 m-0">
+        <a href={articleUrl} class="font-sans text-[13px] font-semibold text-accent hover:text-accent-dark transition-colors">
+          Read the full article →
+        </a>
+      </p>
+    )}
+  </article>
+)}
+
+<style>
+  /* Shared three-part grammar. The night variant colours with raw
+     rgb(var(--night-*)) — there are no Tailwind night text utilities;
+     .surface-night in global.css is the precedent. */
+  .ps-section {
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .ps--article .ps-section {
+    border-top: 1px solid rgb(var(--night-line));
+  }
+  .ps--hub .ps-section {
+    border-top: 1px solid rgb(var(--ink-200));
+    padding-top: 1.1rem;
+    margin-top: 1.1rem;
+  }
+  .ps--hub .ps-section:first-of-type {
+    border-top: 0;
+    margin-top: 0.35rem;
+  }
+
+  .ps-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin: 0 0 0.7rem;
+  }
+  .ps--article .ps-label {
+    font-family: theme('fontFamily.sans');
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(var(--night-ink-dim));
+  }
+  .ps-num {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .ps--article .ps-num { color: rgb(var(--accent-light)); }
+  .ps--hub .ps-num { color: rgb(var(--accent)); }
+
+  .ps--article .ps-heading { color: rgb(var(--night-ink)); }
+
+  .ps-problem,
+  .ps-point {
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  .ps--hub .ps-problem,
+  .ps--hub .ps-point {
+    font-size: 0.975rem;
+    line-height: 1.55;
+  }
+  .ps--article .ps-problem,
+  .ps--article .ps-point { color: rgb(var(--night-ink)); }
+  .ps--hub .ps-problem,
+  .ps--hub .ps-point { color: rgb(var(--ink-800)); }
+
+  /* The if/then lead-in carries the emphasis; the benefit reads on from it. */
+  .ps-if {
+    font-weight: 700;
+  }
+
+  .ps-evidence,
+  .ps-outcomes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .ps--hub .ps-evidence,
+  .ps--hub .ps-outcomes { gap: 0.75rem; }
+  .ps-evidence > li,
+  .ps-outcomes > li {
+    display: flex;
+    gap: 0.85rem;
+    align-items: baseline;
+  }
+  .ps-point-num {
+    flex-shrink: 0;
+    width: 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .ps--article .ps-point-num { color: rgb(var(--accent-light)); }
+  .ps--hub .ps-point-num { color: rgb(var(--accent)); }
+  .ps-arrow {
+    flex-shrink: 0;
+    width: 1.1rem;
+    font-size: 0.9em;
+    font-weight: 700;
+  }
+  .ps--article .ps-arrow { color: rgb(var(--accent-light)); }
+  .ps--hub .ps-arrow { color: rgb(var(--accent)); }
+
+  /* Source pill under an evidence point. */
+  .ps-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin-top: 0.45rem;
+    padding: 0.22rem 0.65rem;
+    border-radius: 9999px;
+    border: 1px solid;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    max-width: 100%;
+  }
+  .ps--article .ps-chip {
+    border-color: rgb(var(--night-line));
+    color: rgb(var(--night-ink-dim));
+  }
+  .ps--article .ps-chip--link {
+    color: rgb(var(--accent-light));
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .ps--article .ps-chip--link:hover {
+    background-color: rgb(var(--accent-light) / 0.12);
+    border-color: rgb(var(--accent-light) / 0.5);
+  }
+  .ps--hub .ps-chip {
+    border-color: rgb(var(--ink-200));
+    color: rgb(var(--ink-600));
+  }
+  .ps--hub .ps-chip--link {
+    color: rgb(var(--accent));
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .ps--hub .ps-chip--link:hover {
+    background-color: rgb(var(--accent) / 0.1);
+    border-color: rgb(var(--accent) / 0.5);
+  }
+
+  .ps-all-link .arrow {
+    display: inline-block;
+  }
+
+  /* Staggered entrance. The root's [data-reveal] hooks the site-wide
+     IntersectionObserver in BaseLayout (which already bails under reduced
+     motion and missing IO support); everything below simply choreographs what
+     .is-revealed means for this card. Reduced-motion readers get the fully
+     static panel. */
+  @media (prefers-reduced-motion: no-preference) {
+    .ps--article .ps-rule {
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s;
+    }
+    .ps--article.is-revealed .ps-rule {
+      transform: scaleX(1);
+    }
+    .ps--article .ps-section {
+      opacity: 0;
+      transform: translateY(10px);
+      transition:
+        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ps--article .ps-section:nth-of-type(1) { transition-delay: 0.1s; }
+    .ps--article .ps-section:nth-of-type(2) { transition-delay: 0.22s; }
+    .ps--article .ps-section:nth-of-type(3) { transition-delay: 0.34s; }
+    .ps--article.is-revealed .ps-section {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ps-all-link .arrow {
+      transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .ps-all-link:hover .arrow {
+      transform: translateX(4px);
+    }
+  }
+</style>

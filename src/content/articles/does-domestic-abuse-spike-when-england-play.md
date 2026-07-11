@@ -14,6 +14,48 @@ tags:
   - domestic abuse
   - statistics
   - alcohol
+practicalSummary:
+  problem: >-
+    The famous claim that domestic abuse rises 38% when England lose comes
+    from a single-force study, and the most repeated version of the
+    statistic is the least representative of what the evidence shows.
+  evidence:
+    - point: >-
+        Across three World Cups in Lancashire, abuse reports rose 38% on days
+        England lost — and 26% on days England won or drew.
+      source: "Kirby, Francis & O'Flaherty (2014)"
+      url: "https://journals.sagepub.com/doi/abs/10.1177/0022427813494843"
+    - point: >-
+        Ten years of West Midlands data show alcohol-related domestic abuse
+        rising around 47% on the day England win, with no measurable increase
+        in abuse not flagged as alcohol-related.
+      source: "Trendl, Stewart & Mullett (2020)"
+      url: "https://pubmed.ncbi.nlm.nih.gov/33126102/"
+    - point: >-
+        The link is likely causal: fixture timing is effectively random, and
+        the rise tracks the match hour by hour — beginning at kick-off,
+        peaking after the final whistle, then fading.
+      source: "LSE Centre for Economic Performance"
+      url: "https://blogs.lse.ac.uk/politicsandpolicy/england-football-alcohol-domestic-violence/"
+  outcomes:
+    - action: >-
+        surge response and safeguarding capacity around England match days,
+        timed to kick-off and the hours after the whistle
+      benefit: >-
+        help reaches victims during the predictable window when the danger
+        actually spikes.
+    - action: >-
+        target alcohol rather than the scoreline, planning for wins as
+        seriously as losses
+      benefit: >-
+        the response addresses the real lever, and victims are protected on
+        the nights the data says are most dangerous.
+    - action: >-
+        quote the evidence accurately — abuse rises around England matches,
+        driven by heavy drinking, win or lose
+      benefit: >-
+        campaigns and briefings rest on solid ground, and the public gets a
+        true warning rather than a slogan the evidence has moved past.
 ---
 
 **Before any of the numbers, hold on to the thing the numbers are about: for a great many women in this country, the day England play is a day they have learned to be frightened of.** That is the fact underneath every percentage in this piece, and no amount of careful statistical hedging should be allowed to soften it. The question here is not whether the danger is real — survivors and the services that support them have never needed a study to tell them it is. The question is narrower and, I think, worth answering honestly: *what does the evidence actually show, how should we read it, and what does the famous statistic get right and wrong?*

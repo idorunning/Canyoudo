@@ -17,6 +17,47 @@ tags:
   - ethics
   - policy
 draft: true
+practicalSummary:
+  problem: >-
+    Around 170,000 people are reported missing in the UK each year, but the
+    visible record is a thin, skewed sliver — and open-source research into the
+    missing routinely mistakes visibility for prevalence and can harm live
+    cases.
+  evidence:
+    - point: >-
+        A small group of repeatedly missing children — around four to six per
+        cent of those involved — accounts for roughly a third of all incidents,
+        and more than half of repeat episodes occur within four weeks of the
+        last.
+      source: "University of Portsmouth (Shalev and colleagues)"
+    - point: >-
+        Roughly one looked-after child in ten is reported missing each year,
+        against about one in two hundred children generally, with risk
+        concentrating around out-of-area and unregulated placements.
+      source: "All-Party Parliamentary Group inquiry"
+    - point: >-
+        Black people account for around 14 per cent of missing reports against
+        roughly 4 per cent of the population, stay missing longer, and are less
+        likely to be graded at risk.
+      source: "Missing People charity research"
+  outcomes:
+    - action: >-
+        concentrate safeguarding effort on repeatedly missing children,
+        especially those in out-of-area and unregulated placements
+      benefit: >-
+        we act where roughly a third of all incidents cluster, and children at
+        risk of county lines exploitation get protection earlier.
+    - action: >-
+        scrutinise how risk grades are applied across ethnic groups
+      benefit: >-
+        missing Black people, who stay missing longer and are graded at risk
+        less often, get a search effort that matches their actual danger.
+    - action: >-
+        confine open-source and volunteer work to aggregates and governed
+        schemes such as Locate International
+      benefit: >-
+        the public gains accountability and useful leads without the privacy
+        breaches and live-case damage amateur detection has caused.
 ---
 
 Every ninety seconds or so, someone in the United Kingdom is reported missing. The figure most often quoted by the National Crime Agency and the charity Missing People is around 170,000 people each year, generating something closer to 330,000 separate incidents. The gap between those two numbers is itself the first useful fact about missing people: a great many of them go missing more than once.

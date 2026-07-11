@@ -14,6 +14,49 @@ thumbnail: "/images/alex-murray-portrait.jpg"
 portrait: "/images/alex-murray-portrait.jpg"
 tags: ["evidence-based-policing", "evidence-based", "policing", "police", "leadership", "criminology", "artificial-intelligence"]
 redirectFrom: ["/police-policy/alex-murray-and-the-rise-of-evidence-based-policing"]
+practicalSummary:
+  problem: >-
+    For most of its history policing rarely tested whether what it did
+    actually worked, and until 2010 a serving British officer had no
+    organised way to find out what the research said.
+  evidence:
+    - point: >-
+        Sherman's Triple-T — target the places and people producing most
+        harm, test what works, track whether the effect holds — replaced the
+        evidence-free three Rs of random patrol, rapid response and reactive
+        investigation.
+      source: "Sherman (1998)"
+      url: "https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
+    - point: >-
+        Murray founded the Society of Evidence-Based Policing in 2010, the
+        first organisation of its kind in the world, now a registered charity
+        with thousands of members and sister bodies across several countries.
+      source: "Society of Evidence-Based Policing"
+      url: "https://www.sebp.police.uk/about"
+    - point: >-
+        He practised what he argued: a randomised controlled trial in
+        Birmingham tested dedicated teams for repeat victims of anti-social
+        behaviour rather than rolling the tactic out because it sounded
+        sensible.
+  outcomes:
+    - action: >-
+        treat operational instinct as a hypothesis to be tested, building
+        evaluation into new tactics before rollout
+      benefit: >-
+        the force learns what works, what backfires and what is ineffective,
+        and the public gets tactics that demonstrably cut harm.
+    - action: >-
+        use the Society of Evidence-Based Policing to find out what the
+        research says and take it back to the front line
+      benefit: >-
+        officers get direct access to evidence their predecessors never had,
+        and practice stops running on hunch and habit.
+    - action: >-
+        ask of any new tool, AI included, how we know it works and how we
+        would find out if it did not
+      benefit: >-
+        the force avoids technology adopted for its own sake and can be
+        straight with the public it serves.
 ---
 
 **For most of its history, policing has rarely tested whether what it does actually works.** Officers patrolled because patrolling felt like policing, responded fast because responding fast felt urgent, and investigated after the fact because that was the job. Whether any of it reduced crime was a question almost nobody asked, and fewer still tried to answer with anything resembling a controlled experiment. Alex Murray is the British officer who decided that was no longer good enough, and who built the institution to change it.

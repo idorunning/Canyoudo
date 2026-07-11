@@ -17,6 +17,42 @@ discussionQuestions:
   - "Commercial organisations selling security products keep producing rankings from open crime data. Is the fix better journalism, better data literacy, or something forces and the ONS need to do differently?"
   - "Sussex Police's April 2026 statement made the reporting-rate point clearly. What would it have cost, in February 2025, to have said it first?"
 author: "Nathan Tracey"
+practicalSummary:
+  problem: >-
+    Commercial rankings branded Worthing the shoplifting capital of the UK when
+    the rise in recorded theft was largely the force's own reporting scheme
+    working as intended — and Sussex Police took fourteen months to say so.
+  evidence:
+    - point: >-
+        One Touch Reporting made shop theft easier to report, so recorded crime
+        rose because more theft was being recorded, not because more was happening.
+      source: "Sussex Police (2024)"
+    - point: >-
+        Worthing's recorded shoplifting fell year on year while it was being called
+        the country's worst town — 1,856 incidents by September 2025, down from 2,596.
+      source: "Sussex PCC figures (2025)"
+    - point: >-
+        Four commercial studies used four different denominators and named four
+        different worst towns from broadly the same data.
+      source: "Accu Components, LEI Register, Avigilon, CrimeRate.co.uk"
+  outcomes:
+    - action: >-
+        publish plain-English reporting-rate context when we launch any
+        reporting-improvement scheme
+      benefit: >-
+        the force owns the story of rising figures from day one, and the public
+        hears a good-news explanation instead of a shoplifting-capital headline.
+    - action: >-
+        brief comms to have the "why the numbers went up" answer ready at launch
+      benefit: >-
+        journalists get the explanation first time, and the force is spared months
+        of reactive correction as the same figure is recycled.
+    - action: >-
+        challenge a commercial ranking's methodology directly, starting with its
+        choice of denominator
+      benefit: >-
+        the public sees the figure in context, and the force's genuine successes
+        lead the coverage rather than trailing it by a year.
 ---
 
 **On 17 February 2025, a Huddersfield firm that sells stainless steel fasteners published a study naming Worthing the worst town in Britain for shoplifting.** Accu Components put the figure at **23.2 incidents per 1,000 residents**, built from ONS, NISRA and Scottish Government data, and within a week the finding had travelled from Radio Worthing to The Argus to the Sussex Express. By the following weekend it had shortened, as these things do, to "the shoplifting capital of the UK."

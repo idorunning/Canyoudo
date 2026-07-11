@@ -21,6 +21,52 @@ tags:
   - police
   - policing
   - politics
+practicalSummary:
+  problem: >-
+    Around 99% of fuel thefts end without prosecution even when retailers hand
+    police clear CCTV, number plates and timestamps — an open abandonment of a
+    solvable crime that is breaking retailer cooperation and eroding policing
+    by consent.
+  evidence:
+    - point: >-
+        Between 2020 and 2024 Sussex closed 94% of 2,892 fuel-theft cases with
+        no suspect identified, Humberside 83% and South Yorkshire 91%, despite
+        comprehensive CCTV, ANPR and payment evidence.
+      source: "Forecourt Trader FOI investigation"
+      url: "https://forecourttrader.co.uk/news/exclusive-65m-of-fuel-stolen-in-drive-offs-as-up-to-94-of-offenders-escape-justice/704134.article"
+    - point: >-
+        Losses have reached £100m across 1.5 million incidents, and the
+        industry now recovers £35m a year through private civil channels
+        because criminal enforcement has withdrawn.
+      source: "British Oil Security Syndicate"
+      url: "https://www.boss-uk.com/"
+    - point: >-
+        Non-investigation is not a staffing problem — officer numbers hit an
+        all-time high of 147,745 in March 2024, making this a prioritisation
+        decision, not a shortage.
+      source: "Home Office police workforce statistics"
+      url: "https://www.gov.uk/government/statistics/police-workforce-england-and-wales-30-september-2025/police-workforce-england-and-wales-30-september-2025"
+  outcomes:
+    - action: >-
+        audit how making-off-without-payment reports are closed, checking that
+        supplied CCTV is reviewed before a no-suspect message is sent
+      benefit: >-
+        the force stops writing off solvable crimes, and victims who hand over
+        evidence see it actually examined.
+    - action: >-
+        treat forecourts as islands of enquiry and retrieve footage within the
+        31-day retention window
+      benefit: >-
+        investigators keep an evidence source that has already helped convict
+        murderers, and serious cases get timeline evidence before it is
+        overwritten.
+    - action: >-
+        state prioritisation decisions openly instead of dressing them up as
+        evidential failure
+      benefit: >-
+        the force protects its legitimacy with retailers and the low-trust
+        communities who staff overnight shifts, instead of eroding policing by
+        consent.
 ---
 
 Consider a business that reports a crime with clear CCTV footage, the suspect's vehicle registration and precise timestamps, and then receives a text message hours later saying "case closed, no suspect identified." For Britain's petrol station operators, this is not a hypothetical scenario. It is a routine experience.

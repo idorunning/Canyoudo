@@ -5,6 +5,46 @@ description: "Every week a cheerful BBC radio programme takes a number that has 
 pubDate: 2026-06-07
 heroImage: "/images/prob-over-pvalues-chart2-framing-survey.png"
 tags: ["public-confidence", "evidence-based-policing", "statistics", "numbers", "media", "data"]
+practicalSummary:
+  problem: >-
+    Confident statistics — crime figures included — arrive in the news and harden
+    into fact within a day, before anyone asks where the number came from or what
+    it should be divided by.
+  evidence:
+    - point: >-
+        A total means nothing on its own: the first question is what to divide by
+        — the population, the budget, the number of years — before deciding whether
+        to be impressed.
+      source: "More or Less, BBC Radio 4"
+      url: "https://www.bbc.co.uk/programmes/b006qshd"
+    - point: >-
+        Half of all arguments about crime figures are really arguments about
+        definitions — recorded crime and the crime survey are two different
+        instruments measuring two different things.
+      source: "More or Less"
+    - point: >-
+        Harford's first rule is to watch your own feelings — the numbers that slip
+        past unchecked are the ones you wanted to believe.
+      source: "Tim Harford, How to Make the World Add Up (2020)"
+      url: "https://timharford.com/"
+  outcomes:
+    - action: >-
+        ask for the denominator before reacting to any headline figure
+      benefit: >-
+        the force judges whether a number is actually big for its population,
+        budget or period before acting on it.
+    - action: >-
+        ask who counted, how and under what definition — starting with recorded
+        crime versus the crime survey
+      benefit: >-
+        most contested crime figures dissolve into clarity, and the force argues
+        from what was actually measured.
+    - action: >-
+        treat the statistic that flatters our existing opinion with the most
+        suspicion
+      benefit: >-
+        checking starts at exactly the moment it usually stops, and decisions rest
+        on tested numbers rather than wishful ones.
 ---
 
 **There is a particular kind of number that arrives in the news fully dressed and absolutely certain of itself.** "Crime is up forty per cent." "One in four of us will experience this." "It would cost nine billion pounds." The number is repeated, retweeted, put on the side of a bus, and within a day it has hardened into a fact. *More or Less*, a half-hour programme on BBC Radio 4 and the World Service, exists to walk up to that number, tap it on the shoulder, and politely ask where it thinks it's going.

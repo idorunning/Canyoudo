@@ -189,12 +189,15 @@ function renderSignInOptions(supabase: any, container: HTMLElement): void {
 
   function showButtons() {
     container.replaceChildren();
-    const row = el('div', 'flex flex-col sm:flex-row gap-3');
-    const email = el('button', primary, 'Email me a sign-in link');
+    // Email leads and Google sits beneath it: the email link is the quick,
+    // password-free route that works on locked-down work machines, so it gets
+    // the primary slot rather than sharing a row.
+    const row = el('div', 'flex flex-col gap-3 max-w-md');
+    const email = el('button', primary, 'Quick sign in with email');
     email.type = 'button';
     email.addEventListener('click', showEmailForm);
     row.appendChild(email);
-    const google = el('button', secondary, 'Or use Google');
+    const google = el('button', secondary, 'Continue with Google');
     google.type = 'button';
     google.addEventListener('click', signInWithGoogle);
     row.appendChild(google);
@@ -203,7 +206,7 @@ function renderSignInOptions(supabase: any, container: HTMLElement): void {
       el(
         'p',
         'font-sans text-xs text-ink-500 mt-2',
-        'The email link is password-free and works with any address, including a work one (e.g. police.gov.uk).'
+        'No password — we email you a link and you’re in. Works with any address, including a work one (e.g. police.gov.uk).'
       )
     );
     container.appendChild(subscribeToggle());

@@ -1,0 +1,149 @@
+---
+// Practical Summaries — every article's senior-leader briefing, collected in
+// one place. Each card is the same structured summary that closes its article
+// (the problem, what the evidence says, and if/then outcomes), grouped by
+// section and filterable, tagged like its article and saveable to a member's
+// library. Reading a summary inside its article is free for everyone;
+// BROWSING the whole library is a members feature, so the collection sits
+// behind the same free sign-in as the other research tools (the hero above
+// the gate stays public, matching /research-tools).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MemberGate from '../components/MemberGate.astro';
+import PracticalSummary from '../components/PracticalSummary.astro';
+import { getCollection } from 'astro:content';
+import { SECTIONS, SECTION_LABELS } from '../content/config';
+import { getTopics, topicForTag } from '../lib/topics';
+
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+
+const articles = await getCollection(
+  'articles',
+  ({ data }) => !data.draft && Boolean(data.practicalSummary)
+);
+
+// Tags resolve to topic archives exactly as they do on the article pages.
+const topics = await getTopics();
+const resolveTags = (tags: string[] | undefined) =>
+  (tags ?? []).map((tag) => {
+    const topic = topicForTag(topics, tag);
+    return { label: tag, href: topic ? `/topics/${topic.slug}` : undefined };
+  });
+
+const groups = SECTIONS.map((s) => ({
+  section: s,
+  label: SECTION_LABELS[s],
+  items: articles
+    .filter((a) => a.data.section === s)
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+})).filter((g) => g.items.length > 0);
+
+const total = articles.length;
+---
+
+<BaseLayout
+  title="Practical Summaries"
+  description="Every article as a briefing for senior leaders — the problem, what the evidence says with links to the sources, and what you gain if you act. Sign in free to browse, tag and save the whole library."
+>
+  <section class="border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="u-kicker mb-5">Research Tools</p>
+      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
+        Practical Summaries
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        Every article as a briefing for senior leaders — the problem, what the evidence says,
+        and what you gain if you act. Each summary is free to read inside its article;
+        sign in free to browse the whole library, filter by section and topic, and save
+        summaries to your account.
+      </p>
+      <p class="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-ink-500 mt-6 u-tnum">
+        {total} summar{total === 1 ? 'y' : 'ies'} · updated with every article
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
+      <MemberGate hasAuth={hasAuth} feature="the summaries library">
+        {/* Section filter. Progressive: without JS every group stays visible. */}
+        <div class="flex flex-wrap gap-2 mb-10" data-summary-filters role="group" aria-label="Filter summaries by section">
+          <button
+            type="button"
+            data-filter="all"
+            aria-pressed="true"
+            class="font-sans text-[13px] font-semibold px-4 py-1.5 rounded-full border border-ink-200 text-ink-700 transition-colors"
+          >
+            All
+          </button>
+          {groups.map((g) => (
+            <button
+              type="button"
+              data-filter={g.section}
+              aria-pressed="false"
+              class="font-sans text-[13px] font-semibold px-4 py-1.5 rounded-full border border-ink-200 text-ink-700 transition-colors"
+            >
+              {g.label}
+            </button>
+          ))}
+        </div>
+
+        <div class="space-y-14">
+          {groups.map((g) => (
+            <section data-section-group={g.section} data-reveal>
+              <p class="u-kicker u-kicker--dim mb-5">
+                {g.label} · <span class="u-tnum">{g.items.length}</span>
+              </p>
+              <div class="grid md:grid-cols-2 gap-6 items-start">
+                {g.items.map((a) => (
+                  <PracticalSummary
+                    variant="hub"
+                    id={a.slug}
+                    summary={a.data.practicalSummary!}
+                    articleTitle={a.data.title}
+                    articleUrl={`/${a.data.section}/${a.slug}`}
+                    articleDescription={a.data.description}
+                    section={a.data.section}
+                    tags={resolveTags(a.data.tags)}
+                  />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </MemberGate>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  [data-summary-filters] button[aria-pressed='true'] {
+    background-color: rgb(var(--accent));
+    border-color: rgb(var(--accent));
+    color: rgb(var(--paper-50));
+  }
+  [data-summary-filters] button[aria-pressed='false']:hover {
+    border-color: rgb(var(--accent) / 0.5);
+    color: rgb(var(--accent));
+  }
+</style>
+
+<script>
+  // Section filter chips: show one group or all of them. Purely additive —
+  // with no JS the buttons do nothing and every group stays visible.
+  const wrap = document.querySelector('[data-summary-filters]');
+  if (wrap) {
+    const buttons = wrap.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const groups = document.querySelectorAll<HTMLElement>('[data-section-group]');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const choice = btn.dataset.filter;
+        buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        groups.forEach((g) => {
+          g.hidden = choice !== 'all' && g.dataset.sectionGroup !== choice;
+        });
+      });
+    });
+  }
+</script>

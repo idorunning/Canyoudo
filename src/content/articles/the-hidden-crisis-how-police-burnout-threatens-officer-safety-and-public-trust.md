@@ -19,6 +19,47 @@ tags:
   - neurodiversity
   - police
   - policing
+practicalSummary:
+  problem: >-
+    Chronic burnout degrades the impulse control, judgement and threat
+    assessment officers rely on, raising the risk of excessive force and
+    eroding public trust — yet forces still treat it as ordinary tiredness.
+  evidence:
+    - point: >-
+        Burnout correlates with more positive attitudes toward force and more
+        frequent violence on duty, established with administrative and
+        observational data on 422 Dutch officers rather than self-report.
+      source: "Kop and Euwema (2001)"
+      url: "https://www.researchgate.net/publication/46615313_Occupational_Stress_and_the_Use_of_Force_by_Dutch_Police_Officers"
+    - point: >-
+        After 17 to 19 hours without sleep, performance matches a blood
+        alcohol level of about 0.05%, and after 24 hours about 0.10% — a
+        sleep-deprived officer can be functionally as impaired as a drunk one.
+      source: "Williamson and Feyer (2000)"
+      url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC1739867/"
+    - point: >-
+        Early warning systems tracking complaints, force incidents and
+        attendance cut citizen complaints by 62–67% in Minneapolis and New
+        Orleans.
+      source: "Department of Justice"
+  outcomes:
+    - action: >-
+        build an early-warning system from data the force already collects —
+        complaints, use-of-force incidents, sick leave
+      benefit: >-
+        struggling officers are reached before a crisis and citizen complaints
+        fall, as they did in Minneapolis and New Orleans.
+    - action: >-
+        treat fatigue as impairment and review shift design
+      benefit: >-
+        officers stop making critical decisions at drunk-equivalent levels of
+        impairment, and schedule change alone has produced sustained gains in
+        work-life balance and job satisfaction.
+    - action: >-
+        make brief trauma-focused CBT and EMDR genuinely accessible
+      benefit: >-
+        officers get treatment that substantially reduces PTSD, depression and
+        anxiety in six to eight sessions — interest already outstrips uptake.
 ---
 
 <figure>

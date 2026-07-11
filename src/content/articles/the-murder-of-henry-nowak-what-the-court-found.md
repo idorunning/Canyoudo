@@ -17,6 +17,49 @@ tags:
   - policing
   - accountability
 draft: false
+practicalSummary:
+  problem: >-
+    Much of what has been said about the murder of Henry Nowak — including
+    about the officers who reached him first — differs sharply from what the
+    court found in the judge's own sentencing remarks.
+  evidence:
+    - point: >-
+        The pathologist found the chest wound unsurvivable — Henry would not
+        have survived however quickly he received first aid, CPR or expert
+        medical treatment.
+      source: "Sentencing remarks, R v Digwa (2026)"
+      url: "/documents/digwa-sentencing-remarks.pdf"
+    - point: >-
+        The judge found the officers honestly believed there were grounds to
+        arrest Henry, and listed Digwa's convincing but wholly false narrative
+        to police as an aggravating feature of the murder.
+      source: "Sentencing remarks, R v Digwa (2026)"
+      url: "/documents/digwa-sentencing-remarks.pdf"
+    - point: >-
+        The remarks are not the final word — the IOPC is examining whether the
+        officers breached professional standards on use of force, duty of care
+        and the respect and courtesy owed to Henry.
+      source: "IOPC (2026)"
+      url: "https://www.policeconduct.gov.uk/news/statement-regarding-our-investigation-contact-hampshire-and-isle-wight-officers-had-henry"
+  outcomes:
+    - action: >-
+        work from primary sources such as sentencing remarks when reviewing a
+        contested incident
+      benefit: >-
+        the force reports the court's measured findings rather than the
+        headlines, and officers and the public get an accurate account.
+    - action: >-
+        ask in training and debriefs how an injured person's own words should
+        be weighed at a chaotic scene
+      benefit: >-
+        responders are better armed against a determined, plausible liar
+        turning their instincts against a victim.
+    - action: >-
+        let the IOPC investigation and the commissioned review run their
+        course
+      benefit: >-
+        conclusions about officer conduct rest on evidence rather than a
+        simpler, angrier story — fairer to the officers and to Henry's family.
 ---
 
 On the night of 3 December 2025, 18-year-old Henry Nowak was walking home to his university accommodation in Portswood, Southampton, after an evening out. He was alone, unarmed, and a little over half a mile from his bed. He never arrived. On 1 June 2026, at Southampton Crown Court, His Honour Judge William Mousley KC — the Honorary Recorder of Southampton — sentenced 23-year-old Vickrum Singh Digwa to life imprisonment for his murder.[^1]

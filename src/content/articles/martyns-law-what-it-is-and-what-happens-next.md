@@ -24,6 +24,45 @@ tags:
   - business
 redirectFrom:
   - /public-policy/martyns-law-a-business-owners-starting-point
+practicalSummary:
+  problem: >-
+    Before the Terrorism (Protection of Premises) Act 2025 no law required any UK
+    venue to prepare for a terrorist attack — and its duties commence around
+    spring 2027, giving venues, forces and local leaders a year of runway.
+  evidence:
+    - point: >-
+        The Act applies where 200 or more people may reasonably be present, split
+        into a standard tier (200–799) and an enhanced tier (800+).
+      source: "ProtectUK"
+      url: "https://www.protectuk.police.uk/martyns-law/martyns-law-overview-and-what-you-need-know"
+    - point: >-
+        The standard tier requires no physical security at all — the duty is a plan
+        for four scenarios (evacuate, invacuate, lock down, communicate) and staff
+        who know it.
+      source: "Home Office factsheet (2025)"
+      url: "https://homeofficemedia.blog.gov.uk/2025/04/03/martyns-law-factsheet/"
+    - point: >-
+        Enforcement sits with the Security Industry Authority, not the police — no
+        officer will inspect venues, and the SIA's stated posture is advice-first.
+      source: "GOV.UK / SIA"
+      url: "https://www.gov.uk/government/publications/martyns-law-the-sias-new-regulatory-role/martyns-law-the-sias-new-regulatory-role"
+  outcomes:
+    - action: >-
+        map the enhanced-tier venues and events in the force area and resource
+        CTSAs for a year of heavy demand
+      benefit: >-
+        businesses get accurate advice before commencement, and the force is ready
+        when every sizeable venue wants an hour of a CTSA's time.
+    - action: >-
+        brief neighbourhood teams on what the law requires — and what it doesn't
+      benefit: >-
+        officers save businesses money, the service earns goodwill, and myths about
+        scanners and police inspections are killed early.
+    - action: >-
+        agree an interface with the SIA now
+      benefit: >-
+        inspection findings that look like intelligence reach the force, while
+        regulatory enforcement stays out of local policing relationships.
 ---
 
 **Martyn Hett was 29 when he was murdered at the Manchester Arena on 22 May 2017, one of 22 people killed as they left an Ariana Grande concert — and the law that now carries his name exists because his mother refused to accept that nothing would change.** [Figen Murray's campaign](https://counterterrorbusiness.com/features/campaign-martyns-law) ran for six years, through three Prime Ministers, a public inquiry and two governments, and ended with her [walking 200 miles from the spot where her son died to the door of Downing Street](https://homeofficemedia.blog.gov.uk/2025/04/03/martyns-law-factsheet/), arriving on the seventh anniversary of the attack. Eleven months later, on 3 April 2025, the [Terrorism (Protection of Premises) Act 2025](https://homeofficemedia.blog.gov.uk/2025/04/03/martyns-law-factsheet/) received Royal Assent. Everyone, including the government, calls it Martyn's Law.

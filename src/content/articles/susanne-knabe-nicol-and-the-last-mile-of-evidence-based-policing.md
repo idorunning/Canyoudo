@@ -16,6 +16,41 @@ tags:
   - investigative-psychology
   - professional-development
   - research
+practicalSummary:
+  problem: >-
+    Most policing research never reaches the officers meant to use it —
+    paywalled, technical and too long for shift work — so evidence that could
+    change practice goes unread.
+  evidence:
+    - point: >-
+        A good study is typically read by a few dozen academics and almost no
+        practitioners, so producing more evidence does not on its own change
+        practice.
+    - point: >-
+        Police Science Dr removes the three barriers — access, time and
+        translation — by turning studies into short plain-English videos, a
+        podcast and transcripts with full references officers can log as CPD.
+      source: "Police Science Dr"
+      url: "https://www.policesciencedr.com/"
+    - point: >-
+        Knabe-Nicol has dual standing: more than ten years inside policing,
+        from PCSO to intelligence analyst, alongside a PhD in Investigative
+        Psychology and peer-reviewed work on detective skills.
+      source: "Cogent Social Sciences (2024)"
+      url: "https://www.tandfonline.com/doi/full/10.1080/23311886.2024.2313275"
+  outcomes:
+    - action: >-
+        circulate findings as short plain-English summaries with the practical
+        "so what" made explicit and references attached
+      benefit: >-
+        frontline officers actually use the evidence, and force practice is
+        justified by research rather than habit.
+    - action: >-
+        point officers at policesciencedr.com and treat its referenced
+        transcripts as citable CPD
+      benefit: >-
+        officers get a free, credible route into what the research says, in a
+        form that fits a fifteen-minute gap between jobs.
 ---
 
 **Evidence-based policing has a problem its founders rarely dwell on: most of the evidence never reaches the people who are supposed to use it.** The studies get done and the papers get published, and then they sit behind journal paywalls, written in a language — regression tables, confidence intervals, effect sizes — that a busy response officer has neither the time nor the training to decode. [Lawrence Sherman](/influential-people/lawrence-sherman-and-the-invention-of-evidence-based-policing) built the science; [Alex Murray](/influential-people/alex-murray-and-the-rise-of-evidence-based-policing) built the institutions. But a randomised controlled trial is only as useful as the number of officers who ever hear about it. Dr Susanne Knabe-Nicol has spent the better part of a decade on that last problem: not producing the evidence, but carrying it the final mile, from the journal to the frontline.

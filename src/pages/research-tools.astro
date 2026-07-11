@@ -17,7 +17,7 @@ const hasAuth = Boolean(
 
 <BaseLayout
   title="Research Tools"
-  description="Three free tools built for this site: a research assistant that turns a policing question into a cited briefing, a live crime dashboard, and a media-perception explorer. Sign in once to unlock all three."
+  description="Free member tools built for this site: a research assistant that turns a policing question into a cited briefing, a live crime dashboard, a media-perception explorer, and the Practical Summaries library. One quick email sign-in unlocks them all."
 >
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
@@ -26,8 +26,9 @@ const hasAuth = Boolean(
         Put the evidence to work
       </h1>
       <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
-        Three free tools built for this site — a research assistant, a live crime dashboard, and a
-        media-perception explorer. Sign in once, free and password-free, to unlock all three.
+        Free member tools built for this site — a research assistant, a live crime dashboard, a
+        media-perception explorer, and the Practical Summaries library. One quick, password-free
+        email sign-in unlocks them all.
       </p>
     </div>
   </section>
@@ -115,6 +116,33 @@ const hasAuth = Boolean(
           </a>
 
         </div>
+
+        <!-- Practical Summaries library: browsing the collection is a members
+             feature (each summary stays free to read inside its article). -->
+        <a
+          href="/practical-summaries"
+          class="group block card-hairline rounded-[18px] p-7 mt-6 hover:border-accent/50 transition-all duration-200"
+        >
+          <div class="flex flex-col md:flex-row md:items-center gap-6">
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-3">
+                <p class="u-kicker m-0">Summaries library</p>
+                <span class="u-kicker bg-accent/10 px-2.5 py-1 rounded-full shrink-0">New</span>
+              </div>
+              <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-2">
+                Practical Summaries
+              </h2>
+              <p class="text-[15px] leading-[1.55] text-ink-700 m-0">
+                Every article as a briefing for senior leaders — the problem, what the evidence
+                says with links to the sources, and what you gain if you act. Browse the whole
+                library, filter by section and topic, and save summaries to your account.
+              </p>
+            </div>
+            <span class="inline-block self-start md:self-center shrink-0 bg-accent text-paper-50 px-5 py-2.5 rounded-full text-[13px] font-bold group-hover:bg-accent-dark transition-colors">
+              Browse the summaries →
+            </span>
+          </div>
+        </a>
       </MemberGate>
     </div>
   </section>

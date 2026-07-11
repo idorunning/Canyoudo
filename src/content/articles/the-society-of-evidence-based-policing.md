@@ -20,6 +20,49 @@ tags:
   - professional-development
   - research
   - leadership
+practicalSummary:
+  problem: >-
+    By 2010 the research on what works in policing existed but the frontline
+    culture to use it did not — the officer with a good idea had no
+    permission, language or support to test it.
+  evidence:
+    - point: >-
+        The SEBP, founded in 2010 by a serving Detective Superintendent, is
+        the most copied model of its kind, with sister societies in Australia
+        and New Zealand, Canada, the US and the Netherlands.
+      source: "Center for Evidence-Based Crime Policy"
+      url: "https://cebcp.org/hall-of-fame/alex-murray/"
+    - point: >-
+        Evidence-based policing does not require a randomised controlled trial
+        — reviewing your own force's data or reading existing evidence before
+        acting also counts, and the shift from nothing to evidence is the
+        biggest one.
+      source: "SEBP mission"
+      url: "https://www.sebp.police.uk/about/mission"
+    - point: >-
+        Membership is free and open to anyone, with an annual practitioner
+        conference, an open-access publishing route on CrimRxiv and informal
+        mentorship through the network.
+      source: "SEBP"
+      url: "https://www.sebp.police.uk/join"
+  outcomes:
+    - action: >-
+        give testing legitimacy — time, and a clear message that trying an
+        idea and reporting back is part of the job
+      benefit: >-
+        curious officers act on the questions they already have, and the force
+        learns what works instead of losing the idea.
+    - action: >-
+        read the existing evidence before trialling a tactic, then record what
+        happened
+      benefit: >-
+        even a two-page note at the next team meeting turns a trial into
+        something genuinely valuable for the team and the force.
+    - action: >-
+        write findings up and share them, including negative results
+      benefit: >-
+        individual learning becomes organisational learning, and a pilot
+        serves the profession rather than going into a drawer.
 ---
 
 **The most important thing the Society of Evidence-Based Policing does is not what appears in its mission statement — it is making ordinary officers feel entitled to ask whether what they are doing actually works.** That might sound like a modest ambition. In the culture of British policing for most of its history, it was genuinely radical. Fifteen years on, the SEBP has not solved the problem. But it has built the infrastructure that makes solving it possible — and the infrastructure is more interesting than it first appears.

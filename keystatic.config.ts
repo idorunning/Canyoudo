@@ -70,6 +70,48 @@ export default config({
         tags: stringList('Tags', 'One per entry, e.g. policing, policy, evidence-based-policing.'),
         keyTakeaways: stringList('Key takeaways (optional)', 'Three to five scannable points readers should leave with.'),
         discussionQuestions: stringList('Discussion questions (optional)', 'Up to three questions shown at the end of the article.'),
+        practicalSummary: fields.object(
+          {
+            problem: fields.text({
+              label: 'The problem',
+              multiline: true,
+              description: 'One sharp sentence: what problem does this article address?',
+            }),
+            evidence: fields.array(
+              fields.object({
+                point: fields.text({ label: 'What the evidence says', multiline: true, description: 'One plain sentence a chief could repeat in a meeting.' }),
+                source: fields.text({ label: 'Source label (optional)', description: 'e.g. "College of Policing (2023)"' }),
+                // Plain text, not fields.url() — same rationale as thumbnail/
+                // heroImage above: never fight a pre-existing plain-string
+                // value; the Zod schema does the real URL validation.
+                url: fields.text({
+                  label: 'Source URL (optional)',
+                  description: 'Must be a link already cited in this article — nothing new.',
+                }),
+              }),
+              { label: 'The evidence — only the strongest, two or three points', itemLabel: (props) => props.fields.point.value || 'Evidence point' }
+            ),
+            outcomes: fields.array(
+              fields.object({
+                action: fields.text({
+                  label: 'If we… — the action',
+                  multiline: true,
+                  description: 'Completes "If we …" — start lowercase, e.g. "concentrate patrol on the highest-harm hot spots".',
+                }),
+                benefit: fields.text({
+                  label: '…then — the benefit, and who gains',
+                  multiline: true,
+                  description: 'The concrete gain and who gets it — the public, victims, officers, the force.',
+                }),
+              }),
+              { label: 'If we act — up to three if/then outcomes', itemLabel: (props) => props.fields.action.value || 'Outcome' }
+            ),
+          },
+          {
+            label: 'Practical summary (optional)',
+            description: 'The senior-leader briefing at the foot of the article and on /practical-summaries. Leave "The problem" blank to publish without one.',
+          }
+        ),
         redirectFrom: stringList(
           'Redirect from (old paths)',
           'If you move this article to a different section, paste its old path here (e.g. /police-policy/the-old-slug) so the old link keeps working.'

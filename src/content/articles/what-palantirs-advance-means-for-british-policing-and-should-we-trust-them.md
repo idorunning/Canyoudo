@@ -27,6 +27,48 @@ tags:
 redirectFrom:
   - /public-policy/joining-the-dots-what-palantir-means-for-british-policing
 updatedDate: 2026-07-10
+practicalSummary:
+  problem: >-
+    Palantir has moved from the edge of UK public-sector IT into a structural
+    position inside defence, health and policing — including the national
+    firearms-licensing database — faster than the transparency and procurement
+    rules governing it.
+  evidence:
+    - point: >-
+        Cumulative UK public-sector commitments to Palantir now exceed £900m,
+        and a £9m contract gives the firm the national firearms-licensing
+        database covering all 43 forces.
+      source: "The Nerve and openDemocracy reporting"
+    - point: >-
+        Bedfordshire's own impact assessment for the multi-force Nectar pilot
+        disclosed processing of political opinions, sexual orientation, race
+        and health data on witnesses, victims and children as well as suspects.
+      source: "Liberty Investigates (2025)"
+    - point: >-
+        The Mayor of London blocked a proposed £50m Met contract in May 2026,
+        citing a clear and serious breach of procurement rules and the risk of
+        being locked into Palantir's technology.
+      source: "Mayor's Office for Policing and Crime (2026)"
+  outcomes:
+    - action: >-
+        publish contract values, data categories ingested and impact
+        assessments voluntarily
+      benefit: >-
+        the force gets ahead of FOI and ICO action, and the public sees what
+        has been bought before the secrecy itself becomes the story.
+    - action: >-
+        require written exit and data-portability plans before any contract
+        extension
+      benefit: >-
+        the force avoids the lock-in the Mayor of London cited when blocking
+        the £50m Met deal, and keeps the freedom to walk away.
+    - action: >-
+        commission independent legal advice on US CLOUD Act exposure for
+        sensitive datasets
+      benefit: >-
+        the force holds its own documented assessment rather than the
+        supplier's account of a risk Parliament has called an unacceptable
+        point of weakness.
 ---
 In June 2026 the contract to run the database that holds every firearms and shotgun certificate in England and Wales — together with Home Office records of explosives, explosive precursors and poisons — was awarded to Palantir Technologies. The value, £9m across all 43 forces, was modest by government-IT standards. The significance was not the money. It was that a company co-founded by Peter Thiel and seeded in its early years by the CIA's venture arm, In-Q-Tel, will now hold the national record of who in this country is licensed to own a gun.
 

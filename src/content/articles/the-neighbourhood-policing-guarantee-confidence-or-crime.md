@@ -20,6 +20,45 @@ tags:
   - what-works
   - policy
   - police
+practicalSummary:
+  problem: >-
+    The Neighbourhood Policing Guarantee folds two different jobs under one
+    banner — a named ward officer builds confidence, hotspot patrolling cuts
+    crime — and the design risks judging each against the wrong outcome.
+  evidence:
+    - point: >-
+        Around half of all crime concentrates in a few per cent of street
+        segments and addresses, so concentrated patrol in those places is
+        where the crime effect lives.
+      source: "Weisburd, law of crime concentration"
+    - point: >-
+        Patrol visits of around 15 minutes buy the most residual deterrence,
+        and diluting the dose into ambient everyday presence buys no crime
+        effect at all.
+      source: "Koper (1995)"
+    - point: >-
+        Neighbourhood policing lifts public confidence when targeted visible
+        presence, community engagement and problem-solving run together.
+      source: "College of Policing (2025)"
+  outcomes:
+    - action: >-
+        run the named-officer scheme and hotspot patrolling as separate
+        programmes, each with its own outcome measures
+      benefit: >-
+        the public gets both a confidence gain and a crime reduction, and
+        neither programme is written off against the wrong yardstick.
+    - action: >-
+        keep dosage discipline — short, repeated, roughly 15-minute visits in
+        the few street segments the data flags
+      benefit: >-
+        crime and disorder fall measurably in the places that carry most of
+        the harm.
+    - action: >-
+        judge the confidence programme on confidence measures, not crime
+        figures it was never dosed to move
+      benefit: >-
+        the force avoids banking a false failure and chiefs can defend their
+        resourcing choices.
 ---
 
 Every council ward in England and Wales now has a named, contactable police officer. The government hit its first milestone — **3,000** additional neighbourhood personnel — in January 2026, ahead of schedule, on the way to **13,000** officers, PCSOs and special constables in neighbourhood roles by 2029. The January 2026 White Paper put the Neighbourhood Policing Guarantee at the centre of the most significant reshaping of policing in a generation.[^1]

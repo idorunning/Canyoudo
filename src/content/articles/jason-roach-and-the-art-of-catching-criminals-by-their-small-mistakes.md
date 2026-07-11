@@ -14,6 +14,45 @@ tags:
   - policing
   - police
   - research
+practicalSummary:
+  problem: >-
+    Serious offenders are hard and costly to identify, yet officers routinely
+    treat as background noise the minor infractions by which those offenders
+    quietly give themselves away.
+  evidence:
+    - point: >-
+        A Home Office study found around one in four cars parked illegally in
+        disabled bays were registered to people of active police interest.
+      source: "Chenery, Henshaw and Pease (1999)"
+      url: "https://popcenter.asu.edu/sites/default/files/problems/bicycle_theft/PDFs/Chenery_etal_1999.pdf"
+    - point: >-
+        Roach and Pease built this into self-selection policing — those who do big
+        bad things also do little bad things, so minor offences flag serious
+        offenders through conduct, not profiling.
+      source: "Roach and Pease (2016)"
+      url: "https://link.springer.com/book/10.1057/978-1-137-46852-9"
+    - point: >-
+        An overwhelming proportion of drivers caught driving while disqualified had
+        records of other, often serious, offending.
+      source: "Roach, Policing 13(3)"
+      url: "https://academic.oup.com/policing/article-abstract/13/3/300/2951290"
+  outcomes:
+    - action: >-
+        identify the minor trigger offences that statistically flag serious
+        offenders and treat each one as an invitation to look closer
+      benefit: >-
+        the force gains a detection method that costs almost nothing, and serious
+        offenders are caught by their own conduct rather than by profiling.
+    - action: >-
+        brief officers to treat small infractions as signal rather than shift noise
+      benefit: >-
+        routine encounters like disabled-bay parking or disqualified driving become
+        cheap leads to serious offenders for officers on shift.
+    - action: >-
+        apply the same logic inside the force
+      benefit: >-
+        officers whose small transgressions foreshadow larger ones are spotted
+        early, protecting the public and the service.
 ---
 
 **Some academics influence policing by building institutions; some by running experiments. Jason Roach's influence is of a rarer kind: he gave officers a genuinely new way of looking at things they were already seeing.** The disabled bay parker. The driver who turns out to be disqualified. The small, irritating infractions that fill an officer's shift and have always been treated as the job's background noise. Roach's work reframed that noise as signal — the place where serious offenders quietly give themselves away — and in doing so handed the service one of the few detection ideas that costs almost nothing to use.

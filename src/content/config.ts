@@ -16,6 +16,45 @@ export const SECTION_LABELS: Record<Section, string> = {
 // blank as absent everywhere an optional/defaulted field could receive one.
 const blankAsUndefined = (v: unknown) => (v === '' || v == null ? undefined : v);
 
+// One point in an article's practical summary: what the evidence says, plus
+// the source it came from — which must already be cited in the article body.
+const evidencePointSchema = z.object({
+  point: z.string(),
+  source: z.preprocess(blankAsUndefined, z.string().optional()), // label, e.g. "College of Policing (2023)"
+  // An absolute URL, or a site-relative path for documents the site hosts
+  // itself (e.g. /documents/…): both must already be cited in the article.
+  url: z.preprocess(
+    blankAsUndefined,
+    z
+      .string()
+      .optional()
+      .refine((v) => v === undefined || v.startsWith('/') || URL.canParse(v), {
+        message: 'must be an absolute URL or a site-relative path',
+      })
+  ),
+});
+
+// The Practical Summary card at the foot of an article, collated on
+// /practical-summaries: a briefing for senior leaders. The problem in a
+// sentence, only the strongest evidence, and if/then outcomes — if we do X,
+// this is the benefit, and who gains. Strictly a summary — no claims or
+// sources beyond the article.
+const practicalSummarySchema = z.object({
+  problem: z.string(),
+  evidence: z.array(evidencePointSchema).min(1).max(3),
+  outcomes: z
+    .array(
+      z.object({
+        action: z.string(), // completes "If we …"
+        benefit: z.string(), // the gain, and who gets it — public/victims/officers/force
+      })
+    )
+    .min(1)
+    .max(3),
+});
+
+export type PracticalSummary = z.infer<typeof practicalSummarySchema>;
+
 const articleSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -37,6 +76,14 @@ const articleSchema = z.object({
   // Up to three questions to spark discussion — shown at the end of the article
   // to give readers something concrete to think about or share on LinkedIn.
   discussionQuestions: z.array(z.string()).optional(),
+  // The Practical Summary card (see practicalSummarySchema above). Optional —
+  // articles without one still build. The editor's object field always
+  // serialises the whole shape, so a summary with a blank problem statement
+  // is treated as absent rather than failing the build.
+  practicalSummary: z.preprocess(
+    (v) => (v && typeof v === 'object' && (v as { problem?: unknown }).problem ? v : undefined),
+    practicalSummarySchema.optional()
+  ),
   // Old paths to 301-redirect to this article — fill in when you move an
   // article between sections so the previous URL doesn't break.
   redirectFrom: z.array(z.string()).optional(),

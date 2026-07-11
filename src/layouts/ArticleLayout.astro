@@ -12,10 +12,12 @@ import BookCTA from '../components/BookCTA.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import ArticleContents from '../components/ArticleContents.astro';
 import KeyTakeaways from '../components/KeyTakeaways.astro';
+import PracticalSummary from '../components/PracticalSummary.astro';
 import RelatedArticles from '../components/RelatedArticles.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getTopics, topicForTag } from '../lib/topics';
 import { SECTION_LABELS } from '../content/config';
+import type { PracticalSummary as PracticalSummaryData } from '../content/config';
 import readingTime from 'reading-time';
 import engagement from '../lib/engagement-bundle.json';
 
@@ -36,6 +38,7 @@ interface Props {
   tags?: string[];
   keyTakeaways?: string[];
   discussionQuestions?: string[];
+  practicalSummary?: PracticalSummaryData;
   author: string;
   section: 'police-policy' | 'public-policy' | 'influential-people' | 'other' | 'data-stories';
   slug: string;
@@ -52,6 +55,7 @@ const {
   tags,
   keyTakeaways,
   discussionQuestions,
+  practicalSummary,
   author,
   section,
   slug,
@@ -230,6 +234,13 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             <slot />
           </div>
 
+          {/* The Practical Summary: a senior-leader briefing distilled from
+              the article — problem / evidence / if-then outcomes. Sits between
+              the body and the share panel — the relocation script below
+              positions the sources tail relative to the panel, so the final
+              order is body → summary → panel → sources. */}
+          {practicalSummary && <PracticalSummary summary={practicalSummary} />}
+
           {/* Combined share + star rating panel. Rendered here as a
               fallback; a script relocates it to sit just above the "Sources and
               further reading" heading so it ends the article body, not the page. */}
@@ -385,6 +396,12 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
         start = heading;
         const prev = heading.previousElementSibling;
         if (prev && prev.tagName === 'HR') start = prev;
+      } else if (prose.querySelector('section.footnotes')) {
+        // Footnote articles: the generated "Notes" section is the prose tail;
+        // lift it below the panel exactly like a sources list, so every
+        // article format ends body → briefing → panel → notes/sources.
+        // (FootnotePreview looks definitions up by id, which survives the move.)
+        start = prose.querySelector('section.footnotes');
       } else {
         // No sources list: lift a trailing end-note (e.g. an italic "Method
         // note") that follows the final <hr>, so the share panel ends the

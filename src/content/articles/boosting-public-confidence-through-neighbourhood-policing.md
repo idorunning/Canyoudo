@@ -21,6 +21,43 @@ keyTakeaways:
   - The gains depend on delivery — problem-solving, partnerships and statutory tools used well — not on the label, and implementation across forces is uneven.
   - Protecting neighbourhood capacity from constant abstraction to response is the precondition for any of it to work.
   - "This is not a departure from British policing tradition but the fulfilment of Peel's founding test: the absence of crime and disorder."
+practicalSummary:
+  problem: >-
+    Neighbourhood policing demonstrably builds public confidence, but
+    delivery across the 43 forces is uneven and neighbourhood capacity is
+    constantly abstracted onto response work.
+  evidence:
+    - point: >-
+        Delivered to a high standard, neighbourhood policing produces quick,
+        large and sustained gains in public confidence.
+      source: "College of Policing systematic reviews"
+    - point: >-
+        Crime concentrates — 50% of all crime in under 4% of addresses — and
+        hot spots policing shows consistent benefits across more than 80
+        rigorous evaluations, with no evidence of displacement.
+      source: "Sherman; Braga and colleagues"
+    - point: >-
+        A Campbell Systematic Review of 34 studies found problem-oriented
+        policing cuts targeted problems, with crime reduction diffusing to
+        nearby areas rather than displacing.
+      source: "Hinkle et al. (2020)"
+  outcomes:
+    - action: >-
+        protect neighbourhood capacity from abstraction onto response work
+      benefit: >-
+        prevention actually happens, engagement promises are kept, and public
+        confidence rises instead of going with the broken promises.
+    - action: >-
+        concentrate problem-solving on the small number of places producing
+        most harm, funded with the analysis SARA needs
+      benefit: >-
+        crime falls in those places and the reduction spreads to nearby areas
+        rather than displacing.
+    - action: >-
+        measure harm reduction rather than activity
+      benefit: >-
+        resources go where they do communities the most good, because what
+        gets measured gets done.
 ---
 
 **Neighbourhood policing, done to a high standard, produces "quick, large and sustained" gains in public confidence — the College of Policing's own systematic reviews back the claim.** What's missing isn't evidence. It's consistent delivery across all 43 forces. The frameworks exist, several forces have already proved they work, and what follows draws together the case studies, statutory powers and partnership models that let neighbourhood teams do the job they exist to do.

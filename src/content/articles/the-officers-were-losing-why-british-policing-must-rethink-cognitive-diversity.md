@@ -25,6 +25,51 @@ tags:
   - police
   - policing
   - technology
+practicalSummary:
+  problem: >-
+    British policing invests heavily in recruitment and training, then loses
+    officers whose cognitive profiles — ADHD, autism, dyslexia — do not fit
+    institutional assumptions about what "good" looks like, discarding
+    capabilities the job increasingly needs.
+  evidence:
+    - point: >-
+        A screen of 302 wildland firefighters found 19.5% scored in the range
+        suggestive of ADHD — roughly four times the general adult rate —
+        consistent with high-stakes operational work suiting these attention
+        systems.
+      source: "US Forest Service"
+      url: "https://research.fs.usda.gov/treesearch/38511"
+    - point: >-
+        In a 2023 survey of UK police employees with ADHD, 78% said the trait
+        brought benefits to their policing work, citing thriving in fast-paced
+        environments.
+      source: "UK police workforce survey (2023)"
+      url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10375865/"
+    - point: >-
+        Organisations that over-invest in efficiency and process compliance at
+        the expense of exploration become brittle — excellent until conditions
+        change, then blindsided.
+      source: "March (1991)"
+      url: "https://pubsonline.informs.org/doi/10.1287/orsc.2.1.71"
+  outcomes:
+    - action: >-
+        audit performance and promotion criteria for which standards predict
+        capability and which merely reward conformity
+      benefit: >-
+        the force keeps officers with pattern recognition, crisis performance
+        and deep community knowledge it would otherwise manage out.
+    - action: >-
+        develop supervisors to see that brilliant crisis performance and
+        chaotic administration can sit in the same officer
+      benefit: >-
+        neurodivergent officers are deployed as assets rather than quietly
+        resigning, and the force keeps capability it paid to train.
+    - action: >-
+        judge officers on the strengths they bring, not only the boxes they
+        tick
+      benefit: >-
+        the force holds the exploratory thinkers it will need when standard
+        approaches stop working in a more volatile operating environment.
 ---
 
 **I have ADHD, and I am a serving police sergeant.** I have spent a career watching officers like me get managed toward the door — chaotic paperwork, missed deadlines, "needs to improve organisation" on the appraisal — while forces spend heavily recruiting people who look, on paper, easier to manage. This is written from inside that experience, not about it.

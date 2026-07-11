@@ -13,6 +13,41 @@ tags:
   - police
   - policing
   - criminology
+practicalSummary:
+  problem: >-
+    Policing spreads its scarce resources evenly across whole districts, while
+    crime concentrates in a small number of places, offenders and moments that
+    produce most of the harm.
+  evidence:
+    - point: >-
+        The Philadelphia Foot Patrol Experiment randomly assigned foot patrols to
+        some violent-crime hot spots and not others, and violent crime fell
+        meaningfully in the treated areas.
+      source: "Ratcliffe et al., Criminology (2011)"
+      url: "https://www.jratcliffe.net/foot-patrol"
+    - point: >-
+        Ratcliffe's 3-i model — analysts interpret the criminal environment,
+        influence decision-makers, who impact it — exposes where forces break the
+        chain: analysis that changes no decision is expensive trivia.
+      source: "Ratcliffe, Intelligence-Led Policing (2016)"
+    - point: >-
+        His predictive-policing work is deliberately sober: gains are modest, and
+        forecasts that send officers back to the same over-policed neighbourhoods
+        risk entrenching bias rather than reducing harm.
+      source: "Ratcliffe"
+  outcomes:
+    - action: >-
+        concentrate patrol deliberately on identified hot spots rather than
+        spreading it evenly, and check whether it made a difference
+      benefit: >-
+        violent crime falls in the treated places, as the Philadelphia experiment
+        showed, and the public gets officers where the harm actually is.
+    - action: >-
+        audit where the 3-i chain breaks — reports that influence nobody,
+        deployments no analysis informed, tactics never evaluated
+      benefit: >-
+        analysis starts changing decisions, the loop closes, and the force learns
+        what actually works.
 ---
 
 **Most policing, left to its own devices, spreads itself thin.** Patrols drift across whole districts, investigations chase whatever lands on the desk, and effort is distributed roughly evenly across a city — which sounds fair until you notice that crime is not distributed evenly at all. A small number of places, a small number of offenders and a small number of moments account for most of the harm. Jerry Ratcliffe has spent a career insisting that policing should be organised around that fact: find the concentrations, aim at them deliberately, and check whether you made a difference. He calls it intelligence-led policing, and he is its most readable advocate.

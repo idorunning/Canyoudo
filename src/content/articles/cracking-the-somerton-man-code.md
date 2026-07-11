@@ -24,6 +24,45 @@ keyTakeaways:
   - Cryptographers in 1949 and later Adelaide researchers agree the five lines are most likely an initialism — the first letters of words — not a recoverable cipher.
   - The author's hypothesis is that the letters record a travel itinerary around 1948 Adelaide, but concedes it is only consistent with the evidence, not yet tested against a real route.
   - 'A test that cannot fail proves nothing: with a huge pool of place names, every letter finds a match, so set-membership matching is a warning rather than a vindication.'
+practicalSummary:
+  problem: >-
+    The five pencilled lines in the Somerton Man's Rubáiyát have defeated
+    cryptographers for nearly eighty years, and the case is a working lesson
+    in how investigators should hold a pet theory.
+  evidence:
+    - point: >-
+        DNA recovered from the death mask identified the Somerton Man in 2022
+        as Carl Webb — and demolished the paternity and espionage theories
+        rather than confirming them.
+      source: "Abbott & Fitzpatrick (2022)"
+    - point: >-
+        Naval cryptographers in 1949 and later University of Adelaide
+        analyses agreed the letters behave like an initialism — the first
+        letters of words — not a cipher with a recoverable key.
+      source: "Naval cryptographers (1949); University of Adelaide"
+    - point: >-
+        With a pool of 575-plus candidate locations every letter in the code
+        finds some match, so set-membership testing cannot fail — and a test
+        that cannot fail proves nothing.
+      source: "Author's RPFA analysis"
+  outcomes:
+    - action: >-
+        separate what is established from what is inferred and keep a
+        preferred theory on a short lead
+      benefit: >-
+        investigators avoid building convictions on evidence that merely
+        fits, and cases rest on solid ground.
+    - action: >-
+        design tests that can actually fail before trusting a hypothesis
+      benefit: >-
+        investigators learn the difference between a theory consistent with
+        the evidence and one that has survived falsification.
+    - action: >-
+        state confidence levels explicitly for each link in the chain of
+        reasoning
+      benefit: >-
+        the strongest evidence stops lending credibility to the weakest, and
+        investigators see where a case is genuinely fragile.
 ---
 
 _This piece updates my earlier analysis of the Somerton Man code. The first version proposed a single base location and a rail-led reading of the letters. What follows widens the transport assumptions to a multimodal model, sets out the search interpretation as the organising idea, tests and rejects the suggestion that Webb's estranged wife explains his presence in South Australia, and then does the thing my first draft did not do properly: it tries to break its own hypothesis. The analysis tools behind it are now public too — see the work-in-progress_ [_Somerton Lab_](/somerton-lab/)_._

@@ -6,6 +6,45 @@ pubDate: 2026-06-07
 heroImage: "/images/prob-over-pvalues-chart1-decision-bands.png"
 tags: ["More or Less Policing", "stop and search", "statistics", "transparency"]
 redirectFrom: ["/other/reading-the-data"]
+practicalSummary:
+  problem: >-
+    Police statistics have never been more available or easier to misread,
+    and quoting a figure without examining the method behind it misleads in
+    either direction.
+  evidence:
+    - point: >-
+        data.police.uk publishes millions of records a month under an open
+        licence, which makes careful reading more necessary, not less.
+      source: "data.police.uk"
+      url: "https://data.police.uk"
+    - point: >-
+        The familiar stop-and-search ratio divides searches by residential
+        population, but searches happen where people are, not where they
+        sleep, so the raw ratio cannot say how much is bias and how much is
+        deployment.
+    - point: >-
+        A single figure is a dot, not an insight: a force's number means
+        nothing until it is set beside last year, a similar force, or what
+        you would expect.
+  outcomes:
+    - action: >-
+        ask what exactly is counted on top and what is on the bottom before
+        repeating any police rate
+      benefit: >-
+        the force stops quoting figures the method cannot support, and the
+        public gets claims that mean what they say.
+    - action: >-
+        set every figure against last year, a comparable force, or a sensible
+        expectation
+      benefit: >-
+        a dot becomes an insight, and leaders draw conclusions the public can
+        actually weigh.
+    - action: >-
+        check the working in the underlying data, noting the month it
+        describes and the day it was pulled
+      benefit: >-
+        claims can be verified rather than taken on trust, by the force and
+        the public alike.
 ---
 
 For more than twenty years, Radio 4's *More or Less* has done something quietly radical: it takes a number that everyone is repeating — in a headline, a manifesto, a select committee — and asks the boring, devastating question. *Where did that come from, and does it mean what they say it means?* Tim Harford and the team have made a national pastime of the polite teardown, and along the way they have taught a generation of listeners — me included — that a statistic is not a fact. It's a claim, with a method behind it, and the method is where the truth lives.

@@ -22,6 +22,48 @@ tags:
   - policing
   - police
   - policy
+practicalSummary:
+  problem: >-
+    Nitazenes — synthetic opioids far more potent than the heroin they are
+    displacing — are already killing at scale in the UK, and most forces are
+    under-resourced even to detect the problem.
+  evidence:
+    - point: >-
+        The National Crime Agency links nitazenes to roughly 1,000 UK deaths
+        since June 2023, while heroin seizures have fallen 54% to their lowest
+        level since 1989 — the conditions for a synthetic transition are in
+        place.
+      source: "National Crime Agency (2026)"
+    - point: >-
+        Naloxone works but often needs multiple or prolonged doses, and
+        apparent recovery can give way to re-narcotisation as the naloxone
+        wears off before the opioid does.
+      source: "Clinical Toxicology (2025)"
+    - point: >-
+        Recorded deaths miss up to a third of nitazene fatalities because the
+        drugs degrade in post-mortem blood samples, so a response funded on
+        official figures is short by design.
+      source: "King's College London / Copeland et al. (2026)"
+  outcomes:
+    - action: >-
+        plug the force into the national early-warning systems and contribute
+        overdose, naloxone and drug-checking data
+      benefit: >-
+        the force spots a cluster before the body count reveals it, and the
+        public gets a response sized to the real threat.
+    - action: >-
+        recalibrate naloxone provision and custody monitoring for multiple
+        doses and prolonged observation
+      benefit: >-
+        victims and detainees are protected against the re-narcotisation and
+        late deterioration that the single-dose heroin model misses.
+    - action: >-
+        fix officer-safety messaging with brief, evidence-based training on
+        exposure risk
+      benefit: >-
+        fear of the powder no longer delays rescue breathing or naloxone — one
+        short intervention cut the false "touching is deadly" belief from 80%
+        to 39%.
 ---
 
 Synthetic opioids are no longer a problem we're watching arrive from across the Atlantic. They've landed. The National Crime Agency now links nitazenes to roughly 1,000 deaths in the UK since they appeared at scale in June 2023, a figure its Director General has called "extraordinary".[^1] For an audience of senior leaders and policymakers, that single sentence reframes the question. This isn't horizon-scanning. It's an operational reality that most forces are under-resourced to detect, let alone respond to.
