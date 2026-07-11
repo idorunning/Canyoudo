@@ -124,7 +124,7 @@ const parts = [
     </section>
   </aside>
 ) : (
-  <article id={id} class="ps ps--hub card-hairline rounded-xl p-6 md:p-7 flex flex-col">
+  <article id={id} data-reveal class="ps ps--hub card-hairline rounded-xl p-6 md:p-7 flex flex-col">
     <div class="h-[3px] w-10 bg-accent mb-4" aria-hidden="true"></div>
     {section && <div class="mb-2.5"><SectionBadge section={section} /></div>}
     {articleTitle && (

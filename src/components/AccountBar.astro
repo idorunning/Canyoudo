@@ -59,6 +59,7 @@ const hasAuth = Boolean(
     <script is:inline set:html={`try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&k.indexOf('sb-')===0&&k.indexOf('-auth-token')>0&&localStorage.getItem(k)){document.documentElement.setAttribute('data-tap-authed','');break;}}}catch(e){}`}></script>
     <style is:inline set:html={`
       html[data-tap-authed] [data-account-dot]{ background-color: rgb(34 197 94); box-shadow: none; --tw-ring-color: rgb(34 197 94 / 0.2); }
+      html[data-tap-authed] [data-quick-signout]{ display: inline-flex; }
     `}></style>
 
     <div id="tap-account-panel" class="hidden fixed inset-0 z-[59] bg-night-50/50 backdrop-blur-[2px] px-4 pt-[8vh]" aria-hidden="true">

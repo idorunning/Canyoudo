@@ -117,7 +117,8 @@ export async function initHeaderAccount(): Promise<void> {
   const labelEls = document.querySelectorAll<HTMLElement>('[data-account-label]');
 
   const welcomeModal = document.getElementById('tap-welcome-modal');
-  const welcomeClose = welcomeModal?.querySelector<HTMLButtonElement>('[data-welcome-close]');
+  const welcomeDismiss = welcomeModal?.querySelector<HTMLButtonElement>('[data-welcome-dismiss]');
+  const welcomeOpenAccount = welcomeModal?.querySelector<HTMLButtonElement>('[data-welcome-open-account]');
 
   const url = import.meta.env.PUBLIC_SUPABASE_URL;
   const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
@@ -412,14 +413,22 @@ export async function initHeaderAccount(): Promise<void> {
   });
 
   // ---------------------------------------------------------------- sign out
-  signOutBtn?.addEventListener('click', async () => {
-    signOutBtn.disabled = true;
+  async function doSignOut(trigger?: HTMLButtonElement) {
+    if (trigger) trigger.disabled = true;
     try {
       await supabase.auth.signOut();
     } catch {}
     // Full reload: guarantees every gated page and in-memory view resets to the
     // signed-out state, rather than relying on in-tab session propagation.
     location.reload();
+  }
+
+  signOutBtn?.addEventListener('click', () => doSignOut(signOutBtn));
+
+  // Quick sign-out button in the header top bar — signs out immediately
+  // without opening the account panel first.
+  document.querySelectorAll<HTMLButtonElement>('[data-quick-signout]').forEach((btn) => {
+    btn.addEventListener('click', () => doSignOut(btn));
   });
 
   // ---------------------------------------------------------- welcome modal
@@ -427,6 +436,11 @@ export async function initHeaderAccount(): Promise<void> {
     const created = user?.created_at ? new Date(user.created_at).getTime() : NaN;
     const lastSignIn = user?.last_sign_in_at ? new Date(user.last_sign_in_at).getTime() : created;
     return Number.isFinite(created) && Math.abs(lastSignIn - created) < 10_000;
+  }
+
+  function hideWelcome() {
+    welcomeModal?.classList.add('hidden');
+    welcomeModal?.setAttribute('aria-hidden', 'true');
   }
 
   function maybeShowWelcome(user: any) {
@@ -443,9 +457,10 @@ export async function initHeaderAccount(): Promise<void> {
     } catch {}
   }
 
-  welcomeClose?.addEventListener('click', () => {
-    welcomeModal?.classList.add('hidden');
-    welcomeModal?.setAttribute('aria-hidden', 'true');
+  welcomeDismiss?.addEventListener('click', hideWelcome);
+  welcomeOpenAccount?.addEventListener('click', () => {
+    hideWelcome();
+    openPanel();
   });
 
   // ------------------------------------------------------------- state wiring
@@ -485,7 +500,14 @@ export async function initHeaderAccount(): Promise<void> {
   supabase.auth.onAuthStateChange(async (event: string, session: any) => {
     if (session?.user) {
       await onSignedIn(session.user);
-      if (event === 'SIGNED_IN') maybeShowWelcome(session.user);
+      if (event === 'SIGNED_IN') {
+        // Sign-in just completed — close the panel rather than leaving the
+        // reader staring at the "Your details" form. A returning reader is
+        // done; a brand-new one gets pointed at account settings via the
+        // welcome bubble instead.
+        closePanel();
+        maybeShowWelcome(session.user);
+      }
     } else {
       onSignedOut();
     }

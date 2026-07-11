@@ -1,36 +1,31 @@
 ---
-// A one-time "thank you for joining" welcome, shown right after a reader
-// completes their very first sign-in. Sitewide (rendered once in
-// BaseLayout) since sign-in can land on any page — the magic-link email and
-// the Google OAuth flow both redirect back to wherever the reader started.
-// See src/scripts/account/header-account.ts for the "is this a new
-// account?" check and the dispatch that reveals this.
+// A one-time "welcome" bubble, shown right after a reader completes their
+// very first sign-in — a small speech-bubble popover near the account
+// control rather than a blocking modal, pointing them at account settings
+// instead of dumping them straight into the settings form. Sitewide
+// (rendered once in BaseLayout) since sign-in can land on any page — the
+// magic-link email and the Google OAuth flow both redirect back to wherever
+// the reader started. See src/scripts/account/header-account.ts for the "is
+// this a new account?" check and the dispatch that reveals this.
 const hasAuth = Boolean(
   import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
 ---
 {hasAuth && (
-  <div id="tap-welcome-modal" class="hidden fixed inset-0 z-[61] bg-night-50/60 backdrop-blur-[2px] px-4 flex items-center justify-center" aria-hidden="true">
-    <div
-      class="w-full max-w-sm bg-paper-50 border border-ink-200 rounded-xl overflow-hidden shadow-panel text-center"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="welcome-heading"
-    >
-      <div class="surface-night px-7 pt-9 pb-8">
-        <div class="text-3xl mb-3" aria-hidden="true">👋</div>
-        <h2 id="welcome-heading" class="font-display text-xl font-bold text-night-ink">Welcome aboard</h2>
-        <p class="font-serif text-night-dim leading-relaxed mt-3">
-          Thank you for joining Thinking About Policing — glad to have you here.
-          You've unlocked saved articles, research tools and the practical
-          summaries library, all free.
-        </p>
-      </div>
-      <div class="px-7 py-5">
-        <button type="button" data-welcome-close class="font-sans text-sm font-bold bg-accent text-paper-50 dark:text-night-50 rounded-full px-5 py-2.5 hover:bg-accent-dark transition-colors">
-          Let's go
-        </button>
-      </div>
+  <div id="tap-welcome-modal" class="hidden fixed top-[76px] right-4 md:right-8 z-[61] w-[280px]" role="status" aria-hidden="true">
+    <div class="relative bg-paper-50 border border-ink-200 rounded-xl shadow-panel p-4">
+      <div class="absolute -top-1.5 right-6 w-3 h-3 bg-paper-50 border-l border-t border-ink-200 rotate-45" aria-hidden="true"></div>
+      <button type="button" data-welcome-dismiss class="absolute top-2 right-2 p-1 text-ink-400 hover:text-ink-900 transition-colors" aria-label="Dismiss">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="5" y1="5" x2="19" y2="19" /><line x1="19" y1="5" x2="5" y2="19" />
+        </svg>
+      </button>
+      <p class="font-sans text-sm font-bold text-ink-900 leading-snug pr-4 m-0">
+        Welcome to Thinking About Policing!
+      </p>
+      <button type="button" data-welcome-open-account class="mt-2 font-sans text-xs font-semibold text-accent hover:text-accent-dark transition-colors underline underline-offset-2">
+        Click here for account settings →
+      </button>
     </div>
   </div>
 )}

@@ -289,6 +289,99 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     </div>
   </section>
 
+  <!-- ============ MOST READ + LATEST WRITING ============ -->
+  <section class="bg-paper-100 border-b border-ink-200">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
+
+      <!-- Most read: baked at build, refreshed live from article_engagement -->
+      {mostRead.length > 0 && (
+        <div class="mb-14">
+          <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-5 pb-3.5 border-b border-ink-300 flex items-baseline justify-between gap-4">
+            <span>
+              <span class="u-kicker block mb-1.5">From the engagement data</span>
+              Most read
+            </span>
+            <span data-most-read-live hidden class="u-kicker u-kicker--dim flex items-center gap-1.5">
+              <span class="w-1 h-1 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
+              Live
+            </span>
+          </h2>
+          <div data-most-read-row class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+            {mostRead.map((article, i) => {
+              const views = viewsBySlug[article.slug] ?? 0;
+              return (
+                <a
+                  href={`/${article.section}/${article.slug}`}
+                  class="card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline"
+                >
+                  <span class={`font-mono font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
+                      {article.data.title}
+                    </h3>
+                    <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum">
+                      {SECTION_LABELS[article.section]}{views > 0 ? ` · ${views.toLocaleString('en-GB')} views` : ''}
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <!-- Latest writing -->
+      <div>
+        <div class="flex items-baseline justify-between mb-5 pb-3.5 border-b border-ink-300">
+          <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+            <span class="u-kicker block mb-1.5">Newest first</span>
+            Latest writing
+          </h2>
+          <a href="/sitemap" class="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
+            Archive →
+          </a>
+        </div>
+        <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
+          {latestArticles.map(article => (
+            <a
+              href={`/${article.section}/${article.slug}`}
+              class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-xl overflow-hidden hover:no-underline"
+            >
+              {(article.data.heroImage || article.data.portrait) ? (
+                <div class="overflow-hidden h-[150px] border-b border-ink-200">
+                  <img
+                    src={article.data.portrait ?? article.data.heroImage}
+                    alt=""
+                    loading="lazy"
+                    class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[600ms] ease-swift"
+                  />
+                </div>
+              ) : (
+                <div class={`h-[150px] flex items-center justify-center border-b border-ink-200 ${SECTION_BG[article.section]}`}>
+                  <span class="font-display font-extrabold text-3xl text-ink-900/20">
+                    {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
+                  </span>
+                </div>
+              )}
+              <div class="p-5 flex flex-col grow">
+                <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
+                  {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                </div>
+                <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
+                  {article.data.title}
+                </h3>
+                <p class="font-sans text-[13.5px] leading-[1.5] text-ink-700 mt-2 line-clamp-2">{article.data.description}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ============ QUOTE ============ -->
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-4 md:py-6">
     <figure class="surface-night rounded-2xl px-10 md:px-16 py-12 md:py-14 text-center relative overflow-hidden m-0">
@@ -453,99 +546,6 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
         </span>
       </div>
     </a>
-  </section>
-
-  <!-- ============ MOST READ + LATEST WRITING ============ -->
-  <section class="bg-paper-100 border-y border-ink-200">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-
-      <!-- Most read: baked at build, refreshed live from article_engagement -->
-      {mostRead.length > 0 && (
-        <div class="mb-14">
-          <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-5 pb-3.5 border-b border-ink-300 flex items-baseline justify-between gap-4">
-            <span>
-              <span class="u-kicker block mb-1.5">From the engagement data</span>
-              Most read
-            </span>
-            <span data-most-read-live hidden class="u-kicker u-kicker--dim flex items-center gap-1.5">
-              <span class="w-1 h-1 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
-              Live
-            </span>
-          </h2>
-          <div data-most-read-row class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
-            {mostRead.map((article, i) => {
-              const views = viewsBySlug[article.slug] ?? 0;
-              return (
-                <a
-                  href={`/${article.section}/${article.slug}`}
-                  class="card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline"
-                >
-                  <span class={`font-mono font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <div>
-                    <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
-                      {article.data.title}
-                    </h3>
-                    <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum">
-                      {SECTION_LABELS[article.section]}{views > 0 ? ` · ${views.toLocaleString('en-GB')} views` : ''}
-                    </div>
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      <!-- Latest writing -->
-      <div>
-        <div class="flex items-baseline justify-between mb-5 pb-3.5 border-b border-ink-300">
-          <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
-            <span class="u-kicker block mb-1.5">Newest first</span>
-            Latest writing
-          </h2>
-          <a href="/sitemap" class="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
-            Archive →
-          </a>
-        </div>
-        <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
-          {latestArticles.map(article => (
-            <a
-              href={`/${article.section}/${article.slug}`}
-              class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-xl overflow-hidden hover:no-underline"
-            >
-              {(article.data.heroImage || article.data.portrait) ? (
-                <div class="overflow-hidden h-[150px] border-b border-ink-200">
-                  <img
-                    src={article.data.portrait ?? article.data.heroImage}
-                    alt=""
-                    loading="lazy"
-                    class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[600ms] ease-swift"
-                  />
-                </div>
-              ) : (
-                <div class={`h-[150px] flex items-center justify-center border-b border-ink-200 ${SECTION_BG[article.section]}`}>
-                  <span class="font-display font-extrabold text-3xl text-ink-900/20">
-                    {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
-                  </span>
-                </div>
-              )}
-              <div class="p-5 flex flex-col grow">
-                <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
-                  {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                </div>
-                <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
-                  {article.data.title}
-                </h3>
-                <p class="font-sans text-[13.5px] leading-[1.5] text-ink-700 mt-2 line-clamp-2">{article.data.description}</p>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-
-    </div>
   </section>
 
   {allArticles.length === 0 && (
