@@ -490,4 +490,19 @@ export async function initHeaderAccount(): Promise<void> {
       onSignedOut();
     }
   });
+
+  // Listen for storage changes (e.g., sign-in from another Supabase client
+  // instance or tab). This ensures the header stays in sync with the gate.
+  window.addEventListener('storage', async (e) => {
+    if (e.key?.includes('auth-token') || e.key?.includes('auth-expires')) {
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (data?.session?.user) {
+          await onSignedIn(data.session.user);
+        } else {
+          onSignedOut();
+        }
+      } catch {}
+    }
+  });
 }

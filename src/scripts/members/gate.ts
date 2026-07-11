@@ -138,6 +138,17 @@ export async function initMembersGate(): Promise<void> {
     applyGate(Boolean(session?.user));
     maybeSubscribeOnSignIn(_event, session?.user?.email);
   });
+
+  // Listen for storage changes (e.g., sign-in from another tab or Supabase client
+  // instance). This ensures the gate stays in sync with other auth listeners.
+  window.addEventListener('storage', async (e) => {
+    if (e.key?.includes('auth-token') || e.key?.includes('auth-expires')) {
+      try {
+        const { data } = await supabase.auth.getSession();
+        applyGate(Boolean(data?.session?.user));
+      } catch {}
+    }
+  });
 }
 
 function renderSignInOptions(supabase: any, container: HTMLElement): void {
