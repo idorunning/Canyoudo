@@ -1,0 +1,143 @@
+---
+// Newsletter page: MailerLite in detail — recent subscribers, twelve-month
+// growth, groups, and open/click rates for the last campaigns. All reads go
+// through the server-side API key; nothing here reaches the browser beyond
+// the rendered HTML.
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Bars from '../../components/dashboard/Bars.astro';
+import { adminGuard } from '../../lib/admin-guard';
+import { getNewsletterDetail, getSubscriberStats } from '../../lib/dashboard-data/mailerlite';
+
+const auth = await adminGuard(Astro);
+if (auth.state === 'redirect') return auth.response;
+
+const [stats, detail] =
+  auth.state === 'ok' ? await Promise.all([getSubscriberStats(), getNewsletterDetail()]) : [null, null];
+
+const growthBars = detail?.recent.ok
+  ? detail.recent.data.growth.map((g) => ({ name: g.month, count: g.count }))
+  : [];
+const newThisMonth = growthBars.length > 0 ? growthBars[growthBars.length - 1].count : 0;
+
+function fmtDate(iso: string): string {
+  return iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+}
+function pct(fraction: number): string {
+  return `${(fraction * 100).toFixed(1)}%`;
+}
+---
+
+<DashboardLayout title="Newsletter" active="newsletter" auth={auth} wide={true}>
+  <div class="grid gap-6 sm:grid-cols-2 mb-10">
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Active subscribers</p>
+      {stats?.ok ? (
+        <p class="text-2xl font-semibold text-ink-900">{stats.data.activeCount.toLocaleString('en-GB')}</p>
+      ) : (
+        <p class="text-sm text-ink-500">{stats?.reason}</p>
+      )}
+    </div>
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">New this month</p>
+      {detail?.recent.ok ? (
+        <p class="text-2xl font-semibold text-ink-900">{newThisMonth.toLocaleString('en-GB')}</p>
+      ) : (
+        <p class="text-sm text-ink-500">{detail?.recent.reason}</p>
+      )}
+    </div>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2 mb-10">
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Sign-ups by month (last 12)</p>
+      {detail?.recent.ok ? (
+        <Bars items={growthBars} emptyLabel="No sign-ups in the last year." />
+      ) : (
+        <p class="text-sm text-ink-500">{detail?.recent.reason}</p>
+      )}
+    </div>
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Groups</p>
+      {detail?.groups.ok ? (
+        <Bars
+          items={detail.groups.data.map((g) => ({ name: g.name, count: g.activeCount }))}
+          emptyLabel="No groups set up."
+        />
+      ) : (
+        <p class="text-sm text-ink-500">{detail?.groups.reason}</p>
+      )}
+    </div>
+  </div>
+
+  <div class="border border-ink-200 rounded-lg p-5 mb-10">
+    <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Last campaigns</p>
+    {detail?.campaigns.ok ? (
+      detail.campaigns.data.length > 0 ? (
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-left">
+              <tr class="border-b border-ink-200">
+                <th class="py-2 pr-3 font-semibold text-ink-700">Campaign</th>
+                <th class="py-2 pr-3 font-semibold text-ink-700 whitespace-nowrap">Sent</th>
+                <th class="py-2 pr-3 font-semibold text-ink-700 text-right">Recipients</th>
+                <th class="py-2 pr-3 font-semibold text-ink-700 text-right">Open rate</th>
+                <th class="py-2 font-semibold text-ink-700 text-right">Click rate</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-ink-100">
+              {detail.campaigns.data.map((c) => (
+                <tr>
+                  <td class="py-2 pr-3 text-ink-900">{c.name}</td>
+                  <td class="py-2 pr-3 whitespace-nowrap text-ink-700">{fmtDate(c.finishedAt)}</td>
+                  <td class="py-2 pr-3 text-right tabular-nums text-ink-700">{c.sent.toLocaleString('en-GB')}</td>
+                  <td class="py-2 pr-3 text-right tabular-nums text-ink-700">{pct(c.openRate)}</td>
+                  <td class="py-2 text-right tabular-nums text-ink-700">{pct(c.clickRate)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p class="text-sm text-ink-500">No sent campaigns yet.</p>
+      )
+    ) : (
+      <p class="text-sm text-ink-500">{detail?.campaigns.reason}</p>
+    )}
+  </div>
+
+  <div class="border border-ink-200 rounded-lg p-5">
+    <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Recent subscribers (latest 50)</p>
+    {detail?.recent.ok ? (
+      detail.recent.data.subscribers.length > 0 ? (
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="text-left">
+              <tr class="border-b border-ink-200">
+                <th class="py-2 pr-3 font-semibold text-ink-700">Email</th>
+                <th class="py-2 pr-3 font-semibold text-ink-700">Name</th>
+                <th class="py-2 pr-3 font-semibold text-ink-700">Status</th>
+                <th class="py-2 font-semibold text-ink-700 whitespace-nowrap">Subscribed</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-ink-100">
+              {detail.recent.data.subscribers.map((s) => (
+                <tr>
+                  <td class="py-2 pr-3 text-ink-900">{s.email}</td>
+                  <td class="py-2 pr-3 text-ink-700">{s.name || '—'}</td>
+                  <td class="py-2 pr-3 text-ink-700">{s.status}</td>
+                  <td class="py-2 whitespace-nowrap text-ink-700">{fmtDate(s.subscribedAt)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p class="text-sm text-ink-500">No subscribers yet.</p>
+      )
+    ) : (
+      <p class="text-sm text-ink-500">{detail?.recent.reason}</p>
+    )}
+  </div>
+</DashboardLayout>

@@ -1,0 +1,108 @@
+---
+// Traffic page: GoatCounter in detail — a 30-day pageview trend, the top 25
+// pages, and where readers come from (referrers, browsers, locations). Each
+// widget fails soft on its own, so an API change in one endpoint can't blank
+// the page.
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Bars from '../../components/dashboard/Bars.astro';
+import Sparkline from '../../components/dashboard/Sparkline.astro';
+import { adminGuard } from '../../lib/admin-guard';
+import { getTrafficDetail } from '../../lib/dashboard-data/goatcounter';
+
+const auth = await adminGuard(Astro);
+if (auth.state === 'redirect') return auth.response;
+
+const detail = auth.state === 'ok' ? await getTrafficDetail() : null;
+
+const dayLabels = detail?.daily.ok ? detail.daily.data.days : [];
+---
+
+<DashboardLayout title="Traffic" active="traffic" auth={auth} wide={true}>
+  <div class="border border-ink-200 rounded-lg p-5 mb-10">
+    <div class="flex flex-wrap items-baseline justify-between gap-4 mb-4">
+      <p class="text-xs uppercase tracking-wide text-ink-500">Pageviews — last 30 days</p>
+      {detail?.daily.ok && (
+        <p class="text-sm text-ink-700">
+          <span class="font-semibold text-ink-900">{detail.daily.data.total.toLocaleString('en-GB')}</span> views ·{' '}
+          <span class="font-semibold text-ink-900">{detail.daily.data.totalUnique.toLocaleString('en-GB')}</span> visitors
+        </p>
+      )}
+    </div>
+    {detail?.daily.ok ? (
+      <>
+        <Sparkline values={dayLabels.map((d) => d.count)} />
+        {dayLabels.length > 1 && (
+          <div class="flex justify-between text-xs text-ink-500 mt-1">
+            <span>{dayLabels[0].day}</span>
+            <span>{dayLabels[dayLabels.length - 1].day}</span>
+          </div>
+        )}
+      </>
+    ) : (
+      <p class="text-sm text-ink-500">{detail?.daily.reason}</p>
+    )}
+  </div>
+
+  <div class="border border-ink-200 rounded-lg p-5 mb-10">
+    <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Top pages</p>
+    {detail?.topPages.ok ? (
+      detail.topPages.data.length > 0 ? (
+        <div class="overflow-x-auto">
+          <table data-sortable class="w-full text-sm">
+            <thead class="text-left">
+              <tr class="border-b border-ink-200">
+                <th data-sort-key class="py-2 pr-3 font-semibold text-ink-700">Path</th>
+                <th data-sort-key class="py-2 font-semibold text-ink-700 text-right">Views</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-ink-100">
+              {detail.topPages.data.map((p) => (
+                <tr>
+                  <td data-sort-value={p.name.toLowerCase()} class="py-2 pr-3 text-ink-900">
+                    <a href={p.name} class="hover:text-accent hover:underline">{p.name}</a>
+                  </td>
+                  <td data-sort-value={p.count} class="py-2 text-right tabular-nums text-ink-700">{p.count.toLocaleString('en-GB')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p class="text-sm text-ink-500">No pageviews recorded yet.</p>
+      )
+    ) : (
+      <p class="text-sm text-ink-500">{detail?.topPages.reason}</p>
+    )}
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-3">
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Referrers</p>
+      {detail?.referrers.ok ? (
+        <Bars items={detail.referrers.data} emptyLabel="No referrers yet." />
+      ) : (
+        <p class="text-sm text-ink-500">{detail?.referrers.reason}</p>
+      )}
+    </div>
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Browsers</p>
+      {detail?.browsers.ok ? (
+        <Bars items={detail.browsers.data} emptyLabel="No browser data yet." />
+      ) : (
+        <p class="text-sm text-ink-500">{detail?.browsers.reason}</p>
+      )}
+    </div>
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Locations</p>
+      {detail?.locations.ok ? (
+        <Bars items={detail.locations.data} emptyLabel="No location data yet." />
+      ) : (
+        <p class="text-sm text-ink-500">{detail?.locations.reason}</p>
+      )}
+    </div>
+  </div>
+
+  <script src="../../scripts/dashboard-table-sort.ts"></script>
+</DashboardLayout>

@@ -1,0 +1,33 @@
+---
+// Dependency-free inline-SVG sparkline for dashboard time series. Scales the
+// values into a fixed viewBox and strokes with currentColor so the parent's
+// text colour themes it.
+interface Props {
+  values: number[];
+  width?: number;
+  height?: number;
+}
+
+const { values, width = 480, height = 64 } = Astro.props;
+
+const max = Math.max(...values, 1);
+const step = values.length > 1 ? width / (values.length - 1) : width;
+const pad = 3; // keep the stroke inside the viewBox at the extremes
+const points = values
+  .map((v, i) => `${(i * step).toFixed(1)},${(pad + (1 - v / max) * (height - pad * 2)).toFixed(1)}`)
+  .join(' ');
+---
+
+{values.length > 1 ? (
+  <svg
+    viewBox={`0 0 ${width} ${height}`}
+    class="w-full h-16 text-accent"
+    preserveAspectRatio="none"
+    role="img"
+    aria-label={`Trend over ${values.length} days`}
+  >
+    <polyline points={points} fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+  </svg>
+) : (
+  <p class="text-sm text-ink-500">Not enough data for a trend yet.</p>
+)}

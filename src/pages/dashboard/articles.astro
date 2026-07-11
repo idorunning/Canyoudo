@@ -1,0 +1,157 @@
+---
+// Article management power table: every article in the content collection
+// (drafts included) joined on slug with live Supabase engagement — views,
+// shares, community rating, saves — with sortable columns and edit links
+// into both editors (Keystatic for .md; Sveltia handles .mdx too).
+export const prerender = false;
+
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { adminGuard } from '../../lib/admin-guard';
+import { getArticleRows } from '../../lib/dashboard-data/articles';
+import { getEngagement, getSavedArticleCounts } from '../../lib/dashboard-data/supabase-admin';
+
+const auth = await adminGuard(Astro);
+if (auth.state === 'redirect') return auth.response;
+
+const [articles, engagement, saves] =
+  auth.state === 'ok'
+    ? await Promise.all([getArticleRows(), getEngagement(), getSavedArticleCounts()])
+    : [[], null, null];
+
+const rows = articles.map((a) => {
+  const e = engagement?.ok ? engagement.data.get(a.slug) : undefined;
+  const avg = e && e.ratingCount > 0 ? e.ratingSum / e.ratingCount : null;
+  return {
+    ...a,
+    views: e?.viewCount ?? 0,
+    shares: e?.shareCount ?? 0,
+    avgRating: avg,
+    ratingCount: e?.ratingCount ?? 0,
+    saveCount: saves?.ok ? (saves.data.get(a.slug) ?? 0) : 0,
+  };
+});
+
+const totals = rows.reduce(
+  (acc, r) => ({
+    words: acc.words + r.words,
+    views: acc.views + r.views,
+    shares: acc.shares + r.shares,
+    ratingSum: acc.ratingSum + (r.avgRating !== null ? r.avgRating * r.ratingCount : 0),
+    ratingCount: acc.ratingCount + r.ratingCount,
+    saves: acc.saves + r.saveCount,
+  }),
+  { words: 0, views: 0, shares: 0, ratingSum: 0, ratingCount: 0, saves: 0 }
+);
+const totalAvg = totals.ratingCount > 0 ? (totals.ratingSum / totals.ratingCount).toFixed(1) : '—';
+
+const sectionLabels: Record<string, string> = {
+  'police-policy': 'Evidence & Practice',
+  'public-policy': 'Leadership & Culture',
+  'influential-people': 'Influential People',
+  other: 'History & Curiosities',
+  'data-stories': 'Technology & Innovation',
+};
+
+function fmtDate(d: Date): string {
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+---
+
+<DashboardLayout title="Articles" active="articles" auth={auth} wide={true}>
+  <div class="flex items-baseline justify-between gap-4 mb-4">
+    <h2 class="font-display text-xl font-semibold text-ink-900">
+      All articles <span class="text-ink-500 font-normal text-base">({rows.length})</span>
+    </h2>
+    <div class="flex gap-4 text-sm">
+      <a href="/keystatic" class="text-accent underline">Open Keystatic</a>
+      <a href="/admin/" class="text-accent underline">Open Sveltia</a>
+    </div>
+  </div>
+
+  {!engagement?.ok && <p class="text-sm text-ink-500 mb-4">{engagement?.reason} Views, shares and ratings show 0 until it connects.</p>}
+  {!saves?.ok && <p class="text-sm text-ink-500 mb-4">{saves?.reason} Save counts show 0 until it connects.</p>}
+
+  <div class="overflow-x-auto border border-ink-200 rounded-lg">
+    <table data-sortable class="w-full text-sm">
+      <thead class="bg-paper-100 text-left">
+        <tr>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Title</th>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Section</th>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 whitespace-nowrap">Published</th>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Status</th>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 text-right">Words</th>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 text-right">Views</th>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 text-right">Shares</th>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 text-right whitespace-nowrap">Rating</th>
+          <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 text-right">Saves</th>
+          <th class="px-3 py-2 font-semibold text-ink-700">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-ink-100">
+        {rows.map((r) => (
+          <tr class="align-top hover:bg-paper-100/60">
+            <td data-sort-value={r.title.toLowerCase()} class="px-3 py-2 max-w-xs">
+              <span class="block font-medium text-ink-900">{r.title}</span>
+              {r.tags.length > 0 && (
+                <span class="block text-xs text-ink-500 truncate">{r.tags.join(', ')}</span>
+              )}
+            </td>
+            <td data-sort-value={r.section} class="px-3 py-2 whitespace-nowrap text-ink-700">
+              {sectionLabels[r.section] ?? r.section}
+            </td>
+            <td data-sort-value={r.pubDate.toISOString()} class="px-3 py-2 whitespace-nowrap text-ink-700">
+              {fmtDate(r.pubDate)}
+              {r.updatedDate && <span class="block text-xs text-ink-500">upd. {fmtDate(r.updatedDate)}</span>}
+            </td>
+            <td data-sort-value={r.draft ? 'draft' : 'live'} class="px-3 py-2">
+              {r.draft ? (
+                <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-800">Draft</span>
+              ) : (
+                <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Live</span>
+              )}
+            </td>
+            <td data-sort-value={r.words} class="px-3 py-2 text-right tabular-nums text-ink-700">
+              {r.words.toLocaleString('en-GB')}
+              <span class="block text-xs text-ink-500">{r.minutes} min</span>
+            </td>
+            <td data-sort-value={r.views} class="px-3 py-2 text-right tabular-nums text-ink-700">{r.views.toLocaleString('en-GB')}</td>
+            <td data-sort-value={r.shares} class="px-3 py-2 text-right tabular-nums text-ink-700">{r.shares.toLocaleString('en-GB')}</td>
+            <td data-sort-value={r.avgRating ?? -1} class="px-3 py-2 text-right tabular-nums text-ink-700 whitespace-nowrap">
+              {r.avgRating !== null ? `${r.avgRating.toFixed(1)} (${r.ratingCount})` : '—'}
+            </td>
+            <td data-sort-value={r.saveCount} class="px-3 py-2 text-right tabular-nums text-ink-700">{r.saveCount.toLocaleString('en-GB')}</td>
+            <td class="px-3 py-2 whitespace-nowrap text-xs space-x-2">
+              <a href={`/${r.section}/${r.slug}`} class="text-accent underline">View</a>
+              {r.format === 'md' ? (
+                <>
+                  <a href={`/keystatic/collection/articles/item/${r.slug}`} class="text-accent underline">Keystatic</a>
+                  <a href={`/admin/#/collections/articles/entries/${r.slug}`} class="text-accent underline">Sveltia</a>
+                </>
+              ) : (
+                <a href={`/admin/#/collections/articles_interactive/entries/${r.slug}`} class="text-accent underline">Sveltia</a>
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+      <tfoot class="bg-paper-100 font-medium">
+        <tr>
+          <td class="px-3 py-2 text-ink-900" colspan="4">Totals</td>
+          <td class="px-3 py-2 text-right tabular-nums text-ink-900">{totals.words.toLocaleString('en-GB')}</td>
+          <td class="px-3 py-2 text-right tabular-nums text-ink-900">{totals.views.toLocaleString('en-GB')}</td>
+          <td class="px-3 py-2 text-right tabular-nums text-ink-900">{totals.shares.toLocaleString('en-GB')}</td>
+          <td class="px-3 py-2 text-right tabular-nums text-ink-900">{totalAvg} ({totals.ratingCount})</td>
+          <td class="px-3 py-2 text-right tabular-nums text-ink-900">{totals.saves.toLocaleString('en-GB')}</td>
+          <td class="px-3 py-2"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <p class="text-xs text-ink-500 mt-3">
+    Interactive (.mdx) articles can't be opened in Keystatic — its rich editor would corrupt the embedded
+    components — so they only link to Sveltia. Click a column heading to sort.
+  </p>
+
+  <script src="../../scripts/dashboard-table-sort.ts"></script>
+</DashboardLayout>
