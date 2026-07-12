@@ -1,13 +1,16 @@
 ---
 // Admin dashboard overview: headline numbers from every connected service,
-// each tile linking to its detail page. Server-rendered on every request
-// (never prerendered) so the numbers are live and the page can gate on a
-// login check.
+// each tile linking to its detail page, plus a pageview trend, the most-read
+// articles, the most-visited pages (as real titles), recent sign-ups and the
+// latest poll. Server-rendered on every request (never prerendered) so the
+// numbers are live and the page can gate on a login check.
 export const prerender = false;
 
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import Bars from '../../components/dashboard/Bars.astro';
+import Sparkline from '../../components/dashboard/Sparkline.astro';
 import { adminGuard } from '../../lib/admin-guard';
-import { getTrafficStats } from '../../lib/dashboard-data/goatcounter';
+import { getTrafficDetail } from '../../lib/dashboard-data/goatcounter';
 import { getSubscriberStats } from '../../lib/dashboard-data/mailerlite';
 import {
   getEngagement,
@@ -16,25 +19,33 @@ import {
   getSignupStats,
 } from '../../lib/dashboard-data/supabase-admin';
 import { getAiSpend } from '../../lib/dashboard-data/ai-budget';
+import { getArticleRows } from '../../lib/dashboard-data/articles';
+import { makePathLabeller } from '../../lib/dashboard-data/path-labels';
 
 const auth = await adminGuard(Astro);
 if (auth.state === 'redirect') return auth.response;
 
-const [traffic, subscribers, signups, engagement, recentSignups, aiSpend, polls] =
+const [traffic, subscribers, signups, engagement, recentSignups, aiSpend, polls, articles] =
   auth.state === 'ok'
     ? await Promise.all([
-        getTrafficStats(),
+        getTrafficDetail('30d'),
         getSubscriberStats(),
         getSignupStats(),
         getEngagement(),
         getRecentSignups(5),
         getAiSpend(),
         getPollResults(),
+        getArticleRows(),
       ])
-    : [null, null, null, null, null, null, null];
+    : [null, null, null, null, null, null, null, []];
 
-// Roll the per-article engagement map up into site-wide totals.
+const labelFor = makePathLabeller(articles ?? []);
+const titleBySlug = new Map((articles ?? []).map((a) => [a.slug, a.title]));
+
+// Roll the per-article engagement map up into site-wide totals, and build a
+// most-read-articles leaderboard (all-time views from the engagement counter).
 const totals = { views: 0, shares: 0, ratingSum: 0, ratingCount: 0 };
+let topArticles: { name: string; count: number }[] = [];
 if (engagement?.ok) {
   for (const e of engagement.data.values()) {
     totals.views += e.viewCount;
@@ -42,8 +53,18 @@ if (engagement?.ok) {
     totals.ratingSum += e.ratingSum;
     totals.ratingCount += e.ratingCount;
   }
+  topArticles = [...engagement.data.entries()]
+    .map(([slug, e]) => ({ name: titleBySlug.get(slug) ?? slug, count: e.viewCount }))
+    .filter((a) => a.count > 0)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 8);
 }
 const avgRating = totals.ratingCount > 0 ? (totals.ratingSum / totals.ratingCount).toFixed(1) : null;
+
+const trafficDaily = traffic?.daily.ok ? traffic.daily.data : null;
+const topPages = traffic?.topPages.ok
+  ? traffic.topPages.data.slice(0, 8).map((p) => ({ ...labelFor(p.name), count: p.count }))
+  : [];
 
 const latestPoll = polls?.ok && polls.data.length > 0 ? polls.data[0] : null;
 
@@ -52,17 +73,17 @@ function shortDate(iso: string): string {
 }
 ---
 
-<DashboardLayout title="Dashboard" active="overview" auth={auth}>
-  <div class="grid gap-6 sm:grid-cols-3 mb-10">
+<DashboardLayout title="Dashboard" active="overview" auth={auth} wide={true}>
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-10">
     <a href="/dashboard/traffic" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
-      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Site visits (recent)</p>
-      {traffic?.ok ? (
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Site visits (30 days)</p>
+      {trafficDaily ? (
         <>
-          <p class="text-2xl font-semibold text-ink-900">{traffic.data.totalPageviews.toLocaleString('en-GB')}</p>
-          <p class="text-xs text-ink-500">{traffic.data.totalVisitors.toLocaleString('en-GB')} visitors</p>
+          <p class="text-2xl font-semibold text-ink-900">{trafficDaily.total.toLocaleString('en-GB')}</p>
+          <p class="text-xs text-ink-500">{trafficDaily.totalUnique.toLocaleString('en-GB')} visitors</p>
         </>
       ) : (
-        <p class="text-sm text-ink-500">{traffic?.reason}</p>
+        <p class="text-sm text-ink-500">{traffic?.daily.reason}</p>
       )}
     </a>
 
@@ -125,7 +146,48 @@ function shortDate(iso: string): string {
     </div>
   </div>
 
+  {trafficDaily && trafficDaily.days.length > 1 && (
+    <a href="/dashboard/traffic" class="block border border-ink-200 rounded-lg p-5 mb-10 hover:border-accent transition-colors">
+      <div class="flex flex-wrap items-baseline justify-between gap-4 mb-3">
+        <p class="text-xs uppercase tracking-wide text-ink-500">Pageviews — last 30 days</p>
+        <p class="text-xs text-ink-500">{trafficDaily.days[0].day} → {trafficDaily.days[trafficDaily.days.length - 1].day}</p>
+      </div>
+      <Sparkline values={trafficDaily.days.map((d) => d.count)} />
+    </a>
+  )}
+
   <div class="grid gap-6 md:grid-cols-2 mb-10">
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-read articles (all time)</p>
+      {engagement?.ok ? (
+        <Bars items={topArticles} emptyLabel="No article views recorded yet." />
+      ) : (
+        <p class="text-sm text-ink-500">{engagement?.reason}</p>
+      )}
+    </div>
+
+    <div class="border border-ink-200 rounded-lg p-5">
+      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-visited pages (30 days)</p>
+      {traffic?.topPages.ok ? (
+        topPages.length > 0 ? (
+          <ol class="space-y-1 text-sm">
+            {topPages.map((p) => (
+              <li class="flex justify-between gap-4">
+                <a href={p.path} class="truncate text-ink-700 hover:text-accent hover:underline">{p.label}</a>
+                <span class="text-ink-500 tabular-nums">{p.count.toLocaleString('en-GB')}</span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p class="text-sm text-ink-500">No pageviews recorded yet.</p>
+        )
+      ) : (
+        <p class="text-sm text-ink-500">{traffic?.topPages.reason}</p>
+      )}
+    </div>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2">
     <div class="border border-ink-200 rounded-lg p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Recent sign-ups</p>
       {recentSignups?.ok ? (
@@ -168,18 +230,4 @@ function shortDate(iso: string): string {
       )}
     </div>
   </div>
-
-  {traffic?.ok && traffic.data.topPaths.length > 0 && (
-    <div class="border border-ink-200 rounded-lg p-5">
-      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-visited pages</p>
-      <ol class="space-y-1 text-sm">
-        {traffic.data.topPaths.map((p) => (
-          <li class="flex justify-between gap-4">
-            <span class="truncate text-ink-700">{p.path}</span>
-            <span class="text-ink-500 tabular-nums">{p.count.toLocaleString('en-GB')}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
-  )}
 </DashboardLayout>

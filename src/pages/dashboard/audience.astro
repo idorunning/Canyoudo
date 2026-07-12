@@ -2,8 +2,10 @@
 // Audience page: every reader account (GoTrue) joined with the optional
 // profile they filled in (reader_profiles: name, role, location, interest,
 // newsletter choice), plus breakdowns and the saved-articles leaderboard.
-// Reader emails are private — this page is admin-only, noindex, behind the
-// password gate, and the data never reaches any client script.
+// Each row has an admin-only delete control (for removing test accounts);
+// deletion posts to /dashboard/delete-user and bounces back here with a
+// result banner. Reader emails are private — this page is admin-only, noindex,
+// behind the password gate, and the data never reaches any client script.
 export const prerender = false;
 
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
@@ -27,12 +29,28 @@ const topSaved = saves?.ok
       .slice(0, 10)
   : [];
 
+// Flash banner after a delete (set by /dashboard/delete-user's redirect).
+const deleted = Astro.url.searchParams.get('deleted');
+const deletedEmail = Astro.url.searchParams.get('email') ?? '';
+const deletedReason = Astro.url.searchParams.get('reason') ?? '';
+
 function fmtDate(iso: string): string {
   return iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
 }
 ---
 
 <DashboardLayout title="Audience" active="audience" auth={auth} wide={true}>
+  {deleted === 'ok' && (
+    <p class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+      Deleted {deletedEmail ? <strong>{deletedEmail}</strong> : 'the account'} and all of their data.
+    </p>
+  )}
+  {deleted === 'error' && (
+    <p class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+      Couldn’t delete that account. {deletedReason}
+    </p>
+  )}
+
   {!readers?.ok && <p class="text-sm text-ink-500 mb-6">{readers?.reason}</p>}
 
   {summary && (
@@ -93,6 +111,7 @@ function fmtDate(iso: string): string {
             <th data-sort-key class="px-3 py-2 font-semibold text-ink-700">Newsletter</th>
             <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 whitespace-nowrap">Joined</th>
             <th data-sort-key class="px-3 py-2 font-semibold text-ink-700 whitespace-nowrap">Last sign-in</th>
+            <th class="px-3 py-2 font-semibold text-ink-700 text-right">Action</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-ink-100">
@@ -108,6 +127,19 @@ function fmtDate(iso: string): string {
               </td>
               <td data-sort-value={r.createdAt} class="px-3 py-2 whitespace-nowrap text-ink-700">{fmtDate(r.createdAt)}</td>
               <td data-sort-value={r.lastSignInAt} class="px-3 py-2 whitespace-nowrap text-ink-700">{fmtDate(r.lastSignInAt)}</td>
+              <td class="px-3 py-2 text-right whitespace-nowrap">
+                <form
+                  method="POST"
+                  action="/dashboard/delete-user"
+                  data-confirm={`Permanently delete ${r.email} and all of their saved data? This can’t be undone.`}
+                >
+                  <input type="hidden" name="userId" value={r.id} />
+                  <input type="hidden" name="email" value={r.email} />
+                  <button type="submit" class="text-xs text-red-600 hover:text-red-800 hover:underline">
+                    Delete
+                  </button>
+                </form>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -117,8 +149,11 @@ function fmtDate(iso: string): string {
 
   <p class="text-xs text-ink-500 mt-3">
     Reader emails are private — this page is admin-only. Profile fields are whatever each reader chose to
-    share in their account panel; blanks mean they left it empty. Click a column heading to sort.
+    share in their account panel; blanks mean they left it empty. <strong>Delete</strong> permanently removes
+    a test or unwanted account and everything it owns (saved articles, folders, profile). Click a column
+    heading to sort.
   </p>
 
   <script src="../../scripts/dashboard-table-sort.ts"></script>
+  <script src="../../scripts/dashboard-confirm.ts"></script>
 </DashboardLayout>

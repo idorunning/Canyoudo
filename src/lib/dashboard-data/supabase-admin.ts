@@ -41,6 +41,7 @@ export async function getSignupStats(): Promise<StatSection<SignupStats>> {
 // --- Reader list (GoTrue users joined with reader_profiles) -------------------
 
 export type Reader = {
+  id: string;
   email: string;
   provider: string;
   createdAt: string;
@@ -109,6 +110,7 @@ export async function listReaders(): Promise<StatSection<{ readers: Reader[]; su
       .map((u) => {
         const p = bySlugId.get(u.id) ?? {};
         return {
+          id: u.id ?? '',
           email: u.email ?? '',
           provider: u.app_metadata?.provider ?? 'email',
           createdAt: u.created_at ?? '',
@@ -166,6 +168,32 @@ export async function getRecentSignups(limit = 5): Promise<StatSection<{ email: 
         .sort((a: any, b: any) => (a.createdAt < b.createdAt ? 1 : -1))
         .slice(0, limit),
     };
+  } catch {
+    return { ok: false, reason: 'Could not reach Supabase.' };
+  }
+}
+
+// --- Reader deletion (admin action) -------------------------------------------
+// Hard-deletes a GoTrue user by id. Every reader-owned table references
+// auth.users with ON DELETE CASCADE, so this also removes their profile, saved
+// articles, folders, etc. in one step (same mechanism as the self-service
+// /api/delete-account function, but driven by the admin rather than the user).
+// Only ever called from the admin-gated /dashboard/delete-user endpoint.
+
+export type DeleteResult = { ok: true } | { ok: false; reason: string };
+
+export async function deleteReader(userId: string): Promise<DeleteResult> {
+  const sb = supabaseAdmin();
+  if (!sb) return { ok: false, reason: 'Supabase is not connected.' };
+  if (!/^[0-9a-fA-F-]{36}$/.test(userId)) return { ok: false, reason: 'Invalid user id.' };
+
+  try {
+    const res = await fetch(`${sb.url}/auth/v1/admin/users/${userId}`, {
+      method: 'DELETE',
+      headers: sb.headers,
+    });
+    if (!res.ok) return { ok: false, reason: 'Supabase would not delete that user.' };
+    return { ok: true };
   } catch {
     return { ok: false, reason: 'Could not reach Supabase.' };
   }
