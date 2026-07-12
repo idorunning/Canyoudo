@@ -93,7 +93,7 @@ async function getDaily(
   try {
     // /stats/total returns per-day buckets in `stats` alongside the totals.
     const res = await fetch(
-      `${gc.site}/api/v0/stats/total?start=${range.start}&end=${range.end}&daily=true`,
+      `${gc.site}/api/v0/stats/total?start=${range.start}&end=${range.end}`,
       { headers: gc.headers }
     );
     if (!res.ok) return { ok: false, reason: 'GoatCounter did not return daily stats.' };
