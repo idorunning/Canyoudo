@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-12T01:29:13.424Z",
-    "feedCount": 10,
+    "fetchedAt": "2026-07-12T12:53:15.970Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -11,18 +11,25 @@
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
-      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Man arrested on suspicion of murder of Ann Widdecombe, police say",
-      "link": "https://www.bbc.co.uk/news/articles/cz6v5z9zz8jo?at_medium=RSS&at_campaign=rss",
+      "title": "Nothing to suggest Widdecombe killing was politically motivated, police say",
+      "link": "https://www.bbc.co.uk/news/articles/c8628q3eqdeo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-12T00:19:09.000Z",
-      "summary": "A 28-year-old white British national has been arrested in South Yorkshire, police say."
+      "isoDate": "2026-07-12T12:18:46.000Z",
+      "summary": "Police say they are not looking for anyone else after a 28-year-old man was arrested in Rotherham, South Yorkshire."
+    },
+    {
+      "title": "'Fresh arrest in killing of Widdecombe' and 'Saved by the Bell'",
+      "link": "https://www.bbc.co.uk/news/articles/cdr488kl1j5o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-12T04:23:49.000Z",
+      "summary": "New arrest after death of Ann Widdecombe and Bellingham brings it home for England leads Sunday's papers."
     },
     {
       "title": "Noskova, an astonishing Wimbledon fightback - and a kiss to the sky",
@@ -33,20 +40,12 @@
       "summary": "Linda Noskova produces \"one of the all-time greatest efforts on Centre Court\" to win Wimbledon - and thanks her late mother, Ivana, for inspiring her."
     },
     {
-      "title": "Teenager charged with murder after man, 18, dies in crash",
+      "title": "Teenager charged with murder after off-road bike crash",
       "link": "https://www.bbc.co.uk/news/articles/cy73l32dj1no?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
       "isoDate": "2026-07-11T20:35:58.000Z",
       "summary": "Tyler Ford, 18, has been charged with the murder of Ceiran Evans after Thursday’s incident in Gorseinon."
-    },
-    {
-      "title": "Man believed to be carrying crossbow shot by police",
-      "link": "https://www.bbc.co.uk/news/articles/cg74xpemg1eo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-11T17:59:04.000Z",
-      "summary": "Police were called to an address in Newport on Friday night following reports of threatening behaviour."
     },
     {
       "title": "Meta pulls new AI image feature after days of backlash",
@@ -145,14 +144,6 @@
       "summary": "Judge with AI-background appointed to top judicial post The post Sir Colin Birss named next Master of the Rolls appeared first on Legal Cheek ."
     },
     {
-      "title": "AI tool scours the web for job openings, preps your resume and cover letter",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/09/ai-tool-scours-the-web-for-job-openings-preps-your-resume-and-cover-letter/5269410",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-09T17:40:00.000Z",
-      "summary": "Searching for work sucks; AI combs the internet and sucks it all up. Combine the two and let 'er rip with this Python project"
-    },
-    {
       "title": "Sir Colin Birss appointed Master of the Rolls",
       "link": "https://www.judiciary.uk/lord-justice-birss-appointed-master-of-the-rolls/",
       "source": "Courts & Tribunals Judiciary",
@@ -193,14 +184,6 @@
       "summary": "The MHRA’s Criminal Enforcement Unit dismantled a multimillion-pound criminal network responsible for illegally supplying medicines."
     },
     {
-      "title": "Tool promises to make lazy academics' AI-written papers sound more human",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/08/tool-promises-to-make-lazy-academics-ai-written-papers-sound-more-human/5268460",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-08T15:55:00.000Z",
-      "summary": "Startup insists it's not trying to help anyone cheat the system - honest!"
-    },
-    {
       "title": "Pro-Worker AI Adoption Prize: how to nominate",
       "link": "https://www.gov.uk/guidance/pro-worker-ai-adoption-prize-how-to-nominate",
       "source": "DSIT",
@@ -225,14 +208,6 @@
       "summary": "What happens when two become one? The post Better together? The hidden challenges of mega mergers appeared first on Legal Cheek ."
     },
     {
-      "title": "Avoid AI atrophy – new tool promises to reverse vibe coding skills decay",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/07/avoid-ai-atrophy-new-tool-promises-to-reverse-vibe-coding-skills-decay/5267913",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-07T20:21:35.000Z",
-      "summary": "Want big muscles? Keep working out. Want big coding skillsets? Flex your dev skills with the Atrophy CLI app before they wither away"
-    },
-    {
       "title": "Robots available for rent: But what can they do?",
       "link": "https://www.bbc.co.uk/news/articles/c4gymkg9lr2o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -247,14 +222,6 @@
       "topic": "law",
       "isoDate": "2026-07-06T09:18:34.000Z",
       "summary": "Following a successful pilot, rape and sexual assault survivors across all of England and Wales will have the right to ask for their cases to be reviewed before a final…"
-    },
-    {
-      "title": "Godot says bye bye AI, bans vibe-coded contributions",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/01/godot-says-bye-bye-ai-bans-vibe-coded-contributions/5265344",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-01T20:29:07.000Z",
-      "summary": "'We can’t trust heavy users of AI to understand their code enough to fix it,' say maintainers who previously called the flood of vibe-coded pull requests 'demoralizing'"
     }
   ]
 }
