@@ -1,7 +1,9 @@
 // GoatCounter traffic stats for /dashboard and /dashboard/traffic.
 // Needs GOATCOUNTER_API_TOKEN, generated at https://<site>.goatcounter.com/user/api
 // (Settings → API). PUBLIC_GOATCOUNTER_URL already holds the site's count
-// endpoint, e.g. https://thinkingaboutpolicing.goatcounter.com/count.
+// endpoint (see .env.example) — deliberately not repeated literally here:
+// once a value is set as a real env var, Netlify's secrets scanner treats any
+// copy of that same string elsewhere in the repo as a leaked secret.
 
 import { safeJson, type StatSection } from './types';
 

@@ -16,8 +16,11 @@
   # design — they are not secrets).
   # Comments — Cusdis app ID (the comment thread won't render without it).
   PUBLIC_CUSDIS_APP_ID = "0924657c-a644-4821-abdc-6743a5de701d"
-  # Analytics — GoatCounter (privacy-friendly, no cookie banner).
-  PUBLIC_GOATCOUNTER_URL = "https://thinkingaboutpolicing.goatcounter.com/count"
+  # Analytics — GoatCounter. The count endpoint moved to a Netlify dashboard
+  # env var (Site configuration → Environment variables) rather than living
+  # here: once the same value is also set as a real Netlify env var, Netlify's
+  # secrets scanner treats any copy of it elsewhere in the repo as a leak and
+  # aborts the build, so it can only be defined in one place now.
   # Newsletter — MailerLite embedded form (account ID + form ID).
   PUBLIC_MAILERLITE_ACCOUNT_ID = "2415278"
   PUBLIC_MAILERLITE_FORM_ID = "vYwUFz"
