@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "prebuild": "node scripts/bundle-policedata.mjs && node scripts/bundle-engagement.mjs && node scripts/bundle-polls.mjs && node scripts/generate-audio.mjs",
+    "prebuild": "node scripts/bundle-policedata.mjs && node scripts/bundle-engagement.mjs && node scripts/generate-audio.mjs",
     "generate-audio": "node scripts/generate-audio.mjs",
     "narrate": "node scripts/narrate.mjs",
     "build": "astro build",
@@ -37,7 +37,6 @@
     "@astrojs/tailwind": "^5.1.2",
     "@fontsource-variable/plus-jakarta-sans": "^5.2.8",
     "@fontsource-variable/source-serif-4": "^5.2.9",
-    "@fontsource/ibm-plex-mono": "^5.2.7",
     "@keystatic/astro": "^5.1.0",
     "@keystatic/core": "^0.5.50",
     "@netlify/blobs": "^10.7.9",

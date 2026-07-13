@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 /* Fonts are self-hosted (Fontsource), imported in BaseLayout.astro:
-   Plus Jakarta Sans Variable (UI/display), Source Serif 4 Variable (reading),
-   IBM Plex Mono (metadata, figures, data surfaces). */
+   Plus Jakarta Sans Variable (UI/display/metadata), Source Serif 4 Variable
+   (reading). No monospace webfont — code samples fall back to the system
+   monospace stack (see .prose-article code/pre below). */
 
 /* ------------------------------------------------------------------ */
 /* "Evidence Desk" design system.                                      */
@@ -919,25 +920,5 @@ html.dark {
 @keyframes soft-pulse {
   0%, 100% { box-shadow: 0 0 0 0 rgb(var(--accent) / 0); }
   50%      { box-shadow: 0 0 0 6px rgb(var(--accent) / 0.16); }
-}
-
-/* ------------------------------------------------------------------ */
-/* Highlighter mark                                                      */
-/* Used as a utility (.mark-orange) and applied automatically to <mark> */
-/* in article prose, so an author can highlight a key line with         */
-/* ==important== and it reads as a soft highlighter band in the site's  */
-/* accent colour — the same semi-transparent-wash language as topic     */
-/* auto-links, rather than a hand-drawn underline.                      */
-/* ------------------------------------------------------------------ */
-.mark-orange,
-.prose-article mark {
-  background-color: transparent;
-  background-image: linear-gradient(rgb(var(--accent-light) / 0.4), rgb(var(--accent-light) / 0.4));
-  background-repeat: no-repeat;
-  background-position: 0 88%;
-  background-size: 100% 50%;
-  color: inherit;
-  padding: 0 0.05em;
-  border-radius: 2px;
 }
 

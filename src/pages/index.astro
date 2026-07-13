@@ -1,13 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionBadge from '../components/SectionBadge.astro';
-import PollTally from '../components/PollTally.astro';
 import { getCollection } from 'astro:content';
 import { getTopics } from '../lib/topics';
 import { SECTIONS, SECTION_LABELS } from '../content/config';
 import engagement from '../lib/engagement-bundle.json';
-import polls from '../data/polls.json';
-import pollVotes from '../lib/polls-bundle.json';
 import readingTime from 'reading-time';
 
 import type { Section } from '../content/config';
@@ -36,8 +33,9 @@ const allArticles: Item[] = articles
   .map(a => ({ slug: a.slug, data: a.data, section: a.data.section }))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-const HERO_SLUG = 'self-selection-policing-catching-serious-criminals-and-bad-cops-through-minor-offences';
-const feature = allArticles.find(a => a.slug === HERO_SLUG) ?? allArticles[0];
+// The lead story is always the newest published article — a "Recently
+// published" banner on the card makes that explicit.
+const feature = allArticles[0];
 const latestArticles = allArticles.slice(0, 8);
 
 // Themed section rows — every article in the section, newest first
@@ -98,27 +96,6 @@ const SECTION_BG: Record<string, string> = {
 };
 
 const topics = await getTopics();
-
-// Monthly reader poll — one question per month (src/data/polls.json), with
-// live vote tallies baked in at build time from the monthly_poll_votes table
-// (see supabase/migrations/0003_monthly_poll_votes.sql and
-// scripts/bundle-polls.mjs). The most recent month accepts votes; earlier
-// months are shown read-only in a scrollable archive strip.
-type Poll = { month: string; question: string; choices: string[] };
-const votesByMonth = pollVotes as Record<string, Record<string, number>>;
-const sortedPolls = [...(polls as Poll[])].sort((a, b) => b.month.localeCompare(a.month));
-const currentPoll = sortedPolls[0];
-const pastPolls = sortedPolls.slice(1);
-function pollTally(poll: Poll) {
-  const counts = votesByMonth[poll.month] ?? {};
-  const results = poll.choices.map((label) => ({ label, votes: counts[label.toLowerCase()] ?? 0 }));
-  const total = results.reduce((s, r) => s + r.votes, 0);
-  return { total, results };
-}
-function monthLabel(month: string): string {
-  const [y, mo] = month.split('-').map(Number);
-  return new Date(y, mo - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-}
 
 const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
 const description =
@@ -214,18 +191,9 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           </h1>
 
           <p class="font-serif text-lg md:text-[20px] leading-relaxed text-ink-700 mt-6 max-w-[30em]">
-            <span class="mark-orange">Evidence-led</span> analysis of policing, public policy,
+            Evidence-led analysis of policing, public policy,
             leadership, and the decisions that shape public safety.
           </p>
-
-          <div class="flex flex-wrap items-center gap-3 mt-8">
-            <a
-              href="/police-policy"
-              class="bg-accent text-paper-50 dark:text-night-50 rounded-full px-5 py-2.5 font-sans text-[14px] font-bold hover:bg-accent-dark transition-colors"
-            >
-              Start reading
-            </a>
-          </div>
 
           <!-- Site figures, in the data voice — one flowing line rather than
                stacked stat tiles, echoing the "·" separator used elsewhere. -->
@@ -271,8 +239,11 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
               )}
               <div class="p-7">
                 <div class="flex items-center gap-3 mb-4">
-                  <span class="u-kicker bg-accent/10 px-2.5 py-1 rounded">Lead story</span>
-                  <span class="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500">
+                  <span class="u-kicker bg-accent/10 px-2.5 py-1 rounded inline-flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
+                    Recently published
+                  </span>
+                  <span class="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500">
                     {SECTION_LABELS[feature.section]} · {feature.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                   </span>
                 </div>
@@ -314,14 +285,14 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                   href={`/${article.section}/${article.slug}`}
                   class="card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline"
                 >
-                  <span class={`font-mono font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
+                  <span class={`font-sans font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
                     <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
                       {article.data.title}
                     </h3>
-                    <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum">
+                    <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum">
                       {SECTION_LABELS[article.section]}{views > 0 ? ` · ${views.toLocaleString('en-GB')} views` : ''}
                     </div>
                   </div>
@@ -339,9 +310,6 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
             <span class="u-kicker block mb-1.5">Newest first</span>
             Latest writing
           </h2>
-          <a href="/sitemap" class="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
-            Archive →
-          </a>
         </div>
         <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
           {latestArticles.map(article => (
@@ -366,7 +334,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                 </div>
               )}
               <div class="p-5 flex flex-col grow">
-                <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
+                <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
                   {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                 </div>
                 <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
@@ -392,7 +360,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           <span class="text-accent-light not-italic font-semibold">but not to our own facts.</span>"
         </p>
       </blockquote>
-      <figcaption class="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-night-dim mt-6">
+      <figcaption class="font-sans text-[11px] font-medium uppercase tracking-[0.14em] text-night-dim mt-6">
         Lawrence Sherman ·{' '}
         <a
           href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
@@ -418,7 +386,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
               <span class="u-kicker block mb-1.5">Section</span>
               {SECTION_LABELS[sectionKey]}
             </h2>
-            <a href={`/${sectionKey}`} class="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors whitespace-nowrap u-tnum">
+            <a href={`/${sectionKey}`} class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors whitespace-nowrap u-tnum">
               All {counts[sectionKey]} →
             </a>
           </div>
@@ -445,7 +413,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                   </div>
                 )}
                 <div class="p-5 flex flex-col grow">
-                  <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
+                  <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
                     {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </div>
                   <h3 class="font-display font-bold text-[17.5px] leading-[1.25] tracking-[-0.015em] text-ink-900 group-hover:text-accent transition-colors m-0">
@@ -460,54 +428,6 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
       </section>
     );
   })}
-
-  <!-- ============ THIS MONTH'S QUESTION ============ -->
-  <section class="bg-paper-100 border-b border-ink-200">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
-      <div class="max-w-2xl">
-        <div class="flex items-center justify-between gap-3 mb-4">
-          <div class="flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
-            <span class="u-kicker">This month's question</span>
-          </div>
-          <span class="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500 u-tnum">{monthLabel(currentPoll.month)}</span>
-        </div>
-        <p class="font-display font-extrabold text-[26px] md:text-[30px] leading-[1.2] tracking-[-0.025em] text-ink-900 mb-6">
-          {currentPoll.question}
-        </p>
-        <div data-poll-choices data-poll-month={currentPoll.month} class="flex flex-wrap gap-3">
-          {currentPoll.choices.map(v => (
-            <button
-              type="button"
-              data-poll={v.toLowerCase()}
-              class="font-sans font-bold text-sm px-6 py-3 rounded-full border-2 border-ink-300 text-ink-700 hover:border-accent hover:text-accent transition-colors"
-            >
-              {v}
-            </button>
-          ))}
-        </div>
-        <div data-poll-tally class="hidden">
-          <PollTally poll={currentPoll} tally={pollTally(currentPoll)} />
-          <p class="font-sans text-sm text-ink-600 mt-3">Thanks — your vote has been counted.</p>
-        </div>
-      </div>
-
-      {pastPolls.length > 0 && (
-        <div class="mt-10 pt-8 border-t border-ink-200">
-          <p class="u-kicker u-kicker--dim mb-4">Past months</p>
-          <div class="row-fade flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
-            {pastPolls.map(poll => (
-              <div class="shrink-0 snap-start w-[260px] bg-paper-50 border border-ink-200 rounded-lg p-4">
-                <p class="font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">{monthLabel(poll.month)}</p>
-                <p class="font-sans text-sm font-semibold text-ink-900 leading-snug mb-3 line-clamp-3">{poll.question}</p>
-                <PollTally poll={poll} tally={pollTally(poll)} compact />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  </section>
 
   <!-- ============ RESEARCH TOOLS ============ -->
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
@@ -535,7 +455,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           </p>
           <div class="flex flex-wrap gap-2 mt-6">
             {['Research Assistant', 'Crime Dashboard', 'Perception'].map(name => (
-              <span class="font-mono text-[10.5px] font-medium uppercase tracking-[0.08em] bg-night-ink/[0.06] border border-night-line text-night-dim px-2.5 py-1.5 rounded-md">
+              <span class="font-sans text-[10.5px] font-medium uppercase tracking-[0.08em] bg-night-ink/[0.06] border border-night-line text-night-dim px-2.5 py-1.5 rounded-md">
                 {name}
               </span>
             ))}
@@ -576,14 +496,14 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     a.href = href;
     a.className = 'card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline';
     const num = document.createElement('span');
-    num.className = `font-mono font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${rank === 1 ? 'text-accent' : 'text-ink-300'}`;
+    num.className = `font-sans font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${rank === 1 ? 'text-accent' : 'text-ink-300'}`;
     num.textContent = String(rank).padStart(2, '0');
     const body = document.createElement('div');
     const h = document.createElement('h3');
     h.className = 'font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0';
     h.textContent = title;
     const meta = document.createElement('div');
-    meta.className = 'font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum';
+    meta.className = 'font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum';
     meta.textContent = metaLine;
     body.appendChild(h);
     body.appendChild(meta);
@@ -641,67 +561,3 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     }
   }
 </script>
-
-<script>
-  // Monthly reader poll — one vote per month per browser (localStorage),
-  // tallied for real via the monthly_poll_votes table (see
-  // supabase/migrations/0003_monthly_poll_votes.sql). Fails silently if
-  // Supabase isn't configured: the vote is still remembered locally and the
-  // baked-in tally (from the last deploy) is shown.
-  const pollKey = (month: string) => `monthly-question:${month}`;
-
-  const choices = document.querySelector<HTMLElement>('[data-poll-choices]');
-  const tally = document.querySelector<HTMLElement>('[data-poll-tally]');
-  const month = choices?.dataset.pollMonth;
-
-  function showTally() {
-    choices?.classList.add('hidden');
-    tally?.classList.remove('hidden');
-  }
-
-  async function castVote(month: string, choice: string) {
-    const url = import.meta.env.PUBLIC_SUPABASE_URL;
-    const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-    if (!url || !key) return;
-    try {
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(url, key, { auth: { persistSession: false } });
-      const { error } = await supabase.rpc('increment_poll_vote', { p_month: month, p_choice: choice });
-      if (error) return;
-      const { data } = await supabase.from('monthly_poll_votes').select('choice, votes').eq('month', month);
-      if (data) renderTally(data as { choice: string; votes: number }[]);
-    } catch {}
-  }
-
-  function renderTally(rows: { choice: string; votes: number }[]) {
-    const body = tally?.querySelector<HTMLElement>('[data-poll-tally-body]');
-    if (!body) return;
-    const byChoice = new Map(rows.map((r) => [r.choice, r.votes]));
-    const total = rows.reduce((s, r) => s + r.votes, 0) || 1;
-    body.querySelectorAll<HTMLElement>('[data-poll-tally-row]').forEach((row) => {
-      const votes = byChoice.get(row.dataset.pollChoice ?? '') ?? 0;
-      const pct = Math.round((votes / total) * 100);
-      const pctEl = row.querySelector('[data-poll-tally-pct]');
-      const barEl = row.querySelector<HTMLElement>('[data-poll-tally-bar]');
-      if (pctEl) pctEl.textContent = `${pct}%`;
-      if (barEl) barEl.style.width = `${pct}%`;
-    });
-    const totalVotes = rows.reduce((s, r) => s + r.votes, 0);
-    const totalEl = body.querySelector('[data-poll-tally-total]');
-    if (totalEl) totalEl.textContent = `${totalVotes} vote${totalVotes === 1 ? '' : 's'}`;
-  }
-
-  if (choices && tally && month) {
-    if (localStorage.getItem(pollKey(month))) showTally();
-
-    choices.querySelectorAll<HTMLButtonElement>('[data-poll]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const choice = btn.dataset.poll ?? '';
-        localStorage.setItem(pollKey(month), choice);
-        showTally();
-        castVote(month, choice);
-      });
-    });
-  }
-</script>
-

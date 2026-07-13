@@ -14,7 +14,6 @@ import { getTrafficDetail } from '../../lib/dashboard-data/goatcounter';
 import { getSubscriberStats } from '../../lib/dashboard-data/mailerlite';
 import {
   getEngagement,
-  getPollResults,
   getRecentSignups,
   getSignupStats,
 } from '../../lib/dashboard-data/supabase-admin';
@@ -25,7 +24,7 @@ import { makePathLabeller } from '../../lib/dashboard-data/path-labels';
 const auth = await adminGuard(Astro);
 if (auth.state === 'redirect') return auth.response;
 
-const [traffic, subscribers, signups, engagement, recentSignups, aiSpend, polls, articles] =
+const [traffic, subscribers, signups, engagement, recentSignups, aiSpend, articles] =
   auth.state === 'ok'
     ? await Promise.all([
         getTrafficDetail('30d'),
@@ -34,10 +33,9 @@ const [traffic, subscribers, signups, engagement, recentSignups, aiSpend, polls,
         getEngagement(),
         getRecentSignups(5),
         getAiSpend(),
-        getPollResults(),
         getArticleRows(),
       ])
-    : [null, null, null, null, null, null, null, []];
+    : [null, null, null, null, null, null, []];
 
 const labelFor = makePathLabeller(articles ?? []);
 const titleBySlug = new Map((articles ?? []).map((a) => [a.slug, a.title]));
@@ -65,8 +63,6 @@ const trafficDaily = traffic?.daily.ok ? traffic.daily.data : null;
 const topPages = traffic?.topPages.ok
   ? traffic.topPages.data.slice(0, 8).map((p) => ({ ...labelFor(p.name), count: p.count }))
   : [];
-
-const latestPoll = polls?.ok && polls.data.length > 0 ? polls.data[0] : null;
 
 function shortDate(iso: string): string {
   return iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
@@ -187,7 +183,7 @@ function shortDate(iso: string): string {
     </div>
   </div>
 
-  <div class="grid gap-6 md:grid-cols-2">
+  <div class="grid gap-6">
     <div class="border border-ink-200 rounded-lg p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Recent sign-ups</p>
       {recentSignups?.ok ? (
@@ -205,28 +201,6 @@ function shortDate(iso: string): string {
         )
       ) : (
         <p class="text-sm text-ink-500">{recentSignups?.reason}</p>
-      )}
-    </div>
-
-    <div class="border border-ink-200 rounded-lg p-5">
-      <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">
-        Homepage poll{latestPoll ? ` — ${latestPoll.month}` : ''}
-      </p>
-      {polls?.ok ? (
-        latestPoll ? (
-          <ol class="space-y-1 text-sm">
-            {latestPoll.choices.map((c) => (
-              <li class="flex justify-between gap-4">
-                <span class="truncate text-ink-700 capitalize">{c.choice}</span>
-                <span class="text-ink-500 tabular-nums">{c.votes.toLocaleString('en-GB')}</span>
-              </li>
-            ))}
-          </ol>
-        ) : (
-          <p class="text-sm text-ink-500">No poll votes yet.</p>
-        )
-      ) : (
-        <p class="text-sm text-ink-500">{polls?.reason}</p>
       )}
     </div>
   </div>

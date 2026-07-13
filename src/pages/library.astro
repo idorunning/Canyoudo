@@ -38,7 +38,7 @@ const hasAuth = Boolean(
       <div>
         <div class="flex items-baseline justify-between gap-4 mb-5 pb-3 border-b border-ink-300">
           <h2 class="font-display font-extrabold text-[20px] tracking-[-0.02em] text-ink-900 m-0">Saved articles</h2>
-          <span data-library-scope class="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-ink-500"></span>
+          <span data-library-scope class="font-sans text-[11px] font-medium uppercase tracking-[0.1em] text-ink-500"></span>
         </div>
 
         <ul data-library-list class="grid gap-3 list-none p-0 m-0"></ul>
@@ -72,7 +72,7 @@ const hasAuth = Boolean(
             Your saved <strong>research papers, folders and briefings</strong> live in the
             Research Assistant, under the same sign-in.
           </p>
-          <a href="/research" class="inline-block mt-4 font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
+          <a href="/research" class="inline-block mt-4 font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
             Open the Research Assistant →
           </a>
         </div>
@@ -119,7 +119,7 @@ const hasAuth = Boolean(
       body.href = `/${a.section}/${a.slug}/`;
       body.className = 'group min-w-0 block';
       const meta = document.createElement('p');
-      meta.className = 'font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 m-0 mb-1.5';
+      meta.className = 'font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 m-0 mb-1.5';
       meta.textContent = `Saved ${fmt(a.savedAt)}`;
       const h = document.createElement('h3');
       h.className = 'font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0';
@@ -135,7 +135,7 @@ const hasAuth = Boolean(
 
       const remove = document.createElement('button');
       remove.type = 'button';
-      remove.className = 'shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500 hover:text-accent-dark transition-colors';
+      remove.className = 'shrink-0 font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-500 hover:text-accent-dark transition-colors';
       remove.textContent = 'Remove';
       remove.setAttribute('aria-label', `Remove “${a.title}” from your library`);
       remove.addEventListener('click', () => removeArticle(a.slug));

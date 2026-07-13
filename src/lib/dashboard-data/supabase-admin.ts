@@ -260,37 +260,3 @@ export async function getEngagement(): Promise<StatSection<Map<string, Engagemen
     return { ok: false, reason: 'Could not reach Supabase.' };
   }
 }
-
-// --- Monthly poll results -----------------------------------------------------
-
-export type PollMonth = { month: string; choices: { choice: string; votes: number }[] };
-
-export async function getPollResults(): Promise<StatSection<PollMonth[]>> {
-  const sb = supabaseAdmin();
-  if (!sb) return { ok: false, reason: 'Supabase poll data is not connected yet.' };
-
-  try {
-    const res = await fetch(
-      `${sb.url}/rest/v1/monthly_poll_votes?select=month,choice,votes&order=month.desc`,
-      { headers: { ...sb.headers, Range: '0-499' } }
-    );
-    if (!res.ok) return { ok: false, reason: 'Supabase did not return poll votes.' };
-    const rows: any[] = (await safeJson(res)) ?? [];
-    const byMonth = new Map<string, { choice: string; votes: number }[]>();
-    for (const row of rows) {
-      if (!row?.month) continue;
-      const list = byMonth.get(row.month) ?? [];
-      list.push({ choice: row.choice ?? '', votes: Number(row.votes ?? 0) });
-      byMonth.set(row.month, list);
-    }
-    return {
-      ok: true,
-      data: [...byMonth.entries()].map(([month, choices]) => ({
-        month,
-        choices: choices.sort((a, b) => b.votes - a.votes),
-      })),
-    };
-  } catch {
-    return { ok: false, reason: 'Could not reach Supabase.' };
-  }
-}

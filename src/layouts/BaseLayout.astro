@@ -4,9 +4,6 @@ import '../styles/global.css';
 // paint, GDPR-clean. Family names are wired up in tailwind.config.mjs.
 import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource-variable/source-serif-4';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
-import '@fontsource/ibm-plex-mono/600.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SupportCTA from '../components/SupportCTA.astro';
@@ -160,7 +157,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     <Header />
     <WelcomeModal />
 <SupportCTA variant="banner" />
-    <main id="main" class="flex-1">
+    <main id="main" class="flex-1" {...(type !== 'article' && !noindex ? { 'data-pagefind-body': true } : {})}>
       <slot />
     </main>
     <Footer />
