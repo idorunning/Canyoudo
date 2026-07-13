@@ -272,7 +272,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
               <div class="p-7">
                 <div class="flex items-center gap-3 mb-4">
                   <span class="u-kicker bg-accent/10 px-2.5 py-1 rounded">Lead story</span>
-                  <span class="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500">
+                  <span class="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500">
                     {SECTION_LABELS[feature.section]} · {feature.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                   </span>
                 </div>
@@ -314,14 +314,14 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                   href={`/${article.section}/${article.slug}`}
                   class="card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline"
                 >
-                  <span class={`font-mono font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
+                  <span class={`font-sans font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
                     <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
                       {article.data.title}
                     </h3>
-                    <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum">
+                    <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum">
                       {SECTION_LABELS[article.section]}{views > 0 ? ` · ${views.toLocaleString('en-GB')} views` : ''}
                     </div>
                   </div>
@@ -339,7 +339,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
             <span class="u-kicker block mb-1.5">Newest first</span>
             Latest writing
           </h2>
-          <a href="/sitemap" class="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
+          <a href="/sitemap" class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
             Archive →
           </a>
         </div>
@@ -366,7 +366,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                 </div>
               )}
               <div class="p-5 flex flex-col grow">
-                <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
+                <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
                   {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
                 </div>
                 <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
@@ -392,7 +392,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           <span class="text-accent-light not-italic font-semibold">but not to our own facts.</span>"
         </p>
       </blockquote>
-      <figcaption class="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-night-dim mt-6">
+      <figcaption class="font-sans text-[11px] font-medium uppercase tracking-[0.14em] text-night-dim mt-6">
         Lawrence Sherman ·{' '}
         <a
           href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
@@ -418,7 +418,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
               <span class="u-kicker block mb-1.5">Section</span>
               {SECTION_LABELS[sectionKey]}
             </h2>
-            <a href={`/${sectionKey}`} class="font-mono text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors whitespace-nowrap u-tnum">
+            <a href={`/${sectionKey}`} class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors whitespace-nowrap u-tnum">
               All {counts[sectionKey]} →
             </a>
           </div>
@@ -445,7 +445,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                   </div>
                 )}
                 <div class="p-5 flex flex-col grow">
-                  <div class="font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
+                  <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
                     {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </div>
                   <h3 class="font-display font-bold text-[17.5px] leading-[1.25] tracking-[-0.015em] text-ink-900 group-hover:text-accent transition-colors m-0">
@@ -470,7 +470,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
             <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
             <span class="u-kicker">This month's question</span>
           </div>
-          <span class="font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500 u-tnum">{monthLabel(currentPoll.month)}</span>
+          <span class="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500 u-tnum">{monthLabel(currentPoll.month)}</span>
         </div>
         <p class="font-display font-extrabold text-[26px] md:text-[30px] leading-[1.2] tracking-[-0.025em] text-ink-900 mb-6">
           {currentPoll.question}
@@ -498,7 +498,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           <div class="row-fade flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
             {pastPolls.map(poll => (
               <div class="shrink-0 snap-start w-[260px] bg-paper-50 border border-ink-200 rounded-lg p-4">
-                <p class="font-mono text-[10px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">{monthLabel(poll.month)}</p>
+                <p class="font-sans text-[10px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">{monthLabel(poll.month)}</p>
                 <p class="font-sans text-sm font-semibold text-ink-900 leading-snug mb-3 line-clamp-3">{poll.question}</p>
                 <PollTally poll={poll} tally={pollTally(poll)} compact />
               </div>
@@ -535,7 +535,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           </p>
           <div class="flex flex-wrap gap-2 mt-6">
             {['Research Assistant', 'Crime Dashboard', 'Perception'].map(name => (
-              <span class="font-mono text-[10.5px] font-medium uppercase tracking-[0.08em] bg-night-ink/[0.06] border border-night-line text-night-dim px-2.5 py-1.5 rounded-md">
+              <span class="font-sans text-[10.5px] font-medium uppercase tracking-[0.08em] bg-night-ink/[0.06] border border-night-line text-night-dim px-2.5 py-1.5 rounded-md">
                 {name}
               </span>
             ))}
@@ -576,14 +576,14 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     a.href = href;
     a.className = 'card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline';
     const num = document.createElement('span');
-    num.className = `font-mono font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${rank === 1 ? 'text-accent' : 'text-ink-300'}`;
+    num.className = `font-sans font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${rank === 1 ? 'text-accent' : 'text-ink-300'}`;
     num.textContent = String(rank).padStart(2, '0');
     const body = document.createElement('div');
     const h = document.createElement('h3');
     h.className = 'font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0';
     h.textContent = title;
     const meta = document.createElement('div');
-    meta.className = 'font-mono text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum';
+    meta.className = 'font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum';
     meta.textContent = metaLine;
     body.appendChild(h);
     body.appendChild(meta);

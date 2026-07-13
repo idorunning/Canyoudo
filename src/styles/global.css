@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 /* Fonts are self-hosted (Fontsource), imported in BaseLayout.astro:
-   Plus Jakarta Sans Variable (UI/display), Source Serif 4 Variable (reading),
-   IBM Plex Mono (metadata, figures, data surfaces). */
+   Plus Jakarta Sans Variable (UI/display/metadata), Source Serif 4 Variable
+   (reading). No monospace webfont — code samples fall back to the system
+   monospace stack (see .prose-article code/pre below). */
 
 /* ------------------------------------------------------------------ */
 /* "Evidence Desk" design system.                                      */

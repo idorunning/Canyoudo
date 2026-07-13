@@ -82,16 +82,16 @@ const parts = [
     </div>
 
     <section class="ps-section">
-      <p class="ps-label"><span class="ps-num font-mono u-tnum">{parts[0].n}</span>{parts[0].label}</p>
+      <p class="ps-label"><span class="ps-num font-sans u-tnum">{parts[0].n}</span>{parts[0].label}</p>
       <p class="ps-problem font-serif m-0">{problem}</p>
     </section>
 
     <section class="ps-section">
-      <p class="ps-label"><span class="ps-num font-mono u-tnum">{parts[1].n}</span>{parts[1].label}</p>
+      <p class="ps-label"><span class="ps-num font-sans u-tnum">{parts[1].n}</span>{parts[1].label}</p>
       <ol class="ps-evidence" role="list">
         {evidence.map((item, i) => (
           <li>
-            <span class="ps-point-num font-mono u-tnum" aria-hidden="true">{i + 1}</span>
+            <span class="ps-point-num font-sans u-tnum" aria-hidden="true">{i + 1}</span>
             <div class="min-w-0">
               <p class="ps-point font-serif m-0">{item.point}</p>
               {(item.url || item.source) && (
@@ -110,7 +110,7 @@ const parts = [
     </section>
 
     <section class="ps-section">
-      <p class="ps-label"><span class="ps-num font-mono u-tnum">{parts[2].n}</span>{parts[2].label}</p>
+      <p class="ps-label"><span class="ps-num font-sans u-tnum">{parts[2].n}</span>{parts[2].label}</p>
       <ul class="ps-outcomes" role="list">
         {outcomes.map((o) => (
           <li>
@@ -147,16 +147,16 @@ const parts = [
     )}
 
     <section class="ps-section">
-      <p class="ps-label u-kicker"><span class="ps-num font-mono u-tnum">{parts[0].n}</span>{parts[0].label}</p>
+      <p class="ps-label u-kicker"><span class="ps-num font-sans u-tnum">{parts[0].n}</span>{parts[0].label}</p>
       <p class="ps-problem font-serif m-0">{problem}</p>
     </section>
 
     <section class="ps-section">
-      <p class="ps-label u-kicker"><span class="ps-num font-mono u-tnum">{parts[1].n}</span>{parts[1].label}</p>
+      <p class="ps-label u-kicker"><span class="ps-num font-sans u-tnum">{parts[1].n}</span>{parts[1].label}</p>
       <ol class="ps-evidence" role="list">
         {evidence.map((item, i) => (
           <li>
-            <span class="ps-point-num font-mono u-tnum" aria-hidden="true">{i + 1}</span>
+            <span class="ps-point-num font-sans u-tnum" aria-hidden="true">{i + 1}</span>
             <div class="min-w-0">
               <p class="ps-point font-serif m-0">{item.point}</p>
               {(item.url || item.source) && (
@@ -175,7 +175,7 @@ const parts = [
     </section>
 
     <section class="ps-section">
-      <p class="ps-label u-kicker"><span class="ps-num font-mono u-tnum">{parts[2].n}</span>{parts[2].label}</p>
+      <p class="ps-label u-kicker"><span class="ps-num font-sans u-tnum">{parts[2].n}</span>{parts[2].label}</p>
       <ul class="ps-outcomes" role="list">
         {outcomes.map((o) => (
           <li>

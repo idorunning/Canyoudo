@@ -318,14 +318,14 @@ export async function initHeaderAccount(): Promise<void> {
       h.className = 'block font-sans text-[13px] font-semibold text-ink-800 group-hover:text-accent transition-colors truncate';
       h.textContent = a.title;
       const meta = document.createElement('span');
-      meta.className = 'block font-mono text-[10px] uppercase tracking-[0.08em] text-ink-400';
+      meta.className = 'block font-sans text-[10px] uppercase tracking-[0.08em] text-ink-400';
       meta.textContent = `Saved ${fmtDate(a.savedAt)}`;
       link.appendChild(h);
       link.appendChild(meta);
 
       const remove = document.createElement('button');
       remove.type = 'button';
-      remove.className = 'shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.06em] text-ink-400 hover:text-accent-dark transition-colors';
+      remove.className = 'shrink-0 font-sans text-[10px] font-semibold uppercase tracking-[0.06em] text-ink-400 hover:text-accent-dark transition-colors';
       remove.textContent = 'Remove';
       remove.setAttribute('aria-label', `Remove "${a.title}" from your library`);
       remove.addEventListener('click', async () => {
