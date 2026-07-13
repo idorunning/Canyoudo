@@ -157,7 +157,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     <Header />
     <WelcomeModal />
 <SupportCTA variant="banner" />
-    <main id="main" class="flex-1">
+    <main id="main" class="flex-1" {...(type !== 'article' && !noindex ? { 'data-pagefind-body': true } : {})}>
       <slot />
     </main>
     <Footer />

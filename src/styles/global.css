@@ -922,23 +922,3 @@ html.dark {
   50%      { box-shadow: 0 0 0 6px rgb(var(--accent) / 0.16); }
 }
 
-/* ------------------------------------------------------------------ */
-/* Highlighter mark                                                      */
-/* Used as a utility (.mark-orange) and applied automatically to <mark> */
-/* in article prose, so an author can highlight a key line with         */
-/* ==important== and it reads as a soft highlighter band in the site's  */
-/* accent colour — the same semi-transparent-wash language as topic     */
-/* auto-links, rather than a hand-drawn underline.                      */
-/* ------------------------------------------------------------------ */
-.mark-orange,
-.prose-article mark {
-  background-color: transparent;
-  background-image: linear-gradient(rgb(var(--accent-light) / 0.4), rgb(var(--accent-light) / 0.4));
-  background-repeat: no-repeat;
-  background-position: 0 88%;
-  background-size: 100% 50%;
-  color: inherit;
-  padding: 0 0.05em;
-  border-radius: 2px;
-}
-
