@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-13T14:01:04.824Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-07-14T01:19:44.768Z",
+    "feedCount": 10,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -11,41 +11,66 @@
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Twelve arrested over threat to Islamic event",
-      "link": "https://www.bbc.co.uk/news/articles/cvgl20x1ggpo?at_medium=RSS&at_campaign=rss",
+      "title": "Gang feud ended with 'resolution of differences' between rivals - police report",
+      "link": "https://www.bbc.co.uk/news/articles/c20yqvrn0qvo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-13T13:57:10.000Z",
-      "summary": "Home Secretary Shabana Mahmood says the police's response \"undoubtedly saved lives\"."
+      "isoDate": "2026-07-13T22:00:08.000Z",
+      "summary": "Chief Constable Jo Farrell noted the feud - which spanned six months and involved 84 separate incidents - had ended for multiple reasons including dozens of arrests."
     },
     {
-      "title": "Three family members found dead in house",
-      "link": "https://www.bbc.co.uk/news/articles/czx5vq0zvn1o?at_medium=RSS&at_campaign=rss",
+      "title": "Sturgeon's police statement on SNP finances won't be released, says lawyer",
+      "link": "https://www.bbc.co.uk/news/articles/c1wyrw55vxvo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-13T13:54:13.000Z",
-      "summary": "Police have launched an investigation but say there is no ongoing risk to the public."
+      "isoDate": "2026-07-13T21:50:22.000Z",
+      "summary": "The former first minister exercised her right to give a \"no comment\" police interview, later sending a written statement to officers."
     },
     {
-      "title": "Pupil accused of stabbing teacher took knife to school for a game, court told",
-      "link": "https://www.bbc.co.uk/news/articles/c0ly3yed2jwo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-13T13:44:28.000Z",
-      "summary": "The boy says he and his friends were bringing \"random household objects\" into school for a game."
+      "title": "Barnsley Tech Town's £800,000 AI skills fund opens for applications",
+      "link": "https://www.gov.uk/government/news/barnsley-tech-towns-800000-ai-skills-fund-opens-for-applications",
+      "source": "DSIT",
+      "topic": "ai",
+      "isoDate": "2026-07-13T21:30:01.000Z",
+      "summary": "Applications open for the AI Upskilling Challenge Fund, inviting organisations to deliver innovative AI training to help Barnsley workers, businesses and residents build AI…"
     },
     {
-      "title": "Manslaughter plea accepted in dog walker killing",
-      "link": "https://www.bbc.co.uk/news/articles/cz0jkjdr352o?at_medium=RSS&at_campaign=rss",
+      "title": "Ann Widdecombe suspect not known to Prevent as counter terrorism police take over investigation",
+      "link": "https://www.bbc.co.uk/news/articles/c0mydjl12mwo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-13T12:36:39.000Z",
-      "summary": "Dawood Safi still faces trial for the attempted murder of his landlord and a teenage boy."
+      "isoDate": "2026-07-13T21:26:28.000Z",
+      "summary": "Home Secretary Shabana Mahmood confirmed the suspect was not known to the government's anti-terrorism programme in an update to MPs."
+    },
+    {
+      "title": "Mahmood says law will be changed to help deport grooming gang leader",
+      "link": "https://www.bbc.co.uk/news/articles/ce8m9615dqlo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-13T20:11:28.000Z",
+      "summary": "Calls to deport Rochdale grooming gang ringleader Shabir Ahmed have been growing since his release from prison."
+    },
+    {
+      "title": "Immigration and Asylum Bill: second reading opening speech",
+      "link": "https://www.gov.uk/government/speeches/immigration-and-asylum-bill-second-reading-opening-speech",
+      "source": "Home Office",
+      "topic": "policing",
+      "isoDate": "2026-07-13T19:16:16.000Z",
+      "summary": "As delivered by the Rt Hon Shabana Mahmood MP, Secretary of State for the Home Office"
+    },
+    {
+      "title": "Sticker shock has execs rethinking this whole AI thing",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/13/sticker-shock-has-execs-rethinking-this-whole-ai-thing-1/5270073",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-13T14:16:00.000Z",
+      "summary": "This week on The Reg's Kettle podcast, we wonder whether tokenminning is going to bring the industry back down to Earth"
     },
     {
       "title": "Record investment to protect Jewish communities",
@@ -168,6 +193,14 @@
       "summary": "Taskforce warning The post Lawyers risk being sued for failing to use AI appeared first on Legal Cheek ."
     },
     {
+      "title": "AI tool scours the web for job openings, preps your resume and cover letter",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/09/ai-tool-scours-the-web-for-job-openings-preps-your-resume-and-cover-letter/5269410",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-09T17:40:00.000Z",
+      "summary": "Searching for work sucks; AI combs the internet and sucks it all up. Combine the two and let 'er rip with this Python project"
+    },
+    {
       "title": "Sir Colin Birss appointed Master of the Rolls",
       "link": "https://www.judiciary.uk/lord-justice-birss-appointed-master-of-the-rolls/",
       "source": "Courts & Tribunals Judiciary",
@@ -192,6 +225,14 @@
       "summary": "Judicial diversity statistics for 2026 have been released today, including, for the first time, data on socio-economic background, sexual orientation, and religion or belief…"
     },
     {
+      "title": "Tool promises to make lazy academics' AI-written papers sound more human",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/08/tool-promises-to-make-lazy-academics-ai-written-papers-sound-more-human/5268460",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-08T15:55:00.000Z",
+      "summary": "Startup insists it's not trying to help anyone cheat the system - honest!"
+    },
+    {
       "title": "Pro-Worker AI Adoption Prize: how to nominate",
       "link": "https://www.gov.uk/guidance/pro-worker-ai-adoption-prize-how-to-nominate",
       "source": "DSIT",
@@ -208,20 +249,12 @@
       "summary": "The tech giant said people can opt out - but privacy campaigners called it a \"recipe for disaster\"."
     },
     {
-      "title": "Robots available for rent: But what can they do?",
-      "link": "https://www.bbc.co.uk/news/articles/c4gymkg9lr2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
+      "title": "Avoid AI atrophy – new tool promises to reverse vibe coding skills decay",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/07/avoid-ai-atrophy-new-tool-promises-to-reverse-vibe-coding-skills-decay/5267913",
+      "source": "The Register",
       "topic": "ai",
-      "isoDate": "2026-07-06T23:48:55.000Z",
-      "summary": "Robotics tech is changing fast, so for many it makes sense to rent a robot."
-    },
-    {
-      "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
-      "link": "https://www.gov.uk/government/news/solicitor-general-announces-national-rollout-of-early-victims-right-to-review-scheme",
-      "source": "CPS",
-      "topic": "law",
-      "isoDate": "2026-07-06T09:18:34.000Z",
-      "summary": "Following a successful pilot, rape and sexual assault survivors across all of England and Wales will have the right to ask for their cases to be reviewed before a final…"
+      "isoDate": "2026-07-07T20:21:35.000Z",
+      "summary": "Want big muscles? Keep working out. Want big coding skillsets? Flex your dev skills with the Atrophy CLI app before they wither away"
     }
   ]
 }
