@@ -12,6 +12,7 @@ import {
   ALL, crimeByMonth, outcomesByMonth, ssDim, populationByEthnicity, force,
 } from '../../src/lib/police-db';
 import { classifyOutcome } from '../../src/lib/outcomes.mjs';
+import { rollupDim } from '../../src/lib/ss-rollup.mjs';
 
 // Evidence-based interpretation of the historical police DATABASE (distinct from
 // interpret.mts, which reads the committed snapshot). Same contract: aggregate
@@ -106,22 +107,18 @@ async function buildDigest(scope: string, forceId: string) {
       forceId === ALL ? Promise.resolve(null) : force(forceId),
     ]);
     if (!dims.length) return null;
-    // Collapse all months → totals by ethnicity.
-    const by = new Map<string, { count: number; find: number }>();
-    let dataMonth = '';
-    for (const d of dims) {
-      dataMonth = d.month > dataMonth ? d.month : dataMonth;
-      const e = by.get(d.value) ?? { count: 0, find: 0 };
-      e.count += d.count; e.find += d.find_count; by.set(d.value, e);
-    }
-    const searchTotal = [...by.values()].reduce((s, e) => s + e.count, 0) || 1;
+    // One row per ethnicity over the latest 12 months — the same window the
+    // fixed chart view uses, so the reading and the chart describe one number.
+    const rolled = rollupDim(dims);
+    const dataMonth = rolled.latestMonth ?? '';
+    const searchTotal = rolled.values.reduce((s, e) => s + e.count, 0) || 1;
     const popTotal = pop.reduce((s: number, p: any) => s + p.population, 0);
     const popShare = new Map(pop.map((p: any) => [p.ethnicity, p.population / (popTotal || 1)]));
-    const groups = [...by].map(([ethnicity, e]) => ({
-      ethnicity, searchShare: pct(e.count / searchTotal),
-      populationShare: popShare.has(ethnicity) ? pct(popShare.get(ethnicity)!) : null,
-      disparityRatio: popShare.has(ethnicity) ? Math.round((e.count / searchTotal) / popShare.get(ethnicity)! * 100) / 100 : null,
-      findRate: pct(e.count ? e.find / e.count : null),
+    const groups = rolled.values.map((e) => ({
+      ethnicity: e.value, searchShare: pct(e.count / searchTotal),
+      populationShare: popShare.has(e.value) ? pct(popShare.get(e.value)!) : null,
+      disparityRatio: popShare.has(e.value) ? Math.round((e.count / searchTotal) / popShare.get(e.value)! * 100) / 100 : null,
+      findRate: pct(e.count ? e.find_count / e.count : null),
     })).sort((a, b) => (b.searchShare ?? 0) - (a.searchShare ?? 0));
     return {
       cacheId: `disproportionality:${forceId}`, dataMonth,
@@ -170,7 +167,7 @@ export default async (req: Request) => {
 
   let built;
   try { built = await buildDigest(scope, forceId); }
-  catch (err) { return json(502, { error: 'Could not gather the data to interpret.', detail: String(err) }); }
+  catch (err) { console.error('db-interpret:', err); return json(502, { error: 'Could not gather the data to interpret.' }); }
   if (!built) return json(404, { error: 'Nothing to interpret yet — the database may still be filling.' });
 
   const { cacheId, dataMonth, digest } = built;

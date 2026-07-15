@@ -1,5 +1,6 @@
 import type { Config } from '@netlify/functions';
 import { classifyOutcome } from '../../src/lib/outcomes.mjs';
+import { rollupDim } from '../../src/lib/ss-rollup.mjs';
 import { buildBriefingDigest } from '../../src/lib/briefing-digest';
 import {
   configured, ALL,
@@ -107,10 +108,13 @@ export default async (req: Request) => {
 
       case 'ss-dim': {
         const dimension = url.searchParams.get('dimension') || 'officer_ethnicity';
-        const rows = await ssDim(forceId, dimension, month);
+        // ss_dim is one row per month per value — roll up to one row per value
+        // over the latest 12 months (or the single requested month), otherwise
+        // every chart built on this view repeats each value once per month.
+        const rolled = rollupDim(await ssDim(forceId, dimension, month));
         return json(200, {
-          force: forceId, dimension,
-          values: rows.map((r) => ({
+          force: forceId, dimension, window: rolled.window,
+          values: rolled.values.map((r) => ({
             value: r.value, count: r.count, find_count: r.find_count,
             findRate: r.count ? r.find_count / r.count : null,
           })),
@@ -120,15 +124,17 @@ export default async (req: Request) => {
       case 'disproportionality': {
         // Officer-defined ethnicity shares of searches vs resident population
         // shares (when seeded) → a disparity ratio. Without population data we
-        // still return search shares + find rates.
+        // still return search shares + find rates. Rolled up to one row per
+        // ethnicity over the latest 12 months — the raw rows are per month.
         const [dims, pop] = await Promise.all([
           ssDim(forceId, 'officer_ethnicity', month),
           forceId === ALL ? [] : populationByEthnicity(forceId),
         ]);
-        const searchTotal = dims.reduce((s, d) => s + d.count, 0) || 1;
+        const rolled = rollupDim(dims);
+        const searchTotal = rolled.values.reduce((s, d) => s + d.count, 0) || 1;
         const popTotal = pop.reduce((s, p) => s + p.population, 0);
         const popShare = new Map(pop.map((p) => [p.ethnicity, p.population / (popTotal || 1)]));
-        const groups = dims.map((d) => {
+        const groups = rolled.values.map((d) => {
           const searchShare = d.count / searchTotal;
           const ps = popShare.get(d.value) ?? null;
           return {
@@ -138,7 +144,7 @@ export default async (req: Request) => {
             findRate: d.count ? d.find_count / d.count : null,
           };
         });
-        return json(200, { force: forceId, month: month ?? null, hasPopulation: popTotal > 0, groups }, true);
+        return json(200, { force: forceId, month: month ?? null, window: rolled.window, hasPopulation: popTotal > 0, groups }, true);
       }
 
       case 'hotspots': {
@@ -202,7 +208,8 @@ export default async (req: Request) => {
         return json(400, { error: `Unknown view "${view}".` });
     }
   } catch (err) {
-    return json(502, { error: 'Database query failed.', detail: String(err) });
+    console.error('police-db:', err);
+    return json(502, { error: 'Database query failed.' });
   }
 };
 
