@@ -58,6 +58,35 @@ export async function outcomesByMonth(forceId = ALL): Promise<OutcomeRow[]> {
   return rows(sb.from('outcome_force_month').select('force_id,month,outcome_category,count').eq('force_id', forceId).order('month'));
 }
 
+// Newest month present in the force crime rollup (the 12-month window's end).
+export async function latestCrimeMonth(): Promise<string | null> {
+  const sb = db(); if (!sb) return null;
+  const r = await rows(sb.from('crime_force_month').select('month').order('month', { ascending: false }).limit(1));
+  return r[0]?.month ?? null;
+}
+
+// Every force's per-category totals since fromMonth, in one read — the map's
+// tier-1 payload. 44 forces × ~14 categories × 12 months ≈ 7.4k rows; the
+// explicit limit matters because PostgREST silently caps at 1,000 otherwise.
+export async function crimeForceCategoryTotals(fromMonth: string): Promise<CrimeRow[]> {
+  const sb = db(); if (!sb) return [];
+  return rows(
+    sb.from('crime_force_month').select('force_id,month,category,count')
+      .gte('month', fromMonth).neq('force_id', ALL).limit(20000)
+  );
+}
+
+// All force populations at once (empty until scripts/seed-population.mjs runs;
+// tolerated if the table doesn't exist yet, same as forcePopulation above).
+export async function forcePopulations(): Promise<{ force_id: string; population: number; year: string }[]> {
+  const sb = db(); if (!sb) return [];
+  try {
+    return await rows(sb.from('force_population').select('force_id,population,year'));
+  } catch {
+    return [];
+  }
+}
+
 // Hotspots: the top LSOAs by all-crime count in one month (latest if omitted).
 export async function lsoaHotspots(month?: string, limit = 50): Promise<{ lsoa_code: string; lsoa_name: string | null; month: string; count: number }[]> {
   const sb = db(); if (!sb) return [];

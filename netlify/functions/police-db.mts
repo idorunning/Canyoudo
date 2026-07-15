@@ -4,6 +4,7 @@ import { buildBriefingDigest } from '../../src/lib/briefing-digest';
 import {
   configured, ALL,
   crimeByMonth, outcomesByMonth, lsoaHotspots,
+  crimeForceCategoryTotals, forcePopulations, latestCrimeMonth,
   ssByMonth, ssDim, populationByEthnicity, forcePopulation,
   force, forcePeople, allForces,
   neighbourhood, neighbourhoodPriorities, dataCoverage,
@@ -140,8 +141,38 @@ export default async (req: Request) => {
         return json(200, { force: forceId, month: month ?? null, hasPopulation: popTotal > 0, groups }, true);
       }
 
-      case 'hotspots':
-        return json(200, { month: month ?? null, lsoas: await lsoaHotspots(month, 50) }, true);
+      case 'hotspots': {
+        // The explorer table wants the default 50; the map asks for more.
+        const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') ?? '50', 10) || 50, 1), 1000);
+        return json(200, { month: month ?? null, lsoas: await lsoaHotspots(month, limit) }, true);
+      }
+
+      case 'map-forces': {
+        // Tier 1 of the Crime Map: every force's rolling-12-month category
+        // totals in one response, so the map never fans out 44 requests.
+        const latest = await latestCrimeMonth();
+        if (!latest) return json(200, { window: null, forces: [] }, true);
+        const [y, m] = latest.split('-').map(Number);
+        const fromD = new Date(Date.UTC(y, m - 1 - 11, 1));
+        const from = `${fromD.getUTCFullYear()}-${String(fromD.getUTCMonth() + 1).padStart(2, '0')}`;
+        const [rows, pops] = await Promise.all([crimeForceCategoryTotals(from), forcePopulations()]);
+        const popById = new Map(pops.map((p) => [p.force_id, p]));
+        const byForce = new Map<string, { total: number; byCategory: Record<string, number> }>();
+        for (const r of rows) {
+          const f = byForce.get(r.force_id) ?? { total: 0, byCategory: {} };
+          f.total += r.count;
+          f.byCategory[r.category] = (f.byCategory[r.category] ?? 0) + r.count;
+          byForce.set(r.force_id, f);
+        }
+        return json(200, {
+          window: { from, to: latest, months: 12 },
+          forces: [...byForce.entries()].map(([id, f]) => ({
+            id, total: f.total, byCategory: f.byCategory,
+            population: popById.get(id)?.population ?? null,
+            populationYear: popById.get(id)?.year ?? null,
+          })),
+        }, true);
+      }
 
       case 'briefing-digest': {
         // The Force Briefing's aggregate-only input. The edge function fetches
