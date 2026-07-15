@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-14T13:03:52.582Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-07-15T01:17:00.235Z",
+    "feedCount": 10,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -11,41 +11,58 @@
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Investigations continue after three found dead at house",
-      "link": "https://www.bbc.co.uk/news/articles/c5yz1d3kryzo?at_medium=RSS&at_campaign=rss",
+      "title": "Men who died helping two children in sea named",
+      "link": "https://www.bbc.co.uk/news/articles/c8626jpp0ewo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-14T12:57:27.000Z",
-      "summary": "A murder investigation was launched after three people were found dead in a family home in Ballymena."
+      "isoDate": "2026-07-14T19:00:52.000Z",
+      "summary": "The men who died rescuing two children at Seaton Carew have not been formally identified, police say."
+    },
+    {
+      "title": "Police say Ann Widdecombe killed in 'targeted attack' as motive investigated",
+      "link": "https://www.bbc.co.uk/news/articles/c0ryr74zjzvo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-14T18:07:08.000Z",
+      "summary": "Counter terror police say they have obtained a warrant to hold a 28-year-old suspect for up to seven days."
     },
     {
       "title": "Man who staged wife's suicide jailed for murder",
       "link": "https://www.bbc.co.uk/news/articles/c8626147e6no?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-14T12:43:17.000Z",
+      "isoDate": "2026-07-14T15:47:41.000Z",
       "summary": "The couple's daughter tells the court her father is a \"jealous, conniving, narcissistic villain\"."
     },
     {
-      "title": "Yes Scotland hands accounts to police after 'missing £1.5m' complaint",
-      "link": "https://www.bbc.co.uk/news/articles/czrxrv3y13go?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
+      "title": "AI to speed up justice under major disclosure reforms",
+      "link": "https://www.gov.uk/government/news/ai-to-speed-up-justice-under-major-disclosure-reforms",
+      "source": "GOV.UK",
       "topic": "policing",
-      "isoDate": "2026-07-14T11:00:01.000Z",
-      "summary": "The group which campaigned for independence in the 2014 referendum insists all its funds have been accounted for."
+      "isoDate": "2026-07-14T13:58:00.000Z",
+      "summary": "Under reforms announced today, disclosure rules written before smartphones existed will be overhauled to free up officer time."
     },
     {
-      "title": "Police continue to question murder suspect over Ann Widdecombe's killing",
-      "link": "https://www.bbc.co.uk/news/articles/c5yzyr3np8xo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
+      "title": "Operation cracks down on waste crime in Cumbria",
+      "link": "https://www.gov.uk/government/news/operation-cracks-down-on-waste-crime-in-cumbria",
+      "source": "GOV.UK",
       "topic": "policing",
-      "isoDate": "2026-07-14T10:34:58.000Z",
-      "summary": "The 28-year-old white British male suspect was re-arrested on Monday after counter terrorism police took over the case."
+      "isoDate": "2026-07-14T13:30:18.000Z",
+      "summary": "The Environment Agency has led a major multi-agency operation to tackle waste crime in Cumbria."
+    },
+    {
+      "title": "CNC narrows gender pay gap to record low",
+      "link": "https://www.gov.uk/government/news/cnc-narrows-gender-pay-gap-to-record-low",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-14T13:08:44.000Z",
+      "summary": "The CNC has reduced its mean gender pay gap to 2.95%, outperforming <mark>policing</mark> and the wider public sector as it continues towards its 2035 target."
     },
     {
       "title": "£8.2 million-a-year Kirkland partners are undercharging, says Legora CEO",
@@ -80,6 +97,14 @@
       "summary": "Missing something? The post ‘I’ve done five vac schemes and failed to secure a TC. Is there something wrong with me?’ appeared first on Legal Cheek ."
     },
     {
+      "title": "Australian police reveal unseen photos 25 years after British backpacker murder",
+      "link": "https://www.bbc.co.uk/news/articles/crlwln0gkzlo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-14T02:26:45.000Z",
+      "summary": "Police hope the images could jog memories that will help them find the body of Peter Falconio."
+    },
+    {
       "title": "Barnsley Tech Town's £800,000 AI skills fund opens for applications",
       "link": "https://www.gov.uk/government/news/barnsley-tech-towns-800000-ai-skills-fund-opens-for-applications",
       "source": "DSIT",
@@ -94,6 +119,14 @@
       "topic": "policing",
       "isoDate": "2026-07-13T19:16:16.000Z",
       "summary": "As delivered by the Rt Hon Shabana Mahmood MP, Secretary of State for the Home Office"
+    },
+    {
+      "title": "Sticker shock has execs rethinking this whole AI thing",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/13/sticker-shock-has-execs-rethinking-this-whole-ai-thing-1/5270073",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-13T14:16:00.000Z",
+      "summary": "This week on The Reg's Kettle podcast, we wonder whether tokenminning is going to bring the industry back down to Earth"
     },
     {
       "title": "Record investment to protect Jewish communities",
@@ -152,22 +185,6 @@
       "summary": "Oxford Probation Office, is a probation contact centre, within the South Central region."
     },
     {
-      "title": "CNC connects with veterans at UK's largest careers event",
-      "link": "https://www.gov.uk/government/news/cnc-connects-with-veterans-at-uks-largest-careers-event",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-10T14:31:08.000Z",
-      "summary": "…CNC officers met service leavers and veterans at the UK&#x27;s largest veterans careers fair to showcase <mark>policing</mark> careers protecting the UK&#x27;s civil nuclear…"
-    },
-    {
-      "title": "Enhanced support for police in traumatic and dangerous environments",
-      "link": "https://www.gov.uk/government/news/enhanced-support-for-police-in-traumatic-and-dangerous-environments",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-10T12:25:00.000Z",
-      "summary": "Officers fighting crime in their communities put their lives at risk every day and are repeatedly exposed to traumatic incidents in high-pressure environments."
-    },
-    {
       "title": "Royal Courts of Justice event showcases the work of the Judicial College",
       "link": "https://www.judiciary.uk/royal-courts-of-justice-event-showcases-the-work-of-the-judicial-college/",
       "source": "Courts & Tribunals Judiciary",
@@ -176,12 +193,12 @@
       "summary": "Guests from across the justice sector gathered at the Royal Courts of Justice to learn how the Judicial College designs and delivers training for more than 24,000 judicial…"
     },
     {
-      "title": "County lines – record year for gang busts and knife seizures",
-      "link": "https://www.gov.uk/government/news/county-lines-record-year-for-gang-busts-and-knife-seizures",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-10T08:53:00.000Z",
-      "summary": "Largest ever numbers of drug lines closed, gang leaders put behind bars and dangerous weapons seized through county line operations."
+      "title": "AI tool scours the web for job openings, preps your resume and cover letter",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/09/ai-tool-scours-the-web-for-job-openings-preps-your-resume-and-cover-letter/5269410",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-09T17:40:00.000Z",
+      "summary": "Searching for work sucks; AI combs the internet and sucks it all up. Combine the two and let 'er rip with this Python project"
     },
     {
       "title": "Sir Colin Birss appointed Master of the Rolls",
@@ -208,12 +225,12 @@
       "summary": "Judicial diversity statistics for 2026 have been released today, including, for the first time, data on socio-economic background, sexual orientation, and religion or belief…"
     },
     {
-      "title": "Pro-Worker AI Adoption Prize: how to nominate",
-      "link": "https://www.gov.uk/guidance/pro-worker-ai-adoption-prize-how-to-nominate",
-      "source": "DSIT",
+      "title": "Tool promises to make lazy academics' AI-written papers sound more human",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/08/tool-promises-to-make-lazy-academics-ai-written-papers-sound-more-human/5268460",
+      "source": "The Register",
       "topic": "ai",
-      "isoDate": "2026-07-08T14:23:42.000Z",
-      "summary": "How to nominate a UK organisation for the Pro-Worker AI Adoption Prize, recognising organisations using AI that benefits workers."
+      "isoDate": "2026-07-08T15:55:00.000Z",
+      "summary": "Startup insists it's not trying to help anyone cheat the system - honest!"
     },
     {
       "title": "Outcry as Meta lets users make AI images from public Instagram profile pics",
@@ -224,20 +241,20 @@
       "summary": "The tech giant said people can opt out - but privacy campaigners called it a \"recipe for disaster\"."
     },
     {
+      "title": "Avoid AI atrophy – new tool promises to reverse vibe coding skills decay",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/07/avoid-ai-atrophy-new-tool-promises-to-reverse-vibe-coding-skills-decay/5267913",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-07T20:21:35.000Z",
+      "summary": "Want big muscles? Keep working out. Want big coding skillsets? Flex your dev skills with the Atrophy CLI app before they wither away"
+    },
+    {
       "title": "Robots available for rent: But what can they do?",
       "link": "https://www.bbc.co.uk/news/articles/c4gymkg9lr2o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
       "isoDate": "2026-07-06T23:48:55.000Z",
       "summary": "Robotics tech is changing fast, so for many it makes sense to rent a robot."
-    },
-    {
-      "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
-      "link": "https://www.gov.uk/government/news/solicitor-general-announces-national-rollout-of-early-victims-right-to-review-scheme",
-      "source": "CPS",
-      "topic": "law",
-      "isoDate": "2026-07-06T09:18:34.000Z",
-      "summary": "Following a successful pilot, rape and sexual assault survivors across all of England and Wales will have the right to ask for their cases to be reviewed before a final…"
     }
   ]
 }
