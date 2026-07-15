@@ -30,13 +30,26 @@ export const CRIME_CATEGORY_META = [
 const META_BY_KEY = new Map(CRIME_CATEGORY_META.map((m) => [m.key, m]));
 const FALLBACK = META_BY_KEY.get('other-crime');
 
+// The street API names categories with url-slugs (violent-crime,
+// criminal-damage-arson) but the bulk-CSV ingest slugifies the CSV's Title
+// Case names (Violence and sexual offences → violence-and-sexual-offences),
+// so the database rollups speak a slightly different dialect. Canonicalise
+// before any palette/label lookup — two of the fourteen differ.
+const CATEGORY_ALIASES = {
+  'violence-and-sexual-offences': 'violent-crime',
+  'criminal-damage-and-arson': 'criminal-damage-arson',
+};
+export function canonicalCategory(key) {
+  return CATEGORY_ALIASES[key] ?? key;
+}
+
 export function categoryColor(key, dark = false) {
-  const m = META_BY_KEY.get(key) ?? FALLBACK;
+  const m = META_BY_KEY.get(canonicalCategory(key)) ?? FALLBACK;
   return dark ? m.colorDark : m.color;
 }
 
 export function categoryLabel(key) {
-  return (META_BY_KEY.get(key) ?? FALLBACK).label;
+  return (META_BY_KEY.get(canonicalCategory(key)) ?? FALLBACK).label;
 }
 
 // The zoom ladder: forces → hotspots → streets.
@@ -53,7 +66,7 @@ export const DOMINANT_EXCLUDE = ['anti-social-behaviour', 'other-crime'];
 export function dominantCategory(byCategory, { exclude = DOMINANT_EXCLUDE } = {}) {
   let best = null, bestCount = 0;
   for (const [key, count] of Object.entries(byCategory ?? {})) {
-    if (exclude.includes(key)) continue;
+    if (exclude.includes(canonicalCategory(key))) continue;
     if (count > bestCount) { best = key; bestCount = count; }
   }
   return best;

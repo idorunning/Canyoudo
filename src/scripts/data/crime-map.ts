@@ -12,7 +12,7 @@
 import { loadLeaflet } from '../loadLeaflet';
 import { fetchJson, fmt, monthLabel } from './explorer';
 import {
-  CRIME_CATEGORY_META, categoryColor, categoryLabel,
+  CRIME_CATEGORY_META, categoryColor, categoryLabel, canonicalCategory,
   tierForZoom, dominantCategory, dotRadius, ratePer1000,
   viewportPoly, viewportAreaKm2, cellSizeDeg, gridCluster,
   monthOptions, heatShade, FORCE_DATA_NOTES,
@@ -283,7 +283,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     mapForces.forEach((f, i) => {
       const c = centroids[f.id];
       if (!c) return;
-      const visible = Object.fromEntries(Object.entries(f.byCategory).filter(([k]) => !state.hidden.has(k)));
+      const visible = Object.fromEntries(Object.entries(f.byCategory).filter(([k]) => !state.hidden.has(canonicalCategory(k))));
       const dom = dominantCategory(visible);
       const color = dom ? categoryColor(dom, state.dark) : (state.dark ? '#555b64' : '#c6cad1');
       const marker = L.circleMarker([c.lat, c.lng], {
@@ -393,7 +393,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     }
     if (seq !== streetFetchSeq) return; // superseded by a newer pan/zoom
     groups[3].clearLayers();
-    const shown = points.filter((p) => !state.hidden.has(p.category));
+    const shown = points.filter((p) => !state.hidden.has(canonicalCategory(p.category)));
     if (!shown.length) {
       status(points.length
         ? 'Every crime here is in a hidden category — tap types in the key to show them.'

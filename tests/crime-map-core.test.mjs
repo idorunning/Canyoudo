@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import {
-  CRIME_CATEGORY_META, categoryColor, categoryLabel,
+  CRIME_CATEGORY_META, categoryColor, categoryLabel, canonicalCategory,
   TIER_BREAKS, tierForZoom,
   DOMINANT_EXCLUDE, dominantCategory,
   dotRadius, ratePer1000,
@@ -24,6 +24,23 @@ test('all 14 data.police.uk categories have distinct light and dark colours', ()
     assert.match(m.colorDark, /^#[0-9a-f]{6}$/, m.key);
     assert.ok(m.label.length > 2, m.key);
   }
+});
+
+test('bulk-CSV category slugs canonicalise to the street-API dialect', () => {
+  // Real keys as served by /api/police-db?view=map-forces (CSV-derived) —
+  // two of the fourteen differ from the street API's url-slugs.
+  assert.equal(canonicalCategory('violence-and-sexual-offences'), 'violent-crime');
+  assert.equal(canonicalCategory('criminal-damage-and-arson'), 'criminal-damage-arson');
+  assert.equal(canonicalCategory('anti-social-behaviour'), 'anti-social-behaviour');
+  assert.equal(categoryColor('violence-and-sexual-offences'), categoryColor('violent-crime'));
+  assert.equal(categoryLabel('criminal-damage-and-arson'), 'Criminal damage & arson');
+  // The DB dialect must never colour or label as the "other" fallback.
+  assert.notEqual(categoryColor('violence-and-sexual-offences'), categoryColor('other-crime'));
+  // Exclusions still bite when the DB dialect carries the excluded category.
+  assert.equal(
+    dominantCategory({ 'anti-social-behaviour': 900, 'violence-and-sexual-offences': 500 }),
+    'violence-and-sexual-offences'
+  );
 });
 
 test('unknown categories fall back to the other-crime colour', () => {
