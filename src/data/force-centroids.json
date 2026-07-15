@@ -1,0 +1,226 @@
+{
+  "source": "ONS Open Geography Portal (Open Government Licence v3.0)",
+  "fetchedAt": "2026-07-15T20:54:12.486Z",
+  "forces": {
+    "metropolitan": {
+      "lat": 51.44,
+      "lng": -0.05,
+      "name": "Metropolitan Police"
+    },
+    "cumbria": {
+      "lat": 54.5917,
+      "lng": -2.8993,
+      "name": "Cumbria"
+    },
+    "lancashire": {
+      "lat": 53.838,
+      "lng": -2.6112,
+      "name": "Lancashire"
+    },
+    "merseyside": {
+      "lat": 53.4695,
+      "lng": -2.8758,
+      "name": "Merseyside"
+    },
+    "greater-manchester": {
+      "lat": 53.5154,
+      "lng": -2.2842,
+      "name": "Greater Manchester"
+    },
+    "cheshire": {
+      "lat": 53.2097,
+      "lng": -2.5275,
+      "name": "Cheshire"
+    },
+    "northumbria": {
+      "lat": 55.211,
+      "lng": -2.0192,
+      "name": "Northumbria"
+    },
+    "durham": {
+      "lat": 54.6834,
+      "lng": -1.8158,
+      "name": "Durham"
+    },
+    "north-yorkshire": {
+      "lat": 54.1824,
+      "lng": -1.4081,
+      "name": "North Yorkshire"
+    },
+    "west-yorkshire": {
+      "lat": 53.7433,
+      "lng": -1.6888,
+      "name": "West Yorkshire"
+    },
+    "south-yorkshire": {
+      "lat": 53.4846,
+      "lng": -1.3312,
+      "name": "South Yorkshire"
+    },
+    "humberside": {
+      "lat": 53.7863,
+      "lng": -0.4946,
+      "name": "Humberside"
+    },
+    "cleveland": {
+      "lat": 54.5731,
+      "lng": -1.1835,
+      "name": "Cleveland"
+    },
+    "west-midlands": {
+      "lat": 52.4883,
+      "lng": -1.8734,
+      "name": "West Midlands"
+    },
+    "staffordshire": {
+      "lat": 52.8575,
+      "lng": -2.0372,
+      "name": "Staffordshire"
+    },
+    "west-mercia": {
+      "lat": 52.3873,
+      "lng": -2.5953,
+      "name": "West Mercia"
+    },
+    "warwickshire": {
+      "lat": 52.3002,
+      "lng": -1.5593,
+      "name": "Warwickshire"
+    },
+    "derbyshire": {
+      "lat": 53.1353,
+      "lng": -1.6107,
+      "name": "Derbyshire"
+    },
+    "nottinghamshire": {
+      "lat": 53.1278,
+      "lng": -1.0122,
+      "name": "Nottinghamshire"
+    },
+    "lincolnshire": {
+      "lat": 53.115,
+      "lng": -0.2494,
+      "name": "Lincolnshire"
+    },
+    "leicestershire": {
+      "lat": 52.6657,
+      "lng": -1.0434,
+      "name": "Leicestershire"
+    },
+    "northamptonshire": {
+      "lat": 52.308,
+      "lng": -0.864,
+      "name": "Northamptonshire"
+    },
+    "cambridgeshire": {
+      "lat": 52.3674,
+      "lng": 0.0043,
+      "name": "Cambridgeshire"
+    },
+    "norfolk": {
+      "lat": 52.6705,
+      "lng": 0.9544,
+      "name": "Norfolk"
+    },
+    "suffolk": {
+      "lat": 52.2209,
+      "lng": 1.0607,
+      "name": "Suffolk"
+    },
+    "bedfordshire": {
+      "lat": 52.0735,
+      "lng": -0.4513,
+      "name": "Bedfordshire"
+    },
+    "hertfordshire": {
+      "lat": 51.8299,
+      "lng": -0.217,
+      "name": "Hertfordshire"
+    },
+    "essex": {
+      "lat": 51.7971,
+      "lng": 0.5479,
+      "name": "Essex"
+    },
+    "thames-valley": {
+      "lat": 51.7194,
+      "lng": -1.0959,
+      "name": "Thames Valley"
+    },
+    "hampshire": {
+      "lat": 51.0642,
+      "lng": -1.2886,
+      "name": "Hampshire"
+    },
+    "surrey": {
+      "lat": 51.2478,
+      "lng": -0.4202,
+      "name": "Surrey"
+    },
+    "kent": {
+      "lat": 51.2256,
+      "lng": 0.7208,
+      "name": "Kent"
+    },
+    "sussex": {
+      "lat": 50.9485,
+      "lng": -0.1342,
+      "name": "Sussex"
+    },
+    "city-of-london": {
+      "lat": 51.5144,
+      "lng": -0.0917,
+      "name": "City of London"
+    },
+    "devon-and-cornwall": {
+      "lat": 50.65,
+      "lng": -4.1,
+      "name": "Devon and Cornwall"
+    },
+    "avon-and-somerset": {
+      "lat": 51.1979,
+      "lng": -2.8341,
+      "name": "Avon and Somerset"
+    },
+    "gloucestershire": {
+      "lat": 51.8256,
+      "lng": -2.1253,
+      "name": "Gloucestershire"
+    },
+    "wiltshire": {
+      "lat": 51.3156,
+      "lng": -1.9312,
+      "name": "Wiltshire"
+    },
+    "dorset": {
+      "lat": 50.8044,
+      "lng": -2.3085,
+      "name": "Dorset"
+    },
+    "north-wales": {
+      "lat": 53.0087,
+      "lng": -3.6972,
+      "name": "North Wales"
+    },
+    "gwent": {
+      "lat": 51.7176,
+      "lng": -2.9803,
+      "name": "Gwent"
+    },
+    "south-wales": {
+      "lat": 51.6074,
+      "lng": -3.6079,
+      "name": "South Wales"
+    },
+    "dyfed-powys": {
+      "lat": 52.1543,
+      "lng": -3.8954,
+      "name": "Dyfed-Powys"
+    },
+    "northern-ireland": {
+      "lat": 54.61,
+      "lng": -6.62,
+      "name": "Police Service of Northern Ireland"
+    }
+  }
+}
