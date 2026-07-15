@@ -58,6 +58,15 @@ export function tierForZoom(zoom) {
   return zoom < TIER_BREAKS.forces ? 1 : zoom < TIER_BREAKS.hotspots ? 2 : 3;
 }
 
+// The tier actually rendered. Zoom alone can lie on large displays: a wide
+// monitor at the street break can still show >400 km², which the street API
+// refuses (>10k crimes) — so tier 3 demotes back to hotspots until the
+// viewport is small enough to load individual crimes.
+export function effectiveTier(zoom, areaKm2, { streetLimit = 400 } = {}) {
+  const t = tierForZoom(zoom);
+  return t === 3 && areaKm2 > streetLimit ? 2 : t;
+}
+
 // Which category colours a force dot. Anti-social behaviour tops nearly every
 // force (and "other crime" says nothing), so by default both are excluded from
 // the *dot colour* — the panel and tooltip always show the true breakdown, and

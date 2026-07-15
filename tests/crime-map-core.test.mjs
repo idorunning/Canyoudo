@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import {
   CRIME_CATEGORY_META, categoryColor, categoryLabel, canonicalCategory,
-  TIER_BREAKS, tierForZoom,
+  TIER_BREAKS, tierForZoom, effectiveTier,
   DOMINANT_EXCLUDE, dominantCategory,
   dotRadius, ratePer1000,
   viewportPoly, viewportAreaKm2,
@@ -58,6 +58,15 @@ test('tierForZoom boundaries match TIER_BREAKS', () => {
   assert.equal(tierForZoom(TIER_BREAKS.hotspots - 1), 2);
   assert.equal(tierForZoom(TIER_BREAKS.hotspots), 3);
   assert.equal(tierForZoom(17), 3);
+});
+
+test('effectiveTier demotes oversized street viewports back to hotspots', () => {
+  assert.equal(effectiveTier(14, 500), 2, 'street zoom but viewport too large');
+  assert.equal(effectiveTier(14, 100), 3, 'street zoom, loadable viewport');
+  assert.equal(effectiveTier(13, 401), 2, 'just over the limit at the break');
+  assert.equal(effectiveTier(8, 50000), 1, 'force tier never affected by area');
+  assert.equal(effectiveTier(10, 5000), 2, 'hotspot tier never affected by area');
+  assert.equal(effectiveTier(14, 500, { streetLimit: 600 }), 3, 'custom limit respected');
 });
 
 // --- dominant category ---------------------------------------------------------
