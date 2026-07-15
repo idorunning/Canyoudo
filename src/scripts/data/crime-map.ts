@@ -10,7 +10,7 @@
 // proxy — so failures degrade tier by tier, never to a blank map.
 
 import { loadLeaflet } from '../loadLeaflet';
-import { fetchJson, fmt, monthLabel } from './explorer';
+import { fetchJson, fmt, monthLabel, streamInterpret } from './explorer';
 import {
   CRIME_CATEGORY_META, categoryColor, categoryLabel, canonicalCategory,
   tierForZoom, effectiveTier, dominantCategory, dotRadius, ratePer1000,
@@ -18,8 +18,18 @@ import {
   monthOptions, heatShade, FORCE_DATA_NOTES,
 } from '../../lib/crime-map-core.mjs';
 
+import {
+  forceInsightLines, nationalInsightLines, hotspotInsight, viewSummary,
+  trendLabel, disparityLine, DISPARITY_CAVEAT,
+} from '../../lib/map-insights.mjs';
+
 type Centroid = { lat: number; lng: number; name: string };
-type MapForce = { id: string; total: number; byCategory: Record<string, number>; population: number | null; populationYear: string | null };
+type MapForce = {
+  id: string; total: number; byCategory: Record<string, number>;
+  byMonth?: number[]; prevTotal?: number | null;
+  population: number | null; populationYear: string | null;
+};
+type National = { total: number; prevTotal: number | null; population: number | null; populationYear: string | null; windowTo?: string } | null;
 type Hotspot = { lsoa_code: string; lsoa_name: string | null; count: number };
 type StreetCrime = { lat: number; lng: number; category: string; street: string; outcome: string; month: string };
 
@@ -139,6 +149,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
 
   // --- data caches -------------------------------------------------------------
   let mapForces: MapForce[] | null = null;
+  let national: National = null;
   let mapForcesError = '';
   let window12: { from: string; to: string } | null = null;
   // Promise caches so concurrent renders (init runs twice; month + zoom churn)
@@ -148,6 +159,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
   const streetCache = new Map<string, StreetCrime[]>();
   let streetFetchSeq = 0;
   let hotspotFetchSeq = 0;
+  let lastStreetShown: StreetCrime[] = [];
 
   // --- legend (doubles as the category filter, and hosts the rate toggle) --------
   function renderLegend() {
@@ -245,52 +257,72 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
   }
 
   // --- side panel --------------------------------------------------------------------
-  function panelNational() {
+  // Every panel render emits a focusable heading; only user-initiated renders
+  // move focus to it (background refreshes must never steal the caret).
+  const panelHeading = (text: string) =>
+    `<h3 tabindex="-1" data-cm-panel-h class="font-display text-base font-semibold text-ink-900 focus:outline-none">${text}</h3>`;
+  function afterPanelRender(focus: boolean) {
+    if (focus) panelEl.querySelector<HTMLElement>('[data-cm-panel-h]')?.focus({ preventScroll: true });
+  }
+
+  function panelNational(focus = false) {
     if (!mapForces) {
       panelEl.innerHTML = `<p class="font-serif text-sm text-ink-600 leading-relaxed">${esc(mapForcesError || 'Loading force data…')}</p>
         <p class="font-serif text-sm text-ink-600 leading-relaxed mt-2">You can still zoom all the way in — street-level dots load straight from data.police.uk.</p>`;
       return;
     }
     const top = [...mapForces].sort((a, b) => b.total - a.total).slice(0, 5);
+    const insights = nationalInsightLines(national, mapForces);
     panelEl.innerHTML = `
-      <h3 class="font-display text-base font-semibold text-ink-900">England, Wales &amp; NI by force</h3>
-      <p class="font-sans text-xs text-ink-500 mt-1 mb-3">Rolling 12 months${window12 ? ` to ${monthLabel(window12.to)}` : ''} · recorded crime</p>
-      <ol class="space-y-1.5">${top.map((f) => `
-        <li><button type="button" data-pick-force="${f.id}" class="w-full text-left font-sans text-sm text-ink-700 hover:text-accent flex justify-between gap-2">
+      ${panelHeading('England, Wales &amp; NI by force')}
+      <p class="font-sans text-xs text-ink-500 mt-1 mb-2">Rolling 12 months${window12 ? ` to ${monthLabel(window12.to)}` : ''} · recorded crime</p>
+      ${insights.map((l) => `<p class="font-serif text-sm text-ink-700 leading-relaxed mt-2">${esc(l)}</p>`).join('')}
+      <ol class="space-y-1.5 mt-4">${top.map((f) => `
+        <li><button type="button" data-pick-force="${f.id}" class="w-full text-left font-sans text-sm text-ink-700 hover:text-accent flex justify-between gap-2 py-0.5">
           <span class="truncate">${esc(centroids[f.id]?.name ?? f.id)}</span>
           <span class="tabular-nums text-ink-500 shrink-0">${fmt.format(f.total)}</span>
         </button></li>`).join('')}
       </ol>
       <label class="mt-4 block">
         <span class="sr-only">Jump to a force</span>
-        <select data-pick-any class="w-full border border-ink-300 rounded-md px-2 py-1.5 font-sans text-xs text-ink-900 bg-paper-50">
+        <select data-pick-any class="w-full border border-ink-300 rounded-md px-2 py-2 font-sans text-xs text-ink-900 bg-paper-50">
           <option value="">Jump to a force…</option>
           ${Object.entries(centroids).map(([id, c]) => `<option value="${id}">${esc(c.name)}</option>`).join('')}
         </select>
       </label>
+      <div data-cm-read-slot class="mt-4"></div>
       <p class="font-sans text-xs text-ink-500 mt-4 leading-relaxed">Tap any dot — or pick a force — for its breakdown. Zoom for neighbourhood hotspots, then street-level reports.</p>`;
     panelEl.querySelectorAll<HTMLButtonElement>('[data-pick-force]').forEach((b) => (b.onclick = () => selectForce(b.dataset.pickForce!)));
     panelEl.querySelector<HTMLSelectElement>('[data-pick-any]')!.onchange = (e) => {
       const id = (e.target as HTMLSelectElement).value;
       if (id) selectForce(id);
     };
+    mountReadingButton('Read the national picture', `/api/db-interpret?scope=crime-history&force=_all`);
+    afterPanelRender(focus);
   }
 
-  async function panelForce(id: string) {
+  async function panelForce(id: string, focus = false) {
     const c = centroids[id];
     const f = mapForces?.find((x) => x.id === id);
     const note = (FORCE_DATA_NOTES as Record<string, string>)[id];
-    const rate = f ? ratePer1000(f.total, f.population ?? 0) : null;
     const cats = f
       ? Object.entries(f.byCategory).sort((a, b) => b[1] - a[1])
       : [];
     const maxCat = cats[0]?.[1] ?? 1;
+    const insights = f
+      ? forceInsightLines(f, national ? { ...national, windowTo: window12?.to } : null, shortName(c?.name ?? id))
+      : [];
+    const trend = f ? trendLabel(f.total, f.prevTotal ?? null) : null;
     panelEl.innerHTML = `
-      <button type="button" data-back class="font-sans text-xs text-accent hover:text-accent-dark mb-2">← All forces</button>
-      <h3 class="font-display text-base font-semibold text-ink-900">${esc(c?.name ?? id)}</h3>
+      <button type="button" data-back class="font-sans text-xs text-accent hover:text-accent-dark mb-2 py-1">← All forces</button>
+      ${panelHeading(esc(c?.name ?? id))}
       ${f ? `
         <p class="font-sans text-xs text-ink-500 mt-1">Rolling 12 months${window12 ? ` to ${monthLabel(window12.to)}` : ''}</p>
-        <p class="font-display text-2xl font-semibold text-ink-900 mt-2">${fmt.format(f.total)} <span class="font-sans text-xs font-normal text-ink-500">recorded crimes${rate != null ? ` · ${rate.toFixed(1)}/1,000 residents` : ''}</span></p>
+        <p class="font-display text-2xl font-semibold text-ink-900 mt-2">${fmt.format(f.total)}
+          <span class="font-sans text-xs font-normal text-ink-500">recorded crimes</span>
+          ${trend ? `<span class="font-sans text-[10px] font-medium uppercase tracking-[0.1em] text-ink-600 border border-ink-300 rounded-full px-2 py-0.5 align-middle ml-1">${trend}</span>` : ''}
+        </p>
+        ${insights.map((l) => `<p class="font-serif text-sm text-ink-700 leading-relaxed mt-2">${esc(l)}</p>`).join('')}
       ` : `<p class="font-serif text-sm text-ink-600 mt-2">${esc(mapForcesError || 'No force-level data available right now.')}</p>`}
       ${note ? `<p class="font-serif text-xs text-ink-600 leading-relaxed mt-2 border-l-2 border-accent/60 pl-2">${esc(note)}</p>` : ''}
       ${cats.length ? `
@@ -303,22 +335,28 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
               <span class="tabular-nums text-ink-500 w-14 text-right shrink-0">${fmt.format(n)}</span>
             </div>`).join('')}
         </div>` : ''}
+      <div data-cm-ss-slot class="mt-4"></div>
       <div class="mt-4 flex flex-wrap gap-2">
-        <button type="button" data-zoom-force class="font-sans text-xs border border-ink-300 rounded-md px-2.5 py-1.5 text-ink-700 hover:border-accent hover:text-accent">Zoom into ${esc(shortName(c?.name ?? id))} →</button>
+        <button type="button" data-zoom-force class="font-sans text-xs border border-ink-300 rounded-md px-2.5 py-2 text-ink-700 hover:border-accent hover:text-accent">Zoom into ${esc(shortName(c?.name ?? id))} →</button>
       </div>
+      <div data-cm-read-slot class="mt-4"></div>
       <ul class="mt-4 space-y-1 font-sans text-xs">
         <li><a class="text-accent hover:text-accent-dark underline underline-offset-2" href="/data/crime?force=${id}">Crime &amp; outcomes over time →</a></li>
+        <li><a class="text-accent hover:text-accent-dark underline underline-offset-2" href="/data/disproportionality?force=${id}">Stop &amp; search disproportionality →</a></li>
         <li><a class="text-accent hover:text-accent-dark underline underline-offset-2" href="/data/briefing?force=${id}">Force briefing →</a></li>
         <li><a class="text-accent hover:text-accent-dark underline underline-offset-2" href="/data/force/${id}">Latest-month reading →</a></li>
       </ul>`;
     panelEl.querySelector<HTMLButtonElement>('[data-back]')!.onclick = () => {
       state.force = '';
       pushUrl();
-      panelNational();
+      panelNational(true);
     };
     panelEl.querySelector<HTMLButtonElement>('[data-zoom-force]')!.onclick = () => {
       if (c) map.flyTo([c.lat, c.lng], 10, { duration: 0.8 });
     };
+    mountReadingButton('Read this force', `/api/db-interpret?scope=crime-history&force=${id}`);
+    mountStopSearch(id);
+    afterPanelRender(focus);
   }
 
   const shortName = (name: string) => name.replace(/\b(Constabulary|Police( Service)?( of)?)\b/gi, '').trim() || name;
@@ -326,7 +364,117 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
   function selectForce(id: string) {
     state.force = id;
     pushUrl();
-    panelForce(id);
+    panelForce(id, true);
+  }
+
+  // --- AI reading, strictly on demand ---------------------------------------------
+  // Force/national readings are cached server-side per data month, but the
+  // first generation each month is a billable call — so nothing streams until
+  // the reader asks. The button lives in the panel's [data-cm-read-slot].
+  function mountReadingButton(label: string, url: string) {
+    const slot = panelEl.querySelector<HTMLElement>('[data-cm-read-slot]');
+    if (!slot) return;
+    slot.innerHTML = `
+      <button type="button" data-cm-read class="font-sans text-xs border border-ink-300 rounded-md px-2.5 py-2 text-ink-700 hover:border-accent hover:text-accent">${esc(label)}</button>`;
+    slot.querySelector<HTMLButtonElement>('[data-cm-read]')!.onclick = () => {
+      slot.innerHTML = `
+        <p class="u-kicker u-kicker--dim mb-2">The reading</p>
+        <div data-cm-read-out class="prose-article font-serif text-sm leading-relaxed min-h-[3rem]"></div>
+        <p class="font-sans text-[10px] text-ink-500 mt-2">AI-generated from the same data as this map — read with care.</p>`;
+      streamInterpret(url, slot.querySelector<HTMLElement>('[data-cm-read-out]')!);
+    };
+  }
+
+  // --- stop & search vs who lives here (the census comparison) ----------------------
+  async function mountStopSearch(id: string) {
+    const slot = panelEl.querySelector<HTMLElement>('[data-cm-ss-slot]');
+    if (!slot) return;
+    let disp: any;
+    try { disp = await fetchJson(`/api/police-db?view=disproportionality&force=${id}`); }
+    catch { return; } // context section only — omit silently on failure
+    if (slot !== panelEl.querySelector('[data-cm-ss-slot]') || !disp?.groups?.length) return;
+    const groups = disp.groups.filter((g: any) => g.ethnicity !== 'Not stated').slice(0, 5);
+    const pctW = (v: number | null) => `${Math.max(Math.min((v ?? 0) * 100, 100), 1)}%`;
+    slot.innerHTML = `
+      <p class="u-kicker u-kicker--dim mb-2">Stop &amp; search — searches vs who lives here</p>
+      <div class="space-y-2">
+        ${groups.map((g: any) => `
+          <div class="font-sans text-[11px] text-ink-700">
+            <div class="flex justify-between gap-2">
+              <span>${esc(g.ethnicity)}</span>
+              ${g.disparityRatio != null ? `<span class="tabular-nums font-medium ${g.disparityRatio >= 1.5 ? 'text-accent' : 'text-ink-600'}">${(Math.round(g.disparityRatio * 10) / 10).toFixed(1)}×</span>` : ''}
+            </div>
+            <div class="mt-0.5 space-y-0.5" title="${esc(disparityLine({ ethnicity: g.ethnicity, searchShare: g.searchShare, populationShare: g.populationShare, disparityRatio: g.disparityRatio }))}">
+              <div class="h-1.5 bg-paper-200 rounded-sm overflow-hidden"><div class="h-full bg-accent/80 rounded-sm" style="width:${pctW(g.searchShare)}"></div></div>
+              ${g.populationShare != null ? `<div class="h-1.5 bg-paper-200 rounded-sm overflow-hidden"><div class="h-full bg-ink-400 rounded-sm" style="width:${pctW(g.populationShare)}"></div></div>` : ''}
+            </div>
+          </div>`).join('')}
+      </div>
+      <p class="font-sans text-[10px] text-ink-500 mt-2 leading-snug">
+        <span class="inline-block w-2 h-2 bg-accent/80 rounded-sm align-baseline"></span> share of searches
+        ${disp.hasPopulation ? '&nbsp;<span class="inline-block w-2 h-2 bg-ink-400 rounded-sm align-baseline"></span> share of residents (Census 2021)' : ''}
+      </p>
+      <p class="font-serif text-[11px] text-ink-600 leading-snug mt-2">${disp.hasPopulation
+        ? esc(DISPARITY_CAVEAT)
+        : 'No resident-population denominator is loaded for this area yet — shares of searches alone are not evidence of bias.'}</p>`;
+  }
+
+  // --- viewport panels: the non-pointer path into tiers 2 and 3 ---------------------
+  function panelViewport(tier: 2 | 3, focus = false) {
+    if (tier === 2) {
+      const bounds = map.getBounds();
+      const inView = lastHotspots
+        .filter((r) => {
+          const ll = lsoaLookup?.[r.lsoa_code];
+          return ll && bounds.contains(ll);
+        })
+        .slice(0, 10);
+      const counts = lastHotspots.map((r) => r.count);
+      panelEl.innerHTML = `
+        ${panelHeading('Hotspots in view')}
+        <p class="font-sans text-xs text-ink-500 mt-1 mb-2">Top neighbourhoods by all-crime count${state.month ? `, ${monthLabel(state.month)}` : ', latest month'} — volume, not crime type, at this level.</p>
+        ${inView.length ? `
+          <ol class="space-y-1.5">${inView.map((r) => `
+            <li><button type="button" data-goto-lsoa="${r.lsoa_code}" class="w-full text-left font-sans text-xs text-ink-700 hover:text-accent py-0.5">
+              <span class="block truncate font-medium">${esc(r.lsoa_name || r.lsoa_code)}</span>
+              <span class="block text-ink-500">${esc(hotspotInsight(r.count, counts))}</span>
+            </button></li>`).join('')}
+          </ol>` : '<p class="font-serif text-sm text-ink-600">None of the top-400 national hotspots sit in this view — that is itself worth knowing. Pan towards a city centre to see where crime concentrates.</p>'}
+        <div data-cm-read-slot class="mt-4"></div>
+        <p class="font-sans text-xs text-ink-500 mt-3 leading-relaxed">Neighbourhoods here are LSOAs — small statistical areas of roughly 1,500–3,000 residents. City-centre areas top these lists partly because of footfall: a count is not a rate.</p>`;
+      panelEl.querySelectorAll<HTMLButtonElement>('[data-goto-lsoa]').forEach((b) => {
+        b.onclick = () => {
+          const ll = lsoaLookup?.[b.dataset.gotoLsoa!];
+          if (ll) map.panTo(ll);
+        };
+      });
+      mountReadingButton('What am I looking at?', `/api/db-interpret?scope=map-hotspots${state.month ? `&month=${state.month}` : ''}`);
+      afterPanelRender(focus);
+    } else {
+      const s = viewSummary(lastStreetShown);
+      panelEl.innerHTML = `
+        ${panelHeading('This view')}
+        <p class="font-sans text-xs text-ink-500 mt-1 mb-2">${state.month ? monthLabel(state.month) : window12 ? monthLabel(window12.to) : 'Latest month'} · individual reports, locations anonymised.</p>
+        ${s.total ? `
+          <p class="font-serif text-sm text-ink-700 leading-relaxed">${fmt.format(s.total)} crimes in this view.</p>
+          <p class="u-kicker u-kicker--dim mt-3 mb-1">Most common</p>
+          <ul class="space-y-1">${s.topCategories.map(([k, n]) => `
+            <li class="flex items-center gap-2 font-sans text-[11px] text-ink-700">
+              <span class="inline-block w-2.5 h-2.5 rounded-full shrink-0" style="background:${categoryColor(k, state.dark)}"></span>
+              <span class="flex-1 truncate">${esc(categoryLabel(k))}</span>
+              <span class="tabular-nums text-ink-500">${fmt.format(n)}</span>
+            </li>`).join('')}
+          </ul>
+          ${s.topStreets.length ? `
+            <p class="u-kicker u-kicker--dim mt-3 mb-1">Busiest locations</p>
+            <ul class="space-y-1">${s.topStreets.map(([street, n]) => `
+              <li class="flex justify-between gap-2 font-sans text-[11px] text-ink-700"><span class="truncate">${esc(street)}</span><span class="tabular-nums text-ink-500 shrink-0">${fmt.format(n)}</span></li>`).join('')}
+            </ul>` : ''}
+        ` : '<p class="font-serif text-sm text-ink-600">No crimes recorded in this view for this month.</p>'}
+        <div data-cm-read-slot class="mt-4"></div>`;
+      mountReadingButton('Read this view', `/api/interpret?scope=map-view&poly=${encodeURIComponent(viewportPoly(currentBox(), 2))}${state.month ? `&month=${state.month}` : ''}`);
+      afterPanelRender(focus);
+    }
   }
 
   // --- tier 1: force dots ------------------------------------------------------------
@@ -422,6 +570,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
         groups[2].addLayer(marker);
       }
       if (misses) console.warn(`crime-map: ${misses} hotspot LSOAs missing from the centroid lookup`);
+      panelViewport(2);
     } catch (err: any) {
       if (seq !== hotspotFetchSeq) return;
       status(`Couldn’t load hotspots: ${err?.message || 'unknown error'}. Street-level dots still work — keep zooming.`, true);
@@ -467,6 +616,8 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     if (seq !== streetFetchSeq) return; // superseded by a newer pan/zoom
     groups[3].clearLayers();
     const shown = points.filter((p) => !state.hidden.has(canonicalCategory(p.category)));
+    lastStreetShown = shown;
+    panelViewport(3);
     if (!shown.length) {
       status(points.length
         ? 'Every crime here is in a hidden category — tap types in the key to show them.'
@@ -514,6 +665,9 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       currentTier = tier;
       status('');
       renderBoundaries(); // interactivity + visibility are tier-dependent
+      // The panel follows the tier: force/national context zoomed out, the
+      // in-view lists (the keyboard path into the dots) at hotspot/street level.
+      if (tier === 1) state.force && centroids[state.force] ? panelForce(state.force) : panelNational();
     }
     if (!map.hasLayer(groups[tier])) groups[tier].addTo(map);
     renderTierChip();
@@ -551,7 +705,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     state.dark = dark;
     if (!tileFellBack) tiles.setUrl(dark ? TILE.dark : TILE.light);
     renderCurrentTier();
-    if (state.force) panelForce(state.force);
+    if (effTier() === 1 && state.force) panelForce(state.force);
     renderBoundaries();
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
@@ -596,10 +750,11 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
   panelNational();
   renderCurrentTier();
   try {
-    const res = await fetchJson<{ window: { from: string; to: string } | null; forces: MapForce[] }>(
+    const res = await fetchJson<{ window: { from: string; to: string } | null; national: National; forces: MapForce[] }>(
       '/api/police-db?view=map-forces'
     );
     window12 = res.window;
+    national = res.national ?? null;
     mapForces = res.forces?.length ? res.forces : null;
     if (!mapForces) mapForcesError = 'The force database is still filling — dots will appear once the first ingest lands.';
   } catch (err: any) {
@@ -607,6 +762,10 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     status(mapForcesError, true);
   }
   renderCurrentTier();
-  if (state.force && centroids[state.force]) panelForce(state.force);
-  else panelNational();
+  // At hotspot/street zooms the tier renderers own the panel; only the force
+  // tier shows the force/national context here.
+  if (effTier() === 1) {
+    if (state.force && centroids[state.force]) panelForce(state.force);
+    else panelNational();
+  }
 }

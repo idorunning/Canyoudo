@@ -65,14 +65,14 @@ export async function latestCrimeMonth(): Promise<string | null> {
   return r[0]?.month ?? null;
 }
 
-// Every force's per-category totals since fromMonth, in one read — the map's
-// tier-1 payload. 44 forces × ~14 categories × 12 months ≈ 7.4k rows; the
+// Every force's per-category rows since fromMonth, in one read — the map's
+// tier-1 payload. 44 forces × ~14 categories × 24 months ≈ 15k rows; the
 // explicit limit matters because PostgREST silently caps at 1,000 otherwise.
 export async function crimeForceCategoryTotals(fromMonth: string): Promise<CrimeRow[]> {
   const sb = db(); if (!sb) return [];
   return rows(
     sb.from('crime_force_month').select('force_id,month,category,count')
-      .gte('month', fromMonth).neq('force_id', ALL).limit(20000)
+      .gte('month', fromMonth).neq('force_id', ALL).limit(40000)
   );
 }
 

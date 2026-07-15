@@ -156,27 +156,53 @@ export default async (req: Request) => {
       case 'map-forces': {
         // Tier 1 of the Crime Map: every force's rolling-12-month category
         // totals in one response, so the map never fans out 44 requests.
+        // Fetches 24 months so the client's computed insights can say how the
+        // last 12 compare with the 12 before (~6 KB extra).
         const latest = await latestCrimeMonth();
-        if (!latest) return json(200, { window: null, forces: [] }, true);
+        if (!latest) return json(200, { window: null, months: [], national: null, forces: [] }, true);
         const [y, m] = latest.split('-').map(Number);
-        const fromD = new Date(Date.UTC(y, m - 1 - 11, 1));
-        const from = `${fromD.getUTCFullYear()}-${String(fromD.getUTCMonth() + 1).padStart(2, '0')}`;
-        const [rows, pops] = await Promise.all([crimeForceCategoryTotals(from), forcePopulations()]);
+        const monthAt = (back: number) => {
+          const d = new Date(Date.UTC(y, m - 1 - back, 1));
+          return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+        };
+        const from24 = monthAt(23), from12 = monthAt(11);
+        const months = Array.from({ length: 12 }, (_, i) => monthAt(11 - i)); // oldest → latest
+        const monthIdx = new Map(months.map((mo, i) => [mo, i]));
+        const [rows, pops] = await Promise.all([crimeForceCategoryTotals(from24), forcePopulations()]);
         const popById = new Map(pops.map((p) => [p.force_id, p]));
-        const byForce = new Map<string, { total: number; byCategory: Record<string, number> }>();
+        // prevTotal is only honest when the previous 12-month window is fully
+        // present in the data — otherwise it reads as a fake collapse.
+        const prevMonths = new Set(rows.filter((r) => r.month < from12).map((r) => r.month));
+        const prevComplete = prevMonths.size === 12;
+        const byForce = new Map<string, { total: number; prevTotal: number; byCategory: Record<string, number>; byMonth: number[] }>();
         for (const r of rows) {
-          const f = byForce.get(r.force_id) ?? { total: 0, byCategory: {} };
-          f.total += r.count;
-          f.byCategory[r.category] = (f.byCategory[r.category] ?? 0) + r.count;
+          const f = byForce.get(r.force_id) ?? { total: 0, prevTotal: 0, byCategory: {}, byMonth: new Array(12).fill(0) };
+          if (r.month >= from12) {
+            f.total += r.count;
+            f.byCategory[r.category] = (f.byCategory[r.category] ?? 0) + r.count;
+            f.byMonth[monthIdx.get(r.month)!] += r.count;
+          } else {
+            f.prevTotal += r.count;
+          }
           byForce.set(r.force_id, f);
         }
+        const forces = [...byForce.entries()].map(([id, f]) => ({
+          id, total: f.total, byCategory: f.byCategory, byMonth: f.byMonth,
+          prevTotal: prevComplete ? f.prevTotal : null,
+          population: popById.get(id)?.population ?? null,
+          populationYear: popById.get(id)?.year ?? null,
+        }));
+        const natPop = popById.get(ALL);
         return json(200, {
-          window: { from, to: latest, months: 12 },
-          forces: [...byForce.entries()].map(([id, f]) => ({
-            id, total: f.total, byCategory: f.byCategory,
-            population: popById.get(id)?.population ?? null,
-            populationYear: popById.get(id)?.year ?? null,
-          })),
+          window: { from: from12, to: latest, months: 12 },
+          months,
+          national: {
+            total: forces.reduce((s, f) => s + f.total, 0),
+            prevTotal: prevComplete ? forces.reduce((s, f) => s + (f.prevTotal ?? 0), 0) : null,
+            population: natPop?.population ?? null,
+            populationYear: natPop?.year ?? null,
+          },
+          forces,
         }, true);
       }
 
