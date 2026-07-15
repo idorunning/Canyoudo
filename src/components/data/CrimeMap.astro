@@ -1,0 +1,68 @@
+---
+// The Crime Map — the interactive heart of the Crime Dashboard hub (/data).
+// Markup + chrome only; all behaviour lives in src/scripts/data/crime-map.ts
+// and the pure logic in src/lib/crime-map-core.mjs. Force centroids are
+// committed data (src/data/force-centroids.json) inlined here so tier 1
+// never waits on a fetch. Initialisation is deferred until the members gate
+// unlocks, so Leaflet never loads for logged-out visitors.
+import { readFileSync } from 'node:fs';
+
+const centroids = JSON.parse(readFileSync('src/data/force-centroids.json', 'utf8'));
+---
+
+<div data-crime-map class="grid lg:grid-cols-[minmax(0,1fr)_21rem] gap-4">
+  <div class="relative">
+    <div data-cm-map class="h-[60vh] md:h-[70vh] rounded-lg border border-ink-200 overflow-hidden bg-paper-100 z-0"></div>
+
+    {/* tier chip */}
+    <div data-cm-tier
+      class="absolute top-3 left-3 z-[500] rounded-md bg-paper-50/95 border border-ink-200 px-2.5 py-1.5 font-sans text-xs text-ink-700 shadow-sm max-w-[70%]">
+    </div>
+
+    {/* month picker */}
+    <div data-cm-month-wrap hidden class="absolute top-3 right-14 z-[500]">
+      <label>
+        <span class="sr-only">Data month</span>
+        <select data-cm-month
+          class="rounded-md bg-paper-50/95 border border-ink-200 px-2 py-1.5 font-sans text-xs text-ink-900 shadow-sm focus:outline-none focus:border-accent">
+        </select>
+      </label>
+    </div>
+
+    {/* status strip — honest loading/error/empty copy */}
+    <p data-cm-status hidden aria-live="polite"
+      class="absolute bottom-3 right-3 z-[500] max-w-[60%] rounded-md bg-paper-50/95 border border-ink-200 px-2.5 py-1.5 font-sans text-xs text-ink-700 shadow-sm">
+    </p>
+
+    {/* legend / category filter */}
+    <details open class="absolute bottom-3 left-3 z-[500] rounded-md bg-paper-50/95 border border-ink-200 shadow-sm max-w-[17rem]">
+      <summary class="cursor-pointer list-none px-2.5 py-1.5 font-sans text-[11px] uppercase tracking-[0.12em] text-ink-500 select-none">Key</summary>
+      <div class="px-2.5 pb-2">
+        <div data-cm-legend class="grid grid-cols-2 gap-x-3 gap-y-1"></div>
+        <p data-cm-legend-note class="font-sans text-[10px] text-ink-500 leading-snug mt-2"></p>
+      </div>
+    </details>
+  </div>
+
+  {/* side panel — also the keyboard path into the data */}
+  <aside data-cm-panel aria-label="Map detail panel"
+    class="rounded-lg border border-ink-200 bg-paper-50 p-4 lg:max-h-[70vh] lg:overflow-y-auto">
+  </aside>
+
+  <script type="application/json" data-cm-centroids set:html={JSON.stringify(centroids)}></script>
+</div>
+
+<p class="font-sans text-xs text-ink-500 mt-3 leading-relaxed">
+  Crime data: <a href="https://data.police.uk" class="underline underline-offset-2 hover:text-accent">data.police.uk</a> (OGL v3.0),
+  read live at street level — locations are anonymised map points, deliberately approximate.
+  Boundaries &amp; centroids: ONS Open Geography Portal (OGL v3.0).
+  Map tiles: &copy; OpenStreetMap contributors &copy; CARTO.
+</p>
+
+<script>
+  import { initCrimeMap } from '../../scripts/data/crime-map';
+  import { onMembersUnlock } from '../../scripts/members/gate';
+
+  const root = document.querySelector<HTMLElement>('[data-crime-map]');
+  if (root) onMembersUnlock(() => initCrimeMap(root));
+</script>

@@ -8,6 +8,7 @@ import Sparkline from '../../components/data/Sparkline.astro';
 import PersonaInterpreter from '../../components/data/PersonaInterpreter.astro';
 import DataChat from '../../components/data/DataChat.astro';
 import MemberGate from '../../components/MemberGate.astro';
+import CrimeMap from '../../components/data/CrimeMap.astro';
 import { getCollection } from 'astro:content';
 import { readFileSync } from 'node:fs';
 
@@ -23,24 +24,29 @@ const dataEntries = await getCollection('policedata');
 const national = dataEntries.find((e) => e.data.kind === 'national')?.data as
   | Extract<(typeof dataEntries)[number]['data'], { kind: 'national' }>
   | undefined;
-const forces = dataEntries
-  .filter((e) => e.data.kind === 'force')
-  .map((e) => e.data as Extract<(typeof dataEntries)[number]['data'], { kind: 'force' }>)
-  .sort((a, b) => a.name.localeCompare(b.name));
 const fmt = new Intl.NumberFormat('en-GB');
 const ss = national?.stopSearch;
 const monthLabel = (m: string) => {
   const [y, mo] = m.split('-').map(Number);
   return new Date(y, mo - 1, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
 };
+
+const explorerLinks = [
+  { href: '/data/crime', title: 'Crime & outcomes over time', blurb: 'Long-run trends by type, and the justice gap.' },
+  { href: '/data/disproportionality', title: 'Stop & search disproportionality', blurb: 'Who gets searched, against who lives there.' },
+  { href: '/data/neighbourhood', title: 'Your neighbourhood team', blurb: 'The officers and priorities for a postcode.' },
+  { href: '/data/coverage', title: 'Forces & data quality', blurb: 'Who files on time, and how complete it is.' },
+  { href: '/data/briefing', title: 'Force briefing', blurb: 'A printable, AI-written data briefing per force.' },
+  { href: '/data/lookup', title: 'Postcode lookup', blurb: 'A plain-English reading of your area.' },
+];
 ---
 
 <BaseLayout
   title="Crime Dashboard"
-  description="The latest month of stop & search and recorded crime, read for you by force and area — refreshed monthly."
+  description="Explore recorded crime on a map of England, Wales & Northern Ireland — every force, every neighbourhood, every street, coloured by crime type. Built on data.police.uk."
 >
   <section class="border-b border-ink-200">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-2xl">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Research Tools', href: '/research-tools' }, { label: 'Crime Dashboard' }]} />
         <p class="u-kicker mb-5">Evidence</p>
@@ -48,103 +54,93 @@ const monthLabel = (m: string) => {
           Crime Dashboard
         </h1>
         <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6">
-          The latest month of stop &amp; search and recorded crime, read for you by force and area — refreshed monthly.
+          Every force, every neighbourhood, every street. Start zoomed out — one dot per police
+          force, coloured by its most common crime — and keep zooming until you're reading
+          individual reports, street by street.
         </p>
       </div>
     </div>
   </section>
 
   <section>
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
-      <div class="max-w-3xl">
-        <MemberGate hasAuth={hasAuth} feature="the Crime Dashboard">
-          <div class="space-y-10">
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-12">
+      <MemberGate hasAuth={hasAuth} feature="the Crime Dashboard">
+        <div class="space-y-10">
+          {/* One honest line above the map; the full caveats sit just below it. */}
+          <p class="font-sans text-xs text-ink-500 -mb-6">
+            This data is <em>not everywhere, not now, and not exact</em> — <a href="#caveats" class="underline underline-offset-2 hover:text-accent">what that means</a>.
+          </p>
+
+          <CrimeMap />
+
+          <div id="caveats">
             <CaveatBanner />
-
-            {ss && national ? (
-              <>
-                <PersonaInterpreter scope="national" />
-
-                <div class="border-t border-ink-200 pt-8 grid sm:grid-cols-2 gap-8">
-                  <div>
-                    <label for="force-pick-r" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Read a police force</label>
-                    <select id="force-pick-r" class="w-full border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
-                      <option value="">Choose a force…</option>
-                      {forces.map((f) => <option value={f.id}>{f.name}</option>)}
-                    </select>
-                  </div>
-                  <div>
-                    <p class="u-kicker u-kicker--dim mb-2">Look up your area</p>
-                    <a href="/data/lookup" class="inline-flex items-center gap-2 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-sm text-ink-700 hover:border-accent hover:text-accent transition-colors">
-                      Interpret a postcode →
-                    </a>
-                  </div>
-                </div>
-
-                <div class="border-t border-ink-200 pt-8">
-                  <p class="u-kicker u-kicker--dim mb-2">Go deeper</p>
-                  <a href="/data/explore" class="block border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors group">
-                    <span class="font-display text-lg font-semibold text-ink-900 group-hover:text-accent transition-colors">Crime Data Explorer →</span>
-                    <span class="block font-serif text-ink-700 leading-relaxed mt-1">The dashboard above reads the latest month. The Crime Data Explorer goes back years — crime &amp; outcome trends, stop &amp; search disproportionality, your neighbourhood, and data-quality tracking, from a queryable database of data.police.uk.</span>
-                  </a>
-                </div>
-
-                <details class="group border-t border-ink-200 pt-6">
-                  <summary class="cursor-pointer list-none font-sans text-sm uppercase tracking-[0.15em] text-accent hover:text-accent-dark flex items-center gap-2">
-                    <span class="transition-transform group-open:rotate-90">▸</span> See the figures
-                  </summary>
-                  <div class="mt-8 space-y-10">
-                    {rcNat && (
-                      <div>
-                        <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
-                          <h3 class="font-display text-lg font-semibold text-ink-900">Recorded crime · {recordedCrime.period}</h3>
-                          <span class="font-sans text-sm text-ink-500">{fmt.format(rcNat.total)} offences</span>
-                        </div>
-                        <BarChart caption="By offence group (Home Office annual, England & Wales)" data={rcNat.byOffenceGroup} asPercent />
-                      </div>
-                    )}
-
-                    <div class="flex items-center gap-4">
-                      <div>
-                        <p class="u-kicker u-kicker--dim mb-1">12-month searches</p>
-                        <p class="font-display text-3xl font-semibold text-ink-900">{fmt.format(ss.window.total)}</p>
-                      </div>
-                      <div class="text-accent"><Sparkline points={ss.series} width={160} /></div>
-                    </div>
-
-                    {national.forcesMissing.length > 0 && (
-                      <p class="font-serif text-sm text-ink-600 leading-relaxed">
-                        <strong>{national.forcesMissing.length} of {national.forcesCount} forces</strong> hadn't filed
-                        {' '}{monthLabel(national.provenance.datasetMonth)} yet, so the latest month is an undercount —
-                        which is why the breakdowns use a rolling 12 months.
-                      </p>
-                    )}
-
-                    <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
-                      <BarChart caption="Who gets searched (officer-defined ethnicity)" data={ss.window.byOfficerEthnicity} asPercent />
-                      <BarChart caption="What officers were looking for" data={ss.window.byObjectOfSearch} asPercent />
-                      <BarChart caption="What happened next (outcome)" data={ss.window.byOutcome} asPercent />
-                    </div>
-
-                    <ProvenanceStamp datasetMonth={national.provenance.datasetMonth} fetchedAt={national.provenance.fetchedAt} sample={national.provenance.sample} />
-                  </div>
-                </details>
-
-                <DataChat scope="national" />
-              </>
-            ) : (
-              <p class="font-serif text-lg text-ink-600">No snapshot found yet.</p>
-            )}
           </div>
-        </MemberGate>
-      </div>
+
+          <div class="max-w-3xl">
+            <PersonaInterpreter scope="national" />
+          </div>
+
+          <div class="border-t border-ink-200 pt-8">
+            <p class="u-kicker u-kicker--dim mb-4">Go deeper</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {explorerLinks.map((l) => (
+                <a href={l.href} class="block border border-ink-200 rounded-lg p-4 hover:border-accent transition-colors group">
+                  <span class="font-display text-base font-semibold text-ink-900 group-hover:text-accent transition-colors">{l.title} →</span>
+                  <span class="block font-serif text-sm text-ink-600 leading-relaxed mt-1">{l.blurb}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {ss && national && (
+            <details class="group border-t border-ink-200 pt-6 max-w-3xl">
+              <summary class="cursor-pointer list-none font-sans text-sm uppercase tracking-[0.15em] text-accent hover:text-accent-dark flex items-center gap-2">
+                <span class="transition-transform group-open:rotate-90">▸</span> See the figures
+              </summary>
+              <div class="mt-8 space-y-10">
+                {rcNat && (
+                  <div>
+                    <div class="flex items-baseline justify-between flex-wrap gap-2 mb-3">
+                      <h3 class="font-display text-lg font-semibold text-ink-900">Recorded crime · {recordedCrime.period}</h3>
+                      <span class="font-sans text-sm text-ink-500">{fmt.format(rcNat.total)} offences</span>
+                    </div>
+                    <BarChart caption="By offence group (Home Office annual, England & Wales)" data={rcNat.byOffenceGroup} asPercent />
+                  </div>
+                )}
+
+                <div class="flex items-center gap-4">
+                  <div>
+                    <p class="u-kicker u-kicker--dim mb-1">12-month searches</p>
+                    <p class="font-display text-3xl font-semibold text-ink-900">{fmt.format(ss.window.total)}</p>
+                  </div>
+                  <div class="text-accent"><Sparkline points={ss.series} width={160} /></div>
+                </div>
+
+                {national.forcesMissing.length > 0 && (
+                  <p class="font-serif text-sm text-ink-600 leading-relaxed">
+                    <strong>{national.forcesMissing.length} of {national.forcesCount} forces</strong> hadn't filed
+                    {' '}{monthLabel(national.provenance.datasetMonth)} yet, so the latest month is an undercount —
+                    which is why the breakdowns use a rolling 12 months.
+                  </p>
+                )}
+
+                <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+                  <BarChart caption="Who gets searched (officer-defined ethnicity)" data={ss.window.byOfficerEthnicity} asPercent />
+                  <BarChart caption="What officers were looking for" data={ss.window.byObjectOfSearch} asPercent />
+                  <BarChart caption="What happened next (outcome)" data={ss.window.byOutcome} asPercent />
+                </div>
+
+                <ProvenanceStamp datasetMonth={national.provenance.datasetMonth} fetchedAt={national.provenance.fetchedAt} sample={national.provenance.sample} />
+              </div>
+            </details>
+          )}
+
+          <div class="max-w-3xl">
+            <DataChat scope="national" />
+          </div>
+        </div>
+      </MemberGate>
     </div>
   </section>
 </BaseLayout>
-
-<script>
-  const pick = document.getElementById('force-pick-r') as HTMLSelectElement | null;
-  pick?.addEventListener('change', () => {
-    if (pick.value) window.location.href = `/data/force/${pick.value}`;
-  });
-</script>
