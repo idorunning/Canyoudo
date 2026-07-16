@@ -3,6 +3,7 @@ import { getStore } from '@netlify/blobs';
 import Anthropic from '@anthropic-ai/sdk';
 import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-budget';
 import bundle from '../../src/lib/policedata-bundle.json';
+import { viewportAreaKm2 } from '../../src/lib/crime-map-core.mjs';
 import {
   getPersona,
   systemFor,
@@ -49,8 +50,22 @@ function tally(rows: any[], pick: (r: any) => string) {
   return [...m.entries()].map(([label, count]) => ({ label, count })).sort((a, b) => b.count - a.count).slice(0, 10);
 }
 
+// The Crime Map's street tier sends its viewport as the data.police.uk poly
+// format ("lat,lng:lat,lng:…", 4 corners). Every viewport is different, so
+// map-view readings are never cached and always live-model — the poly is
+// validated hard before any upstream call.
+function parsePoly(poly: string) {
+  const pairs = poly.split(':').map((p) => p.split(',').map(Number));
+  if (pairs.length !== 4 || pairs.some((p) => p.length !== 2 || p.some((n) => !Number.isFinite(n)))) return null;
+  const lats = pairs.map((p) => p[0]), lngs = pairs.map((p) => p[1]);
+  const box = { north: Math.max(...lats), south: Math.min(...lats), east: Math.max(...lngs), west: Math.min(...lngs) };
+  if (box.south < 49 || box.north > 61.5 || box.west < -9 || box.east > 2.5) return null; // UK bounds
+  if (viewportAreaKm2(box) > 400) return null; // the street API's practical ceiling
+  return box;
+}
+
 // Assemble the aggregate-only digest the model reasons from, plus the cache id.
-async function buildDigest(scope: string, id: string, postcode: string) {
+async function buildDigest(scope: string, id: string, postcode: string, opts: { poly?: string; month?: string } = {}) {
   if (scope === 'national') {
     return {
       cacheId: 'national',
@@ -61,6 +76,7 @@ async function buildDigest(scope: string, id: string, postcode: string) {
         windowMonths: bundle.windowMonths,
         forcesReporting: bundle.national.forcesCount - bundle.national.forcesMissing.length,
         forcesMissingLatestMonth: bundle.national.forcesMissing,
+        ethnicityDefinition: 'Officer-defined ethnicity is the ethnicity of the person searched, as perceived and recorded by the searching officer - never the officer\'s own ethnicity.',
         stopSearch: bundle.national.stopSearch,
         recordedCrime: bundle.national.recordedCrime,
       },
@@ -72,7 +88,7 @@ async function buildDigest(scope: string, id: string, postcode: string) {
     return {
       cacheId: `force:${id}`,
       dataMonth: bundle.datasetMonth,
-      digest: { force: f.name, datasetMonth: bundle.datasetMonth, windowMonths: bundle.windowMonths, stopSearch: f.stopSearch, recordedCrime: f.recordedCrime },
+      digest: { force: f.name, datasetMonth: bundle.datasetMonth, windowMonths: bundle.windowMonths, ethnicityDefinition: 'Officer-defined ethnicity is the ethnicity of the person searched, as perceived and recorded by the searching officer - never the officer\'s own ethnicity.', stopSearch: f.stopSearch, recordedCrime: f.recordedCrime },
     };
   }
   if (scope === 'area') {
@@ -100,6 +116,31 @@ async function buildDigest(scope: string, id: string, postcode: string) {
         byCategory: tally(list, (c) => c.category),
         byOutcome: tally(list, (c) => (c.outcome_status ? c.outcome_status.category : 'Awaiting / under investigation')),
         neighbourhood: hood?.force ? `${hood.force}/${hood.neighbourhood}` : null,
+      },
+    };
+  }
+  if (scope === 'map-view') {
+    const box = opts.poly ? parsePoly(opts.poly) : null;
+    if (!box) return { error: 'A valid map viewport (poly) is required — zoom in a little further.' };
+    if (opts.month && !/^\d{4}-\d{2}$/.test(opts.month)) return { error: 'Invalid month.' };
+    const crimes = await api(`/crimes-street/all-crime?poly=${encodeURIComponent(opts.poly!)}${opts.month ? `&date=${opts.month}` : ''}`);
+    // An upstream refusal (over-limit 503, outage) must never read as
+    // "0 crimes" — the model would confidently describe a quiet area.
+    if (!Array.isArray(crimes)) return { error: 'The street-level source couldn’t answer for this view — try a smaller area or another month.' };
+    const list: any[] = crimes;
+    const month = list[0]?.month ?? opts.month ?? '';
+    const centre = { lat: (box.north + box.south) / 2, lng: (box.east + box.west) / 2 };
+    return {
+      cacheId: null, // unbounded distinct inputs — live, never cached
+      dataMonth: month,
+      digest: {
+        view: `a map viewport roughly ${Math.round(Math.sqrt(viewportAreaKm2(box)))} km across, centred near ${centre.lat.toFixed(2)}, ${centre.lng.toFixed(2)}`,
+        crimeMonth: month,
+        totalCrimes: list.length,
+        byCategory: tally(list, (c) => c.category),
+        topStreets: tally(list, (c) => c.location?.street?.name ?? 'Unknown').slice(0, 5),
+        byOutcome: tally(list, (c) => (c.outcome_status ? c.outcome_status.category : 'Awaiting / under investigation')).slice(0, 5),
+        note: 'Locations are anonymised map points, deliberately approximate; the reader sees these crimes as coloured dots on an interactive street map. Summarise what stands out and what it does and does not mean — counts reflect footfall as much as risk.',
       },
     };
   }
@@ -183,18 +224,22 @@ export default async (req: Request) => {
 
   let built;
   try {
-    built = await buildDigest(scope, id, postcode);
+    built = await buildDigest(scope, id, postcode, {
+      poly: url.searchParams.get('poly') ?? undefined,
+      month: url.searchParams.get('month') ?? undefined,
+    });
   } catch (err) {
-    return json(502, { error: 'Could not gather the data to interpret.', detail: String(err) });
+    console.error('interpret:', err);
+    return json(502, { error: 'Could not gather the data to interpret.' });
   }
   if (!built) return json(404, { error: 'Nothing to interpret for that request.' });
   if ('error' in built && built.error) return json(400, { error: built.error });
 
-  const { cacheId, dataMonth, digest } = built as { cacheId: string; dataMonth: string; digest: unknown };
+  const { cacheId, dataMonth, digest } = built as { cacheId: string | null; dataMonth: string; digest: unknown };
 
-  // Pick the model: live (fast) for the chat and for postcode; cached (careful)
-  // for the national/force overviews. Env overrides at each tier.
-  const live = isChat || scope === 'area';
+  // Pick the model: live (fast) for the chat, postcode and map viewports;
+  // cached (careful) for the national/force overviews. Env overrides per tier.
+  const live = isChat || scope === 'area' || scope === 'map-view';
   const envOverride = live ? process.env.INTERPRET_MODEL_LIVE : process.env.INTERPRET_MODEL_CACHED;
   const { id: model, label: modelLabel } = resolveModel(
     envOverride ?? process.env.INTERPRET_MODEL,
@@ -217,19 +262,22 @@ export default async (req: Request) => {
     return streamResponse(aiStream, null, null, dataMonth, modelLabel, model);
   }
 
-  // Overview: cache per scope+id+persona+month+model+prompt-version.
-  const key = `${cacheId}:${personaKey}:${dataMonth || 'na'}:${model}:${PROMPT_VERSION}`;
+  // Overview: cache per scope+id+persona+month+model+prompt-version. A null
+  // cacheId (map viewports — unbounded distinct inputs) skips caching entirely.
+  const key = cacheId ? `${cacheId}:${personaKey}:${dataMonth || 'na'}:${model}:${PROMPT_VERSION}` : null;
   let store: ReturnType<typeof getStore> | null = null;
-  try {
-    store = getStore('interpretations');
-    const cached = await store.get(key);
-    if (cached) {
-      return new Response(cached, {
-        headers: { 'content-type': 'text/markdown; charset=utf-8', 'x-cache': 'HIT', 'x-data-month': dataMonth, 'x-model': modelLabel },
-      });
+  if (key) {
+    try {
+      store = getStore('interpretations');
+      const cached = await store.get(key);
+      if (cached) {
+        return new Response(cached, {
+          headers: { 'content-type': 'text/markdown; charset=utf-8', 'x-cache': 'HIT', 'x-data-month': dataMonth, 'x-model': modelLabel },
+        });
+      }
+    } catch {
+      store = null;
     }
-  } catch {
-    store = null;
   }
 
   // Cache miss → a real model call; the budget guard sits between them so

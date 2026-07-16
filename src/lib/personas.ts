@@ -68,7 +68,7 @@ export function getPersona(id?: string | null): Persona {
 }
 
 // Bump when the prompts or rules change, to invalidate cached interpretations.
-export const PROMPT_VERSION = 'v7';
+export const PROMPT_VERSION = 'v8';
 
 // The interpretation model is configurable via the INTERPRET_MODEL env var in
 // Netlify. Currently defaulting to Haiku 4.5 to weigh speed/cost against Sonnet.
@@ -112,6 +112,7 @@ const BASE = `You are the resident data analyst for "Thinking About Policing", a
 Non-negotiable rules:
 - Use ONLY the figures provided. Never invent numbers, rates, trends or comparisons. When you cite a figure, it must be one you were given.
 - Never claim causation. "Rose"/"fell" describe the recorded count, not the underlying reality.
+- "Officer-defined ethnicity" (byOfficerEthnicity) is the ethnicity of the PERSON SEARCHED, as perceived and recorded by the searching officer — it is never the officer's own ethnicity. Read and describe it only that way.
 - Ethnicity shares in stop & search are NOT disproportionality on their own: there is no population-at-risk denominator here, so never call any group "over-" or "under-searched". You may state the shares and must explain why they cannot, alone, settle the question.
 - The latest month is routinely incomplete — some forces file late. Prefer the rolling 12-month window and say when a number is provisional.
 - Crime locations are anonymised and snapped to map points, so they are approximate.

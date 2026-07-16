@@ -119,6 +119,7 @@ export async function buildBriefingDigest(forceId: string) {
           .map(([value, e]) => ({ object: value, count: e.count }))
           .sort((a, b) => b.count - a.count)
           .slice(0, 6),
+        ethnicityDefinition: 'Officer-defined ethnicity is the ethnicity of the person searched, as perceived and recorded by the searching officer - never the officer\'s own ethnicity.',
         byOfficerEthnicity: [...ethTotals]
           .map(([value, e]) => ({
             ethnicity: value,

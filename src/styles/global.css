@@ -922,3 +922,23 @@ html.dark {
   50%      { box-shadow: 0 0 0 6px rgb(var(--accent) / 0.16); }
 }
 
+
+/* Crime Map fullscreen (src/components/data/CrimeMap.astro): a fixed layer
+   over the whole viewport, above the sticky header (z-50) — same high-layer
+   convention as .smce-card. The root is the map+panel grid, so the side panel
+   travels into fullscreen: bottom sheet on phones, side column from lg. */
+[data-crime-map].cm-fs {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  padding: 0.75rem;
+  background: rgb(var(--paper-50));
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+[data-crime-map].cm-fs > .relative { height: 100%; }
+[data-crime-map].cm-fs [data-cm-map] { height: 100% !important; }
+[data-crime-map].cm-fs [data-cm-panel] { max-height: 34vh; overflow-y: auto; }
+@media (min-width: 1024px) {
+  [data-crime-map].cm-fs { grid-template-rows: none; grid-template-columns: minmax(0, 1fr) 21rem; }
+  [data-crime-map].cm-fs [data-cm-panel] { max-height: none; height: 100%; }
+}

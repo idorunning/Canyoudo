@@ -1,9 +1,11 @@
 import type { Config } from '@netlify/functions';
 import { classifyOutcome } from '../../src/lib/outcomes.mjs';
+import { rollupDim } from '../../src/lib/ss-rollup.mjs';
 import { buildBriefingDigest } from '../../src/lib/briefing-digest';
 import {
   configured, ALL,
   crimeByMonth, outcomesByMonth, lsoaHotspots,
+  crimeForceCategoryTotals, forcePopulations, latestCrimeMonth,
   ssByMonth, ssDim, populationByEthnicity, forcePopulation,
   force, forcePeople, allForces,
   neighbourhood, neighbourhoodPriorities, dataCoverage,
@@ -106,10 +108,13 @@ export default async (req: Request) => {
 
       case 'ss-dim': {
         const dimension = url.searchParams.get('dimension') || 'officer_ethnicity';
-        const rows = await ssDim(forceId, dimension, month);
+        // ss_dim is one row per month per value — roll up to one row per value
+        // over the latest 12 months (or the single requested month), otherwise
+        // every chart built on this view repeats each value once per month.
+        const rolled = rollupDim(await ssDim(forceId, dimension, month), month ? { windowMonths: 1 } : {});
         return json(200, {
-          force: forceId, dimension,
-          values: rows.map((r) => ({
+          force: forceId, dimension, window: rolled.window,
+          values: rolled.values.map((r) => ({
             value: r.value, count: r.count, find_count: r.find_count,
             findRate: r.count ? r.find_count / r.count : null,
           })),
@@ -119,15 +124,17 @@ export default async (req: Request) => {
       case 'disproportionality': {
         // Officer-defined ethnicity shares of searches vs resident population
         // shares (when seeded) → a disparity ratio. Without population data we
-        // still return search shares + find rates.
+        // still return search shares + find rates. Rolled up to one row per
+        // ethnicity over the latest 12 months — the raw rows are per month.
         const [dims, pop] = await Promise.all([
           ssDim(forceId, 'officer_ethnicity', month),
           forceId === ALL ? [] : populationByEthnicity(forceId),
         ]);
-        const searchTotal = dims.reduce((s, d) => s + d.count, 0) || 1;
+        const rolled = rollupDim(dims, month ? { windowMonths: 1 } : {});
+        const searchTotal = rolled.values.reduce((s, d) => s + d.count, 0) || 1;
         const popTotal = pop.reduce((s, p) => s + p.population, 0);
         const popShare = new Map(pop.map((p) => [p.ethnicity, p.population / (popTotal || 1)]));
-        const groups = dims.map((d) => {
+        const groups = rolled.values.map((d) => {
           const searchShare = d.count / searchTotal;
           const ps = popShare.get(d.value) ?? null;
           return {
@@ -137,11 +144,78 @@ export default async (req: Request) => {
             findRate: d.count ? d.find_count / d.count : null,
           };
         });
-        return json(200, { force: forceId, month: month ?? null, hasPopulation: popTotal > 0, groups }, true);
+        return json(200, { force: forceId, month: month ?? null, window: rolled.window, hasPopulation: popTotal > 0, groups }, true);
       }
 
-      case 'hotspots':
-        return json(200, { month: month ?? null, lsoas: await lsoaHotspots(month, 50) }, true);
+      case 'hotspots': {
+        // The explorer table wants the default 50; the map asks for more.
+        const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') ?? '50', 10) || 50, 1), 1000);
+        return json(200, { month: month ?? null, lsoas: await lsoaHotspots(month, limit) }, true);
+      }
+
+      case 'map-forces': {
+        // Tier 1 of the Crime Map: every force's rolling-12-month category
+        // totals in one response, so the map never fans out 44 requests.
+        // Fetches 24 months so the client's computed insights can say how the
+        // last 12 compare with the 12 before (~6 KB extra).
+        const latest = await latestCrimeMonth();
+        if (!latest) return json(200, { window: null, months: [], national: null, forces: [] }, true);
+        const [y, m] = latest.split('-').map(Number);
+        const monthAt = (back: number) => {
+          const d = new Date(Date.UTC(y, m - 1 - back, 1));
+          return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+        };
+        const from24 = monthAt(23), from12 = monthAt(11);
+        const months = Array.from({ length: 12 }, (_, i) => monthAt(11 - i)); // oldest → latest
+        const monthIdx = new Map(months.map((mo, i) => [mo, i]));
+        const [rows, pops] = await Promise.all([crimeForceCategoryTotals(from24), forcePopulations()]);
+        const popById = new Map(pops.map((p) => [p.force_id, p]));
+        const byForce = new Map<string, { total: number; prevTotal: number; prevMonths: Set<string>; byCategory: Record<string, number>; byMonth: number[] }>();
+        for (const r of rows) {
+          if (r.month > latest) continue; // ingest racing between the two reads
+          const f = byForce.get(r.force_id) ?? { total: 0, prevTotal: 0, prevMonths: new Set<string>(), byCategory: {}, byMonth: new Array(12).fill(0) };
+          if (r.month >= from12) {
+            f.total += r.count;
+            f.byCategory[r.category] = (f.byCategory[r.category] ?? 0) + r.count;
+            f.byMonth[monthIdx.get(r.month)!] += r.count;
+          } else {
+            // prevTotal is only honest per force when that force filed all 12
+            // previous months — forces with gaps (Greater Manchester) must not
+            // fake a collapse.
+            f.prevTotal += r.count;
+            f.prevMonths.add(r.month);
+          }
+          byForce.set(r.force_id, f);
+        }
+        const forces = [...byForce.entries()].map(([id, f]) => ({
+          id, total: f.total, byCategory: f.byCategory, byMonth: f.byMonth,
+          prevTotal: f.prevMonths.size === 12 ? f.prevTotal : null,
+          population: popById.get(id)?.population ?? null,
+          populationYear: popById.get(id)?.year ?? null,
+        }));
+        // The national trend compares like with like: only forces whose
+        // previous window is complete contribute to both sides.
+        const trendable = forces.filter((f) => f.prevTotal != null);
+        const natPop = popById.get(ALL);
+        // The population denominator covers the 43 territorial E&W forces, so
+        // the rate numerator must too (PSNI and BTP totals still count in
+        // `total`, just not in the rate basis).
+        const ewTotal = forces.filter((f) => f.id !== 'northern-ireland' && f.id !== 'btp')
+          .reduce((s, f) => s + f.total, 0);
+        return json(200, {
+          window: { from: from12, to: latest, months: 12 },
+          months,
+          national: {
+            total: forces.reduce((s, f) => s + f.total, 0),
+            prevTotal: trendable.length ? trendable.reduce((s, f) => s + (f.prevTotal ?? 0), 0) : null,
+            trendTotal: trendable.length ? trendable.reduce((s, f) => s + f.total, 0) : null,
+            ewTotal,
+            population: natPop?.population ?? null,
+            populationYear: natPop?.year ?? null,
+          },
+          forces,
+        }, true);
+      }
 
       case 'briefing-digest': {
         // The Force Briefing's aggregate-only input. The edge function fetches
@@ -171,7 +245,8 @@ export default async (req: Request) => {
         return json(400, { error: `Unknown view "${view}".` });
     }
   } catch (err) {
-    return json(502, { error: 'Database query failed.', detail: String(err) });
+    console.error('police-db:', err);
+    return json(502, { error: 'Database query failed.' });
   }
 };
 

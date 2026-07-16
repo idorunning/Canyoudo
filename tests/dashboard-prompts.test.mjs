@@ -41,3 +41,18 @@ test('model and version are pinned', () => {
   assert.equal(typeof BRIEFING_MODEL, 'string');
   assert.match(BRIEFING_PROMPT_VERSION, /^v\d+$/);
 });
+
+// Regression pin: "officer-defined ethnicity" is the ethnicity of the PERSON
+// SEARCHED as recorded by the officer — an AI briefing once described it as
+// the searching officer's own ethnicity. Every prompt that sees stop & search
+// data must carry the definition so no model can misread the field name again.
+test('every AI prompt defines officer-defined ethnicity correctly', async () => {
+  const { BRIEFING_SYSTEM } = await import('../src/lib/dashboard-prompts.ts');
+  const { systemGeneral, PROMPT_VERSION } = await import('../src/lib/personas.ts');
+  for (const prompt of [BRIEFING_SYSTEM, systemGeneral()]) {
+    assert.match(prompt, /ethnicity of the PERSON SEARCHED/i, 'definition present');
+    assert.match(prompt, /never the officer.s own ethnicity/i, 'misreading explicitly ruled out');
+  }
+  // The definition shipped in v8/v2 — regenerating stale cached readings.
+  assert.ok(Number(PROMPT_VERSION.slice(1)) >= 8, 'PROMPT_VERSION must not be rolled back below v8');
+});

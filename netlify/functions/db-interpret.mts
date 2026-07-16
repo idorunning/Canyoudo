@@ -9,9 +9,10 @@ import {
   CACHED_MODEL_DEFAULT, LIVE_MODEL_DEFAULT,
 } from '../../src/lib/personas';
 import {
-  ALL, crimeByMonth, outcomesByMonth, ssDim, populationByEthnicity, force,
+  ALL, crimeByMonth, outcomesByMonth, ssDim, populationByEthnicity, force, lsoaHotspots,
 } from '../../src/lib/police-db';
 import { classifyOutcome } from '../../src/lib/outcomes.mjs';
+import { rollupDim } from '../../src/lib/ss-rollup.mjs';
 
 // Evidence-based interpretation of the historical police DATABASE (distinct from
 // interpret.mts, which reads the committed snapshot). Same contract: aggregate
@@ -30,7 +31,29 @@ const pct = (n: number | null) => (n == null ? null : Math.round(n * 1000) / 10)
 // Last n of a monthly series, summed.
 const tail = (arr: number[], n: number) => arr.slice(-n).reduce((s, v) => s + v, 0);
 
-async function buildDigest(scope: string, forceId: string) {
+async function buildDigest(scope: string, forceId: string, opts: { month?: string } = {}) {
+  if (scope === 'map-hotspots') {
+    // The Crime Map's hotspot tier: the national top-LSOA dots. Aggregate-only
+    // — names and counts, never anything street-level.
+    const rows = await lsoaHotspots(opts.month, 400);
+    if (!rows.length) return null;
+    const counts = rows.map((r) => r.count).sort((a, b) => a - b);
+    const dataMonth = rows[0]?.month ?? '';
+    return {
+      cacheId: `map-hotspots:${opts.month ?? 'latest'}`, dataMonth,
+      digest: {
+        scope: 'England & Wales neighbourhood crime hotspots (interactive map view)',
+        month: dataMonth,
+        topLsoas: rows.slice(0, 15).map((r) => ({ name: r.lsoa_name ?? r.lsoa_code, count: r.count })),
+        lsoaCount: rows.length,
+        medianCount: counts[Math.floor(counts.length / 2)],
+        maxCount: counts[counts.length - 1],
+        note:
+          'LSOAs are small statistical neighbourhoods of roughly 1,500–3,000 residents. These are the highest single-month all-crime counts in England & Wales. City-centre LSOAs with small resident populations but very high footfall (retail, transport hubs, the night-time economy) dominate such lists — a count is not a rate, and a hot neighbourhood is not a dangerous resident population.',
+      },
+    };
+  }
+
   if (scope === 'crime-history') {
     const [crime, outcomes] = await Promise.all([crimeByMonth(forceId), outcomesByMonth(forceId)]);
     if (!crime.length) return null;
@@ -106,26 +129,22 @@ async function buildDigest(scope: string, forceId: string) {
       forceId === ALL ? Promise.resolve(null) : force(forceId),
     ]);
     if (!dims.length) return null;
-    // Collapse all months → totals by ethnicity.
-    const by = new Map<string, { count: number; find: number }>();
-    let dataMonth = '';
-    for (const d of dims) {
-      dataMonth = d.month > dataMonth ? d.month : dataMonth;
-      const e = by.get(d.value) ?? { count: 0, find: 0 };
-      e.count += d.count; e.find += d.find_count; by.set(d.value, e);
-    }
-    const searchTotal = [...by.values()].reduce((s, e) => s + e.count, 0) || 1;
+    // One row per ethnicity over the latest 12 months — the same window the
+    // fixed chart view uses, so the reading and the chart describe one number.
+    const rolled = rollupDim(dims);
+    const dataMonth = rolled.latestMonth ?? '';
+    const searchTotal = rolled.values.reduce((s, e) => s + e.count, 0) || 1;
     const popTotal = pop.reduce((s: number, p: any) => s + p.population, 0);
     const popShare = new Map(pop.map((p: any) => [p.ethnicity, p.population / (popTotal || 1)]));
-    const groups = [...by].map(([ethnicity, e]) => ({
-      ethnicity, searchShare: pct(e.count / searchTotal),
-      populationShare: popShare.has(ethnicity) ? pct(popShare.get(ethnicity)!) : null,
-      disparityRatio: popShare.has(ethnicity) ? Math.round((e.count / searchTotal) / popShare.get(ethnicity)! * 100) / 100 : null,
-      findRate: pct(e.count ? e.find / e.count : null),
+    const groups = rolled.values.map((e) => ({
+      ethnicity: e.value, searchShare: pct(e.count / searchTotal),
+      populationShare: popShare.has(e.value) ? pct(popShare.get(e.value)!) : null,
+      disparityRatio: popShare.has(e.value) ? Math.round((e.count / searchTotal) / popShare.get(e.value)! * 100) / 100 : null,
+      findRate: pct(e.count ? e.find_count / e.count : null),
     })).sort((a, b) => (b.searchShare ?? 0) - (a.searchShare ?? 0));
     return {
       cacheId: `disproportionality:${forceId}`, dataMonth,
-      digest: { scope: f?.name ?? (forceId === ALL ? 'England & Wales' : forceId), latestMonth: dataMonth, hasPopulationDenominator: popTotal > 0, byOfficerEthnicity: groups },
+      digest: { scope: f?.name ?? (forceId === ALL ? 'England & Wales' : forceId), latestMonth: dataMonth, hasPopulationDenominator: popTotal > 0, ethnicityDefinition: 'Officer-defined ethnicity is the ethnicity of the person searched, as perceived and recorded by the searching officer - never the officer\'s own ethnicity.', byOfficerEthnicity: groups },
     };
   }
 
@@ -168,9 +187,10 @@ export default async (req: Request) => {
   const personaKey = persona?.id ?? 'general';
   const isChat = question.length > 0;
 
+  const month = url.searchParams.get('month') || undefined;
   let built;
-  try { built = await buildDigest(scope, forceId); }
-  catch (err) { return json(502, { error: 'Could not gather the data to interpret.', detail: String(err) }); }
+  try { built = await buildDigest(scope, forceId, { month }); }
+  catch (err) { console.error('db-interpret:', err); return json(502, { error: 'Could not gather the data to interpret.' }); }
   if (!built) return json(404, { error: 'Nothing to interpret yet — the database may still be filling.' });
 
   const { cacheId, dataMonth, digest } = built;
@@ -208,7 +228,9 @@ export default async (req: Request) => {
   };
   const pointer = chartsOnPage[scope]
     ? `\n\nThe reader sees these charts directly below this reading: ${chartsOnPage[scope].map((c) => `"${c}"`).join(', ')}. You may end with one short sentence pointing them at the single most informative chart for this data, naming it by its title.`
-    : '';
+    : scope === 'map-hotspots'
+      ? '\n\nThe reader is looking at these hotspots as dots on an interactive map, sized and shaded by volume. Explain briefly why neighbourhoods run hot — footfall, retail, transport hubs, the night-time economy — and make the count-is-not-a-rate caveat unmissable. Two short paragraphs at most.'
+      : '';
 
   const aiStream = client.messages.stream({
     // Cached per data month, so a little extra thinking amortises across every

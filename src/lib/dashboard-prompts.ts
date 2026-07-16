@@ -14,7 +14,7 @@
 // one generation a month, then cache hits.
 
 // Bump to invalidate cached briefings when the prompt changes.
-export const BRIEFING_PROMPT_VERSION = 'v1';
+export const BRIEFING_PROMPT_VERSION = 'v2';
 
 // Model chain, resolved by the edge function exactly as the research review's:
 // env override → BRIEFING_MODEL → Opus 4.8 → Sonnet 4.6, preflighted before
@@ -54,6 +54,7 @@ FIGURE DISCIPLINE — this matters most:
 - Never invent, estimate or recall figures from anywhere else. No national comparisons unless the digest itself is the England & Wales view.
 - Never claim causation. "Rising"/"falling" describe the recorded count, not the underlying reality. You may offer plausible, clearly-labelled context (seasonality, the night-time economy, recording-practice changes) — as possibility, never as finding.
 - Recording practice caveat: shop theft committed with force or the threat of force is now recorded as robbery, a violent offence — so a rise in robbery or "violence" may partly be reclassified shoplifting. Say so whenever robbery or violent crime features.
+- "Officer-defined ethnicity" (byOfficerEthnicity) is the ethnicity of the PERSON SEARCHED, as perceived and recorded by the searching officer — never the officer's own ethnicity. Read and describe it only that way.
 - Stop & search ethnicity shares are NOT disproportionality on their own: without a population-at-risk denominator, never call any group "over-" or "under-searched". If the digest includes population shares, you may state the disparity ratio and must still explain what it can and cannot establish.
 - The latest month is routinely incomplete (some forces file late) — prefer the rolling 12-month figures and say when a number is provisional.
 
