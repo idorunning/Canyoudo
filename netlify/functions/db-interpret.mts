@@ -9,7 +9,7 @@ import {
   CACHED_MODEL_DEFAULT, LIVE_MODEL_DEFAULT,
 } from '../../src/lib/personas';
 import {
-  ALL, crimeByMonth, outcomesByMonth, ssDim, populationByEthnicity, force,
+  ALL, crimeByMonth, outcomesByMonth, ssDim, populationByEthnicity, force, lsoaHotspots,
 } from '../../src/lib/police-db';
 import { classifyOutcome } from '../../src/lib/outcomes.mjs';
 import { rollupDim } from '../../src/lib/ss-rollup.mjs';
@@ -31,7 +31,29 @@ const pct = (n: number | null) => (n == null ? null : Math.round(n * 1000) / 10)
 // Last n of a monthly series, summed.
 const tail = (arr: number[], n: number) => arr.slice(-n).reduce((s, v) => s + v, 0);
 
-async function buildDigest(scope: string, forceId: string) {
+async function buildDigest(scope: string, forceId: string, opts: { month?: string } = {}) {
+  if (scope === 'map-hotspots') {
+    // The Crime Map's hotspot tier: the national top-LSOA dots. Aggregate-only
+    // — names and counts, never anything street-level.
+    const rows = await lsoaHotspots(opts.month, 400);
+    if (!rows.length) return null;
+    const counts = rows.map((r) => r.count).sort((a, b) => a - b);
+    const dataMonth = rows[0]?.month ?? '';
+    return {
+      cacheId: `map-hotspots:${opts.month ?? 'latest'}`, dataMonth,
+      digest: {
+        scope: 'England & Wales neighbourhood crime hotspots (interactive map view)',
+        month: dataMonth,
+        topLsoas: rows.slice(0, 15).map((r) => ({ name: r.lsoa_name ?? r.lsoa_code, count: r.count })),
+        lsoaCount: rows.length,
+        medianCount: counts[Math.floor(counts.length / 2)],
+        maxCount: counts[counts.length - 1],
+        note:
+          'LSOAs are small statistical neighbourhoods of roughly 1,500–3,000 residents. These are the highest single-month all-crime counts in England & Wales. City-centre LSOAs with small resident populations but very high footfall (retail, transport hubs, the night-time economy) dominate such lists — a count is not a rate, and a hot neighbourhood is not a dangerous resident population.',
+      },
+    };
+  }
+
   if (scope === 'crime-history') {
     const [crime, outcomes] = await Promise.all([crimeByMonth(forceId), outcomesByMonth(forceId)]);
     if (!crime.length) return null;
@@ -165,8 +187,9 @@ export default async (req: Request) => {
   const personaKey = persona?.id ?? 'general';
   const isChat = question.length > 0;
 
+  const month = url.searchParams.get('month') || undefined;
   let built;
-  try { built = await buildDigest(scope, forceId); }
+  try { built = await buildDigest(scope, forceId, { month }); }
   catch (err) { console.error('db-interpret:', err); return json(502, { error: 'Could not gather the data to interpret.' }); }
   if (!built) return json(404, { error: 'Nothing to interpret yet — the database may still be filling.' });
 
@@ -205,7 +228,9 @@ export default async (req: Request) => {
   };
   const pointer = chartsOnPage[scope]
     ? `\n\nThe reader sees these charts directly below this reading: ${chartsOnPage[scope].map((c) => `"${c}"`).join(', ')}. You may end with one short sentence pointing them at the single most informative chart for this data, naming it by its title.`
-    : '';
+    : scope === 'map-hotspots'
+      ? '\n\nThe reader is looking at these hotspots as dots on an interactive map, sized and shaded by volume. Explain briefly why neighbourhoods run hot — footfall, retail, transport hubs, the night-time economy — and make the count-is-not-a-rate caveat unmissable. Two short paragraphs at most.'
+      : '';
 
   const aiStream = client.messages.stream({
     // Cached per data month, so a little extra thinking amortises across every
