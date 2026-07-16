@@ -144,7 +144,7 @@ async function buildDigest(scope: string, forceId: string, opts: { month?: strin
     })).sort((a, b) => (b.searchShare ?? 0) - (a.searchShare ?? 0));
     return {
       cacheId: `disproportionality:${forceId}`, dataMonth,
-      digest: { scope: f?.name ?? (forceId === ALL ? 'England & Wales' : forceId), latestMonth: dataMonth, hasPopulationDenominator: popTotal > 0, byOfficerEthnicity: groups },
+      digest: { scope: f?.name ?? (forceId === ALL ? 'England & Wales' : forceId), latestMonth: dataMonth, hasPopulationDenominator: popTotal > 0, ethnicityDefinition: 'Officer-defined ethnicity is the ethnicity of the person searched, as perceived and recorded by the searching officer - never the officer\'s own ethnicity.', byOfficerEthnicity: groups },
     };
   }
 
