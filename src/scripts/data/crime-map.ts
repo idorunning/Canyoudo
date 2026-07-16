@@ -545,6 +545,29 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       marker.on('click', () => selectForce(f.id));
       groups[1].addLayer(marker);
     });
+    // Forces with a centroid but no database rows (Greater Manchester has
+    // published no bulk street-level data since 2019) must not vanish — a
+    // missing dot reads as "no crime here". Render a hollow marker that
+    // carries the honesty note instead.
+    const present = new Set(mapForces.map((f) => f.id));
+    for (const [id, c] of Object.entries(centroids)) {
+      if (present.has(id)) continue;
+      const marker = L.circleMarker([c.lat, c.lng], {
+        radius: 8,
+        color: state.dark ? '#9a9fa7' : '#81868f',
+        weight: 1.5,
+        dashArray: '3,3',
+        fillColor: 'transparent',
+        fillOpacity: 0,
+      });
+      const note = (FORCE_DATA_NOTES as Record<string, string>)[id];
+      marker.bindTooltip(
+        `<strong>${esc(c.name)}</strong><br>${esc(note ?? 'No data in the database for this force yet — missing data, not zero crime.')}`,
+        { direction: 'top', offset: [0, -4] }
+      );
+      marker.on('click', () => selectForce(id));
+      groups[1].addLayer(marker);
+    }
   }
 
   // --- tier 2: LSOA hotspot dots -------------------------------------------------------
