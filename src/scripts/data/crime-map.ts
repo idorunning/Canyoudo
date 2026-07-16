@@ -10,7 +10,7 @@
 // proxy — so failures degrade tier by tier, never to a blank map.
 
 import { loadLeaflet } from '../loadLeaflet';
-import { fetchJson, fmt, monthLabel, streamInterpret } from './explorer';
+import { fetchJson, fmt, monthLabel, streamInterpret, abortInterpret } from './explorer';
 import {
   CRIME_CATEGORY_META, categoryColor, categoryLabel, canonicalCategory,
   tierForZoom, effectiveTier, dominantCategory, dotRadius, ratePer1000,
@@ -29,7 +29,7 @@ type MapForce = {
   byMonth?: number[]; prevTotal?: number | null;
   population: number | null; populationYear: string | null;
 };
-type National = { total: number; prevTotal: number | null; population: number | null; populationYear: string | null; windowTo?: string } | null;
+type National = { total: number; prevTotal: number | null; trendTotal?: number | null; ewTotal?: number; population: number | null; populationYear: string | null; windowTo?: string } | null;
 type Hotspot = { lsoa_code: string; lsoa_name: string | null; count: number };
 type StreetCrime = { lat: number; lng: number; category: string; street: string; outcome: string; month: string };
 type Place = { n: string; lat: number; lng: number; p: number; s: 'major' | 'large' | 'medium' };
@@ -159,7 +159,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
   // share one fetch instead of racing two.
   let lsoaLookupPromise: Promise<Record<string, [number, number]>> | null = null;
   const hotspotCache = new Map<string, Promise<Hotspot[]>>();
-  const streetCache = new Map<string, StreetCrime[]>();
+  const streetCache = new Map<string, Promise<StreetCrime[]>>();
   let streetFetchSeq = 0;
   let hotspotFetchSeq = 0;
   let lastStreetShown: StreetCrime[] = [];
@@ -282,6 +282,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
   }
 
   function panelNational(focus = false) {
+    abortPanelReading();
     if (!mapForces) {
       panelEl.innerHTML = `<p class="font-serif text-sm text-ink-600 leading-relaxed">${esc(mapForcesError || 'Loading force data…')}</p>
         <p class="font-serif text-sm text-ink-600 leading-relaxed mt-2">You can still zoom all the way in — street-level dots load straight from data.police.uk.</p>`;
@@ -318,6 +319,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
   }
 
   async function panelForce(id: string, focus = false) {
+    abortPanelReading();
     const c = centroids[id];
     const f = mapForces?.find((x) => x.id === id);
     const note = (FORCE_DATA_NOTES as Record<string, string>)[id];
@@ -387,6 +389,13 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
   // Force/national readings are cached server-side per data month, but the
   // first generation each month is a billable call — so nothing streams until
   // the reader asks. The button lives in the panel's [data-cm-read-slot].
+  // The panel rebuilds its DOM wholesale, which detaches any streaming reading
+  // — abort it first or a live-model call runs (and bills) into a dead node.
+  let activeReadOut: HTMLElement | null = null;
+  function abortPanelReading() {
+    abortInterpret(activeReadOut);
+    activeReadOut = null;
+  }
   function mountReadingButton(label: string, url: string) {
     const slot = panelEl.querySelector<HTMLElement>('[data-cm-read-slot]');
     if (!slot) return;
@@ -397,7 +406,8 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
         <p class="u-kicker u-kicker--dim mb-2">The reading</p>
         <div data-cm-read-out class="prose-article font-serif text-sm leading-relaxed min-h-[3rem]"></div>
         <p class="font-sans text-[10px] text-ink-500 mt-2">AI-generated from the same data as this map — read with care.</p>`;
-      streamInterpret(url, slot.querySelector<HTMLElement>('[data-cm-read-out]')!);
+      activeReadOut = slot.querySelector<HTMLElement>('[data-cm-read-out]')!;
+      streamInterpret(url, activeReadOut);
     };
   }
 
@@ -409,7 +419,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     try { disp = await fetchJson(`/api/police-db?view=disproportionality&force=${id}`); }
     catch { return; } // context section only — omit silently on failure
     if (slot !== panelEl.querySelector('[data-cm-ss-slot]') || !disp?.groups?.length) return;
-    const groups = disp.groups.filter((g: any) => g.ethnicity !== 'Not stated').slice(0, 5);
+    const groups = disp.groups.slice(0, 6); // includes 'Not stated' — it stays in every denominator
     const pctW = (v: number | null) => `${Math.max(Math.min((v ?? 0) * 100, 100), 1)}%`;
     slot.innerHTML = `
       <p class="u-kicker u-kicker--dim mb-2">Stop &amp; search — searches vs who lives here</p>
@@ -437,6 +447,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
 
   // --- viewport panels: the non-pointer path into tiers 2 and 3 ---------------------
   function panelViewport(tier: 2 | 3, focus = false) {
+    abortPanelReading();
     if (tier === 2) {
       const bounds = map.getBounds();
       const inView = lastHotspots
@@ -464,13 +475,13 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
           if (ll) map.panTo(ll);
         };
       });
-      mountReadingButton('What am I looking at?', `/api/db-interpret?scope=map-hotspots${state.month ? `&month=${state.month}` : ''}`);
+      mountReadingButton('What am I looking at? (England & Wales picture)', `/api/db-interpret?scope=map-hotspots${state.month ? `&month=${state.month}` : ''}`);
       afterPanelRender(focus);
     } else {
       const s = viewSummary(lastStreetShown);
       panelEl.innerHTML = `
         ${panelHeading('This view')}
-        <p class="font-sans text-xs text-ink-500 mt-1 mb-2">${state.month ? monthLabel(state.month) : window12 ? monthLabel(window12.to) : 'Latest month'} · individual reports, locations anonymised.</p>
+        <p class="font-sans text-xs text-ink-500 mt-1 mb-2">${lastStreetShown[0]?.month ? monthLabel(lastStreetShown[0].month) : state.month ? monthLabel(state.month) : 'Latest month'} · individual reports, locations anonymised.</p>
         ${s.total ? `
           <p class="font-serif text-sm text-ink-700 leading-relaxed">${fmt.format(s.total)} crimes in this view.</p>
           <p class="u-kicker u-kicker--dim mt-3 mb-1">Most common</p>
@@ -488,7 +499,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
             </ul>` : ''}
         ` : '<p class="font-serif text-sm text-ink-600">No crimes recorded in this view for this month.</p>'}
         <div data-cm-read-slot class="mt-4"></div>`;
-      mountReadingButton('Read this view', `/api/interpret?scope=map-view&poly=${encodeURIComponent(viewportPoly(currentBox(), 2))}${state.month ? `&month=${state.month}` : ''}`);
+      mountReadingButton('Read this view', `/api/interpret?scope=map-view&poly=${encodeURIComponent(viewportPoly(currentBox(), 4))}${state.month ? `&month=${state.month}` : ''}`);
       afterPanelRender(focus);
     }
   }
@@ -503,7 +514,12 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     const values = mapForces.map((f) =>
       asRate ? (f.population ? ratePer1000(f.total, f.population)! : 0) : f.total
     );
-    const maxVal = Math.max(...values, asRate ? 0.001 : 1);
+    // City of London's ~15k residents against a huge daytime population makes
+    // its rate an artifact — clamp it to the scale rather than let one dot
+    // flatten every other force's rate.
+    const maxVal = asRate
+      ? Math.max(...mapForces.map((f, i) => (f.id === 'city-of-london' ? 0 : values[i])), 0.001)
+      : Math.max(...values, 1);
     mapForces.forEach((f, i) => {
       const c = centroids[f.id];
       if (!c) return;
@@ -566,7 +582,8 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
         status('No hotspot data for this month yet — the database may still be filling.');
         return;
       }
-      status('');
+      // Keep the demoted-tier explanation on screen; only clear our own copy.
+      if (tierForZoom(map.getZoom()) !== 3) status('');
       let misses = 0;
       const max = rows[0]?.count ?? 1;
       for (const r of rows) {
@@ -602,19 +619,15 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     const poly = viewportPoly(box);
     const key = `${poly}|${state.month}`;
     const seq = ++streetFetchSeq;
-    let points = streetCache.get(key);
-    if (!points) {
+    let pointsP = streetCache.get(key);
+    if (!pointsP) {
       status('Loading crimes for this view…');
-      try {
-        const dateParam = state.month ? `&date=${state.month}` : '';
-        const res = await fetch(`/api/police/crimes-street/all-crime?poly=${poly}${dateParam}`);
-        if (res.status === 503) {
-          status('Too many crimes in this view for the national API — zoom in a little further.');
-          return;
-        }
+      const dateParam = state.month ? `&date=${state.month}` : '';
+      pointsP = fetch(`/api/police/crimes-street/all-crime?poly=${poly}${dateParam}`).then(async (res) => {
+        if (res.status === 503) throw Object.assign(new Error('over-limit'), { overLimit: true });
         if (!res.ok) throw new Error(`API returned ${res.status}`);
         const raw = await res.json();
-        points = (raw as any[]).map((cr) => ({
+        return (raw as any[]).map((cr) => ({
           lat: Number(cr.location?.latitude),
           lng: Number(cr.location?.longitude),
           category: cr.category,
@@ -622,14 +635,22 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
           outcome: cr.outcome_status?.category ?? 'Outcome not yet recorded',
           month: cr.month,
         })).filter((p) => Number.isFinite(p.lat) && Number.isFinite(p.lng));
-        streetCache.set(key, points);
-        if (streetCache.size > 20) streetCache.delete(streetCache.keys().next().value!);
-      } catch (err: any) {
-        status(`Couldn’t load street-level crimes: ${err?.message || 'unknown error'}. Try again in a moment.`, true);
-        return;
-      }
+      });
+      streetCache.set(key, pointsP);
+      pointsP.catch(() => streetCache.delete(key)); // failures don't poison the cache
+      if (streetCache.size > 20) streetCache.delete(streetCache.keys().next().value!);
     }
-    if (seq !== streetFetchSeq) return; // superseded by a newer pan/zoom
+    let points: StreetCrime[];
+    try {
+      points = await pointsP;
+    } catch (err: any) {
+      if (seq === streetFetchSeq && effTier() === 3) {
+        if (err?.overLimit) status('Too many crimes in this view for the national API — zoom in a little further.');
+        else status(`Couldn’t load street-level crimes: ${err?.message || 'unknown error'}. Try again in a moment.`, true);
+      }
+      return;
+    }
+    if (seq !== streetFetchSeq || effTier() !== 3) return; // superseded by a newer pan/zoom/tier
     groups[3].clearLayers();
     const shown = points.filter((p) => !state.hidden.has(canonicalCategory(p.category)));
     lastStreetShown = shown;
@@ -713,7 +734,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     if (tier === 3) {
       clearTimeout(moveTimer);
       moveTimer = setTimeout(renderTier3, 400);
-    } else if (tier === 2) {
+    } else if (tier === 2 && lastHotspots.length) {
       panelViewport(2); // the in-view hotspot list follows the pan
     }
   });

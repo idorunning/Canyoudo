@@ -137,6 +137,14 @@ export function lineChart(
 // readings into the same box.
 const activeStreams = new WeakMap<HTMLElement, AbortController>();
 
+// Callers that rebuild their DOM (the Crime Map panel) can't rely on the
+// element-keyed supersede above — the old output node is simply detached, and
+// a live-model stream would run (and bill) to completion into it. They must
+// abort explicitly before discarding the element.
+export function abortInterpret(out: HTMLElement | null): void {
+  if (out) activeStreams.get(out)?.abort();
+}
+
 export async function streamInterpret(
   url: string,
   out: HTMLElement,

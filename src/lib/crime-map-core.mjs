@@ -174,4 +174,6 @@ export function placeVisible(zoom, sizeClass) {
 export const FORCE_DATA_NOTES = {
   'greater-manchester':
     'Greater Manchester Police’s street-level data has known gaps since 2019, including recent missing months — treat low counts here as missing data, not low crime.',
+  'city-of-london':
+    'The City of London has only ~15,000 residents but a daytime population many times that — its per-resident crime rate is an artifact of the denominator, not a description of risk.',
 };

@@ -29,7 +29,7 @@ test('changePct and median', () => {
   assert.equal(median([]), null);
 });
 
-const nat = { total: 4_400_000, prevTotal: 4_500_000, population: 60_000_000, windowTo: '2026-04' };
+const nat = { total: 4_400_000, prevTotal: 4_500_000, trendTotal: 4_400_000, ewTotal: 4_400_000, population: 60_000_000, windowTo: '2026-04' };
 
 test('forceInsightLines: full context when denominators exist', () => {
   const lines = forceInsightLines({ total: 61204, prevTotal: 64000, population: 1_850_000 }, nat, 'Kent');
@@ -81,10 +81,31 @@ test('disparityLine is careful with and without a denominator', () => {
     /Black people account for 22% of searches and 12% of residents — a 1\.8× disparity\./
   );
   assert.match(
+    disparityLine({ ethnicity: 'White', searchShare: 0.8, populationShare: 0.82, disparityRatio: 0.98 }),
+    /in line with their share of the population/
+  );
+  assert.match(
+    disparityLine({ ethnicity: 'Asian', searchShare: 0.06, populationShare: 0.1, disparityRatio: 0.6 }),
+    /below their share of the population \(0\.6×\)/
+  );
+  assert.ok(!/0\.6× disparity/.test(disparityLine({ ethnicity: 'Asian', searchShare: 0.06, populationShare: 0.1, disparityRatio: 0.6 })), 'a sub-1 ratio is never called a disparity');
+  assert.match(
     disparityLine({ ethnicity: 'Asian', searchShare: 0.1, populationShare: null, disparityRatio: null }),
     /no population share loaded/
   );
   assert.match(DISPARITY_CAVEAT, /not proof of bias/);
+});
+
+test('national rate basis excludes non-E&W forces; trend uses the like-for-like base', () => {
+  // PSNI/BTP inflate `total` but not `ewTotal`; the rate sentence must use ewTotal.
+  const natMixed = { ...nat, total: 5_000_000, ewTotal: 4_400_000 };
+  const lines = forceInsightLines({ total: 61204, prevTotal: 64000, population: 1_850_000 }, natMixed, 'Kent');
+  assert.match(lines[0], /average of 73/, 'rate from ewTotal (4.4M/60M), not total (5M/60M = 83)');
+  // National trend compares trendTotal (complete-window forces) with prevTotal.
+  const natTrend = { ...nat, total: 9_000_000, trendTotal: 4_200_000, prevTotal: 4_500_000 };
+  const nlines = nationalInsightLines(natTrend, []);
+  assert.match(nlines[0], /9,000,000 crimes/, 'headline keeps the true total');
+  assert.match(nlines[0], /6\.7% lower.*falling/, 'trend from the like-for-like base');
 });
 
 test('no dramatic vocabulary ever appears in generated lines', () => {

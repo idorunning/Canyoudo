@@ -62,7 +62,10 @@ export function forceInsightLines(force, national, name) {
   const lines = [];
   const to = national?.windowTo; // optional 'YYYY-MM'
   const rate = per1000(force.total, force.population);
-  const natRate = national ? per1000(national.total, national.population) : null;
+  // The population denominator covers England & Wales only, so the comparison
+  // rate must use the E&W numerator (ewTotal), never a total that includes
+  // PSNI or BTP.
+  const natRate = national ? per1000(national.ewTotal ?? 0, national.population) : null;
   let head = `${name} recorded ${fmt.format(force.total)} crimes in the 12 months${to ? ` to ${monthName(to)}` : ''}`;
   if (rate != null && natRate != null) {
     head += ` — ${rate.toFixed(0)} per 1,000 residents, ${compareBand(rate, natRate)} the England & Wales average of ${natRate.toFixed(0)}.`;
@@ -89,8 +92,11 @@ export function forceInsightLines(force, national, name) {
 export function nationalInsightLines(national, forces) {
   if (!national) return [];
   const lines = [];
-  const label = trendLabel(national.total, national.prevTotal);
-  const pctChange = changePct(national.total, national.prevTotal);
+  // The trend compares like with like: only forces whose previous 12-month
+  // window is complete contribute to both sides (trendTotal ↔ prevTotal).
+  const trendBase = national.trendTotal ?? national.total;
+  const label = trendLabel(trendBase, national.prevTotal);
+  const pctChange = changePct(trendBase, national.prevTotal);
   let head = `${fmt.format(national.total)} crimes recorded across all forces in 12 months`;
   if (label === 'Too early to say') head += '.';
   else if (label === 'Steady') head += ` — within ${Math.abs(pctChange)}% of the previous 12 months, steady.`;
@@ -131,6 +137,8 @@ export function viewSummary(points) {
 }
 
 // One ethnicity row from view=disproportionality → a careful sentence.
+// "Disparity" is only claimed when there is one: ratios near 1 are said to be
+// in line, ratios below 1 are below the resident share — never "a 0.6× disparity".
 // group: { ethnicity, searchShare, populationShare, disparityRatio }
 export function disparityLine(group) {
   const s = Math.round(group.searchShare * 100);
@@ -139,7 +147,10 @@ export function disparityLine(group) {
   }
   const p = Math.round(group.populationShare * 100);
   const ratio = Math.round(group.disparityRatio * 10) / 10;
-  return `${group.ethnicity} people account for ${s}% of searches and ${p}% of residents — a ${ratio}× disparity.`;
+  const base = `${group.ethnicity} people account for ${s}% of searches and ${p}% of residents`;
+  if (ratio >= 0.9 && ratio <= 1.1) return `${base} — in line with their share of the population.`;
+  if (ratio < 0.9) return `${base} — below their share of the population (${ratio}×).`;
+  return `${base} — a ${ratio}× disparity.`;
 }
 
 export const DISPARITY_CAVEAT =

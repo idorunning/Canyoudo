@@ -111,7 +111,7 @@ export default async (req: Request) => {
         // ss_dim is one row per month per value — roll up to one row per value
         // over the latest 12 months (or the single requested month), otherwise
         // every chart built on this view repeats each value once per month.
-        const rolled = rollupDim(await ssDim(forceId, dimension, month));
+        const rolled = rollupDim(await ssDim(forceId, dimension, month), month ? { windowMonths: 1 } : {});
         return json(200, {
           force: forceId, dimension, window: rolled.window,
           values: rolled.values.map((r) => ({
@@ -130,7 +130,7 @@ export default async (req: Request) => {
           ssDim(forceId, 'officer_ethnicity', month),
           forceId === ALL ? [] : populationByEthnicity(forceId),
         ]);
-        const rolled = rollupDim(dims);
+        const rolled = rollupDim(dims, month ? { windowMonths: 1 } : {});
         const searchTotal = rolled.values.reduce((s, d) => s + d.count, 0) || 1;
         const popTotal = pop.reduce((s, p) => s + p.population, 0);
         const popShare = new Map(pop.map((p) => [p.ethnicity, p.population / (popTotal || 1)]));
@@ -170,35 +170,46 @@ export default async (req: Request) => {
         const monthIdx = new Map(months.map((mo, i) => [mo, i]));
         const [rows, pops] = await Promise.all([crimeForceCategoryTotals(from24), forcePopulations()]);
         const popById = new Map(pops.map((p) => [p.force_id, p]));
-        // prevTotal is only honest when the previous 12-month window is fully
-        // present in the data — otherwise it reads as a fake collapse.
-        const prevMonths = new Set(rows.filter((r) => r.month < from12).map((r) => r.month));
-        const prevComplete = prevMonths.size === 12;
-        const byForce = new Map<string, { total: number; prevTotal: number; byCategory: Record<string, number>; byMonth: number[] }>();
+        const byForce = new Map<string, { total: number; prevTotal: number; prevMonths: Set<string>; byCategory: Record<string, number>; byMonth: number[] }>();
         for (const r of rows) {
-          const f = byForce.get(r.force_id) ?? { total: 0, prevTotal: 0, byCategory: {}, byMonth: new Array(12).fill(0) };
+          if (r.month > latest) continue; // ingest racing between the two reads
+          const f = byForce.get(r.force_id) ?? { total: 0, prevTotal: 0, prevMonths: new Set<string>(), byCategory: {}, byMonth: new Array(12).fill(0) };
           if (r.month >= from12) {
             f.total += r.count;
             f.byCategory[r.category] = (f.byCategory[r.category] ?? 0) + r.count;
             f.byMonth[monthIdx.get(r.month)!] += r.count;
           } else {
+            // prevTotal is only honest per force when that force filed all 12
+            // previous months — forces with gaps (Greater Manchester) must not
+            // fake a collapse.
             f.prevTotal += r.count;
+            f.prevMonths.add(r.month);
           }
           byForce.set(r.force_id, f);
         }
         const forces = [...byForce.entries()].map(([id, f]) => ({
           id, total: f.total, byCategory: f.byCategory, byMonth: f.byMonth,
-          prevTotal: prevComplete ? f.prevTotal : null,
+          prevTotal: f.prevMonths.size === 12 ? f.prevTotal : null,
           population: popById.get(id)?.population ?? null,
           populationYear: popById.get(id)?.year ?? null,
         }));
+        // The national trend compares like with like: only forces whose
+        // previous window is complete contribute to both sides.
+        const trendable = forces.filter((f) => f.prevTotal != null);
         const natPop = popById.get(ALL);
+        // The population denominator covers the 43 territorial E&W forces, so
+        // the rate numerator must too (PSNI and BTP totals still count in
+        // `total`, just not in the rate basis).
+        const ewTotal = forces.filter((f) => f.id !== 'northern-ireland' && f.id !== 'btp')
+          .reduce((s, f) => s + f.total, 0);
         return json(200, {
           window: { from: from12, to: latest, months: 12 },
           months,
           national: {
             total: forces.reduce((s, f) => s + f.total, 0),
-            prevTotal: prevComplete ? forces.reduce((s, f) => s + (f.prevTotal ?? 0), 0) : null,
+            prevTotal: trendable.length ? trendable.reduce((s, f) => s + (f.prevTotal ?? 0), 0) : null,
+            trendTotal: trendable.length ? trendable.reduce((s, f) => s + f.total, 0) : null,
+            ewTotal,
             population: natPop?.population ?? null,
             populationYear: natPop?.year ?? null,
           },

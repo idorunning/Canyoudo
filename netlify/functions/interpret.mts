@@ -121,8 +121,12 @@ async function buildDigest(scope: string, id: string, postcode: string, opts: { 
   if (scope === 'map-view') {
     const box = opts.poly ? parsePoly(opts.poly) : null;
     if (!box) return { error: 'A valid map viewport (poly) is required — zoom in a little further.' };
-    const crimes = await api(`/crimes-street/all-crime?poly=${opts.poly}${opts.month ? `&date=${opts.month}` : ''}`);
-    const list: any[] = Array.isArray(crimes) ? crimes : [];
+    if (opts.month && !/^\d{4}-\d{2}$/.test(opts.month)) return { error: 'Invalid month.' };
+    const crimes = await api(`/crimes-street/all-crime?poly=${encodeURIComponent(opts.poly!)}${opts.month ? `&date=${opts.month}` : ''}`);
+    // An upstream refusal (over-limit 503, outage) must never read as
+    // "0 crimes" — the model would confidently describe a quiet area.
+    if (!Array.isArray(crimes)) return { error: 'The street-level source couldn’t answer for this view — try a smaller area or another month.' };
+    const list: any[] = crimes;
     const month = list[0]?.month ?? opts.month ?? '';
     const centre = { lat: (box.north + box.south) / 2, lng: (box.east + box.west) / 2 };
     return {
