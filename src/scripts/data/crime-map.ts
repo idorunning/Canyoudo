@@ -128,8 +128,10 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     fsBtn.title = on ? 'Exit full screen (Esc)' : 'Full screen';
     fsBtn.querySelector('[data-fs-expand]')?.toggleAttribute('hidden', on);
     fsBtn.querySelector('[data-fs-compress]')?.toggleAttribute('hidden', !on);
-    // Leaflet must re-measure its container after any size change.
-    setTimeout(() => map.invalidateSize(), 250);
+    // Leaflet must re-measure its container after any size change — and the
+    // effective tier can change with it (a fullscreen 4K viewport at street
+    // zoom can exceed the street API's area limit and demote to hotspots).
+    setTimeout(() => { map.invalidateSize(); renderCurrentTier(); }, 250);
     if (!on) { window.scrollTo(0, savedScrollY); fsBtn.focus(); }
   }
   fsBtn?.addEventListener('click', () => setFullscreen(!root.classList.contains('cm-fs')));

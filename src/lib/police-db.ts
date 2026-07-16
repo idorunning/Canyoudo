@@ -42,6 +42,20 @@ const rows = async (q: any) => {
   return data ?? [];
 };
 
+// PostgREST's server-side max-rows caps every request regardless of .limit(),
+// and truncation is silent — plausible rows come back with the tail missing.
+// Any read that can plausibly exceed ~1,000 rows must page until a short page.
+// `make` builds a fresh query per page (Supabase builders are single-use).
+const PAGE = 1000;
+async function pagedRows<T>(make: () => any): Promise<T[]> {
+  const out: T[] = [];
+  for (let start = 0; ; start += PAGE) {
+    const page: T[] = await rows(make().range(start, start + PAGE - 1));
+    out.push(...page);
+    if (page.length < PAGE) return out;
+  }
+}
+
 export interface CrimeRow { force_id: string; month: string; category: string; count: number }
 export interface OutcomeRow { force_id: string; month: string; outcome_category: string; count: number }
 export interface SsMonthRow { force_id: string; month: string; total: number; find_count: number; find_known: number }
@@ -50,12 +64,18 @@ export interface SsDimRow { force_id: string; month: string; dimension: string; 
 // --- crime + outcomes --------------------------------------------------------
 export async function crimeByMonth(forceId = ALL): Promise<CrimeRow[]> {
   const sb = db(); if (!sb) return [];
-  return rows(sb.from('crime_force_month').select('force_id,month,category,count').eq('force_id', forceId).order('month'));
+  // 36 months × ~14 categories ≈ 500 rows today, but page anyway — the window
+  // is configurable and truncation is silent.
+  return pagedRows<CrimeRow>(() =>
+    sb.from('crime_force_month').select('force_id,month,category,count').eq('force_id', forceId).order('month').order('category'));
 }
 
 export async function outcomesByMonth(forceId = ALL): Promise<OutcomeRow[]> {
   const sb = db(); if (!sb) return [];
-  return rows(sb.from('outcome_force_month').select('force_id,month,outcome_category,count').eq('force_id', forceId).order('month'));
+  // 36 months × ~25 outcome categories ≈ 900 rows — one config change from the
+  // max-rows cliff, so page.
+  return pagedRows<OutcomeRow>(() =>
+    sb.from('outcome_force_month').select('force_id,month,outcome_category,count').eq('force_id', forceId).order('month').order('outcome_category'));
 }
 
 // Newest month present in the force crime rollup (the 12-month window's end).
@@ -65,15 +85,20 @@ export async function latestCrimeMonth(): Promise<string | null> {
   return r[0]?.month ?? null;
 }
 
-// Every force's per-category rows since fromMonth, in one read — the map's
-// tier-1 payload. 44 forces × ~14 categories × 24 months ≈ 15k rows; the
-// explicit limit matters because PostgREST silently caps at 1,000 otherwise.
+// Every force's per-category rows since fromMonth — the map's tier-1 payload.
+// 44 forces × ~14 categories × 24 months ≈ 15k rows. This MUST paginate:
+// PostgREST's server-side max-rows setting caps every request regardless of
+// .limit(), and the table's heap order is month-major (the ingest writes the
+// oldest months first across all forces), so a truncated read returns
+// plausible-looking rows for every force with the newest months missing —
+// zeros and undercounts that no shape check catches. Ordered pages until a
+// short page is the only honest read.
 export async function crimeForceCategoryTotals(fromMonth: string): Promise<CrimeRow[]> {
   const sb = db(); if (!sb) return [];
-  return rows(
+  return pagedRows<CrimeRow>(() =>
     sb.from('crime_force_month').select('force_id,month,category,count')
-      .gte('month', fromMonth).neq('force_id', ALL).limit(40000)
-  );
+      .gte('month', fromMonth).neq('force_id', ALL)
+      .order('force_id').order('month').order('category'));
 }
 
 // All force populations at once (empty until scripts/seed-population.mjs runs;
