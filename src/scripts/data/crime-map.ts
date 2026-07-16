@@ -15,7 +15,7 @@ import {
   CRIME_CATEGORY_META, categoryColor, categoryLabel, canonicalCategory,
   tierForZoom, effectiveTier, dominantCategory, dotRadius, ratePer1000,
   viewportPoly, viewportAreaKm2, cellSizeDeg, gridCluster,
-  monthOptions, heatShade, FORCE_DATA_NOTES,
+  monthOptions, heatShade, placeVisible, FORCE_DATA_NOTES,
 } from '../../lib/crime-map-core.mjs';
 
 import {
@@ -32,6 +32,7 @@ type MapForce = {
 type National = { total: number; prevTotal: number | null; population: number | null; populationYear: string | null; windowTo?: string } | null;
 type Hotspot = { lsoa_code: string; lsoa_name: string | null; count: number };
 type StreetCrime = { lat: number; lng: number; category: string; street: string; outcome: string; month: string };
+type Place = { n: string; lat: number; lng: number; p: number; s: 'major' | 'large' | 'medium' };
 
 const TILE = {
   light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
@@ -177,6 +178,10 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       <label class="col-span-2 flex items-center gap-1.5 font-sans text-[11px] text-ink-700 py-1 mt-1 border-t border-ink-200 cursor-pointer">
         <input type="checkbox" data-cm-rate class="accent-current" ${state.asRate ? 'checked' : ''}>
         Size dots per 1,000 residents
+      </label>` : '') + (tier !== 1 ? `
+      <label class="col-span-2 flex items-center gap-1.5 font-sans text-[11px] text-ink-700 py-1 mt-1 border-t border-ink-200 cursor-pointer">
+        <input type="checkbox" data-cm-places class="accent-current" ${placesOn ? 'checked' : ''}>
+        Town &amp; city centres <span class="inline-block w-2 h-2 shrink-0" style="transform:rotate(45deg);background:${state.dark ? '#d6d9de' : '#2b2e34'}" aria-hidden="true"></span>
       </label>` : '');
     legendNoteEl.textContent =
       tier === 2
@@ -197,6 +202,15 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       state.asRate = rate.checked;
       try { sessionStorage.setItem('cm-rate', rate.checked ? '1' : '0'); } catch {}
       renderTier1();
+    };
+    const places = legendEl.querySelector<HTMLInputElement>('[data-cm-places]');
+    if (places) places.onchange = () => {
+      placesOn = places.checked;
+      try { sessionStorage.setItem('cm-places', placesOn ? '1' : '0'); } catch {}
+      renderPlaces();
+      legendNoteEl.textContent = placesOn && tier !== 1
+        ? 'Diamonds mark town & city centres — context, not crime data.'
+        : legendNoteEl.textContent;
     };
   }
 
@@ -681,6 +695,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     if (tier === 1) renderTier1();
     else if (tier === 2) renderTier2();
     else renderTier3();
+    renderPlaces();
   }
 
   // One URL write and one tier evaluation per gesture: Leaflet always fires
@@ -692,9 +707,12 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     pushUrl();
     const tier = effTier();
     if (tier !== currentTier) { renderCurrentTier(); return; }
+    renderPlaces(); // viewport-filtered; no network after first load
     if (tier === 3) {
       clearTimeout(moveTimer);
       moveTimer = setTimeout(renderTier3, 400);
+    } else if (tier === 2) {
+      panelViewport(2); // the in-view hotspot list follows the pan
     }
   });
 
@@ -708,6 +726,50 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     if (effTier() === 1 && state.force) panelForce(state.force);
     renderBoundaries();
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+  // --- places: town & city centres — context, not crime data ------------------------------------
+  // "Crime concentrates where people do": named centres with census population,
+  // as diamonds (categorically distinct from the circular crime dots).
+  const placesPane = L.layerGroup();
+  let placesData: Place[] | null = null;
+  let placesPromise: Promise<Place[]> | null = null;
+  let placesOn = sessionStorage.getItem('cm-places') !== '0'; // default on at tiers 2–3
+  async function renderPlaces() {
+    const tier = effTier();
+    if (tier === 1 || !placesOn) { map.removeLayer(placesPane); return; }
+    if (!placesData) {
+      placesPromise ??= fetch('/geo/places.json').then(async (r) => {
+        if (!r.ok) throw new Error('places unreachable');
+        return (await r.json()).places;
+      });
+      try { placesData = await placesPromise; }
+      catch { placesPromise = null; return; } // context layer only — fail quietly
+      if (effTier() === 1 || !placesOn) return; // world moved on while loading
+    }
+    placesPane.clearLayers();
+    const zoom = map.getZoom();
+    const bounds = map.getBounds().pad(0.2);
+    for (const p of placesData) {
+      if (!placeVisible(zoom, p.s) || !bounds.contains([p.lat, p.lng])) continue;
+      const size = p.s === 'major' ? 12 : p.s === 'large' ? 10 : 8;
+      const marker = L.marker([p.lat, p.lng], {
+        icon: L.divIcon({
+          className: '',
+          iconSize: [size, size],
+          html: `<div style="width:${size}px;height:${size}px;transform:rotate(45deg);background:${state.dark ? '#d6d9de' : '#2b2e34'};border:1.5px solid ${state.dark ? '#101318' : '#ffffff'};" aria-hidden="true"></div>`,
+        }),
+        interactive: true,
+        keyboard: false,
+      });
+      marker.bindTooltip(
+        `<strong>${esc(p.n)}</strong> — ${p.s} centre, pop ${fmt.format(p.p)}<br>` +
+          'Town and city centres concentrate footfall, retail and the night-time economy — crime concentrates where people do. Correlation, not cause.',
+        { direction: 'top', offset: [0, -6] }
+      );
+      placesPane.addLayer(marker);
+    }
+    if (!map.hasLayer(placesPane)) placesPane.addTo(map);
+  }
 
   // --- boundaries: progressive enhancement, fetched when the browser is idle ------------------
   // Interactive (hover highlight, click-to-select) only at tier 1; passive

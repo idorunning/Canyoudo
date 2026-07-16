@@ -160,6 +160,15 @@ export function heatShade(count, max, dark = false) {
   return ramp[Math.min(ramp.length - 1, Math.floor(t * ramp.length))];
 }
 
+// Which places (ONS built-up areas) show at a zoom level — majors first so
+// low zooms aren't a label cloud, everything by street level.
+export function placeVisible(zoom, sizeClass) {
+  if (zoom >= 13) return true;
+  if (zoom >= 11) return sizeClass === 'major' || sizeClass === 'large';
+  if (zoom >= 9) return sizeClass === 'major';
+  return false;
+}
+
 // Honesty notes the map must surface for specific forces (see
 // docs/crime-dashboard-review.md's caveat discipline; police.uk changelog).
 export const FORCE_DATA_NOTES = {

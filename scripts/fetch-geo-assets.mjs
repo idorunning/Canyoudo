@@ -22,6 +22,7 @@
 import { mkdir, writeFile, readdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as XLSX from 'xlsx';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const UA = 'thinkingaboutpolicing.org geo assets (+https://thinkingaboutpolicing.org)';
@@ -36,6 +37,23 @@ const LSOA_SERVICES = [
 const OUT_CENTROIDS = join(ROOT, 'src/data/force-centroids.json');
 const OUT_BOUNDARIES = join(ROOT, 'public/geo/pfa-boundaries.json');
 const OUT_LSOA = join(ROOT, 'public/geo/lsoa-centroids.json');
+const OUT_PLACES = join(ROOT, 'public/geo/places.json');
+
+// The "places" layer: ONS Built-Up Areas with census population + ONS's own
+// size classification. Centroids from the BUA_2022_GB service; populations and
+// classes from the Census 2021 towns-and-cities workbook (sheets 1c England
+// ex-London + 1d Wales — London's borough-BUAs are excluded there, so Greater
+// London is pinned by hand with its real census total).
+const BUA_SERVICE = `${ONS}/BUA_2022_GB/FeatureServer/0/query`;
+const TOWNS_XLSX =
+  'https://www.ons.gov.uk/file?uri=/peoplepopulationandcommunity/housing/datasets/townsandcitiescharacteristicsofbuiltupareasenglandandwalescensus2021/2021/townsandcitiescharacteristicsofbuiltupareasenglandandwalescensus2021.xlsx';
+const PLACE_CLASSES = new Set(['Major', 'Large', 'Medium']); // ≥20k residents by ONS's classification
+const EXTRA_PLACES = [
+  // Census 2021 usual residents of the London region (ONS) — the towns tables
+  // split it out; one label point at the centre is what a map needs.
+  { n: 'London', lat: 51.5072, lng: -0.1276, p: 8799800, s: 'major' },
+];
+const PLACES_MIN = 400, PLACES_MAX = 700, PLACES_BUDGET = 120 * 1024;
 
 const BOUNDARY_BUDGET = 600 * 1024; // bytes — fail loudly rather than ship a heavy map
 const LSOA_MIN = 34000, LSOA_MAX = 39000; // 2021 set is 35,672; union adds a little
@@ -152,6 +170,63 @@ async function fetchLsoaCentroids() {
   return c;
 }
 
+async function fetchPlaces() {
+  console.log('Places (BUA centroids × Census 2021 towns-and-cities populations)…');
+  // 1. Populations + ONS size classes from the towns workbook.
+  const res = await fetch(TOWNS_XLSX, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(300000) });
+  if (!res.ok) throw new Error(`towns workbook → ${res.status}`);
+  const wb = XLSX.read(Buffer.from(await res.arrayBuffer()), { type: 'buffer' });
+  const pops = new Map(); // BUA code → { name, pop, class }
+  for (const sheet of ['1c', '1d']) {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheet], { header: 1, blankrows: false });
+    const hr = rows.findIndex((r) => r.includes('BUA code'));
+    if (hr < 0) throw new Error(`towns workbook sheet ${sheet}: no "BUA code" header`);
+    const h = rows[hr];
+    const iCode = h.indexOf('BUA code'), iName = h.indexOf('BUA name'),
+      iClass = h.indexOf('BUA size classification'), iCount = h.indexOf('Counts');
+    let kept = 0;
+    for (const r of rows.slice(hr + 1)) {
+      const cls = String(r[iClass] ?? '').trim();
+      if (!PLACE_CLASSES.has(cls)) continue;
+      const pop = Number(r[iCount]);
+      if (!r[iCode] || !Number.isFinite(pop) || pop <= 0) throw new Error(`towns sheet ${sheet}: bad row ${JSON.stringify(r)}`);
+      pops.set(String(r[iCode]).trim(), { name: String(r[iName]).trim(), pop, cls: cls.toLowerCase() });
+      kept++;
+    }
+    console.log(`  sheet ${sheet}: ${kept} Major/Large/Medium BUAs`);
+  }
+
+  // 2. Centroids from the BUA service (LONG/LAT ride along — no geometry).
+  const centroidByCode = new Map();
+  let offset = 0;
+  for (;;) {
+    const fc = await getJson(`${BUA_SERVICE}?${new URLSearchParams({
+      where: '1=1', outFields: 'BUA22CD,LONG,LAT', returnGeometry: 'false',
+      resultOffset: String(offset), resultRecordCount: '2000', f: 'json',
+    })}`);
+    const feats = fc.features ?? [];
+    for (const f of feats) centroidByCode.set(f.attributes.BUA22CD, [f.attributes.LAT, f.attributes.LONG]);
+    offset += feats.length;
+    if (!feats.length || !fc.exceededTransferLimit) break;
+    process.stdout.write(`\r  BUA centroids: ${offset}…`);
+  }
+  console.log(`\r  BUA centroids: ${centroidByCode.size}`);
+
+  // 3. Join, with a coverage pin — a silent partial join would lie on the map.
+  const places = [...EXTRA_PLACES];
+  let unmatched = 0;
+  for (const [code, v] of pops) {
+    const ll = centroidByCode.get(code);
+    if (!ll) { unmatched++; continue; }
+    places.push({ n: v.name, lat: Math.round(ll[0] * 1e4) / 1e4, lng: Math.round(ll[1] * 1e4) / 1e4, p: v.pop, s: v.cls });
+  }
+  if (unmatched > pops.size * 0.1) throw new Error(`places: ${unmatched}/${pops.size} BUAs had no centroid — vintage mismatch?`);
+  if (unmatched) console.log(`  ${unmatched} BUAs without a centroid (dropped)`);
+  places.sort((a, b) => b.p - a.p);
+  if (places.length < PLACES_MIN || places.length > PLACES_MAX) throw new Error(`places count ${places.length} outside [${PLACES_MIN}, ${PLACES_MAX}]`);
+  return places;
+}
+
 async function main() {
   const fetchedAt = new Date().toISOString();
   const committedIds = (await readdir(join(ROOT, 'src/content/policedata/forces')))
@@ -178,6 +253,8 @@ async function main() {
   const lsoaCount = Object.keys(lsoa).length;
   if (lsoaCount < LSOA_MIN || lsoaCount > LSOA_MAX) throw new Error(`LSOA centroid count ${lsoaCount} outside [${LSOA_MIN}, ${LSOA_MAX}].`);
 
+  const places = await fetchPlaces();
+
   const source = 'ONS Open Geography Portal (Open Government Licence v3.0)';
   await mkdir(dirname(OUT_BOUNDARIES), { recursive: true });
 
@@ -189,11 +266,18 @@ async function main() {
   await writeFile(OUT_CENTROIDS, JSON.stringify({ source, fetchedAt, forces }, null, 2) + '\n');
   await writeFile(OUT_LSOA, JSON.stringify({ v: 1, source, fetchedAt, count: lsoaCount, c: lsoa }) + '\n');
 
+  const placesJson = JSON.stringify({
+    v: 1, source: `${source}; Census 2021 towns and cities`, fetchedAt, count: places.length, places,
+  });
+  if (Buffer.byteLength(placesJson) > PLACES_BUDGET) throw new Error(`places.json ${Buffer.byteLength(placesJson)} bytes over budget`);
+  await writeFile(OUT_PLACES, placesJson + '\n');
+
   const kb = (p) => `${Math.round(Buffer.byteLength(p) / 1024)} KB`;
   console.log(`\nWrote:`);
   console.log(`  ${OUT_CENTROIDS} (${Object.keys(forces).length} forces)`);
   console.log(`  ${OUT_BOUNDARIES} (${kb(boundaryJson)})`);
   console.log(`  ${OUT_LSOA} (${lsoaCount} LSOAs, ${kb(JSON.stringify(lsoa))})`);
+  console.log(`  ${OUT_PLACES} (${places.length} places, ${kb(placesJson)})`);
 }
 
 main().catch((err) => {

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import {
   CRIME_CATEGORY_META, categoryColor, categoryLabel, canonicalCategory,
-  TIER_BREAKS, tierForZoom, effectiveTier,
+  TIER_BREAKS, tierForZoom, effectiveTier, placeVisible,
   DOMINANT_EXCLUDE, dominantCategory,
   dotRadius, ratePer1000,
   viewportPoly, viewportAreaKm2,
@@ -179,6 +179,31 @@ test('pfa-boundaries.json is a FeatureCollection under the size budget', () => {
   assert.equal(fc.type, 'FeatureCollection');
   assert.equal(fc.features.length, 43, '43 territorial EW forces');
   for (const f of fc.features) assert.ok(f.properties.id && f.properties.name);
+});
+
+test('placeVisible reveals places by size as zoom deepens', () => {
+  assert.equal(placeVisible(8, 'major'), false, 'nothing at force tier');
+  assert.equal(placeVisible(9, 'major'), true);
+  assert.equal(placeVisible(9, 'large'), false);
+  assert.equal(placeVisible(11, 'large'), true);
+  assert.equal(placeVisible(11, 'medium'), false);
+  assert.equal(placeVisible(13, 'medium'), true);
+});
+
+test('places.json: pinned count, EW bounds, sane classes, under budget', () => {
+  const path = 'public/geo/places.json';
+  assert.ok(statSync(path).size <= 120 * 1024, 'over the 120 KB budget');
+  const { count, places } = JSON.parse(readFileSync(path, 'utf8'));
+  assert.ok(count >= 400 && count <= 700, `count ${count}`);
+  assert.equal(places.length, count);
+  const classes = new Set(places.map((p) => p.s));
+  assert.deepEqual([...classes].sort(), ['large', 'major', 'medium']);
+  for (const p of places) {
+    assert.ok(p.lat >= 49 && p.lat <= 61 && p.lng >= -8.7 && p.lng <= 2, `${p.n} out of bounds`);
+    assert.ok(p.p >= 20000 || p.n === 'London', `${p.n} pop ${p.p}`);
+  }
+  assert.ok(places.some((p) => p.n === 'London' && p.p > 8_000_000), 'London pinned');
+  assert.equal(places[0].n, 'London', 'sorted by population, largest first');
 });
 
 test('lsoa-centroids.json has a plausible code count and shape', () => {
