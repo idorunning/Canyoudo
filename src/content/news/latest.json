@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-17T13:00:29.628Z",
-    "feedCount": 10,
+    "fetchedAt": "2026-07-18T01:21:00.348Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -11,11 +11,42 @@
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
-      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
+    {
+      "title": "Mother of Henry Nowak killer jailed for removing knife from murder scene",
+      "link": "https://www.bbc.co.uk/news/articles/c1w1nnzgg2no?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-17T17:22:48.000Z",
+      "summary": "Kiran Kaur is jailed after attempting to hide the knife used to kill student Henry Nowak."
+    },
+    {
+      "title": "China's Moonshot AI claims Kimi K3 can rival OpenAI and Anthropic",
+      "link": "https://www.bbc.co.uk/news/articles/cy9w4q8pgp0o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-17T16:53:04.000Z",
+      "summary": "The company has unveiled a massive new artificial intelligence model it says can take on top American firms."
+    },
+    {
+      "title": "Former DUP leader Jeffrey Donaldson to appeal child sex abuse convictions",
+      "link": "https://www.bbc.co.uk/news/articles/c2046e37ewyo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-17T15:12:27.000Z",
+      "summary": "His legal team has lodged the paperwork with the Court of Appeal in Belfast."
+    },
+    {
+      "title": "Hogan Lovells Cadwalader lets London lawyers and staff WFH for 2 weeks due to aircon fail",
+      "link": "https://www.legalcheek.com/2026/07/hogan-lovells-cadwalader-lets-london-lawyers-and-staff-wfh-for-2-weeks-due-to-aircon-fail/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-17T14:23:07.000Z",
+      "summary": "Transatlantic firm goes into fully-remote mode The post Hogan Lovells Cadwalader lets London lawyers and staff WFH for 2 weeks due to aircon fail appeared first on Legal Cheek ."
+    },
     {
       "title": "Elmley Prison",
       "link": "https://www.gov.uk/guidance/elmley-prison",
@@ -23,14 +54,6 @@
       "topic": "law",
       "isoDate": "2026-07-17T11:48:56.000Z",
       "summary": "Elmley is one of 3 prisons on the Isle of Sheppey, Kent, the other two being HMP Standford Hill and HMP Swaleside."
-    },
-    {
-      "title": "Man appears in court charged with causing death by dangerous driving",
-      "link": "https://www.bbc.co.uk/news/articles/cx2rmm1g5ego?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-17T11:48:29.000Z",
-      "summary": "Raven Adams, 24, from County Tipperary, died after she was hit by a vehicle in Belfast on 16 July."
     },
     {
       "title": "Independent review of the prison system in England and Wales",
@@ -55,30 +78,6 @@
       "topic": "law",
       "isoDate": "2026-07-17T09:00:00.000Z",
       "summary": "A consultation on proposals for a new performance and oversight framework for youth justice services, and reforms to how they are funded."
-    },
-    {
-      "title": "Pakistan resisting UK attempts to deport grooming gang leader",
-      "link": "https://www.bbc.co.uk/news/articles/clyxnvjy706o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-17T00:34:27.000Z",
-      "summary": "The government of Pakistan says it has \"no connection whatsoever\" with the case of Shabir Ahmed."
-    },
-    {
-      "title": "EU forces Google to share its toys with the other AI and search kids",
-      "link": "https://www.theregister.com/software/2026/07/16/eu-forces-google-to-share-its-toys-with-the-other-ai-and-search-kids/5273819",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-16T16:48:41.000Z",
-      "summary": "The Chocolate Factory is not amused"
-    },
-    {
-      "title": "AI vendors have found someone to pay their infrastructure bills: You",
-      "link": "https://www.theregister.com/software/2026/07/16/ai-vendors-have-found-someone-to-pay-their-infrastructure-bills-you/5273712",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-16T16:21:00.000Z",
-      "summary": "Forrester warns price hikes and usage charges will pump up software budgets next year"
     },
     {
       "title": "Crackdown on baseless legal claims to get Britain building",
@@ -113,14 +112,6 @@
       "summary": "This consultation seeks views on the future structure, scope and format of the Undercover Policing Inquiry."
     },
     {
-      "title": "Top US law school bans laptops in lectures amid fears future lawyers are becoming too dependent on AI",
-      "link": "https://www.legalcheek.com/2026/07/top-us-law-school-bans-laptops-in-lectures-amid-fears-future-lawyers-are-becoming-too-dependent-on-ai/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-16T06:54:23.000Z",
-      "summary": "New policy The post Top US law school bans laptops in lectures amid fears future lawyers are becoming too dependent on AI appeared first on Legal Cheek ."
-    },
-    {
       "title": "Data regulation in the age of AI and other data‑intensive technologies",
       "link": "https://www.gov.uk/government/calls-for-evidence/data-regulation-in-the-age-of-ai-and-other-data-intensive-technologies",
       "source": "DSIT",
@@ -153,14 +144,6 @@
       "summary": "The CNC has reduced its mean gender pay gap to 2.95%, outperforming <mark>policing</mark> and the wider public sector as it continues towards its 2035 target."
     },
     {
-      "title": "Sticker shock has execs rethinking this whole AI thing",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/13/sticker-shock-has-execs-rethinking-this-whole-ai-thing-1/5270073",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-13T14:16:00.000Z",
-      "summary": "This week on The Reg's Kettle podcast, we wonder whether tokenminning is going to bring the industry back down to Earth"
-    },
-    {
       "title": "Meta pulls new AI image feature after days of backlash",
       "link": "https://www.bbc.co.uk/news/articles/c2dy6e8klw0o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -183,14 +166,6 @@
       "topic": "law",
       "isoDate": "2026-07-10T09:00:07.000Z",
       "summary": "Guests from across the justice sector gathered at the Royal Courts of Justice to learn how the Judicial College designs and delivers training for more than 24,000 judicial…"
-    },
-    {
-      "title": "AI tool scours the web for job openings, preps your resume and cover letter",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/09/ai-tool-scours-the-web-for-job-openings-preps-your-resume-and-cover-letter/5269410",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-09T17:40:00.000Z",
-      "summary": "Searching for work sucks; AI combs the internet and sucks it all up. Combine the two and let 'er rip with this Python project"
     },
     {
       "title": "Sir Colin Birss appointed Master of the Rolls",
