@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-18T12:47:11.101Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-07-19T01:27:22.963Z",
+    "feedCount": 10,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -11,25 +11,18 @@
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
       "DSIT",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Murder investigation after woman found dead following street altercation",
-      "link": "https://www.bbc.co.uk/news/articles/c04kpx2l3p9o?at_medium=RSS&at_campaign=rss",
+      "title": "Eight released over alleged threat to Islamic event",
+      "link": "https://www.bbc.co.uk/news/articles/cr49xv56g77o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-18T12:37:16.000Z",
-      "summary": "Specially-trained firearms officers were sent to an altercation, with the woman found nearby."
-    },
-    {
-      "title": "Mother of Henry Nowak killer jailed for removing knife from murder scene",
-      "link": "https://www.bbc.co.uk/news/articles/c1w1nnzgg2no?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-17T17:22:48.000Z",
-      "summary": "Kiran Kaur is jailed after attempting to hide the knife used to kill student Henry Nowak."
+      "isoDate": "2026-07-18T20:29:25.000Z",
+      "summary": "More people are freed from custody, as police investigate an alleged extreme right-wing threat."
     },
     {
       "title": "China's Moonshot AI claims Kimi K3 can rival OpenAI and Anthropic",
@@ -38,14 +31,6 @@
       "topic": "ai",
       "isoDate": "2026-07-17T16:53:04.000Z",
       "summary": "The company has unveiled a massive new artificial intelligence model it says can take on top American firms."
-    },
-    {
-      "title": "Former DUP leader Jeffrey Donaldson to appeal child sex abuse convictions",
-      "link": "https://www.bbc.co.uk/news/articles/c2046e37ewyo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-17T15:12:27.000Z",
-      "summary": "His legal team has lodged the paperwork with the Court of Appeal in Belfast."
     },
     {
       "title": "Hogan Lovells Cadwalader lets London lawyers and staff WFH for 2 weeks due to aircon fail",
@@ -86,6 +71,22 @@
       "topic": "law",
       "isoDate": "2026-07-17T09:00:00.000Z",
       "summary": "A consultation on proposals for a new performance and oversight framework for youth justice services, and reforms to how they are funded."
+    },
+    {
+      "title": "EU forces Google to share its toys with the other AI and search kids",
+      "link": "https://www.theregister.com/software/2026/07/16/eu-forces-google-to-share-its-toys-with-the-other-ai-and-search-kids/5273819",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-16T16:48:41.000Z",
+      "summary": "The Chocolate Factory is not amused"
+    },
+    {
+      "title": "AI vendors have found someone to pay their infrastructure bills: You",
+      "link": "https://www.theregister.com/software/2026/07/16/ai-vendors-have-found-someone-to-pay-their-infrastructure-bills-you/5273712",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-16T16:21:00.000Z",
+      "summary": "Forrester warns price hikes and usage charges will pump up software budgets next year"
     },
     {
       "title": "Crackdown on baseless legal claims to get Britain building",
@@ -152,6 +153,14 @@
       "summary": "The CNC has reduced its mean gender pay gap to 2.95%, outperforming <mark>policing</mark> and the wider public sector as it continues towards its 2035 target."
     },
     {
+      "title": "Sticker shock has execs rethinking this whole AI thing",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/13/sticker-shock-has-execs-rethinking-this-whole-ai-thing-1/5270073",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-13T14:16:00.000Z",
+      "summary": "This week on The Reg's Kettle podcast, we wonder whether tokenminning is going to bring the industry back down to Earth"
+    },
+    {
       "title": "Meta pulls new AI image feature after days of backlash",
       "link": "https://www.bbc.co.uk/news/articles/c2dy6e8klw0o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -174,6 +183,14 @@
       "topic": "law",
       "isoDate": "2026-07-10T09:00:07.000Z",
       "summary": "Guests from across the justice sector gathered at the Royal Courts of Justice to learn how the Judicial College designs and delivers training for more than 24,000 judicial…"
+    },
+    {
+      "title": "AI tool scours the web for job openings, preps your resume and cover letter",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/09/ai-tool-scours-the-web-for-job-openings-preps-your-resume-and-cover-letter/5269410",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-09T17:40:00.000Z",
+      "summary": "Searching for work sucks; AI combs the internet and sucks it all up. Combine the two and let 'er rip with this Python project"
     },
     {
       "title": "Sir Colin Birss appointed Master of the Rolls",
