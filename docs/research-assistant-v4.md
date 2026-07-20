@@ -203,9 +203,24 @@ Running under Deno instead of Node changes several things inside the file:
 
 Everything else about the streaming contract is unchanged from the original
 design:
+- **The review is two model calls, not one** (since v13). A fast SELECTION
+  pass — the same picked model at low effort, non-streaming, JSON-only
+  (`SELECT_SYSTEM`) — screens the client's candidate pool (up to
+  `REVIEW_POOL_MAX` studies) down to the at-most-`REVIEW_TABLE_MAX` that
+  genuinely bear on the question; only those reach the high-effort writing
+  call. Selected studies keep their ORIGINAL pool numbers (sparse,
+  non-sequential), so the client's `[n]` → reference mapping is untouched.
+  Any selection failure falls back to the head of the curated pool. One call
+  doing both jobs was the v12 stall: minutes of silent thinking over 30
+  studies that could exhaust the token ceiling before the report finished.
 - One byte (a `preamble`) is enqueued immediately, so time-to-first-byte stays
-  near zero while the model is still thinking (adaptive thinking at high
-  effort can sit silent for tens of seconds before the first text token).
+  near zero — and while the model thinks, the edge function **heartbeats a
+  newline every ~15s** until the first real text token. Adaptive thinking at
+  high effort can sit silent for minutes with no stream events at all, and a
+  byte-less connection is what mobile networks idle-kill; the heartbeats are
+  leading whitespace the client already trims, never cached, and stop
+  permanently once the report starts. Client-side, a 120s no-bytes watchdog
+  aborts a genuinely dead stream into the normal single-retry path.
 - Finished reports are cached in Blobs (`research-review` store) keyed on
   problem + curated set + model + prompt version via the shared
   `stableKey` (src/lib/cache-key.mjs — which also fixes a latent v3 bug where
@@ -263,7 +278,8 @@ is itself the progress indicator.
 |---|---|---|
 | translate / plan / brief | `claude-sonnet-4-6` | adaptive thinking, effort low |
 | overview | `claude-sonnet-4-6` (`OVERVIEW_MODEL`) | adaptive thinking, effort low |
-| review | `claude-sonnet-5` (`REVIEW_MODEL`), falls back to Opus 4.8 → Sonnet 4.6 | adaptive thinking, **effort high**, streamed (edge function), max 12,000 tokens |
+| review — selection pass | same model as the writer | adaptive thinking, effort low, JSON-only, max 4,000 tokens (`SELECT_MAX_TOKENS`) |
+| review — writer | `claude-sonnet-5` (`REVIEW_MODEL`), falls back to Opus 4.8 → Sonnet 4.6; `RESEARCH_REVIEW_MODEL` env override (e.g. `claude-opus-4-8`) leads the chain | adaptive thinking, **effort high**, streamed (edge function), max 16,000 tokens |
 
 Model ids are pinned in `research-assist-prompts.ts` (shared by functions and
 client provenance records) and registered in `personas.ts`

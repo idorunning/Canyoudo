@@ -10,6 +10,9 @@ import {
   REVIEW_MODEL,
   REVIEW_MAX_TOKENS,
   REVIEW_POOL_MAX,
+  REVIEW_TABLE_MAX,
+  SELECT_SYSTEM,
+  SELECT_MAX_TOKENS,
 } from '../../src/lib/research-assist-prompts.ts';
 import { stableKey } from '../../src/lib/cache-key.mjs';
 import { costUsd, monthKey } from '../../src/lib/ai-budget-core.mjs';
@@ -106,10 +109,15 @@ async function recordUsage(model: string, inputTokens: number, outputTokens: num
 
 // ---- raw Messages API calls (fetch + hand-parsed SSE — no SDK) ----
 
-/** One non-streaming call — used for the model-access preflight. Throws an
- *  object with `.status` on a non-2xx response, mirroring the SDK's own
- *  error shape closely enough for pickModel's status check below. */
-async function messagesCreate(apiKey: string, body: Record<string, unknown>): Promise<any> {
+/** One non-streaming call — used for the model-access preflight and the
+ *  selection pass. Throws an object with `.status` on a non-2xx response,
+ *  mirroring the SDK's own error shape closely enough for pickModel's status
+ *  check below. `signal` lets the caller abort (client disconnected). */
+async function messagesCreate(
+  apiKey: string,
+  body: Record<string, unknown>,
+  signal?: AbortSignal
+): Promise<any> {
   const res = await fetch(ANTHROPIC_API_URL, {
     method: 'POST',
     headers: {
@@ -118,6 +126,7 @@ async function messagesCreate(apiKey: string, body: Record<string, unknown>): Pr
       'content-type': 'application/json',
     },
     body: JSON.stringify({ ...body, stream: false }),
+    signal,
   });
   if (!res.ok) {
     const err: any = new Error(`Anthropic API ${res.status}`);
@@ -181,6 +190,77 @@ async function* streamMessages(
   }
 }
 
+// ---- the selection pass: which pool studies does the briefing get? --------
+
+/** Pull the JSON array of study numbers out of a selection response. Adaptive
+ *  thinking means content[] may lead with a thinking block, and models
+ *  sometimes wrap JSON in fences or a stray sentence — so this concatenates
+ *  the text blocks and grabs the first [...] it can parse. Returns [] on any
+ *  failure; the caller falls back deterministically. */
+function parseSelection(res: any, poolSize: number): number[] {
+  try {
+    const text = (Array.isArray(res?.content) ? res.content : [])
+      .filter((b: any) => b?.type === 'text' && typeof b.text === 'string')
+      .map((b: any) => b.text)
+      .join('\n')
+      .replace(/```[a-z]*\n?/gi, '');
+    const match = text.match(/\[[\d\s,]*\]/);
+    const parsed = JSON.parse(match ? match[0] : text.trim());
+    if (!Array.isArray(parsed)) return [];
+    const seen = new Set<number>();
+    const out: number[] = [];
+    for (const n of parsed) {
+      if (Number.isInteger(n) && n >= 1 && n <= poolSize && !seen.has(n)) {
+        seen.add(n);
+        out.push(n);
+      }
+    }
+    return out.slice(0, REVIEW_TABLE_MAX);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * The screening pass: the same model that will write the briefing, at LOW
+ * effort with a tight token ceiling, picks the pool studies that genuinely
+ * bear on the question — so the high-effort writing call only ever weighs the
+ * briefing-sized set the format was designed around, instead of thinking
+ * silently for minutes over the whole pool (the v12 stall). Returns original
+ * pool numbers. Any failure returns [] and the caller falls back to the first
+ * REVIEW_TABLE_MAX curated studies, so this can never break the review.
+ */
+async function selectStudies(
+  apiKey: string,
+  model: ModelId,
+  problem: string,
+  numberedLines: string[],
+  signal: AbortSignal
+): Promise<number[]> {
+  try {
+    const res = await messagesCreate(
+      apiKey,
+      {
+        model,
+        max_tokens: SELECT_MAX_TOKENS,
+        ...modelParams(model, 'low'),
+        system: SELECT_SYSTEM,
+        messages: [
+          {
+            role: 'user',
+            content: `Question: ${problem}\n\nStudies:\n${numberedLines.join('\n')}`,
+          },
+        ],
+      },
+      signal
+    );
+    await recordUsage(model, res?.usage?.input_tokens ?? 0, res?.usage?.output_tokens ?? 0);
+    return parseSelection(res, numberedLines.length);
+  } catch {
+    return [];
+  }
+}
+
 // The intended model first, then a fallback chain of top-tier reasoning models
 // so a single account-access gap doesn't break the whole feature. Deduped and
 // validated against the model registry; env override leads when set.
@@ -233,14 +313,27 @@ async function pickModel(
 }
 
 /**
- * Stream the model's markdown to the client. Same behaviour as before:
+ * Stream the model's markdown to the client. Same behaviour as before —
  * immediate preamble byte, tolerant enqueue after the client disconnects,
  * caching gated on a complete + shouldCache-passing result, and the fetch is
  * aborted on cancel so a superseded/closed request doesn't keep spending
- * tokens.
+ * tokens — plus two changes for the staged pipeline:
+ *
+ *  - `makeEvents` is a LAZY factory, awaited inside the stream body. The 200
+ *    and the preamble byte are committed to the client first, so the
+ *    selection pass (which runs inside the factory) is covered by the
+ *    heartbeat rather than adding dead air before headers.
+ *  - a HEARTBEAT: until the first text delta, a lone newline goes to the
+ *    client every ~15s. High-effort adaptive thinking can sit silent for
+ *    minutes with no deltas at all (thinking display is omitted), and a
+ *    byte-less connection is exactly what mobile networks and proxies
+ *    idle-kill — the v12 "stall". Leading newlines are whitespace the client
+ *    already trims; the heartbeat stops permanently at the first real text
+ *    byte (a newline injected mid-document would corrupt the markdown) and
+ *    is never appended to `full`, so the cached report stays clean.
  */
 function streamMarkdown(
-  events: AsyncGenerator<any>,
+  makeEvents: () => Promise<AsyncGenerator<any>>,
   abort: () => void,
   opts: {
     store: ReturnType<typeof getStore> | null;
@@ -265,8 +358,12 @@ function streamMarkdown(
           controller.enqueue(enc.encode(text));
         } catch {}
       };
+      const heartbeat = setInterval(() => {
+        if (!full) send('\n');
+      }, 15_000);
       try {
         if (preamble) send(preamble);
+        const events = await makeEvents();
         for await (const event of events) {
           if (event.type === 'message_start') {
             inputTokens = event.message?.usage?.input_tokens ?? 0;
@@ -274,6 +371,7 @@ function streamMarkdown(
             if (event.usage) outputTokens = event.usage.output_tokens ?? outputTokens;
             stopReason = event.delta?.stop_reason ?? stopReason;
           } else if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
+            if (!full) clearInterval(heartbeat);
             full += event.delta.text;
             send(event.delta.text);
           }
@@ -285,6 +383,7 @@ function streamMarkdown(
       } catch {
         send('\n\n_Interrupted — please try again._');
       } finally {
+        clearInterval(heartbeat);
         await recordUsage(model, inputTokens, outputTokens);
         try {
           controller.close();
@@ -318,11 +417,12 @@ export default async (req: Request) => {
   }
 
   const problem = clipStr(body?.problem, 600);
-  // The client hands the model a candidate POOL, not a pre-cut set: review.ts
-  // sizes it by how much research the question surfaced (up to REVIEW_POOL_MAX,
-  // of which at most PREPRINT_CAP are preprints) and the model selects the
-  // studies that belong in the ~2-page briefing table. This slice is defence in
-  // depth against a stray caller sending more than the pool max.
+  // The client hands over a candidate POOL, not a pre-cut set: review.ts sizes
+  // it by how much research the question surfaced (up to REVIEW_POOL_MAX, of
+  // which at most PREPRINT_CAP are preprints). A fast selection pass below
+  // screens it down to the studies that belong in the ~2-page briefing before
+  // the high-effort writing call ever sees it. This slice is defence in depth
+  // against a stray caller sending more than the pool max.
   const items = (Array.isArray(body?.items) ? body.items : [])
     .slice(0, REVIEW_POOL_MAX)
     .map((it: any) => ({
@@ -341,9 +441,11 @@ export default async (req: Request) => {
     .filter((it: any) => it.title);
   if (!problem || items.length === 0) return json(400, { error: 'Nothing to review from.' });
 
-  const user = `Question: ${problem}\n\nStudies:\n${items
-    .map((it: any, i: number) => `[${i + 1}] ${JSON.stringify(it)}`)
-    .join('\n')}`;
+  // Numbered once, indexed by both the selection pass and the writing call —
+  // the study at numberedLines[n-1] is "[n] {...}" for every consumer, which
+  // is what guarantees the briefing's [n] markers land on the same records
+  // the client numbered its reference list from.
+  const numberedLines = items.map((it: any, i: number) => `[${i + 1}] ${JSON.stringify(it)}`);
 
   const candidates = reviewCandidates();
   const cacheInput = { p: problem.toLowerCase(), items };
@@ -380,23 +482,43 @@ export default async (req: Request) => {
   const { model, label: modelLabel } = picked;
 
   const controller = new AbortController();
-  const events = streamMessages(
-    apiKey,
-    {
-      model,
-      max_tokens: REVIEW_MAX_TOKENS,
-      // High effort: this is the one call on the site where deep thinking is
-      // the whole point — the report is handed to the strongest reasoning tier.
-      // Safe to let this run long here: edge execution time is CPU-bound, and
-      // waiting on the model doesn't count against it.
-      ...modelParams(model, 'high'),
-      system: REVIEW_SYSTEM,
-      messages: [{ role: 'user', content: user }],
-    },
-    controller.signal
-  );
 
-  return streamMarkdown(events, () => controller.abort(), {
+  // The staged pipeline, run lazily inside the committed stream (see
+  // streamMarkdown): screen the pool down to a briefing-sized set first, then
+  // hand ONLY those studies — original numbers intact — to the high-effort
+  // writing call. Pools already at briefing size skip the screening call.
+  const makeEvents = async () => {
+    let selected: number[] = [];
+    if (items.length > REVIEW_TABLE_MAX) {
+      selected = await selectStudies(apiKey, model, problem, numberedLines, controller.signal);
+    }
+    // A degenerate selection (failed call, unparseable output, or too few
+    // rows to write a citable briefing from) falls back to the head of the
+    // curated pool — curation order, i.e. the pre-v12 behaviour.
+    if (selected.length < 3) {
+      selected = numberedLines.slice(0, REVIEW_TABLE_MAX).map((_: string, i: number) => i + 1);
+    }
+    const user = `Question: ${problem}\n\nStudies:\n${selected
+      .map((n) => numberedLines[n - 1])
+      .join('\n')}`;
+    return streamMessages(
+      apiKey,
+      {
+        model,
+        max_tokens: REVIEW_MAX_TOKENS,
+        // High effort: this is the one call on the site where deep thinking is
+        // the whole point — the report is handed to the strongest reasoning tier.
+        // Safe to let this run long here: edge execution time is CPU-bound, and
+        // waiting on the model doesn't count against it.
+        ...modelParams(model, 'high'),
+        system: REVIEW_SYSTEM,
+        messages: [{ role: 'user', content: user }],
+      },
+      controller.signal
+    );
+  };
+
+  return streamMarkdown(makeEvents, () => controller.abort(), {
     store,
     key: keyFor(model),
     model,

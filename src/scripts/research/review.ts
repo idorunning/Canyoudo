@@ -353,7 +353,9 @@ export async function runReviewPipeline(
     return { status: 'thin', problem, framing, references };
   }
 
-  hooks.onProgress(`Reading ${references.length} studies and thinking — the report streams in as it’s written…`);
+  hooks.onProgress(
+    `Reading ${references.length} studies and thinking hard — deep reasoning can take a couple of minutes; the report streams in as it’s written…`
+  );
   const items = references.map((w) => ({
     title: w.title,
     authors: w.authors,
@@ -385,11 +387,24 @@ export async function runReviewPipeline(
     // x-model header and stored so the page and PDF never claim a model that
     // didn't run.
     let model = REVIEW_MODEL;
+    // Idle watchdog: the server heartbeats a byte every ~15s while the model
+    // thinks, so a healthy stream is never silent for long. A stream with NO
+    // bytes at all for this long is genuinely dead (killed connection, hung
+    // edge) — abort it so the attempt fails into the normal retry path
+    // instead of waiting forever. Reset on every received chunk.
+    const ac = new AbortController();
+    let watchdog: ReturnType<typeof setTimeout> | undefined;
+    const bump = () => {
+      clearTimeout(watchdog);
+      watchdog = setTimeout(() => ac.abort(), 120_000);
+    };
     try {
+      bump();
       const res = await fetch('/api/research-review', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ problem, items }),
+        signal: ac.signal,
       });
       const headerModel = res.headers.get('x-model');
       if (headerModel) model = headerModel;
@@ -411,23 +426,32 @@ export async function runReviewPipeline(
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
+        bump();
         raw += decoder.decode(value, { stream: true });
         if (stale()) {
           reader.cancel().catch(() => {});
           return { kind: 'stale' };
         }
         // Progressive render, throttled — the report writing itself onto the
-        // page IS the loading state for the long synthesis step.
+        // page IS the loading state for the long synthesis step. Gated on
+        // actual content: the preamble byte and the thinking-phase heartbeat
+        // newlines are pure whitespace, and an empty draft must not flip the
+        // status to "Writing…" while the model is still thinking.
         const now = Date.now();
         if (hooks.onDraft && now - lastDraw > 150) {
-          lastDraw = now;
-          hooks.onDraft(draftDisplayText(raw), references);
+          const disp = draftDisplayText(raw);
+          if (disp) {
+            lastDraw = now;
+            hooks.onDraft(disp, references);
+          }
         }
       }
       raw += decoder.decode();
     } catch {
       if (stale()) return { kind: 'stale' };
       return { kind: 'retry' };
+    } finally {
+      clearTimeout(watchdog);
     }
     if (stale()) return { kind: 'stale' };
 
