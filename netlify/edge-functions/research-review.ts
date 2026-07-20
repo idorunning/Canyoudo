@@ -449,6 +449,20 @@ export default async (req: Request) => {
   // is what guarantees the briefing's [n] markers land on the same records
   // the client numbered its reference list from.
   const numberedLines = items.map((it: any, i: number) => `[${i + 1}] ${JSON.stringify(it)}`);
+  // The selection pass screens HEADLINES, not abstracts: title, authors,
+  // year, venue, preprint flag and a one-line snippet. Same numbering, a
+  // fraction of the input — the screening call stays fast (the depth belongs
+  // to the writing call, which reads the chosen studies in full).
+  const headlineLines = items.map((it: any, i: number) =>
+    `[${i + 1}] ${JSON.stringify({
+      title: it.title,
+      authors: it.authors,
+      year: it.year,
+      venue: it.venue,
+      snippet: clipStr(it.abstract, 220) || undefined,
+      ...(it.preprint === true ? { preprint: true } : {}),
+    })}`
+  );
 
   const candidates = reviewCandidates();
   const cacheInput = { p: problem.toLowerCase(), items };
@@ -494,7 +508,7 @@ export default async (req: Request) => {
   const makeEvents = async () => {
     let selected: number[] = [];
     if (items.length > REVIEW_TABLE_MAX) {
-      selected = await selectStudies(apiKey, model, problem, numberedLines, controller.signal);
+      selected = await selectStudies(apiKey, model, problem, headlineLines, controller.signal);
     }
     // A degenerate selection (failed call, unparseable output, or too few
     // rows to write a citable briefing from) falls back to the head of the

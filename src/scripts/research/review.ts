@@ -72,7 +72,7 @@ const INTERRUPT_MARKER = '_Interrupted — please try again._';
 //    latency. The review always walks the whole ladder if it has to: this is
 //    the deep mode, and the report is only as good as its evidence base.
 const THIN_THRESHOLD = 4;
-const POOL_MIN = 15;
+const POOL_MIN = 12;
 const POOL_MAX = REVIEW_POOL_MAX; // keep in step with the server's slice guard
 const ESCALATION: { page: number; oa: boolean }[] = [
   { page: 2, oa: true },
@@ -87,8 +87,8 @@ const ESCALATION: { page: number; oa: boolean }[] = [
 // chooses FROM; the briefing table it writes stays a short, selected handful.
 function poolTargetFor(available: number): number {
   if (available >= 800) return POOL_MAX; // a large literature — widest net
-  if (available >= 200) return 25;
-  if (available >= 60) return 20;
+  if (available >= 200) return 18;
+  if (available >= 60) return 15;
   return POOL_MIN; // niche or thin — keep it tight
 }
 

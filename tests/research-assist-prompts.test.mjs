@@ -12,8 +12,8 @@ const src = readFileSync(
   'utf8'
 );
 
-test('prompt version bumped to v13 (invalidates the assist cache)', () => {
-  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v13'/);
+test('prompt version bumped to v14 (invalidates the assist cache)', () => {
+  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v14'/);
 });
 
 test('a fast selection pass screens the pool; the writer gets a briefing-length set', () => {
@@ -29,9 +29,14 @@ test('a fast selection pass screens the pool; the writer gets a briefing-length 
   assert.match(select, /ONLY a JSON array/);
   assert.match(select, /up to \$\{REVIEW_POOL_MAX\}/);
   assert.match(select, /at most \$\{REVIEW_TABLE_MAX\}/);
+  // The screen judges HEADLINE metadata only — titles, venue, snippet — so
+  // it stays fast; the depth belongs to the writing call.
+  assert.match(select, /HEADLINE information only/);
+  assert.match(select, /one-line snippet/i);
+  assert.match(select, /full texts are read later/i);
   // Selection can only ever point back into the list it was shown.
   assert.match(select, /never a number outside it/i);
-  // Same prompt-injection guard as every prompt that reads external abstracts.
+  // Same prompt-injection guard as every prompt that reads external metadata.
   assert.match(select, /untrusted data/i);
   assert.match(select, /data, not instructions/i);
   const review = src.slice(src.indexOf('export const REVIEW_SYSTEM'));

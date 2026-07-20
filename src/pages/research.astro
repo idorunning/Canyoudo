@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
 import { TOPIC_GROUPS } from '../lib/research-topics';
+import { ASSIST_PROMPT_VERSION } from '../lib/research-assist-prompts';
 
 // Feature flags, baked in at build time. The page degrades gracefully:
 // without keys there's no AI, no sign-in, and only the OpenAlex sources —
@@ -71,8 +72,13 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
       <p class="u-kicker mb-5">Evidence</p>
+      {/* The pipeline version rides next to the tool's name, baked in at
+          build time — so a glance at the page says which build is actually
+          being served (a stale cached page shows a stale number). Kept in
+          step automatically: it IS ASSIST_PROMPT_VERSION. */}
       <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
         Research assistant
+        <span class="font-sans text-sm md:text-base font-medium text-ink-400 tracking-wide align-super ml-1">{ASSIST_PROMPT_VERSION}</span>
       </h1>
       <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
         One tool, three depths. <strong>Search</strong> the open research record straight —
