@@ -2,7 +2,7 @@
 title: "How Worthing Became 'The Shoplifting Capital of the UK' — And Why That Was Never the Real Story"
 section: "data-stories"
 description: "A fastener manufacturer's PR ranking named Worthing the worst town in the UK for shoplifting. The real driver was a police reporting scheme working as intended — and the force didn't say so for fourteen months. A case study in reading crime data, and in explaining it before someone else does."
-pubDate: 2026-07-10
+pubDate: 2026-07-19
 heroImage: "/images/worthing-montague-street.jpg"
 thumbnail: "/images/worthing-montague-street.jpg"
 tags: ["More or Less Policing", "evidence-based-policing", "public-confidence", "statistics", "media", "data"]
