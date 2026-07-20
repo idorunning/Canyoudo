@@ -99,8 +99,10 @@ export function resolveModel(env?: string | null, fallback: ModelId = LIVE_MODEL
 // we want it lean and fast anyway), so it runs without thinking/effort. The
 // others use adaptive thinking; `effort` defaults to low — a little reasoning
 // for the caveats without the latency of deep thinking — but callers doing
-// heavyweight synthesis (the research review on Sonnet 5) pass a higher level.
-export type Effort = 'low' | 'medium' | 'high';
+// heavyweight synthesis (the research review) pass a higher level. `xhigh` and
+// `max` sit above `high` on the current reasoning tiers (Opus 4.7+/4.8,
+// Sonnet 5); the review runs at `xhigh` for its one deep synthesis call.
+export type Effort = 'low' | 'medium' | 'high' | 'xhigh' | 'max';
 export function modelParams(id: ModelId, effort: Effort = 'low') {
   if (id === 'claude-haiku-4-5') return {};
   return { thinking: { type: 'adaptive' as const }, output_config: { effort } };

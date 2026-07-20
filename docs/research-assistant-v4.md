@@ -282,7 +282,7 @@ is itself the progress indicator.
 | translate / plan / brief | `claude-sonnet-4-6` | adaptive thinking, effort low |
 | overview | `claude-sonnet-4-6` (`OVERVIEW_MODEL`) | adaptive thinking, effort low |
 | review — selection pass | same model as the writer | adaptive thinking, effort low, JSON-only, max 4,000 tokens (`SELECT_MAX_TOKENS`) |
-| review — writer | `claude-sonnet-5` (`REVIEW_MODEL`), falls back to Opus 4.8 → Sonnet 4.6; `RESEARCH_REVIEW_MODEL` env override (e.g. `claude-opus-4-8`) leads the chain | adaptive thinking, **effort high**, streamed (edge function), max 16,000 tokens |
+| review — writer | `claude-sonnet-5` (`REVIEW_MODEL`), falls back to Opus 4.8 → Sonnet 4.6; `RESEARCH_REVIEW_MODEL` env override (e.g. `claude-opus-4-8`) leads the chain | adaptive thinking, **effort xhigh** ("extra"), streamed (edge function), max 32,000 tokens |
 
 Model ids are pinned in `research-assist-prompts.ts` (shared by functions and
 client provenance records) and registered in `personas.ts`
@@ -327,6 +327,21 @@ save no longer blames the per-user limit regardless of cause:
 (and that the PDF download still works), and the underlying Supabase error is
 logged to the console for the site owner ("relation does not exist" = run the
 migration).
+
+### Recent briefings — 30-day device history
+
+Every finished review is also recorded to a per-device localStorage history
+(`src/scripts/research/history-store.ts`, key `tap-research-history`),
+independent of sign-in. A "Recent briefings" panel under the review form lists
+them newest-first; clicking one re-renders it in place from its stored
+`ReviewResult` (no network — the object carries its own studies, the same
+property the shared read-only view relies on). Entries are pruned after 30 days
+and capped at 30, and writes shed the oldest on a quota error. This is the
+ephemeral safety net; the Supabase `saveBriefing` path above remains the
+deliberate, permanent, shareable store, and a signed-in reader can promote any
+history entry to it with one tap ("Save to your account"). The review runs at
+`xhigh` effort with a 32,000-token ceiling so the heavier thinking can't
+truncate the report.
 
 ## Deferred
 

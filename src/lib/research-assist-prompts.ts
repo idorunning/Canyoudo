@@ -14,19 +14,22 @@
 // saved-papers folders; translate turns a plain question into search terms.
 
 // Bump to invalidate cached assist responses when the prompts change.
-export const ASSIST_PROMPT_VERSION = 'v16';
+export const ASSIST_PROMPT_VERSION = 'v17';
 
 // Models, pinned here so the functions and the client-side provenance records
 // can never drift apart. They must be keys of INTERPRET_MODELS (personas.ts).
 export const OVERVIEW_MODEL = 'claude-sonnet-4-6';
 export const REVIEW_MODEL = 'claude-sonnet-5';
 
-// The review streams markdown; give it generous room — on Sonnet 5 (or Opus,
-// via RESEARCH_REVIEW_MODEL) the adaptive-thinking tokens count against
-// max_tokens too, and high-effort thinking can run for thousands of tokens
-// before the report's ~2,500. Streaming means a bigger ceiling costs nothing
-// unless it's actually used.
-export const REVIEW_MAX_TOKENS = 16000;
+// The review streams markdown; give it generous room — on Opus 4.8 (or
+// Sonnet 5) the adaptive-thinking tokens count against max_tokens too, and the
+// review now runs at `xhigh` effort, which thinks substantially harder than
+// `high`: it can burn many thousands of tokens before the report's ~2,500. The
+// ceiling is sized well above that combined worst case so heavier thinking can
+// never crowd out the report and truncate it (a truncated report fails the
+// client's checks and the reader sees a stall). Streaming means an unused
+// ceiling costs nothing.
+export const REVIEW_MAX_TOKENS = 32000;
 
 // The candidate POOL is pre-screened by a separate, fast SELECTION call
 // (SELECT_SYSTEM below) before the briefing is written. The pool is sized

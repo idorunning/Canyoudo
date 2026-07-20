@@ -37,6 +37,13 @@ import {
 } from './review';
 import type { SavedStore } from './saved';
 import type { BriefingsStore } from './briefings-store';
+import {
+  recordHistory,
+  listHistory,
+  deleteHistoryEntry,
+  clearHistory,
+  type HistoryEntry,
+} from './history-store';
 
 interface PageConfig {
   hasAi: boolean;
@@ -317,6 +324,112 @@ function wireReview(
     progress!.appendChild(el('p', 'font-serif text-sm text-ink-700', text));
   }
 
+  // ---- 30-day recent-briefings history (per-device, localStorage) ----------
+  const historyWrap = root.querySelector<HTMLElement>('[data-review-history-wrap]');
+  const historyList = root.querySelector<HTMLElement>('[data-review-history]');
+
+  function agoLabel(iso: string): string {
+    const then = Date.parse(iso);
+    if (!Number.isFinite(then)) return '';
+    const mins = Math.max(0, Math.round((Date.now() - then) / 60000));
+    if (mins < 1) return 'just now';
+    if (mins < 60) return `${mins} min ago`;
+    const hrs = Math.round(mins / 60);
+    if (hrs < 24) return `${hrs} hr${hrs === 1 ? '' : 's'} ago`;
+    const days = Math.round(hrs / 24);
+    return `${days} day${days === 1 ? '' : 's'} ago`;
+  }
+
+  // Reopen a stored briefing: re-render it in place from its ReviewResult (no
+  // network — the object carries its own studies). Signed-in readers get a
+  // one-tap "Save to your account" to promote it to the permanent store.
+  function openFromHistory(entry: HistoryEntry) {
+    cancelReview(); // a history view supersedes any in-flight run
+    progress!.hidden = true;
+    renderReview(result!, entry.result, { hooks: cardHooks });
+    if (savedStore?.signedIn() && briefingsStore) {
+      const bar = el('div', 'mt-8 border-t border-ink-200 pt-5');
+      const btn = el(
+        'button',
+        'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50',
+        'Save to your account'
+      ) as HTMLButtonElement;
+      btn.type = 'button';
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        btn.textContent = 'Saving…';
+        const saved = await briefingsStore!.saveBriefing(entry.result);
+        btn.textContent = saved.ok
+          ? '✓ Saved to your account'
+          : saved.reason === 'limit'
+            ? 'Save limit reached'
+            : 'Couldn’t save — try again';
+        if (!saved.ok && saved.reason !== 'limit') btn.disabled = false;
+      });
+      bar.appendChild(btn);
+      bar.appendChild(
+        el('p', 'font-sans text-xs text-ink-500 mt-2', 'Recent briefings are kept on this device for 30 days. Saving keeps this one for good on your account.')
+      );
+      result!.querySelector('.max-w-3xl')?.appendChild(bar);
+    }
+    result!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderHistory() {
+    if (!historyWrap || !historyList) return;
+    const entries = listHistory();
+    if (!entries.length) {
+      historyWrap.hidden = true;
+      historyList.replaceChildren();
+      return;
+    }
+    historyWrap.hidden = false;
+    historyList.replaceChildren();
+    const ul = el('ul', 'space-y-2');
+    for (const entry of entries) {
+      const li = el('li', 'flex items-start gap-3');
+      const open = el(
+        'button',
+        'flex-1 text-left group',
+        ''
+      ) as HTMLButtonElement;
+      open.type = 'button';
+      open.appendChild(
+        el('span', 'block font-serif text-sm text-ink-800 group-hover:text-accent leading-snug', entry.result.problem || 'Untitled review')
+      );
+      const meta = `${agoLabel(entry.savedAt)} · ${entry.result.confidence} confidence · ${entry.result.references.length} studies`;
+      open.appendChild(el('span', 'block font-sans text-xs text-ink-500 mt-0.5', meta));
+      open.addEventListener('click', () => openFromHistory(entry));
+      const del = el(
+        'button',
+        'shrink-0 font-sans text-xs text-ink-400 hover:text-ink-700 px-1',
+        '✕'
+      ) as HTMLButtonElement;
+      del.type = 'button';
+      del.title = 'Remove from history';
+      del.setAttribute('aria-label', 'Remove from history');
+      del.addEventListener('click', () => {
+        deleteHistoryEntry(entry.id);
+        renderHistory();
+      });
+      li.appendChild(open);
+      li.appendChild(del);
+      ul.appendChild(li);
+    }
+    historyList.appendChild(ul);
+    const clear = el(
+      'button',
+      'mt-4 font-sans text-xs uppercase tracking-[0.12em] text-ink-400 hover:text-ink-700',
+      `Clear history (${entries.length})`
+    ) as HTMLButtonElement;
+    clear.type = 'button';
+    clear.addEventListener('click', () => {
+      clearHistory();
+      renderHistory();
+    });
+    historyList.appendChild(clear);
+  }
+
   async function handleOutcome(outcome: ReviewOutcome) {
     if (outcome.status === 'stale') return;
     if (outcome.status === 'budget' || outcome.status === 'error') {
@@ -352,13 +465,21 @@ function wireReview(
     // status === 'ok'
     progress!.hidden = true;
     renderReview(result!, outcome.result, { hooks: cardHooks });
-    // Save + share (only when signed in and storage is configured).
+    // Auto-history: record every finished review on this device (signed in or
+    // not), then refresh the recent-briefings list so it appears immediately.
+    recordHistory(outcome.result);
+    renderHistory();
+    // Save + share (only when signed in and storage is configured) — the
+    // deliberate, permanent store beyond the 30-day device history.
     if (savedStore?.signedIn() && briefingsStore) {
       const bar = el('div', 'mt-8 border-t border-ink-200 pt-5');
       result!.querySelector('.max-w-3xl')?.appendChild(bar);
       await renderSaveBar(bar, outcome, briefingsStore);
     }
   }
+
+  // Populate the recent-briefings panel on load (survives reloads; per device).
+  renderHistory();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();

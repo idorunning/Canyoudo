@@ -236,6 +236,16 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 
               <div data-review-progress hidden class="mt-6" aria-live="polite"></div>
               <div data-review-result class="mt-8"></div>
+
+              {/* Recent briefings — a per-device 30-day history, filled by the
+                  client (history-store.ts). Works signed-in or out; hidden
+                  until there's something in it. */}
+              <details data-review-history-wrap hidden class="mt-10 border-t border-ink-200 pt-5">
+                <summary class="font-sans text-sm uppercase tracking-[0.12em] text-ink-600 cursor-pointer hover:text-ink-900 select-none">
+                  Recent briefings <span class="text-ink-400 normal-case tracking-normal">— kept on this device for 30 days</span>
+                </summary>
+                <div data-review-history class="mt-4"></div>
+              </details>
             </div>
           )}
 

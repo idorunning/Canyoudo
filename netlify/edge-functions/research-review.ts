@@ -540,11 +540,15 @@ export default async (req: Request) => {
       {
         model,
         max_tokens: REVIEW_MAX_TOKENS,
-        // High effort: this is the one call on the site where deep thinking is
-        // the whole point — the report is handed to the strongest reasoning tier.
-        // Safe to let this run long here: edge execution time is CPU-bound, and
-        // waiting on the model doesn't count against it.
-        ...modelParams(model, 'high'),
+        // Extra effort (xhigh): this is the one call on the site where deep
+        // thinking is the whole point — the report is handed to the strongest
+        // reasoning tier and told to think hard. Safe to let this run long
+        // here: edge execution time is CPU-bound, waiting on the model doesn't
+        // count against it, and the whole-stream heartbeat keeps the
+        // connection alive through the longer thinking pauses xhigh brings.
+        // REVIEW_MAX_TOKENS is sized so that heavier thinking can't crowd out
+        // the report and truncate it.
+        ...modelParams(model, 'xhigh'),
         system: REVIEW_SYSTEM,
         messages: [{ role: 'user', content: user }],
       }
