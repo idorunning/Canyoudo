@@ -400,6 +400,9 @@ function streamMarkdown(
       'content-type': 'text/markdown; charset=utf-8',
       'x-cache': 'MISS',
       'x-model': modelLabel,
+      // Which prompt/pipeline version served this — lets anyone confirm from
+      // the network tab that a deploy actually took effect.
+      'x-assist-version': ASSIST_PROMPT_VERSION,
     },
   });
 }
@@ -465,6 +468,7 @@ export default async (req: Request) => {
             'content-type': 'text/markdown; charset=utf-8',
             'x-cache': 'HIT',
             'x-model': INTERPRET_MODELS[m],
+            'x-assist-version': ASSIST_PROMPT_VERSION,
           },
         });
       }

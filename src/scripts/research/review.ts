@@ -255,7 +255,12 @@ export async function runReviewPipeline(
   const seq = ++reviewSeq;
   const stale = () => seq !== reviewSeq;
 
-  hooks.onProgress('Framing the question…');
+  // Every progress line carries the pipeline version, so anyone looking at
+  // the page (or reporting a stall) can tell at a glance whether the client
+  // they're running is the current build — "Framing the question… · v13".
+  const progress = (text: string) => hooks.onProgress(`${text} · ${ASSIST_PROMPT_VERSION}`);
+
+  progress('Framing the question…');
   const planned = await planProblem(problem);
   if (stale()) return { status: 'stale' };
   if (planned && 'budget' in planned) {
@@ -277,7 +282,7 @@ export async function runReviewPipeline(
   // First pass: each planned angle, free-to-read, first page.
   for (let i = 0; i < plan.angles.length; i++) {
     const a = plan.angles[i];
-    hooks.onProgress(`Searching angle ${i + 1} of ${plan.angles.length}: ${a.label}…`);
+    progress(`Searching angle ${i + 1} of ${plan.angles.length}: ${a.label}…`);
     const { results, count } = await searchAngle(a, hooks.source, { page: 1, oa: true });
     if (stale()) return { status: 'stale' };
     perAngle[i] = results;
@@ -297,7 +302,7 @@ export async function runReviewPipeline(
   // angles' hits form ONE pseudo-angle, so the round-robin admits at most one
   // preprint per round — current work joins the evidence base without ever
   // leading it. Never escalated: page 1 is plenty for the early rung.
-  hooks.onProgress('Checking recent preprints — not yet peer reviewed…');
+  progress('Checking recent preprints — not yet peer reviewed…');
   let preprintList: Work[] = [];
   for (const a of plan.angles) {
     const { results: pre } = await searchAngle({ ...a, review: false }, 'preprints', { page: 1, oa: true });
@@ -313,7 +318,7 @@ export async function runReviewPipeline(
     };
   }
 
-  hooks.onProgress('Curating the strongest studies…');
+  progress('Curating the strongest studies…');
   // curate lives in untyped lib JS (like research-merge); it preserves the
   // Work shape it's given, so assert the element type back here. The preprint
   // pseudo-angle rides along, capped so early work never crowds out the
@@ -327,7 +332,7 @@ export async function runReviewPipeline(
   // candidate pool hits its target size or the ladder is spent.
   for (let s = 0; s < ESCALATION.length && references.length < poolTarget; s++) {
     const step = ESCALATION[s];
-    hooks.onProgress(
+    progress(
       step.oa
         ? 'Thin so far — digging deeper for more studies…'
         : 'Widening the search beyond free-to-read…'
@@ -353,7 +358,7 @@ export async function runReviewPipeline(
     return { status: 'thin', problem, framing, references };
   }
 
-  hooks.onProgress(
+  progress(
     `Reading ${references.length} studies and thinking hard — deep reasoning can take a couple of minutes; the report streams in as it’s written…`
   );
   const items = references.map((w) => ({
@@ -496,7 +501,7 @@ export async function runReviewPipeline(
   let attempt = await attemptWrite();
   if (attempt.kind === 'retry') {
     if (stale()) return { status: 'stale' };
-    hooks.onProgress('The write stalled — trying once more…');
+    progress('The write stalled — trying once more…');
     attempt = await attemptWrite();
   }
 
@@ -987,10 +992,13 @@ export function renderReview(
   });
   meta.appendChild(pdfBtn);
   // Name the model that actually wrote it — the server falls back down a chain
-  // if the intended model isn't reachable, so this must reflect reality.
+  // if the intended model isn't reachable, so this must reflect reality. The
+  // pipeline version rides along (older saved briefings may predate it) so a
+  // finished report also says which build produced it.
   if (result.model) {
+    const version = result.promptVersion ? ` · ${result.promptVersion}` : '';
     meta.appendChild(
-      el('span', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-400', `Report produced by an AI model (${result.model})`)
+      el('span', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-400', `Report produced by an AI model (${result.model}${version})`)
     );
   }
   article.appendChild(meta);
