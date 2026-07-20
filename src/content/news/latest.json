@@ -1,10 +1,9 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-20T01:52:39.520Z",
-    "feedCount": 10,
+    "fetchedAt": "2026-07-20T13:45:29.919Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
-      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "CPS",
@@ -16,6 +15,38 @@
     ]
   },
   "items": [
+    {
+      "title": "Pupil not guilty of trying to murder history teacher after stabbing her in the head",
+      "link": "https://www.bbc.co.uk/news/articles/cglj43pn525o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-20T13:44:36.000Z",
+      "summary": "History teacher Vicki Williams was stabbed in her classroom at Milford Haven Comprehensive School."
+    },
+    {
+      "title": "Linklaters defends hiring process after unknowingly awarding TC to one of its top boss’s children",
+      "link": "https://www.legalcheek.com/2026/07/linklaters-defends-hiring-process-after-unknowingly-awarding-tc-to-one-of-its-top-bosss-children/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-20T07:47:43.000Z",
+      "summary": "Family connection unknown The post Linklaters defends hiring process after unknowingly awarding TC to one of its top boss’s children appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Listed law firm Gateley to cut jobs as share price tumbles",
+      "link": "https://www.legalcheek.com/2026/07/listed-law-firm-gateley-to-cut-jobs-as-share-price-tumbles/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-20T07:47:09.000Z",
+      "summary": "Support roles The post Listed law firm Gateley to cut jobs as share price tumbles appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Monday morning round-up",
+      "link": "https://www.legalcheek.com/2026/07/monday-morning-round-up-158/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-20T07:44:10.000Z",
+      "summary": "The top legal affairs news stories from this morning and the weekend The post Monday morning round-up appeared first on Legal Cheek ."
+    },
     {
       "title": "Man injured in dockside crane 'collapse'",
       "link": "https://www.bbc.co.uk/news/articles/c3ek8n17lq3o?at_medium=RSS&at_campaign=rss",
@@ -65,14 +96,6 @@
       "summary": "This Call for Evidence exercise is intended to gather evidence to support the work of the Independent Review of the Prison System."
     },
     {
-      "title": "The SQE has made qualifying ‘much harder in this weird way that doesn’t reflect what it’s like to become a lawyer’",
-      "link": "https://www.legalcheek.com/2026/07/the-sqe-has-made-qualifying-much-harder-in-this-weird-way-that-doesnt-reflect-what-its-like-to-become-a-lawyer/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-17T09:28:13.000Z",
-      "summary": "Ex-Hogan Lovells and Linklaters lawyers slam the SQE The post The SQE has made qualifying ‘much harder in this weird way that doesn’t reflect what it’s like to become a lawyer’…"
-    },
-    {
       "title": "Oversight and funding of youth justice services",
       "link": "https://www.gov.uk/government/consultations/oversight-and-funding-of-youth-justice-services",
       "source": "Ministry of Justice",
@@ -103,30 +126,6 @@
       "topic": "law",
       "isoDate": "2026-07-16T16:03:09.000Z",
       "summary": "Thousands of new homes and major infrastructure projects could be unblocked under plans being considered to reduce delays from legal challenges."
-    },
-    {
-      "title": "A&O Shearman partners see pay climb to £2.2 million as revenue stalls",
-      "link": "https://www.legalcheek.com/2026/07/ao-shearman-partners-see-pay-climb-to-2-2-million-as-revenue-stalls/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-16T13:49:32.000Z",
-      "summary": "Profits return to pre-merger levels The post A&O Shearman partners see pay climb to £2.2 million as revenue stalls appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Criminal barristers to get pay rise under new government plans",
-      "link": "https://www.legalcheek.com/2026/07/criminal-barristers-to-get-pay-rise-under-new-government-plans/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-16T09:55:21.000Z",
-      "summary": "£34 million extra funding The post Criminal barristers to get pay rise under new government plans appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Future of the Undercover Policing Inquiry",
-      "link": "https://www.gov.uk/government/consultations/future-of-the-undercover-policing-inquiry",
-      "source": "Home Office",
-      "topic": "policing",
-      "isoDate": "2026-07-16T09:52:39.000Z",
-      "summary": "This consultation seeks views on the future structure, scope and format of the Undercover Policing Inquiry."
     },
     {
       "title": "Data regulation in the age of AI and other data‑intensive technologies",
