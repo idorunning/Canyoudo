@@ -12,8 +12,21 @@ const src = readFileSync(
   'utf8'
 );
 
-test('prompt version bumped to v11 (invalidates the assist cache)', () => {
-  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v11'/);
+test('prompt version bumped to v12 (invalidates the assist cache)', () => {
+  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v12'/);
+});
+
+test('the review is shown a candidate pool and selects a capped, briefing-length set', () => {
+  // The pool is sized client-side (review.ts) and bounded by REVIEW_POOL_MAX;
+  // the model selects at most REVIEW_TABLE_MAX for the table. Both constants are
+  // the single source of truth the client and server slice against.
+  assert.match(src, /export const REVIEW_POOL_MAX\s*=\s*\d+/);
+  assert.match(src, /export const REVIEW_TABLE_MAX\s*=\s*\d+/);
+  const review = src.slice(src.indexOf('export const REVIEW_SYSTEM'));
+  assert.match(review, /CANDIDATE POOL/);
+  assert.match(review, /up to \$\{REVIEW_POOL_MAX\}/);
+  assert.match(review, /Put at most \$\{REVIEW_TABLE_MAX\} studies in the table/);
+  assert.match(review, /Never exceed \$\{REVIEW_TABLE_MAX\} rows/);
 });
 
 test('models are pinned where client and functions both read them', () => {
@@ -119,11 +132,13 @@ test('the fixed legend text exists for every strength label, plus the preprint n
   assert.match(preprint, /can change or be withdrawn/i);
 });
 
-test('REVIEW_SYSTEM keeps only studies specific to the problem, table rows are not guaranteed for all 10', () => {
-  const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
-  assert.match(review, /genuinely specific to THIS problem/i);
-  assert.match(review, /Leave out any numbered study that's too tangential/i);
-  assert.match(review, /You don't need all of them/i);
+test('REVIEW_SYSTEM keeps only studies specific to the problem, selecting from the wider pool', () => {
+  const review = src.slice(src.indexOf('export const REVIEW_SYSTEM'));
+  assert.match(review, /genuinely specific to the problem/i);
+  assert.match(review, /leave out anything too tangential/i);
+  // A short, well-fitting table beats a padded one — the model need not fill it.
+  assert.match(review, /padded with loose fits/i);
+  assert.match(review, /shown more candidates than that on purpose/i);
 });
 
 test('REVIEW_SYSTEM frames the output as a two-page briefing, not an essay', () => {

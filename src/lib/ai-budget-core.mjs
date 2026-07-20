@@ -5,6 +5,10 @@
 
 export const MODEL_PRICES_USD_PER_MTOK = {
   'claude-opus-4-8': { input: 15, output: 75 },
+  // Sonnet 5 lists at the same $3/$15 as Sonnet 4.6 (intro $2/$10 through
+  // 2026-08-31). Priced explicitly so the estimate doesn't silently lean on
+  // the Sonnet-4.6 FALLBACK below — the review can run on either.
+  'claude-sonnet-5': { input: 3, output: 15 },
   'claude-sonnet-4-6': { input: 3, output: 15 },
   'claude-haiku-4-5': { input: 1, output: 5 },
 };

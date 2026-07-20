@@ -9,6 +9,7 @@ import {
   REVIEW_SYSTEM,
   REVIEW_MODEL,
   REVIEW_MAX_TOKENS,
+  REVIEW_POOL_MAX,
 } from '../../src/lib/research-assist-prompts.ts';
 import { stableKey } from '../../src/lib/cache-key.mjs';
 import { costUsd, monthKey } from '../../src/lib/ai-budget-core.mjs';
@@ -317,13 +318,13 @@ export default async (req: Request) => {
   }
 
   const problem = clipStr(body?.problem, 600);
-  // The briefing format gives every curated study a row in the evidence
-  // table (up to REVIEW_HEADINGS' table), which is what keeps the whole
-  // thing to ~2 pages — the client already curates to 10 (review.ts's
-  // TARGET_STUDIES, of which at most PREPRINT_CAP are preprints); this is
-  // defence in depth against a stray caller.
+  // The client hands the model a candidate POOL, not a pre-cut set: review.ts
+  // sizes it by how much research the question surfaced (up to REVIEW_POOL_MAX,
+  // of which at most PREPRINT_CAP are preprints) and the model selects the
+  // studies that belong in the ~2-page briefing table. This slice is defence in
+  // depth against a stray caller sending more than the pool max.
   const items = (Array.isArray(body?.items) ? body.items : [])
-    .slice(0, 10)
+    .slice(0, REVIEW_POOL_MAX)
     .map((it: any) => ({
       title: clipStr(it?.title, 300),
       authors: Array.isArray(it?.authors)

@@ -7,8 +7,10 @@
 //   search   GET  /api/research?source=all&q=…         → per-angle studies
 //            plus one page of source=preprints per angle — current, not yet
 //            peer-reviewed work, tagged and capped so it never dominates
-//   curate   src/lib/briefing-curate.mjs (deterministic) → ≤10 studies
+//   curate   src/lib/briefing-curate.mjs (deterministic) → a candidate pool,
+//            sized by how much research the question surfaced (poolTargetFor)
 //   review   POST /api/research-review                 → STREAMED markdown briefing
+//            — the model selects the studies that belong from the pool
 //                                                        (Sonnet 5, thinking hard)
 //
 // The old implementation asked a synchronous JSON function for the finished
@@ -36,6 +38,7 @@ import {
   ASSIST_PROMPT_VERSION,
   REVIEW_MODEL,
   REVIEW_CONFIDENCE_PREFIX,
+  REVIEW_POOL_MAX,
   STRENGTH_COLUMN,
   EFFECTIVENESS_EXPLANATIONS,
   PREPRINT_EXPLANATION,
@@ -54,26 +57,40 @@ const INTERRUPT_MARKER = '_Interrupted — please try again._';
 // How hard the review searches before synthesising:
 //  - thinThreshold: below this many curated studies, don't stream a report —
 //    show what came back honestly instead.
-//  - targetStudies: a "healthy" evidence base, and the hard cap the briefing
-//    format is built around — the model turns curated studies specific to the
-//    problem into evidence-table rows (dropping any that are too tangential),
-//    so this number is the table's row ceiling, not its guaranteed count. 10
-//    keeps the briefing to about two printed pages (docs/research-assistant-v4.md)
-//    and the table itself is the study's only reference list. While the
-//    curated set is below it, escalate; at or above it, stop.
+//  - poolTarget: how wide a CANDIDATE POOL to hand the model — sized by how
+//    much relevant research the question actually surfaced (the catalogue
+//    totals, summed across angles; see poolTargetFor). The model then SELECTS
+//    the studies that belong in the briefing table (at most REVIEW_TABLE_MAX,
+//    server-side prompt) and drops the rest, so the pool is what it chooses
+//    FROM, not the report's length. A broad literature earns a bigger pool; a
+//    niche one stays tight. While the curated pool is below target, escalate;
+//    at or above it, stop. The briefing itself still prints to ~2 pages
+//    (docs/research-assistant-v4.md) and the table is the only reference list.
 //  - ESCALATION: the ladder, applied in order while still below target — dig
 //    deeper (further free-to-read pages) then widen beyond free-to-read.
 //    Catalogue searches are free and edge-cached, so a deeper rung costs only
 //    latency. The review always walks the whole ladder if it has to: this is
 //    the deep mode, and the report is only as good as its evidence base.
 const THIN_THRESHOLD = 4;
-const TARGET_STUDIES = 10;
+const POOL_MIN = 15;
+const POOL_MAX = REVIEW_POOL_MAX; // keep in step with the server's slice guard
 const ESCALATION: { page: number; oa: boolean }[] = [
   { page: 2, oa: true },
   { page: 3, oa: true },
   { page: 1, oa: false },
   { page: 2, oa: false },
 ];
+
+// Map how much relevant research a question surfaced (the catalogue totals,
+// summed across its angles) to how wide a candidate pool to curate. Bands, not
+// a curve, so it stays easy to read and tune later. The pool is what the model
+// chooses FROM; the briefing table it writes stays a short, selected handful.
+function poolTargetFor(available: number): number {
+  if (available >= 800) return POOL_MAX; // a large literature — widest net
+  if (available >= 200) return 25;
+  if (available >= 60) return 20;
+  return POOL_MIN; // niche or thin — keep it tight
+}
 
 export interface ReviewAngle {
   label: string;
@@ -157,12 +174,15 @@ export async function planProblem(
 }
 
 /** One angle's search. `page`/`oa` let the adaptive pass dig deeper (further
- *  pages) and wider (beyond free-to-read) when the first pass comes back thin. */
+ *  pages) and wider (beyond free-to-read) when the first pass comes back thin.
+ *  Returns the page of results AND the catalogue's grand total for the query
+ *  (`count`) — the "how much research exists" signal that sizes the candidate
+ *  pool. `count` is approximate for the "all" fan-out (a max across sources). */
 async function searchAngle(
   angle: ReviewAngle,
   source: string,
   { page = 1, oa = true }: { page?: number; oa?: boolean } = {}
-): Promise<Work[]> {
+): Promise<{ results: Work[]; count: number }> {
   const params = new URLSearchParams({ q: angle.query });
   if (source !== 'openalex') params.set('source', source);
   if (oa) params.set('oa', '1'); // free-to-read: practitioners without library access
@@ -172,9 +192,12 @@ async function searchAngle(
   try {
     const res = await fetch(`/api/research?${params}`);
     const data = await res.json().catch(() => null);
-    if (res.ok && Array.isArray(data?.results)) return data.results as Work[];
+    if (res.ok && Array.isArray(data?.results)) {
+      const count = Number.isFinite(data?.count) ? Number(data.count) : data.results.length;
+      return { results: data.results as Work[], count };
+    }
   } catch {}
-  return [];
+  return { results: [], count: 0 };
 }
 
 // The protocol line, parsed tolerantly: the prompt asks for the bare form
@@ -247,16 +270,25 @@ export async function runReviewPipeline(
 
   const perAngle: Work[][] = plan.angles.map(() => []);
   let foundAny = false;
+  // How much research the question surfaced across its angles — the signal that
+  // sizes the candidate pool. Summed from the catalogue totals, so a broad
+  // literature lets the model choose from more than a niche one.
+  let scopeTotal = 0;
   // First pass: each planned angle, free-to-read, first page.
   for (let i = 0; i < plan.angles.length; i++) {
     const a = plan.angles[i];
     hooks.onProgress(`Searching angle ${i + 1} of ${plan.angles.length}: ${a.label}…`);
-    const results = await searchAngle(a, hooks.source, { page: 1, oa: true });
+    const { results, count } = await searchAngle(a, hooks.source, { page: 1, oa: true });
     if (stale()) return { status: 'stale' };
     perAngle[i] = results;
+    scopeTotal += count;
     if (results.length) foundAny = true;
     hooks.onAngleDone?.(i, plan.angles.length);
   }
+  // Size the candidate pool to the question's breadth. The model still selects
+  // a briefing-length handful from it (server-side prompt) — this only widens
+  // what it gets to choose from, so nothing on-point is cut before it's seen.
+  const poolTarget = poolTargetFor(scopeTotal);
 
   // Preprint pass: one page of not-yet-peer-reviewed work per angle from the
   // preprints facet (CrimRxiv, SSRN, SocArXiv…), tagged `preprint: true` so
@@ -268,7 +300,7 @@ export async function runReviewPipeline(
   hooks.onProgress('Checking recent preprints — not yet peer reviewed…');
   let preprintList: Work[] = [];
   for (const a of plan.angles) {
-    const pre = await searchAngle({ ...a, review: false }, 'preprints', { page: 1, oa: true });
+    const { results: pre } = await searchAngle({ ...a, review: false }, 'preprints', { page: 1, oa: true });
     if (stale()) return { status: 'stale' };
     preprintList = preprintList.concat(pre.map((w) => ({ ...w, preprint: true })));
   }
@@ -287,13 +319,13 @@ export async function runReviewPipeline(
   // pseudo-angle rides along, capped so early work never crowds out the
   // peer-reviewed base.
   const curateAll = () =>
-    curate([...perAngle, preprintList], TARGET_STUDIES, { preprintCap: PREPRINT_CAP }) as Work[];
+    curate([...perAngle, preprintList], poolTarget, { preprintCap: PREPRINT_CAP }) as Work[];
   let references = curateAll();
 
   // Thin first pass → walk the escalation ladder: dig deeper (further pages)
   // then wider (beyond free-to-read), re-curating after each rung, until the
-  // evidence base hits the target or the ladder is spent.
-  for (let s = 0; s < ESCALATION.length && references.length < TARGET_STUDIES; s++) {
+  // candidate pool hits its target size or the ladder is spent.
+  for (let s = 0; s < ESCALATION.length && references.length < poolTarget; s++) {
     const step = ESCALATION[s];
     hooks.onProgress(
       step.oa
@@ -301,7 +333,7 @@ export async function runReviewPipeline(
         : 'Widening the search beyond free-to-read…'
     );
     for (let i = 0; i < plan.angles.length; i++) {
-      const more = await searchAngle(plan.angles[i], hooks.source, step);
+      const { results: more } = await searchAngle(plan.angles[i], hooks.source, step);
       if (stale()) return { status: 'stale' };
       if (more.length) perAngle[i] = perAngle[i].concat(more);
     }
