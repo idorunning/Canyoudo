@@ -147,7 +147,7 @@ async function messagesCreate(
 async function* streamMessages(
   apiKey: string,
   body: Record<string, unknown>,
-  signal: AbortSignal
+  signal?: AbortSignal
 ): AsyncGenerator<any> {
   const res = await fetch(ANTHROPIC_API_URL, {
     method: 'POST',
@@ -235,7 +235,7 @@ async function selectStudies(
   model: ModelId,
   problem: string,
   numberedLines: string[],
-  signal: AbortSignal
+  signal?: AbortSignal
 ): Promise<number[]> {
   try {
     const res = await messagesCreate(
@@ -315,26 +315,33 @@ async function pickModel(
 /**
  * Stream the model's markdown to the client. Same behaviour as before —
  * immediate preamble byte, tolerant enqueue after the client disconnects,
- * caching gated on a complete + shouldCache-passing result, and the fetch is
- * aborted on cancel so a superseded/closed request doesn't keep spending
- * tokens — plus two changes for the staged pipeline:
+ * caching gated on a complete + shouldCache-passing result — plus the staged
+ * pipeline's resilience pieces:
  *
  *  - `makeEvents` is a LAZY factory, awaited inside the stream body. The 200
  *    and the preamble byte are committed to the client first, so the
  *    selection pass (which runs inside the factory) is covered by the
  *    heartbeat rather than adding dead air before headers.
- *  - a HEARTBEAT: until the first text delta, a lone newline goes to the
- *    client every ~15s. High-effort adaptive thinking can sit silent for
- *    minutes with no deltas at all (thinking display is omitted), and a
- *    byte-less connection is exactly what mobile networks and proxies
- *    idle-kill — the v12 "stall". Leading newlines are whitespace the client
- *    already trims; the heartbeat stops permanently at the first real text
- *    byte (a newline injected mid-document would corrupt the markdown) and
- *    is never appended to `full`, so the cached report stays clean.
+ *  - a HEARTBEAT for the WHOLE stream: whenever the model has been silent
+ *    for ~12s, a zero-width no-break space (U+FEFF) goes to the client.
+ *    Adaptive thinking sits silent not only before the report but BETWEEN
+ *    its sections (interleaved thinking emits no text events), and
+ *    intermediaries kill a quiet connection — Cloudflare's between-bytes
+ *    timeout is ~100s, which is exactly how v14 reports died mid-document on
+ *    real connections while short test runs survived. U+FEFF is invisible
+ *    and the client strips it before any parsing, so it is safe to send
+ *    mid-word, mid-table, anywhere; it is never appended to `full`, so the
+ *    cached report stays clean.
+ *  - client disconnect does NOT abort the model call (see cancel below): the
+ *    report finishes and caches, so the reader's retry — the normal next
+ *    step on a phone whose connection dropped — returns the completed report
+ *    instantly instead of restarting the multi-minute job from scratch.
  */
+const HEARTBEAT_CHAR = '\uFEFF';
+const HEARTBEAT_IDLE_MS = 12_000;
+
 function streamMarkdown(
   makeEvents: () => Promise<AsyncGenerator<any>>,
-  abort: () => void,
   opts: {
     store: ReturnType<typeof getStore> | null;
     key: string;
@@ -353,14 +360,19 @@ function streamMarkdown(
 
   const body = new ReadableStream({
     async start(controller) {
+      let lastByteAt = Date.now();
       const send = (text: string) => {
         try {
           controller.enqueue(enc.encode(text));
-        } catch {}
+          lastByteAt = Date.now();
+        } catch {
+          // Client gone — keep consuming the model stream anyway so the
+          // report completes and caches (see cancel below).
+        }
       };
       const heartbeat = setInterval(() => {
-        if (!full) send('\n');
-      }, 15_000);
+        if (Date.now() - lastByteAt >= HEARTBEAT_IDLE_MS) send(HEARTBEAT_CHAR);
+      }, 4_000);
       try {
         if (preamble) send(preamble);
         const events = await makeEvents();
@@ -371,7 +383,6 @@ function streamMarkdown(
             if (event.usage) outputTokens = event.usage.output_tokens ?? outputTokens;
             stopReason = event.delta?.stop_reason ?? stopReason;
           } else if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
-            if (!full) clearInterval(heartbeat);
             full += event.delta.text;
             send(event.delta.text);
           }
@@ -391,7 +402,12 @@ function streamMarkdown(
       }
     },
     cancel() {
-      abort();
+      // Deliberately DO NOT abort the upstream model call. The common
+      // disconnect is a phone whose connection or tab died mid-report — that
+      // reader is about to retry, and a finished report caches, turning the
+      // retry into an instant cache hit instead of a second multi-minute
+      // generation. send() already tolerates the closed controller, so the
+      // loop above simply runs to completion in the background.
     },
   });
 
@@ -499,16 +515,16 @@ export default async (req: Request) => {
   if ('error' in picked) return json(502, { error: picked.error });
   const { model, label: modelLabel } = picked;
 
-  const controller = new AbortController();
-
   // The staged pipeline, run lazily inside the committed stream (see
   // streamMarkdown): screen the pool down to a briefing-sized set first, then
   // hand ONLY those studies — original numbers intact — to the high-effort
   // writing call. Pools already at briefing size skip the screening call.
+  // No abort signal anywhere: a client disconnect must not kill the
+  // generation (streamMarkdown's cancel explains why).
   const makeEvents = async () => {
     let selected: number[] = [];
     if (items.length > REVIEW_TABLE_MAX) {
-      selected = await selectStudies(apiKey, model, problem, headlineLines, controller.signal);
+      selected = await selectStudies(apiKey, model, problem, headlineLines);
     }
     // A degenerate selection (failed call, unparseable output, or too few
     // rows to write a citable briefing from) falls back to the head of the
@@ -531,12 +547,11 @@ export default async (req: Request) => {
         ...modelParams(model, 'high'),
         system: REVIEW_SYSTEM,
         messages: [{ role: 'user', content: user }],
-      },
-      controller.signal
+      }
     );
   };
 
-  return streamMarkdown(makeEvents, () => controller.abort(), {
+  return streamMarkdown(makeEvents, {
     store,
     key: keyFor(model),
     model,

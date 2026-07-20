@@ -432,7 +432,13 @@ export async function runReviewPipeline(
         const { done, value } = await reader.read();
         if (done) break;
         bump();
-        raw += decoder.decode(value, { stream: true });
+        // The server heartbeats a zero-width no-break space (U+FEFF) whenever
+        // the model goes quiet mid-stream, to stop intermediaries idle-killing
+        // the connection during thinking pauses. Strip it before ANY parsing —
+        // it can land anywhere, including inside a [n] marker. The streaming
+        // decoder reassembles a split character before emitting it, so
+        // stripping per-chunk catches every one.
+        raw += decoder.decode(value, { stream: true }).replace(/\uFEFF/g, '');
         if (stale()) {
           reader.cancel().catch(() => {});
           return { kind: 'stale' };
@@ -451,7 +457,7 @@ export async function runReviewPipeline(
           }
         }
       }
-      raw += decoder.decode();
+      raw += decoder.decode().replace(/\uFEFF/g, '');
     } catch {
       if (stale()) return { kind: 'stale' };
       return { kind: 'retry' };

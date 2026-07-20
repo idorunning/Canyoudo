@@ -214,13 +214,16 @@ design:
   doing both jobs was the v12 stall: minutes of silent thinking over 30
   studies that could exhaust the token ceiling before the report finished.
 - One byte (a `preamble`) is enqueued immediately, so time-to-first-byte stays
-  near zero — and while the model thinks, the edge function **heartbeats a
-  newline every ~15s** until the first real text token. Adaptive thinking at
-  high effort can sit silent for minutes with no stream events at all, and a
-  byte-less connection is what mobile networks idle-kill; the heartbeats are
-  leading whitespace the client already trims, never cached, and stop
-  permanently once the report starts. Client-side, a 120s no-bytes watchdog
-  aborts a genuinely dead stream into the normal single-retry path.
+  near zero — and for the WHOLE stream, whenever the model has been silent
+  ~12s, the edge function **heartbeats an invisible zero-width no-break space
+  (U+FEFF)**. Adaptive thinking sits silent not only before the report but
+  between its sections (interleaved thinking), and intermediaries kill a
+  quiet connection — Cloudflare's ~100s between-bytes timeout is how v14
+  reports died mid-document. The client strips U+FEFF from every chunk
+  before any parsing, and heartbeats are never cached. A client disconnect
+  no longer aborts the generation: the report finishes and caches, so a
+  retry returns it instantly. Client-side, a 120s no-bytes watchdog aborts a
+  genuinely dead stream into the normal single-retry path.
 - Finished reports are cached in Blobs (`research-review` store) keyed on
   problem + curated set + model + prompt version via the shared
   `stableKey` (src/lib/cache-key.mjs — which also fixes a latent v3 bug where
