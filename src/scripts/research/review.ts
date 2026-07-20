@@ -385,8 +385,16 @@ export async function runReviewPipeline(
     | { kind: 'stale' }
     | { kind: 'retry'; message?: string };
 
-  const attemptWrite = async (): Promise<WriteAttempt> => {
+  // One line of plain fact per failed attempt ("attempt 1: connection
+  // dropped after 87s, 3,214 characters received") — surfaced in the failure
+  // message so a screenshot of a failure IS its diagnosis, instead of another
+  // round of guessing whether something blocked, timed out, or truncated.
+  const diags: string[] = [];
+
+  const attemptWrite = async (label: string): Promise<WriteAttempt> => {
     let raw = '';
+    const t0 = Date.now();
+    const secs = () => `${Math.round((Date.now() - t0) / 1000)}s`;
     // The model that actually wrote the report (the server picks the first its
     // account can reach, so it may not be the intended one) — reported via the
     // x-model header and stored so the page and PDF never claim a model that
@@ -422,10 +430,14 @@ export async function runReviewPipeline(
         }
         // Any other server error is worth one retry; keep a specific reason
         // (e.g. model access) to show if it fails again.
+        diags.push(`${label}: server error ${res.status} after ${secs()}`);
         return { kind: 'retry', message: typeof body?.error === 'string' ? body.error : undefined };
       }
       const reader = res.body?.getReader();
-      if (!reader) return { kind: 'retry' };
+      if (!reader) {
+        diags.push(`${label}: no response stream`);
+        return { kind: 'retry' };
+      }
       const decoder = new TextDecoder();
       let lastDraw = 0;
       while (true) {
@@ -458,8 +470,11 @@ export async function runReviewPipeline(
         }
       }
       raw += decoder.decode().replace(/\uFEFF/g, '');
-    } catch {
+    } catch (e: any) {
       if (stale()) return { kind: 'stale' };
+      diags.push(
+        `${label}: ${e?.name === 'AbortError' ? 'no data for 120s (watchdog)' : 'connection dropped'} after ${secs()}, ${raw.length} characters received`
+      );
       return { kind: 'retry' };
     } finally {
       clearTimeout(watchdog);
@@ -480,6 +495,9 @@ export async function runReviewPipeline(
     const { text: briefing, used } = sanitizeCitations(text, references.length);
     const cutShort = interrupted || !found; // no protocol line ⇒ the stream was cut off
     if (!briefing || used.length === 0 || (cutShort && briefing.length < 500)) {
+      diags.push(
+        `${label}: incomplete report after ${secs()} (${briefing.length} usable characters${interrupted ? ', server reported an interruption' : ''})`
+      );
       return { kind: 'retry' };
     }
 
@@ -504,11 +522,25 @@ export async function runReviewPipeline(
   // Write it, and quietly try once more on a transient failure — most of the
   // "the review couldn't be written" cases are a one-off blip that a second
   // attempt clears, so the reader rarely sees the fallback.
-  let attempt = await attemptWrite();
+  let attempt = await attemptWrite('attempt 1');
   if (attempt.kind === 'retry') {
     if (stale()) return { status: 'stale' };
     progress('The write stalled — trying once more…');
-    attempt = await attemptWrite();
+    attempt = await attemptWrite('attempt 2');
+  }
+
+  // Last resort: the server deliberately keeps writing after a dropped
+  // connection and caches the finished report (research-review.ts). If both
+  // live attempts died, one of them very likely completed in the background —
+  // wait for it to land, then collect it as a cache hit.
+  if (attempt.kind === 'retry') {
+    if (stale()) return { status: 'stale' };
+    progress('The connection keeps dropping — waiting for the report to finish in the background…');
+    for (let i = 0; i < 30; i++) {
+      await new Promise((r) => setTimeout(r, 1000));
+      if (stale()) return { status: 'stale' };
+    }
+    attempt = await attemptWrite('rescue attempt');
   }
 
   switch (attempt.kind) {
@@ -518,8 +550,17 @@ export async function runReviewPipeline(
       return { status: 'budget', message: attempt.message };
     case 'stale':
       return { status: 'stale' };
-    default:
-      return { status: 'failed', problem, framing, references, message: attempt.message };
+    default: {
+      // Every attempt failed. Say what actually happened, attempt by attempt —
+      // the reader (or a bug report) shouldn't have to guess whether something
+      // blocked, timed out or truncated, and the version pins which build ran.
+      const detail = diags.length ? ` Technical detail (${ASSIST_PROMPT_VERSION}): ${diags.join('; ')}.` : '';
+      const message =
+        (attempt.message ??
+          'The studies came back fine — but the review couldn’t be written this time. That’s on the assistant, not the evidence. Here’s the evidence base it found; try again in a moment.') +
+        detail;
+      return { status: 'failed', problem, framing, references, message };
+    }
   }
 }
 
