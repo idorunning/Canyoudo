@@ -32,7 +32,6 @@ import {
   renderReview,
   renderDraft,
   cancelReview,
-  type ReviewPlan,
   type ReviewOutcome,
 } from './review';
 import type { SavedStore } from './saved';
@@ -259,12 +258,15 @@ function wireReview(
   const reviewSource = config.sources.includes('all') ? 'all' : 'openalex';
 
   // ---- progress: spinner + framing + angle checklist ----
+  // Progress is a single spinner + a short label, nothing else — no framing
+  // paragraph, no angle checklist, no reassurance copy. The streaming report
+  // below is the real "it's working" signal.
   function startProgress() {
     progress!.replaceChildren();
     progress!.hidden = false;
     const row = el('div', '');
     row.dataset.role = 'status';
-    row.appendChild(spinner('Framing the question…'));
+    row.appendChild(spinner('Planning the search…'));
     progress!.appendChild(row);
   }
   function setProgressText(text: string) {
@@ -272,35 +274,6 @@ function wireReview(
     // aria-live region announces only the changed text, not a rebuilt widget.
     const spin = progress!.querySelector<HTMLElement>('[data-role="status"] [role="status"]');
     if (spin) setSpinnerLabel(spin, text);
-  }
-  function renderPlan(plan: ReviewPlan) {
-    if (plan.framing && !progress!.querySelector('[data-role="framing"]')) {
-      const f = el('p', 'font-serif text-sm text-ink-700 leading-relaxed mt-2 italic', plan.framing);
-      f.dataset.role = 'framing';
-      progress!.appendChild(f);
-    }
-    if (!progress!.querySelector('[data-role="checklist"]')) {
-      const ul = el('ul', 'mt-3 space-y-1 font-sans text-sm text-ink-600');
-      ul.dataset.role = 'checklist';
-      for (const a of plan.angles) {
-        const li = el('li', 'flex items-center gap-2');
-        li.appendChild(el('span', 'text-ink-400', '○'));
-        li.appendChild(el('span', '', a.label));
-        ul.appendChild(li);
-      }
-      progress!.appendChild(ul);
-    }
-  }
-  function tickAngle(index: number) {
-    const items = progress!.querySelectorAll<HTMLElement>('[data-role="checklist"] li');
-    const li = items[index];
-    if (li) {
-      const marker = li.querySelector('span');
-      if (marker) {
-        marker.textContent = '✓';
-        marker.className = 'text-accent';
-      }
-    }
   }
 
   // ---- the thin / failure fallback: show the curated studies plainly ----
@@ -492,23 +465,15 @@ function wireReview(
     send.disabled = true;
     result.replaceChildren();
     startProgress();
-    let draftStarted = false;
     let outcome: ReviewOutcome;
     try {
       outcome = await runReviewPipeline(problem, {
         source: reviewSource,
         onProgress: setProgressText,
-        onPlan: renderPlan,
-        onAngleDone: (i) => tickAngle(i),
-        // The report streams onto the page as it's written — the best
-        // possible "something is happening" indicator for the long step.
-        onDraft: (markdown, references) => {
-          if (!draftStarted) {
-            draftStarted = true;
-            setProgressText('Writing the review — it appears below as it’s written…');
-          }
-          renderDraft(result, markdown, references);
-        },
+        // The report streams onto the page as it's written — the real "it's
+        // working" signal, so the label above just stays "…writing the
+        // research briefing" until it's done.
+        onDraft: (markdown, references) => renderDraft(result, markdown, references),
       });
     } catch {
       outcome = { status: 'error', message: 'Something went wrong building the review. Try again.' };

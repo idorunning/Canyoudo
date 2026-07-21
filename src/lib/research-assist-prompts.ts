@@ -14,7 +14,7 @@
 // saved-papers folders; translate turns a plain question into search terms.
 
 // Bump to invalidate cached assist responses when the prompts change.
-export const ASSIST_PROMPT_VERSION = 'v17';
+export const ASSIST_PROMPT_VERSION = 'v18';
 
 // Models, pinned here so the functions and the client-side provenance records
 // can never drift apart. They must be keys of INTERPRET_MODELS (personas.ts).

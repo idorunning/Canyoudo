@@ -255,12 +255,11 @@ export async function runReviewPipeline(
   const seq = ++reviewSeq;
   const stale = () => seq !== reviewSeq;
 
-  // Every progress line carries the pipeline version, so anyone looking at
-  // the page (or reporting a stall) can tell at a glance whether the client
-  // they're running is the current build — "Framing the question… · v13".
-  const progress = (text: string) => hooks.onProgress(`${text} · ${ASSIST_PROMPT_VERSION}`);
+  // Keep the running commentary to a minimum — three plain phases, no version
+  // noise (the tool version lives on the page badge), no reassurance copy.
+  const progress = hooks.onProgress;
 
-  progress('Framing the question…');
+  progress('Planning the search…');
   const planned = await planProblem(problem);
   if (stale()) return { status: 'stale' };
   if (planned && 'budget' in planned) {
@@ -280,9 +279,9 @@ export async function runReviewPipeline(
   // literature lets the model choose from more than a niche one.
   let scopeTotal = 0;
   // First pass: each planned angle, free-to-read, first page.
+  progress('Searching the research…');
   for (let i = 0; i < plan.angles.length; i++) {
     const a = plan.angles[i];
-    progress(`Searching angle ${i + 1} of ${plan.angles.length}: ${a.label}…`);
     const { results, count } = await searchAngle(a, hooks.source, { page: 1, oa: true });
     if (stale()) return { status: 'stale' };
     perAngle[i] = results;
@@ -302,7 +301,6 @@ export async function runReviewPipeline(
   // angles' hits form ONE pseudo-angle, so the round-robin admits at most one
   // preprint per round — current work joins the evidence base without ever
   // leading it. Never escalated: page 1 is plenty for the early rung.
-  progress('Checking recent preprints — not yet peer reviewed…');
   let preprintList: Work[] = [];
   for (const a of plan.angles) {
     const { results: pre } = await searchAngle({ ...a, review: false }, 'preprints', { page: 1, oa: true });
@@ -318,7 +316,6 @@ export async function runReviewPipeline(
     };
   }
 
-  progress('Curating the strongest studies…');
   // curate lives in untyped lib JS (like research-merge); it preserves the
   // Work shape it's given, so assert the element type back here. The preprint
   // pseudo-angle rides along, capped so early work never crowds out the
@@ -332,11 +329,6 @@ export async function runReviewPipeline(
   // candidate pool hits its target size or the ladder is spent.
   for (let s = 0; s < ESCALATION.length && references.length < poolTarget; s++) {
     const step = ESCALATION[s];
-    progress(
-      step.oa
-        ? 'Thin so far — digging deeper for more studies…'
-        : 'Widening the search beyond free-to-read…'
-    );
     for (let i = 0; i < plan.angles.length; i++) {
       const { results: more } = await searchAngle(plan.angles[i], hooks.source, step);
       if (stale()) return { status: 'stale' };
@@ -358,9 +350,7 @@ export async function runReviewPipeline(
     return { status: 'thin', problem, framing, references };
   }
 
-  progress(
-    `Reading ${references.length} studies and thinking hard — deep reasoning can take a couple of minutes; the report streams in as it’s written…`
-  );
+  progress('The LLM is writing the research briefing…');
   const items = references.map((w) => ({
     title: w.title,
     authors: w.authors,
@@ -525,7 +515,6 @@ export async function runReviewPipeline(
   let attempt = await attemptWrite('attempt 1');
   if (attempt.kind === 'retry') {
     if (stale()) return { status: 'stale' };
-    progress('The write stalled — trying once more…');
     attempt = await attemptWrite('attempt 2');
   }
 
@@ -535,7 +524,6 @@ export async function runReviewPipeline(
   // wait for it to land, then collect it as a cache hit.
   if (attempt.kind === 'retry') {
     if (stale()) return { status: 'stale' };
-    progress('The connection keeps dropping — waiting for the report to finish in the background…');
     for (let i = 0; i < 30; i++) {
       await new Promise((r) => setTimeout(r, 1000));
       if (stale()) return { status: 'stale' };
@@ -1039,13 +1027,12 @@ export function renderReview(
   });
   meta.appendChild(pdfBtn);
   // Name the model that actually wrote it — the server falls back down a chain
-  // if the intended model isn't reachable, so this must reflect reality. The
-  // pipeline version rides along (older saved briefings may predate it) so a
-  // finished report also says which build produced it.
+  // if the intended model isn't reachable, so this must reflect reality. This
+  // is the ONE place the report is marked AI-generated — kept plain and not
+  // repeated elsewhere in the flow.
   if (result.model) {
-    const version = result.promptVersion ? ` · ${result.promptVersion}` : '';
     meta.appendChild(
-      el('span', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-400', `Report produced by an AI model (${result.model}${version})`)
+      el('span', 'font-sans text-[0.65rem] uppercase tracking-[0.12em] text-ink-400', `AI-generated · ${result.model}`)
     );
   }
   article.appendChild(meta);
