@@ -282,7 +282,7 @@ is itself the progress indicator.
 | translate / plan / brief | `claude-sonnet-4-6` | adaptive thinking, effort low |
 | overview | `claude-sonnet-4-6` (`OVERVIEW_MODEL`) | adaptive thinking, effort low |
 | review — selection pass | same model as the writer | adaptive thinking, effort low, JSON-only, max 4,000 tokens (`SELECT_MAX_TOKENS`) |
-| review — writer | `claude-sonnet-5` (`REVIEW_MODEL`), falls back to Opus 4.8 → Sonnet 4.6; `RESEARCH_REVIEW_MODEL` env override (e.g. `claude-opus-4-8`) leads the chain | adaptive thinking, **effort xhigh** ("extra"), streamed (edge function), max 32,000 tokens |
+| review — writer | `claude-sonnet-5` (`REVIEW_MODEL`), falls back to Opus 4.8 → Sonnet 4.6; `RESEARCH_REVIEW_MODEL` env override leads the chain if set | adaptive thinking, **effort high**, streamed (edge function), max 16,000 tokens. Sonnet 5 at high is the proven-reliable config; a brief Opus-4.8-at-xhigh experiment thought for minutes per report and dropped connections, and was reverted. |
 
 Model ids are pinned in `research-assist-prompts.ts` (shared by functions and
 client provenance records) and registered in `personas.ts`

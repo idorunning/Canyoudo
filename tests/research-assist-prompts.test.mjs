@@ -12,8 +12,8 @@ const src = readFileSync(
   'utf8'
 );
 
-test('prompt version bumped to v18 (invalidates the assist cache)', () => {
-  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v18'/);
+test('prompt version bumped to v19 (invalidates the assist cache)', () => {
+  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v19'/);
 });
 
 test('a fast selection pass screens the pool; the writer gets a briefing-length set', () => {

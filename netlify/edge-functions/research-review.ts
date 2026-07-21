@@ -540,15 +540,13 @@ export default async (req: Request) => {
       {
         model,
         max_tokens: REVIEW_MAX_TOKENS,
-        // Extra effort (xhigh): this is the one call on the site where deep
-        // thinking is the whole point — the report is handed to the strongest
-        // reasoning tier and told to think hard. Safe to let this run long
-        // here: edge execution time is CPU-bound, waiting on the model doesn't
-        // count against it, and the whole-stream heartbeat keeps the
-        // connection alive through the longer thinking pauses xhigh brings.
-        // REVIEW_MAX_TOKENS is sized so that heavier thinking can't crowd out
-        // the report and truncate it.
-        ...modelParams(model, 'xhigh'),
+        // High effort on Sonnet 5 — the proven, reliable config. An earlier
+        // experiment (Opus 4.8 at xhigh "extra" effort) thought for minutes
+        // per report and dropped connections mid-generation in production;
+        // Sonnet 5 at high writes the same briefing in ~60–90s and is solid.
+        // The whole-stream heartbeat and disconnect-tolerant caching stay as
+        // belt-and-braces, but this engine rarely needs them.
+        ...modelParams(model, 'high'),
         system: REVIEW_SYSTEM,
         messages: [{ role: 'user', content: user }],
       }
