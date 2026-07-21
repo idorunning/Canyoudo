@@ -244,6 +244,13 @@ export function mapOpenAlexWork(w) {
     citedBy: w.cited_by_count ?? 0,
     abstract: abstractFromIndex(w.abstract_inverted_index),
     source: 'openalex',
+    // OpenAlex ingests the Retraction Watch database, so `is_retracted` is the
+    // broadest free retraction signal there is — and OpenAlex is both the
+    // default source and part of every merged fan-out, so this flag reaches
+    // most records. Set only when true, so ordinary works stay byte-identical
+    // (their cache keys included). The review pipeline drops flagged works from
+    // the briefing pool; the search cards badge them.
+    ...(w.is_retracted === true ? { retracted: true } : {}),
   };
 }
 

@@ -73,14 +73,26 @@ actually uses it**: skim the problem, scan a table for the evidence at a
 glance, check confidence, then jump straight to whichever action tier matches
 their appetite for effort.
 
-Seven fixed `###` sections (exported as `REVIEW_HEADINGS`, asserted in
-tests): *The problem · What the evidence says · How confident can we be ·
-Quick wins · Medium term · Long term — higher effort · Powers and policies.*
-It is still explicitly a **grounding report, not a verdict** — the prompt
-forbids definitive answers; guidance with sources only.
+**v21 reordered the sections simplest-first.** Eight fixed `###` sections
+(exported as `REVIEW_HEADINGS`, asserted in tests), now in **overview→detail**
+order: *In brief · What you could do · Quick wins · Medium term · Long term —
+higher effort · What the evidence says · How confident can we be · Powers and
+policies.* The top is a plain-English summary (`In brief` — no jargon at all,
+the part a reader with no research background fully understands) and the
+practical to-do options; the briefing then grows more detailed and
+evidence-heavy as it descends — the evidence ladder + table, the confidence
+caveats, then the legal/policy hooks. The client appends the study cards
+(**"Sources & further reading"**, formerly "Read the studies") at the very
+bottom, so the whole document reads ELI5→practitioner top to bottom. The two
+summary/to-do headings carry a small emoji icon on the **web** render (`🔑 In
+brief`, `✅ What you could do`, and `⚡ / 📅 / 🎯` on the three action-tier
+boxes); the lower sections stay plain, and the **PDF keeps every heading plain**
+(jsPDF's core fonts don't carry emoji). It is still explicitly a **grounding
+report, not a verdict** — the prompt forbids definitive answers; guidance with
+sources only.
 
 **Format: a briefing, not an essay.** The prompt states this outright and
-bounds prose to 700–950 words (excluding the table) — built to print to about
+bounds prose to 800–1,100 words (excluding the table) — built to print to about
 two A4 pages, the length convention this design leans on across university
 and think-tank writing guidance for policy/research briefs (UNC's and the
 University of York's writing-centre guidance, FiscalNote's and IHPI
@@ -342,6 +354,59 @@ deliberate, permanent, shareable store, and a signed-in reader can promote any
 history entry to it with one tap ("Save to your account"). The review runs at
 `xhigh` effort with a 32,000-token ceiling so the heavier thinking can't
 truncate the report.
+
+## Research integrity — retraction screening (v20)
+
+The search reaches the whole open scholarly record, which includes retracted
+papers. A withdrawn finding must never inform a briefing, so the review
+pipeline screens them out:
+
+- **Signal.** OpenAlex ingests the [Retraction Watch](https://retractionwatch.com)
+  database, so its `is_retracted` boolean is the broadest *free* retraction
+  flag available — and OpenAlex is both the default source and part of every
+  merged fan-out, so the flag reaches most records at no extra request.
+  `mapOpenAlexWork` sets `retracted: true` only when flagged (ordinary works
+  stay byte-identical, cache keys included). On a cross-source merge the flag
+  **ORs** across copies — unlike `preprint`, which ANDs — because retraction is
+  a property of the underlying work: if any catalogue knows it's retracted, it
+  is (`research-merge.mjs`).
+- **Where it acts.** `searchAngle` (in `review.ts`) drops flagged works
+  *before* curation, so a retracted paper can't even occupy a pool slot and
+  displace a sound study. The count is accumulated and surfaced under the
+  finished briefing as a plain note ("N retracted studies were found in the
+  search and left out of this briefing") — screened, not silently trimmed.
+- **Plain search is different.** The `/research` search view still *shows*
+  retracted papers, badged with a red "Retracted" pill (`cards.ts`). Hiding
+  them there would be its own distortion; the briefing excludes them only
+  because it speaks with one synthesised voice.
+- **Not Scite.** Scite's richer *contradiction* signals (supporting vs
+  contrasting Smart Citations) would need a paid API key, and the review runs
+  in a Netlify Edge (Deno) function that can't hold one — so the deployable
+  core uses the free OpenAlex signal. Contradiction-aware screening remains a
+  possible phase 2 if a Scite key is ever provisioned server-side.
+
+## Scoping — College of Policing and other EBP evidence sources
+
+Notes on drawing in more UK evidence-based-policing material (investigated
+July 2026), kept here so the trade-offs aren't re-litigated:
+
+- **College of Policing Crime Reduction Toolkit / What Works Centre.** The
+  gold-standard UK practitioner resource — EMMIE-rated (effect, mechanism,
+  moderators, implementation, economic cost) summaries of systematic reviews.
+  **No public API, feed, or dataset** (confirmed; it's a human-facing web
+  resource, and the site blocks automated fetches). Options: (a) a curated
+  static link-out to the toolkit from the review footer — honest, zero-risk,
+  but not data; (b) the toolkit's *evidence base* is **Campbell Collaboration
+  systematic reviews** (DOI prefix `10.4073`), which are already DOI-indexed
+  and surface through our existing OpenAlex/Crossref search — a "systematic
+  reviews first" boost would foreground exactly the studies the toolkit is
+  built on, without scraping anyone. (a)+(b) is the recommended path.
+- **Already covered.** GOV.UK (Home Office, HMICFRS, legacy College reports)
+  is a live source; Europe PMC covers health-adjacent CJ topics; the policing
+  ISSN facet locks to the core journals.
+- **Deferred integrations.** Scite (contradiction/retraction, paid key),
+  PubMed E-utilities (structured CJ-health metadata), and a Campbell/Cochrane
+  systematic-review facet.
 
 ## Deferred
 

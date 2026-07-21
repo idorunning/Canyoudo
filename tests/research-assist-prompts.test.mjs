@@ -12,8 +12,8 @@ const src = readFileSync(
   'utf8'
 );
 
-test('prompt version bumped to v19 (invalidates the assist cache)', () => {
-  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v19'/);
+test('prompt version bumped to v21 (invalidates the assist cache)', () => {
+  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v21'/);
 });
 
 test('a fast selection pass screens the pool; the writer gets a briefing-length set', () => {
@@ -80,19 +80,21 @@ test('OVERVIEW_SYSTEM asks for a reading order pointing at the numbered results'
   assert.match(overview, /untrusted data/i);
 });
 
-test('REVIEW_SYSTEM names the seven exact ### headings, in order, a briefing not a narrative', () => {
+test('REVIEW_SYSTEM names the eight exact ### headings, in simplest-first order', () => {
   // The client renderer parses these headings, the PDF draws the table +
   // action-tier boxes off them, and REVIEW_HEADINGS exports them — keep in
-  // lockstep. v9 is a 2-page briefing (problem, evidence table, confidence,
-  // three action tiers, policy pointers), not the v8 narrative report.
+  // lockstep. v21 is simplest-first: the plain-English "In brief" summary and
+  // the "What you could do" action tiers lead, the evidence table + caveats
+  // follow, so the document reads overview→detail top to bottom.
   const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
   const headings = [
-    'The problem',
-    'What the evidence says',
-    'How confident can we be',
+    'In brief',
+    'What you could do',
     'Quick wins',
     'Medium term',
     'Long term — higher effort',
+    'What the evidence says',
+    'How confident can we be',
     'Powers and policies',
   ];
   let at = -1;
@@ -123,7 +125,7 @@ test('REVIEW_SYSTEM demands the evidence table with the exact GFM header', () =>
 
 test('the evidence section walks the ladder, strongest first, table ordered to match', () => {
   const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
-  assert.match(review, /Walk the reader down the ladder/i);
+  assert.match(review, /Walk down the ladder of evidence, strongest first/i);
   assert.match(review, /strict strength order/i);
   assert.match(review, /Order the rows strongest first/i);
   // Ladder ordering keeps original study numbers, so the "#" column is
@@ -169,7 +171,7 @@ test('REVIEW_SYSTEM frames the output as a two-page briefing, not an essay', () 
   const review = src.slice(src.indexOf('REVIEW_SYSTEM'));
   assert.match(review, /this is a briefing, not an essay/i);
   assert.match(review, /two A4 pages/i);
-  assert.match(review, /750–1,050 words/);
+  assert.match(review, /800–1,100 words/);
 });
 
 test('the review is written for a non-academic, in plain English', () => {

@@ -21,6 +21,10 @@ export type Work = {
   /** Shared before peer review (CrimRxiv, SSRN…) — set by the review
    *  pipeline's preprints pass; cleared on merge with a published copy. */
   preprint?: boolean;
+  /** Flagged as retracted by OpenAlex (Retraction Watch data). Search cards
+   *  badge it; the review pipeline drops it from the briefing pool so a
+   *  withdrawn finding never informs a report. */
+  retracted?: boolean;
 };
 
 export const SOURCE_LABELS: Record<string, string> = {
@@ -116,6 +120,17 @@ export function card(w: Work, hooks: CardHooks = {}) {
   const href = safeHttpUrl(w.oaUrl) || safeHttpUrl(w.doi);
   if (href) h.appendChild(link(href, 'hover:text-accent transition-colors', w.title));
   else h.textContent = w.title;
+  // A retracted paper is still shown (hiding it would be its own distortion),
+  // but a clear badge warns the reader that its findings have been withdrawn.
+  if (w.retracted) {
+    const flag = el(
+      'span',
+      'ml-2 inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-red-800 align-middle',
+      'Retracted'
+    );
+    flag.title = 'Flagged as retracted in the Retraction Watch database (via OpenAlex).';
+    h.appendChild(flag);
+  }
   head.appendChild(h);
 
   if (hooks.onToggleSave) {

@@ -77,6 +77,11 @@ function mergePair(a, b) {
   // would be wrong (and ...base could leak the flag from a preprint base).
   if (base.preprint && other.preprint) merged.preprint = true;
   else delete merged.preprint;
+  // Retraction is the opposite: it's a property of the underlying work, so if
+  // EITHER copy is flagged (only OpenAlex carries the Retraction Watch signal,
+  // and it may be the leaner record), the merged work is retracted.
+  if (base.retracted || other.retracted) merged.retracted = true;
+  else delete merged.retracted;
   return merged;
 }
 

@@ -115,6 +115,9 @@ export interface ReviewResult {
   references: Work[]; // the curated, numbered studies — also the reference list
   model: string;
   promptVersion: string;
+  /** Retracted studies the search surfaced and the pipeline kept out of the
+   *  pool — shown as a transparency note. Absent/0 means none were found. */
+  retractedExcluded?: number;
 }
 
 export type ReviewOutcome =
@@ -182,7 +185,7 @@ async function searchAngle(
   angle: ReviewAngle,
   source: string,
   { page = 1, oa = true }: { page?: number; oa?: boolean } = {}
-): Promise<{ results: Work[]; count: number }> {
+): Promise<{ results: Work[]; count: number; retracted: number }> {
   const params = new URLSearchParams({ q: angle.query });
   if (source !== 'openalex') params.set('source', source);
   if (oa) params.set('oa', '1'); // free-to-read: practitioners without library access
@@ -194,10 +197,17 @@ async function searchAngle(
     const data = await res.json().catch(() => null);
     if (res.ok && Array.isArray(data?.results)) {
       const count = Number.isFinite(data?.count) ? Number(data.count) : data.results.length;
-      return { results: data.results as Work[], count };
+      // Retracted studies never enter a briefing pool — a withdrawn finding
+      // must not inform a report, and dropping it here (before curation) means
+      // it can't even displace a sound study from a pool slot. The plain
+      // search view still shows retracted papers, badged; only the AI briefing
+      // excludes them, because the briefing speaks with one synthesised voice.
+      const all = data.results as Work[];
+      const results = all.filter((w) => !w.retracted);
+      return { results, count, retracted: all.length - results.length };
     }
   } catch {}
-  return { results: [], count: 0 };
+  return { results: [], count: 0, retracted: 0 };
 }
 
 // The protocol line, parsed tolerantly: the prompt asks for the bare form
@@ -274,6 +284,9 @@ export async function runReviewPipeline(
 
   const perAngle: Work[][] = plan.angles.map(() => []);
   let foundAny = false;
+  // How many retracted studies the search surfaced and this pipeline dropped
+  // before curation — surfaced in the finished briefing as a transparency note.
+  let retractedExcluded = 0;
   // How much research the question surfaced across its angles — the signal that
   // sizes the candidate pool. Summed from the catalogue totals, so a broad
   // literature lets the model choose from more than a niche one.
@@ -282,10 +295,11 @@ export async function runReviewPipeline(
   progress('Searching the research…');
   for (let i = 0; i < plan.angles.length; i++) {
     const a = plan.angles[i];
-    const { results, count } = await searchAngle(a, hooks.source, { page: 1, oa: true });
+    const { results, count, retracted } = await searchAngle(a, hooks.source, { page: 1, oa: true });
     if (stale()) return { status: 'stale' };
     perAngle[i] = results;
     scopeTotal += count;
+    retractedExcluded += retracted;
     if (results.length) foundAny = true;
     hooks.onAngleDone?.(i, plan.angles.length);
   }
@@ -303,8 +317,9 @@ export async function runReviewPipeline(
   // leading it. Never escalated: page 1 is plenty for the early rung.
   let preprintList: Work[] = [];
   for (const a of plan.angles) {
-    const { results: pre } = await searchAngle({ ...a, review: false }, 'preprints', { page: 1, oa: true });
+    const { results: pre, retracted } = await searchAngle({ ...a, review: false }, 'preprints', { page: 1, oa: true });
     if (stale()) return { status: 'stale' };
+    retractedExcluded += retracted;
     preprintList = preprintList.concat(pre.map((w) => ({ ...w, preprint: true })));
   }
   if (preprintList.length) foundAny = true;
@@ -330,8 +345,9 @@ export async function runReviewPipeline(
   for (let s = 0; s < ESCALATION.length && references.length < poolTarget; s++) {
     const step = ESCALATION[s];
     for (let i = 0; i < plan.angles.length; i++) {
-      const { results: more } = await searchAngle(plan.angles[i], hooks.source, step);
+      const { results: more, retracted } = await searchAngle(plan.angles[i], hooks.source, step);
       if (stale()) return { status: 'stale' };
+      retractedExcluded += retracted;
       if (more.length) perAngle[i] = perAngle[i].concat(more);
     }
     references = curateAll();
@@ -505,6 +521,7 @@ export async function runReviewPipeline(
         references,
         model,
         promptVersion: ASSIST_PROMPT_VERSION,
+        ...(retractedExcluded > 0 ? { retractedExcluded } : {}),
       },
     };
   };
@@ -860,21 +877,36 @@ function renderSectionBody(body: string, valid: Set<number>, refs?: Work[]): Nod
 // same "make the recommendation stand out" principle as the effectiveness
 // badges, applied to urgency instead of evidence strength). Exported so
 // pdf-report.ts recognises the same three headings without re-typing them.
-export const ACTION_TIERS: { heading: string; style: string }[] = [
-  { heading: 'Quick wins', style: 'border-accent bg-accent/[0.06]' },
-  { heading: 'Medium term', style: 'border-ink-400 bg-paper-100' },
-  { heading: 'Long term — higher effort', style: 'border-ink-300 bg-paper-50' },
+// The `icon` rides on the web render only (renderActionBox below) — the
+// briefing is simplest-first, so the top "what to do" tier boxes get a friendly
+// glyph. pdf-report.ts imports this same array for its heading text + styling
+// and simply ignores `icon` (jsPDF core fonts don't carry emoji).
+export const ACTION_TIERS: { heading: string; style: string; icon: string }[] = [
+  { heading: 'Quick wins', style: 'border-accent bg-accent/[0.06]', icon: '⚡' },
+  { heading: 'Medium term', style: 'border-ink-400 bg-paper-100', icon: '📅' },
+  { heading: 'Long term — higher effort', style: 'border-ink-300 bg-paper-50', icon: '🎯' },
 ];
+
+// Emoji only for the plain-English top sections — the summary and to-do
+// headings. The detailed lower sections (evidence, confidence, powers) stay
+// plain and academic, so the page reads ELI5→practitioner top to bottom.
+const SECTION_ICONS: Record<string, string> = {
+  'In brief': '🔑',
+  'What you could do': '✅',
+};
 
 function renderActionBox(
   heading: string,
   style: string,
+  icon: string,
   body: string,
   valid: Set<number>,
   refs?: Work[]
 ): HTMLElement {
   const box = el('div', `rounded-md border-l-[3px] px-4 py-3.5 ${style}`);
-  box.appendChild(el('h4', 'font-sans text-xs font-bold uppercase tracking-[0.08em] text-ink-900 mb-2', heading));
+  box.appendChild(
+    el('h4', 'font-sans text-xs font-bold uppercase tracking-[0.08em] text-ink-900 mb-2', `${icon} ${heading}`)
+  );
   for (const node of renderSectionBody(body, valid, refs)) box.appendChild(node);
   return box;
 }
@@ -898,12 +930,19 @@ function renderReportBody(md: string, valid: Set<number>, refs?: Work[]): HTMLEl
         grid = el('div', 'grid sm:grid-cols-3 gap-3 mt-7');
         body.appendChild(grid);
       }
-      grid.appendChild(renderActionBox(tier.heading, tier.style, sec.body, valid, refs));
+      grid.appendChild(renderActionBox(tier.heading, tier.style, tier.icon, sec.body, valid, refs));
       continue;
     }
     grid = null; // a non-tier heading ends the run, so a repeat later starts a fresh grid
     if (sec.heading && !tierHeadings.has(sec.heading)) {
-      body.appendChild(el('h3', 'font-display text-lg font-semibold text-ink-900 mt-7 mb-1', sec.heading));
+      const icon = SECTION_ICONS[sec.heading];
+      body.appendChild(
+        el(
+          'h3',
+          'font-display text-lg font-semibold text-ink-900 mt-7 mb-1',
+          icon ? `${icon}  ${sec.heading}` : sec.heading
+        )
+      );
     }
     for (const node of renderSectionBody(sec.body, valid, refs)) body.appendChild(node);
   }
@@ -936,10 +975,10 @@ function evidenceBase(references: Work[], tableNums: Set<number>, hooks: CardHoo
     .filter(({ n }) => tableNums.size === 0 || tableNums.has(n));
   const wrap = el('div', 'mt-10 border-t border-ink-200 pt-6');
   wrap.appendChild(
-    el('h3', 'font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-1', `Read the studies — ${shown.length}`)
+    el('h3', 'font-sans text-xs uppercase tracking-[0.2em] text-ink-500 mb-1', `Sources & further reading — ${shown.length}`)
   );
   wrap.appendChild(
-    el('p', 'font-serif text-sm text-ink-600 mb-2', 'The full abstract behind each row of the table above — numbered the same way. Weigh the study, not the summary.')
+    el('p', 'font-serif text-sm text-ink-600 mb-2', 'The full study behind each row of the evidence table — numbered the same way. Weigh the study, not the summary.')
   );
   shown.forEach(({ w, n }) => {
     const row = el('div', 'flex gap-3 scroll-mt-24');
@@ -1036,6 +1075,20 @@ export function renderReview(
     );
   }
   article.appendChild(meta);
+
+  // Transparency note: if the search turned up retracted studies, say so and
+  // that they were held out — a reader should know the pool was screened, not
+  // silently trimmed.
+  if (result.retractedExcluded && result.retractedExcluded > 0) {
+    const n = result.retractedExcluded;
+    article.appendChild(
+      el(
+        'p',
+        'font-sans text-xs text-ink-500 mt-2',
+        `${n} retracted ${n === 1 ? 'study was' : 'studies were'} found in the search and left out of this briefing.`
+      )
+    );
+  }
 
   article.appendChild(renderReportBody(result.briefing, valid, result.references));
 

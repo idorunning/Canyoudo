@@ -114,3 +114,18 @@ test('an unmerged preprint keeps its flag through the single-copy path', () => {
   const merged = mergeWorks([[work({ title: 'Solo preprint', preprint: true })]]);
   assert.equal(merged[0].preprint, true);
 });
+
+test('retraction ORs across copies (either flag makes the merged work retracted)', () => {
+  // Only OpenAlex carries the Retraction Watch signal, and it can be the leaner
+  // record — so a flag on EITHER copy must survive the merge, unlike preprint.
+  const flagged = work({ doi: '10.1/rr', retracted: true, abstract: 'short' });
+  const clean = work({ doi: '10.1/rr', source: 'crossref', abstract: 'A much longer, richer abstract wins as base.' });
+  assert.equal(mergeWorks([[flagged], [clean]])[0].retracted, true);
+  assert.equal(mergeWorks([[clean], [flagged]])[0].retracted, true);
+});
+
+test('a merge of two non-retracted copies carries no retracted key', () => {
+  const a = work({ doi: '10.1/rs' });
+  const b = work({ doi: '10.1/rs', source: 'scholar' });
+  assert.equal('retracted' in mergeWorks([[a], [b]])[0], false);
+});

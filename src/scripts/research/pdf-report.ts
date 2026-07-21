@@ -5,11 +5,14 @@
 //
 // Design follows the research/policy briefing genre (see
 // docs/research-assistant-v4.md for the sourced rationale): A4, built to
-// print to about two pages, the site's branding, the question as the title,
-// a short "The problem" lead, the evidence-rating table (drawn as a real
-// table — this IS the reference list; there's no separate references
-// section), three boxed "what to do" tiers side by side, then a short rules-
-// and-policy checklist and a closing note. Page footers with numbers.
+// print to about two pages, the site's branding, the question as the title.
+// The body renders sections in document order, which since v21 is
+// simplest-first: an "In brief" plain-English summary, the three boxed "what
+// to do" tiers side by side, then the evidence-rating table (drawn as a real
+// table — this IS the reference list; there's no separate references section),
+// the confidence caveats, and a short policy checklist, then a closing note.
+// Page footers with numbers. (Emoji section/tier icons are web-only; the PDF
+// keeps headings plain, since jsPDF's core fonts don't carry emoji.)
 //
 // Safety is the same discipline as the page: everything is drawn as TEXT from
 // the validated ReviewResult (jsPDF has no HTML path here), and only http(s)

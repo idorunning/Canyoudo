@@ -100,6 +100,20 @@ test('mapOpenAlexWork emits the exact Work shape', () => {
   assert.equal(w.publisher, 'Wiley');
 });
 
+test('mapOpenAlexWork flags a retracted work (only when is_retracted is true)', () => {
+  const base = {
+    display_name: 'Police violence and the health of black infants',
+    authorships: [],
+    publication_year: 2019,
+    doi: 'https://doi.org/10.1073/pnas.1821204116',
+  };
+  // Not retracted → no key at all (keeps ordinary works byte-identical).
+  assert.equal('retracted' in mapOpenAlexWork(base), false);
+  assert.equal('retracted' in mapOpenAlexWork({ ...base, is_retracted: false }), false);
+  // Retracted → flag set to true.
+  assert.equal(mapOpenAlexWork({ ...base, is_retracted: true }).retracted, true);
+});
+
 test('mapScholarPaper maps DOI, OA pdf and tldr', () => {
   const w = mapScholarPaper({
     title: 'Body-worn cameras and policing',
