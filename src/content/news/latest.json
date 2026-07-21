@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-20T13:45:29.919Z",
+    "fetchedAt": "2026-07-21T01:26:52.463Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,11 +16,35 @@
   },
   "items": [
     {
+      "title": "Man, 28, charged with murder of Ann Widdecombe",
+      "link": "https://www.bbc.co.uk/news/articles/cn4n2erympvo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-20T19:02:04.000Z",
+      "summary": "Joshua Kerry from Rotherham will appear at Westminster Magistrates' Court on Tuesday."
+    },
+    {
+      "title": "MOJ Lawtech Grant Competition Phase III",
+      "link": "https://www.gov.uk/government/news/moj-lawtech-grant-competition-phase-iii",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-20T15:23:25.000Z",
+      "summary": "The Ministry of Justice (MOJ) has launched a competition to award funding for the third phase of the LawtechUK programme."
+    },
+    {
+      "title": "'Scrutiny' needed over baby's death, court hears",
+      "link": "https://www.bbc.co.uk/news/articles/clyxje8y8vko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-20T15:11:23.000Z",
+      "summary": "Preston Davey died after months of sexual and physical abuse at the hands of Jamie Varley."
+    },
+    {
       "title": "Pupil not guilty of trying to murder history teacher after stabbing her in the head",
       "link": "https://www.bbc.co.uk/news/articles/cglj43pn525o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-20T13:44:36.000Z",
+      "isoDate": "2026-07-20T13:50:18.000Z",
       "summary": "History teacher Vicki Williams was stabbed in her classroom at Milford Haven Comprehensive School."
     },
     {
@@ -54,14 +78,6 @@
       "topic": "policing",
       "isoDate": "2026-07-19T19:16:21.000Z",
       "summary": "Emergency services attend the Port of Tyne after a crane \"collided\" with a container ship, police say."
-    },
-    {
-      "title": "Eight released over alleged threat to Islamic event",
-      "link": "https://www.bbc.co.uk/news/articles/cr49xv56g77o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-18T20:29:25.000Z",
-      "summary": "More people are freed from custody, as police investigate an alleged extreme right-wing threat."
     },
     {
       "title": "China's Moonshot AI claims Kimi K3 can rival OpenAI and Anthropic",
@@ -120,14 +136,6 @@
       "summary": "Forrester warns price hikes and usage charges will pump up software budgets next year"
     },
     {
-      "title": "Crackdown on baseless legal claims to get Britain building",
-      "link": "https://www.gov.uk/government/news/crackdown-on-baseless-legal-claims-to-get-britain-building",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-16T16:03:09.000Z",
-      "summary": "Thousands of new homes and major infrastructure projects could be unblocked under plans being considered to reduce delays from legal challenges."
-    },
-    {
       "title": "Data regulation in the age of AI and other data‑intensive technologies",
       "link": "https://www.gov.uk/government/calls-for-evidence/data-regulation-in-the-age-of-ai-and-other-data-intensive-technologies",
       "source": "DSIT",
@@ -174,14 +182,6 @@
       "topic": "ai",
       "isoDate": "2026-07-11T01:45:59.000Z",
       "summary": "Meta's release this week of an AI feature that let people alter Instagram content drew swift blowback."
-    },
-    {
-      "title": "Apple sues OpenAI, its employees claiming theft of trade secrets",
-      "link": "https://www.bbc.co.uk/news/articles/cy8w379e091o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-10T22:54:16.000Z",
-      "summary": "Apple said in a Friday lawsuit that OpenAI’s nascent hardware business is “rotten to its core.”"
     },
     {
       "title": "Royal Courts of Justice event showcases the work of the Judicial College",
