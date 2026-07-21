@@ -1,69 +1,78 @@
 ---
-// The ARV payload builder: load an armed response vehicle the way a force
-// actually loads one — crew, weapons, armour, method-of-entry kit — and watch
-// the same load land on two payload budgets at once: the diesel BMW X5 the
-// job uses today, and the closest current electric equivalent. The point the
-// component makes is that the battery has already spent several hundred
-// kilograms of the EV's legal payload before the first officer gets in.
+// The ARV payload builder — visual-first redesign.
 //
-// Payload budgets are gross vehicle weight minus kerb weight (manufacturer
-// figures, cited in the article). Kit weights are drawn from published
-// officer-safety and equipment sources where they exist and flagged as
-// estimates where they do not; each row shows its weight so a reader who
-// knows better can re-run the sum in their head.
+// The one idea this tool has to land: the SAME crew and kit is legal in the
+// diesel X5 and over the legal limit in the electric equivalent, because the
+// battery already spent the payload. So both vehicles are drawn on ONE shared
+// kilogram scale — the load bar is identical length for both, but each has its
+// own limit line, and you watch that one identical bar clear the diesel's line
+// and cross the EV's. A PASS / OVERWEIGHT stamp (icon + word + colour, never
+// colour alone) reads the result at a glance.
+//
+// House pattern: dependency-free, JSON in a script tag, re-init on
+// astro:page-load, themed CSS-variable colours throughout.
+
+const MAX_SCALE = 800; // kg — the shared ruler; sized just above the X5's payload
+
 const VEHICLES = [
   {
     id: 'x5',
-    name: 'BMW X5 xDrive30d (diesel ARV)',
+    name: 'BMW X5 xDrive30d',
+    kind: 'Diesel ARV — in service today',
     payloadKg: 730,
-    note: 'kerb ≈ 2,220 kg · payload 730 kg (manufacturer figure)',
   },
   {
     id: 'ix',
-    name: 'BMW iX xDrive50 (electric equivalent)',
+    name: 'BMW iX xDrive50',
+    kind: 'Closest electric equivalent',
     payloadKg: 540,
-    note: 'kerb ≈ 2,585 kg · payload ≈ 540 kg — the battery alone weighs ≈ 700 kg',
   },
 ] as const;
 
-// The conversion is not optional, so it is pre-ticked and locked: racking,
-// gun safe, comms, lightbar, livery. Crew is a stepper, not a checkbox.
 const ITEMS = [
-  { id: 'conv', name: 'Police conversion — comms, lightbar, racking, gun safe, livery', kg: 170, fixed: true },
-  { id: 'armour', name: 'Enhanced ballistic armour, helmet and plates (per officer ≈ 12 kg)', kg: 12, perCrew: true, checked: true },
-  { id: 'carbine', name: 'Carbine, sidearm, Taser and ammunition (per officer ≈ 8 kg)', kg: 8, perCrew: true, checked: true },
+  { id: 'conv', name: 'Police conversion (comms, lightbar, gun safe, racking)', kg: 170, fixed: true },
+  { id: 'armour', name: 'Ballistic armour, helmet & plates', kg: 12, perCrew: true, checked: true },
+  { id: 'carbine', name: 'Carbine, sidearm, Taser & ammunition', kg: 8, perCrew: true, checked: true },
   { id: 'shield', name: 'Ballistic shield', kg: 11, checked: true },
-  { id: 'moe', name: 'Method-of-entry kit — enforcer ram, hooligan bar, door jack', kg: 35, checked: true },
-  { id: 'trauma', name: 'Trauma and first-aid kit', kg: 7, checked: true },
-  { id: 'lesslethal', name: 'Less-lethal launcher and rounds', kg: 9, checked: false },
-  { id: 'drone', name: 'Drone and spare batteries', kg: 8, checked: false },
+  { id: 'moe', name: 'Method-of-entry kit (ram, hooligan bar)', kg: 35, checked: true },
+  { id: 'trauma', name: 'Trauma & first-aid kit', kg: 7, checked: true },
+  { id: 'lesslethal', name: 'Less-lethal launcher & rounds', kg: 9, checked: false },
+  { id: 'drone', name: 'Drone & spare batteries', kg: 8, checked: false },
 ] as const;
 
-const CREW_KG = 95; // an equipped officer before the ballistic kit goes on
+const CREW_KG = 95; // an equipped officer before ballistic kit
+const AXIS = [0, 200, 400, 600, 800];
 
-const loadData = { vehicles: VEHICLES, items: ITEMS, crewKg: CREW_KG };
+const loadData = { vehicles: VEHICLES, items: ITEMS, crewKg: CREW_KG, maxScale: MAX_SCALE };
+
+// An SUV side-profile, tinted by pass/fail via currentColor.
+const suvGlyph = `<svg viewBox="0 0 64 30" aria-hidden="true" focusable="false"><path fill="currentColor" d="M4 23c0-3 .5-5 2.2-6l4-1 3-3.9c.7-1 1.8-1.6 3.1-1.6h23.4c1.3 0 2.6.6 3.4 1.7l3 4 6 1c2 .4 3.5 1.9 3.8 4l.2 1.6c.1.7-.4 1.2-1 1.2H5c-.6 0-1-.5-1-1z"/><path fill="currentColor" opacity="0.4" d="M17 12l2.7-3.4c.5-.7 1.3-1 2.2-1h20.2c1.1 0 2.2.5 2.9 1.4l2.5 3z"/><g><circle cx="18" cy="23.5" r="5" fill="currentColor"/><circle cx="18" cy="23.5" r="2" fill="rgb(var(--paper-100))"/><circle cx="46" cy="23.5" r="5" fill="currentColor"/><circle cx="46" cy="23.5" r="2" fill="rgb(var(--paper-100))"/></g></svg>`;
 ---
 
-<div class="arv-load not-prose" data-arv-load>
-  <p class="arv-load-label">Load the ARV yourself</p>
-  <p class="arv-load-sub">
-    The same crew and kit, weighed against the diesel X5's payload and its
-    electric equivalent's. Tick the kit on or off; the conversion is welded in.
+<div class="arv not-prose" data-arv>
+  <p class="arv-kicker">Interactive · the payload test</p>
+  <h4 class="arv-title">Load an armed response car yourself</h4>
+  <p class="arv-intro">
+    Tick the crew and kit onto the truck. Both cars carry the
+    <em>identical</em> load — but each has its own legal weight limit, marked on
+    the same scale. Watch the bar clear one line and cross the other.
   </p>
 
-  <div class="arv-load-controls">
-    <div class="arv-load-crew">
-      <span class="arv-load-crew-label">Crew</span>
-      <button type="button" data-crew-minus aria-label="Remove an officer">−</button>
-      <output data-crew-out>3</output>
-      <button type="button" data-crew-plus aria-label="Add an officer">+</button>
-      <span class="arv-load-crew-note">officers × {CREW_KG} kg equipped</span>
+  <div class="arv-build">
+    <div class="arv-crew">
+      <span class="arv-flabel">Firearms officers</span>
+      <div class="arv-stepper">
+        <button type="button" data-crew-minus aria-label="Remove an officer">−</button>
+        <output data-crew-out>3</output>
+        <button type="button" data-crew-plus aria-label="Add an officer">+</button>
+      </div>
+      <span class="arv-crew-note">× {CREW_KG} kg each, equipped</span>
     </div>
 
-    <ul class="arv-load-items" role="list">
+    <ul class="arv-kit" role="list">
       {loadData.items.map((it) => (
         <li>
-          <label class:list={['arv-load-item', { 'arv-load-item--fixed': 'fixed' in it && it.fixed }]}>
+          <label class:list={['arv-kit-item', { 'arv-kit-item--fixed': 'fixed' in it && it.fixed }]}>
             <input
               type="checkbox"
               value={it.id}
@@ -72,227 +81,319 @@ const loadData = { vehicles: VEHICLES, items: ITEMS, crewKg: CREW_KG };
               checked={('fixed' in it && it.fixed) || ('checked' in it && it.checked)}
               disabled={'fixed' in it && it.fixed}
             />
-            <span class="arv-load-item-name">{it.name}</span>
-            <span class="arv-load-item-kg">{it.kg} kg{'perCrew' in it && it.perCrew ? ' each' : ''}</span>
+            <span class="arv-kit-name">{it.name}</span>
+            <span class="arv-kit-kg">{it.kg} kg{'perCrew' in it && it.perCrew ? ' ea' : ''}</span>
           </label>
         </li>
       ))}
     </ul>
   </div>
 
-  <div class="arv-load-bars" aria-live="polite">
-    {loadData.vehicles.map((v) => (
-      <div class="arv-load-bar" data-vehicle={v.id}>
-        <div class="arv-load-bar-head">
-          <span class="arv-load-bar-name">{v.name}</span>
-          <span class="arv-load-bar-note">{v.note}</span>
+  <div class="arv-result" aria-live="polite">
+    <div class="arv-rows">
+      {loadData.vehicles.map((v) => (
+        <div class="arv-row" data-vehicle={v.id}>
+          <div class="arv-row-head">
+            <span class="arv-suv" set:html={suvGlyph} />
+            <span class="arv-vname">{v.name}<em>{v.kind}</em></span>
+            <span class="arv-stamp" data-stamp>
+              <span class="arv-stamp-icon" data-icon></span>
+              <span class="arv-stamp-word" data-word></span>
+            </span>
+          </div>
+          <div class="arv-track" data-payload={v.payloadKg}>
+            <div
+              class="arv-over"
+              style={`left:${(v.payloadKg / MAX_SCALE) * 100}%;width:${(1 - v.payloadKg / MAX_SCALE) * 100}%`}
+            ></div>
+            <div class="arv-fill" data-fill></div>
+            <div class="arv-limit" style={`left:${(v.payloadKg / MAX_SCALE) * 100}%`}>
+              <span class="arv-limit-tag">{v.payloadKg} kg limit</span>
+            </div>
+          </div>
+          <p class="arv-reading" data-reading>—</p>
         </div>
-        <div class="arv-load-bar-track" data-payload={v.payloadKg}>
-          <div class="arv-load-bar-fill" data-fill></div>
-          <span class="arv-load-bar-limit">payload limit {v.payloadKg} kg</span>
-        </div>
-        <p class="arv-load-bar-read" data-read></p>
+      ))}
+      <div class="arv-axis" aria-hidden="true">
+        {AXIS.map((t) => (
+          <span class="arv-axis-tick" style={`left:${(t / MAX_SCALE) * 100}%`}>{t === 800 ? '800 kg' : t}</span>
+        ))}
       </div>
-    ))}
-  </div>
+    </div>
 
-  <p class="arv-load-verdict" data-verdict></p>
+    <p class="arv-verdict" data-verdict></p>
+  </div>
 
   <script type="application/json" data-load-data set:html={JSON.stringify(loadData)} />
 </div>
 
 <style>
-  .arv-load {
+  .arv {
     margin: 2.5rem 0;
     border: 1px solid rgb(var(--ink-200));
-    border-radius: 8px;
-    padding: 1.35rem 1.5rem 1.5rem;
+    border-radius: 10px;
+    padding: 1.35rem 1.4rem 1.5rem;
     background: rgb(var(--paper-100));
     font-family: theme('fontFamily.sans');
+    --st-good: var(--chart-green);
+    --st-crit: var(--chart-red);
   }
-  .arv-load-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
+  .arv-kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: rgb(var(--ink-500));
-    margin: 0 0 0.35rem;
+    margin: 0 0 0.3rem;
   }
-  .arv-load-sub {
-    font-size: 0.85rem;
+  .arv-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: rgb(var(--ink-900));
+    margin: 0 0 0.4rem;
+    line-height: 1.2;
+  }
+  .arv-intro {
+    font-size: 0.86rem;
+    line-height: 1.5;
     color: rgb(var(--ink-600));
-    margin: 0 0 1.1rem;
-    max-width: 46rem;
+    margin: 0 0 1.2rem;
+    max-width: 44rem;
   }
-  .arv-load-crew {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    margin-bottom: 0.9rem;
+
+  .arv-build {
+    display: grid;
+    gap: 1rem;
   }
-  .arv-load-crew-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
+  @media (min-width: 720px) {
+    .arv-build { grid-template-columns: auto 1fr; gap: 1.5rem; align-items: start; }
+  }
+  .arv-flabel {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgb(var(--ink-500));
+    margin-bottom: 0.45rem;
   }
-  .arv-load-crew button {
-    width: 1.8rem;
-    height: 1.8rem;
-    border-radius: 5px;
+  .arv-stepper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .arv-stepper button {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 6px;
     border: 1px solid rgb(var(--ink-300));
     background: rgb(var(--paper-200));
     color: rgb(var(--ink-700));
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     cursor: pointer;
     line-height: 1;
   }
-  .arv-load-crew button:hover {
-    border-color: rgb(var(--accent));
-    color: rgb(var(--accent));
-  }
-  .arv-load-crew output {
-    font-size: 1.1rem;
+  .arv-stepper button:hover { border-color: rgb(var(--accent)); color: rgb(var(--accent)); }
+  .arv-stepper output {
+    font-size: 1.3rem;
     font-weight: 700;
-    min-width: 1.2rem;
+    min-width: 1.4rem;
     text-align: center;
+    color: rgb(var(--ink-900));
     font-variant-numeric: tabular-nums;
   }
-  .arv-load-crew-note {
-    font-size: 0.78rem;
+  .arv-crew-note {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.72rem;
     color: rgb(var(--ink-500));
   }
-  .arv-load-items {
+
+  .arv-kit {
     margin: 0;
     padding: 0;
     list-style: none;
     display: grid;
-    gap: 0.3rem;
+    gap: 0.25rem;
   }
-  .arv-load-items li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .arv-kit li { list-style: none; margin: 0; padding: 0; }
+  @media (min-width: 560px) {
+    .arv-kit { grid-template-columns: 1fr 1fr; gap: 0.25rem 1.1rem; }
   }
-  @media (min-width: 720px) {
-    .arv-load-items {
-      grid-template-columns: 1fr 1fr;
-      gap: 0.3rem 1.2rem;
-    }
-  }
-  .arv-load-item {
+  .arv-kit-item {
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: rgb(var(--ink-700));
     cursor: pointer;
-    padding: 0.2rem 0;
+    padding: 0.22rem 0;
   }
-  .arv-load-item--fixed {
-    cursor: default;
+  .arv-kit-item--fixed { cursor: default; color: rgb(var(--ink-500)); }
+  .arv-kit-item input { accent-color: rgb(var(--accent)); flex-shrink: 0; position: relative; top: 1px; }
+  .arv-kit-name { flex: 1; }
+  .arv-kit-kg { color: rgb(var(--ink-500)); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .arv-result { margin-top: 1.4rem; }
+  .arv-rows {
+    border-top: 1px solid rgb(var(--ink-200));
+    padding-top: 1.1rem;
+  }
+  .arv-row { --st: var(--st-good); margin-bottom: 1.15rem; }
+  .arv-row-head {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+  }
+  .arv-suv {
+    width: 3rem;
+    height: 1.4rem;
+    flex-shrink: 0;
+    color: rgb(var(--st));
+  }
+  .arv-suv svg { width: 100%; height: 100%; display: block; }
+  .arv-vname {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: rgb(var(--ink-900));
+    line-height: 1.15;
+  }
+  .arv-vname em {
+    display: block;
+    font-style: normal;
+    font-size: 0.72rem;
+    font-weight: 400;
     color: rgb(var(--ink-500));
   }
-  .arv-load-item input {
-    accent-color: rgb(var(--accent));
-    flex-shrink: 0;
+  .arv-stamp {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.28rem 0.65rem 0.28rem 0.35rem;
+    border-radius: 999px;
+    background: rgb(var(--st) / 0.13);
+    border: 1px solid rgb(var(--st) / 0.4);
+  }
+  .arv-stamp-icon {
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: rgb(var(--st));
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .arv-stamp-word {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgb(var(--st));
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  .arv-track {
     position: relative;
-    top: 1px;
+    height: 30px;
+    border-radius: 4px;
+    background: rgb(var(--ink-900) / 0.07);
+    border: 1px solid rgb(var(--ink-200));
+    overflow: hidden;
   }
-  .arv-load-item-name {
-    flex: 1;
+  .arv-over {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: rgb(var(--st-crit) / 0.1);
+    pointer-events: none;
   }
-  .arv-load-item-kg {
+  .arv-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: rgb(var(--st));
+    transition: width 0.4s ease, background 0.3s ease;
+  }
+  .arv-limit {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    border-left: 2px solid rgb(var(--ink-800));
+    z-index: 2;
+    pointer-events: none;
+  }
+  .arv-limit-tag {
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgb(var(--ink-700));
+    background: rgb(var(--paper-100) / 0.88);
+    padding: 0 0.2rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .arv-reading {
+    margin: 0.4rem 0 0;
+    font-size: 0.8rem;
+    color: rgb(var(--ink-700));
+    font-variant-numeric: tabular-nums;
+  }
+  .arv-reading b { color: rgb(var(--ink-900)); }
+
+  .arv-axis {
+    position: relative;
+    height: 1.1rem;
+    margin-top: 0.15rem;
+  }
+  .arv-axis-tick {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 0.62rem;
     color: rgb(var(--ink-500));
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
-  .arv-load-bars {
-    margin-top: 1.35rem;
-    display: grid;
-    gap: 1.1rem;
-  }
-  .arv-load-bar-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.3rem 0.8rem;
-    margin-bottom: 0.35rem;
-  }
-  .arv-load-bar-name {
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: rgb(var(--ink-800));
-  }
-  .arv-load-bar-note {
-    font-size: 0.72rem;
-    color: rgb(var(--ink-500));
-  }
-  .arv-load-bar-track {
-    position: relative;
-    height: 24px;
-    border-radius: 4px;
-    background: rgb(var(--ink-900) / 0.08);
-    overflow: hidden;
-  }
-  .arv-load-bar-fill {
-    height: 100%;
-    width: 0;
-    background: rgb(var(--chart-blue));
-    transition: width 0.35s ease, background 0.35s ease;
-  }
-  .arv-load-bar--over .arv-load-bar-fill {
-    background: rgb(var(--chart-red));
-  }
-  .arv-load-bar-limit {
-    position: absolute;
-    right: 0.4rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.7rem;
-    color: rgb(var(--ink-700));
-    background: rgb(var(--paper-100) / 0.9);
-    border-radius: 3px;
-    padding: 0.05rem 0.35rem;
-    font-variant-numeric: tabular-nums;
-    pointer-events: none;
-  }
-  .arv-load-bar-read {
-    margin: 0.3rem 0 0;
-    font-size: 0.78rem;
-    color: rgb(var(--ink-600));
-    font-variant-numeric: tabular-nums;
-  }
-  .arv-load-verdict {
-    margin: 1.1rem 0 0;
+  .arv-axis-tick:first-child { transform: none; }
+
+  .arv-verdict {
+    margin: 0.5rem 0 0;
     font-size: 0.9rem;
     line-height: 1.5;
     color: rgb(var(--ink-700));
     border-left: 3px solid rgb(var(--accent));
-    padding-left: 0.8rem;
+    padding-left: 0.85rem;
   }
+  .arv-verdict b { color: rgb(var(--ink-900)); }
 </style>
 
 <script>
   function initArvLoads() {
-    document.querySelectorAll<HTMLElement>('[data-arv-load]').forEach((root) => {
-      if (root.dataset.loadReady) return;
-      root.dataset.loadReady = '1';
+    document.querySelectorAll<HTMLElement>('[data-arv]').forEach((root) => {
+      if (root.dataset.arvReady) return;
+      root.dataset.arvReady = '1';
 
-      const dataEl = root.querySelector('[data-load-data]');
       let data: any;
       try {
-        data = JSON.parse(dataEl?.textContent || '{}');
+        data = JSON.parse(root.querySelector('[data-load-data]')?.textContent || '{}');
       } catch {
         return;
       }
 
       let crew = 3;
-      const crewOut = root.querySelector<HTMLOutputElement>('[data-crew-out]')!;
+      const crewOut = root.querySelector('[data-crew-out]') as HTMLOutputElement;
+      const GOOD = 'var(--st-good)';
+      const CRIT = 'var(--st-crit)';
 
       function totalKg(): number {
         let sum = crew * data.crewKg;
-        root.querySelectorAll<HTMLInputElement>('.arv-load-item input').forEach((cb) => {
+        root.querySelectorAll<HTMLInputElement>('.arv-kit-item input').forEach((cb) => {
           if (!cb.checked) return;
           const kg = Number(cb.dataset.kg || 0);
           sum += cb.dataset.perCrew ? kg * crew : kg;
@@ -303,52 +404,42 @@ const loadData = { vehicles: VEHICLES, items: ITEMS, crewKg: CREW_KG };
       function render() {
         crewOut.value = String(crew);
         const load = totalKg();
-        let anyOver = false;
+        const widthPct = Math.min(100, (load / data.maxScale) * 100);
         let evOver = false;
+        let x5Over = false;
 
-        root.querySelectorAll<HTMLElement>('.arv-load-bar').forEach((bar) => {
-          const track = bar.querySelector<HTMLElement>('.arv-load-bar-track')!;
-          const payload = Number(track.dataset.payload || 1);
-          const fill = bar.querySelector<HTMLElement>('[data-fill]')!;
-          const read = bar.querySelector<HTMLElement>('[data-read]')!;
-          const frac = load / payload;
-          fill.style.width = `${Math.min(100, frac * 100)}%`;
-          bar.classList.toggle('arv-load-bar--over', frac > 1);
-          if (frac > 1) {
-            anyOver = true;
-            if (bar.dataset.vehicle === 'ix') evOver = true;
-            read.textContent = `${load} kg loaded — ${Math.round(load - payload)} kg over the legal limit`;
-          } else {
-            read.textContent = `${load} kg loaded — ${Math.round(payload - load)} kg in hand (${Math.round(frac * 100)}% of payload)`;
-          }
+        root.querySelectorAll<HTMLElement>('.arv-row').forEach((row) => {
+          const payload = Number((row.querySelector('.arv-track') as HTMLElement).dataset.payload || 1);
+          const over = load > payload;
+          if (row.dataset.vehicle === 'ix' && over) evOver = true;
+          if (row.dataset.vehicle === 'x5' && over) x5Over = true;
+
+          row.style.setProperty('--st', over ? CRIT : GOOD);
+          (row.querySelector('[data-icon]') as HTMLElement).textContent = over ? '✕' : '✓';
+          (row.querySelector('[data-word]') as HTMLElement).textContent = over ? 'Overweight' : 'Legal';
+          (row.querySelector('[data-fill]') as HTMLElement).style.width = `${widthPct}%`;
+
+          const reading = row.querySelector('[data-reading]') as HTMLElement;
+          reading.innerHTML = over
+            ? `<b>${load} kg</b> loaded — <b>${Math.round(load - payload)} kg over</b> the ${payload} kg limit`
+            : `<b>${load} kg</b> loaded — ${Math.round(payload - load)} kg spare under the ${payload} kg limit`;
         });
 
-        const verdict = root.querySelector<HTMLElement>('[data-verdict]')!;
-        if (evOver) {
-          verdict.textContent =
-            'The electric car is now over its gross vehicle weight with a load the diesel carries legally. That is not a software problem or a range problem — it is Newton. The pack spent the payload before the crew arrived, and the only fixes are fewer officers, less kit, or a heavier class of vehicle.';
-        } else if (anyOver) {
-          verdict.textContent =
-            'Both vehicles are over their legal limit with this load — time to take something off the truck.';
+        const verdict = root.querySelector('[data-verdict]') as HTMLElement;
+        if (evOver && !x5Over) {
+          verdict.innerHTML = `Same load, same crew. The diesel carries it with room to spare; the electric car is <b>over its legal limit</b>. The battery spent the payload before the officers got in — and no software update fixes Newton.`;
+        } else if (evOver && x5Over) {
+          verdict.innerHTML = `Both are over now — but that took four officers and every box ticked. The diesel only fails at the extreme; the EV was <b>over from the standard fit</b>.`;
         } else {
           const ix = data.vehicles.find((v: any) => v.id === 'ix');
           const x5 = data.vehicles.find((v: any) => v.id === 'x5');
-          const load2 = totalKg();
-          verdict.textContent = `Both carry this load legally — but the diesel has ${Math.round(x5.payloadKg - load2)} kg in hand and the EV ${Math.round(ix.payloadKg - load2)} kg. Add the fourth officer and the margins tell you which one the fleet manager signs off.`;
+          verdict.innerHTML = `Both legal at this load — but mind the gap: the diesel has <b>${Math.round(x5.payloadKg - load)} kg</b> spare, the EV only <b>${Math.round(ix.payloadKg - load)} kg</b>. Add an officer and the electric car is the one that fails.`;
         }
       }
 
-      root.querySelector('[data-crew-minus]')?.addEventListener('click', () => {
-        crew = Math.max(2, crew - 1);
-        render();
-      });
-      root.querySelector('[data-crew-plus]')?.addEventListener('click', () => {
-        crew = Math.min(4, crew + 1);
-        render();
-      });
-      root.querySelectorAll<HTMLInputElement>('.arv-load-item input').forEach((cb) => {
-        cb.addEventListener('change', render);
-      });
+      root.querySelector('[data-crew-minus]')?.addEventListener('click', () => { crew = Math.max(2, crew - 1); render(); });
+      root.querySelector('[data-crew-plus]')?.addEventListener('click', () => { crew = Math.min(4, crew + 1); render(); });
+      root.querySelectorAll<HTMLInputElement>('.arv-kit-item input').forEach((cb) => cb.addEventListener('change', render));
       render();
     });
   }

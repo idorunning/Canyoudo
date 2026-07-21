@@ -1,229 +1,245 @@
 ---
-// The pursuit battery simulator: pick a car, a pursuit profile and a duration,
-// and watch what the chase does to the fuel state — battery for the EVs, tank
-// for the diesel comparators. All computation is client-side from a small
-// physics model (rolling resistance + aerodynamic drag + auxiliary load), with
-// the model's assumptions spelled out in the "how this is modelled" details
-// block so a sceptical reader can check the working. Vehicle parameters are
-// manufacturer figures (kerb weight, usable battery, drag area) cited in the
-// article body; the model is deliberately simple and errs kind to the EV —
-// no tyre scrub, no repeated full-bore acceleration beyond the intensity
-// factor, regen credited on every braking cycle.
+// The pursuit fuel simulator — visual-first redesign.
 //
-// House pattern: dependency-free, data passed as JSON in a script tag,
-// initialised on load and astro:page-load, CSS-variable colours throughout.
+// The job: let a procurement reader SEE, at a glance, that most pursuits are
+// fine in an EV and the rare long/fast one is not — and that a diesel shrugs
+// off both. So every result is a traffic-light verdict (icon + word + colour,
+// never colour alone) with a battery/tank gauge, and the chosen EV is always
+// shown beside a diesel traffic car running the identical pursuit. The raw
+// numbers live behind a "show the numbers" toggle so they inform without
+// leading.
+//
+// The physics is unchanged from the first version and validated against
+// published BMW i4 M50 constant-speed range tests (see "how this is modelled").
+// House pattern: dependency-free, JSON in a script tag, re-init on
+// astro:page-load, themed CSS-variable colours throughout.
 
-// Vehicle model parameters. mass = kerb weight + 2 crew (90 kg each) + 40 kg
-// of comms/livery/kit for the cars marked converted:true (the police
-// conversion itself). battery = usable kWh. cda = drag coefficient × frontal
-// area (m²). aux = steady electrical load of the police equipment fit (kW).
-// tank/mpg for the diesels. Sources for the headline figures are cited in the
-// article body and the details block below.
-const VEHICLES = [
+const EVS = [
   {
     id: 'corsa',
     name: 'Vauxhall Corsa Electric',
-    role: 'Beat / response EV — the class of car forces actually buy in numbers',
-    kind: 'ev',
-    massKg: 1690, // 1,469 kerb + crew + conversion
+    role: 'the everyday beat car',
+    massKg: 1690,
     battKwh: 46.3,
     cda: 0.62,
     crr: 0.011,
     auxKw: 0.8,
-    wltpMi: 222,
     topMph: 93,
   },
   {
     id: 'model3',
     name: 'Tesla Model 3 Long Range',
-    role: 'The EV the "it can do the job" demonstrations use',
-    kind: 'ev',
-    massKg: 2065, // ~1,844 kerb + crew + conversion
+    role: 'the demo favourite',
+    massKg: 2065,
     battKwh: 75,
     cda: 0.51,
     crr: 0.011,
     auxKw: 0.8,
-    wltpMi: 374,
     topMph: 125,
   },
   {
     id: 'i4m50',
     name: 'BMW i4 M50',
-    role: 'High-performance EV — the electric answer to the traffic car',
-    kind: 'ev',
-    massKg: 2440, // 2,215 kerb + crew + conversion
+    role: 'the electric traffic car',
+    massKg: 2440,
     battKwh: 80.7,
     cda: 0.56,
     crr: 0.011,
     auxKw: 0.8,
-    wltpMi: 316,
     topMph: 140,
   },
   {
     id: 'ix50',
     name: 'BMW iX xDrive50',
-    role: 'Big EV SUV — the shape an electric ARV would have to be',
-    kind: 'ev',
-    massKg: 2810, // 2,585 kerb + crew + conversion
+    role: 'the big SUV',
+    massKg: 2810,
     battKwh: 105.2,
     cda: 0.68,
     crr: 0.011,
     auxKw: 0.8,
-    wltpMi: 380,
     topMph: 124,
-  },
-  {
-    id: 'x5',
-    name: 'BMW X5 xDrive30d',
-    role: 'The standard armed response vehicle, for comparison',
-    kind: 'ice',
-    massKg: 2450, // 2,220 kerb + crew + conversion
-    tankL: 80,
-    cruiseMpg: 38, // steady patrol economy, imperial
-    pursuitMpgFloor: 11, // hard-driven large diesel SUV
-    topMph: 143,
-  },
-  {
-    id: '530d',
-    name: 'BMW 530d Touring',
-    role: 'The classic motorway traffic car, for comparison',
-    kind: 'ice',
-    massKg: 2090, // 1,865 kerb + crew + conversion
-    tankL: 66,
-    cruiseMpg: 44,
-    pursuitMpgFloor: 13,
-    topMph: 155,
   },
 ] as const;
 
-// Pursuit profiles. avgMph is the average over the whole pursuit (pursuits
-// are stop-start; peaks run far higher). intensity multiplies the steady-state
-// consumption at that average speed to account for the acceleration/braking
-// cycle, net of regen for the EVs (regen recovers energy at the wheels but
-// the round trip is far from free, and the peaks between the braking are at
-// full power). ICE pursuit economy is floored at pursuitMpgFloor.
+// The fixed diesel comparator: the classic BMW traffic car.
+const DIESEL = {
+  id: '530d',
+  name: 'BMW 530d diesel',
+  role: 'the traffic car it replaces',
+  tankL: 66,
+  cruiseMpg: 44,
+  pursuitMpgFloor: 13,
+  topMph: 155,
+};
+
 const PROFILES = [
   {
     id: 'urban',
-    name: 'Urban pursuit',
-    desc: 'Town roads, junctions, hard acceleration between them',
+    name: 'Town chase',
+    desc: 'Streets and junctions, hard bursts of speed',
     avgMph: 42,
     intensity: 2.1,
   },
   {
     id: 'aroad',
-    name: 'A-road pursuit',
-    desc: 'Open single carriageway, sustained high speed with overtakes',
+    name: 'A-road chase',
+    desc: 'Fast open road, sustained overtakes',
     avgMph: 72,
     intensity: 1.5,
   },
   {
     id: 'motorway',
-    name: 'Motorway pursuit',
-    desc: 'The rare long one — sustained three-figure speeds',
+    name: 'Motorway chase',
+    desc: 'The rare long one, sustained three-figure speeds',
     avgMph: 118,
     intensity: 1.15,
   },
 ] as const;
 
-const simData = { vehicles: VEHICLES, profiles: PROFILES };
+const simData = { evs: EVS, diesel: DIESEL, profiles: PROFILES };
+
+// A saloon side-profile, tinted by status via currentColor.
+const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M4 20c0-1 .6-2 2-2.2l3-.4 4.4-5.1c.8-.9 1.9-1.4 3.1-1.4h20.7c2.6 0 5 1.3 6.5 3.4l1.9 2.7 5.7 1c2.2.4 3.9 1.7 4.5 3.4.2.6-.3 1.2-1 1.2H5c-.6 0-1-.4-1-1z" opacity="0.9"/><path d="M17 12.1l3.4-3.9c.5-.6 1.2-.9 2-.9h13.9c1.7 0 3.3.8 4.3 2.2l1.8 2.5-25.4.1z" opacity="0.45"/></g><g><circle cx="18" cy="21.5" r="4.4" fill="currentColor"/><circle cx="18" cy="21.5" r="1.8" fill="rgb(var(--paper-100))"/><circle cx="46" cy="21.5" r="4.4" fill="currentColor"/><circle cx="46" cy="21.5" r="1.8" fill="rgb(var(--paper-100))"/></g></svg>`;
 ---
 
-<div class="ev-sim not-prose" data-ev-sim>
-  <p class="ev-sim-label">The pursuit fuel simulator</p>
-  <p class="ev-sim-sub">
-    Pick the car, the kind of pursuit and how long it runs. The model does the
-    physics; the assumptions are under "how this is modelled" below.
+<div class="psim not-prose" data-psim>
+  <p class="psim-kicker">Interactive · the pursuit fuel test</p>
+  <h4 class="psim-title">What a chase leaves in the tank</h4>
+  <p class="psim-intro">
+    Pick an electric car and a type of chase. You'll see the same pursuit run
+    twice — in the EV, and in the diesel traffic car it would replace.
+    <strong class="psim-legend-good">Green</strong> means still fit for the
+    shift; <strong class="psim-legend-warn">amber</strong>, finished but
+    compromised; <strong class="psim-legend-crit">red</strong>, out of the
+    fight.
   </p>
 
-  <div class="ev-sim-grid">
-    <fieldset class="ev-sim-cars">
-      <legend>Vehicle</legend>
-      {simData.vehicles.map((v, i) => (
-        <label class="ev-sim-car" data-kind={v.kind}>
-          <input type="radio" name="ev-sim-car" value={v.id} checked={i === 1} />
-          <span class="ev-sim-car-name">{v.name}</span>
-          <span class="ev-sim-car-role">{v.role}</span>
-        </label>
-      ))}
-    </fieldset>
-
-    <div class="ev-sim-controls">
-      <fieldset class="ev-sim-profiles">
-        <legend>Pursuit profile</legend>
-        {simData.profiles.map((p, i) => (
-          <label class="ev-sim-profile">
-            <input type="radio" name="ev-sim-profile" value={p.id} checked={i === 0} />
-            <span class="ev-sim-profile-name">{p.name}</span>
-            <span class="ev-sim-profile-desc">{p.desc}</span>
+  <div class="psim-controls">
+    <div class="psim-field">
+      <span class="psim-flabel">1 · Electric car</span>
+      <div class="psim-choice psim-choice--cars" role="radiogroup" aria-label="Electric car">
+        {simData.evs.map((v, i) => (
+          <label class="psim-opt psim-opt--car">
+            <input type="radio" name="psim-car" value={v.id} checked={i === 1} />
+            <span class="psim-opt-car" set:html={carGlyph} />
+            <span class="psim-opt-name">{v.name}</span>
+            <span class="psim-opt-role">{v.role}</span>
           </label>
         ))}
-      </fieldset>
+      </div>
+    </div>
 
-      <div class="ev-sim-sliders">
-        <label class="ev-sim-slider">
-          <span>Pursuit duration: <output data-out="dur">10</output> min</span>
-          <input type="range" data-in="dur" min="2" max="60" step="1" value="10" />
+    <div class="psim-field">
+      <span class="psim-flabel">2 · Type of chase</span>
+      <div class="psim-choice" role="radiogroup" aria-label="Type of chase">
+        {simData.profiles.map((p, i) => (
+          <label class="psim-opt">
+            <input type="radio" name="psim-profile" value={p.id} checked={i === 0} />
+            <span class="psim-opt-name">{p.name}</span>
+            <span class="psim-opt-role">{p.desc}</span>
+          </label>
+        ))}
+      </div>
+
+      <div class="psim-sliders">
+        <label class="psim-slider">
+          <span class="psim-slider-label">How long it runs <b><output data-out="dur">10</output> min</b></span>
+          <input type="range" data-in="dur" min="2" max="45" step="1" value="10" />
         </label>
-        <label class="ev-sim-slider">
-          <span>Charge / fuel at the moment it starts: <output data-out="soc">65</output>%</span>
+        <label class="psim-slider">
+          <span class="psim-slider-label">Charge when it starts <b><output data-out="soc">65</output>%</b></span>
           <input type="range" data-in="soc" min="10" max="100" step="5" value="65" />
         </label>
-        <label class="ev-sim-check">
+        <label class="psim-toggle">
           <input type="checkbox" data-in="winter" />
-          <span>January (cold-weather penalty on the EVs)</span>
+          <span>Freezing January day</span>
         </label>
       </div>
     </div>
   </div>
 
-  <div class="ev-sim-result" data-result aria-live="polite">
-    <div class="ev-sim-gauge">
-      <div class="ev-sim-gauge-track">
-        <div class="ev-sim-gauge-used" data-gauge-used></div>
-        <div class="ev-sim-gauge-left" data-gauge-left></div>
+  <div class="psim-scenario" data-scenario aria-hidden="true"></div>
+
+  <div class="psim-lanes" aria-live="polite">
+    <div class="psim-lane" data-lane="ev">
+      <div class="psim-lane-head">
+        <span class="psim-lane-car" data-glyph set:html={carGlyph} />
+        <span class="psim-lane-name" data-name>—</span>
       </div>
-      <div class="ev-sim-gauge-labels">
-        <span data-gauge-label-start></span>
-        <span data-gauge-label-end></span>
+      <div class="psim-verdict" data-badge>
+        <span class="psim-verdict-icon" data-icon></span>
+        <span class="psim-verdict-word" data-word></span>
       </div>
+      <div class="psim-gauge">
+        <span class="psim-gauge-cap">Battery</span>
+        <div class="psim-gauge-body">
+          <div class="psim-gauge-zone psim-gauge-zone--danger"></div>
+          <div class="psim-gauge-zone psim-gauge-zone--low"></div>
+          <div class="psim-gauge-fill" data-fill></div>
+          <div class="psim-gauge-start" data-start><span>start</span></div>
+        </div>
+        <span class="psim-gauge-nub"></span>
+      </div>
+      <p class="psim-read" data-read>—</p>
     </div>
-    <dl class="ev-sim-stats">
-      <div><dt>Distance covered</dt><dd data-stat="dist">—</dd></div>
-      <div><dt>Energy / fuel used</dt><dd data-stat="used">—</dd></div>
-      <div><dt>State at the end</dt><dd data-stat="end">—</dd></div>
-      <div><dt>Patrol range left</dt><dd data-stat="range">—</dd></div>
-    </dl>
-    <p class="ev-sim-verdict" data-verdict></p>
+
+    <div class="psim-lane" data-lane="ice">
+      <div class="psim-lane-head">
+        <span class="psim-lane-car" data-glyph set:html={carGlyph} />
+        <span class="psim-lane-name" data-name>BMW 530d diesel</span>
+      </div>
+      <div class="psim-verdict" data-badge>
+        <span class="psim-verdict-icon" data-icon></span>
+        <span class="psim-verdict-word" data-word></span>
+      </div>
+      <div class="psim-gauge">
+        <span class="psim-gauge-cap">Diesel tank</span>
+        <div class="psim-gauge-body">
+          <div class="psim-gauge-fill" data-fill></div>
+          <div class="psim-gauge-start" data-start><span>start</span></div>
+        </div>
+        <span class="psim-gauge-nub"></span>
+      </div>
+      <p class="psim-read" data-read>—</p>
+    </div>
   </div>
 
-  <details class="ev-sim-how">
+  <details class="psim-disc">
+    <summary>Show the numbers</summary>
+    <table class="psim-table">
+      <thead>
+        <tr><th></th><th data-th="ev">EV</th><th>BMW 530d diesel</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>Distance covered</th><td data-num="ev-dist">—</td><td data-num="ice-dist">—</td></tr>
+        <tr><th>Energy / fuel used</th><td data-num="ev-used">—</td><td data-num="ice-used">—</td></tr>
+        <tr><th>Left at the end</th><td data-num="ev-end">—</td><td data-num="ice-end">—</td></tr>
+        <tr><th>Time to refill / recharge</th><td data-num="ev-refuel">—</td><td data-num="ice-refuel">5 min at any forecourt</td></tr>
+      </tbody>
+    </table>
+  </details>
+
+  <details class="psim-disc">
     <summary>How this is modelled</summary>
-    <div>
+    <div class="psim-how">
       <p>
         Steady-state power is rolling resistance plus aerodynamic drag
         (P&nbsp;=&nbsp;(C<sub>rr</sub>·m·g&nbsp;+&nbsp;½ρ·C<sub>d</sub>A·v²)·v),
-        divided by a 90% drivetrain efficiency for the EVs, plus a constant
-        0.8&nbsp;kW auxiliary load for the blue-light and comms fit. Pursuit
-        driving is not steady-state, so each profile applies an intensity
-        multiplier for the acceleration-braking cycle — 2.1× in town (net of
-        regenerative braking for the EVs), 1.5× on A-roads, 1.15× on the
-        motorway where the speed itself is doing the damage. Vehicle mass is
-        kerb weight plus a double crew and a conversion allowance. Cold
-        weather applies a 20% consumption penalty to the EVs only, in line
-        with Recurrent's 2025 winter analysis of 30,000 cars (average 78%
-        range retention at 0°C). As a sanity check, at a steady 90 and
-        120&nbsp;km/h the model predicts 157 and 206&nbsp;Wh/km for the BMW
+        over a 90% drivetrain efficiency for the EVs, plus a constant
+        0.8&nbsp;kW for the blue-light and comms fit. A pursuit is not
+        steady-state, so each profile applies an intensity multiplier for the
+        accelerate-brake cycle — 2.1× in town (net of regen), 1.5× on A-roads,
+        1.15× on the motorway where speed itself is the cost. Mass is kerb
+        weight plus a double crew and a conversion allowance. A freezing day
+        adds a 20% consumption penalty to the EVs only, matching Recurrent's
+        2025 winter study (78% range retention at 0°C). As a check: at a steady
+        90 and 120&nbsp;km/h the model gives 157 and 206&nbsp;Wh/km for the BMW
         i4&nbsp;M50 against Bjørn Nyland's measured 155 and 217 — close, and
-        kind to the EV, which is the right direction for the argument this
-        piece makes. The diesels use a fixed
-        pursuit economy floor (11–13&nbsp;mpg) rather than the drag model,
-        because a hard-driven diesel's losses are dominated by the engine, not
-        the aerodynamics. Patrol range afterwards assumes normal response-car
-        consumption. The model is deliberately kind to the EV: no tyre scrub,
-        no track-mode battery heat management, no derating when the pack gets
-        hot or low. Real pursuits would land on the worse side of these
-        numbers, not the better.
+        kind to the EV. The diesel uses a fixed pursuit economy floor
+        (13&nbsp;mpg), because a hard-driven diesel's losses are the engine's,
+        not the air's. The model carries no tyre scrub, no battery-heat
+        derating and no low-charge power cut, so a real pursuit lands on the
+        worse side of these figures, not the better.
       </p>
     </div>
   </details>
@@ -232,229 +248,336 @@ const simData = { vehicles: VEHICLES, profiles: PROFILES };
 </div>
 
 <style>
-  .ev-sim {
+  .psim {
     margin: 2.5rem 0;
     border: 1px solid rgb(var(--ink-200));
-    border-radius: 8px;
-    padding: 1.35rem 1.5rem 1.5rem;
+    border-radius: 10px;
+    padding: 1.35rem 1.4rem 1.5rem;
     background: rgb(var(--paper-100));
     font-family: theme('fontFamily.sans');
+    /* Traffic-light status ramp, from the site's themed chart tokens. */
+    --st-good: var(--chart-green);
+    --st-warn: var(--chart-orange);
+    --st-crit: var(--chart-red);
   }
-  .ev-sim-label {
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
+  .psim-kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: rgb(var(--ink-500));
-    margin: 0 0 0.35rem;
+    margin: 0 0 0.3rem;
   }
-  .ev-sim-sub {
-    font-size: 0.85rem;
+  .psim-title {
+    font-family: theme('fontFamily.sans');
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: rgb(var(--ink-900));
+    margin: 0 0 0.4rem;
+    line-height: 1.2;
+  }
+  .psim-intro {
+    font-size: 0.86rem;
+    line-height: 1.5;
     color: rgb(var(--ink-600));
-    margin: 0 0 1.1rem;
-    max-width: 46rem;
+    margin: 0 0 1.15rem;
+    max-width: 44rem;
   }
-  .ev-sim-grid {
+  .psim-legend-good { color: rgb(var(--st-good)); font-weight: 700; }
+  .psim-legend-warn { color: rgb(var(--st-warn)); font-weight: 700; }
+  .psim-legend-crit { color: rgb(var(--st-crit)); font-weight: 700; }
+
+  .psim-controls {
     display: grid;
-    gap: 1.25rem;
-    grid-template-columns: 1fr;
+    gap: 1.15rem;
   }
   @media (min-width: 720px) {
-    .ev-sim-grid {
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    }
+    .psim-controls { grid-template-columns: 1fr 1fr; }
   }
-  fieldset {
-    border: 0;
-    padding: 0;
-    margin: 0;
-  }
-  legend {
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
+  .psim-flabel {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgb(var(--ink-500));
-    padding: 0;
     margin-bottom: 0.5rem;
   }
-  .ev-sim-car,
-  .ev-sim-profile {
+  .psim-choice {
+    display: grid;
+    gap: 0.4rem;
+  }
+  .psim-choice--cars { grid-template-columns: 1fr 1fr; }
+
+  .psim-opt {
+    position: relative;
     display: block;
     border: 1px solid rgb(var(--ink-200));
-    border-radius: 6px;
-    padding: 0.5rem 0.7rem;
-    margin-bottom: 0.4rem;
+    border-radius: 7px;
+    padding: 0.5rem 0.65rem;
     cursor: pointer;
     background: rgb(var(--paper-200));
-    transition: border-color 0.15s ease, background 0.15s ease;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
   }
-  .ev-sim-car:has(input:checked),
-  .ev-sim-profile:has(input:checked) {
+  .psim-opt:hover { border-color: rgb(var(--ink-300)); }
+  .psim-opt:has(input:checked) {
     border-color: rgb(var(--accent));
-    background: rgb(var(--accent) / 0.07);
+    background: rgb(var(--accent) / 0.08);
+    box-shadow: inset 0 0 0 1px rgb(var(--accent) / 0.5);
   }
-  .ev-sim-car input,
-  .ev-sim-profile input {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .ev-sim-car-name,
-  .ev-sim-profile-name {
+  .psim-opt:has(input:focus-visible) { outline: 2px solid rgb(var(--accent)); outline-offset: 2px; }
+  .psim-opt input { position: absolute; opacity: 0; pointer-events: none; }
+  .psim-opt--car { padding-top: 0.35rem; }
+  .psim-opt-car {
     display: block;
-    font-size: 0.88rem;
+    width: 3.1rem;
+    height: 1.35rem;
+    color: rgb(var(--ink-400));
+    margin-bottom: 0.15rem;
+  }
+  .psim-opt:has(input:checked) .psim-opt-car { color: rgb(var(--accent)); }
+  .psim-opt-car svg { width: 100%; height: 100%; display: block; }
+  .psim-opt-name {
+    display: block;
+    font-size: 0.83rem;
     font-weight: 600;
     color: rgb(var(--ink-800));
+    line-height: 1.2;
   }
-  .ev-sim-car[data-kind='ice'] .ev-sim-car-name::after {
-    content: ' · diesel';
-    font-weight: 400;
-    font-size: 0.75rem;
-    color: rgb(var(--ink-500));
-  }
-  .ev-sim-car-role,
-  .ev-sim-profile-desc {
+  .psim-opt-role {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: rgb(var(--ink-500));
     margin-top: 0.1rem;
   }
-  .ev-sim-sliders {
-    margin-top: 1rem;
-    display: grid;
-    gap: 0.8rem;
-  }
-  .ev-sim-slider span {
+
+  .psim-sliders { margin-top: 0.9rem; display: grid; gap: 0.7rem; }
+  .psim-slider-label {
     display: block;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: rgb(var(--ink-700));
     margin-bottom: 0.25rem;
   }
-  .ev-sim-slider output {
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-  }
-  .ev-sim-slider input[type='range'] {
-    width: 100%;
-    accent-color: rgb(var(--accent));
-  }
-  .ev-sim-check {
+  .psim-slider-label b { color: rgb(var(--ink-900)); font-variant-numeric: tabular-nums; }
+  .psim-slider input[type='range'] { width: 100%; accent-color: rgb(var(--accent)); }
+  .psim-toggle {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: rgb(var(--ink-700));
     cursor: pointer;
   }
-  .ev-sim-check input {
-    accent-color: rgb(var(--accent));
-  }
-  .ev-sim-result {
-    margin-top: 1.35rem;
-    border-top: 1px solid rgb(var(--ink-200));
-    padding-top: 1.1rem;
-  }
-  .ev-sim-gauge-track {
-    display: flex;
-    height: 22px;
-    border-radius: 4px;
-    overflow: hidden;
-    background: rgb(var(--ink-900) / 0.08);
-  }
-  .ev-sim-gauge-used {
-    background: rgb(var(--chart-red));
-    transition: width 0.35s ease;
-  }
-  .ev-sim-gauge-left {
-    background: rgb(var(--chart-green));
-    transition: width 0.35s ease;
-  }
-  .ev-sim-gauge-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.72rem;
-    color: rgb(var(--ink-500));
-    margin-top: 0.3rem;
+  .psim-toggle input { accent-color: rgb(var(--accent)); }
+
+  .psim-scenario {
+    margin: 1.25rem 0 0.9rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: rgb(var(--ink-600));
+    text-align: center;
     font-variant-numeric: tabular-nums;
   }
-  .ev-sim-stats {
+  .psim-scenario::before,
+  .psim-scenario::after {
+    content: '';
+    display: inline-block;
+    width: 1.6rem;
+    height: 1px;
+    background: rgb(var(--ink-300));
+    vertical-align: middle;
+    margin: 0 0.6rem;
+  }
+
+  .psim-lanes {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.7rem 1.2rem;
-    margin: 1rem 0 0;
+    gap: 0.9rem;
   }
-  @media (min-width: 640px) {
-    .ev-sim-stats {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
+  @media (min-width: 620px) {
+    .psim-lanes { grid-template-columns: 1fr 1fr; gap: 1rem; }
   }
-  .ev-sim-stats dt {
-    font-size: 0.68rem;
+  .psim-lane {
+    border: 1px solid rgb(var(--ink-200));
+    border-radius: 9px;
+    padding: 0.95rem 1rem 1.05rem;
+    background: rgb(var(--paper-200));
+    /* --st is set per lane from JS; default good so first paint is sane. */
+    --st: var(--st-good);
+  }
+  .psim-lane[data-lane='ice'] { background: rgb(var(--ink-900) / 0.02); }
+  .psim-lane-head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.7rem;
+  }
+  .psim-lane-car {
+    width: 2.9rem;
+    height: 1.3rem;
+    flex-shrink: 0;
+    color: rgb(var(--st));
+  }
+  .psim-lane-car svg { width: 100%; height: 100%; display: block; }
+  .psim-lane-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgb(var(--ink-900));
+    line-height: 1.15;
+  }
+
+  .psim-verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.7rem 0.35rem 0.4rem;
+    border-radius: 999px;
+    background: rgb(var(--st) / 0.13);
+    border: 1px solid rgb(var(--st) / 0.4);
+    margin-bottom: 0.85rem;
+  }
+  .psim-verdict-icon {
+    display: grid;
+    place-items: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 50%;
+    background: rgb(var(--st));
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .psim-verdict-word {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: rgb(var(--st));
+    letter-spacing: 0.01em;
+  }
+
+  .psim-gauge {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .psim-gauge-cap {
+    font-size: 0.62rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: rgb(var(--ink-500));
+    width: 3.4rem;
+    flex-shrink: 0;
   }
-  .ev-sim-stats dd {
-    margin: 0.15rem 0 0;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: rgb(var(--ink-800));
-    font-variant-numeric: tabular-nums;
+  .psim-gauge-body {
+    position: relative;
+    flex: 1;
+    height: 26px;
+    border-radius: 4px 2px 2px 4px;
+    background: rgb(var(--ink-900) / 0.09);
+    border: 1px solid rgb(var(--ink-300));
+    overflow: hidden;
   }
-  .ev-sim-verdict {
-    margin: 1rem 0 0;
-    font-size: 0.9rem;
-    line-height: 1.5;
+  .psim-gauge-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+  .psim-gauge-zone--danger { left: 0; width: 20%; background: rgb(var(--st-crit) / 0.14); }
+  .psim-gauge-zone--low { left: 20%; width: 20%; background: rgb(var(--st-warn) / 0.12); }
+  .psim-gauge-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: rgb(var(--st));
+    border-right: 2px solid rgb(var(--paper-100));
+    transition: width 0.4s ease, background 0.3s ease;
+  }
+  .psim-gauge-start {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    width: 0;
+    border-left: 2px dashed rgb(var(--ink-700));
+    transition: left 0.4s ease;
+  }
+  .psim-gauge-start span {
+    position: absolute;
+    top: -0.05rem;
+    left: 2px;
+    font-size: 0.55rem;
+    color: rgb(var(--ink-600));
+    background: rgb(var(--paper-200));
+    padding: 0 0.15rem;
+    white-space: nowrap;
+  }
+  .psim-gauge-nub {
+    width: 3px;
+    height: 12px;
+    border-radius: 0 2px 2px 0;
+    background: rgb(var(--ink-300));
+    flex-shrink: 0;
+  }
+  .psim-read {
+    margin: 0.7rem 0 0;
+    font-size: 0.8rem;
+    line-height: 1.45;
     color: rgb(var(--ink-700));
-    border-left: 3px solid rgb(var(--accent));
-    padding-left: 0.8rem;
   }
-  .ev-sim-how {
+  .psim-read b { color: rgb(var(--ink-900)); font-variant-numeric: tabular-nums; }
+
+  .psim-disc {
     margin-top: 1.1rem;
     font-size: 0.8rem;
     color: rgb(var(--ink-500));
   }
-  .ev-sim-how summary {
-    cursor: pointer;
+  .psim-disc summary { cursor: pointer; }
+  .psim-disc summary:hover { color: rgb(var(--accent)); }
+  .psim-table {
+    margin: 0.7rem 0 0;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
   }
-  .ev-sim-how summary:hover {
-    color: rgb(var(--accent));
-  }
-  .ev-sim-how div {
-    margin-top: 0.5rem;
-    line-height: 1.55;
-    max-width: 46rem;
-  }
+  .psim-table th, .psim-table td { text-align: left; padding: 0.35rem 0.5rem; border-top: 1px solid rgb(var(--ink-200)); }
+  .psim-table thead th { border-top: 0; color: rgb(var(--ink-600)); font-weight: 600; }
+  .psim-table tbody th { font-weight: 500; color: rgb(var(--ink-600)); }
+  .psim-table td { color: rgb(var(--ink-800)); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .psim-how { margin-top: 0.6rem; line-height: 1.55; max-width: 46rem; }
 </style>
 
 <script>
-  function initEvSims() {
-    document.querySelectorAll<HTMLElement>('[data-ev-sim]').forEach((root) => {
-      if (root.dataset.simReady) return;
-      root.dataset.simReady = '1';
+  function initPsims() {
+    document.querySelectorAll<HTMLElement>('[data-psim]').forEach((root) => {
+      if (root.dataset.psimReady) return;
+      root.dataset.psimReady = '1';
 
-      const dataEl = root.querySelector('[data-sim-data]');
       let data: any;
       try {
-        data = JSON.parse(dataEl?.textContent || '{}');
+        data = JSON.parse(root.querySelector('[data-sim-data]')?.textContent || '{}');
       } catch {
         return;
       }
 
-      const $ = <T extends HTMLElement = HTMLElement>(sel: string) =>
-        root.querySelector<T>(sel);
-      const durIn = $('[data-in="dur"]') as HTMLInputElement;
-      const socIn = $('[data-in="soc"]') as HTMLInputElement;
-      const winterIn = $('[data-in="winter"]') as HTMLInputElement;
+      const durIn = root.querySelector('[data-in="dur"]') as HTMLInputElement;
+      const socIn = root.querySelector('[data-in="soc"]') as HTMLInputElement;
+      const winterIn = root.querySelector('[data-in="winter"]') as HTMLInputElement;
+      const evLane = root.querySelector('[data-lane="ev"]') as HTMLElement;
+      const iceLane = root.querySelector('[data-lane="ice"]') as HTMLElement;
 
       const MPH_TO_MS = 0.44704;
-      const RHO = 1.225; // air density kg/m³
+      const RHO = 1.225;
       const G = 9.81;
-      const ETA = 0.9; // EV drivetrain efficiency
-      const WINTER_PENALTY = 1.2; // +20% EV consumption in cold
-      const PATROL_MPH = 30; // blended patrol/response average for "range left"
+      const ETA = 0.9;
+      const WINTER = 1.2;
+      const PATROL_MPH = 30;
       const L_PER_GAL = 4.546;
 
-      // Steady-state battery power draw (kW) at speed v mph.
+      const TOKEN: Record<string, string> = {
+        good: 'var(--st-good)',
+        warn: 'var(--st-warn)',
+        crit: 'var(--st-crit)',
+      };
+
       function evPowerKw(v: any, mph: number) {
         const ms = mph * MPH_TO_MS;
         const rolling = v.crr * v.massKg * G * ms;
@@ -462,84 +585,111 @@ const simData = { vehicles: VEHICLES, profiles: PROFILES };
         return (rolling + aero) / 1000 / ETA + v.auxKw;
       }
 
+      // Paint one lane: status token, glyph colour, badge, gauge, reading.
+      function paint(
+        lane: HTMLElement,
+        st: 'good' | 'warn' | 'crit',
+        icon: string,
+        word: string,
+        startPct: number,
+        endPct: number,
+        read: string
+      ) {
+        lane.style.setProperty('--st', TOKEN[st]);
+        (lane.querySelector('[data-icon]') as HTMLElement).textContent = icon;
+        (lane.querySelector('[data-word]') as HTMLElement).textContent = word;
+        const fill = lane.querySelector('[data-fill]') as HTMLElement;
+        const start = lane.querySelector('[data-start]') as HTMLElement;
+        fill.style.width = `${Math.max(0, Math.min(100, endPct))}%`;
+        start.style.left = `${Math.max(0, Math.min(100, startPct))}%`;
+        (lane.querySelector('[data-read]') as HTMLElement).innerHTML = read;
+      }
+
+      function num(sel: string, val: string) {
+        const el = root.querySelector(`[data-num="${sel}"]`);
+        if (el) el.textContent = val;
+      }
+
       function compute() {
-        const carId = (root.querySelector('input[name="ev-sim-car"]:checked') as HTMLInputElement)?.value;
-        const profId = (root.querySelector('input[name="ev-sim-profile"]:checked') as HTMLInputElement)?.value;
-        const car = data.vehicles.find((c: any) => c.id === carId);
+        const carId = (root.querySelector('input[name="psim-car"]:checked') as HTMLInputElement)?.value;
+        const profId = (root.querySelector('input[name="psim-profile"]:checked') as HTMLInputElement)?.value;
+        const ev = data.evs.find((c: any) => c.id === carId);
         const prof = data.profiles.find((p: any) => p.id === profId);
-        if (!car || !prof) return;
+        const diesel = data.diesel;
+        if (!ev || !prof) return;
 
         const durMin = Number(durIn.value);
         const startPct = Number(socIn.value);
         const winter = winterIn.checked;
 
-        // Cap the average at what the car can actually sustain.
-        const avgMph = Math.min(prof.avgMph, car.topMph * 0.85);
-        const distMi = (avgMph * durMin) / 60;
+        (root.querySelector('[data-out="dur"]') as HTMLOutputElement).value = String(durMin);
+        (root.querySelector('[data-out="soc"]') as HTMLOutputElement).value = String(startPct);
 
-        let usedStr = '';
-        let endPct = 0;
-        let rangeLeftMi = 0;
-        let endStr = '';
+        // Scenario strip + EV lane name + table header.
+        const evAvg = Math.min(prof.avgMph, ev.topMph * 0.85);
+        const evDist = (evAvg * durMin) / 60;
+        (root.querySelector('[data-scenario]') as HTMLElement).textContent =
+          `${prof.name} · ${durMin} minutes · about ${evDist.toFixed(0)} miles covered${winter ? ' · freezing' : ''}`;
+        (evLane.querySelector('[data-name]') as HTMLElement).textContent = ev.name;
+        (evLane.querySelector('[data-glyph]') as HTMLElement).style.color = ''; // uses --st
+        const thEv = root.querySelector('[data-th="ev"]');
+        if (thEv) thEv.textContent = ev.name;
 
-        if (car.kind === 'ev') {
-          let kw = evPowerKw(car, avgMph) * prof.intensity;
-          if (winter) kw *= WINTER_PENALTY;
-          const usedKwh = (kw * durMin) / 60;
-          const startKwh = (startPct / 100) * car.battKwh;
-          const endKwh = Math.max(0, startKwh - usedKwh);
-          endPct = (endKwh / car.battKwh) * 100;
-          // Patrol consumption afterwards: steady low-speed + aux, plus winter.
-          let patrolKw = evPowerKw(car, PATROL_MPH) * 1.3; // response driving isn't gentle
-          if (winter) patrolKw *= WINTER_PENALTY;
-          rangeLeftMi = (endKwh / patrolKw) * PATROL_MPH;
-          usedStr = `${usedKwh.toFixed(1)} kWh (${((usedKwh / car.battKwh) * 100).toFixed(0)}% of the pack)`;
-          endStr = endKwh <= 0 ? 'Flat. The pursuit ends here.' : `${endPct.toFixed(0)}% charge`;
+        // --- EV physics ---
+        let kw = evPowerKw(ev, evAvg) * prof.intensity;
+        if (winter) kw *= WINTER;
+        const usedKwh = (kw * durMin) / 60;
+        const startKwh = (startPct / 100) * ev.battKwh;
+        const endKwh = Math.max(0, startKwh - usedKwh);
+        const evEndPct = (endKwh / ev.battKwh) * 100;
+        let patrolKw = evPowerKw(ev, PATROL_MPH) * 1.3;
+        if (winter) patrolKw *= WINTER;
+        const evRangeLeft = endKwh > 0 ? (endKwh / patrolKw) * PATROL_MPH : 0;
+
+        let evSt: 'good' | 'warn' | 'crit';
+        let evIcon: string, evWord: string, evRead: string;
+        if (endKwh <= 0) {
+          evSt = 'crit'; evIcon = '✕'; evWord = 'Out of the fight';
+          evRead = `The battery is <b>flat</b> before the chase ends. A control room would have pulled it out earlier — but it is not finishing this pursuit.`;
+        } else if (evEndPct < 20) {
+          evSt = 'crit'; evIcon = '✕'; evWord = 'Finished it, then out';
+          evRead = `Down to <b>${evEndPct.toFixed(0)}%</b>. It completes the chase and then leaves the fight — the next job happens without this car until it has sat on a rapid charger.`;
+        } else if (evEndPct < 40) {
+          evSt = 'warn'; evIcon = '!'; evWord = 'Finished — but low';
+          evRead = `Left with <b>${evEndPct.toFixed(0)}%</b>, roughly <b>${Math.round(evRangeLeft / 5) * 5} miles</b> of response driving. One more job like this takes it off the road; a diesel would splash-and-dash in five minutes.`;
         } else {
-          // Diesel: pursuit economy floor, patrol at cruise mpg.
-          const usedL = (distMi / car.pursuitMpgFloor) * L_PER_GAL;
-          const startL = (startPct / 100) * car.tankL;
-          const endL = Math.max(0, startL - usedL);
-          endPct = (endL / car.tankL) * 100;
-          rangeLeftMi = (endL / L_PER_GAL) * car.cruiseMpg * 0.85; // response, not lab
-          usedStr = `${usedL.toFixed(1)} L of diesel (${((usedL / car.tankL) * 100).toFixed(0)}% of the tank)`;
-          endStr = endL <= 0 ? 'Dry tank — but it took some doing.' : `${endPct.toFixed(0)}% of the tank`;
+          evSt = 'good'; evIcon = '✓'; evWord = 'Still fit for the shift';
+          evRead = `Still <b>${evEndPct.toFixed(0)}%</b>, about <b>${Math.round(evRangeLeft / 5) * 5} miles</b> left. This is the normal case — most chases are short, and short chases barely dent the pack.`;
         }
+        paint(evLane, evSt, evIcon, evWord, startPct, evEndPct, evRead);
 
-        const usedPct = Math.min(100, startPct - endPct);
+        // --- Diesel physics (same pursuit, same starting %) ---
+        const iceAvg = Math.min(prof.avgMph, diesel.topMph * 0.85);
+        const iceDist = (iceAvg * durMin) / 60;
+        const usedL = (iceDist / diesel.pursuitMpgFloor) * L_PER_GAL;
+        const startL = (startPct / 100) * diesel.tankL;
+        const endL = Math.max(0, startL - usedL);
+        const iceEndPct = (endL / diesel.tankL) * 100;
+        const iceRangeLeft = (endL / L_PER_GAL) * diesel.cruiseMpg * 0.85;
 
-        ($('[data-out="dur"]') as HTMLOutputElement).value = String(durMin);
-        ($('[data-out="soc"]') as HTMLOutputElement).value = String(startPct);
-        ($('[data-stat="dist"]') as HTMLElement).textContent = `${distMi.toFixed(0)} miles`;
-        ($('[data-stat="used"]') as HTMLElement).textContent = usedStr;
-        ($('[data-stat="end"]') as HTMLElement).textContent = endStr;
-        ($('[data-stat="range"]') as HTMLElement).textContent =
-          endPct <= 0 ? 'none' : `≈ ${Math.round(rangeLeftMi / 5) * 5} miles`;
-
-        const usedBar = $('[data-gauge-used]') as HTMLElement;
-        const leftBar = $('[data-gauge-left]') as HTMLElement;
-        usedBar.style.width = `${usedPct}%`;
-        leftBar.style.width = `${Math.max(0, endPct)}%`;
-        ($('[data-gauge-label-start]') as HTMLElement).textContent = `started at ${startPct}%`;
-        ($('[data-gauge-label-end]') as HTMLElement).textContent =
-          endPct <= 0 ? 'empty' : `${endPct.toFixed(0)}% left`;
-
-        // The verdict line: what this means operationally.
-        const verdict = $('[data-verdict]') as HTMLElement;
-        if (car.kind === 'ev') {
-          if (endPct <= 0) {
-            verdict.textContent =
-              'The pack is flat before the pursuit ends. In practice the car would have been stood down long before this point — control rooms do not let a pursuit run on a dying battery.';
-          } else if (endPct < 20) {
-            verdict.textContent = `The car finishes the pursuit but is now below 20% — it is done for the shift until it has sat on a rapid charger. Whatever happens next (containment, scene guard, prisoner transport), it happens without this car.`;
-          } else if (endPct < 40) {
-            verdict.textContent = `The car survives, with ${endPct.toFixed(0)}% left. It can limp through the rest of a quiet shift, but a second job like this one takes it out. An ICE car in the same state would splash-and-dash in five minutes; this one needs a working rapid charger and half an hour.`;
-          } else {
-            verdict.textContent = `Comfortable, this time. Short pursuits are the normal ones — most last only a few minutes — and this one leaves the car fit to carry on. The problem is not the typical pursuit; it is the tail of long ones, and everything else the shift still holds.`;
-          }
+        let iceSt: 'good' | 'warn' | 'crit', iceIcon: string, iceWord: string, iceRead: string;
+        if (endL <= 0) {
+          iceSt = 'warn'; iceIcon = '!'; iceWord = 'Running on fumes';
+          iceRead = `Even the big tank runs dry on a chase this long — but a five-minute splash of diesel fixes it, anywhere.`;
         } else {
-          verdict.textContent = `The diesel barely notices: pursuit economy is dreadful, but the tank is huge and a refill takes five minutes at any forecourt. This is the baseline the electric car is being asked to match.`;
+          iceSt = 'good'; iceIcon = '✓'; iceWord = 'Barely dented';
+          iceRead = `Still <b>${iceEndPct.toFixed(0)}%</b> in the tank, about <b>${Math.round(iceRangeLeft / 10) * 10} miles</b> left — and any forecourt refills it in five minutes. This is the bar the EV has to clear.`;
         }
+        paint(iceLane, iceSt, iceIcon, iceWord, startPct, iceEndPct, iceRead);
+
+        // --- Numbers table ---
+        num('ev-dist', `${evDist.toFixed(0)} miles`);
+        num('ice-dist', `${iceDist.toFixed(0)} miles`);
+        num('ev-used', `${usedKwh.toFixed(1)} kWh (${((usedKwh / ev.battKwh) * 100).toFixed(0)}% of pack)`);
+        num('ice-used', `${usedL.toFixed(1)} L (${((usedL / diesel.tankL) * 100).toFixed(0)}% of tank)`);
+        num('ev-end', endKwh <= 0 ? 'flat' : `${evEndPct.toFixed(0)}% · ~${Math.round(evRangeLeft / 5) * 5} mi`);
+        num('ice-end', endL <= 0 ? 'dry' : `${iceEndPct.toFixed(0)}% · ~${Math.round(iceRangeLeft / 10) * 10} mi`);
+        num('ev-refuel', '25–40 min on a rapid charger');
       }
 
       root.querySelectorAll('input').forEach((el) => {
@@ -550,6 +700,6 @@ const simData = { vehicles: VEHICLES, profiles: PROFILES };
     });
   }
 
-  initEvSims();
-  document.addEventListener('astro:page-load', initEvSims);
+  initPsims();
+  document.addEventListener('astro:page-load', initPsims);
 </script>

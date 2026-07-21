@@ -1,7 +1,7 @@
 ---
 title: 'Can an Electric Car Catch a Criminal? The Physics, the Payload and the Pursuit'
 section: data-stories
-description: 'British policing has promised to electrify a fleet that is 80% diesel, and the hard cases are not the school run — they are the pursuit, the armed response vehicle and the 3am rural shift. What the physics, the payload figures and the pursuit data actually say, with two interactive tools so you can run the numbers yourself.'
+description: 'British policing has promised to electrify a fleet that is four-fifths diesel — but the pursuit, the armed response car and the 3am rural shift are governed by physics a procurement target cannot waive. A guide for the people signing the forms, with two interactive tools: match the car to the role, fund the charging first, and do not let a demonstration write fleet policy.'
 pubDate: 2026-07-21
 thumbnail: /images/met-police-bmw-i3-westminster-thumb.webp
 heroImage: /images/met-police-bmw-i3-westminster.webp
@@ -75,9 +75,9 @@ import TabPanel from '../../components/TabPanel.astro';
 import PursuitSimulator from '../../components/ev/PursuitSimulator.astro';
 import ArvLoadout from '../../components/ev/ArvLoadout.astro';
 
-**In September 2019, an officer in Fremont, California, was several minutes into a motorway pursuit when he came on the radio with a sentence no pursuit commander had heard before: his patrol car — a Tesla Model S the city had converted as an experiment — was low on charge, and he was "going to have to find a way to get it to the Supercharger."** The pursuit was called off shortly afterwards for other reasons, and the suspect was not caught. Nobody was hurt. But the radio call travelled around the world, because it named the question every fleet manager in policing has been quietly asked since: when the whole fleet is electric, what happens on the day the job does not fit the battery?
+**In September 2019 an officer in Fremont, California, radioed something no pursuit commander had heard before: his patrol car — a Tesla the city had converted as an experiment — was low on charge, and he would "have to find a way to get it to the Supercharger."** The suspect got away, for unrelated reasons, and nobody was hurt. But the call named the question now sitting on every police fleet manager's desk: when the fleet goes electric, what happens on the day the job does not fit the battery?
 
-This piece is an attempt to answer that question with numbers rather than anecdotes, because both sides of it are currently argued with anecdotes. The enthusiast case says an EV out-accelerates anything a criminal is likely to be driving, which is true and mostly beside the point. The sceptic case says electric police cars run out mid-shift, which happens, but far less often than the anecdotes suggest, and mostly for reasons that are fixable. The interesting ground is in the middle: what a police car actually does all day, which parts of that an electric drivetrain does better, and which parts run into physics that no amount of procurement can negotiate with.
+This is written for the people who answer that with a signature — the procurement leads and policy makers deciding what the next generation of police cars will be. The useful brief is neither the salesroom's (*it out-accelerates anything a criminal drives*) nor the sceptic's (*they run out mid-shift*). It is duller, and it holds: match the powertrain to the role, fund the charging before you buy the cars, and never let a manufacturer's demonstration — or a tabloid anecdote — write fleet policy.
 
 <StickyNav
   items={[
@@ -85,119 +85,111 @@ This piece is an attempt to answer that question with numbers rather than anecdo
     { label: 'A police car’s day', href: '#a-police-cars-day' },
     { label: 'The pursuit problem', href: '#the-pursuit-problem' },
     { label: 'The ARV problem', href: '#the-arv-problem' },
-    { label: 'The diesel counter-case', href: '#the-diesel-counter-case' },
+    { label: 'Diesel & charging', href: '#the-diesel-counter-case' },
     { label: 'The options', href: '#the-options' },
   ]}
 />
 
 <h2 id="the-commitment">The commitment: 32,000 vehicles, 80% diesel, fewer than 1,000 chargers</h2>
 
-Start with the scale of what has been promised. UK police forces run a combined fleet of just under **32,000 vehicles**. When the national Sustainability Decarbonisation Programme was launched in November 2021 by the National Police Chiefs' Council, the Association of Police and Crime Commissioners and BlueLight Commercial, around **80% of that fleet was diesel**, there were **fewer than 1,000 charge points** across police estates in England and Wales, and the programme's own analysis suggested a fully electric fleet would need **more than 8,000**. From 2030, no new pure petrol or diesel car can be sold in the UK; hybrids with significant electric range get until 2035. Nothing in the phase-out carves out a police car. The direction is set; the argument is about the map.
+UK forces run just under **32,000 vehicles**. When the National Police Chiefs' Council, the Association of Police and Crime Commissioners and BlueLight Commercial launched their joint decarbonisation programme in November 2021, about **80% were diesel**, police estates held **fewer than 1,000 charge points**, and the programme's own analysis put the number a fully electric fleet would need above **8,000**. From 2030 no new petrol or diesel car can be sold in the UK; plug-in hybrids get until 2035. Nothing carves out a police car. The direction is fixed; the argument is the route.
 
-Some forces did not wait. Gloucestershire Constabulary bought **75 Nissan electric vehicles in February 2020** — at the time the largest all-electric share of any UK police fleet, around a fifth of its vehicles — and Police Scotland ordered **180 Hyundai Kona Electrics** the same year. Seven forces, including the Met and Police Scotland, evaluated a police-converted Ford Mustang Mach-E in 2021. The Metropolitan Police has run hydrogen Toyota Mirais since 2018. This is not a hypothetical future. It is a live experiment with several years of results in, and the results are more interesting than either camp's slogans.
+Some forces moved early. Gloucestershire bought **75 Nissan EVs** in February 2020 — then the largest electric share of any UK fleet — Police Scotland ordered **180 Hyundai Konas**, seven forces trialled a converted Ford Mustang Mach-E, and the Met has run hydrogen Toyota Mirais since 2018. This is a live experiment with years of results in, and they are more interesting than either slogan.
 
 <figure>
   <img src="/images/met-police-bmw-i3-westminster.webp" alt="A Metropolitan Police BMW i3 electric car in Battenberg livery, marked Low Emissions Vehicle, parked on King Charles Street in Westminster" loading="lazy" />
   <figcaption>The experiment is already on the street: a Met BMW i3 in Westminster. The question is no longer whether electric cars can do police work — it is which police work, and what fills the gap for the rest. <em>Photo: Hullian OneEleven, CC BY-SA 2.0, via Wikimedia Commons.</em></figcaption>
 </figure>
 
-<h2 id="a-police-cars-day">What a police car actually does all day (and why most of it suits a battery)</h2>
+<h2 id="a-police-cars-day">What a police car does all day (and why most of it suits a battery)</h2>
 
-The mental image behind the sceptic case is a car that spends its shift at 140 mph. The reality of response policing is a car that spends its shift accelerating hard for short bursts, crawling around an area on patrol, and then sitting completely still for hours with its lights on.
+The image behind the sceptic's case is a car at 140 mph. The reality of response work is short hard bursts, a lot of low-speed patrol, and hours parked with the lights on.
 
-The best public numbers we have for the blue-light part come from a trial Tesla ran with UK emergency services through 2021, using a converted Model 3. Its findings deserve to be better known. The car managed **over 200 miles of blue-light advanced driving on a single charge**, with the longest continuous run lasting four hours. The trial's most useful figure was not about the car at all: the **average UK blue-light run lasts 7 to 15 minutes**. Three hours of ANPR use cost "less than a few miles" of range, and after 10,000 miles of emergency driving the original brake pads had most of their life left, because regenerative braking had done the bulk of the stopping. A trial run by a manufacturer with something to sell deserves scepticism, and the car was not carrying a full operational fit. But the shape of the finding is corroborated by ordinary fleet experience: Škoda's police-converted Enyaq claims over 300 miles of range, and the East Midlands Ambulance Service found its electric response cars averaged around **40 miles a day**.
+The best public numbers come from a trial Tesla ran with UK emergency services in 2021. Read them with the scepticism any manufacturer's demonstration earns — but read them: a converted Model 3 managed **over 200 miles of blue-light driving on a charge**, three hours of ANPR cost "less than a few miles", and — the figure that matters most — the **average UK blue-light run lasts 7 to 15 minutes**. The shape holds beyond the sales deck: Škoda's police Enyaq claims over 300 miles, and East Midlands Ambulance Service's electric cars average about **40 miles a day**.
 
-The static half of the day is where the electric case gets strong enough that even sceptics should concede it. American data (ours is thinner) suggests a patrol car spends **around half its shift idling**, and an idling petrol cruiser burns roughly **two litres of fuel an hour** to run a few hundred watts of lights and radios. An EV holding a cordon runs the same kit off its pack at a cost of roughly 0.2 kWh an hour — a 75 kWh battery could hold a lit scene guard for the better part of a week. Every officer who has nursed a diesel at fast idle through a twelve-hour scene guard knows exactly what that is worth.
-
-And the everyday physics genuinely favours the electric car in town. Instant torque wins the 0–30 sprint that decides whether a failed-to-stop becomes a pursuit at all. So the fair summary of the ordinary day is this: for beat work, neighbourhood work, most response runs and almost all static work, the electric police car is not a compromise. On the evidence, it is the better tool.
+The static half of the shift is where the EV simply wins. A patrol car spends **around half its time idling**, and an idling diesel burns roughly **two litres an hour** to run a few hundred watts of lights and radios; an EV holds the same cordon at about 0.2 kWh an hour — a 75 kWh pack could light a scene guard for most of a week. Add the instant torque that wins the 0–30 sprint deciding whether a failed-to-stop even becomes a pursuit, and the verdict on the ordinary day is plain: for beat, neighbourhood, most response and all static work, the electric car is the better tool, not a compromise.
 
 Then there is the other 2% of the job.
 
 <h2 id="the-pursuit-problem">The pursuit problem: the cube law does not negotiate</h2>
 
-Here is the piece of physics that should be pinned above every fleet procurement desk. The power needed to push a car through the air rises with the **cube** of its speed. Double the speed and the drag power multiplies by eight. At 30 mph aerodynamics barely matter; at 70 mph they dominate; at 130 mph they are practically the whole bill. This is why an EV's official range, measured on a gentle test cycle, evaporates at speed. Independent testing by Bjørn Nyland found a BMW i4 M50 — as close as currently exists to an electric traffic car — used **155 Wh/km at 90 km/h and 217 Wh/km at 120 km/h**: a 33% increase in speed costing 40% more energy, exactly as the cube law predicts. Push into genuine pursuit speeds and the numbers stop being subtle. A Porsche Taycan driven at a sustained **160 mph** on a derestricted autobahn — a €150,000 car with one of the most efficient drivetrains ever built — emptied its 93.4 kWh pack in roughly **80 miles**.
+Pin this above the procurement desk: the power to push a car through the air rises with the **cube** of its speed. Double the speed, eight times the drag power. At 30 mph aerodynamics barely register; at 130 they are the whole bill. That is why lab range collapses at speed. Independent testing of a BMW i4 M50 — the closest thing to an electric traffic car — measured **155 Wh/km at 90 km/h and 217 at 120**. Push to real pursuit speed and it stops being subtle: a Porsche Taycan held at a sustained **160 mph** emptied its 93 kWh pack in about **80 miles**. Winter takes another bite — **78% range retention at freezing**, on Recurrent's 2025 study of 30,000 cars, and up to 41% loss in AAA's lab.
 
-Winter compounds it. Recurrent's 2025 analysis of more than 30,000 electric cars found average range retention of **78% at freezing**, and AAA's laboratory work measured **41% range loss at −7°C** with the heating on. A January pursuit starts with a smaller tank.
+The defence is that pursuits are short, and it is mostly right. Geoffrey Alpert's foundational research finds the typical pursuit runs **under five minutes**; Pennsylvania, one of the few places that publishes, logged 2,958 in 2023, nearly all short and local. England and Wales publish no national pursuit count at all — we know **18 people died in 17 pursuit-related incidents in 2024/25**, but not the denominator. So a fleet is specified for a distribution: a five-minute town chase is nothing to a battery; the same car at 40% charge picking up a long motorway pursuit is another matter, and "the car had to pull out" is not a line any commander wants at an inquest.
 
-The defence against this argument is that pursuits are short, and the defence is mostly right. The research literature going back to Geoffrey Alpert's foundational studies finds the typical pursuit lasts **under five minutes**. Pennsylvania — one of the few jurisdictions anywhere that publishes complete pursuit data — recorded 2,958 pursuits in 2023, the majority starting from ordinary traffic offences, and its annual reports paint the same picture of short, local events. England and Wales publish no national pursuit statistics at all, which is itself worth pausing on: we know from the IOPC that **18 people died in 17 pursuit-related incidents in 2024/25**, but how many pursuits produced those deaths — the denominator — is a number the public cannot look up. The absence of the data is instructive, and it cuts both ways in this argument.
-
-So the right framing is a distribution, and a fleet has to be specified for its tail. A five-minute urban pursuit is nothing to a battery; the same car, three hours into a shift at 40% charge, picking up a motorway pursuit that runs long, is a different proposition — and "the car had to pull out" is not a sentence any pursuit commander wants to explain at an inquest, in either direction.
-
-Run it yourself. The simulator below uses the drag model above (it reproduces the independent i4 M50 test figures to within a few percent) and lets you choose the car, the pursuit and the state of charge it starts with.
+Run it. The simulator uses the drag model above (it tracks the measured i4 M50 figures closely) and shows the same chase in your chosen EV and the diesel it would replace.
 
 <PursuitSimulator />
 
-Three things fall out of playing with it. First, the sceptics undersell the EV on the typical case: a short pursuit takes single-digit percentages off a decent pack, and the electric car out-drags the fleeing hatchback while it is at it. Second, the enthusiasts undersell the tail: a long motorway pursuit on a half-charged battery ends with the pursuing car, not the pursued one, being the constraint — and unlike the diesel it cannot splash-and-dash in five minutes. Third, the starting state of charge is doing most of the work, which turns an engineering question into a management one: a force that cannot guarantee its response cars start each deployment near full has bought itself the failure mode, not the technology.
+Three things surface. The typical short chase barely dents a decent pack — the sceptics undersell that. A long motorway pursuit on a half-charge ends with the *pursuing* car as the constraint, and unlike the diesel it cannot splash-and-dash in five minutes — the enthusiasts undersell that. And the single biggest lever is the starting charge, which makes this a management question before an engineering one.
 
 <PullQuote>The battery does not fail the pursuit. The half-empty battery fails the pursuit — and half-empty is a management choice.</PullQuote>
 
 <h2 id="the-arv-problem">The armed response problem: Newton gets a vote</h2>
 
-The pursuit problem is about energy. The armed response problem is about mass, and it is the harder of the two, because you cannot charge your way out of it.
+Pursuit is about energy; armed response is about mass, and you cannot charge your way out of mass. A UK armed response vehicle — for two decades a diesel BMW X5 — carries three firearms officers, carbines and sidearms, Tasers, enhanced armour, a ballistic shield, method-of-entry kit and the fixed conversion of gun safe, racking, comms and lighting. A 2024 *Ergonomics* review put specialist officers' personal kit alone at up to **22 kg each**; no force publishes the full fit weight, which is a freedom-of-information request waiting to be filed.
 
-A UK armed response vehicle — for two decades, in practice, a diesel BMW X5 — carries a crew of three authorised firearms officers, their carbines and sidearms, Tasers, enhanced ballistic armour and helmets, a ballistic shield, method-of-entry kit (the enforcer ram is 16 kg on its own), trauma kit and the fixed conversion: gun safe, racking, comms, lighting. Published figures for the people are sobering enough — a 2024 systematic review in *Ergonomics* put specialist tactical officers' personal equipment at up to **22 kg per officer** on top of body weight. No UK force has published the total weight of an ARV's full fit; that gap is a freedom-of-information request waiting to be filed, and this piece flags it rather than inventing a number.
-
-What is published is the payload arithmetic, and it is brutal for the battery. The current X5 xDrive30d offers about **730 kg** of legal payload. Its nearest electric sibling, the BMW iX xDrive50, offers about **540 kg** — nearly 200 kg less — because its battery pack weighs roughly **700 kg** and every kilogram of it comes off the payload budget before anyone opens a door. Load the same crew and kit into both below and watch the margins.
+The payload arithmetic is brutal. The X5 offers about **730 kg**; its nearest electric sibling, the BMW iX, about **540 kg** — because the battery pack weighs roughly **700 kg**, and every kilogram of it comes off payload before a door opens. Load both below.
 
 <ArvLoadout />
 
-The interesting detail from the 2021 British Mach-E police conversion points the same way: the builders added a **second 12-volt battery** dedicated to the police equipment, precisely so the kit would not eat the traction range. Engineers do not add mass to an EV for fun. They were already managing the margin.
+The tell from the 2021 British Mach-E conversion: the builders added a **second 12-volt battery** just for the police kit, so it would not eat the traction range. Engineers do not add mass to an EV for fun. And in 2026 no manufacturer sells an electric ARV — the NYPD's 347 Mach-Es are patrol cars, not tactical trucks; the LAPD's i3s were bought for non-pursuit duties and many sat idle. The biggest forces on earth are still waiting, which tells British buyers where the market actually is.
 
-None of this says an electric ARV is impossible. It says the electric ARV is a heavier vehicle class than the diesel one, with the consumption penalty that implies — and that in 2026 no manufacturer sells one. The NYPD's 347 Mustang Mach-E GTs are patrol cars; the electric tactical truck remains unbuilt. The LAPD's hundred BMW i3s were bought for non-pursuit duties, and several years of reporting suggested many barely turned a wheel. Where armed, pursuit-capable electric vehicles are concerned, the world's biggest forces are still waiting, which should tell British policy makers something about the state of the market.
+<h2 id="the-diesel-counter-case">Diesel is not the safe option either — and charging is a management problem</h2>
 
-<h2 id="the-diesel-counter-case">The counter-argument: diesel is not the safe option either</h2>
+A brief for the status quo would be wrong, because the diesel pursuit fleet just had its own crisis. In January 2020 PC Nick Dumphreys of Cumbria Police died when the **N57 diesel engine** of his BMW failed at speed on the M6 — a fault known since **2016**, effectively confined to police duty cycles. Forces restricted the cars from pursuit; in January 2023 BMW ended specialist sales to UK police. The standard British traffic car and ARV platform came from a supplier that has walked away. "Proven" carries less than its advocates think.
 
-If this piece stopped here it would read as a brief for the status quo, and the status quo does not deserve one. The uncomfortable fact for the "just keep the diesels" camp is that the diesel pursuit fleet has just been through its own crisis, and it was worse than anything the batteries have done.
+Nor is the sceptic's favourite anecdote what it seems. When Gloucestershire's Police and Crime Commissioner said in 2022 that officers' EVs "run out of puff" across a rural county, the detail underneath was that officers **could not find working chargers** mid-shift — infrastructure, not chemistry. That is the whole lesson for a buyer: the failure mode is charging, and charging is a procurement decision, not a property of the car. Depot rapid chargers, bought *before* the vehicles, sized to the shift pattern and sited behind the wire — because a marked car queuing at motorway services is a security problem as much as a delay. The public network has nearly doubled its rapid count in three years, to about **29,000**, but at roughly 94% uptime it is not yet something a response fleet can depend on. A police car is not a taxi; "come back when the charger works" is not in the vocabulary.
 
-In January 2020, PC Nick Dumphreys of Cumbria Police died when the **N57 diesel engine** of his BMW patrol car suffered catastrophic failure at speed on the M6. The inquest heard the fault was known, confined in practice to police vehicles, and associated with exactly the duty cycle this article has described: long idling followed by hard acceleration, at high mileage. BMW had been aware of the issue since **2016**, with incidents going back to 2014. Forces across the country restricted or withdrew the affected cars from pursuit work, and in January 2023 BMW ended specialist sales to UK police forces altogether. The de facto standard British traffic car and the de facto standard ARV platform came, until recently, from a supplier that no longer wants the business. "Proven" is doing less work in the diesel case than its advocates think.
+Weigh both failure lists and the conclusion is simple: every powertrain is a risk portfolio, and a fleet strategy's job is to say so out loud.
 
-Nor is the sceptics' favourite anecdote quite the gotcha it appears. When Gloucestershire's Police and Crime Commissioner told a police and crime panel in 2022 that officers' electric cars "run out of puff" responding across a rural county, the operational detail underneath was that officers **struggled to find working chargers** mid-shift — an infrastructure failure, not a chemistry one. The force's own answer has not been to retreat: by mid-2025 it still ran around 79 battery-electric vehicles, on beat and support duties that fit them. Meanwhile the public network the stragglers rely on has roughly doubled its rapid-charger count in three years — nearly **29,000 rapid and ultra-rapid chargers** by mid-2026 — whilst reliability, at roughly 94% uptime, remains the number an operational fleet cannot quite live with. A response car is not a taxi; "come back when the charger works" is not in the vocabulary.
+<Callout label="What to tell the public" tone="note">
+The transition also has to be explained, and the evidence gives forces a strong story. An electric beat car is cheaper per mile, has a fraction of the moving parts to fail, and — as the Tesla trial found — barely wears its brakes, because regenerative braking does most of the stopping, so it should last longer in service. Say that plainly. Then say the other half just as plainly: pursuit and armed response cars will stay hybrid or diesel until vehicles exist to replace them. A public told both halves will trust the fleet. A public sold "all-electric by [year]" and then shown a diesel armed response car hears only spin.
+</Callout>
 
-Weigh both failure lists fairly and a conclusion follows: every powertrain choice is a risk portfolio, and the job of a fleet strategy is to stop pretending otherwise.
-
-<h2 id="the-options">The options on the policy maker's desk</h2>
+<h2 id="the-options">The options on the procurement desk</h2>
 
 <Tabs tabs={['Fully electric', 'Hybrid bridge', 'Hydrogen', 'Mixed fleet by role']} label="Four ways to spend the same money">
 
 <TabPanel>
-**The case:** cheapest miles, best urban performance, zero tailpipe emissions, and the maintenance savings of a drivetrain with a fraction of the moving parts. For beat, neighbourhood, custody transport and most response work, the trial evidence above says it already works.
+**The case:** cheapest miles, best urban performance, and near-zero maintenance on a drivetrain with a fraction of the moving parts. For beat, neighbourhood and most response work the evidence above already backs it.
 
-**The catch:** the tail cases — long pursuits, ARVs, rural 24/7 response — are exactly where it is weakest, and they are the cases with inquests attached. Going fully electric by a hard date means either accepting a capability gap or betting that vehicle technology closes it on schedule. The 8,000-charger infrastructure bill lands first, the savings later; and every charger has to be behind the wire, because a marked police car queuing at a motorway services is a security problem as much as a time one.
+**The catch:** the tail — long pursuits, ARVs, rural 24/7 — is where it is weakest and where the inquests are. A hard all-electric date either accepts a capability gap or bets the technology closes on schedule, and the 8,000-charger bill lands first, the savings later.
 
-**Verdict:** right destination, wrong single step. A force that flips its whole fleet on one date is specifying for the press release rather than the shift pattern.
+**Verdict:** right destination, wrong single step. A force that flips its whole fleet on one date is specifying for the press release, not the shift pattern.
 </TabPanel>
 
 <TabPanel>
-**The case:** plug-in hybrids stay legal to buy until 2035 and dissolve the two hardest problems: electric drive for the urban 95% of the duty cycle, a fuel tank for the tail. Germany's autobahn-facing forces quietly reached the same conclusion, running diesel-hybrid estates for motorway divisions whilst electrifying city patrol.
+**The case:** plug-in hybrids stay legal to 2035 and solve both hard problems at once — electric drive for the urban 95%, a fuel tank for the tail. Germany's autobahn-facing forces already run hybrid estates for motorway divisions whilst electrifying city patrol.
 
-**The catch:** hybrids carry both drivetrains' weight and both drivetrains' maintenance, the electric-only range is small, and a hybrid bought in 2029 is a 2042 disposal problem. It is a bridge, and bridges have tolls. There is also a cultural risk the fleet data from civilian PHEVs makes vivid: a hybrid that is never plugged in is just a heavy diesel.
+**The catch:** two drivetrains' weight and maintenance, a small electric-only range, and a hybrid bought in 2029 is a 2042 disposal problem. And a hybrid that is never plugged in is just a heavy diesel.
 
-**Verdict:** the defensible answer for pursuit-capable and ARV fleets this decade, if — and it is a real if — forces manage the charging discipline that makes a hybrid worth its weight.
+**Verdict:** the defensible answer for pursuit-capable and ARV fleets this decade — if forces enforce the charging discipline that makes it worth the weight.
 </TabPanel>
 
 <TabPanel>
-**The case:** hydrogen refuels in five minutes, carries no half-tonne pack, and the Met has run Toyota Mirais since **2018** precisely because the duty cycle of a 24/7 fleet punishes charging downtime. On paper it is the electric car's answer to the splash-and-dash.
+**The case:** hydrogen refuels in five minutes and carries no half-tonne pack; the Met has run Toyota Mirais since **2018** because a 24/7 fleet punishes charging downtime.
 
-**The catch:** the network. The United Kingdom has roughly **16 hydrogen refuelling stations**; a pursuit that ends forty miles from the nearest one is a recovery-truck job. The fuel is expensive, the cars are expensive, and the national hydrogen strategy has visibly pivoted towards heavy goods vehicles and depot-based fleets. A force could make hydrogen work exactly where the Met has: a dense urban area with a station inside the patrol footprint, for roles that never leave it.
+**The catch:** about **16 UK refuelling stations**. A pursuit ending forty miles from one is a recovery-truck job, the cars and fuel are expensive, and national strategy has pivoted to heavy goods vehicles. It works only where the Met makes it work — a dense urban area with a station inside the patrol footprint.
 
-**Verdict:** a niche solved twice. Everything hydrogen offers a city patrol fleet, a battery now offers more cheaply; everything it offers the rural tail, the missing stations take away.
+**Verdict:** a niche a battery now fills more cheaply everywhere the stations do not reach.
 </TabPanel>
 
 <TabPanel>
-**The case:** specify the powertrain by role rather than by slogan. Electric for the beat cars, response cars in urban and suburban commands, and every static-heavy role, where the evidence says it is already the better vehicle. Hybrid for roads policing and ARVs, reviewed at each procurement cycle as payloads and packs improve. A handful of diesels retained where the risk assessment demands them, with a published sunset date. Chargers bought before cars, on the depot side of the fence, sized to the shift pattern — because the simulator above says the state of charge at deployment, a pure management variable, decides more outcomes than the badge on the bonnet.
+**The case:** specify by role, not slogan. Electric for beat, urban and suburban response, and every static-heavy job. Hybrid for roads policing and ARVs, reviewed each cycle as packs improve. A few diesels where the risk assessment demands, with a published sunset. Chargers before cars, depot-side, sized to the shift — because the simulator shows the state of charge at deployment decides more than the badge on the bonnet.
 
-**The catch:** it is unglamorous, it makes no headline, and it requires saying in public that some police vehicles will burn diesel into the 2030s. It also requires the thing British policing is institutionally worst at: 43 forces resisting 43 bespoke answers to one national question.
+**The catch:** it is unglamorous, headline-free, and it means admitting some police cars will burn diesel into the 2030s. It also asks 43 forces to give one national answer.
 
-**Verdict:** this is where the evidence points. The fleets that get this right will be the ones that electrified the 90% early and told the truth about the 10%.
+**Verdict:** this is where the evidence points. The fleets that get it right will electrify the 90% early and tell the truth about the 10%.
 </TabPanel>
 
 </Tabs>
 
 <Callout label="The gap in the public data" tone="note">
-Three numbers this article could not cite, because nobody publishes them: the annual number of police pursuits in England and Wales; the total laden weight of a UK armed response vehicle's operational fit; and any force's before-and-after cost per mile from an electrified response fleet. All three are knowable. Until they are known, national fleet policy is being made on manufacturers' spec sheets and American proxies — and both of this article's interactive tools had to be built the same way.
+Three numbers this piece could not cite, because nobody publishes them: the annual number of police pursuits in England and Wales; the full laden weight of an armed response vehicle's operational fit; and any force's before-and-after cost per mile from an electrified fleet. All three are knowable. Until they are, national fleet policy runs on manufacturers' spec sheets and American proxies — as, for want of anything better, did both tools above.
 </Callout>
 
-The Fremont officer's radio call is usually told as a joke at the electric car's expense. Listen to it again and it is something else: a professional, mid-pursuit, calmly reporting a constraint and handing off — which is what pursuit management is. Every police vehicle that has ever existed has had constraints; the diesels idling outside the station tonight have a fatal one on the record. The electric fleet's constraints are at least legible: a cube law, a payload budget, a state of charge. Those you can plan for. The question for the people signing the procurement forms is not whether the electric car can catch the criminal. Mostly, it can. The question is whether the fleet strategy is written for the average day or the worst one — and a police service, of all institutions, does not get to choose the average.
+The Fremont call is told as a joke at the electric car's expense. Heard again, it is just pursuit management: a professional reporting a constraint and handing off. Every police car ever built has had constraints — the diesels idling outside the station tonight have a fatal one on the record. The electric fleet's are at least legible: a cube law, a payload budget, a state of charge. Those you can plan for, buy for and explain. The question on the procurement form is not whether an electric car can catch a criminal. Mostly, it can. It is whether the fleet is specified for the average day or the worst one — and whether someone has funded the chargers and levelled with the public. A police service, of all institutions, does not get to choose the average.
 
 ---
 
