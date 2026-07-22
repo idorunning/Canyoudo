@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-21T13:13:34.152Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-07-22T01:25:50.499Z",
+    "feedCount": 8,
     "sources": [
       "GOV.UK",
       "BBC News",
@@ -9,19 +9,58 @@
       "CPS",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
-      "DSIT",
       "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
+      "title": "Will AI help you do your job or replace you?",
+      "link": "https://www.bbc.co.uk/news/articles/cn7nllr4vd6o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-21T23:04:42.000Z",
+      "summary": "Artificial Intelligence companies make vast claims about their tools replacing human labour - our charts show what's happening."
+    },
+    {
+      "title": "Boy, 15, accused of sex attacks on eight girls",
+      "link": "https://www.bbc.co.uk/news/articles/ce3q2ke5kwzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-21T15:37:57.000Z",
+      "summary": "The teenager will next appear before a court in August."
+    },
+    {
+      "title": "Labour MP who called himself a ‘solicitor’ despite never qualifying lands top cabinet job in Burnham’s new government",
+      "link": "https://www.legalcheek.com/2026/07/labour-mp-who-called-himself-a-solicitor-despite-never-qualifying-lands-top-cabinet-job-in-burnhams-new-government/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-21T14:54:28.000Z",
+      "summary": "Jonathan Reynolds back as Business Sec The post Labour MP who called himself a ‘solicitor’ despite never qualifying lands top cabinet job in Burnham’s new government appeared…"
+    },
+    {
       "title": "Teenagers jailed for murdering 16-year-old in beach knife attack",
       "link": "https://www.bbc.co.uk/news/articles/cly5gq5w04eo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-21T12:23:35.000Z",
+      "isoDate": "2026-07-21T14:42:07.000Z",
       "summary": "Kayden Moy was fatally wounded during a confrontation on Irvine Beach in North Ayrshire in May 2025."
+    },
+    {
+      "title": "Family of woman who lay dead in crash for days confronts mechanic who falsified MOT",
+      "link": "https://www.bbc.co.uk/news/articles/c980l72p65yo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-21T14:12:52.000Z",
+      "summary": "Police swoop in after row erupts between Neil Lewis and family of Darcy Ross in Cardiff."
+    },
+    {
+      "title": "Ministry of Justice Witness Intermediary Scheme",
+      "link": "https://www.gov.uk/guidance/ministry-of-justice-witness-intermediary-scheme",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-21T14:10:47.000Z",
+      "summary": "Information about Registered Intermediaries as part of the Ministry of Justice Witness Intermediary Scheme."
     },
     {
       "title": "Non-lawyer lands Justice Secretary role in Burnham reshuffle, as former barrister becomes Attorney General",
@@ -40,7 +79,7 @@
       "summary": "Up 11% The post Linklaters partners’ average earnings climb to £2.5 million appeared first on Legal Cheek ."
     },
     {
-      "title": "'Treasured' teen, 18, died after cardiac arrest at festival",
+      "title": "'Treasured' teen died after cardiac arrest at festival",
       "link": "https://www.bbc.co.uk/news/articles/cpw927kwn0xo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
@@ -64,36 +103,12 @@
       "summary": "Support roles The post K&L Gates to cut 10% of staff worldwide appeared first on Legal Cheek ."
     },
     {
-      "title": "Baker McKenzie boosts NQ lawyer pay to £150k, matching Magic Circle",
-      "link": "https://www.legalcheek.com/2026/07/baker-mckenzie-boosts-nq-lawyer-pay-to-150k-matching-magic-circle/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-21T06:48:56.000Z",
-      "summary": "More summer rises The post Baker McKenzie boosts NQ lawyer pay to £150k, matching Magic Circle appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Northern Ireland's deputy first minster was 'floored' by news of Donaldson arrest",
-      "link": "https://www.bbc.co.uk/news/articles/c87nx97zlyno?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-21T05:34:49.000Z",
-      "summary": "The deputy first minister says people who worked alongside Jeffrey Donaldson are \"floored, shocked and utterly repulsed\"."
-    },
-    {
       "title": "MOJ Lawtech Grant Competition Phase III",
       "link": "https://www.gov.uk/government/news/moj-lawtech-grant-competition-phase-iii",
       "source": "Ministry of Justice",
       "topic": "law",
       "isoDate": "2026-07-20T15:23:25.000Z",
       "summary": "The Ministry of Justice (MOJ) has launched a competition to award funding for the third phase of the LawtechUK programme."
-    },
-    {
-      "title": "'Scrutiny' needed over baby's death, court hears",
-      "link": "https://www.bbc.co.uk/news/articles/clyxje8y8vko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-20T15:11:23.000Z",
-      "summary": "Preston Davey died after months of sexual and physical abuse at the hands of Jamie Varley."
     },
     {
       "title": "China's Moonshot AI claims Kimi K3 can rival OpenAI and Anthropic",
@@ -120,14 +135,6 @@
       "summary": "This Call for Evidence exercise is intended to gather evidence to support the work of the Independent Review of the Prison System."
     },
     {
-      "title": "Oversight and funding of youth justice services",
-      "link": "https://www.gov.uk/government/consultations/oversight-and-funding-of-youth-justice-services",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-17T09:00:00.000Z",
-      "summary": "A consultation on proposals for a new performance and oversight framework for youth justice services, and reforms to how they are funded."
-    },
-    {
       "title": "EU forces Google to share its toys with the other AI and search kids",
       "link": "https://www.theregister.com/software/2026/07/16/eu-forces-google-to-share-its-toys-with-the-other-ai-and-search-kids/5273819",
       "source": "The Register",
@@ -142,14 +149,6 @@
       "topic": "ai",
       "isoDate": "2026-07-16T16:21:00.000Z",
       "summary": "Forrester warns price hikes and usage charges will pump up software budgets next year"
-    },
-    {
-      "title": "Data regulation in the age of AI and other data‑intensive technologies",
-      "link": "https://www.gov.uk/government/calls-for-evidence/data-regulation-in-the-age-of-ai-and-other-data-intensive-technologies",
-      "source": "DSIT",
-      "topic": "ai",
-      "isoDate": "2026-07-15T09:00:04.000Z",
-      "summary": "This call for evidence asks for examples of how data regulation interacts with AI and data-intensive technologies, and how technological progress may change data use in the…"
     },
     {
       "title": "AI to speed up justice under major disclosure reforms",
