@@ -3,31 +3,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import { getCollection } from 'astro:content';
 
-// Curiosities — the hidden "History & Curiosities" collection. It has no place
-// in the site nav: the only way in is the logo in the footer (see
-// src/components/Footer.astro), which makes this a small easter egg. The
-// articles themselves still live at /other/{slug}; this is just their home
-// page. noindex keeps it out of search — found, not indexed.
 const articles = (
   await getCollection('articles', ({ data }) => !data.draft && data.section === 'other')
 ).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 ---
 
 <BaseLayout
-  title="Curiosities"
-  description="Historical puzzles, methods, and the occasional digression — a hidden corner of Thinking About Policing."
-  noindex={true}
+  title="Data Stories"
+  description="Non-police stories on history, methods, technology, and related topics."
+  noindex={false}
 >
   <section class="border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
-      <p class="u-kicker mb-5 u-tnum">You found it · {articles.length} piece{articles.length === 1 ? '' : 's'}</p>
+      <p class="u-kicker mb-5 u-tnum">{articles.length} piece{articles.length === 1 ? '' : 's'}</p>
       <h1 class="font-display text-4xl md:text-5xl font-bold text-ink-900 leading-[1.05] tracking-[-0.025em] text-balance">
-        Curiosities
+        Data Stories
       </h1>
       <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
-        A hidden shelf: history, puzzles, methods and the odd digression that
-        didn't fit a neater box. No link in the menu points here — you came in
-        through the logo. Welcome.
+        Non-police stories on history, research methods, technology, and related topics.
       </p>
     </div>
   </section>

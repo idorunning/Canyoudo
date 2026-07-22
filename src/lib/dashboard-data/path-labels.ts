@@ -17,7 +17,7 @@ const STATIC_LABELS: Record<string, string> = {
   '/research-tools': 'Research tools',
   '/practical-summaries': 'Practical summaries',
   '/perception': 'Perception explorer',
-  '/curiosities': 'Curiosities',
+  '/curiosities': 'Data Stories',
   '/further-reading': 'Further reading',
   '/all': 'All articles',
   '/contact': 'Contact',
