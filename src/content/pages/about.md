@@ -11,7 +11,7 @@ The articles sit in five areas:
 * **[Leadership](/topics/leadership) & Culture** — the wider structural questions: [criminal justice](/topics/law), legislation, and the political pressures that shape demand on the police.
 * **Influential People** — profiles of the researchers and practitioners who have shifted how policing is done.
 * **Technology & Innovation** — short, data-led pieces where the numbers carry the argument.
-* **History & Curiosities** — including the Somerton Man code mystery, which has nothing to do with policing but earned a permanent home here anyway.
+* **Data Stories** — non-police stories on history, research methods, and other topics, including the Somerton Man code mystery.
 
 ## Three free tools
 

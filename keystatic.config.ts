@@ -21,7 +21,7 @@ const SECTION_OPTIONS = [
   { label: 'Evidence & Practice', value: 'police-policy' },
   { label: 'Leadership & Culture', value: 'public-policy' },
   { label: 'Influential People', value: 'influential-people' },
-  { label: 'History & Curiosities', value: 'other' },
+  { label: 'Data Stories', value: 'other' },
   { label: 'Technology & Innovation', value: 'data-stories' },
 ];
 

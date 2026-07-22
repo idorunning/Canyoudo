@@ -7,16 +7,13 @@ export const SECTION_LABELS: Record<Section, string> = {
   'police-policy': 'Evidence & Practice',
   'public-policy': 'Leadership & Culture',
   'influential-people': 'Influential People',
-  other: 'History & Curiosities',
+  other: 'Data Stories',
   'data-stories': 'Technology & Innovation',
 };
 
 // Sections shown in navigation and discovery surfaces (homepage grid, site
-// overview, explore rail). `other` (History & Curiosities) is intentionally
-// left out: it lives as a hidden page at /curiosities, reachable only through
-// the logo in the footer. Its articles still build at /other/{slug} and are
-// still counted — they're just not advertised in the nav.
-export const VISIBLE_SECTIONS: Section[] = SECTIONS.filter((s) => s !== 'other');
+// overview, explore rail).
+export const VISIBLE_SECTIONS: Section[] = SECTIONS;
 
 // The browser editor serialises a cleared optional field as '' rather than
 // omitting it — and '' coerces to Invalid Date, which fails the build. Treat
