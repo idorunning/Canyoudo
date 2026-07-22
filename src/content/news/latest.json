@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-22T01:25:50.499Z",
-    "feedCount": 8,
+    "fetchedAt": "2026-07-22T13:19:09.413Z",
+    "feedCount": 7,
     "sources": [
       "GOV.UK",
       "BBC News",
@@ -9,18 +9,57 @@
       "CPS",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
-      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
-      "title": "Will AI help you do your job or replace you?",
-      "link": "https://www.bbc.co.uk/news/articles/cn7nllr4vd6o?at_medium=RSS&at_campaign=rss",
+      "title": "OpenAI says its AI went rogue and launched 'unprecedented' cyber-attack",
+      "link": "https://www.bbc.co.uk/news/articles/c3ek3gvdnj3o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
-      "isoDate": "2026-07-21T23:04:42.000Z",
-      "summary": "Artificial Intelligence companies make vast claims about their tools replacing human labour - our charts show what's happening."
+      "isoDate": "2026-07-22T11:40:11.000Z",
+      "summary": "It is one of the first publicly disclosed cyber-attacks carried out by AI without direct human involvement."
+    },
+    {
+      "title": "New protocol for legal professionals wishing to raise concerns informally about coroner behaviour",
+      "link": "https://www.judiciary.uk/new-protocol-for-legal-professionals-wishing-to-raise-concerns-informally-about-coroner-behaviour/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-22T10:30:42.000Z",
+      "summary": "Read more about this informal route through which legal professionals may raise concerns about the behaviour of a coroner where early and constructive resolution is appropriate…"
+    },
+    {
+      "title": "Holme House Prison",
+      "link": "https://www.gov.uk/guidance/holme-house-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-22T09:49:50.000Z",
+      "summary": "Holme House is a men’s prison in Stockton on Tees, north east England."
+    },
+    {
+      "title": "Mishcon de Reya signs 20-year lease for new Holborn HQ",
+      "link": "https://www.legalcheek.com/2026/07/mishcon-de-reya-signs-20-year-lease-for-new-holborn-hq/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-22T09:04:49.000Z",
+      "summary": "Relocating in 2029 The post Mishcon de Reya signs 20-year lease for new Holborn HQ appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Debevoise analyst posed as firm lawyer in tenancy row",
+      "link": "https://www.legalcheek.com/2026/07/debevoise-analyst-posed-as-firm-lawyer-in-tenancy-row/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-22T07:54:46.000Z",
+      "summary": "Barred from profession The post Debevoise analyst posed as firm lawyer in tenancy row appeared first on Legal Cheek ."
+    },
+    {
+      "title": "New Hall Prison and Young Offender Institution",
+      "link": "https://www.gov.uk/guidance/new-hall-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-22T07:06:07.000Z",
+      "summary": "New Hall is a prison and young offender institution (YOI) in Flockton, West Yorkshire, for women aged 18 and over."
     },
     {
       "title": "Boy, 15, accused of sex attacks on eight girls",
@@ -39,22 +78,6 @@
       "summary": "Jonathan Reynolds back as Business Sec The post Labour MP who called himself a ‘solicitor’ despite never qualifying lands top cabinet job in Burnham’s new government appeared…"
     },
     {
-      "title": "Teenagers jailed for murdering 16-year-old in beach knife attack",
-      "link": "https://www.bbc.co.uk/news/articles/cly5gq5w04eo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-21T14:42:07.000Z",
-      "summary": "Kayden Moy was fatally wounded during a confrontation on Irvine Beach in North Ayrshire in May 2025."
-    },
-    {
-      "title": "Family of woman who lay dead in crash for days confronts mechanic who falsified MOT",
-      "link": "https://www.bbc.co.uk/news/articles/c980l72p65yo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-21T14:12:52.000Z",
-      "summary": "Police swoop in after row erupts between Neil Lewis and family of Darcy Ross in Cardiff."
-    },
-    {
       "title": "Ministry of Justice Witness Intermediary Scheme",
       "link": "https://www.gov.uk/guidance/ministry-of-justice-witness-intermediary-scheme",
       "source": "Ministry of Justice",
@@ -71,36 +94,12 @@
       "summary": "All change The post Non-lawyer lands Justice Secretary role in Burnham reshuffle, as former barrister becomes Attorney General appeared first on Legal Cheek ."
     },
     {
-      "title": "Linklaters partners’ average earnings climb to £2.5 million",
-      "link": "https://www.legalcheek.com/2026/07/linklaters-partners-average-earnings-climb-to-2-5-million/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-21T10:03:06.000Z",
-      "summary": "Up 11% The post Linklaters partners’ average earnings climb to £2.5 million appeared first on Legal Cheek ."
-    },
-    {
-      "title": "'Treasured' teen died after cardiac arrest at festival",
-      "link": "https://www.bbc.co.uk/news/articles/cpw927kwn0xo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-21T09:37:56.000Z",
-      "summary": "Lucy Ellen Halpin died at Tonnau festival near Llanfaethlu on Anglesey."
-    },
-    {
       "title": "AI minister role boosted but tech department axed in Burnham shake-up",
       "link": "https://www.bbc.co.uk/news/articles/cz97x8k4zqzo?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
       "isoDate": "2026-07-21T09:15:55.000Z",
       "summary": "Kanishka Narayan will attend cabinet - but no longer have the leadership of a technology secretary."
-    },
-    {
-      "title": "K&L Gates to cut 10% of staff worldwide",
-      "link": "https://www.legalcheek.com/2026/07/kl-gates-to-cut-10-staff-worldwide/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-21T06:49:22.000Z",
-      "summary": "Support roles The post K&L Gates to cut 10% of staff worldwide appeared first on Legal Cheek ."
     },
     {
       "title": "MOJ Lawtech Grant Competition Phase III",
@@ -117,38 +116,6 @@
       "topic": "ai",
       "isoDate": "2026-07-17T16:53:04.000Z",
       "summary": "The company has unveiled a massive new artificial intelligence model it says can take on top American firms."
-    },
-    {
-      "title": "Elmley Prison",
-      "link": "https://www.gov.uk/guidance/elmley-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-17T11:48:56.000Z",
-      "summary": "Elmley is one of 3 prisons on the Isle of Sheppey, Kent, the other two being HMP Standford Hill and HMP Swaleside."
-    },
-    {
-      "title": "Independent review of the prison system in England and Wales",
-      "link": "https://www.gov.uk/government/calls-for-evidence/independent-review-of-the-prison-system-in-england-and-wales",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-17T10:53:23.000Z",
-      "summary": "This Call for Evidence exercise is intended to gather evidence to support the work of the Independent Review of the Prison System."
-    },
-    {
-      "title": "EU forces Google to share its toys with the other AI and search kids",
-      "link": "https://www.theregister.com/software/2026/07/16/eu-forces-google-to-share-its-toys-with-the-other-ai-and-search-kids/5273819",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-16T16:48:41.000Z",
-      "summary": "The Chocolate Factory is not amused"
-    },
-    {
-      "title": "AI vendors have found someone to pay their infrastructure bills: You",
-      "link": "https://www.theregister.com/software/2026/07/16/ai-vendors-have-found-someone-to-pay-their-infrastructure-bills-you/5273712",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-16T16:21:00.000Z",
-      "summary": "Forrester warns price hikes and usage charges will pump up software budgets next year"
     },
     {
       "title": "AI to speed up justice under major disclosure reforms",
@@ -175,14 +142,6 @@
       "summary": "The CNC has reduced its mean gender pay gap to 2.95%, outperforming <mark>policing</mark> and the wider public sector as it continues towards its 2035 target."
     },
     {
-      "title": "Sticker shock has execs rethinking this whole AI thing",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/13/sticker-shock-has-execs-rethinking-this-whole-ai-thing-1/5270073",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-13T14:16:00.000Z",
-      "summary": "This week on The Reg's Kettle podcast, we wonder whether tokenminning is going to bring the industry back down to Earth"
-    },
-    {
       "title": "Meta pulls new AI image feature after days of backlash",
       "link": "https://www.bbc.co.uk/news/articles/c2dy6e8klw0o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -199,14 +158,6 @@
       "summary": "Guests from across the justice sector gathered at the Royal Courts of Justice to learn how the Judicial College designs and delivers training for more than 24,000 judicial…"
     },
     {
-      "title": "AI tool scours the web for job openings, preps your resume and cover letter",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/09/ai-tool-scours-the-web-for-job-openings-preps-your-resume-and-cover-letter/5269410",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-09T17:40:00.000Z",
-      "summary": "Searching for work sucks; AI combs the internet and sucks it all up. Combine the two and let 'er rip with this Python project"
-    },
-    {
       "title": "Sir Colin Birss appointed Master of the Rolls",
       "link": "https://www.judiciary.uk/lord-justice-birss-appointed-master-of-the-rolls/",
       "source": "Courts & Tribunals Judiciary",
@@ -221,14 +172,6 @@
       "topic": "law",
       "isoDate": "2026-07-09T12:31:24.000Z",
       "summary": "His Majesty King Charles III has been pleased to approve the appointment of The Rt Hon Lord Justice Warby as the President of the King's Bench Division The post Lord Justice…"
-    },
-    {
-      "title": "Judicial diversity statistics 2026 – statement from the Lady Chief Justice",
-      "link": "https://www.judiciary.uk/judicial-diversity-statistics-2026-statement-from-the-lady-chief-justice/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-07-09T09:31:18.000Z",
-      "summary": "Judicial diversity statistics for 2026 have been released today, including, for the first time, data on socio-economic background, sexual orientation, and religion or belief…"
     },
     {
       "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
