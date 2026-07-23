@@ -1,57 +1,123 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-23T01:45:27.587Z",
-    "feedCount": 7,
+    "fetchedAt": "2026-07-23T13:21:33.122Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
+      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "CPS",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
     {
+      "title": "Police failed to check Manchester synagogue attacker's phones despite arresting him twice",
+      "link": "https://www.bbc.co.uk/news/articles/c3d3507ng37o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-23T13:05:01.000Z",
+      "summary": "Greater Manchester Police apologises because Jihad Al-Shamie's devices were not reviewed before the attack."
+    },
+    {
+      "title": "Master of the Rolls celebrates centuries-old role at National Archives display",
+      "link": "https://www.judiciary.uk/master-of-the-rolls-celebrates-centuries-old-role-at-national-archives-display/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-23T12:20:34.000Z",
+      "summary": "Sir Geoffrey Vos, the Master of the Rolls, celebrated a rare viewing of historical documents at The National Archives The post Master of the Rolls celebrates centuries-old role…"
+    },
+    {
+      "title": "'Let's enjoy the ride' says Elon Musk, as AI fears mount",
+      "link": "https://www.bbc.co.uk/news/articles/c4gkxppljpyo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-23T11:39:11.000Z",
+      "summary": "Talking to The Economist, Musk said he doesn't care if people hate him and said he was not a racist."
+    },
+    {
+      "title": "IBM insists AI didn't kill software deals, just delayed them",
+      "link": "https://www.theregister.com/software/2026/07/23/ibm-insists-ai-didnt-kill-software-deals-just-delayed-them/5276977",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-23T11:34:42.000Z",
+      "summary": "Big Blue says customers postponed rather than abandoned major purchases as hardware soaked up enterprise budgets"
+    },
+    {
+      "title": "Murder investigation launched after man dies",
+      "link": "https://www.bbc.co.uk/news/articles/cp87qz866zlo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-23T11:24:26.000Z",
+      "summary": "Police say the man died from his injuries after an attack in the New Lodge area of Belfast."
+    },
+    {
+      "title": "Statutory guidance: Firearms licensing: statutory guidance for police",
+      "link": "https://www.gov.uk/government/publications/statutory-guidance-for-police-on-firearms-licensing",
+      "source": "Home Office",
+      "topic": "policing",
+      "isoDate": "2026-07-23T11:09:59.000Z",
+      "summary": "How police chiefs should carry out checks when assessing someone's suitability to own firearms or become a registered firearms dealer."
+    },
+    {
+      "title": "'Every victim will feel the same,' says mother of PC Harper over early prison release",
+      "link": "https://www.bbc.co.uk/news/articles/cx2rkl1778zo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-23T10:56:38.000Z",
+      "summary": "As the deadline for releases approaches, Andy Burnham has reignited a row over the legislation after he said he would review the plans."
+    },
+    {
+      "title": "Billionaire’s spies targeted DWF partner in sting operation to get insider info on £300m dispute",
+      "link": "https://www.legalcheek.com/2026/07/billionaires-spies-targeted-dwf-partner-in-sting-operation-to-get-insider-info-on-300m-dispute/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-23T10:18:18.000Z",
+      "summary": "Wined and dined The post Billionaire’s spies targeted DWF partner in sting operation to get insider info on £300m dispute appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Police recorded crime and outcomes open data tables",
+      "link": "https://www.gov.uk/government/statistical-data-sets/police-recorded-crime-and-outcomes-open-data-tables",
+      "source": "Home Office",
+      "topic": "policing",
+      "isoDate": "2026-07-23T08:30:05.000Z",
+      "summary": "Police recorded crime and outcomes detailed figures and supplementary material."
+    },
+    {
+      "title": "Travers Smith bounces back with record £229 million turnover",
+      "link": "https://www.legalcheek.com/2026/07/travers-smith-bounces-back-with-record-229-million-turnover/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-23T07:41:13.000Z",
+      "summary": "Partner pay hits £1.4 million The post Travers Smith bounces back with record £229 million turnover appeared first on Legal Cheek ."
+    },
+    {
+      "title": "What the lawyer picks in Andy Burnham’s Cabinet tell us about the way he will govern",
+      "link": "https://www.legalcheek.com/2026/07/what-the-lawyer-picks-in-andy-burnhams-cabinet-tell-us-about-the-way-he-will-govern/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-23T07:40:24.000Z",
+      "summary": "One quit his training contract after 10 months and never actually qualified The post What the lawyer picks in Andy Burnham’s Cabinet tell us about the way he will govern…"
+    },
+    {
       "title": "Google burning through cash with spiralling AI costs",
       "link": "https://www.bbc.co.uk/news/articles/c235n47g8g8o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
-      "isoDate": "2026-07-22T23:02:32.000Z",
+      "isoDate": "2026-07-23T07:15:59.000Z",
       "summary": "The company said earlier this year it expected to spend as much as $190bn on AI investments."
     },
     {
-      "title": "Four more members of grooming gang guilty of sexually abusing girl in care",
-      "link": "https://www.bbc.co.uk/news/articles/cy07r94qyyzo?at_medium=RSS&at_campaign=rss",
+      "title": "Police officer was violent rapist who attacked women over 14 years",
+      "link": "https://www.bbc.co.uk/news/articles/c3v0rq66q3no?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-22T20:00:59.000Z",
-      "summary": "A total of 13 men have been convicted of offences against a girl who the court heard was \"passed around like candy\"."
-    },
-    {
-      "title": "Police formally investigate woman after Brit stabbed to death in French village",
-      "link": "https://www.bbc.co.uk/news/articles/cwye7lv2endo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-22T19:03:08.000Z",
-      "summary": "Karen Carter was found with stab wounds in the Dordogne village she had lived in for over a decade."
-    },
-    {
-      "title": "Young people 'urged to attack police' in west Belfast disorder",
-      "link": "https://www.bbc.co.uk/news/articles/c39e1nl9z28o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-22T17:17:39.000Z",
-      "summary": "Jim Donnelly said youth workers who had been trying to help young people had since received threats."
-    },
-    {
-      "title": "'No secrecy' over asylum camp decision, court told",
-      "link": "https://www.bbc.co.uk/news/articles/c74gm8vwnm2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-22T17:16:46.000Z",
-      "summary": "Campaigners take action over the government's use of a former military camp to house up to 540 men."
+      "isoDate": "2026-07-23T05:12:30.000Z",
+      "summary": "The BBC can reveal that detectives have so far uncovered nine victims of PC Alan Greer but many more are anticipated."
     },
     {
       "title": "Morton Hall Prison",
@@ -110,36 +176,12 @@
       "summary": "Holme House is a men’s prison in Stockton on Tees, north east England."
     },
     {
-      "title": "Mishcon de Reya signs 20-year lease for new Holborn HQ",
-      "link": "https://www.legalcheek.com/2026/07/mishcon-de-reya-signs-20-year-lease-for-new-holborn-hq/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-22T09:04:49.000Z",
-      "summary": "Relocating in 2029 The post Mishcon de Reya signs 20-year lease for new Holborn HQ appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Debevoise analyst posed as firm lawyer in tenancy row",
-      "link": "https://www.legalcheek.com/2026/07/debevoise-analyst-posed-as-firm-lawyer-in-tenancy-row/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-22T07:54:46.000Z",
-      "summary": "Barred from profession The post Debevoise analyst posed as firm lawyer in tenancy row appeared first on Legal Cheek ."
-    },
-    {
       "title": "New Hall Prison and Young Offender Institution",
       "link": "https://www.gov.uk/guidance/new-hall-prison",
       "source": "Ministry of Justice",
       "topic": "law",
       "isoDate": "2026-07-22T07:06:07.000Z",
       "summary": "New Hall is a prison and young offender institution (YOI) in Flockton, West Yorkshire, for women aged 18 and over."
-    },
-    {
-      "title": "Labour MP who called himself a ‘solicitor’ despite never qualifying lands top cabinet job in Burnham’s new government",
-      "link": "https://www.legalcheek.com/2026/07/labour-mp-who-called-himself-a-solicitor-despite-never-qualifying-lands-top-cabinet-job-in-burnhams-new-government/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-21T14:54:28.000Z",
-      "summary": "Jonathan Reynolds back as Business Sec The post Labour MP who called himself a ‘solicitor’ despite never qualifying lands top cabinet job in Burnham’s new government appeared…"
     },
     {
       "title": "Ministry of Justice Witness Intermediary Scheme",
@@ -158,12 +200,20 @@
       "summary": "Kanishka Narayan will attend cabinet - but no longer have the leadership of a technology secretary."
     },
     {
-      "title": "China's Moonshot AI claims Kimi K3 can rival OpenAI and Anthropic",
-      "link": "https://www.bbc.co.uk/news/articles/cy9w4q8pgp0o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
+      "title": "EU forces Google to share its toys with the other AI and search kids",
+      "link": "https://www.theregister.com/software/2026/07/16/eu-forces-google-to-share-its-toys-with-the-other-ai-and-search-kids/5273819",
+      "source": "The Register",
       "topic": "ai",
-      "isoDate": "2026-07-17T16:53:04.000Z",
-      "summary": "The company has unveiled a massive new artificial intelligence model it says can take on top American firms."
+      "isoDate": "2026-07-16T16:48:41.000Z",
+      "summary": "The Chocolate Factory is not amused"
+    },
+    {
+      "title": "AI vendors have found someone to pay their infrastructure bills: You",
+      "link": "https://www.theregister.com/software/2026/07/16/ai-vendors-have-found-someone-to-pay-their-infrastructure-bills-you/5273712",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-16T16:21:00.000Z",
+      "summary": "Forrester warns price hikes and usage charges will pump up software budgets next year"
     },
     {
       "title": "AI to speed up justice under major disclosure reforms",
@@ -182,6 +232,14 @@
       "summary": "The Environment Agency has led a major multi-agency operation to tackle waste crime in Cumbria."
     },
     {
+      "title": "Sticker shock has execs rethinking this whole AI thing",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/13/sticker-shock-has-execs-rethinking-this-whole-ai-thing-1/5270073",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-13T14:16:00.000Z",
+      "summary": "This week on The Reg's Kettle podcast, we wonder whether tokenminning is going to bring the industry back down to Earth"
+    },
+    {
       "title": "Royal Courts of Justice event showcases the work of the Judicial College",
       "link": "https://www.judiciary.uk/royal-courts-of-justice-event-showcases-the-work-of-the-judicial-college/",
       "source": "Courts & Tribunals Judiciary",
@@ -196,22 +254,6 @@
       "topic": "law",
       "isoDate": "2026-07-09T12:31:48.000Z",
       "summary": "His Majesty King Charles III has been pleased to approve the appointment of Sir Colin Birss as the Master of the Rolls The post Sir Colin Birss appointed Master of the Rolls…"
-    },
-    {
-      "title": "Lord Justice Warby appointed President of the King’s Bench Division",
-      "link": "https://www.judiciary.uk/lord-justice-warby-appointed-president-of-the-kings-bench-division/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-07-09T12:31:24.000Z",
-      "summary": "His Majesty King Charles III has been pleased to approve the appointment of The Rt Hon Lord Justice Warby as the President of the King's Bench Division The post Lord Justice…"
-    },
-    {
-      "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
-      "link": "https://www.gov.uk/government/news/solicitor-general-announces-national-rollout-of-early-victims-right-to-review-scheme",
-      "source": "CPS",
-      "topic": "law",
-      "isoDate": "2026-07-06T09:18:34.000Z",
-      "summary": "Following a successful pilot, rape and sexual assault survivors across all of England and Wales will have the right to ask for their cases to be reviewed before a final…"
     }
   ]
 }
