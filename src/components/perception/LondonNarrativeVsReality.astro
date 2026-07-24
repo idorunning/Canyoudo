@@ -1,0 +1,169 @@
+---
+// London: narrative vs reality — the divergence at the heart of the explorer's
+// London view. It plots the social-media "London is unsafe / in decline"
+// narrative (an illustrative intensity index, rising) against the real headline
+// crime metric Mayor Khan led with on LBC — London homicides (falling to the
+// fewest since 2014). Both series are indexed to a shared base year = 100 so a
+// post-volume index and a homicide count read on one honest axis; the point is
+// the DIVERGENCE (narrative up-and-right, crime down-and-right). Pure build-time
+// inline SVG (house pattern, cf. ConfidenceVsCoverage/TrendChart), with a
+// <details> data-table fallback and the cited posts beneath, so the whole thing
+// works with no JavaScript. The client (explorer.ts) redraws an interactive
+// version into a sibling node and hides this fallback.
+import { getCollection } from 'astro:content';
+
+interface Props {
+  width?: number;
+  height?: number;
+}
+const { width = 820, height = 380 } = Astro.props;
+
+const entries = await getCollection('perception');
+const ctx = entries.find((e) => e.data.kind === 'context')?.data as
+  | Extract<(typeof entries)[number]['data'], { kind: 'context' }>
+  | undefined;
+const london = ctx?.london;
+
+// Index a {year,value}[] series to 100 at the base year, so different units
+// (a post-volume index, a homicide count) share one comparable axis.
+function indexed(points: { year: number; value: number }[], baseYear: number) {
+  const base = points.find((p) => p.year === baseYear)?.value ?? points[0]?.value ?? 0;
+  if (!base) return points.map((p) => ({ year: p.year, value: 0 }));
+  return points.map((p) => ({ year: p.year, value: Math.round((p.value / base) * 100) }));
+}
+
+const baseYear = london?.baseYear ?? 2019;
+const homicide = london?.metrics.find((m) => m.key === 'homicide');
+const narrSeries = indexed(london?.narrative ?? [], baseYear);
+const crimeSeries = indexed(homicide?.points ?? [], baseYear);
+
+const allYears = [...narrSeries, ...crimeSeries].map((p) => p.year);
+const yrLo = allYears.length ? Math.min(...allYears) : 2016;
+const yrHi = allYears.length ? Math.max(...allYears) : 2025;
+const yrSpan = yrHi - yrLo || 1;
+
+const yLo = 0;
+const yHi = Math.max(...narrSeries.map((p) => p.value), ...crimeSeries.map((p) => p.value), 120) * 1.05;
+const pad = { l: 40, r: 104, t: 24, b: 30 };
+const innerW = width - pad.l - pad.r;
+const innerH = height - pad.t - pad.b;
+const xf = (yr: number) => pad.l + ((yr - yrLo) / yrSpan) * innerW;
+const yf = (v: number) => pad.t + innerH - ((v - yLo) / (yHi - yLo)) * innerH;
+
+const path = (series: { year: number; value: number }[]) =>
+  series.map((p, i) => `${i ? 'L' : 'M'}${xf(p.year).toFixed(1)},${yf(p.value).toFixed(1)}`).join(' ');
+
+const NARR = 'rgb(var(--chart-red))'; // the rising "hell hole" narrative
+const CRIME = 'rgb(var(--chart-blue))'; // the falling reality (homicide)
+const narrPath = path(narrSeries);
+const crimePath = path(crimeSeries);
+
+// Y gridlines at sensible index steps up to the top of the axis.
+const yTicks = [0, 100, 200, 400, 600, 800, 1000].filter((t) => t <= yHi);
+const xTicks: number[] = [];
+for (let y = yrLo; y <= yrHi; y++) if (y % 2 === 0 || y === yrHi) xTicks.push(y);
+
+const metrics = london?.metrics ?? [];
+const posts = london?.posts ?? [];
+---
+{london ? (
+  <div class="not-prose">
+    <figure class="my-2">
+      <figcaption class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">
+        The narrative vs the figures — both indexed to {baseYear} = 100
+      </figcaption>
+      <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img"
+           aria-label={`An index of the social-media 'London is unsafe' narrative, rising sharply after 2022, plotted against London homicides, which fall to the fewest since 2014. Both indexed to ${baseYear} equals 100.`}
+           class="overflow-visible">
+        {yTicks.map((t) => (
+          <g>
+            <line x1={pad.l} x2={width - pad.r} y1={yf(t)} y2={yf(t)} stroke="rgb(var(--ink-200))" stroke-width="1" />
+            <text x={pad.l - 6} y={yf(t) + 3} font-size="9" fill="rgb(var(--ink-500))" text-anchor="end" font-family="system-ui, sans-serif">{t}</text>
+          </g>
+        ))}
+        {xTicks.map((y) => (
+          <text x={xf(y)} y={height - 10} font-size="10" fill="rgb(var(--ink-500))" text-anchor="middle" font-family="system-ui, sans-serif">{y}</text>
+        ))}
+        {/* crime (blue, falling) */}
+        <path d={crimePath} fill="none" stroke={CRIME} stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        {crimeSeries.map((p) => <circle cx={xf(p.year)} cy={yf(p.value)} r="2" fill={CRIME} />)}
+        {/* narrative (red, rising) */}
+        <path d={narrPath} fill="none" stroke={NARR} stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        {narrSeries.map((p) => <circle cx={xf(p.year)} cy={yf(p.value)} r="2" fill={NARR} />)}
+        {/* end-of-line labels */}
+        {narrSeries.length > 0 && (
+          <text x={width - pad.r + 6} y={yf(narrSeries[narrSeries.length - 1].value) + 3} font-size="9.5" fill={NARR} font-family="system-ui, sans-serif">Narrative</text>
+        )}
+        {crimeSeries.length > 0 && (
+          <text x={width - pad.r + 6} y={yf(crimeSeries[crimeSeries.length - 1].value) + 3} font-size="9.5" fill={CRIME} font-family="system-ui, sans-serif">Homicides</text>
+        )}
+      </svg>
+      <div class="mt-2 flex flex-wrap gap-x-5 gap-y-1 font-sans text-xs text-ink-600">
+        <span class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5" style={`background:${NARR}`}></span> Social-media "London unsafe / in decline" narrative — illustrative index</span>
+        <span class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5" style={`background:${CRIME}`}></span> London homicides — Metropolitan Police / City Hall</span>
+      </div>
+    </figure>
+
+    {/* The wider picture: the metrics the narrative rarely mentions. */}
+    <div class="mt-6">
+      <p class="font-sans text-xs uppercase tracking-[0.15em] text-accent mb-3">The wider picture — key London crime metrics</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {metrics.map((m) => (
+          <div class="border border-ink-200 rounded-md p-3.5 bg-paper-50">
+            <p class="font-display text-sm font-semibold text-ink-900">{m.label}</p>
+            <p class="font-serif text-sm text-ink-700 leading-snug mt-1">{m.latest}</p>
+            {m.sourceUrl ? (
+              <a href={m.sourceUrl} class="font-sans text-[11px] text-ink-500 hover:text-accent underline underline-offset-2 mt-1.5 inline-block">{m.source}</a>
+            ) : (
+              <p class="font-sans text-[11px] text-ink-500 mt-1.5">{m.source}</p>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* What's driving the narrative — the cited posts. */}
+    {posts.length > 0 && (
+      <div class="mt-6">
+        <p class="font-sans text-xs uppercase tracking-[0.15em] text-accent mb-3">What's driving the narrative</p>
+        <ul class="space-y-2.5">
+          {posts.map((p) => (
+            <li class="font-sans text-sm text-ink-700 leading-snug border-l-2 border-ink-200 pl-3">
+              <span class="text-ink-500 tabular-nums text-xs">{p.date}</span>
+              <span class="font-medium text-ink-900"> · {p.author}</span>
+              <span class="text-ink-400"> ({p.platform})</span>
+              <p class="italic mt-0.5">“{p.quote}”</p>
+              {p.note && <p class="text-ink-500 text-xs mt-0.5">{p.note} {p.url && <a href={p.url} class="underline underline-offset-2 hover:text-accent">source</a>}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <details class="mt-5 font-sans text-xs text-ink-500">
+      <summary class="cursor-pointer hover:text-accent">Show the figures &amp; method</summary>
+      <p class="mt-2 leading-relaxed">{london.note}</p>
+      <table class="mt-3 w-full max-w-md border-collapse">
+        <thead>
+          <tr class="text-left text-ink-600"><th class="py-1 pr-4 font-medium">Year</th><th class="py-1 pr-4 font-medium">Narrative index</th><th class="py-1 font-medium">Homicides</th></tr>
+        </thead>
+        <tbody>
+          {Array.from({ length: yrHi - yrLo + 1 }, (_, i) => yrLo + i).map((yr) => {
+            const n = (london.narrative ?? []).find((r) => r.year === yr);
+            const h = (homicide?.points ?? []).find((r) => r.year === yr);
+            return (
+              <tr class="border-t border-ink-200/60">
+                <td class="py-0.5 pr-4 tabular-nums">{yr}</td>
+                <td class="py-0.5 pr-4 tabular-nums">{n ? n.value : '—'}</td>
+                <td class="py-0.5 tabular-nums">{h ? h.value : '—'}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <p class="mt-2 leading-relaxed">Homicide: {homicide?.source}. The narrative index is illustrative — its one measured anchor is City Hall's finding that social-media stories calling London unsafe or in decline rose ~200% in the two years to 2025.</p>
+    </details>
+  </div>
+) : (
+  <p class="font-sans text-sm text-ink-500">London data unavailable.</p>
+)}

@@ -8,6 +8,7 @@
 // facet tabs, dimension views, redrawn trend charts and the social-media overlay.
 import { getCollection } from 'astro:content';
 import TrendChart from './TrendChart.astro';
+import LondonNarrativeVsReality from './LondonNarrativeVsReality.astro';
 
 const FACET_LABELS: Record<string, string> = {
   'police-general': 'The police, generally',
@@ -64,6 +65,7 @@ const defNegPct = defSentTotal > 0
         ['sentiment', 'Sentiment'],
         ['themes', 'Themes'],
         ['entities', 'Who & what'],
+        ['london', 'London vs the narrative'],
       ].map(([v, lbl]) => (
         <button
           type="button"
@@ -141,6 +143,25 @@ const defNegPct = defSentTotal > 0
     </div>
     <div data-panel="entities" hidden>
       <div data-entities-chart class="min-h-[16rem]"></div>
+    </div>
+
+    {/* London: narrative vs reality. Not tied to the year slider — a self-
+        contained divergence over its own window. The static fallback below
+        (LondonNarrativeVsReality) renders with no JS; the client redraws an
+        interactive chart into [data-london-chart] and hides the fallback,
+        mirroring the sentiment fallback→chart swap. */}
+    <div data-panel="london" hidden>
+      <p class="font-sans text-sm text-ink-600 mb-4 max-w-2xl">
+        Elon Musk, Nigel Farage and others paint London as a "dystopian hell hole." The
+        figures don't match. Here the social-media "London is unsafe" narrative (a rising
+        illustrative index) is set against the real Met/London crime figures — homicide at its
+        lowest since 2014, with phone theft, robbery and burglary all falling. Two metrics are
+        shown honestly against the trend: knife crime and recorded sexual offences.
+      </p>
+      <div data-london-fallback>
+        <LondonNarrativeVsReality />
+      </div>
+      <div data-london-chart hidden></div>
     </div>
 
     <!-- Per-year stats + provenance (simplified: Tone and Source diversity removed) -->

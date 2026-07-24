@@ -396,6 +396,53 @@ const perceptionContext = z.object({
       })
     )
     .default([]),
+  // London: narrative vs reality. The curated, fully-cited dataset behind the
+  // explorer's London view — a divergence between the social-media "London is a
+  // hell hole" narrative (an illustrative intensity index, anchored on City
+  // Hall's measured +200% and dated flashpoint posts) and the real Met/London
+  // crime figures (published MPS/ONS/City Hall releases, each carrying a source).
+  // Optional so the pre-existing context docs still validate.
+  london: z
+    .object({
+      note: z.string().default(''),
+      baseYear: z.number(), // series indexed to 100 here, so counts and post-volume compare
+      // Real published Met/London crime series. `value` is the recorded count (or
+      // an index where the source only publishes a change); the chart re-indexes
+      // to baseYear so every metric is comparable. `latest` is a short, cited
+      // headline change for the stat strip.
+      metrics: z
+        .array(
+          z.object({
+            key: z.string(),
+            label: z.string(),
+            source: z.string(),
+            sourceUrl: z.string().default(''),
+            latest: z.string().default(''), // e.g. "−16% — fewest since 2014"
+            points: z.array(z.object({ year: z.number(), value: z.number() })).default([]),
+          })
+        )
+        .default([]),
+      // The social-media "London unsafe" narrative intensity, per year. An
+      // illustrative index (not scraped analytics), anchored on City Hall's
+      // measured 200% two-year rise; `note` cites what pins each point.
+      narrative: z
+        .array(z.object({ year: z.number(), value: z.number(), note: z.string().default('') }))
+        .default([]),
+      // Cited exemplar posts that drive the narrative — real authors, dates, URLs.
+      posts: z
+        .array(
+          z.object({
+            date: z.string(),
+            author: z.string(),
+            platform: z.string().default('X'),
+            quote: z.string(),
+            url: z.string().default(''),
+            note: z.string().default(''), // reported reach/engagement, cited
+          })
+        )
+        .default([]),
+    })
+    .optional(),
 });
 
 const perceptionSchema = z.discriminatedUnion('kind', [perceptionYear, perceptionIndex, perceptionContext]);
