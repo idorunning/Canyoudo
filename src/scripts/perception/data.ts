@@ -31,9 +31,34 @@ export interface YearData {
   facets: Record<string, Facet>;
   forceBreakdown?: Record<string, ForceTrend> | null;
 }
+// London: narrative vs reality — the curated, cited dataset behind the London view.
+export interface LondonMetric {
+  key: string;
+  label: string;
+  source: string;
+  sourceUrl: string;
+  latest: string; // short cited headline change, e.g. "−16% — fewest since 2014"
+  points: { year: number; value: number }[];
+}
+export interface LondonPost {
+  date: string;
+  author: string;
+  platform: string;
+  quote: string;
+  url: string;
+  note: string;
+}
+export interface LondonData {
+  note: string;
+  baseYear: number;
+  metrics: LondonMetric[];
+  narrative: { year: number; value: number; note: string }[];
+  posts: LondonPost[];
+}
 export interface Context {
   milestones: { date: string; label: string; detail: string; url: string }[];
   adoption: { year: number; share: number; note: string }[];
+  london?: LondonData;
 }
 export interface Bundle {
   methodologyVersion: string;

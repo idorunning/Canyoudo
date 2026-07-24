@@ -28,7 +28,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
   const minYear = years[0].year;
   const maxYear = years[years.length - 1].year;
 
-  const state = { facet: 'police-general' as FacetKey, year: maxYear, view: 'cloud', context: false };
+  const state = { facet: 'police-general' as FacetKey, year: maxYear, view: 'cloud', context: false, londonMetric: 'homicide' };
   let timer: number | null = null;
 
   const $ = <T extends Element>(sel: string) => root.querySelector<T>(sel);
@@ -43,6 +43,8 @@ function wire(root: HTMLElement, bundle: Bundle): void {
   const sentFallback = $<HTMLElement>('[data-sentiment-fallback]');
   const sentChart = $<HTMLElement>('[data-sentiment-chart]');
   const contextToggle = $<HTMLInputElement>('[data-context-toggle]');
+  const londonFallback = $<HTMLElement>('[data-london-fallback]');
+  const londonChart = $<HTMLElement>('[data-london-chart]');
 
   // Client owns the sentiment chart now (so facet + overlay work).
   if (sentFallback) sentFallback.hidden = true;
@@ -464,6 +466,131 @@ function wire(root: HTMLElement, bundle: Bundle): void {
       `</div>`;
   }
 
+  // --- London: narrative vs reality ---------------------------------------
+  // A self-contained divergence: the social-media "London unsafe" narrative
+  // (illustrative index, rising) against a real Met/London crime series
+  // (falling). Both indexed to the data's base year = 100 so a post-volume index
+  // and a crime count share one honest axis. The reality line is switchable
+  // between the metrics that carry a real series (homicide, knife); the metric
+  // cards and cited posts sit beneath. Not tied to the year slider. On any gap
+  // (no data) the static .astro fallback is left in place.
+  function indexToBase(points: { year: number; value: number }[], baseYear: number): { year: number; value: number }[] {
+    const base = points.find((p) => p.year === baseYear)?.value ?? points[0]?.value ?? 0;
+    if (!base) return points.map((p) => ({ year: p.year, value: 0 }));
+    return points.map((p) => ({ year: p.year, value: Math.round((p.value / base) * 100) }));
+  }
+
+  function renderLondon(): void {
+    const lon = bundle.context?.london;
+    if (!londonChart || !lon || !lon.narrative.length) return; // keep the static fallback
+    if (londonFallback) londonFallback.hidden = true;
+    londonChart.hidden = false;
+
+    const LW = 720;
+    const LH = 320;
+    const LP = { l: 40, r: 104, t: 20, b: 30 };
+    const lInnerW = LW - LP.l - LP.r;
+    const lInnerH = LH - LP.t - LP.b;
+
+    // Metrics that carry a real multi-point series can be the reality line.
+    const withPoints = lon.metrics.filter((m) => m.points && m.points.length > 1);
+    const sel =
+      withPoints.find((m) => m.key === state.londonMetric) ??
+      withPoints.find((m) => m.key === 'homicide') ??
+      withPoints[0];
+
+    const narr = indexToBase(lon.narrative, lon.baseYear);
+    const crime = sel ? indexToBase(sel.points, lon.baseYear) : [];
+
+    const allYears = [...narr, ...crime].map((p) => p.year);
+    const yrLo = Math.min(...allYears);
+    const yrHi = Math.max(...allYears);
+    const yrSpan = yrHi - yrLo || 1;
+    const yHi = Math.max(...narr.map((p) => p.value), ...crime.map((p) => p.value), 120) * 1.05;
+
+    const lx = (yr: number) => LP.l + ((yr - yrLo) / yrSpan) * lInnerW;
+    const ly = (v: number) => LP.t + lInnerH - (v / yHi) * lInnerH;
+    const lpath = (s: { year: number; value: number }[]) =>
+      s.map((p, i) => `${i ? 'L' : 'M'}${lx(p.year).toFixed(1)},${ly(p.value).toFixed(1)}`).join(' ');
+
+    const NARR = 'rgb(var(--chart-red))';
+    const CRIME = 'rgb(var(--chart-blue))';
+
+    const yTicks = [0, 100, 200, 400, 600, 800, 1000].filter((t) => t <= yHi);
+    let grid = '';
+    for (const t of yTicks) {
+      grid += `<line x1="${LP.l}" x2="${LW - LP.r}" y1="${ly(t)}" y2="${ly(t)}" stroke="rgb(var(--ink-200))" stroke-width="1"/>`;
+      grid += `<text x="${LP.l - 6}" y="${ly(t) + 3}" font-size="9" fill="rgb(var(--ink-500))" text-anchor="end" font-family="system-ui,sans-serif">${t}</text>`;
+    }
+    let xax = '';
+    for (let y = yrLo; y <= yrHi; y++) if (y % 2 === 0 || y === yrHi) xax += `<text x="${lx(y)}" y="${LH - 10}" font-size="10" fill="rgb(var(--ink-500))" text-anchor="middle" font-family="system-ui,sans-serif">${y}</text>`;
+
+    const dots = (s: { year: number; value: number }[], c: string) => s.map((p) => `<circle cx="${lx(p.year)}" cy="${ly(p.value)}" r="2" fill="${c}"/>`).join('');
+    const crimeLabel = sel ? esc(sel.label) : 'Crime';
+    const svgInner =
+      grid + xax +
+      `<path d="${lpath(crime)}" fill="none" stroke="${CRIME}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>` + dots(crime, CRIME) +
+      `<path d="${lpath(narr)}" fill="none" stroke="${NARR}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>` + dots(narr, NARR) +
+      (narr.length ? `<text x="${LW - LP.r + 6}" y="${ly(narr[narr.length - 1].value) + 3}" font-size="9.5" fill="${NARR}" font-family="system-ui,sans-serif">Narrative</text>` : '') +
+      (crime.length ? `<text x="${LW - LP.r + 6}" y="${ly(crime[crime.length - 1].value) + 3}" font-size="9.5" fill="${CRIME}" font-family="system-ui,sans-serif">${crimeLabel}</text>` : '');
+
+    const chart =
+      `<figure class="not-prose my-2"><figcaption class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-3">The narrative vs the figures — both indexed to ${lon.baseYear} = 100</figcaption>` +
+      `<svg width="100%" viewBox="0 0 ${LW} ${LH}" role="img" aria-label="An index of the social-media 'London is unsafe' narrative, rising sharply after 2022, against ${crimeLabel} in London, indexed to ${lon.baseYear} equals 100." class="overflow-visible">${svgInner}</svg>` +
+      `<div class="mt-2 flex flex-wrap gap-x-5 gap-y-1 font-sans text-xs text-ink-600">` +
+      `<span class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5" style="background:${NARR}"></span> Social-media "London unsafe / in decline" narrative — illustrative index</span>` +
+      `<span class="flex items-center gap-1.5"><span class="inline-block w-4 h-0.5" style="background:${CRIME}"></span> ${crimeLabel} — ${esc(sel?.source ?? '')}</span>` +
+      `</div></figure>`;
+
+    // Metric cards — the ones with a series are clickable to switch the reality line.
+    const cards = lon.metrics
+      .map((m) => {
+        const clickable = m.points && m.points.length > 1;
+        const active = sel && m.key === sel.key;
+        const src = m.sourceUrl
+          ? `<a href="${m.sourceUrl}" class="font-sans text-[11px] text-ink-500 hover:text-accent underline underline-offset-2 mt-1.5 inline-block">${esc(m.source)}</a>`
+          : `<p class="font-sans text-[11px] text-ink-500 mt-1.5">${esc(m.source)}</p>`;
+        return (
+          `<div ${clickable ? `data-london-metric="${m.key}" role="button" tabindex="0"` : ''} class="border rounded-md p-3.5 bg-paper-50 ${clickable ? 'cursor-pointer hover:border-accent' : ''} ${active ? 'border-accent bg-accent/[0.05]' : 'border-ink-200'}">` +
+          `<p class="font-display text-sm font-semibold text-ink-900">${esc(m.label)}${clickable ? ' <span class="font-sans text-[10px] font-normal text-ink-400">· click to chart</span>' : ''}</p>` +
+          `<p class="font-serif text-sm text-ink-700 leading-snug mt-1">${esc(m.latest)}</p>${src}</div>`
+        );
+      })
+      .join('');
+
+    const posts = (lon.posts ?? [])
+      .map(
+        (p) =>
+          `<li class="font-sans text-sm text-ink-700 leading-snug border-l-2 border-ink-200 pl-3">` +
+          `<span class="text-ink-500 tabular-nums text-xs">${esc(p.date)}</span><span class="font-medium text-ink-900"> · ${esc(p.author)}</span><span class="text-ink-400"> (${esc(p.platform)})</span>` +
+          `<p class="italic mt-0.5">&ldquo;${esc(p.quote)}&rdquo;</p>` +
+          (p.note ? `<p class="text-ink-500 text-xs mt-0.5">${esc(p.note)} ${p.url ? `<a href="${p.url}" class="underline underline-offset-2 hover:text-accent">source</a>` : ''}</p>` : '') +
+          `</li>`
+      )
+      .join('');
+
+    londonChart.innerHTML =
+      chart +
+      `<div class="mt-6"><p class="font-sans text-xs uppercase tracking-[0.15em] text-accent mb-3">The wider picture — key London crime metrics</p><div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">${cards}</div></div>` +
+      (posts ? `<div class="mt-6"><p class="font-sans text-xs uppercase tracking-[0.15em] text-accent mb-3">What's driving the narrative</p><ul class="space-y-2.5">${posts}</ul></div>` : '') +
+      `<p class="font-sans text-xs text-ink-500 leading-relaxed mt-5 max-w-2xl">${esc(lon.note)}</p>`;
+
+    // Clicking a metric card with a series switches the reality line.
+    londonChart.querySelectorAll<HTMLElement>('[data-london-metric]').forEach((el) => {
+      const pick = () => {
+        state.londonMetric = el.getAttribute('data-london-metric')!;
+        renderLondon();
+      };
+      el.addEventListener('click', pick);
+      el.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Enter' || (e as KeyboardEvent).key === ' ') {
+          e.preventDefault();
+          pick();
+        }
+      });
+    });
+  }
+
   function setView(view: string): void {
     state.view = view;
     root.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => {
@@ -483,6 +610,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     else if (state.view === 'sentiment') renderSentiment();
     else if (state.view === 'themes') renderThemes();
     else if (state.view === 'entities') renderEntities();
+    else if (state.view === 'london') renderLondon();
   }
 
   // Significant policing events shown as animated pill bubbles below the race.

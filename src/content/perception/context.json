@@ -40,5 +40,122 @@
     { "year": 2023, "goodJob": 51.2, "localConfidence": 67.7 },
     { "year": 2024, "goodJob": 48.8, "localConfidence": 65.2 },
     { "year": 2025, "goodJob": 48.8, "localConfidence": 66.9 }
-  ]
+  ],
+  "london": {
+    "baseYear": 2019,
+    "note": "London: narrative vs reality. The rising line is an illustrative index of the social-media 'London is unsafe / in decline' narrative — not scraped analytics. Its one measured anchor is City Hall's finding that stories on social media calling London dangerous or in decline rose about 200% in the two years to 2025; earlier years are an illustrative baseline, and the dated posts below are what pin the shape. The falling line and the metric cards are real published figures from the Metropolitan Police, City Hall and the ONS, each carrying its source. Homicide is the headline reality metric (the figure Mayor Khan led with on LBC): 97 in 2025, the fewest since 2014, and a lower rate per head than Paris, Berlin or New York. Two metrics are shown honestly against the trend — knife crime rose to a record in 2024/25 before a recent turn, and recorded sexual offences remain high, a post-pandemic rise that partly reflects more victims coming forward.",
+    "narrative": [
+      { "year": 2016, "value": 60, "note": "Illustrative baseline — 'London decline' a fringe online theme." },
+      { "year": 2017, "value": 70, "note": "Illustrative baseline." },
+      { "year": 2018, "value": 80, "note": "Illustrative baseline." },
+      { "year": 2019, "value": 100, "note": "Index base year." },
+      { "year": 2020, "value": 120, "note": "Illustrative baseline." },
+      { "year": 2021, "value": 150, "note": "Illustrative baseline." },
+      { "year": 2022, "value": 220, "note": "Elon Musk completes the $44bn takeover of Twitter/X (Oct 2022); moderation loosens." },
+      { "year": 2023, "value": 300, "note": "Anchor point for City Hall's measured two-year rise." },
+      { "year": 2024, "value": 620, "note": "Aug 2024 unrest after the Southport attack; Musk's 'civil war is inevitable' post reaches ~9.6m views." },
+      { "year": 2025, "value": 900, "note": "City Hall: social-media 'London in decline / dangerous' stories up ~200% over the two years to 2025 (300 to 900)." }
+    ],
+    "metrics": [
+      {
+        "key": "homicide",
+        "label": "Homicide",
+        "source": "Metropolitan Police / City Hall; AP (Jul 2025)",
+        "sourceUrl": "https://www.london.gov.uk/london-records-fewest-homicides-year-monthly-records-began",
+        "latest": "97 in 2025 — the fewest since 2014, and down ~16% year on year",
+        "points": [
+          { "year": 2016, "value": 109 },
+          { "year": 2017, "value": 137 },
+          { "year": 2018, "value": 135 },
+          { "year": 2019, "value": 149 },
+          { "year": 2020, "value": 132 },
+          { "year": 2021, "value": 128 },
+          { "year": 2022, "value": 109 },
+          { "year": 2023, "value": 111 },
+          { "year": 2024, "value": 105 },
+          { "year": 2025, "value": 97 }
+        ]
+      },
+      {
+        "key": "phone-theft",
+        "label": "Phone & personal theft",
+        "source": "Metropolitan Police; City Hall (2025)",
+        "sourceUrl": "https://news.met.police.uk/news/met-and-apple-join-forces-to-disrupt-global-criminal-networks-as-phone-theft-halved-in-westminster-510316",
+        "latest": "Phone theft down ~50% in the West End; theft from person down 23% across London (23,311 fewer, year to June 2025)",
+        "points": []
+      },
+      {
+        "key": "robbery",
+        "label": "Personal robbery",
+        "source": "City Hall / Metropolitan Police (2025)",
+        "sourceUrl": "https://www.london.gov.uk/london-records-fewest-homicides-year-monthly-records-began",
+        "latest": "Down ~11–13% — 2,943 fewer personal robberies in the year to June 2025",
+        "points": []
+      },
+      {
+        "key": "burglary",
+        "label": "Residential burglary",
+        "source": "City Hall / Metropolitan Police (2025)",
+        "sourceUrl": "https://www.london.gov.uk/london-records-fewest-homicides-year-monthly-records-began",
+        "latest": "Down 10% year on year; down ~28% since 2016",
+        "points": []
+      },
+      {
+        "key": "knife",
+        "label": "Knife crime",
+        "source": "Metropolitan Police; Statista (2025)",
+        "sourceUrl": "https://www.statista.com/statistics/864736/knife-crime-in-london/",
+        "latest": "Rose to a record ~16,344 offences in 2024/25, then fell ~7% (1,154 fewer) in the 12 months to Aug 2025",
+        "points": [
+          { "year": 2020, "value": 14680 },
+          { "year": 2022, "value": 12119 },
+          { "year": 2023, "value": 14577 },
+          { "year": 2024, "value": 15016 },
+          { "year": 2025, "value": 16344 }
+        ]
+      },
+      {
+        "key": "sexual",
+        "label": "Sexual offences",
+        "source": "Metropolitan Police / ONS (2024/25)",
+        "sourceUrl": "https://www.met.police.uk/foi-ai/metropolitan-police/disclosure-2025/august-2025/rape-sexual-offence-april2022-march2025/",
+        "latest": "≈25,000 recorded in 2023/24 and holding — a post-pandemic rise that partly reflects more victims reporting, not a fall",
+        "points": []
+      }
+    ],
+    "posts": [
+      {
+        "date": "2024-08",
+        "author": "Elon Musk",
+        "platform": "X",
+        "quote": "Civil war is inevitable.",
+        "url": "https://www.middleeasteye.net/news/uk-slams-elon-musk-predicting-civil-war-and-attacking-british-police",
+        "note": "Posted under a video of UK unrest after the Southport attack; reported at ~9.6m views. Downing Street said there was 'no justification' for it."
+      },
+      {
+        "date": "2024-08",
+        "author": "Elon Musk",
+        "platform": "X",
+        "quote": "#TwoTierKier",
+        "url": "https://www.aol.com/elon-musk-criticised-claim-civil-115613347.html",
+        "note": "Amplifying the 'two-tier policing' claim — that protests are policed unequally — which fact-checkers and the government rejected."
+      },
+      {
+        "date": "2025-03",
+        "author": "Elon Musk",
+        "platform": "X",
+        "quote": "Sadiq Khan is a 'stone-cold loser' and a 'terrible, terrible mayor'.",
+        "url": "https://www.thenationalnews.com/news/uk/2025/03/26/surge-in-islamophobia-against-london-mayor-sadiq-khan-from-elon-musks-x/",
+        "note": "Part of a run of attacks on London's mayor; researchers reported a surge in Islamophobic abuse toward Khan on X."
+      },
+      {
+        "date": "2024-08",
+        "author": "Nigel Farage",
+        "platform": "X / broadcast",
+        "quote": "Britain has a problem of 'two-tier policing'.",
+        "url": "https://www.gbnews.com/news/us/elon-musk-civil-war-britain-migration-warning",
+        "note": "The 'two-tier policing' framing that Musk amplified; the Mayor names Musk and Farage as 'captains of online disinformation'."
+      }
+    ]
+  }
 }
