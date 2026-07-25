@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-24T13:15:12.552Z",
+    "fetchedAt": "2026-07-25T01:29:32.544Z",
     "feedCount": 8,
     "sources": [
       "GOV.UK",
@@ -15,20 +15,52 @@
   },
   "items": [
     {
-      "title": "'Extremely significant' bomb in car intercepted on way to NI, Irish police say",
-      "link": "https://www.bbc.co.uk/news/articles/cpq82dg0y3qo?at_medium=RSS&at_campaign=rss",
+      "title": "Police declare 'major incident' as wind change increases Cairngorms wildfire risk",
+      "link": "https://www.bbc.co.uk/news/articles/c2k7g15v3epo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-24T12:52:55.000Z",
-      "summary": "Two people are arrested after a vehicle was stopped in County Monaghan in an operation targeting dissident republican activity."
+      "isoDate": "2026-07-25T01:12:39.000Z",
+      "summary": "All residents in the village of Nethy Bridge have been evacuated over the threat the wildfire spreading."
     },
     {
-      "title": "Southport killer Axel Rudakubana appears to be manipulating the system, families' lawyer says",
-      "link": "https://www.bbc.co.uk/news/articles/cjrvy450jv5o?at_medium=RSS&at_campaign=rss",
+      "title": "Warning shot or publicity stunt - how worried should we be about the OpenAI hack?",
+      "link": "https://www.bbc.co.uk/news/articles/cd9w22n9e4go?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-24T23:11:13.000Z",
+      "summary": "Hugging Face said the hack was done at superhuman speed by an AI with little or no human guidance."
+    },
+    {
+      "title": "Judge demands answers after 'dangerous' man who threatened to 'chop up' woman was released on bail",
+      "link": "https://www.bbc.co.uk/news/articles/c9w0p5znzyvo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-24T11:43:40.000Z",
-      "summary": "On Thursday, Axel Rudakubana was moved from prison to a secure psychiatric hospital in Berkshire."
+      "isoDate": "2026-07-24T21:56:12.000Z",
+      "summary": "Martin Edwards went on to threaten to murder a woman while in possession of a knife, before a former soldier intervened."
+    },
+    {
+      "title": "Slapping therapist jailed over death 'released early'",
+      "link": "https://www.bbc.co.uk/news/articles/c86nppppj1jo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-24T20:45:56.000Z",
+      "summary": "A court is told the convicted man was returned to his native US where he may no longer be in custody."
+    },
+    {
+      "title": "Officers hurt as police boat hits Westminster Bridge",
+      "link": "https://www.bbc.co.uk/news/articles/c935k4k4pezo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-24T19:11:50.000Z",
+      "summary": "Police say a number of armed officers entered the River Thames but were recovered after the crash."
+    },
+    {
+      "title": "Winchester Prison",
+      "link": "https://www.gov.uk/guidance/winchester-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-24T15:01:10.000Z",
+      "summary": "Winchester is a men’s prison and young offender institution (YOI) in the centre of Winchester, Hampshire."
     },
     {
       "title": "President of the King’s Bench Division in conversation with Chair of the Bar",
@@ -53,14 +85,6 @@
       "topic": "policing",
       "isoDate": "2026-07-24T10:36:29.000Z",
       "summary": "CNC&#39;s Legal Services hosted a mock civil trial, giving officers and partners practical insight into court proceedings, evidence and legal decision-making."
-    },
-    {
-      "title": "Burns scholar unmasked as convicted paedophile is jailed for historical abuse",
-      "link": "https://www.bbc.co.uk/news/articles/c24mpgme1v1o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-24T10:27:29.000Z",
-      "summary": "A sex offender who changed his name and led a renowned literary society has been jailed for further historical offences."
     },
     {
       "title": "Willkie teams up with OpenAI to build legal tech tools",
@@ -101,14 +125,6 @@
       "topic": "ai",
       "isoDate": "2026-07-23T20:42:33.000Z",
       "summary": "As major tech companies race to capitalize on a new wave of AI technology, investors wonder when financial benefits will appear."
-    },
-    {
-      "title": "What could happen to prisoner early release scheme now PM has paused it?",
-      "link": "https://www.bbc.co.uk/news/articles/c62vqj7ged4o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-23T16:52:28.000Z",
-      "summary": "The PM's decision comes after a police officer's widow said the possible early release of his killers was \"deplorable\"."
     },
     {
       "title": "Independent review of the prison system in England and Wales",
@@ -191,28 +207,12 @@
       "summary": "After 51 years in <mark>policing</mark>, Chief Inspector Steve Edwards retires, leaving a lasting legacy through the officers he trained, mentored and inspired."
     },
     {
-      "title": "OpenAI says its AI went rogue and launched 'unprecedented' cyber-attack",
-      "link": "https://www.bbc.co.uk/news/articles/c3ek3gvdnj3o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-22T11:40:11.000Z",
-      "summary": "It is one of the first publicly disclosed cyber-attacks carried out by AI without direct human involvement."
-    },
-    {
       "title": "New protocol for legal professionals wishing to raise concerns informally about coroner behaviour",
       "link": "https://www.judiciary.uk/new-protocol-for-legal-professionals-wishing-to-raise-concerns-informally-about-coroner-behaviour/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-07-22T10:30:42.000Z",
       "summary": "Read more about this informal route through which legal professionals may raise concerns about the behaviour of a coroner where early and constructive resolution is appropriate…"
-    },
-    {
-      "title": "Holme House Prison",
-      "link": "https://www.gov.uk/guidance/holme-house-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-22T09:49:50.000Z",
-      "summary": "Holme House is a men’s prison in Stockton on Tees, north east England."
     },
     {
       "title": "EU forces Google to share its toys with the other AI and search kids",
