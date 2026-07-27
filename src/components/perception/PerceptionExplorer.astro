@@ -48,6 +48,23 @@ const defSentTotal = defSentiment
 const defNegPct = defSentTotal > 0
   ? Math.round((defSentiment!.negative / defSentTotal) * 100) + '%'
   : '—';
+
+// The "London: narrative vs reality" view is held back from public viewing until
+// its social-media narrative series is backed by real scraped/metadata research
+// rather than the current illustrative index. Off by default; enable by setting
+// PUBLIC_PERCEPTION_LONDON=true at build time (and regenerating the bundle so it
+// carries the london block — see scripts/generate-perception-clouds.mjs). Keep
+// this flag in sync with that script so the tab and the data appear together.
+const showLondon = import.meta.env.PUBLIC_PERCEPTION_LONDON === 'true';
+
+// View tabs — the London tab appears only when the flag above is on.
+const viewTabs: [string, string][] = [
+  ['cloud', 'Words'],
+  ['sentiment', 'Sentiment'],
+  ['themes', 'Themes'],
+  ['entities', 'Who & what'],
+  ...(showLondon ? ([['london', 'London vs the narrative']] as [string, string][]) : []),
+];
 ---
 <section class="not-prose my-10 border border-ink-200 rounded-lg overflow-hidden bg-paper-50 dark:bg-ink-900" data-perception aria-label="Police perception explorer">
   {isSample && (
@@ -60,13 +77,7 @@ const defNegPct = defSentTotal > 0
   <div class="p-5 md:p-6 space-y-6">
     <!-- View toggle (primary navigation) -->
     <div class="flex flex-wrap gap-2" role="tablist" aria-label="View">
-      {[
-        ['cloud', 'Words'],
-        ['sentiment', 'Sentiment'],
-        ['themes', 'Themes'],
-        ['entities', 'Who & what'],
-        ['london', 'London vs the narrative'],
-      ].map(([v, lbl]) => (
+      {viewTabs.map(([v, lbl]) => (
         <button
           type="button"
           data-view-tab={v}
@@ -145,11 +156,14 @@ const defNegPct = defSentTotal > 0
       <div data-entities-chart class="min-h-[16rem]"></div>
     </div>
 
-    {/* London: narrative vs reality. Not tied to the year slider — a self-
-        contained divergence over its own window. The static fallback below
+    {/* London: narrative vs reality. Held back from public view behind
+        `showLondon` until the narrative series is real scraped/metadata research
+        (see the flag note above). Not tied to the year slider — a self-contained
+        divergence over its own window. The static fallback below
         (LondonNarrativeVsReality) renders with no JS; the client redraws an
         interactive chart into [data-london-chart] and hides the fallback,
         mirroring the sentiment fallback→chart swap. */}
+    {showLondon && (
     <div data-panel="london" hidden>
       <p class="font-sans text-sm text-ink-600 mb-4 max-w-2xl">
         Elon Musk, Nigel Farage and others paint London as a "dystopian hell hole." The
@@ -163,6 +177,7 @@ const defNegPct = defSentTotal > 0
       </div>
       <div data-london-chart hidden></div>
     </div>
+    )}
 
     <!-- Per-year stats + provenance (simplified: Tone and Source diversity removed) -->
     <div class="border-t border-ink-200 pt-4 flex flex-wrap gap-6 font-sans text-sm" data-stats>

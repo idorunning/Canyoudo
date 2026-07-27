@@ -182,6 +182,18 @@ async function main() {
     context = JSON.parse(await readFile(join(SRC, 'context.json'), 'utf8'));
   } catch {}
 
+  // The "London: narrative vs reality" data is held back from the public bundle
+  // until its narrative series is real scraped/metadata research rather than the
+  // illustrative index. Keep this in sync with `showLondon` in
+  // src/components/perception/PerceptionExplorer.astro — both gate on the same
+  // env var so the tab and its data are published together, or not at all. The
+  // curated data stays in context.json (source of truth) either way.
+  const SHOW_LONDON = process.env.PUBLIC_PERCEPTION_LONDON === 'true';
+  if (context && context.london && !SHOW_LONDON) {
+    delete context.london;
+    console.log('  london: held back from bundle (set PUBLIC_PERCEPTION_LONDON=true to include)');
+  }
+
   const bundle = {
     methodologyVersion: index.methodologyVersion,
     maxima: index.maxima,
