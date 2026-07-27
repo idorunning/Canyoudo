@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-26T12:54:57.653Z",
-    "feedCount": 7,
+    "fetchedAt": "2026-07-27T01:50:51.913Z",
+    "feedCount": 8,
     "sources": [
       "GOV.UK",
       "BBC News",
@@ -9,10 +9,27 @@
       "CPS",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
+    {
+      "title": "Boy, 16, charged with murder after Luton stabbing",
+      "link": "https://www.bbc.co.uk/news/articles/cjejvkk70z1o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-26T22:01:17.000Z",
+      "summary": "Four other teenagers have been arrested over the same incident, which left a 17-year-old boy dead."
+    },
+    {
+      "title": "Family tributes to four men who died in crash",
+      "link": "https://www.bbc.co.uk/news/articles/c74gkr23xvdo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-26T17:22:48.000Z",
+      "summary": "Jack Diggle, Benjamin Dooley, Andrew Roberts and Craig Shackleton-Brady died on Friday, police say."
+    },
     {
       "title": "Police investigating attempted murder of two officers",
       "link": "https://www.bbc.co.uk/news/articles/c1k14vxgg04o?at_medium=RSS&at_campaign=rss",
@@ -22,28 +39,12 @@
       "summary": "Officers were carrying out enquiries at a property in Larkhall when a white Renault Traffic van was driven at them."
     },
     {
-      "title": "Man charged with possession of explosive substance after bomb found in car",
-      "link": "https://www.bbc.co.uk/news/articles/cj637j9gkd9o?at_medium=RSS&at_campaign=rss",
+      "title": "Police Scotland investigating Al Fayed abuse claims",
+      "link": "https://www.bbc.co.uk/news/articles/cre4qql7dx3o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-26T01:46:13.000Z",
-      "summary": "The Dublin man appeared at the Criminal Courts of Justice on Saturday evening."
-    },
-    {
-      "title": "Residents allowed to return after Cairngorms wildfire evacuation",
-      "link": "https://www.bbc.co.uk/news/articles/c75gdn674r9o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-25T23:28:07.000Z",
-      "summary": "The fire was declared a major incident on Friday, but that has now been stood down by Police Scotland."
-    },
-    {
-      "title": "Police investigate donations by Tice company to Reform UK",
-      "link": "https://www.bbc.co.uk/news/articles/c5yv4r5g55do?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-25T18:04:50.000Z",
-      "summary": "Britain Means Business, owned by the party’s deputy leader Richard Tice, made two donations of £250,000 in the run-up to the 2024 general election."
+      "isoDate": "2026-07-26T11:42:34.000Z",
+      "summary": "The former Harrods owner, who died in August 2023, is alleged to have sexually abused hundreds of women and girls at various locations."
     },
     {
       "title": "Warning shot or publicity stunt - how worried should we be about the OpenAI hack?",
@@ -110,6 +111,14 @@
       "summary": "A new bill would let the US government order the shutdown of AI models that pose a public threat."
     },
     {
+      "title": "OpenAI won't let some customers export their chats, but this tool will",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/23/openai-wont-let-some-customers-export-their-chats-but-this-tool-will/5277795",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-23T20:48:39.000Z",
+      "summary": "ChatGPT Business and Enterprise users lack the standard chat export option, so third-party utilities like scrapemychats fill the gap"
+    },
+    {
       "title": "Google and Tesla shares plunge as AI spending rattles markets",
       "link": "https://www.bbc.co.uk/news/articles/c235n47g8g8o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
@@ -148,6 +157,14 @@
       "topic": "ai",
       "isoDate": "2026-07-23T11:39:11.000Z",
       "summary": "Talking to The Economist, Musk said he doesn't care if people hate him and said he was not a racist."
+    },
+    {
+      "title": "IBM insists AI didn't kill software deals, just delayed them",
+      "link": "https://www.theregister.com/software/2026/07/23/ibm-insists-ai-didnt-kill-software-deals-just-delayed-them/5276977",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-23T11:34:42.000Z",
+      "summary": "Big Blue says customers postponed rather than abandoned major purchases as hardware soaked up enterprise budgets"
     },
     {
       "title": "Billionaire’s spies targeted DWF partner in sting operation to get insider info on £300m dispute",
@@ -196,6 +213,22 @@
       "topic": "law",
       "isoDate": "2026-07-22T10:30:42.000Z",
       "summary": "Read more about this informal route through which legal professionals may raise concerns about the behaviour of a coroner where early and constructive resolution is appropriate…"
+    },
+    {
+      "title": "EU forces Google to share its toys with the other AI and search kids",
+      "link": "https://www.theregister.com/software/2026/07/16/eu-forces-google-to-share-its-toys-with-the-other-ai-and-search-kids/5273819",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-16T16:48:41.000Z",
+      "summary": "The Chocolate Factory is not amused"
+    },
+    {
+      "title": "AI vendors have found someone to pay their infrastructure bills: You",
+      "link": "https://www.theregister.com/software/2026/07/16/ai-vendors-have-found-someone-to-pay-their-infrastructure-bills-you/5273712",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-16T16:21:00.000Z",
+      "summary": "Forrester warns price hikes and usage charges will pump up software budgets next year"
     },
     {
       "title": "AI to speed up justice under major disclosure reforms",
