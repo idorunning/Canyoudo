@@ -6,14 +6,14 @@
 // default card. Mirrors that script's palette and serif styling so the
 // per-article cards stay brand-consistent with og-default.png.
 
-// Brand palette. Matches the ground of the logo artwork and of
-// public/og-default.png, so the article cards, the default card and the
-// favicon all read as one system — they previously did not: the cards were
-// cream-on-near-black with an oxblood rule, which appeared nowhere else.
-export const INK = '#14170f';
-export const PAPER = '#f7f8f7';
-export const ACCENT = '#0e5138';
-export const MUTED = '#6d7365';
+// The site's live palette, mirroring src/styles/global.css — paper-50, ink-900,
+// accent and ink-600. The cards were previously cream-on-near-black with an
+// oxblood rule, a third palette that appeared nowhere else on the site; now a
+// shared link looks like the page it opens.
+export const INK = '#14161b';
+export const PAPER = '#fbfcfd';
+export const ACCENT = '#0f766e';
+export const MUTED = '#646971';
 
 // Reserved square at the top right for the mark, composited by the endpoint
 // after rasterising (the logo is raster artwork, so it cannot live in the SVG

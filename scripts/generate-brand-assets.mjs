@@ -199,20 +199,25 @@ const icoImages = await Promise.all(
 writeFileSync(join(OUT, 'favicon.ico'), buildIco(icoImages));
 
 // Open Graph default card: the mark on the left, the name and strapline beside
-// it, on the same ground so the card and the icon read as one system.
-const OG_INK = '#14170f';
-const OG_MUTED = '#6d7365';
-const OG_ACCENT = '#0e5138';
+// it. Uses the site's live palette (paper-50, ink-900, accent, ink-600 from
+// src/styles/global.css) rather than the logo's own ground, so a shared link
+// looks like the page it opens — and matches src/lib/og-card.mjs, which draws
+// the per-article cards. The mark goes on keyed rather than as the master
+// tile, or its slightly different ground would show as a square on the card.
+const OG_PAPER = '#fbfcfd';
+const OG_INK = '#14161b';
+const OG_MUTED = '#646971';
+const OG_ACCENT = '#0f766e';
 const ogText = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="${GROUND_HEX}"/>
+  <rect width="1200" height="630" fill="${OG_PAPER}"/>
   <rect x="0" y="0" width="1200" height="12" fill="${OG_ACCENT}"/>
   <text x="470" y="250" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" fill="${OG_INK}">Thinking About</text>
   <text x="470" y="336" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" fill="${OG_INK}">Policing</text>
-  <text x="470" y="404" font-family="Georgia, 'Times New Roman', serif" font-size="30" fill="${OG_MUTED}">What works in policing — and how we&#8217;d know.</text>
+  <text x="470" y="404" font-family="Georgia, 'Times New Roman', serif" font-size="30" fill="${OG_MUTED}">Evidence-based writing on policing and public policy.</text>
   <text x="470" y="470" font-family="Georgia, 'Times New Roman', serif" font-size="25" letter-spacing="2" fill="${OG_MUTED}">Nathan Tracey &#183; thinkingaboutpolicing.org</text>
 </svg>`;
 await sharp(Buffer.from(ogText))
-  .composite([{ input: await from().resize(300, 300).png().toBuffer(), left: 110, top: 165 }])
+  .composite([{ input: await keyOutGround(300), left: 110, top: 165 }])
   .png({ compressionLevel: 9 })
   .toFile(join(OUT, 'og-default.png'));
 
