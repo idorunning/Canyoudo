@@ -27,7 +27,15 @@ const browseLinks = [
       <!-- Brand + about -->
       <div class="max-w-xs">
         <a href="/other" class="flex items-center gap-2.5 mb-4 group" aria-label="Thinking About Policing">
-          <img src="/logo.png" alt="Thinking About Policing logo" class="h-[30px] w-auto object-contain" />
+          {/* The footer sits on the night surface, which stays dark in both
+              themes — so it always takes the light-ink variant of the mark. */}
+          <img
+            src="/logo-mark-dark.png"
+            alt="Thinking About Policing"
+            width="30"
+            height="30"
+            class="h-[30px] w-[30px] object-contain"
+          />
           <span class="font-display font-extrabold text-[1.05rem] text-night-ink leading-none">Thinking About Policing</span>
         </a>
         <p class="font-sans text-sm leading-relaxed text-night-dim">
