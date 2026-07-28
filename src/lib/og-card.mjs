@@ -2,15 +2,25 @@
 // (og:image / twitter:image) for every article. Kept as a plain module — with
 // no Astro or sharp imports — so the wrapping logic can be unit-tested and so
 // the OG endpoint (src/pages/og/[section]/[slug].png.ts) can rasterise the SVG
-// with `sharp`, exactly as scripts/generate-og-assets.mjs does for the static
+// with `sharp`, exactly as scripts/generate-brand-assets.mjs does for the static
 // default card. Mirrors that script's palette and serif styling so the
 // per-article cards stay brand-consistent with og-default.png.
 
-// Brand palette (mirrors tailwind.config.mjs / generate-og-assets.mjs).
-export const INK = '#1a1817';
-export const PAPER = '#f7f3eb';
-export const ACCENT = '#7c2828';
-export const MUTED = '#9c9389';
+// Brand palette. Matches the ground of the logo artwork and of
+// public/og-default.png, so the article cards, the default card and the
+// favicon all read as one system — they previously did not: the cards were
+// cream-on-near-black with an oxblood rule, which appeared nowhere else.
+export const INK = '#14170f';
+export const PAPER = '#f7f8f7';
+export const ACCENT = '#0e5138';
+export const MUTED = '#6d7365';
+
+// Reserved square at the top right for the mark, composited by the endpoint
+// after rasterising (the logo is raster artwork, so it cannot live in the SVG
+// without inlining it as a data URI on every card).
+export const MARK_SIZE = 108;
+export const MARK_X = 1200 - 80 - MARK_SIZE;
+export const MARK_Y = 74;
 
 const WIDTH = 1200;
 const HEIGHT = 630;
@@ -83,11 +93,12 @@ export function renderCardSvg({ title, section, author = 'Nathan Tracey', domain
     .join('');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
-  <rect width="${WIDTH}" height="${HEIGHT}" fill="${INK}"/>
-  <rect x="0" y="0" width="${WIDTH}" height="10" fill="${ACCENT}"/>
+  <rect width="${WIDTH}" height="${HEIGHT}" fill="${PAPER}"/>
+  <rect x="0" y="0" width="${WIDTH}" height="12" fill="${ACCENT}"/>
   <rect x="${MARGIN}" y="118" width="64" height="6" fill="${ACCENT}"/>
   <text x="${MARGIN}" y="160" font-family="${serif}" font-size="26" letter-spacing="6" fill="${ACCENT}">${escapeXml(String(section).toUpperCase())}</text>
-  <text font-family="${serif}" font-size="${fontSize}" font-weight="700" fill="${PAPER}">${titleTspans}</text>
-  <text x="${MARGIN}" y="578" font-family="${serif}" font-size="26" letter-spacing="2" fill="${MUTED}">${escapeXml(author)} · ${escapeXml(domain)}</text>
+  <text font-family="${serif}" font-size="${fontSize}" font-weight="700" fill="${INK}">${titleTspans}</text>
+  <rect x="${MARGIN}" y="540" width="${WIDTH - MARGIN * 2}" height="1" fill="${MUTED}" opacity="0.35"/>
+  <text x="${MARGIN}" y="582" font-family="${serif}" font-size="26" letter-spacing="2" fill="${MUTED}">${escapeXml(author)} · ${escapeXml(domain)}</text>
 </svg>`;
 }
