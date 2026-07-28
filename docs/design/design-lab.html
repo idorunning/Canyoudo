@@ -1395,7 +1395,7 @@ body:has(#d-0:checked) #brief    { display: block; }
     <div class="kills">
       <div class="kill"><span class="kill__n">01</span><span class="kill__t">Every article looks identical in a feed</span><span class="kill__w">The generated card carries only the title. A reader scrolling X sees the same black rectangle whether the piece is about nitazenes or the Somerton Man. Nothing earns a second look.</span></div>
       <div class="kill"><span class="kill__n">02</span><span class="kill__t">The card uses a third, unrelated palette</span><span class="kill__w">The card is cream on near-black with an oxblood rule (#7C2828). The site is teal. The logo is navy. Three brands, none of which agree — and the card is the one most people see first.</span></div>
-      <div class="kill"><span class="kill__n">03</span><span class="kill__t">Eleven source images are too small, three do not exist</span><span class="kill__w">Below 1200px wide there is no sharp card to make. Three articles point at a <code>.jpg</code> hero where only an <code>.svg</code> exists — those heroes are broken on the page today, not only in the card.</span></div>
+      <div class="kill"><span class="kill__n">03</span><span class="kill__t">Eleven source images are too small for a sharp card</span><span class="kill__w">Below 1200px wide there is nothing to crop from. Type C is the honest answer for those, rather than upscaling a 512px photo into a 1200px card.</span></div>
     </div>
 
     <h2>The card system</h2>
@@ -1571,7 +1571,8 @@ body:has(#d-0:checked) #brief    { display: block; }
     </div>
 
     <h2>What every article gets, and what needs fixing first</h2>
-    <p>All 32 articles, audited against their current hero. <b style="color:var(--lab-ink)">Eleven</b> are under 1200px wide, <b style="color:var(--lab-ink)">two</b> are portrait-oriented so a 2:1 crop loses most of the frame, and <b style="color:var(--lab-ink)">three</b> point at files that do not exist.</p>
+    <p>All 32 articles, audited against their current hero. <b style="color:var(--lab-ink)">Eleven</b> are under 1200px wide and <b style="color:var(--lab-ink)">two</b> are portrait-oriented, so a 2:1 crop loses most of the frame.</p>
+    <p style="margin-top:10px"><b style="color:var(--lab-ink)">Note on the build-time fetch.</b> Not every hero lives in the repository. <code>netlify.toml</code> runs <code>fetch-images.sh</code> before each build, which downloads 47 images into <code>public/images/</code> at 1600px. Those files are absent from a fresh checkout but present on the deployed site, so any audit run against the working tree alone will wrongly report them missing.</p>
     <div class="assign">
       <table>
         <thead><tr><th>Article</th><th>Current hero</th><th>Pixels</th><th>Card</th><th>Action</th></tr></thead>
@@ -1593,9 +1594,9 @@ body:has(#d-0:checked) #brief    { display: block; }
           <tr><td>What Palantir's Advance Means for British Policing</td><td class="mono">palantir-logo</td><td class="mono">1014×761</td><td><span class="pill pill--type">Type</span></td><td>A company logo is not a photograph — Type C</td></tr>
           <tr><td>Policing the Police: Why the "Small Stuff" Matters</td><td class="mono">professional-standards</td><td class="mono">403×204</td><td><span class="pill pill--type">Type</span></td><td>Too small — Type C</td></tr>
           <tr><td>Sir Robert Peel and the Invention of Policing by Consent</td><td class="mono">peel-portrait</td><td class="mono">portrait</td><td><span class="pill pill--port">Portrait</span></td><td>Hero 11539 is 1024px — use the portrait instead</td></tr>
-          <tr><td>Lawrence Sherman and the Invention of Evidence-Based Policing</td><td class="mono">sherman-ebp-hero.jpg</td><td class="mono">missing</td><td><span class="pill pill--port">Portrait</span></td><td><b>Broken:</b> only sherman-ebp-hero.svg exists</td></tr>
-          <tr><td>Alex Murray and the Society That Asked Policing to Prove What Works</td><td class="mono">murray-ebp-hero.jpg</td><td class="mono">missing</td><td><span class="pill pill--port">Portrait</span></td><td><b>Broken:</b> only murray-ebp-hero.svg exists</td></tr>
-          <tr><td>Susanne Knabe-Nicol and the Last Mile of Evidence-Based Policing</td><td class="mono">knabe-nicol-hero.jpg</td><td class="mono">missing</td><td><span class="pill pill--port">Portrait</span></td><td><b>Broken:</b> only knabe-nicol-hero.svg exists</td></tr>
+          <tr><td>Lawrence Sherman and the Invention of Evidence-Based Policing</td><td class="mono">sherman-ebp-hero</td><td class="mono">1600 wide</td><td><span class="pill pill--port">Portrait</span></td><td>Fetched at build; portrait reads better than the stock photo</td></tr>
+          <tr><td>Alex Murray and the Society That Asked Policing to Prove What Works</td><td class="mono">murray-ebp-hero</td><td class="mono">1600 wide</td><td><span class="pill pill--port">Portrait</span></td><td>Fetched at build; portrait reads better than the stock photo</td></tr>
+          <tr><td>Susanne Knabe-Nicol and the Last Mile of Evidence-Based Policing</td><td class="mono">knabe-nicol-hero</td><td class="mono">1600 wide</td><td><span class="pill pill--port">Portrait</span></td><td>Fetched at build; portrait reads better than the stock photo</td></tr>
           <tr><td>Jason Roach and the Art of Catching Criminals by Their Small Mistakes</td><td class="mono">roach</td><td class="mono">180×180</td><td><span class="pill pill--port">Portrait</span></td><td>Too small for a plate — re-source at 800px</td></tr>
           <tr><td>Jerry Ratcliffe and the Case for Intelligence-Led Policing</td><td class="mono">ratcliffe-portrait</td><td class="mono">400×400</td><td><span class="pill pill--port">Portrait</span></td><td>Workable at 36% width; 800px would be better</td></tr>
           <tr><td>The Society of Evidence-Based Policing</td><td class="mono">11540</td><td class="mono">1280×1280</td><td><span class="pill pill--type">Type</span></td><td>Square stock filler — Type C</td></tr>
