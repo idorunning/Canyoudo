@@ -302,7 +302,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       </ol>
       <label class="mt-4 block">
         <span class="sr-only">Jump to a force</span>
-        <select data-pick-any class="w-full border border-ink-300 rounded-md px-2 py-2 font-sans text-xs text-ink-900 bg-paper-50">
+        <select data-pick-any class="w-full border border-ink-300 rounded-2 px-2 py-2 font-sans text-xs text-ink-900 bg-paper-50">
           <option value="">Jump to a force…</option>
           ${Object.entries(centroids).map(([id, c]) => `<option value="${id}">${esc(c.name)}</option>`).join('')}
         </select>
@@ -349,13 +349,13 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
             <div class="flex items-center gap-2 font-sans text-[11px] text-ink-700" role="row">
               <span class="inline-block w-2.5 h-2.5 rounded-full shrink-0" style="background:${categoryColor(k, state.dark)}"></span>
               <span class="w-32 truncate" title="${esc(categoryLabel(k))}">${esc(categoryLabel(k))}</span>
-              <span class="flex-1 h-2 bg-paper-200 rounded-sm overflow-hidden"><span class="block h-full rounded-sm" style="width:${Math.max((n / maxCat) * 100, 1)}%;background:${categoryColor(k, state.dark)}"></span></span>
+              <span class="flex-1 h-2 bg-paper-200 rounded-1 overflow-hidden"><span class="block h-full rounded-1" style="width:${Math.max((n / maxCat) * 100, 1)}%;background:${categoryColor(k, state.dark)}"></span></span>
               <span class="tabular-nums text-ink-500 w-14 text-right shrink-0">${fmt.format(n)}</span>
             </div>`).join('')}
         </div>` : ''}
       <div data-cm-ss-slot class="mt-4"></div>
       <div class="mt-4 flex flex-wrap gap-2">
-        <button type="button" data-zoom-force class="font-sans text-xs border border-ink-300 rounded-md px-2.5 py-2 text-ink-700 hover:border-accent hover:text-accent">Zoom into ${esc(shortName(c?.name ?? id))} →</button>
+        <button type="button" data-zoom-force class="font-sans text-xs border border-ink-300 rounded-2 px-2.5 py-2 text-ink-700 hover:border-accent hover:text-accent">Zoom into ${esc(shortName(c?.name ?? id))} →</button>
       </div>
       <div data-cm-read-slot class="mt-4"></div>
       <ul class="mt-4 space-y-1 font-sans text-xs">
@@ -400,7 +400,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     const slot = panelEl.querySelector<HTMLElement>('[data-cm-read-slot]');
     if (!slot) return;
     slot.innerHTML = `
-      <button type="button" data-cm-read class="font-sans text-xs border border-ink-300 rounded-md px-2.5 py-2 text-ink-700 hover:border-accent hover:text-accent">${esc(label)}</button>`;
+      <button type="button" data-cm-read class="font-sans text-xs border border-ink-300 rounded-2 px-2.5 py-2 text-ink-700 hover:border-accent hover:text-accent">${esc(label)}</button>`;
     slot.querySelector<HTMLButtonElement>('[data-cm-read]')!.onclick = () => {
       slot.innerHTML = `
         <p class="u-kicker u-kicker--dim mb-2">The reading</p>
@@ -431,14 +431,14 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
               ${g.disparityRatio != null ? `<span class="tabular-nums font-medium ${g.disparityRatio >= 1.5 ? 'text-accent' : 'text-ink-600'}">${(Math.round(g.disparityRatio * 10) / 10).toFixed(1)}×</span>` : ''}
             </div>
             <div class="mt-0.5 space-y-0.5" title="${esc(disparityLine({ ethnicity: g.ethnicity, searchShare: g.searchShare, populationShare: g.populationShare, disparityRatio: g.disparityRatio }))}">
-              <div class="h-1.5 bg-paper-200 rounded-sm overflow-hidden"><div class="h-full bg-accent/80 rounded-sm" style="width:${pctW(g.searchShare)}"></div></div>
-              ${g.populationShare != null ? `<div class="h-1.5 bg-paper-200 rounded-sm overflow-hidden"><div class="h-full bg-ink-400 rounded-sm" style="width:${pctW(g.populationShare)}"></div></div>` : ''}
+              <div class="h-1.5 bg-paper-200 rounded-1 overflow-hidden"><div class="h-full bg-accent/80 rounded-1" style="width:${pctW(g.searchShare)}"></div></div>
+              ${g.populationShare != null ? `<div class="h-1.5 bg-paper-200 rounded-1 overflow-hidden"><div class="h-full bg-ink-400 rounded-1" style="width:${pctW(g.populationShare)}"></div></div>` : ''}
             </div>
           </div>`).join('')}
       </div>
       <p class="font-sans text-[10px] text-ink-500 mt-2 leading-snug">
-        <span class="inline-block w-2 h-2 bg-accent/80 rounded-sm align-baseline"></span> share of searches
-        ${disp.hasPopulation ? '&nbsp;<span class="inline-block w-2 h-2 bg-ink-400 rounded-sm align-baseline"></span> share of residents (Census 2021)' : ''}
+        <span class="inline-block w-2 h-2 bg-accent/80 rounded-1 align-baseline"></span> share of searches
+        ${disp.hasPopulation ? '&nbsp;<span class="inline-block w-2 h-2 bg-ink-400 rounded-1 align-baseline"></span> share of residents (Census 2021)' : ''}
       </p>
       <p class="font-serif text-[11px] text-ink-600 leading-snug mt-2">${disp.hasPopulation
         ? esc(DISPARITY_CAVEAT)

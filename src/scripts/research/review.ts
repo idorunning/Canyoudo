@@ -695,7 +695,7 @@ function renderTable(
   if (nCol === -1 || studyCol === -1 || findingCol === -1) return null;
 
   const outer = el('div', 'mt-4');
-  const wrap = el('div', 'overflow-x-auto rounded-md border border-ink-200');
+  const wrap = el('div', 'overflow-x-auto rounded-2 border border-ink-200');
   const table = document.createElement('table');
   table.className = 'w-full text-left border-collapse';
 
@@ -903,9 +903,9 @@ function renderActionBox(
   valid: Set<number>,
   refs?: Work[]
 ): HTMLElement {
-  const box = el('div', `rounded-md border-l-[3px] px-4 py-3.5 ${style}`);
+  const box = el('div', `rounded-2 border-l-[3px] px-4 py-3.5 ${style}`);
   box.appendChild(
-    el('h4', 'font-sans text-xs font-bold uppercase tracking-[0.08em] text-ink-900 mb-2', `${icon} ${heading}`)
+    el('h4', 'u-datum !text-ink-900 mb-2', `${icon} ${heading}`)
   );
   for (const node of renderSectionBody(body, valid, refs)) box.appendChild(node);
   return box;

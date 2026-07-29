@@ -125,7 +125,7 @@ export function card(w: Work, hooks: CardHooks = {}) {
   if (w.retracted) {
     const flag = el(
       'span',
-      'ml-2 inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 font-sans text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-red-800 align-middle',
+      'ml-2 inline-flex items-center rounded-1 border border-flag/30 bg-flag/10 px-2 py-0.5 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.08em] text-flag align-middle',
       'Retracted'
     );
     flag.title = 'Flagged as retracted in the Retraction Watch database (via OpenAlex).';

@@ -146,8 +146,8 @@ export async function initHeaderAccount(): Promise<void> {
 
     dotEls.forEach((el) => {
       el.className = isIn
-        ? 'w-2.5 h-2.5 rounded-full bg-green-500 shrink-0 ring-2 ring-green-500/20'
-        : 'w-2.5 h-2.5 rounded-full bg-red-500 shrink-0 ring-2 ring-red-500/20';
+        ? 'w-2.5 h-2.5 rounded-full bg-chart-green shrink-0 ring-2 ring-chart-green/20'
+        : 'w-2.5 h-2.5 rounded-full bg-flag shrink-0 ring-2 ring-flag/20';
     });
     labelEls.forEach((el) => {
       el.textContent = isIn ? profile.name || 'Account' : 'Sign in';
@@ -325,7 +325,7 @@ export async function initHeaderAccount(): Promise<void> {
 
       const remove = document.createElement('button');
       remove.type = 'button';
-      remove.className = 'shrink-0 font-sans text-[10px] font-semibold uppercase tracking-[0.06em] text-ink-400 hover:text-accent-dark transition-colors';
+      remove.className = 'u-datum shrink-0 !text-ink-400 hover:text-accent-dark transition-colors';
       remove.textContent = 'Remove';
       remove.setAttribute('aria-label', `Remove "${a.title}" from your library`);
       remove.addEventListener('click', async () => {

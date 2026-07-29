@@ -193,7 +193,7 @@ const riverData = {
     <line data-river-cursor x1="0" x2="0" y1={pad.t} y2={pad.t + innerH} stroke="rgb(var(--ink-900))" stroke-width="1.5" opacity="0" style="transition:opacity .12s" />
   </svg>
   {/* Hover readout. */}
-  <div data-river-tip class="pointer-events-none absolute z-10 hidden rounded-md border border-ink-200 bg-paper-50 px-3 py-2 text-xs shadow-md" style="min-width:9rem"></div>
+  <div data-river-tip class="pointer-events-none absolute z-10 hidden surface-sheet rounded-2 px-3 py-2 text-xs shadow-e2" style="min-width:9rem"></div>
   <script type="application/json" data-river-data set:html={JSON.stringify(riverData)} />
   <details class="mt-2">
     <summary class="cursor-pointer font-sans text-xs uppercase tracking-[0.15em] text-accent">Theme rates by year (table)</summary>

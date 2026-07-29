@@ -41,12 +41,12 @@ function fmtDate(iso: string): string {
 
 <DashboardLayout title="Audience" active="audience" auth={auth} wide={true}>
   {deleted === 'ok' && (
-    <p class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+    <p class="mb-6 rounded-3 border border-chart-green/30 bg-chart-green/8 px-4 py-3 text-sm text-chart-green">
       Deleted {deletedEmail ? <strong>{deletedEmail}</strong> : 'the account'} and all of their data.
     </p>
   )}
   {deleted === 'error' && (
-    <p class="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+    <p class="mb-6 rounded-3 border border-flag/30 bg-flag/8 px-4 py-3 text-sm text-flag">
       Couldn’t delete that account. {deletedReason}
     </p>
   )}
@@ -55,20 +55,20 @@ function fmtDate(iso: string): string {
 
   {summary && (
     <div class="grid gap-6 sm:grid-cols-4 mb-10">
-      <div class="border border-ink-200 rounded-lg p-5">
+      <div class="border border-ink-200 rounded-3 p-5">
         <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Total readers</p>
         <p class="text-2xl font-semibold text-ink-900">{summary.total.toLocaleString('en-GB')}</p>
         {summary.truncated && <p class="text-xs text-ink-500">showing first 1,000</p>}
       </div>
-      <div class="border border-ink-200 rounded-lg p-5">
+      <div class="border border-ink-200 rounded-3 p-5">
         <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">New this month</p>
         <p class="text-2xl font-semibold text-ink-900">{summary.newThisMonth.toLocaleString('en-GB')}</p>
       </div>
-      <div class="border border-ink-200 rounded-lg p-5">
+      <div class="border border-ink-200 rounded-3 p-5">
         <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Newsletter opt-in</p>
         <p class="text-2xl font-semibold text-ink-900">{summary.subscribedPct}%</p>
       </div>
-      <div class="border border-ink-200 rounded-lg p-5">
+      <div class="border border-ink-200 rounded-3 p-5">
         <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Sign-in method</p>
         <p class="text-sm text-ink-700">
           {summary.byProvider.map((p) => `${p.name} ${p.count}`).join(' · ') || '—'}
@@ -79,15 +79,15 @@ function fmtDate(iso: string): string {
 
   {summary && (
     <div class="grid gap-6 md:grid-cols-3 mb-10">
-      <div class="border border-ink-200 rounded-lg p-5">
+      <div class="border border-ink-200 rounded-3 p-5">
         <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">By role</p>
         <Bars items={summary.byRole} emptyLabel="No roles given yet." />
       </div>
-      <div class="border border-ink-200 rounded-lg p-5">
+      <div class="border border-ink-200 rounded-3 p-5">
         <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">By interest</p>
         <Bars items={summary.byInterest} emptyLabel="No interests given yet." />
       </div>
-      <div class="border border-ink-200 rounded-lg p-5">
+      <div class="border border-ink-200 rounded-3 p-5">
         <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-saved articles</p>
         {saves?.ok ? (
           <Bars items={topSaved} emptyLabel="No saved articles yet." />
@@ -99,7 +99,7 @@ function fmtDate(iso: string): string {
   )}
 
   {readers?.ok && (
-    <div class="overflow-x-auto border border-ink-200 rounded-lg">
+    <div class="overflow-x-auto border border-ink-200 rounded-3">
       <table data-sortable class="w-full text-sm">
         <thead class="bg-paper-100 text-left">
           <tr>
@@ -135,7 +135,7 @@ function fmtDate(iso: string): string {
                 >
                   <input type="hidden" name="userId" value={r.id} />
                   <input type="hidden" name="email" value={r.email} />
-                  <button type="submit" class="text-xs text-red-600 hover:text-red-800 hover:underline">
+                  <button type="submit" class="text-xs text-flag hover:text-flag hover:underline">
                     Delete
                   </button>
                 </form>

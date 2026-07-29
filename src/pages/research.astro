@@ -145,7 +145,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
 
             {/* Worked example — static HTML, always present (no AI call). */}
             <p class="u-datum mb-3">From an example review</p>
-            <div class="rounded-lg border border-ink-200 bg-paper-50 px-6 py-7">
+            <div class="surface-sheet rounded-3 px-6 py-7">
               <p class="u-datum mb-2">Research review</p>
               <h2 class="font-display text-xl md:text-2xl font-semibold text-ink-900 leading-tight">
                 How do we cut repeat domestic-abuse victimisation in our area?
@@ -175,7 +175,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
             </div>
 
             {/* Sign-in: the gate to the tool. Both routes mounted by the script. */}
-            <div class="mt-12 rounded-lg bg-paper-200 px-6 py-7">
+            <div class="mt-12 rounded-3 bg-paper-200 px-6 py-7">
               <h2 class="font-display text-xl font-semibold text-ink-900">Sign in to use the research assistant</h2>
               <p class="font-serif text-ink-700 leading-relaxed mt-2 max-w-xl">
                 It’s free. Create a password or use Google. Your reviews save to your
@@ -199,13 +199,13 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
           {hasAi && (
             <div class="mb-7">
               <nav data-research-mode class="flex flex-wrap gap-2 font-sans text-sm" aria-label="Assistant mode">
-                <button type="button" data-mode="search" class="px-4 py-2 rounded-md border border-ink-300 text-ink-700 hover:border-ink-500">
+                <button type="button" data-mode="search" class="px-4 py-2 rounded-2 border border-ink-300 text-ink-700 hover:border-ink-500">
                   Search
                 </button>
-                <button type="button" data-mode="overview" class="px-4 py-2 rounded-md border border-ink-300 text-ink-700 hover:border-ink-500">
+                <button type="button" data-mode="overview" class="px-4 py-2 rounded-2 border border-ink-300 text-ink-700 hover:border-ink-500">
                   Overview
                 </button>
-                <button type="button" data-mode="review" class="px-4 py-2 rounded-md bg-ink-900 text-paper-50 border border-transparent">
+                <button type="button" data-mode="review" class="px-4 py-2 rounded-2 bg-ink-900 text-paper-50 border border-transparent">
                   Research review
                 </button>
               </nav>
@@ -225,13 +225,13 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                   data-review-input
                   rows="3"
                   placeholder="e.g. How do we reduce repeat burglary on a single estate without simply displacing it?"
-                  class="w-full border border-ink-300 rounded-md px-4 py-3 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent resize-y"
+                  class="w-full border border-ink-300 rounded-2 px-4 py-3 font-sans text-base text-ink-900 bg-paper-200/50 shadow-well focus:outline-none focus:border-accent resize-y"
                 ></textarea>
                 <div class="flex flex-wrap items-center gap-3">
                   <button
                     type="submit"
                     data-review-send
-                    class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50"
+                    class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-2 hover:bg-accent-dark transition-colors disabled:opacity-50"
                   >
                     Build research review
                   </button>
@@ -267,12 +267,12 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                   type="search"
                   autocomplete="off"
                   placeholder="e.g. does extra patrol cut burglary?"
-                  class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
+                  class="flex-1 min-w-0 border border-ink-300 rounded-2 px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-200/50 shadow-well focus:outline-none focus:border-accent"
                 />
                 <button
                   type="submit"
                   data-overview-send
-                  class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50"
+                  class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-2 hover:bg-accent-dark transition-colors disabled:opacity-50"
                 >
                   Get overview
                 </button>
@@ -303,12 +303,12 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                 type="search"
                 autocomplete="off"
                 placeholder="e.g. hot spots policing"
-                class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
+                class="flex-1 min-w-0 border border-ink-300 rounded-2 px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-200/50 shadow-well focus:outline-none focus:border-accent"
               />
               <button
                 type="submit"
                 data-research-send
-                class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50"
+                class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-2 hover:bg-accent-dark transition-colors disabled:opacity-50"
               >
                 Search
               </button>
@@ -423,7 +423,7 @@ const evidenceDatabases = (resourcesEntry?.data.resources ?? []).filter(
                   type="button"
                   data-research-more
                   hidden
-                  class="font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50"
+                  class="font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-2 hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50"
                 >
                   More results
                 </button>

@@ -64,12 +64,12 @@ const parts = [
     data-reveal
     data-pagefind-ignore
     aria-labelledby="ps-heading"
-    class="ps ps--article surface-night rounded-xl mt-12 p-7 md:p-10 overflow-hidden"
+    class="ps ps--article surface-night rounded-4 mt-12 p-7 md:p-10 overflow-hidden"
   >
     <div class="flex items-start justify-between gap-4">
       <div>
         <div class="ps-rule h-[3px] w-12 bg-accent-light mb-5" aria-hidden="true"></div>
-        <p class="font-sans text-xs font-semibold uppercase tracking-[0.16em] text-accent-light mb-2.5">
+        <p class="u-datum !text-accent-light mb-2.5">
           Practical summary
         </p>
         <h2 id="ps-heading" class="ps-heading font-display text-2xl md:text-[1.75rem] font-bold leading-tight m-0">
@@ -124,7 +124,7 @@ const parts = [
     </section>
   </aside>
 ) : (
-  <article id={id} data-reveal class="ps ps--hub card-hairline rounded-xl p-6 md:p-7 flex flex-col">
+  <article id={id} data-reveal class="ps ps--hub card-hairline rounded-4 p-6 md:p-7 flex flex-col">
     <div class="h-[3px] w-10 bg-accent mb-4" aria-hidden="true"></div>
     {section && <div class="mb-2.5"><SectionBadge section={section} /></div>}
     {articleTitle && (

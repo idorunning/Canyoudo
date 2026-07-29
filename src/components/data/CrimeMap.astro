@@ -12,11 +12,11 @@ const centroids = JSON.parse(readFileSync('src/data/force-centroids.json', 'utf8
 
 <div data-crime-map class="grid lg:grid-cols-[minmax(0,1fr)_21rem] gap-4">
   <div class="relative">
-    <div data-cm-map class="h-[60vh] md:h-[70vh] rounded-lg border border-ink-200 overflow-hidden bg-paper-100 z-0"></div>
+    <div data-cm-map class="h-[60vh] md:h-[70vh] rounded-3 border border-ink-200 overflow-hidden bg-paper-100 z-0"></div>
 
     {/* tier chip */}
     <div data-cm-tier
-      class="absolute top-3 left-3 z-[500] rounded-md bg-paper-50/95 border border-ink-200 px-2.5 py-1.5 font-sans text-xs text-ink-700 shadow-sm max-w-[70%]">
+      class="absolute top-3 left-3 z-[500] rounded-2 bg-paper-50/95 border border-ink-200 px-2.5 py-1.5 font-sans text-xs text-ink-700 shadow-e2 max-w-[70%]">
     </div>
 
     {/* month picker */}
@@ -24,14 +24,14 @@ const centroids = JSON.parse(readFileSync('src/data/force-centroids.json', 'utf8
       <label>
         <span class="sr-only">Data month</span>
         <select data-cm-month
-          class="rounded-md bg-paper-50/95 border border-ink-200 px-2 py-2 font-sans text-xs text-ink-900 shadow-sm focus:outline-none focus:border-accent">
+          class="rounded-2 bg-paper-50/95 border border-ink-200 px-2 py-2 font-sans text-xs text-ink-900 shadow-e2 focus:outline-none focus:border-accent">
         </select>
       </label>
     </div>
 
     {/* fullscreen toggle — sits below the Leaflet zoom control */}
     <button type="button" data-cm-fs aria-pressed="false" aria-label="Full screen" title="Full screen"
-      class="absolute top-24 right-3 z-[500] rounded-md bg-paper-50/95 border border-ink-200 p-2.5 shadow-sm text-ink-700 hover:text-accent hover:border-accent transition-colors">
+      class="absolute top-24 right-3 z-[500] rounded-2 bg-paper-50/95 border border-ink-200 p-2.5 shadow-e2 text-ink-700 hover:text-accent hover:border-accent transition-colors">
       <svg data-fs-expand width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
         <path d="M1 5V1h4M9 1h4v4M13 9v4H9M5 13H1V9"/>
       </svg>
@@ -42,11 +42,11 @@ const centroids = JSON.parse(readFileSync('src/data/force-centroids.json', 'utf8
 
     {/* status strip — honest loading/error/empty copy; top-centre, clear of key + attribution */}
     <p data-cm-status hidden aria-live="polite"
-      class="absolute top-14 left-1/2 -translate-x-1/2 z-[500] w-max max-w-[85%] rounded-md bg-paper-50/95 border border-ink-200 px-2.5 py-1.5 font-sans text-xs text-ink-700 shadow-sm">
+      class="absolute top-14 left-1/2 -translate-x-1/2 z-[500] w-max max-w-[85%] rounded-2 bg-paper-50/95 border border-ink-200 px-2.5 py-1.5 font-sans text-xs text-ink-700 shadow-e2">
     </p>
 
     {/* legend / category filter */}
-    <details open class="absolute bottom-3 left-3 z-[500] rounded-md bg-paper-50/95 border border-ink-200 shadow-sm max-w-[17rem]">
+    <details open class="absolute bottom-3 left-3 z-[500] rounded-2 bg-paper-50/95 border border-ink-200 shadow-e2 max-w-[17rem]">
       <summary class="cursor-pointer list-none px-2.5 py-1.5 font-sans text-[11px] uppercase tracking-[0.12em] text-ink-500 select-none">Key</summary>
       <div class="px-2.5 pb-2">
         <div data-cm-legend class="grid grid-cols-2 gap-x-3 gap-y-1"></div>
@@ -57,7 +57,7 @@ const centroids = JSON.parse(readFileSync('src/data/force-centroids.json', 'utf8
 
   {/* side panel — also the keyboard path into the data */}
   <aside data-cm-panel aria-label="Map detail panel" aria-live="polite"
-    class="rounded-lg border border-ink-200 bg-paper-50 p-4 lg:max-h-[70vh] lg:overflow-y-auto">
+    class="surface-sheet rounded-3 p-4 lg:max-h-[70vh] lg:overflow-y-auto">
   </aside>
 
   <script type="application/json" data-cm-centroids set:html={JSON.stringify(centroids)}></script>

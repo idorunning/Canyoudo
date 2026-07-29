@@ -133,7 +133,7 @@ export async function initSaved(
       // A quiet bar above the search box: the benefit, then both sign-in
       // routes right there (email link primary, Google secondary) — no
       // teaser that sends the reader hunting elsewhere.
-      const bar = el('div', 'flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between rounded-lg bg-paper-200 px-5 py-4');
+      const bar = el('div', 'flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between rounded-3 bg-paper-200 px-5 py-4');
       const blurb = el('div', 'max-w-sm');
       blurb.appendChild(el('p', 'font-sans text-sm font-medium text-ink-900', 'Save papers, notes and reference lists as you go'));
       blurb.appendChild(el('p', 'font-sans text-xs text-ink-600 mt-0.5', 'Free and optional — searching works without an account.'));
@@ -449,7 +449,7 @@ export async function initSaved(
     };
     const summary = el('summary', 'cursor-pointer list-none border border-ink-300 rounded px-2 py-1 bg-paper-50 hover:border-ink-500 select-none', summaryLabel());
     details.appendChild(summary);
-    const panel = el('div', 'absolute z-10 mt-1 min-w-[12rem] max-w-xs rounded-md border border-ink-200 bg-paper-50 shadow-lg p-2 space-y-1');
+    const panel = el('div', 'absolute z-10 mt-1 min-w-[12rem] max-w-xs rounded-2 border border-ink-200 bg-paper-50 shadow-e3 p-2 space-y-1');
     if (folders.length === 0) {
       panel.appendChild(el('p', 'text-ink-500 px-1 py-0.5', 'No folders yet — create one below the chips.'));
     }
@@ -594,7 +594,7 @@ export async function initSaved(
     // A contextual banner when the reader arrived here by trying to save.
     if (signInPrompt) {
       box.appendChild(
-        el('p', 'mb-5 px-4 py-3 rounded-md bg-paper-200 border-l-2 border-accent font-sans text-sm text-ink-800', signInPrompt)
+        el('p', 'mb-5 px-4 py-3 rounded-2 bg-paper-200 border-l-2 border-accent font-sans text-sm text-ink-800', signInPrompt)
       );
       signInPrompt = null;
     }

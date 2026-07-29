@@ -26,9 +26,9 @@ const entries = [...(changelogEntry?.data.changelog ?? [])].sort(
 // dynamically) so Tailwind keeps them in the build.
 const TYPE_META: Record<string, { label: string; badge: string }> = {
   new: { label: 'New', badge: 'bg-accent/10 text-accent-dark border-accent/30' },
-  fix: { label: 'Fix', badge: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30' },
-  update: { label: 'Update', badge: 'bg-sky-500/10 text-sky-700 dark:text-sky-300 border-sky-500/30' },
-  article: { label: 'Article', badge: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30' },
+  fix: { label: 'Fix', badge: 'bg-chart-green/10 text-chart-green border-chart-green/30' },
+  update: { label: 'Update', badge: 'bg-accent/10 text-accent border-accent/30' },
+  article: { label: 'Article', badge: 'bg-chart-amber/10 text-chart-amber border-chart-amber/30' },
   note: { label: 'Note', badge: 'bg-ink-500/10 text-ink-600 border-ink-300' },
 };
 
@@ -116,7 +116,7 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
       </section>
 
       {/* --- Suggestions / contact ------------------------------------- */}
-      <aside class="mt-16 rounded-lg border border-ink-200 bg-paper-200 p-6 sm:p-8">
+      <aside class="mt-16 rounded-3 border border-ink-200 bg-paper-200 p-6 sm:p-8">
         <h2 class="font-display text-xl font-semibold text-ink-900">
           Spotted something, or have an idea?
         </h2>

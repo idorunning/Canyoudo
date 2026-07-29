@@ -41,7 +41,7 @@ const tools = [
      <MemberGate hasAuth={hasAuth} feature="the Crime Data Explorer">
       <div class="grid md:grid-cols-2 gap-6 max-w-4xl">
         {tools.map((t) => (
-          <a href={t.href} class="block border border-ink-200 rounded-lg p-6 hover:border-accent transition-colors group">
+          <a href={t.href} class="block border border-ink-200 rounded-3 p-6 hover:border-accent transition-colors group">
             <h2 class="font-display text-xl font-semibold text-ink-900 group-hover:text-accent transition-colors">{t.title}</h2>
             <p class="font-serif text-ink-700 leading-relaxed mt-2">{t.blurb}</p>
             <span class="inline-block mt-4 font-sans text-sm text-accent">Open →</span>

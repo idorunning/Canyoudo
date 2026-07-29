@@ -49,12 +49,12 @@ const forces = entries
         <form data-briefing-form class="flex flex-wrap gap-3 items-end">
           <div>
             <label for="force-pick" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Choose an area</label>
-            <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
+            <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-2 px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
               <option value="_all">England &amp; Wales (all forces)</option>
               {forces.map((f) => <option value={f.id}>{f.name}</option>)}
             </select>
           </div>
-          <button type="submit" data-generate class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50">
+          <button type="submit" data-generate class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-2 hover:bg-accent-dark transition-colors disabled:opacity-50">
             Write the briefing
           </button>
         </form>
@@ -67,7 +67,7 @@ const forces = entries
           <div class="flex flex-wrap items-center gap-3">
             <span data-confidence class="chip" hidden></span>
             <span data-figure-check class="font-sans text-xs text-ink-500" hidden></span>
-            <button type="button" data-download hidden class="ml-auto font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-accent hover:text-accent transition-colors">
+            <button type="button" data-download hidden class="ml-auto font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-2 hover:border-accent hover:text-accent transition-colors">
               Download PDF
             </button>
           </div>

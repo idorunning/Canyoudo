@@ -43,7 +43,7 @@ const forces = entries
 
         <div>
           <label for="force-pick" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Choose an area</label>
-          <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
+          <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-2 px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
             <option value="_all">England &amp; Wales (all forces)</option>
             {forces.map((f) => <option value={f.id}>{f.name}</option>)}
           </select>
@@ -82,7 +82,7 @@ const forces = entries
 
           <div class="border-t border-ink-200 pt-6 space-y-3">
             <div>
-              <button type="button" data-csv class="font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-accent hover:text-accent transition-colors">
+              <button type="button" data-csv class="font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-2 hover:border-accent hover:text-accent transition-colors">
                 Download the data (CSV)
               </button>
               <span class="font-sans text-xs text-ink-500 ml-3">Search shares, find rates and disparity ratios by ethnicity, for this area.</span>

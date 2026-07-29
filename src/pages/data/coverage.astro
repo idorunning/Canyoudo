@@ -50,7 +50,7 @@ const forces = entries
         <div class="border-t border-ink-200 pt-10">
           <h2 class="font-display text-xl font-semibold text-ink-900 mb-4">Force profile</h2>
           <label for="force-pick" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Choose a force</label>
-          <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
+          <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-2 px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
             <option value="">Choose a force…</option>
             {forces.map((f) => <option value={f.id}>{f.name}</option>)}
           </select>

@@ -54,8 +54,8 @@ const width = (d: Datum) => `${Math.max((d.count / scaleMax) * 100, 0.5)}%`;
           </th>
           <td class="py-1.5 w-2/3">
             <div class="flex items-center gap-2">
-              <div class="flex-1 bg-paper-200 rounded-sm overflow-hidden h-3.5">
-                <div class="h-full bg-accent/80 rounded-sm" style={`width:${width(d)}`}></div>
+              <div class="flex-1 bg-paper-200 rounded-1 overflow-hidden h-3.5">
+                <div class="h-full bg-accent/80 rounded-1" style={`width:${width(d)}`}></div>
               </div>
               <span class="tabular-nums text-ink-600 w-14 text-right shrink-0">{value(d)}</span>
             </div>

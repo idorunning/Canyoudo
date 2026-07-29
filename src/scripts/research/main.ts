@@ -230,7 +230,7 @@ async function showSharedReview(container: HTMLElement, token: string) {
 
     // A quiet "make your own" footer — the share link is also a funnel.
     const cta = el('div', 'mt-10 border-t border-ink-200 pt-6');
-    const a = el('a', 'inline-block font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors', 'Build your own research review →') as HTMLAnchorElement;
+    const a = el('a', 'inline-block font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-2 hover:bg-accent-dark transition-colors', 'Build your own research review →') as HTMLAnchorElement;
     a.href = '/research';
     cta.appendChild(a);
     container.appendChild(cta);
@@ -324,7 +324,7 @@ function wireReview(
       const bar = el('div', 'mt-8 border-t border-ink-200 pt-5');
       const btn = el(
         'button',
-        'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50',
+        'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-2 hover:text-ink-900 hover:border-ink-500 transition-colors disabled:opacity-50',
         'Save to your account'
       ) as HTMLButtonElement;
       btn.type = 'button';
@@ -510,7 +510,7 @@ async function renderSaveBar(
 
   const row = el('div', 'flex flex-wrap items-center gap-3');
   row.appendChild(el('span', 'font-sans text-sm text-ink-700', '✓ Saved to your account.'));
-  const shareBtn = el('button', 'font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-ink-500', 'Copy share link') as HTMLButtonElement;
+  const shareBtn = el('button', 'font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-2 hover:border-ink-500', 'Copy share link') as HTMLButtonElement;
   shareBtn.type = 'button';
   row.appendChild(shareBtn);
   bar.appendChild(row);

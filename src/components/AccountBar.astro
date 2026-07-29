@@ -32,7 +32,7 @@ const hasAuth = Boolean(
     aria-haspopup="dialog"
     aria-expanded="false"
   >
-    <span data-account-dot class="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0 ring-2 ring-red-500/20" aria-hidden="true"></span>
+    <span data-account-dot class="w-2.5 h-2.5 rounded-full bg-flag shrink-0 ring-2 ring-flag/20" aria-hidden="true"></span>
     <span data-account-label class="font-sans text-[13px] font-semibold whitespace-nowrap">Sign in</span>
   </button>
 )}
@@ -46,7 +46,7 @@ const hasAuth = Boolean(
     aria-expanded="false"
     aria-label="Your account"
   >
-    <span data-account-dot class="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0 ring-2 ring-red-500/20" aria-hidden="true"></span>
+    <span data-account-dot class="w-2.5 h-2.5 rounded-full bg-flag shrink-0 ring-2 ring-flag/20" aria-hidden="true"></span>
     <span data-account-label class="font-sans text-[12px] font-semibold whitespace-nowrap max-w-[80px] truncate">Sign in</span>
   </button>
 )}
@@ -64,7 +64,7 @@ const hasAuth = Boolean(
 
     <div id="tap-account-panel" class="hidden fixed inset-0 z-[59] bg-night-50/50 backdrop-blur-[2px] px-4 pt-[8vh]" aria-hidden="true">
       <div
-        class="mx-auto w-full max-w-md bg-paper-50 border border-ink-200 rounded-xl overflow-hidden shadow-panel max-h-[84vh] flex flex-col"
+        class="mx-auto w-full max-w-md bg-paper-50 border border-ink-200 rounded-4 overflow-hidden shadow-panel max-h-[84vh] flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-label="Your account"
@@ -99,28 +99,28 @@ const hasAuth = Boolean(
               <div>
                 <label for="account-name" class="block font-sans text-xs font-semibold text-ink-600 mb-1">Name</label>
                 <input id="account-name" name="name" type="text" maxlength="80" autocomplete="name"
-                  class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+                  class="w-full border border-ink-300 rounded-2 px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
               </div>
               <div>
                 <label for="account-role" class="block font-sans text-xs font-semibold text-ink-600 mb-1">Role</label>
                 <input id="account-role" name="role" type="text" maxlength="80" placeholder="e.g. Chief Inspector"
-                  class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+                  class="w-full border border-ink-300 rounded-2 px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
               </div>
               <div>
                 <label for="account-location" class="block font-sans text-xs font-semibold text-ink-600 mb-1">Location</label>
                 <input id="account-location" name="location" type="text" maxlength="80"
-                  class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+                  class="w-full border border-ink-300 rounded-2 px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
               </div>
               <div>
                 <label for="account-interest" class="block font-sans text-xs font-semibold text-ink-600 mb-1">Area of interest</label>
                 <input id="account-interest" name="interest" type="text" maxlength="80" placeholder="e.g. neighbourhood policing"
-                  class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
+                  class="w-full border border-ink-300 rounded-2 px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
               </div>
               <div class="flex items-center gap-3 pt-1">
                 <button type="submit" class="btn btn--primary">
                   Save details
                 </button>
-                <span data-account-saved class="hidden font-sans text-xs text-green-600">Saved</span>
+                <span data-account-saved class="hidden font-sans text-xs text-chart-green">Saved</span>
               </div>
             </form>
 
@@ -136,7 +136,7 @@ const hasAuth = Boolean(
                   </span>
                 </span>
               </label>
-              <p data-account-subscribe-note class="hidden font-sans text-xs text-green-600 mt-2"></p>
+              <p data-account-subscribe-note class="hidden font-sans text-xs text-chart-green mt-2"></p>
             </div>
 
             {/* Library manager */}
@@ -151,7 +151,7 @@ const hasAuth = Boolean(
               <p data-account-library-empty class="font-sans text-sm text-ink-500 m-0">
                 Nothing saved yet — look for the <span class="font-semibold text-ink-700">Save</span> button on any article.
               </p>
-              <a href="/library" class="inline-block mt-3 font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors">
+              <a href="/library" class="u-datum u-datum--accent inline-flex mt-3 hover:text-accent-dark transition-colors">
                 Open full library →
               </a>
             </div>
@@ -172,16 +172,16 @@ const hasAuth = Boolean(
 
             {/* Danger zone */}
             <div class="px-5 py-5 border-b border-ink-200">
-              <div class="rounded-lg border border-red-300 bg-red-50 dark:bg-red-950/20 p-4">
-                <p class="font-sans text-xs font-bold uppercase tracking-[0.14em] text-red-600 mb-1.5">Danger zone</p>
-                <p class="font-sans text-xs text-red-700/90 dark:text-red-300/80 leading-relaxed m-0 mb-3">
+              <div class="rounded-3 border border-flag/40 bg-flag/8 dark:bg-flag/10 p-4">
+                <p class="u-datum !text-flag mb-1.5">Danger zone</p>
+                <p class="font-sans text-xs text-flag/90 dark:text-flag/80 leading-relaxed m-0 mb-3">
                   Permanently delete your account, saved articles, research library
                   and details. This cannot be undone.
                 </p>
                 <button type="button" data-account-delete class="btn text-flag border-flag/60 hover:bg-flag hover:text-paper-50 hover:border-flag">
                   Delete account
                 </button>
-                <p data-account-delete-note class="hidden font-sans text-xs text-red-700 mt-2"></p>
+                <p data-account-delete-note class="hidden font-sans text-xs text-flag mt-2"></p>
               </div>
             </div>
 

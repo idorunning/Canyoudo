@@ -66,7 +66,7 @@ const viewTabs: [string, string][] = [
   ...(showLondon ? ([['london', 'London vs the narrative']] as [string, string][]) : []),
 ];
 ---
-<section class="not-prose my-10 border border-ink-200 rounded-lg overflow-hidden bg-paper-50 dark:bg-ink-900" data-perception aria-label="Police perception explorer">
+<section class="not-prose my-10 border border-ink-200 rounded-3 overflow-hidden bg-paper-50 dark:bg-ink-900" data-perception aria-label="Police perception explorer">
   {isSample && (
     <p class="bg-paper-100 border-b border-ink-200 px-5 py-2.5 font-sans text-xs text-accent">
       <strong class="font-medium">Illustrative sample data.</strong> The shapes and trends follow the documented record,
@@ -82,7 +82,7 @@ const viewTabs: [string, string][] = [
           type="button"
           data-view-tab={v}
           class:list={[
-            'font-sans text-xs px-3 py-1.5 rounded-md border transition-colors',
+            'font-sans text-xs px-3 py-1.5 rounded-2 border transition-colors',
             v === 'cloud' ? 'bg-ink-900 text-paper-50 border-ink-900' : 'border-ink-300 text-ink-600 hover:border-accent',
           ]}
         >{lbl}</button>
@@ -91,12 +91,12 @@ const viewTabs: [string, string][] = [
 
     <!-- Year control: Play, prev/next steppers flanking the slider, year label, full screen -->
     <div class="flex items-center gap-2 sm:gap-3">
-      <button type="button" data-play class="font-sans text-xs px-3 py-1.5 rounded-md border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Play through the years">▶ Play</button>
-      <button type="button" data-year-prev class="font-sans text-base leading-none px-2.5 py-1.5 rounded-md border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Previous year">‹</button>
+      <button type="button" data-play class="font-sans text-xs px-3 py-1.5 rounded-2 border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Play through the years">▶ Play</button>
+      <button type="button" data-year-prev class="font-sans text-base leading-none px-2.5 py-1.5 rounded-2 border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Previous year">‹</button>
       <input type="range" data-year-slider min={yearEntries[0]?.year} max={defaultYear?.year} value={defaultYear?.year} step="1" class="flex-1 accent-accent" aria-label="Year" />
-      <button type="button" data-year-next class="font-sans text-base leading-none px-2.5 py-1.5 rounded-md border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Next year">›</button>
+      <button type="button" data-year-next class="font-sans text-base leading-none px-2.5 py-1.5 rounded-2 border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Next year">›</button>
       <span data-year-label class="font-display text-2xl font-semibold text-ink-900 w-14 text-right tabular-nums">{defaultYear?.year}</span>
-      <button type="button" data-fullscreen class="font-sans text-xs px-3 py-1.5 rounded-md border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Toggle full screen">⤢ Full screen</button>
+      <button type="button" data-fullscreen class="font-sans text-xs px-3 py-1.5 rounded-2 border border-ink-300 text-ink-700 hover:border-accent shrink-0" aria-label="Toggle full screen">⤢ Full screen</button>
     </div>
 
     <!-- Cloud panel (default visible; static fallback) -->
@@ -107,7 +107,7 @@ const viewTabs: [string, string][] = [
       <div
         data-wordrace
         hidden
-        class="relative overflow-y-auto rounded-md border border-ink-200 bg-paper-50 px-3 py-2"
+        class="relative overflow-y-auto surface-sheet rounded-2 px-3 py-2"
         role="img"
         aria-label="Most-used words this year, as animated bars"
       ></div>
@@ -121,7 +121,7 @@ const viewTabs: [string, string][] = [
         alt={`Word cloud of how the press wrote about ${FACET_LABELS[defFacet]} in ${defaultYear?.year}`}
         width="820"
         height="460"
-        class="w-full h-auto rounded-md border border-ink-200 bg-paper-50"
+        class="w-full h-auto surface-sheet rounded-2"
         loading="lazy"
       />
       <div class="mt-4" data-wordlist>

@@ -31,7 +31,7 @@ function pct(fraction: number): string {
 
 <DashboardLayout title="Newsletter" active="newsletter" auth={auth} wide={true}>
   <div class="grid gap-6 sm:grid-cols-2 mb-10">
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Active subscribers</p>
       {stats?.ok ? (
         <p class="text-2xl font-semibold text-ink-900">{stats.data.activeCount.toLocaleString('en-GB')}</p>
@@ -39,7 +39,7 @@ function pct(fraction: number): string {
         <p class="text-sm text-ink-500">{stats?.reason}</p>
       )}
     </div>
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">New this month</p>
       {detail?.recent.ok ? (
         <p class="text-2xl font-semibold text-ink-900">{newThisMonth.toLocaleString('en-GB')}</p>
@@ -50,7 +50,7 @@ function pct(fraction: number): string {
   </div>
 
   <div class="grid gap-6 md:grid-cols-2 mb-10">
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Sign-ups by month (last 12)</p>
       {detail?.recent.ok ? (
         <Bars items={growthBars} emptyLabel="No sign-ups in the last year." />
@@ -58,7 +58,7 @@ function pct(fraction: number): string {
         <p class="text-sm text-ink-500">{detail?.recent.reason}</p>
       )}
     </div>
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Groups</p>
       {detail?.groups.ok ? (
         <Bars
@@ -71,7 +71,7 @@ function pct(fraction: number): string {
     </div>
   </div>
 
-  <div class="border border-ink-200 rounded-lg p-5 mb-10">
+  <div class="border border-ink-200 rounded-3 p-5 mb-10">
     <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Last campaigns</p>
     {detail?.campaigns.ok ? (
       detail.campaigns.data.length > 0 ? (
@@ -107,7 +107,7 @@ function pct(fraction: number): string {
     )}
   </div>
 
-  <div class="border border-ink-200 rounded-lg p-5">
+  <div class="border border-ink-200 rounded-3 p-5">
     <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Recent subscribers (latest 50)</p>
     {detail?.recent.ok ? (
       detail.recent.data.subscribers.length > 0 ? (
