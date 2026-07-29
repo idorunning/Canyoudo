@@ -38,9 +38,9 @@ const pages = [
   title="Sitemap"
   description="A complete index of Thinking About Policing — every article, section, topic and tool."
 >
-  <section class="border-b border-ink-200">
+  <section class="border-b-2 border-rule">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
-      <p class="u-kicker mb-5">Sitemap</p>
+      <p class="u-eyebrow mb-5">Sitemap</p>
       <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
         Everything on the site
       </h1>
@@ -55,7 +55,7 @@ const pages = [
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16 space-y-12">
       {/* Key pages */}
       <div>
-        <h2 class="u-kicker mb-5">Pages</h2>
+        <h2 class="u-eyebrow mb-5">Pages</h2>
         <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-2 font-sans text-sm">
           {pages.map((p) => (
             <li><a href={p.href} class="text-ink-700 hover:text-accent transition-colors">{p.label}</a></li>
@@ -66,7 +66,7 @@ const pages = [
       {/* Articles by section */}
       {bySection.map((group) => (
         <div>
-          <h2 class="u-kicker mb-5">
+          <h2 class="u-eyebrow mb-5">
             <a href={`/${group.section}`} class="hover:text-accent-dark">{group.label}</a>
             <span class="text-ink-400 normal-case tracking-normal"> · {group.items.length}</span>
           </h2>
@@ -84,7 +84,7 @@ const pages = [
 
       {/* Topics */}
       <div>
-        <h2 class="u-kicker mb-5">Topics</h2>
+        <h2 class="u-eyebrow mb-5">Topics</h2>
         <ul class="flex flex-wrap gap-2">
           {topics.map((t) => (
             <li>

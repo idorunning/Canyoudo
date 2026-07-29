@@ -109,7 +109,7 @@ const posts = london?.posts ?? [];
       <p class="font-sans text-xs uppercase tracking-[0.15em] text-accent mb-3">The wider picture — key London crime metrics</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {metrics.map((m) => (
-          <div class="border border-ink-200 rounded-md p-3.5 bg-paper-50">
+          <div class="border border-ink-200 rounded-2 p-3.5 bg-paper-50">
             <p class="font-display text-sm font-semibold text-ink-900">{m.label}</p>
             <p class="font-serif text-sm text-ink-700 leading-snug mt-1">{m.latest}</p>
             {m.sourceUrl ? (

@@ -204,17 +204,19 @@ writeFileSync(join(OUT, 'favicon.ico'), buildIco(icoImages));
 // looks like the page it opens — and matches src/lib/og-card.mjs, which draws
 // the per-article cards. The mark goes on keyed rather than as the master
 // tile, or its slightly different ground would show as a square on the card.
-const OG_PAPER = '#fbfcfd';
-const OG_INK = '#14161b';
-const OG_MUTED = '#646971';
-const OG_ACCENT = '#0f766e';
+const OG_PAPER = '#fbfdfe';
+const OG_INK = '#0c1728';
+const OG_MUTED = '#5d6978';
+const OG_ACCENT = '#1059ac';
 const ogText = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="${OG_PAPER}"/>
-  <rect x="0" y="0" width="1200" height="12" fill="${OG_ACCENT}"/>
+  <rect x="0" y="0" width="1200" height="10" fill="${OG_INK}"/>
+  <rect x="0" y="0" width="240" height="10" fill="${OG_ACCENT}"/>
   <text x="470" y="250" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" fill="${OG_INK}">Thinking About</text>
   <text x="470" y="336" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" fill="${OG_INK}">Policing</text>
   <text x="470" y="404" font-family="Georgia, 'Times New Roman', serif" font-size="30" fill="${OG_MUTED}">Evidence-based writing on policing and public policy.</text>
-  <text x="470" y="470" font-family="Georgia, 'Times New Roman', serif" font-size="25" letter-spacing="2" fill="${OG_MUTED}">Nathan Tracey &#183; thinkingaboutpolicing.org</text>
+  <rect x="470" y="430" width="620" height="2" fill="${OG_INK}"/>
+  <text x="470" y="474" font-family="'DejaVu Sans', 'Liberation Sans', Helvetica, Arial, sans-serif" font-size="23" letter-spacing="1" fill="${OG_MUTED}">Nathan Tracey &#183; thinkingaboutpolicing.org</text>
 </svg>`;
 await sharp(Buffer.from(ogText))
   .composite([{ input: await keyOutGround(300), left: 110, top: 165 }])

@@ -2,7 +2,11 @@
 import '../styles/global.css';
 // Self-hosted fonts (Fontsource) — no third-party font CDN, faster first
 // paint, GDPR-clean. Family names are wired up in tailwind.config.mjs.
-import '@fontsource-variable/plus-jakarta-sans';
+// Two families, one superfamily: Source Sans 3 and Source Serif 4 were drawn
+// together, so the label above a paragraph and the paragraph agree by
+// construction. No monospace webfont — code blocks fall back to the system
+// mono stack, which is the only place on the site that needs one.
+import '@fontsource-variable/source-sans-3';
 import '@fontsource-variable/source-serif-4';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -84,7 +88,10 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#0f766e" />
+    {/* The browser chrome takes the ink, not the accent: on mobile the bar sits
+        directly above the masthead, so it should read as the page's own edge. */}
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e9eff6" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#040a14" />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL} />
     {noindex && <meta name="robots" content="noindex, follow" />}
@@ -181,7 +188,7 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
   <body class="paper-grain text-ink-900 antialiased min-h-screen flex flex-col">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[100] focus:bg-paper-50 focus:text-ink-900 focus:px-4 focus:py-2 focus:rounded-md font-sans text-sm"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[100] focus:bg-paper-50 focus:text-ink-900 focus:px-4 focus:py-2 focus:rounded-2 font-sans text-sm"
     >
       Skip to content
     </a>

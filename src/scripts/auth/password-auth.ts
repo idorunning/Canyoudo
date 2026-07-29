@@ -40,12 +40,12 @@ export async function initPasswordAuth(supabase: any, container: HTMLElement): P
   const redirectTo = location.origin + location.pathname + location.search;
 
   const styles = {
-    primary: 'font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto',
-    secondary: 'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-md hover:text-ink-900 hover:border-ink-500 transition-colors w-full sm:w-auto',
+    primary: 'font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-2 hover:bg-accent-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto',
+    secondary: 'font-sans text-sm uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-5 py-2.5 rounded-2 hover:text-ink-900 hover:border-ink-500 transition-colors w-full sm:w-auto',
     textLink: 'font-sans text-xs underline underline-offset-2 text-ink-600 hover:text-accent cursor-pointer',
-    input: 'w-full border border-ink-300 rounded-md px-4 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20',
-    error: 'text-red-600 text-xs mt-1',
-    success: 'text-green-600 text-xs mt-1',
+    input: 'w-full border border-ink-300 rounded-2 px-4 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/20',
+    error: 'text-flag text-xs mt-1',
+    success: 'text-chart-green text-xs mt-1',
     label: 'block font-sans text-sm font-medium text-ink-900 mb-1.5',
   };
 

@@ -28,9 +28,9 @@ const { scope, id = '', postcode = '', eyebrow } = Astro.props;
         autocomplete="postal-code"
         value={postcode}
         placeholder="e.g. SW1A 1AA"
-        class="flex-1 min-w-0 border border-ink-300 rounded-md px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"
+        class="flex-1 min-w-0 border border-ink-300 rounded-2 px-4 py-2.5 font-sans text-base text-ink-900 bg-paper-200/50 shadow-well focus:outline-none focus:border-accent"
       />
-      <button type="submit" class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors">
+      <button type="submit" class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-2 hover:bg-accent-dark transition-colors">
         Interpret
       </button>
     </form>

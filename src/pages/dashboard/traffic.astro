@@ -61,7 +61,7 @@ const locationBars = detail?.locations.ok
     ))}
   </div>
 
-  <div class="border border-ink-200 rounded-lg p-5 mb-10">
+  <div class="border border-ink-200 rounded-3 p-5 mb-10">
     <div class="flex flex-wrap items-baseline justify-between gap-4 mb-4">
       <p class="text-xs uppercase tracking-wide text-ink-500">Pageviews — {activePeriod?.label.toLowerCase()}</p>
       {detail?.daily.ok && (
@@ -86,7 +86,7 @@ const locationBars = detail?.locations.ok
     )}
   </div>
 
-  <div class="border border-ink-200 rounded-lg p-5 mb-10">
+  <div class="border border-ink-200 rounded-3 p-5 mb-10">
     <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Top articles by reads</p>
     {detail?.topPages.ok ? (
       <Bars items={topArticles} emptyLabel="No article reads in this period yet." />
@@ -95,7 +95,7 @@ const locationBars = detail?.locations.ok
     )}
   </div>
 
-  <div class="border border-ink-200 rounded-lg p-5 mb-10">
+  <div class="border border-ink-200 rounded-3 p-5 mb-10">
     <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Top pages</p>
     {detail?.topPages.ok ? (
       namedPages.length > 0 ? (
@@ -129,7 +129,7 @@ const locationBars = detail?.locations.ok
   </div>
 
   <div class="grid gap-6 md:grid-cols-3">
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Referrers</p>
       {detail?.referrers.ok ? (
         <Bars items={detail.referrers.data} emptyLabel="No referrers yet." />
@@ -137,7 +137,7 @@ const locationBars = detail?.locations.ok
         <p class="text-sm text-ink-500">{detail?.referrers.reason}</p>
       )}
     </div>
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Browsers</p>
       {detail?.browsers.ok ? (
         <Bars items={detail.browsers.data} emptyLabel="No browser data yet." />
@@ -145,7 +145,7 @@ const locationBars = detail?.locations.ok
         <p class="text-sm text-ink-500">{detail?.browsers.reason}</p>
       )}
     </div>
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Reader locations</p>
       {detail?.locations.ok ? (
         <Bars items={locationBars} emptyLabel="No location data yet." />

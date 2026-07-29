@@ -64,7 +64,7 @@ export function barTable(
           <tr class="align-middle">
             <th scope="row" class="py-1.5 pr-3 text-left font-normal text-ink-700 whitespace-nowrap w-1/3 max-w-[14rem] truncate" title="${esc(d.label)}">${esc(d.label)}</th>
             <td class="py-1.5 w-2/3"><div class="flex items-center gap-2">
-              <div class="flex-1 bg-paper-200 rounded-sm overflow-hidden h-3.5"><div class="h-full bg-accent/80 rounded-sm" style="width:${width(d)}"></div></div>
+              <div class="flex-1 bg-paper-200 rounded-1 overflow-hidden h-3.5"><div class="h-full bg-accent/80 rounded-1" style="width:${width(d)}"></div></div>
               <span class="tabular-nums text-ink-600 w-20 text-right shrink-0">${val(d)}${d.note ? ` <span class="text-ink-400">${esc(d.note)}</span>` : ''}</span>
             </div></td>
           </tr>`).join('')}

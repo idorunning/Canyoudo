@@ -71,7 +71,7 @@ function fmtDate(d: Date): string {
   {!engagement?.ok && <p class="text-sm text-ink-500 mb-4">{engagement?.reason} Views, shares and ratings show 0 until it connects.</p>}
   {!saves?.ok && <p class="text-sm text-ink-500 mb-4">{saves?.reason} Save counts show 0 until it connects.</p>}
 
-  <div class="overflow-x-auto border border-ink-200 rounded-lg">
+  <div class="overflow-x-auto border border-ink-200 rounded-3">
     <table data-sortable class="w-full text-sm">
       <thead class="bg-paper-100 text-left">
         <tr>
@@ -105,9 +105,9 @@ function fmtDate(d: Date): string {
             </td>
             <td data-sort-value={r.draft ? 'draft' : 'live'} class="px-3 py-2">
               {r.draft ? (
-                <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-800">Draft</span>
+                <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded bg-chart-amber/12 text-chart-amber">Draft</span>
               ) : (
-                <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Live</span>
+                <span class="inline-block text-xs font-semibold px-2 py-0.5 rounded bg-chart-green/12 text-chart-green">Live</span>
               )}
             </td>
             <td data-sort-value={r.words} class="px-3 py-2 text-right tabular-nums text-ink-700">

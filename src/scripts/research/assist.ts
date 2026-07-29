@@ -95,7 +95,7 @@ export async function renderOverview(
     return;
   }
 
-  const box = el('div', 'bg-paper-100 border-l-2 border-accent rounded-r-md px-5 py-4');
+  const box = el('div', 'bg-paper-100 border-l-2 border-accent rounded-r-2 px-5 py-4');
   box.appendChild(
     el('p', 'font-sans text-[0.65rem] uppercase tracking-[0.15em] text-ink-500 mb-2', 'Assistant’s overview — read the studies, not the summary')
   );

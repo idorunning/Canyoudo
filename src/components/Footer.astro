@@ -36,7 +36,7 @@ const browseLinks = [
             height="30"
             class="h-[30px] w-[30px] object-contain"
           />
-          <span class="font-display font-extrabold text-[1.05rem] text-night-ink leading-none">Thinking About Policing</span>
+          <span class="font-display font-bold text-[1.05rem] tracking-[-0.015em] text-night-ink leading-none">Thinking About Policing</span>
         </a>
         <p class="font-sans text-sm leading-relaxed text-night-dim">
           Evidence-based writing on policing, public policy, and the occasional historical puzzle.
@@ -47,9 +47,9 @@ const browseLinks = [
               href={supportUrl}
               rel="noopener"
               target="_blank"
-              class="inline-block font-sans text-[12.5px] font-bold bg-accent hover:bg-accent-dark text-paper-50 dark:text-night-50 px-4 py-2.5 rounded-full transition-colors"
+              class="btn btn--night btn--sm"
             >
-              ☕ Buy me a coffee →
+              Buy me a coffee <span class="arrow">→</span>
             </a>
             <p class="font-sans text-xs text-night-dim/80 mt-2 leading-relaxed">
               Any donations go towards API costs and time spent on the website. Thank you!
@@ -60,7 +60,7 @@ const browseLinks = [
 
       <!-- Links columns -->
       <div>
-        <p class="u-kicker mb-4">Sections</p>
+        <p class="u-datum !text-accent-light mb-4 pb-2 border-b border-night-line">Sections</p>
         <ul class="space-y-2.5 font-sans text-sm">
           {sectionLinks.map(link => (
             <li><a href={link.href} class="text-night-dim hover:text-night-ink transition-colors">{link.label}</a></li>
@@ -69,7 +69,7 @@ const browseLinks = [
       </div>
 
       <div>
-        <p class="u-kicker mb-4">Browse</p>
+        <p class="u-datum !text-accent-light mb-4 pb-2 border-b border-night-line">Browse</p>
         <ul class="space-y-2.5 font-sans text-sm">
           {browseLinks.map(link => (
             <li><a href={link.href} class="text-night-dim hover:text-night-ink transition-colors">{link.label}</a></li>
@@ -83,7 +83,7 @@ const browseLinks = [
     </div>
 
     <!-- Bottom bar -->
-    <div class="border-t border-night-line mt-12 pt-6 flex flex-wrap justify-between items-center gap-3 font-sans text-[11px] tracking-[0.06em] text-night-dim/80">
+    <div class="border-t border-night-line mt-12 pt-6 flex flex-wrap justify-between items-center gap-3 u-datum !text-night-dim">
       <span>© {year} NATHAN TRACEY · VIEWS ARE PERSONAL</span>
       <span class="uppercase">Evidence · Integrity · Action</span>
       <a href="/dashboard/" class="hover:text-night-ink transition-colors uppercase">Editor</a>

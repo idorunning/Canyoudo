@@ -27,7 +27,7 @@ const quickLinks = [
   aria-hidden="true"
 >
   <div
-    class="palette mx-auto w-full max-w-xl bg-paper-50 border border-ink-200 rounded-xl overflow-hidden shadow-panel"
+    class="palette mx-auto w-full max-w-xl bg-paper-50 border border-ink-200 rounded-4 overflow-hidden shadow-panel"
     role="dialog"
     aria-modal="true"
     aria-label="Search and navigate"
@@ -63,7 +63,7 @@ const quickLinks = [
             <li>
               <a
                 href={link.href}
-                class="flex items-center justify-between gap-3 px-3 py-2 rounded-md font-sans text-[13.5px] font-semibold text-ink-800 hover:bg-paper-100 hover:text-ink-900 transition-colors"
+                class="flex items-center justify-between gap-3 px-3 py-2 rounded-2 font-sans text-[13.5px] font-semibold text-ink-800 hover:bg-paper-100 hover:text-ink-900 transition-colors"
               >
                 <span>{link.label}</span>
                 <span class="font-sans text-[10px] uppercase tracking-[0.08em] text-ink-400">{link.hint}</span>
@@ -74,7 +74,7 @@ const quickLinks = [
             <button
               type="button"
               data-theme-toggle
-              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-md font-sans text-[13.5px] font-semibold text-ink-800 hover:bg-paper-100 hover:text-ink-900 transition-colors"
+              class="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-2 font-sans text-[13.5px] font-semibold text-ink-800 hover:bg-paper-100 hover:text-ink-900 transition-colors"
             >
               <span>Toggle dark mode</span>
               <span class="font-sans text-[10px] uppercase tracking-[0.08em] text-ink-400">Action</span>

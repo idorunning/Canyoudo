@@ -71,7 +71,7 @@ function shortDate(iso: string): string {
 
 <DashboardLayout title="Dashboard" active="overview" auth={auth} wide={true}>
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-10">
-    <a href="/dashboard/traffic" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+    <a href="/dashboard/traffic" class="border border-ink-200 rounded-3 p-5 hover:border-accent transition-colors">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Site visits (30 days)</p>
       {trafficDaily ? (
         <>
@@ -83,7 +83,7 @@ function shortDate(iso: string): string {
       )}
     </a>
 
-    <a href="/dashboard/newsletter" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+    <a href="/dashboard/newsletter" class="border border-ink-200 rounded-3 p-5 hover:border-accent transition-colors">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Email subscribers</p>
       {subscribers?.ok ? (
         <p class="text-2xl font-semibold text-ink-900">{subscribers.data.activeCount.toLocaleString('en-GB')}</p>
@@ -92,7 +92,7 @@ function shortDate(iso: string): string {
       )}
     </a>
 
-    <a href="/dashboard/audience" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+    <a href="/dashboard/audience" class="border border-ink-200 rounded-3 p-5 hover:border-accent transition-colors">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Reader sign-ups</p>
       {signups?.ok ? (
         <p class="text-2xl font-semibold text-ink-900">{signups.data.totalUsers.toLocaleString('en-GB')}</p>
@@ -101,7 +101,7 @@ function shortDate(iso: string): string {
       )}
     </a>
 
-    <a href="/dashboard/articles" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+    <a href="/dashboard/articles" class="border border-ink-200 rounded-3 p-5 hover:border-accent transition-colors">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Article views · shares</p>
       {engagement?.ok ? (
         <>
@@ -113,7 +113,7 @@ function shortDate(iso: string): string {
       )}
     </a>
 
-    <a href="/dashboard/articles" class="border border-ink-200 rounded-lg p-5 hover:border-accent transition-colors">
+    <a href="/dashboard/articles" class="border border-ink-200 rounded-3 p-5 hover:border-accent transition-colors">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">Average rating</p>
       {engagement?.ok ? (
         avgRating ? (
@@ -129,7 +129,7 @@ function shortDate(iso: string): string {
       )}
     </a>
 
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-2">AI spend this month</p>
       {aiSpend?.ok ? (
         <>
@@ -143,7 +143,7 @@ function shortDate(iso: string): string {
   </div>
 
   {trafficDaily && trafficDaily.days.length > 1 && (
-    <a href="/dashboard/traffic" class="block border border-ink-200 rounded-lg p-5 mb-10 hover:border-accent transition-colors">
+    <a href="/dashboard/traffic" class="block border border-ink-200 rounded-3 p-5 mb-10 hover:border-accent transition-colors">
       <div class="flex flex-wrap items-baseline justify-between gap-4 mb-3">
         <p class="text-xs uppercase tracking-wide text-ink-500">Pageviews — last 30 days</p>
         <p class="text-xs text-ink-500">{trafficDaily.days[0].day} → {trafficDaily.days[trafficDaily.days.length - 1].day}</p>
@@ -153,7 +153,7 @@ function shortDate(iso: string): string {
   )}
 
   <div class="grid gap-6 md:grid-cols-2 mb-10">
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-read articles (all time)</p>
       {engagement?.ok ? (
         <Bars items={topArticles} emptyLabel="No article views recorded yet." />
@@ -162,7 +162,7 @@ function shortDate(iso: string): string {
       )}
     </div>
 
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Most-visited pages (30 days)</p>
       {traffic?.topPages.ok ? (
         topPages.length > 0 ? (
@@ -184,7 +184,7 @@ function shortDate(iso: string): string {
   </div>
 
   <div class="grid gap-6">
-    <div class="border border-ink-200 rounded-lg p-5">
+    <div class="border border-ink-200 rounded-3 p-5">
       <p class="text-xs uppercase tracking-wide text-ink-500 mb-3">Recent sign-ups</p>
       {recentSignups?.ok ? (
         recentSignups.data.length > 0 ? (

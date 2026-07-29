@@ -1,155 +1,353 @@
 ---
-// Internal, unlinked exploration page: four candidate colour-palette
-// directions, each rendered with the site's real components (ArticleCard,
-// PullQuote, SectionBadge) and real typography rules (.prose-article drop
-// cap, h2 accent rule). Colour is scoped per-direction via inline CSS custom
-// property overrides — no production file is touched. Not linked from any
-// nav and excluded from the sitemap; see astro.config.mjs.
+// The Blue Book reference — the design language on one page, rendered with the
+// real tokens and the real component classes rather than screenshots, so it
+// cannot drift from the site. Internal: unlinked from any nav, excluded from
+// the sitemap (see astro.config.mjs) and noindexed.
+//
+// This page replaced the four candidate colour directions it used to show;
+// the direction is chosen, and what a reference page is for now is keeping it.
+// If you are adding a surface to the site, build it out of what is here. If
+// what you need is not here, add it here first — that is what keeps one design
+// language across the pages nobody individually redesigns.
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ArticleCard from '../components/ArticleCard.astro';
-import PullQuote from '../components/PullQuote.astro';
-import SectionBadge from '../components/SectionBadge.astro';
 
-interface Direction {
-  name: string;
-  rationale: string;
-  vars: string;
-}
-
-const directions: Direction[] = [
-  {
-    name: 'Command Paper',
-    rationale:
-      'Muted institutional stone and slate with a deep teal accent — reads like an official policy document rather than a tech product.',
-    vars: `
-      --paper-50: 242 239 232; --paper-100: 232 227 214; --paper-200: 216 209 189;
-      --ink-900: 33 38 45; --ink-800: 48 54 62; --ink-700: 75 82 89; --ink-600: 100 107 114;
-      --ink-500: 124 132 140; --ink-400: 150 157 164; --ink-300: 178 183 188; --ink-200: 208 211 214;
-      --accent: 15 110 99; --accent-dark: 11 84 76; --accent-light: 47 143 131;
-    `,
-  },
-  {
-    name: 'Case File',
-    rationale:
-      'Warm manila paper, near-black ink, a rust/redaction-red accent — an investigative, evidence-board register that fits the misconduct and case-study content directly.',
-    vars: `
-      --paper-50: 247 241 225; --paper-100: 239 228 200; --paper-200: 224 207 158;
-      --ink-900: 28 26 20; --ink-800: 45 42 32; --ink-700: 74 68 54; --ink-600: 100 92 72;
-      --ink-500: 138 128 106; --ink-400: 168 157 132; --ink-300: 196 186 160; --ink-200: 224 214 188;
-      --accent: 184 69 47; --accent-dark: 143 51 34; --accent-light: 209 106 79;
-    `,
-  },
-  {
-    name: 'Forensic Data',
-    rationale:
-      'One navy hue for backgrounds (near-black stepping to elevated surfaces), white text, one turquoise accent — the direction now live in the site’s dark mode.',
-    vars: `
-      --paper-50: 13 18 32; --paper-100: 20 27 46; --paper-200: 28 37 64;
-      --ink-900: 245 247 251; --ink-800: 228 232 242; --ink-700: 201 208 224; --ink-600: 164 174 200;
-      --ink-500: 130 145 181; --ink-400: 100 113 148; --ink-300: 55 65 92; --ink-200: 34 42 62;
-      --accent: 45 212 191; --accent-dark: 20 184 166; --accent-light: 94 234 212;
-    `,
-  },
-  {
-    name: 'Broadsheet Oxblood',
-    rationale:
-      'Warm cream broadsheet paper with slate-navy ink and an oxblood accent in place of the current blue — a classic, serious-newspaper register.',
-    vars: `
-      --paper-50: 247 243 234; --paper-100: 239 232 216; --paper-200: 221 210 184;
-      --ink-900: 31 41 55; --ink-800: 46 56 70; --ink-700: 75 85 99; --ink-600: 100 110 124;
-      --ink-500: 128 139 153; --ink-400: 156 165 177; --ink-300: 186 193 201; --ink-200: 216 220 225;
-      --accent: 124 45 58; --accent-dark: 94 31 41; --accent-light: 156 74 86;
-    `,
-  },
+// Written out rather than generated: Tailwind only emits a class it can see
+// as a literal string, so `bg-${token}` would compile to nothing.
+const inkRamp = [
+  { t: '900', cls: 'bg-ink-900' },
+  { t: '800', cls: 'bg-ink-800' },
+  { t: '700', cls: 'bg-ink-700' },
+  { t: '600', cls: 'bg-ink-600' },
+  { t: '500', cls: 'bg-ink-500' },
+  { t: '400', cls: 'bg-ink-400' },
+  { t: '300', cls: 'bg-ink-300' },
+  { t: '200', cls: 'bg-ink-200' },
+];
+const surfaces = [
+  { token: 'canvas', role: 'The desk — the page ground', cls: 'bg-canvas' },
+  { token: 'paper-50', role: 'The sheet — cards, panels, chrome', cls: 'bg-paper-50' },
+  { token: 'paper-100', role: 'A band — secondary regions', cls: 'bg-paper-100' },
+  { token: 'paper-200', role: 'A well — inputs, code, chart grounds', cls: 'bg-paper-200' },
+  { token: 'night-50', role: 'Night — dark in both themes', cls: 'bg-night-50' },
+];
+const meaning = [
+  { token: 'accent', role: 'Interactive: links, controls, active state', cls: 'bg-accent' },
+  { token: 'signal', role: 'A figure worth stopping on', cls: 'bg-signal' },
+  { token: 'flag', role: 'Harm, or a claim withdrawn', cls: 'bg-flag' },
+  { token: 'rule', role: 'The structural 2px line', cls: 'bg-rule' },
+];
+const chart = [
+  { t: 'chart-blue', cls: 'bg-chart-blue' },
+  { t: 'chart-teal', cls: 'bg-chart-teal' },
+  { t: 'chart-green', cls: 'bg-chart-green' },
+  { t: 'chart-amber', cls: 'bg-chart-amber' },
+  { t: 'chart-red', cls: 'bg-chart-red' },
+  { t: 'chart-violet', cls: 'bg-chart-violet' },
+  { t: 'chart-slate', cls: 'bg-chart-slate' },
+];
+const elevation = [
+  { name: 'e1', use: 'At rest: a card on the desk', cls: 'shadow-e1' },
+  { name: 'e2', use: 'Lifted: the lead story, an image', cls: 'shadow-e2' },
+  { name: 'e3', use: 'Hover, and standing panels', cls: 'shadow-e3' },
+  { name: 'e4', use: 'Over the page: menus, modals', cls: 'shadow-e4' },
+];
+const radii = [
+  { name: 'r1', use: 'Chips, tags, swatches', cls: 'rounded-1' },
+  { name: 'r2', use: 'Buttons, inputs, thumbnails', cls: 'rounded-2' },
+  { name: 'r3', use: 'Cards and panels', cls: 'rounded-3' },
+  { name: 'r4', use: 'Full-width plates, modals', cls: 'rounded-4' },
 ];
 
-const sampleDate = new Date('2026-05-14');
+// The house style, stated — the rules that stop the site drifting back towards
+// a page that looks like it was generated rather than designed.
+const rules = [
+  {
+    no: 'A gradient as decoration — aurora grounds, floating orbs, gradient headline text.',
+    yes: 'The measured ground (.grid-ground): 1px hairlines, masked out. Texture from measurement, not from mood.',
+  },
+  {
+    no: 'A second and third brand hue, introduced because a section "needed some colour".',
+    yes: 'One accent. signal and flag are meanings, not decoration; the chart ramp is for series, and only inside a chart.',
+  },
+  {
+    no: 'Pill buttons, and a different corner radius in every component.',
+    yes: 'Four radii, each used for what it is named for. Pills are for status dots only.',
+  },
+  {
+    no: 'Flat cards separated by nothing but a hairline.',
+    yes: 'Every surface declares its layer: sheet (lit edge + e1), well (inset), or night. Depth carries the hierarchy.',
+  },
+  {
+    no: 'Idle animation — a button that pulses at rest, a dot that breathes to look live.',
+    yes: 'Motion answers the pointer or reports a state change. "Live" is a label that says so in words.',
+  },
+  {
+    no: 'Uppercase micro-labels hand-rolled at a slightly different size on every page.',
+    yes: '.u-eyebrow opens a page, .u-datum is a reading, .u-kicker is editorial chrome, .u-figure is a number.',
+  },
+];
 ---
 
-<BaseLayout title="Design Preview" noindex={true}>
-  <div class="max-w-wide mx-auto px-6 lg:px-10 py-12">
-    <p class="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">Internal — not linked from navigation</p>
-    <h1 class="font-display text-3xl md:text-4xl font-bold text-gray-900 mt-2">Colour palette directions</h1>
-    <p class="font-serif text-gray-600 max-w-2xl mt-3 leading-relaxed">
-      Four candidate directions, each built from the site's real components and typography
-      rules. Only the colour variables change between sections — layout, fonts, and spacing
-      are identical to production.
-    </p>
-  </div>
-
-  {directions.map((d, i) => (
-    <div class="max-w-wide mx-auto px-6 lg:px-10 mb-20">
-      <div class="mb-4">
-        <span class="inline-block font-sans text-xs font-semibold uppercase tracking-[0.18em] text-gray-500">
-          Direction {i + 1}
-        </span>
-        <h2 class="font-display text-2xl font-bold text-gray-900 mt-1">{d.name}</h2>
-        <p class="font-serif text-gray-600 max-w-2xl mt-1 leading-relaxed">{d.rationale}</p>
-      </div>
-
-      <div style={`${d.vars}`} class="rounded-xl overflow-hidden ring-1 ring-black/10 bg-paper-50">
-        {/* Masthead band */}
-        <div class="bg-paper-100 px-6 md:px-10 py-8">
-          <SectionBadge section="police-policy" link={false} />
-          <h3 class="font-display font-bold text-ink-900 text-2xl md:text-3xl leading-tight mt-2 max-w-2xl">
-            Policing the Police: Why the &ldquo;Small Stuff&rdquo; Matters
-          </h3>
-          <p class="font-serif text-ink-700 mt-2 max-w-xl">
-            How minor-offence self-selection catches serious criminals — and the officers who become one.
-          </p>
-        </div>
-
-        {/* Article body: drop cap, h2 accent rule, pull quote */}
-        <div class="prose-article px-6 md:px-10 py-10">
-          <p>
-            When a police officer is finally dismissed or even convicted for gross
-            misconduct, it is striking how often colleagues quietly nod and say
-            something like, &ldquo;I saw that coming.&rdquo;
-          </p>
-          <h2>The self-selection argument</h2>
-          <p>
-            Officers who cut corners on the small things — a rude stop, a sloppy
-            statement, a missed welfare check — are disproportionately likely to be
-            the ones who later cut corners on the things that matter.
-          </p>
-          <PullQuote cite="Jason Roach, self-selection theory">
-            The small stuff is not a distraction from serious misconduct. It is the earliest reliable signal of it.
-          </PullQuote>
-        </div>
-
-        {/* Cards + button/link states */}
-        <div class="px-6 md:px-10 pb-10 grid gap-8 md:grid-cols-[1fr_auto]">
-          <div class="grid sm:grid-cols-2 gap-6">
-            <ArticleCard
-              href="#"
-              title="Sir Robert Peel and the Invention of Policing by Consent"
-              description="The police are the public and the public are the police — how an 1829 design choice became the basis for modern legitimacy research."
-              pubDate={sampleDate}
-              section="influential-people"
-              showSection={true}
-              layout="stack"
-            />
-            <ArticleCard
-              href="#"
-              title="Lawrence Sherman and the Invention of Evidence-Based Policing"
-              description="An experiment that tells you your earlier conclusion was wrong has not failed — it has done the one thing that distinguishes science from advocacy."
-              pubDate={sampleDate}
-              section="influential-people"
-              showSection={true}
-              layout="stack"
-            />
-          </div>
-          <div class="flex flex-col gap-3 justify-center items-start">
-            <a href="#" class="inline-block font-sans text-sm font-medium bg-accent text-paper-50 px-4 py-2 rounded hover:bg-accent-dark transition-colors">
-              Primary action →
-            </a>
-            <a href="#" class="font-sans text-sm text-accent hover:text-accent-dark underline underline-offset-4 transition-colors">
-              Secondary link
-            </a>
-            <span class="font-sans text-xs uppercase tracking-[0.15em] text-ink-500">Muted meta text</span>
-          </div>
-        </div>
-      </div>
+<BaseLayout
+  title="Blue Book — design language"
+  description="The site's design system on one page: tokens, surfaces, elevation, type and controls."
+  noindex={true}
+>
+  <section class="relative overflow-hidden border-b-2 border-rule">
+    <div class="grid-ground absolute inset-0 pointer-events-none opacity-70 dark:opacity-40" aria-hidden="true"
+         style="-webkit-mask-image: radial-gradient(ellipse 90% 80% at 25% 0%, #000 25%, transparent 75%); mask-image: radial-gradient(ellipse 90% 80% at 25% 0%, #000 25%, transparent 75%);"></div>
+    <div class="relative max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+      <p class="u-eyebrow mb-5">Internal reference · Blue Book</p>
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-ink-900 leading-[1.05] tracking-[-0.03em]">
+        The design language
+      </h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
+        One hue, three surfaces, four elevations and four label voices, in one superfamily.
+        Everything on this page is drawn from the live tokens in
+        <code class="font-mono text-[0.9em]">global.css</code> — if it looks wrong here, it is
+        wrong on the site.
+      </p>
     </div>
-  ))}
+  </section>
+
+  <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16 space-y-16">
+
+    <!-- ============ COLOUR ============ -->
+    <section>
+      <div class="rule-head mb-6">
+        <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+          <span class="u-datum u-datum--accent block mb-1.5">01</span>
+          Colour
+        </h2>
+        <span class="u-datum">One hue axis · ~254°</span>
+      </div>
+
+      <p class="u-datum mb-3">Surfaces — the stack, from desk to sheet</p>
+      <div class="grid sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
+        {surfaces.map(s => (
+          <div class="surface-sheet rounded-3 overflow-hidden">
+            <div class={`h-16 border-b border-ink-200 ${s.cls}`}></div>
+            <div class="p-3">
+              <p class="u-figure text-[13px] m-0">{s.token}</p>
+              <p class="font-sans text-[12px] text-ink-600 leading-snug mt-1 m-0">{s.role}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p class="u-datum mb-3">Ink — eight steps, every one a blue-grey</p>
+      <div class="flex flex-wrap gap-2 mb-8">
+        {inkRamp.map(t => (
+          <div class="text-center">
+            <div class={`w-16 h-10 rounded-2 border border-ink-200 ${t.cls}`}></div>
+            <p class="u-datum !text-[0.58rem] mt-1.5 m-0">{t.t}</p>
+          </div>
+        ))}
+      </div>
+
+      <p class="u-datum mb-3">Colour with a job — never decoration</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+        {meaning.map(m => (
+          <div class="surface-sheet rounded-3 p-3 flex items-center gap-3">
+            <span class={`w-9 h-9 rounded-2 shrink-0 ${m.cls}`}></span>
+            <div>
+              <p class="u-figure text-[13px] m-0">{m.token}</p>
+              <p class="font-sans text-[12px] text-ink-600 leading-snug m-0">{m.role}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p class="u-datum mb-3">Chart series — categorical, matched in lightness</p>
+      <div class="flex flex-wrap gap-2">
+        {chart.map(c => (
+          <div class="text-center">
+            <div class={`w-20 h-10 rounded-2 ${c.cls}`}></div>
+            <p class="u-datum !text-[0.58rem] mt-1.5 m-0">{c.t.replace('chart-', '')}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ============ DEPTH ============ -->
+    <section>
+      <div class="rule-head mb-6">
+        <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+          <span class="u-datum u-datum--accent block mb-1.5">02</span>
+          Depth
+        </h2>
+        <span class="u-datum">Contact shadow + ambient shadow</span>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        {elevation.map(e => (
+          <div class={`bg-paper-50 border border-ink-200 rounded-3 p-5 ${e.cls}`}>
+            <p class="u-figure text-[15px] m-0">{e.name}</p>
+            <p class="font-sans text-[12.5px] text-ink-600 leading-snug mt-1.5 m-0">{e.use}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="surface-sheet rounded-3 p-5">
+          <p class="u-datum mb-2">Sheet</p>
+          <p class="font-sans text-[13px] text-ink-700 leading-snug m-0">Lit top edge, hairline, e1. The default panel.</p>
+        </div>
+        <div class="surface-well rounded-3 p-5">
+          <p class="u-datum mb-2">Well</p>
+          <p class="font-sans text-[13px] text-ink-700 leading-snug m-0">Inset shadow, no lit edge. Inputs, code, chart grounds.</p>
+        </div>
+        <div class="surface-night rounded-3 p-5">
+          <p class="u-datum !text-accent-light mb-2">Night</p>
+          <p class="font-sans text-[13px] text-night-dim leading-snug m-0">Dark in both themes. Footer, quote plate, tool CTA.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TYPE ============ -->
+    <section>
+      <div class="rule-head mb-6">
+        <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+          <span class="u-datum u-datum--accent block mb-1.5">03</span>
+          Type
+        </h2>
+        <span class="u-datum">Source Sans 3 · Source Serif 4</span>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-5">
+        <div class="surface-sheet rounded-3 p-6">
+          <p class="u-datum mb-3">Sans — the institution</p>
+          <p class="font-display font-bold text-[28px] leading-[1.1] tracking-[-0.02em] text-ink-900 m-0">
+            Thinking About Policing
+          </p>
+          <p class="font-sans text-[13.5px] text-ink-700 leading-relaxed mt-3 m-0">
+            Nav, headlines, card titles, buttons. Source Sans 3 — plain, quiet and legible at
+            every size the site uses.
+          </p>
+        </div>
+        <div class="surface-sheet rounded-3 p-6">
+          <p class="u-datum mb-3">The same sans — the instruments</p>
+          <p class="u-figure text-[28px] leading-[1.1] m-0">63% → 49%</p>
+          <div class="flex flex-wrap gap-2 mt-3">
+            <span class="chip">2026-04</span>
+            <span class="chip chip--accent">43 forces</span>
+            <span class="chip chip--signal">Provisional</span>
+          </div>
+          <p class="font-sans text-[13.5px] text-ink-700 leading-relaxed mt-3 m-0">
+            Figures, dates, IDs, filter state, source counts. Set in the sans with tabular
+            figures and tracked-out caps — a reading, not a sentence. No typewriter face: it
+            was harder to read small, and made ordinary metadata look like terminal output.
+          </p>
+        </div>
+        <div class="surface-sheet rounded-3 p-6">
+          <p class="u-datum mb-3">Serif — the argument</p>
+          <p class="font-serif text-[19px] leading-[1.55] text-ink-800 m-0">
+            Article bodies, standfirsts and pull quotes. Source Serif 4 on a 36rem measure —
+            about 68 characters, which is where sustained reading stays comfortable. It and the
+            sans are one superfamily, so they agree without tuning.
+          </p>
+        </div>
+      </div>
+
+      <div class="surface-sheet rounded-3 p-6 mt-5">
+        <p class="u-datum mb-4">The four label roles — one face, at their real sizes</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div>
+            <p class="u-eyebrow mb-2">Page eyebrow</p>
+            <p class="font-sans text-[12.5px] text-ink-600 leading-snug m-0"><code class="font-mono">.u-eyebrow</code> — opens a page, led by an accent rule.</p>
+          </div>
+          <div>
+            <p class="u-datum mb-2">Datum label</p>
+            <p class="font-sans text-[12.5px] text-ink-600 leading-snug m-0"><code class="font-mono">.u-datum</code> — a reading, a date, a state.</p>
+          </div>
+          <div>
+            <p class="u-kicker mb-2">Editorial kicker</p>
+            <p class="font-sans text-[12.5px] text-ink-600 leading-snug m-0"><code class="font-mono">.u-kicker</code> — section and card chrome.</p>
+          </div>
+          <div>
+            <p class="u-figure text-[22px] mb-1 leading-none">1,284</p>
+            <p class="font-sans text-[12.5px] text-ink-600 leading-snug m-0"><code class="font-mono">.u-figure</code> — a number printed at size.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTROLS ============ -->
+    <section>
+      <div class="rule-head mb-6">
+        <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+          <span class="u-datum u-datum--accent block mb-1.5">04</span>
+          Controls
+        </h2>
+        <span class="u-datum">One grammar · four variants</span>
+      </div>
+
+      <div class="surface-sheet rounded-3 p-6 mb-5">
+        <p class="u-datum mb-4">Buttons</p>
+        <div class="flex flex-wrap items-center gap-3">
+          <button type="button" class="btn btn--primary">Primary <span class="arrow">→</span></button>
+          <button type="button" class="btn btn--secondary">Secondary</button>
+          <button type="button" class="btn btn--ghost">Ghost</button>
+          <button type="button" class="btn btn--primary btn--sm">Small</button>
+        </div>
+      </div>
+
+      <div class="surface-night rounded-3 p-6 mb-5">
+        <p class="u-datum !text-accent-light mb-4">On night</p>
+        <button type="button" class="btn btn--night">Open the tool <span class="arrow">→</span></button>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div class="surface-sheet rounded-3 p-6">
+          <p class="u-datum mb-4">Radii</p>
+          <div class="flex flex-wrap gap-4">
+            {radii.map(r => (
+              <div class="text-center">
+                <div class={`w-16 h-16 bg-paper-200 border border-ink-300 ${r.cls}`}></div>
+                <p class="u-datum !text-[0.58rem] mt-2 m-0">{r.name}</p>
+                <p class="font-sans text-[11px] text-ink-500 leading-snug max-w-[7rem] m-0">{r.use}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="surface-sheet rounded-3 p-6">
+          <p class="u-datum mb-4">Ruled head</p>
+          <div class="rule-head">
+            <h3 class="font-display font-bold text-[18px] text-ink-900 m-0">
+              <span class="u-datum u-datum--accent block mb-1">Section</span>
+              Evidence &amp; Practice
+            </h3>
+            <span class="u-datum">All 15 →</span>
+          </div>
+          <p class="font-sans text-[12.5px] text-ink-600 leading-snug mt-3 m-0">
+            The strongest piece of furniture in the system: kicker, title, 2px rule, a reading on
+            the right. It is what makes a page read as a document rather than a feed.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE RULES ============ -->
+    <section>
+      <div class="rule-head mb-6">
+        <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+          <span class="u-datum u-datum--accent block mb-1.5">05</span>
+          What this system refuses
+        </h2>
+        <span class="u-datum">The house style, stated</span>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-5">
+        {rules.map(r => (
+          <div class="surface-sheet rounded-3 p-5">
+            <p class="u-datum !text-flag mb-1.5">Not this</p>
+            <p class="font-sans text-[13.5px] text-ink-700 leading-snug m-0">{r.no}</p>
+            <p class="u-datum u-datum--accent mt-4 mb-1.5">This</p>
+            <p class="font-sans text-[13.5px] text-ink-800 leading-snug m-0">{r.yes}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+  </div>
 </BaseLayout>

@@ -82,16 +82,16 @@ const monthLabel = (m: string) => {
 
               <div class="grid sm:grid-cols-3 gap-8 items-start">
                 <div>
-                  <p class="u-kicker u-kicker--dim mb-1">12-month searches</p>
+                  <p class="u-datum mb-1">12-month searches</p>
                   <p class="font-display text-3xl font-semibold text-ink-900">{fmt.format(win.total)}</p>
                 </div>
                 <div>
-                  <p class="u-kicker u-kicker--dim mb-1">Latest ({monthLabel(force.provenance.datasetMonth)})</p>
+                  <p class="u-datum mb-1">Latest ({monthLabel(force.provenance.datasetMonth)})</p>
                   <p class="font-display text-3xl font-semibold text-ink-900">{ss.latest ? fmt.format(ss.latest.total) : '—'}</p>
                   {!ss.latest && <p class="font-serif text-xs text-ink-500 mt-1">Not yet filed.</p>}
                 </div>
                 <div>
-                  <p class="u-kicker u-kicker--dim mb-1">Monthly trend</p>
+                  <p class="u-datum mb-1">Monthly trend</p>
                   <div class="text-accent mt-2"><Sparkline points={ss.series} width={180} /></div>
                 </div>
               </div>

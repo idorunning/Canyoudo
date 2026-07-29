@@ -24,19 +24,25 @@ const points = (items ?? []).filter((s) => s && s.trim());
     margin: 0 0 2.5rem;
     max-width: 36rem;
     border: 1px solid rgb(var(--ink-200));
-    border-left: 4px solid rgb(var(--accent));
-    border-radius: 6px;
+    border-top: 3px solid rgb(var(--accent));
+    border-radius: var(--r2);
     background: rgb(var(--paper-50));
+    box-shadow:
+      inset 0 1px 0 rgb(var(--edge-lit) / var(--edge-lit-alpha)),
+      var(--e2);
     padding: 1.25rem 1.4rem;
+    counter-reset: takeaway;
   }
   .tap-takeaways-label {
     font-family: theme('fontFamily.sans');
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgb(var(--accent));
     margin: 0 0 0.75rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgb(var(--ink-200));
   }
   .tap-takeaways-list {
     list-style: none;
@@ -51,16 +57,20 @@ const points = (items ?? []).filter((s) => s && s.trim());
     font-size: 1.0625rem;
     line-height: 1.55;
     color: rgb(var(--ink-800));
-    padding-left: 1.4rem;
+    padding-left: 2rem;
   }
+  /* Numbered, not bulleted: a takeaway is an ordered finding, and the figure
+     ties the box to the instrument voice used everywhere else. */
   .tap-takeaways-list li::before {
-    content: '';
+    counter-increment: takeaway;
+    content: counter(takeaway, decimal-leading-zero);
     position: absolute;
     left: 0;
-    top: 0.6em;
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 9999px;
-    background: rgb(var(--accent-light));
+    top: 0.28em;
+    font-family: theme('fontFamily.sans');
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: rgb(var(--accent));
   }
 </style>

@@ -45,7 +45,7 @@ const tools = [
       {VISIBLE_SECTIONS.map((s) => (
         <a
           href={`/${s}`}
-          class="group block border border-ink-200 rounded-md p-6 hover:border-ink-300 hover:bg-paper-100 transition-colors"
+          class="group block border border-ink-200 rounded-2 p-6 hover:border-ink-300 hover:bg-paper-100 transition-colors"
         >
           <h3 class="font-display text-xl font-semibold text-ink-900 group-hover:text-accent transition-colors leading-snug">
             {SECTION_LABELS[s]}
@@ -61,12 +61,12 @@ const tools = [
         <div class="flex flex-col">
           <a
             href={t.href}
-            class="group block flex-1 border border-accent/30 bg-accent/[0.04] rounded-md p-6 hover:bg-accent/[0.08] hover:border-accent/50 transition-colors"
+            class="group block flex-1 border border-accent/30 bg-accent/[0.04] rounded-2 p-6 hover:bg-accent/[0.08] hover:border-accent/50 transition-colors"
           >
             <h3 class="font-display text-xl font-semibold text-accent group-hover:text-accent-dark transition-colors leading-snug">
               {t.label}
               {t.badge && (
-                <span class="align-middle ml-2 font-sans text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-accent bg-accent/10 border border-accent/30 rounded-full px-2 py-0.5">
+                <span class="chip chip--accent align-middle ml-2">
                   {t.badge}
                 </span>
               )}

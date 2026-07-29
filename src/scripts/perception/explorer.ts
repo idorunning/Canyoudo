@@ -124,7 +124,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     // "Stephen Lawrence" / "Cressida Dick" fully readable on one line.
     row.innerHTML =
       `<span class="w-28 sm:w-36 shrink-0 text-right font-sans text-[11px] font-medium leading-tight whitespace-nowrap" style="color:${LABEL_INK}">${esc(display(term))}</span>` +
-      `<span class="relative flex-1 h-4 rounded-sm bg-paper-200"><span data-bar class="absolute inset-y-0 left-0 rounded-sm" style="width:0%;background:${BAR_FILL};transition:width ${DUR}s cubic-bezier(.4,0,.2,1)"></span></span>` +
+      `<span class="relative flex-1 h-4 rounded-1 bg-paper-200"><span data-bar class="absolute inset-y-0 left-0 rounded-1" style="width:0%;background:${BAR_FILL};transition:width ${DUR}s cubic-bezier(.4,0,.2,1)"></span></span>` +
       `<span data-val class="w-10 shrink-0 font-sans text-xs tabular-nums text-ink-400"></span>`;
     return row;
   }
@@ -412,7 +412,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
     return items
       .map((i) => {
         const w = Math.round((i.value / max) * 100);
-        return `<div class="flex items-center gap-2 text-sm"><span class="w-44 shrink-0 truncate text-ink-700">${esc(i.label)}</span><span class="h-3 rounded-sm" style="width:${w}%;background:rgb(var(--ink-700))"></span><span class="text-ink-400 tabular-nums text-xs">${i.value}</span></div>`;
+        return `<div class="flex items-center gap-2 text-sm"><span class="w-44 shrink-0 truncate text-ink-700">${esc(i.label)}</span><span class="h-3 rounded-1" style="width:${w}%;background:rgb(var(--ink-700))"></span><span class="text-ink-400 tabular-nums text-xs">${i.value}</span></div>`;
       })
       .join('');
   }
@@ -551,7 +551,7 @@ function wire(root: HTMLElement, bundle: Bundle): void {
           ? `<a href="${m.sourceUrl}" class="font-sans text-[11px] text-ink-500 hover:text-accent underline underline-offset-2 mt-1.5 inline-block">${esc(m.source)}</a>`
           : `<p class="font-sans text-[11px] text-ink-500 mt-1.5">${esc(m.source)}</p>`;
         return (
-          `<div ${clickable ? `data-london-metric="${m.key}" role="button" tabindex="0"` : ''} class="border rounded-md p-3.5 bg-paper-50 ${clickable ? 'cursor-pointer hover:border-accent' : ''} ${active ? 'border-accent bg-accent/[0.05]' : 'border-ink-200'}">` +
+          `<div ${clickable ? `data-london-metric="${m.key}" role="button" tabindex="0"` : ''} class="border rounded-2 p-3.5 bg-paper-50 ${clickable ? 'cursor-pointer hover:border-accent' : ''} ${active ? 'border-accent bg-accent/[0.05]' : 'border-ink-200'}">` +
           `<p class="font-display text-sm font-semibold text-ink-900">${esc(m.label)}${clickable ? ' <span class="font-sans text-[10px] font-normal text-ink-400">· click to chart</span>' : ''}</p>` +
           `<p class="font-serif text-sm text-ink-700 leading-snug mt-1">${esc(m.latest)}</p>${src}</div>`
         );

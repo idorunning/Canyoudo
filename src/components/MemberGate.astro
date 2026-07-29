@@ -39,8 +39,8 @@ const { hasAuth, feature = 'this' } = Astro.props;
         <div class="h-4 bg-paper-200 rounded w-2/3"></div>
       </div>
 
-      <div data-members-gate class="rounded-lg bg-paper-200 px-6 py-7 max-w-2xl">
-        <p class="font-sans text-xs uppercase tracking-[0.2em] text-accent mb-2">Members · free</p>
+      <div data-members-gate class="surface-sheet rounded-3 px-6 py-7 max-w-2xl">
+        <p class="u-eyebrow mb-3">Members · free</p>
         <h2 class="font-display text-xl font-semibold text-ink-900">Sign in to unlock {feature}</h2>
         <p class="font-serif text-ink-700 leading-relaxed mt-2">
           Sign-in takes under a minute: create a password or use Google, and
@@ -53,7 +53,7 @@ const { hasAuth, feature = 'this' } = Astro.props;
             'Use every research tool on the site — free',
           ].map((benefit) => (
             <li class="flex gap-2.5 items-baseline font-serif text-ink-700 leading-snug">
-              <span class="text-accent font-sans font-bold text-sm shrink-0" aria-hidden="true">✓</span>
+              <span class="text-accent font-semibold text-sm shrink-0" aria-hidden="true">+</span>
               {benefit}
             </li>
           ))}

@@ -28,7 +28,7 @@ const forces = entries
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-3xl">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Crime Data Explorer', href: '/data/explore' }, { label: 'Force briefing' }]} />
-        <p class="u-kicker mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Force briefing</p>
+        <p class="u-datum mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Force briefing</p>
         <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">The force briefing</h1>
         <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
           A short, structured data briefing on one force — what's moving, the justice gap, stop &amp; search,
@@ -49,12 +49,12 @@ const forces = entries
         <form data-briefing-form class="flex flex-wrap gap-3 items-end">
           <div>
             <label for="force-pick" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Choose an area</label>
-            <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
+            <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-2 px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
               <option value="_all">England &amp; Wales (all forces)</option>
               {forces.map((f) => <option value={f.id}>{f.name}</option>)}
             </select>
           </div>
-          <button type="submit" data-generate class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-md hover:bg-accent-dark transition-colors disabled:opacity-50">
+          <button type="submit" data-generate class="font-sans text-sm uppercase tracking-[0.12em] bg-accent text-paper-50 px-5 py-2.5 rounded-2 hover:bg-accent-dark transition-colors disabled:opacity-50">
             Write the briefing
           </button>
         </form>
@@ -65,9 +65,9 @@ const forces = entries
 
         <div data-briefing-result hidden class="space-y-6">
           <div class="flex flex-wrap items-center gap-3">
-            <span data-confidence class="inline-block font-sans text-xs font-semibold uppercase tracking-[0.08em] border border-ink-300 text-ink-700 rounded-full px-3 py-1" hidden></span>
+            <span data-confidence class="chip" hidden></span>
             <span data-figure-check class="font-sans text-xs text-ink-500" hidden></span>
-            <button type="button" data-download hidden class="ml-auto font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-accent hover:text-accent transition-colors">
+            <button type="button" data-download hidden class="ml-auto font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-2 hover:border-accent hover:text-accent transition-colors">
               Download PDF
             </button>
           </div>

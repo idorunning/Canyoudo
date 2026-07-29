@@ -27,7 +27,7 @@ const forces = entries
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-3xl">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Crime Data Explorer', href: '/data/explore' }, { label: 'Crime & outcomes' }]} />
-        <p class="u-kicker mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Crime &amp; outcomes</p>
+        <p class="u-datum mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Crime &amp; outcomes</p>
         <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">Crime &amp; outcomes over time</h1>
         <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
           How recorded crime has moved by type — and what happens next. The <em>justice gap</em> is the share of
@@ -46,7 +46,7 @@ const forces = entries
 
         <div>
           <label for="force-pick" class="block font-sans text-xs uppercase tracking-[0.15em] text-ink-500 mb-2">Choose an area</label>
-          <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-md px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
+          <select id="force-pick" class="w-full sm:w-auto border border-ink-300 rounded-2 px-3 py-2.5 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent">
             <option value="_all">England &amp; Wales (all forces)</option>
             {forces.map((f) => <option value={f.id}>{f.name}</option>)}
           </select>
@@ -54,7 +54,7 @@ const forces = entries
 
         {/* AI reading */}
         <div class="not-prose">
-          <p class="u-kicker mb-3">The reading</p>
+          <p class="u-datum mb-3">The reading</p>
           <div class="prose-article min-h-[6rem]" data-interpretation aria-live="polite"></div>
           <p class="mt-4 font-sans text-xs text-ink-500 leading-relaxed">
             Interpreted by <strong class="font-medium text-ink-600" data-model>the site&rsquo;s AI</strong> from
@@ -83,7 +83,7 @@ const forces = entries
               <h3 class="font-display text-lg font-semibold text-ink-900">One crime type over time</h3>
               <label class="font-sans text-xs text-ink-600">
                 <span class="sr-only">Crime type</span>
-                <select data-cat-pick class="border border-ink-300 rounded-md px-2 py-1.5 font-sans text-xs text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"></select>
+                <select data-cat-pick class="border border-ink-300 rounded-2 px-2 py-1.5 font-sans text-xs text-ink-900 bg-paper-50 focus:outline-none focus:border-accent"></select>
               </label>
             </div>
             <div data-chart-category></div>
@@ -104,7 +104,7 @@ const forces = entries
           </div>
 
           <div class="border-t border-ink-200 pt-6">
-            <button type="button" data-csv class="font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-accent hover:text-accent transition-colors">
+            <button type="button" data-csv class="font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-2 hover:border-accent hover:text-accent transition-colors">
               Download the data (CSV)
             </button>
             <span class="font-sans text-xs text-ink-500 ml-3">Monthly counts by crime type plus the justice-gap shares, for this area.</span>
