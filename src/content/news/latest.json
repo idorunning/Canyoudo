@@ -1,9 +1,10 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-28T13:27:39.625Z",
-    "feedCount": 8,
+    "fetchedAt": "2026-07-29T01:25:53.347Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
+      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "CPS",
@@ -15,20 +16,84 @@
   },
   "items": [
     {
-      "title": "Mother and boyfriend guilty of murder of girl, two",
-      "link": "https://www.bbc.co.uk/news/articles/cvg9lv27v69o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-28T12:49:20.000Z",
-      "summary": "Prosecutors say Isabelle Welsh was subjected to a \"wicked\" campaign of abuse before her death."
+      "title": "Sloppy and clumsy but overwhelming - inside the rogue ChatGPT hack",
+      "link": "https://www.bbc.co.uk/news/articles/c2el319vzr3o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-28T23:00:10.000Z",
+      "summary": "Details have been released of an emergency call with hundreds of cyber-security experts after the ChatGPT hack of a tech company."
     },
     {
-      "title": "Former boxing world champion denies assaulting man, court hears",
-      "link": "https://www.bbc.co.uk/news/articles/ceqeg288l29o?at_medium=RSS&at_campaign=rss",
+      "title": "Perplexity's tokenmaxxing Model Council gives you multiple bot perspectives",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/28/perplexitys-tokenmaxxing-model-council-gives-you-multiple-bot-perspectives/5279972",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-28T21:26:53.000Z",
+      "summary": "Up to 8 AI models running in the cloud weighing in on ambiguous business issues? Sounds affordable"
+    },
+    {
+      "title": "Woman found dead was murdered, police say, as man's death still 'unexplained'",
+      "link": "https://www.bbc.co.uk/news/articles/c5y0677el3mo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-28T11:23:44.000Z",
-      "summary": "Joe Cordina, 34, was charged in connection with an incident outside a petrol station in February."
+      "isoDate": "2026-07-28T21:08:28.000Z",
+      "summary": "Stacy Mair, 35, was found near Corsliehill Road in Houston on Monday morning after police received a report of concern for a person."
+    },
+    {
+      "title": "Tech Life",
+      "link": "https://www.bbc.co.uk/sounds/play/w3ct8jy6?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-28T20:00:00.000Z",
+      "summary": "What do we need to know about agentic AI?"
+    },
+    {
+      "title": "Man guilty of murdering two men found in woods",
+      "link": "https://www.bbc.co.uk/news/articles/cewrd42lx0eo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-28T16:35:14.000Z",
+      "summary": "James Desborough \"savagely desecrated\" his victims' bodies, a court hears."
+    },
+    {
+      "title": "Reform UK reports Zack Polanski to police over guillotine T-shirt post",
+      "link": "https://www.bbc.co.uk/news/articles/c5y063yqlleo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-28T16:33:04.000Z",
+      "summary": "The post included a photo of a man wearing a top featuring the name \"Nigel\" alongside an image of a guillotine."
+    },
+    {
+      "title": "College prof hides prompt to catch AI cheaters, finds human nature is pretty much as we thought",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/28/college-prof-hides-prompt-to-catch-ai-cheaters-finds-human-nature-is-pretty-much-as-we-thought/5279864",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-28T16:20:00.000Z",
+      "summary": ""
+    },
+    {
+      "title": "Chairman stole £22k from junior football club to fund cocaine habit",
+      "link": "https://www.bbc.co.uk/news/articles/c89np1z2eq5o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-28T16:13:54.000Z",
+      "summary": "The club relied on fundraisers, parents and volunteers to raise the money to keep going after the fraud."
+    },
+    {
+      "title": "Chief Constable joins Ceremony of Remembrance",
+      "link": "https://www.gov.uk/government/news/chief-constable-joins-ceremony-of-remembrance",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-28T15:22:00.000Z",
+      "summary": "Chief Constable Simon Chesterman honoured fallen <mark>police</mark> officers at the UK <mark>Police</mark> Memorial, paying tribute to their courage, service and sacrifice."
+    },
+    {
+      "title": "Unauthorised fraud in the UK",
+      "link": "https://www.gov.uk/government/calls-for-evidence/unauthorised-fraud-in-the-uk",
+      "source": "Home Office",
+      "topic": "policing",
+      "isoDate": "2026-07-28T13:54:37.000Z",
+      "summary": "This call for evidence seeks input from people and organisations with experience of unauthorised fraud in the UK."
     },
     {
       "title": "Milbank hands out even more money: Firm follows record trainee pay and NQ hike with new bonuses",
@@ -37,14 +102,6 @@
       "topic": "law",
       "isoDate": "2026-07-28T11:16:17.000Z",
       "summary": "Demand for elite junior legal talent remains high The post Milbank hands out even more money: Firm follows record trainee pay and NQ hike with new bonuses appeared first on…"
-    },
-    {
-      "title": "Reform UK reports Zack Polanski to police over guillotine T-shirt post",
-      "link": "https://www.bbc.co.uk/news/articles/c5y063yqlleo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-28T10:23:46.000Z",
-      "summary": "The post included a photo of a man wearing a top featuring the name \"Nigel\" alongside an image of a guillotine."
     },
     {
       "title": "Independent statutory regulation of probation practitioners",
@@ -77,14 +134,6 @@
       "topic": "ai",
       "isoDate": "2026-07-27T22:05:00.000Z",
       "summary": "AI seems to have a liberal bias"
-    },
-    {
-      "title": "Ex political advisor admits fraud over expense claims",
-      "link": "https://www.bbc.co.uk/news/articles/cq895xvd04xo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-27T17:38:53.000Z",
-      "summary": "Matthew Torbitt was working for Bury South MP Christian Wakeford at th etime of the offences."
     },
     {
       "title": "Crown Prosecution Service to increase trainee solicitor numbers from 80 to 120",
@@ -151,28 +200,12 @@
       "summary": "CNC&#39;s Legal Services hosted a mock civil trial, giving officers and partners practical insight into court proceedings, evidence and legal decision-making."
     },
     {
-      "title": "Lawmakers push for AI 'kill switch' after OpenAI models go rogue",
-      "link": "https://www.bbc.co.uk/news/articles/cx2vqj2e9x8o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-23T20:58:35.000Z",
-      "summary": "A new bill would let the US government order the shutdown of AI models that pose a public threat."
-    },
-    {
       "title": "OpenAI won't let some customers export their chats, but this tool will",
       "link": "https://www.theregister.com/ai-and-ml/2026/07/23/openai-wont-let-some-customers-export-their-chats-but-this-tool-will/5277795",
       "source": "The Register",
       "topic": "ai",
       "isoDate": "2026-07-23T20:48:39.000Z",
       "summary": "ChatGPT Business and Enterprise users lack the standard chat export option, so third-party utilities like scrapemychats fill the gap"
-    },
-    {
-      "title": "Google and Tesla shares plunge as AI spending rattles markets",
-      "link": "https://www.bbc.co.uk/news/articles/c235n47g8g8o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-23T20:42:33.000Z",
-      "summary": "As major tech companies race to capitalize on a new wave of AI technology, investors wonder when financial benefits will appear."
     },
     {
       "title": "Circuit Judge – Death in Service",
@@ -189,14 +222,6 @@
       "topic": "law",
       "isoDate": "2026-07-23T12:20:34.000Z",
       "summary": "Sir Geoffrey Vos, the Master of the Rolls, celebrated a rare viewing of historical documents at The National Archives The post Master of the Rolls celebrates centuries-old role…"
-    },
-    {
-      "title": "IBM insists AI didn't kill software deals, just delayed them",
-      "link": "https://www.theregister.com/software/2026/07/23/ibm-insists-ai-didnt-kill-software-deals-just-delayed-them/5276977",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-23T11:34:42.000Z",
-      "summary": "Big Blue says customers postponed rather than abandoned major purchases as hardware soaked up enterprise budgets"
     },
     {
       "title": "Lynne Ford retires after 34 years protecting UK nuclear policing",
@@ -221,22 +246,6 @@
       "topic": "law",
       "isoDate": "2026-07-22T10:30:42.000Z",
       "summary": "Read more about this informal route through which legal professionals may raise concerns about the behaviour of a coroner where early and constructive resolution is appropriate…"
-    },
-    {
-      "title": "EU forces Google to share its toys with the other AI and search kids",
-      "link": "https://www.theregister.com/software/2026/07/16/eu-forces-google-to-share-its-toys-with-the-other-ai-and-search-kids/5273819",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-16T16:48:41.000Z",
-      "summary": "The Chocolate Factory is not amused"
-    },
-    {
-      "title": "AI to speed up justice under major disclosure reforms",
-      "link": "https://www.gov.uk/government/news/ai-to-speed-up-justice-under-major-disclosure-reforms",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-14T13:58:00.000Z",
-      "summary": "Under reforms announced today, disclosure rules written before smartphones existed will be overhauled to free up officer time."
     },
     {
       "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
