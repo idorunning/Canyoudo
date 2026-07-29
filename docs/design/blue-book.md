@@ -118,29 +118,43 @@ Two details are worth keeping:
 Cards press back down on `:active` — the shadow shrinks rather than
 disappearing — so a click feels attached to the page.
 
-## 5. Type: three faces, three jobs
+## 5. Type: one superfamily, two jobs
 
 | Face | Job |
 |---|---|
-| **IBM Plex Sans** (variable, self-hosted) | The institution: nav, headlines, card titles, buttons |
-| **IBM Plex Mono** (400/600) | The instruments: figures, dates, IDs, filter state, source counts, code |
-| **Source Serif 4** (variable) | The argument: article bodies, standfirsts, pull quotes |
+| **Source Sans 3** (variable, self-hosted) | The institution *and* its instruments: nav, headlines, card titles, buttons, and every label, date and figure |
+| **Source Serif 4** (variable, self-hosted) | The argument: article bodies, standfirsts, pull quotes |
 
 Plus Jakarta Sans was replaced because it is a geometric-humanist face that
-reads as a product-marketing site. Plex was drawn for technical documentation
-by a technology company, and its sans and mono share a skeleton — so a table
-of numbers and the label above it read as one instrument rather than two
-fonts that happen to be adjacent.
+reads as a product-marketing site. Source Sans 3 is plain and quiet, and it is
+the sans half of the superfamily the site's reading face already comes from —
+so a caption and the paragraph under it agree by construction rather than by
+tuning.
 
-Four label voices, one class each. Using them is what carries the language
-into pages nobody redesigned:
+**There is no monospace webfont.** An earlier draft of this system set the
+instrument voice in IBM Plex Mono, on the theory that a fixed pitch says "this
+is a reading, not a sentence". In practice it was harder to read at 11px, and
+it made ordinary metadata — a date, a section name, a source count — look like
+terminal output, on a site whose readers are police officers and policy people
+rather than developers. The voice survives; the face does not. Labels are
+tracked-out uppercase in the sans, and every figure carries `tabular-nums`,
+which is what was actually doing the work of keeping columns aligned.
+
+Mono is now used for exactly one thing — code samples — and comes from the
+system stack, so it costs no download.
+
+Four label *roles*, one face and one class each. With the mono gone they are
+separated by colour, position and tabular figures rather than by typeface —
+which is the honest description, and still enough to tell a section label from
+a reading. Using the class rather than re-deriving the values inline is what
+carries the language into pages nobody redesigned:
 
 | Class | Use |
 |---|---|
-| `.u-eyebrow` | Opens a page. Mono label led by a short accent rule. |
-| `.u-datum` | A reading: a date, a count, a state, a source. |
-| `.u-kicker` | Editorial chrome: section and card kickers. Stays sans. |
-| `.u-figure` | A number printed at size — a stat, a rank, a delta. |
+| `.u-eyebrow` | Opens a page. Tracked caps led by a short accent rule. |
+| `.u-datum` | A reading: a date, a count, a state, a source. Tracked caps, tabular figures. |
+| `.u-kicker` | Editorial chrome: section and card kickers. |
+| `.u-figure` | A number printed at size — a stat, a rank, a delta. Tabular figures. |
 
 ## 6. The furniture
 
@@ -153,7 +167,7 @@ into pages nobody redesigned:
   desk, which is the single change that gives the reading experience depth.
 - **`.btn` + `--primary/--secondary/--ghost/--night`** — one button grammar,
   replacing the pill-shaped buttons that were defined inline on twelve pages.
-- **`.chip`** — a filter, tag or source, in the mono voice.
+- **`.chip`** — a filter, tag or source, in the label voice.
 - **`.tile-blank`** — a card with no photograph gets the measured ground with
   its initial ghosted into it, rather than an empty rectangle. A grid of
   blank tiles is one of the things that made the card rows read as a
@@ -163,7 +177,7 @@ into pages nobody redesigned:
 
 Motion answers the pointer or reports a state change. Nothing animates at
 rest. The idle `soft-pulse` and the pulsing "live" dots were removed; "live"
-is now a mono readout that says what it is (`Live · refreshed on load`),
+is now a readout that says what it is (`Live · refreshed on load`),
 which is both more honest and more legible. Scroll reveal, the arrow nudge
 and the card lift all remain, all behind `prefers-reduced-motion`.
 
@@ -199,7 +213,7 @@ the part that decays:
 - `src/styles/global.css` — the token blocks, the component layer (surfaces,
   controls, label voices, `.rule-head`, `.grid-ground`, `.tile-blank`), prose
   restyling, the map explorer moved onto tokens, dead orb/pulse CSS deleted.
-- `tailwind.config.mjs` — Plex families, `canvas`/`rule`/`signal`/`flag`/
+- `tailwind.config.mjs` — the Source families, `canvas`/`rule`/`signal`/`flag`/
   `chart-*` colours, the `e1`–`e4` elevation scale, the four radii.
 - `src/layouts/BaseLayout.astro` — font imports, split light/dark
   `theme-color`.

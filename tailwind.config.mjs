@@ -11,15 +11,20 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // Self-hosted via Fontsource (imported in BaseLayout.astro). Two
-        // families, three jobs: Plex Sans is the institution's voice (nav,
-        // headlines, labels), Plex Mono is its instruments (figures, codes,
-        // filters), Source Serif is the argument (article bodies). Sans and
-        // mono share a skeleton, so a table and its caption agree.
-        display: ['"IBM Plex Sans Variable"', '"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        // Self-hosted via Fontsource (imported in BaseLayout.astro). One
+        // superfamily doing two jobs: Source Sans 3 is the institution's voice
+        // (nav, headlines, labels, figures) and Source Serif 4 is its argument
+        // (article bodies). They were drawn together, so a caption and the
+        // paragraph under it agree without any tuning.
+        //
+        // `mono` is the system stack and is used for one thing: code samples.
+        // The instrument voice is set in the sans with tabular figures — a
+        // typewriter face is harder to read at label sizes and made ordinary
+        // metadata look like terminal output.
+        display: ['"Source Sans 3 Variable"', '"Source Sans 3"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         serif: ['"Source Serif 4 Variable"', '"Source Serif 4"', 'ui-serif', 'Georgia', 'serif'],
-        sans: ['"IBM Plex Sans Variable"', '"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        mono: ['"IBM Plex Mono"', 'ui-monospace', '"SF Mono"', 'Menlo', 'monospace'],
+        sans: ['"Source Sans 3 Variable"', '"Source Sans 3"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['ui-monospace', '"SF Mono"', 'Menlo', 'Consolas', 'monospace'],
       },
       colors: {
         // The desk the page is laid on — a step below every panel on it.

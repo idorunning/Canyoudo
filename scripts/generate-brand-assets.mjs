@@ -216,7 +216,7 @@ const ogText = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630
   <text x="470" y="336" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="700" fill="${OG_INK}">Policing</text>
   <text x="470" y="404" font-family="Georgia, 'Times New Roman', serif" font-size="30" fill="${OG_MUTED}">Evidence-based writing on policing and public policy.</text>
   <rect x="470" y="430" width="620" height="2" fill="${OG_INK}"/>
-  <text x="470" y="474" font-family="'IBM Plex Mono', ui-monospace, monospace" font-size="23" letter-spacing="1" fill="${OG_MUTED}">Nathan Tracey &#183; thinkingaboutpolicing.org</text>
+  <text x="470" y="474" font-family="'DejaVu Sans', 'Liberation Sans', Helvetica, Arial, sans-serif" font-size="23" letter-spacing="1" fill="${OG_MUTED}">Nathan Tracey &#183; thinkingaboutpolicing.org</text>
 </svg>`;
 await sharp(Buffer.from(ogText))
   .composite([{ input: await keyOutGround(300), left: 110, top: 165 }])

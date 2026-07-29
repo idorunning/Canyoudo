@@ -81,7 +81,7 @@ The site cites heavily and nowhere can a reader see the whole body of
 evidence it draws on. One page listing every study, report and dataset cited
 anywhere, with which articles use it, generated from existing citations.
 Cheap, genuinely useful to a researcher, and a quiet authority signal almost
-no site offers. In the Blue Book it is a ruled table in the mono voice, with
+no site offers. In the Blue Book it is a ruled table in the label voice, with
 `.chip` filters by source type.
 
 ***Small build, distinctive.***

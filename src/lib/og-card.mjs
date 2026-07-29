@@ -87,9 +87,10 @@ export function renderCardSvg({ title, section, author = 'Nathan Tracey', domain
   const blockHeight = lines.length * lineHeight;
   const blockTop = Math.max(190, Math.round((180 + 520) / 2 - blockHeight / 2));
   const serif = "Georgia, 'Times New Roman', serif";
-  // The instrument voice — the section label and the footer credit are data
-  // about the card, so they are set in mono like every other label on the site.
-  const mono = "'IBM Plex Mono', ui-monospace, 'DejaVu Sans Mono', monospace";
+  const sans = "'DejaVu Sans', 'Liberation Sans', Helvetica, Arial, sans-serif";
+  // The label voice. The rasteriser has no webfonts, so this resolves to
+  // whatever sans the render host provides — tracked-out uppercase is what
+  // carries the voice here, not the specific face.
 
   const titleTspans = lines
     .map((l, i) => `<tspan x="${MARGIN}" y="${blockTop + i * lineHeight + fontSize}">${escapeXml(l)}</tspan>`)
@@ -101,9 +102,9 @@ export function renderCardSvg({ title, section, author = 'Nathan Tracey', domain
        rule that sits above every h2 in an article. -->
   <rect x="0" y="0" width="${WIDTH}" height="10" fill="${INK}"/>
   <rect x="0" y="0" width="240" height="10" fill="${ACCENT}"/>
-  <text x="${MARGIN}" y="160" font-family="${mono}" font-size="24" font-weight="600" letter-spacing="5" fill="${ACCENT}">${escapeXml(String(section).toUpperCase())}</text>
+  <text x="${MARGIN}" y="160" font-family="${sans}" font-size="24" font-weight="600" letter-spacing="5" fill="${ACCENT}">${escapeXml(String(section).toUpperCase())}</text>
   <text font-family="${serif}" font-size="${fontSize}" font-weight="700" fill="${INK}">${titleTspans}</text>
   <rect x="${MARGIN}" y="540" width="${WIDTH - MARGIN * 2}" height="2" fill="${INK}"/>
-  <text x="${MARGIN}" y="584" font-family="${mono}" font-size="23" letter-spacing="1" fill="${MUTED}">${escapeXml(author)} · ${escapeXml(domain)}</text>
+  <text x="${MARGIN}" y="584" font-family="${sans}" font-size="23" letter-spacing="1" fill="${MUTED}">${escapeXml(author)} · ${escapeXml(domain)}</text>
 </svg>`;
 }

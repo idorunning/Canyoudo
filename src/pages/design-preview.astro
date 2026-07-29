@@ -79,7 +79,7 @@ const rules = [
   },
   {
     no: 'Idle animation — a button that pulses at rest, a dot that breathes to look live.',
-    yes: 'Motion answers the pointer or reports a state change. "Live" is a mono readout that says so in words.',
+    yes: 'Motion answers the pointer or reports a state change. "Live" is a label that says so in words.',
   },
   {
     no: 'Uppercase micro-labels hand-rolled at a slightly different size on every page.',
@@ -102,9 +102,10 @@ const rules = [
         The design language
       </h1>
       <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
-        One hue, three surfaces, four elevations and four label voices. Everything on this page is
-        drawn from the live tokens in <code class="font-mono text-[0.9em]">global.css</code> — if it
-        looks wrong here, it is wrong on the site.
+        One hue, three surfaces, four elevations and four label voices, in one superfamily.
+        Everything on this page is drawn from the live tokens in
+        <code class="font-mono text-[0.9em]">global.css</code> — if it looks wrong here, it is
+        wrong on the site.
       </p>
     </div>
   </section>
@@ -210,7 +211,7 @@ const rules = [
           <span class="u-datum u-datum--accent block mb-1.5">03</span>
           Type
         </h2>
-        <span class="u-datum">Plex Sans · Plex Mono · Source Serif 4</span>
+        <span class="u-datum">Source Sans 3 · Source Serif 4</span>
       </div>
 
       <div class="grid lg:grid-cols-3 gap-5">
@@ -220,12 +221,12 @@ const rules = [
             Thinking About Policing
           </p>
           <p class="font-sans text-[13.5px] text-ink-700 leading-relaxed mt-3 m-0">
-            Nav, headlines, card titles, buttons. IBM Plex Sans was drawn for technical
-            documentation, which is what this is.
+            Nav, headlines, card titles, buttons. Source Sans 3 — plain, quiet and legible at
+            every size the site uses.
           </p>
         </div>
         <div class="surface-sheet rounded-3 p-6">
-          <p class="u-datum mb-3">Mono — the instruments</p>
+          <p class="u-datum mb-3">The same sans — the instruments</p>
           <p class="u-figure text-[28px] leading-[1.1] m-0">63% → 49%</p>
           <div class="flex flex-wrap gap-2 mt-3">
             <span class="chip">2026-04</span>
@@ -233,21 +234,23 @@ const rules = [
             <span class="chip chip--signal">Provisional</span>
           </div>
           <p class="font-sans text-[13.5px] text-ink-700 leading-relaxed mt-3 m-0">
-            Figures, dates, IDs, filter state, source counts. If a machine produced it, or a
-            reader might check it, it is set in mono.
+            Figures, dates, IDs, filter state, source counts. Set in the sans with tabular
+            figures and tracked-out caps — a reading, not a sentence. No typewriter face: it
+            was harder to read small, and made ordinary metadata look like terminal output.
           </p>
         </div>
         <div class="surface-sheet rounded-3 p-6">
           <p class="u-datum mb-3">Serif — the argument</p>
           <p class="font-serif text-[19px] leading-[1.55] text-ink-800 m-0">
             Article bodies, standfirsts and pull quotes. Source Serif 4 on a 36rem measure —
-            about 68 characters, which is where sustained reading stays comfortable.
+            about 68 characters, which is where sustained reading stays comfortable. It and the
+            sans are one superfamily, so they agree without tuning.
           </p>
         </div>
       </div>
 
       <div class="surface-sheet rounded-3 p-6 mt-5">
-        <p class="u-datum mb-4">The four label voices, at their real sizes</p>
+        <p class="u-datum mb-4">The four label roles — one face, at their real sizes</p>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div>
             <p class="u-eyebrow mb-2">Page eyebrow</p>
