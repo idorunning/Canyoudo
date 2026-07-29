@@ -28,7 +28,7 @@ const hasAuth = Boolean(
   <button
     type="button"
     data-account-toggle
-    class="flex items-center gap-2 pl-2.5 pr-3.5 py-1.5 rounded-full border border-ink-200 text-ink-700 hover:border-accent hover:text-accent transition-colors"
+    class="flex items-center gap-2 pl-2.5 pr-3.5 py-1.5 rounded-2 border border-ink-300 bg-paper-50 shadow-e1 text-ink-700 hover:border-accent hover:text-accent transition-colors"
     aria-haspopup="dialog"
     aria-expanded="false"
   >
@@ -41,7 +41,7 @@ const hasAuth = Boolean(
   <button
     type="button"
     data-account-toggle
-    class="flex items-center gap-1.5 pl-2 pr-2.5 py-1.5 rounded-full text-ink-600 hover:text-ink-900 transition-colors"
+    class="flex items-center gap-1.5 pl-2 pr-2.5 py-1.5 rounded-2 text-ink-600 hover:text-ink-900 transition-colors"
     aria-haspopup="dialog"
     aria-expanded="false"
     aria-label="Your account"
@@ -117,7 +117,7 @@ const hasAuth = Boolean(
                   class="w-full border border-ink-300 rounded-md px-3 py-2 font-sans text-sm text-ink-900 bg-paper-50 focus:outline-none focus:border-accent" />
               </div>
               <div class="flex items-center gap-3 pt-1">
-                <button type="submit" class="font-sans text-sm font-bold bg-accent text-paper-50 dark:text-night-50 rounded-full px-4 py-2 hover:bg-accent-dark transition-colors">
+                <button type="submit" class="btn btn--primary">
                   Save details
                 </button>
                 <span data-account-saved class="hidden font-sans text-xs text-green-600">Saved</span>
@@ -178,7 +178,7 @@ const hasAuth = Boolean(
                   Permanently delete your account, saved articles, research library
                   and details. This cannot be undone.
                 </p>
-                <button type="button" data-account-delete class="font-sans text-sm font-bold text-red-700 border border-red-400 rounded-full px-4 py-2 hover:bg-red-600 hover:text-white hover:border-red-600 transition-colors">
+                <button type="button" data-account-delete class="btn text-flag border-flag/60 hover:bg-flag hover:text-paper-50 hover:border-flag">
                   Delete account
                 </button>
                 <p data-account-delete-note class="hidden font-sans text-xs text-red-700 mt-2"></p>
@@ -187,7 +187,7 @@ const hasAuth = Boolean(
 
             {/* Sign out */}
             <div class="px-5 py-4 flex items-center justify-between">
-              <button type="button" data-account-signout class="font-sans text-sm font-semibold text-ink-700 border border-ink-300 rounded-full px-4 py-2 hover:border-ink-500 hover:text-ink-900 transition-colors">
+              <button type="button" data-account-signout class="btn btn--secondary">
                 Sign out
               </button>
               <span class="font-sans text-[10.5px] uppercase tracking-[0.1em] text-ink-400">Signed in · syncs across devices</span>

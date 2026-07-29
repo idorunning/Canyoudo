@@ -23,10 +23,10 @@ const audioSrc = narrated ? `/audio/${slug}.mp3` : null;
 ---
 
 {audioSrc ? (
-  <div class="mb-8 max-w-prose rounded-xl border border-ink-200 bg-paper-100 p-4 sm:p-5">
+  <div class="mb-8 max-w-prose rounded-3 surface-well p-4 sm:p-5">
     <div class="flex items-center justify-between gap-3 mb-3">
       <p class="u-kicker m-0">Audio edition</p>
-      <p class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 m-0 u-tnum">
+      <p class="u-datum m-0 u-tnum">
         ≈ {minutes} min · narrated
       </p>
     </div>
@@ -44,11 +44,11 @@ const audioSrc = narrated ? `/audio/${slug}.mp3` : null;
   data-audio-edition
   data-audio-title={title}
   hidden
-  class="mb-8 max-w-prose rounded-xl border border-ink-200 bg-paper-100 p-4 sm:p-5"
+  class="mb-8 max-w-prose rounded-3 surface-well p-4 sm:p-5"
 >
   <div class="flex items-center justify-between gap-3 mb-3">
     <p class="u-kicker m-0">Audio edition</p>
-    <p class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 m-0 u-tnum">
+    <p class="u-datum m-0 u-tnum">
       ≈ {minutes} min · on-device voice
     </p>
   </div>
@@ -57,7 +57,7 @@ const audioSrc = narrated ? `/audio/${slug}.mp3` : null;
     <button
       type="button"
       data-audio-toggle
-      class="shrink-0 w-11 h-11 rounded-full bg-accent text-paper-50 dark:text-night-50 flex items-center justify-center hover:bg-accent-dark transition-colors"
+      class="shrink-0 w-11 h-11 rounded-2 bg-accent text-paper-50 dark:text-night-50 shadow-e1 flex items-center justify-center hover:bg-accent-dark transition-colors"
       aria-label="Listen to this article"
     >
       <svg data-audio-icon-play width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -74,7 +74,7 @@ const audioSrc = narrated ? `/audio/${slug}.mp3` : null;
         <div data-audio-progress class="h-full w-0 bg-accent transition-[width] duration-300"></div>
       </div>
       <div class="flex items-center justify-between mt-1.5">
-        <span data-audio-status class="font-sans text-[10.5px] font-medium uppercase tracking-[0.08em] text-ink-500 u-tnum">Ready</span>
+        <span data-audio-status class="u-datum">Ready</span>
         <div class="flex items-center gap-2">
           <button type="button" data-audio-back class="font-sans text-[11px] font-semibold text-ink-500 hover:text-ink-900 transition-colors px-1" aria-label="Back one section">‹‹</button>
           <button type="button" data-audio-fwd class="font-sans text-[11px] font-semibold text-ink-500 hover:text-ink-900 transition-colors px-1" aria-label="Forward one section">››</button>

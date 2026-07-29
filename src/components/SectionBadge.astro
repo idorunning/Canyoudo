@@ -16,21 +16,21 @@ import { SECTION_LABELS } from '../content/config';
 const labels = SECTION_LABELS;
 
 const sizeClasses = {
-  sm: 'text-[0.66rem]',
-  md: 'text-[0.7rem]',
+  sm: 'text-[0.64rem]',
+  md: 'text-[0.68rem]',
 };
 ---
 
 {link ? (
   <a
     href={`/${section}`}
-    class={`inline-block font-sans font-semibold uppercase tracking-[0.14em] text-accent hover:text-accent-dark transition-colors ${sizeClasses[size]}`}
+    class={`inline-flex items-center gap-2 font-sans font-semibold uppercase tracking-[0.12em] text-accent hover:text-accent-dark transition-colors before:content-[''] before:h-[2px] before:w-4 before:bg-accent ${sizeClasses[size]}`}
   >
     {labels[section]}
   </a>
 ) : (
   <span
-    class={`inline-block font-sans font-semibold uppercase tracking-[0.14em] text-accent ${sizeClasses[size]}`}
+    class={`inline-flex items-center gap-2 font-sans font-semibold uppercase tracking-[0.12em] text-accent before:content-[''] before:h-[2px] before:w-4 before:bg-accent ${sizeClasses[size]}`}
   >
     {labels[section]}
   </span>

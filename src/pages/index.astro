@@ -85,16 +85,6 @@ const SECTION_DESC: Record<string, string> = {
   other:                 'Historical puzzles and tangents.',
 };
 
-// Placeholder tile background for articles without an image — one neutral
-// tone for every section, rather than a per-section pastel.
-const SECTION_BG: Record<string, string> = {
-  'police-policy':      'bg-paper-200',
-  'influential-people': 'bg-paper-200',
-  'public-policy':      'bg-paper-200',
-  'data-stories':       'bg-paper-200',
-  other:                'bg-paper-200',
-};
-
 const topics = await getTopics();
 
 const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
@@ -162,31 +152,40 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
   <!-- ============ HAVE AN IDEA? ============ -->
   <div class="bg-paper-100 border-b border-ink-200">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-2.5 flex items-center justify-center gap-3">
-      <span class="u-kicker hidden sm:inline">Contribute</span>
+      <span class="u-datum u-datum--accent hidden sm:inline">Contribute</span>
       <p class="font-sans text-[13px] font-medium text-ink-700 leading-snug m-0">
         Have an article you'd like to write or publish?
-        <a href={pitchMailto} class="font-semibold text-accent hover:text-accent-dark underline decoration-1 underline-offset-2 transition-colors">Pitch it here →</a>
+        <a href={pitchMailto} class="font-semibold text-accent hover:text-accent-dark underline decoration-1 underline-offset-2 transition-colors">Pitch it here <span class="arrow">→</span></a>
       </p>
     </div>
   </div>
 
   <!-- ============ HERO ============ -->
-  <section class="relative overflow-hidden border-b border-ink-200">
-    <!-- Technical grid ground: hairlines fading out radially. -->
+  {/* The masthead of the document: a measured ground, a title set against a
+      standing rule, and the site's own figures in the instrument voice. No
+      hero image, no gradient — the lead story provides the picture. */}
+  <section class="relative overflow-hidden border-b-2 border-rule">
+    <!-- Drafting-paper ground: hairlines on a 56px grid, faded out radially. -->
     <div
-      class="absolute inset-0 pointer-events-none opacity-[0.55] dark:opacity-[0.35]"
+      class="grid-ground absolute inset-0 pointer-events-none opacity-70 dark:opacity-40"
       aria-hidden="true"
-      style="background-image: linear-gradient(rgb(var(--ink-200)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--ink-200)) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse 90% 80% at 30% 0%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 90% 80% at 30% 0%, #000 30%, transparent 75%);"
+      style="-webkit-mask-image: radial-gradient(ellipse 90% 80% at 30% 0%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 90% 80% at 30% 0%, #000 30%, transparent 75%);"
     ></div>
 
-    <div class="relative max-w-wide mx-auto px-6 lg:px-10 pt-16 pb-14 md:py-[72px]">
+    <div class="relative max-w-wide mx-auto px-6 lg:px-10 pt-14 pb-14 md:py-[68px]">
       <div class="lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 xl:gap-[60px] lg:items-center">
 
         <!-- Left: headline + standfirst + figures -->
         <div>
-          <p class="u-kicker mb-5">Evidence-based analysis</p>
+          <!-- Publication line: what this is, and when it was last worked on. -->
+          <div class="flex items-center gap-3 mb-6">
+            <span class="h-[2px] w-8 bg-accent" aria-hidden="true"></span>
+            <span class="u-datum">Evidence-based analysis</span>
+            <span class="u-datum text-ink-400 hidden sm:inline">·</span>
+            <span class="u-datum text-ink-500 hidden sm:inline">Updated {feature ? feature.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}</span>
+          </div>
 
-          <h1 class="font-display font-extrabold text-[52px] md:text-[62px] leading-[1.02] tracking-[-0.035em] text-ink-900 text-balance m-0">
+          <h1 class="font-display font-bold text-[52px] md:text-[62px] leading-[1.02] tracking-[-0.03em] text-ink-900 text-balance m-0">
             Thinking About Policing
           </h1>
 
@@ -195,22 +194,26 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
             leadership, and the decisions that shape public safety.
           </p>
 
-          <!-- Site figures, in the data voice — one flowing line rather than
-               stacked stat tiles, echoing the "·" separator used elsewhere. -->
-          <p class="font-sans text-[13px] text-ink-600 flex flex-wrap items-center gap-x-2 gap-y-1.5 mt-10 pt-7 border-t border-ink-200 m-0">
-            <span><span class="font-semibold text-ink-900 u-tnum">{allArticles.length}</span> articles</span>
-            <span class="text-ink-300" aria-hidden="true">·</span>
-            <span><span class="font-semibold text-ink-900 u-tnum">{topics.length}</span> topics</span>
-            <span class="text-ink-300" aria-hidden="true">·</span>
-            <span><span class="font-semibold text-ink-900 u-tnum">{totalReadingMinutes}</span> minutes of reading</span>
-            <span data-live-reads-stat class:list={['flex items-center gap-2', bakedTotalViews > 0 ? '' : 'hidden']}>
-              <span class="text-ink-300" aria-hidden="true">·</span>
-              <span class="flex items-center gap-1.5">
-                <span class="w-1 h-1 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
-                <span data-live-total-reads class="font-semibold text-ink-900 u-tnum">{bakedTotalViews.toLocaleString('en-GB')}</span> views
-              </span>
-            </span>
-          </p>
+          <!-- The site's own figures, read as instruments: label above, figure
+               below, ruled off. Four readings, one of them live. -->
+          <dl class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 mt-10 pt-6 border-t-2 border-rule m-0">
+            <div>
+              <dt class="u-datum text-ink-500">Articles</dt>
+              <dd class="u-figure text-[26px] leading-none mt-1.5 m-0">{allArticles.length}</dd>
+            </div>
+            <div>
+              <dt class="u-datum text-ink-500">Topics</dt>
+              <dd class="u-figure text-[26px] leading-none mt-1.5 m-0">{topics.length}</dd>
+            </div>
+            <div>
+              <dt class="u-datum text-ink-500">Minutes</dt>
+              <dd class="u-figure text-[26px] leading-none mt-1.5 m-0">{totalReadingMinutes}</dd>
+            </div>
+            <div data-live-reads-stat class:list={[bakedTotalViews > 0 ? '' : 'hidden']}>
+              <dt class="u-datum text-accent">Views · live</dt>
+              <dd data-live-total-reads class="u-figure text-[26px] leading-none mt-1.5 m-0">{bakedTotalViews.toLocaleString('en-GB')}</dd>
+            </div>
+          </dl>
         </div>
 
         <!-- Right: lead story -->
@@ -218,7 +221,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           <div class="mt-12 lg:mt-0">
             <a
               href={`/${feature.section}/${feature.slug}`}
-              class="card-hairline group block rounded-xl overflow-hidden"
+              class="card-hairline group block rounded-3 overflow-hidden shadow-e2"
             >
               {(feature.data.heroImage || feature.data.portrait) && (
                 <div class="overflow-hidden h-[280px] border-b border-ink-200">
@@ -231,23 +234,20 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                 </div>
               )}
               {!(feature.data.heroImage || feature.data.portrait) && (
-                <div class="h-[200px] surface-night flex items-center justify-center border-b border-ink-200">
-                  <span class="font-display font-extrabold text-6xl text-night-ink/70">
+                <div class="h-[200px] surface-night flex items-center justify-center border-b border-night-line">
+                  <span class="font-display font-bold text-6xl text-night-ink/70">
                     {(feature.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
                   </span>
                 </div>
               )}
               <div class="p-7">
-                <div class="flex items-center gap-3 mb-4">
-                  <span class="u-kicker bg-accent/10 px-2.5 py-1 rounded inline-flex items-center gap-1.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
-                    Recently published
-                  </span>
-                  <span class="font-sans text-[11px] font-medium uppercase tracking-[0.08em] text-ink-500">
-                    {SECTION_LABELS[feature.section]} · {feature.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mb-4">
+                  <span class="chip chip--accent">Latest</span>
+                  <span class="u-datum">
+                    {SECTION_LABELS[feature.section]} · {feature.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
-                <h2 class="font-display font-extrabold text-[25px] leading-[1.18] tracking-[-0.02em] text-ink-900 group-hover:text-accent transition-colors m-0">
+                <h2 class="font-display font-bold text-[25px] leading-[1.18] tracking-[-0.02em] text-ink-900 group-hover:text-accent transition-colors m-0">
                   {feature.data.title}
                 </h2>
                 <p class="font-sans text-[14.5px] leading-relaxed text-ink-700 mt-3">{feature.data.description}</p>
@@ -267,32 +267,29 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
       <!-- Most read: baked at build, refreshed live from article_engagement -->
       {mostRead.length > 0 && (
         <div class="mb-14">
-          <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0 mb-5 pb-3.5 border-b border-ink-300 flex items-baseline justify-between gap-4">
-            <span>
-              <span class="u-kicker block mb-1.5">From the engagement data</span>
+          <div class="rule-head mb-5">
+            <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+              <span class="u-datum u-datum--accent block mb-1.5">From the engagement data</span>
               Most read
-            </span>
-            <span data-most-read-live hidden class="u-kicker u-kicker--dim flex items-center gap-1.5">
-              <span class="w-1 h-1 rounded-full bg-accent animate-pulse" aria-hidden="true"></span>
-              Live
-            </span>
-          </h2>
+            </h2>
+            <span data-most-read-live hidden class="u-datum">Live · refreshed on load</span>
+          </div>
           <div data-most-read-row class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
             {mostRead.map((article, i) => {
               const views = viewsBySlug[article.slug] ?? 0;
               return (
                 <a
                   href={`/${article.section}/${article.slug}`}
-                  class="card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline"
+                  class="card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-3 p-5 hover:no-underline"
                 >
-                  <span class={`font-sans font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${i === 0 ? 'text-accent' : 'text-ink-300'}`}>
+                  <span class={`u-figure text-[22px] leading-[1.2] min-w-[34px] ${i === 0 ? 'text-accent' : 'text-ink-400'}`}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <div>
                     <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
                       {article.data.title}
                     </h3>
-                    <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum">
+                    <div class="u-datum mt-1.5">
                       {SECTION_LABELS[article.section]}{views > 0 ? ` · ${views.toLocaleString('en-GB')} views` : ''}
                     </div>
                   </div>
@@ -305,17 +302,18 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
 
       <!-- Latest writing -->
       <div>
-        <div class="flex items-baseline justify-between mb-5 pb-3.5 border-b border-ink-300">
-          <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
-            <span class="u-kicker block mb-1.5">Newest first</span>
+        <div class="rule-head mb-5">
+          <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+            <span class="u-datum u-datum--accent block mb-1.5">Newest first</span>
             Latest writing
           </h2>
+          <span class="u-datum">{allArticles.length} in the archive</span>
         </div>
         <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
           {latestArticles.map(article => (
             <a
               href={`/${article.section}/${article.slug}`}
-              class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-xl overflow-hidden hover:no-underline"
+              class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-3 overflow-hidden hover:no-underline"
             >
               {(article.data.heroImage || article.data.portrait) ? (
                 <div class="overflow-hidden h-[150px] border-b border-ink-200">
@@ -327,15 +325,15 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                   />
                 </div>
               ) : (
-                <div class={`h-[150px] flex items-center justify-center border-b border-ink-200 ${SECTION_BG[article.section]}`}>
-                  <span class="font-display font-extrabold text-3xl text-ink-900/20">
+                <div class="tile-blank h-[150px] border-b border-ink-200">
+                  <span class="text-4xl">
                     {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
                   </span>
                 </div>
               )}
               <div class="p-5 flex flex-col grow">
-                <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
-                  {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                <div class="u-datum mb-2">
+                  {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                 </div>
                 <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
                   {article.data.title}
@@ -352,15 +350,18 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
 
   <!-- ============ QUOTE ============ -->
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-4 md:py-6">
-    <figure class="surface-night rounded-2xl px-10 md:px-16 py-12 md:py-14 text-center relative overflow-hidden m-0">
-      <div class="absolute left-1/2 -translate-x-1/2 top-0 h-[3px] w-16 bg-accent" aria-hidden="true"></div>
-      <blockquote class="m-0">
-        <p class="font-serif text-[26px] md:text-[34px] lg:text-[36px] leading-[1.3] tracking-[-0.01em] text-night-ink text-balance italic m-0">
-          "We are all entitled to our own opinions,<br class="hidden md:block" />
-          <span class="text-accent-light not-italic font-semibold">but not to our own facts.</span>"
-        </p>
-      </blockquote>
-      <figcaption class="font-sans text-[11px] font-medium uppercase tracking-[0.14em] text-night-dim mt-6">
+    <figure class="surface-night rounded-4 px-10 md:px-16 py-12 md:py-14 relative overflow-hidden m-0 shadow-e3">
+      <div class="grid-ground--night absolute inset-0 pointer-events-none opacity-60" aria-hidden="true"
+           style="-webkit-mask-image: radial-gradient(ellipse 70% 100% at 100% 0%, #000 10%, transparent 70%); mask-image: radial-gradient(ellipse 70% 100% at 100% 0%, #000 10%, transparent 70%);"></div>
+      <div class="relative">
+        <div class="h-[2px] w-16 bg-accent-light mb-8" aria-hidden="true"></div>
+        <blockquote class="m-0">
+          <p class="font-serif text-[26px] md:text-[34px] lg:text-[36px] leading-[1.3] tracking-[-0.01em] text-night-ink text-balance m-0">
+            "We are all entitled to our own opinions,<br class="hidden md:block" />
+            <span class="text-accent-light font-semibold">but not to our own facts.</span>"
+          </p>
+        </blockquote>
+      <figcaption class="u-datum text-night-dim mt-7">
         Lawrence Sherman ·{' '}
         <a
           href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
@@ -371,6 +372,7 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
           Ideas in American Policing, 1998
         </a>
       </figcaption>
+      </div>
     </figure>
   </section>
 
@@ -381,20 +383,20 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
     return (
       <section class="border-b border-ink-200">
         <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
-          <div class="flex items-baseline justify-between gap-4 mb-7">
-            <h2 class="font-display font-extrabold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
-              <span class="u-kicker block mb-1.5">Section</span>
+          <div class="rule-head mb-7">
+            <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
+              <span class="u-datum u-datum--accent block mb-1.5">Section</span>
               {SECTION_LABELS[sectionKey]}
             </h2>
-            <a href={`/${sectionKey}`} class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-accent hover:text-accent-dark transition-colors whitespace-nowrap u-tnum">
-              All {counts[sectionKey]} →
+            <a href={`/${sectionKey}`} class="u-datum u-datum--accent hover:text-accent-dark transition-colors whitespace-nowrap">
+              All {counts[sectionKey]} <span class="arrow">→</span>
             </a>
           </div>
           <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
             {articles.map(article => (
               <a
                 href={`/${article.section}/${article.slug}`}
-                class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-xl overflow-hidden"
+                class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-3 overflow-hidden"
               >
                 {(article.data.heroImage || article.data.portrait) ? (
                   <div class="overflow-hidden h-[160px] border-b border-ink-200">
@@ -406,15 +408,15 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
                     />
                   </div>
                 ) : (
-                  <div class={`h-[160px] flex items-center justify-center border-b border-ink-200 ${SECTION_BG[article.section]}`}>
-                    <span class="font-display font-extrabold text-3xl text-ink-900/20">
+                  <div class="tile-blank h-[160px] border-b border-ink-200">
+                    <span class="text-4xl">
                       {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
                     </span>
                   </div>
                 )}
                 <div class="p-5 flex flex-col grow">
-                  <div class="font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mb-2 u-tnum">
-                    {article.data.pubDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  <div class="u-datum mb-2">
+                    {article.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                   </div>
                   <h3 class="font-display font-bold text-[17.5px] leading-[1.25] tracking-[-0.015em] text-ink-900 group-hover:text-accent transition-colors m-0">
                     {article.data.title}
@@ -433,36 +435,36 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
   <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
     <a
       href="/research-tools"
-      class="group block surface-night rounded-2xl p-10 md:p-12 relative overflow-hidden hover:-translate-y-1 transition-transform duration-300 ease-swift"
+      class="group block surface-night rounded-4 p-10 md:p-12 relative overflow-hidden shadow-e3 hover:-translate-y-1 hover:shadow-e4 transition-all duration-300 ease-swift"
     >
-      <!-- Technical grid on the night surface -->
+      <!-- The measured ground again, on the night surface. -->
       <div
-        class="absolute inset-0 pointer-events-none opacity-[0.5]"
+        class="grid-ground--night absolute inset-0 pointer-events-none opacity-60"
         aria-hidden="true"
-        style="background-image: linear-gradient(rgb(var(--night-line)) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--night-line)) 1px, transparent 1px); background-size: 48px 48px; -webkit-mask-image: radial-gradient(ellipse 80% 100% at 100% 100%, #000 20%, transparent 70%); mask-image: radial-gradient(ellipse 80% 100% at 100% 100%, #000 20%, transparent 70%);"
+        style="-webkit-mask-image: radial-gradient(ellipse 80% 100% at 100% 100%, #000 20%, transparent 70%); mask-image: radial-gradient(ellipse 80% 100% at 100% 100%, #000 20%, transparent 70%);"
       ></div>
 
       <div class="relative flex flex-wrap items-center justify-between gap-8">
         <div class="max-w-xl">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="w-1.5 h-1.5 rounded-full bg-accent-light" aria-hidden="true"></span>
-            <span class="u-kicker !text-accent-light">Research Tools</span>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="h-[2px] w-8 bg-accent-light" aria-hidden="true"></span>
+            <span class="u-datum !text-accent-light">Research Tools</span>
           </div>
-          <h2 class="font-display font-extrabold text-[34px] tracking-[-0.03em] text-night-ink m-0">Put the evidence to work</h2>
+          <h2 class="font-display font-bold text-[34px] tracking-[-0.03em] text-night-ink m-0">Put the evidence to work</h2>
           <p class="font-sans text-[15px] leading-[1.55] text-night-dim mt-4">
             Three free tools built for this site — a research assistant, a live crime dashboard, and a
             media-perception explorer. Sign in once to unlock all three.
           </p>
           <div class="flex flex-wrap gap-2 mt-6">
             {['Research Assistant', 'Crime Dashboard', 'Perception'].map(name => (
-              <span class="font-sans text-[10.5px] font-medium uppercase tracking-[0.08em] bg-night-ink/[0.06] border border-night-line text-night-dim px-2.5 py-1.5 rounded-md">
+              <span class="chip bg-night-ink/[0.05] border-night-line text-night-dim">
                 {name}
               </span>
             ))}
           </div>
         </div>
-        <span class="shrink-0 inline-block bg-accent-light text-night-50 px-6 py-3 rounded-full text-[14px] font-bold group-hover:bg-accent transition-colors">
-          Explore the tools →
+        <span class="btn btn--night shrink-0">
+          Explore the tools <span class="arrow">→</span>
         </span>
       </div>
     </a>
@@ -494,16 +496,16 @@ const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIC
   function mostReadCard(rank: number, href: string, title: string, metaLine: string): HTMLAnchorElement {
     const a = document.createElement('a');
     a.href = href;
-    a.className = 'card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-xl p-5 hover:no-underline';
+    a.className = 'card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-3 p-5 hover:no-underline';
     const num = document.createElement('span');
-    num.className = `font-sans font-semibold text-[22px] leading-[1.2] min-w-[34px] u-tnum ${rank === 1 ? 'text-accent' : 'text-ink-300'}`;
+    num.className = `u-figure text-[22px] leading-[1.2] min-w-[34px] ${rank === 1 ? 'text-accent' : 'text-ink-400'}`;
     num.textContent = String(rank).padStart(2, '0');
     const body = document.createElement('div');
     const h = document.createElement('h3');
     h.className = 'font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0';
     h.textContent = title;
     const meta = document.createElement('div');
-    meta.className = 'font-sans text-[10.5px] font-medium uppercase tracking-[0.1em] text-ink-500 mt-1.5 u-tnum';
+    meta.className = 'u-datum mt-1.5';
     meta.textContent = metaLine;
     body.appendChild(h);
     body.appendChild(meta);

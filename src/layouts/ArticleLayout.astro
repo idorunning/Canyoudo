@@ -151,9 +151,12 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
   <FootnotePreview />
   <div class="max-w-6xl mx-auto px-6 lg:px-10">
     <div class="lg:flex lg:gap-12 xl:gap-16">
-      <article class="mx-auto w-full max-w-3xl min-w-0 lg:mx-0 lg:flex-1" data-pagefind-body>
+      <article
+        class="surface-reading rounded-b-3 mx-auto w-full max-w-3xl min-w-0 px-5 sm:px-8 md:px-10 lg:mx-0 lg:flex-1"
+        data-pagefind-body
+      >
         {/* Title block */}
-        <header class="border-b border-ink-200 py-14 md:py-20">
+        <header class="border-b-2 border-rule py-14 md:py-20">
           <Breadcrumbs items={[
             { label: 'Home', href: '/' },
             { label: SECTION_LABELS[section], href: `/${section}` },
@@ -162,7 +165,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
           <div class="mb-6 flex flex-wrap items-center gap-x-3 gap-y-1">
             <SectionBadge section={section} />
             <span class="text-ink-300" aria-hidden="true">·</span>
-            <span class="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-ink-500 u-tnum">
+            <span class="u-datum">
               <time datetime={pubDate.toISOString()}>{formattedPubDate}</time> · {minutes} min read<span data-live-views></span>
             </span>
           </div>
@@ -176,7 +179,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
           </p>
 
           <div class="mt-8 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center font-extrabold text-paper-50 dark:text-night-50 text-sm shrink-0 select-none">
+            <div class="w-10 h-10 rounded-2 bg-accent shadow-e1 flex items-center justify-center font-display font-bold text-paper-50 dark:text-night-50 text-sm shrink-0 select-none">
               {author.charAt(0)}
             </div>
             <div class="flex-1 min-w-0">
@@ -184,7 +187,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             </div>
             <div class="flex items-center gap-3 shrink-0">
               {updatedDate && (
-                <div class="hidden sm:block font-sans text-[0.66rem] font-semibold uppercase tracking-[0.1em] text-ink-500 text-right u-tnum">
+                <div class="hidden sm:block u-datum text-right">
                   Updated {updatedDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                 </div>
               )}
@@ -203,18 +206,20 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
             <img
               src={heroImage}
               alt={`Illustration for “${title}”`}
-              class="w-full max-h-[820px] object-cover rounded-md"
+              class="w-full max-h-[820px] object-cover rounded-2 shadow-e2"
               loading="eager"
               onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
             />
           )}
           <div
-            class="hero-fallback w-full min-h-[240px] md:min-h-[320px] rounded-lg surface-night px-8 md:px-12 py-12 md:py-16 flex-col justify-center"
+            class="hero-fallback relative overflow-hidden w-full min-h-[240px] md:min-h-[320px] rounded-3 surface-night shadow-e3 px-8 md:px-12 py-12 md:py-16 flex-col justify-center"
             style={heroImage ? 'display:none' : 'display:flex'}
           >
-            <div class="h-[3px] w-12 bg-accent-light mb-5"></div>
-            <p class="font-sans text-xs font-semibold uppercase tracking-[0.16em] text-accent-light mb-4">{SECTION_LABELS[section]}</p>
-            <p class="font-display text-3xl md:text-5xl font-bold text-night-ink leading-[1.1] max-w-3xl">{title}</p>
+            <div class="grid-ground--night absolute inset-0 pointer-events-none opacity-60" aria-hidden="true"
+                 style="-webkit-mask-image: radial-gradient(ellipse 70% 100% at 100% 0%, #000 10%, transparent 70%); mask-image: radial-gradient(ellipse 70% 100% at 100% 0%, #000 10%, transparent 70%);"></div>
+            <div class="relative h-[2px] w-12 bg-accent-light mb-5"></div>
+            <p class="relative u-datum !text-accent-light mb-4">{SECTION_LABELS[section]}</p>
+            <p class="relative font-display text-3xl md:text-5xl font-bold text-night-ink leading-[1.1] max-w-3xl">{title}</p>
           </div>
         </div>
 
@@ -244,7 +249,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
           {/* Combined share + star rating panel. Rendered here as a
               fallback; a script relocates it to sit just above the "Sources and
               further reading" heading so it ends the article body, not the page. */}
-          <div data-share-panel data-article-slug={slug} data-pagefind-ignore class="mt-10 bg-paper-100 border border-ink-200 rounded-xl p-7">
+          <div data-share-panel data-article-slug={slug} data-pagefind-ignore class="mt-10 surface-well rounded-3 p-7">
             <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
               {/* Share buttons */}
               <div class="flex-1">
@@ -261,7 +266,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
                     rel="noopener noreferrer"
                     aria-label="Share on LinkedIn"
                     data-share-link
-                    class="font-sans text-xs font-semibold px-4 py-2 bg-accent text-paper-50 dark:text-night-50 rounded-full hover:bg-accent-dark transition-colors"
+                    class="btn btn--primary btn--sm"
                   >
                     LinkedIn
                   </a>
@@ -271,7 +276,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
                     rel="noopener noreferrer"
                     aria-label="Share on X"
                     data-share-link
-                    class="font-sans text-xs font-semibold px-4 py-2 bg-accent text-paper-50 dark:text-night-50 rounded-full hover:bg-accent-dark transition-colors"
+                    class="btn btn--primary btn--sm"
                   >
                     X
                   </a>
@@ -279,7 +284,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
                     href={`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(title + '\n\n' + pageUrl)}`}
                     aria-label="Share by email"
                     data-share-link
-                    class="font-sans text-xs font-semibold px-4 py-2 bg-accent text-paper-50 dark:text-night-50 rounded-full hover:bg-accent-dark transition-colors"
+                    class="btn btn--primary btn--sm"
                   >
                     Email
                   </a>
@@ -289,7 +294,7 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
                     data-share-url={pageUrl}
                     data-share-title={title}
                     aria-label="Copy link to this article"
-                    class="font-sans text-xs font-semibold px-4 py-2 border border-ink-300 text-ink-700 rounded-full hover:bg-paper-200 transition-colors"
+                    class="btn btn--secondary btn--sm"
                   >
                     <span data-share-copy-label>Copy link</span>
                   </button>
@@ -325,12 +330,12 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
                 return topic ? (
                   <a
                     href={`/topics/${topic.slug}`}
-                    class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded hover:text-accent hover:bg-paper-100 transition-colors"
+                    class="chip hover:text-accent hover:border-accent/40 transition-colors"
                   >
                     {tag}
                   </a>
                 ) : (
-                  <span class="font-sans text-xs px-2.5 py-1 bg-paper-200 text-ink-700 rounded">
+                  <span class="chip">
                     {tag}
                   </span>
                 );
@@ -340,11 +345,11 @@ const jsonLd = JSON.stringify([articleLd, breadcrumbLd]);
 
           {discussionQuestions && discussionQuestions.length > 0 && (
             <div class="mt-12 pt-8 border-t border-ink-200" data-pagefind-ignore>
-              <p class="u-kicker u-kicker--dim mb-4">Discussion questions</p>
+              <p class="u-datum mb-4 pb-2 border-b border-ink-200">Discussion questions</p>
               <ol class="space-y-4">
                 {discussionQuestions.map((q, i) => (
                   <li class="flex gap-3">
-                    <span class="font-sans font-bold text-accent text-sm shrink-0 w-4">{i + 1}.</span>
+                    <span class="u-figure text-accent text-sm shrink-0 w-5">{String(i + 1).padStart(2, '0')}</span>
                     <p class="font-serif text-ink-800 leading-snug">{q}</p>
                   </li>
                 ))}

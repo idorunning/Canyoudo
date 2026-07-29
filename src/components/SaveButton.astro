@@ -20,7 +20,7 @@ const { slug, section, title, description } = Astro.props;
   data-title={title}
   data-description={description ?? ''}
   data-pagefind-ignore
-  class="group inline-flex items-center gap-2 rounded-full border border-ink-300 px-4 py-2 font-sans text-[13px] font-semibold text-ink-700 hover:text-ink-900 hover:border-ink-500 transition-colors data-[saved]:border-accent data-[saved]:text-accent"
+  class="btn btn--secondary btn--sm group data-[saved]:border-accent data-[saved]:text-accent"
   aria-pressed="false"
 >
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" class="group-data-[saved]:fill-current">

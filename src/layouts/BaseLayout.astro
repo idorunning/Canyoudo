@@ -2,8 +2,12 @@
 import '../styles/global.css';
 // Self-hosted fonts (Fontsource) — no third-party font CDN, faster first
 // paint, GDPR-clean. Family names are wired up in tailwind.config.mjs.
-import '@fontsource-variable/plus-jakarta-sans';
+import '@fontsource-variable/ibm-plex-sans';
 import '@fontsource-variable/source-serif-4';
+// Mono is the data voice (figures, labels, filter state), so only the two
+// weights the design language actually uses are loaded.
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SupportCTA from '../components/SupportCTA.astro';
@@ -84,7 +88,10 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#0f766e" />
+    {/* The browser chrome takes the ink, not the accent: on mobile the bar sits
+        directly above the masthead, so it should read as the page's own edge. */}
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#e9eff6" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#040a14" />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={canonicalURL} />
     {noindex && <meta name="robots" content="noindex, follow" />}

@@ -45,9 +45,9 @@ const tools = [
     </script>
   )}
 
-  <section class="border-b border-ink-200">
+  <section class="border-b-2 border-rule">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
-      <p class="u-kicker mb-5">Perception</p>
+      <p class="u-eyebrow mb-5">Perception</p>
       <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
         Perception explorer
       </h1>
@@ -70,7 +70,7 @@ const tools = [
       (hidden once signed in; see the flash/hide rule above). */}
   <section data-loggedout-only class="border-b border-ink-200 bg-paper-50">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-12">
-      <p class="u-kicker u-kicker--dim mb-6">Three free tools, one sign-in</p>
+      <p class="u-datum mb-6">Three free tools, one sign-in</p>
       <div class="grid sm:grid-cols-3 gap-5">
         {tools.map((t) => (
           <a
@@ -86,7 +86,7 @@ const tools = [
             <h2 class="font-display text-lg font-semibold text-accent group-hover:text-accent-dark transition-colors leading-snug">
               {t.label}
               {t.current && (
-                <span class="align-middle ml-2 font-sans text-[0.6rem] font-semibold uppercase tracking-[0.12em] text-accent bg-accent/10 border border-accent/30 rounded-full px-2 py-0.5">
+                <span class="chip chip--accent align-middle ml-2">
                   You’re here
                 </span>
               )}

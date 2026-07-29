@@ -20,7 +20,7 @@ const { cite } = Astro.props;
   .tap-pullquote {
     margin: 2.5rem 0;
     max-width: calc(var(--measure, 36rem) + 6rem);
-    border-top: 2px solid rgb(var(--accent));
+    border-top: 2px solid rgb(var(--ink-900));
     border-bottom: 1px solid rgb(var(--ink-200));
     padding: 1.4rem 0;
   }
@@ -35,12 +35,12 @@ const { cite } = Astro.props;
   }
   .tap-pullquote-cite {
     margin-top: 0.85rem;
-    font-family: theme('fontFamily.sans');
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
+    font-family: theme('fontFamily.mono');
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: rgb(var(--ink-500));
+    color: rgb(var(--ink-600));
   }
   @media (min-width: 768px) {
     .tap-pullquote-q {

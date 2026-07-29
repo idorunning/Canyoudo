@@ -34,7 +34,7 @@ const hasAuth = Boolean(
 
 <header
   id="site-header"
-  class="sticky top-0 z-50 border-b border-ink-200 bg-paper-50/85 backdrop-blur-md transition-shadow duration-300 [view-transition-name:site-header]"
+  class="sticky top-0 z-50 border-b-2 border-rule bg-paper-50/88 backdrop-blur-md shadow-edge transition-shadow duration-300 [view-transition-name:site-header]"
 >
   <div class="max-w-wide mx-auto px-6 lg:px-10">
     <div
@@ -62,7 +62,7 @@ const hasAuth = Boolean(
           height="32"
           class="h-8 w-8 object-contain hidden dark:block"
         />
-        <span class="font-display font-extrabold text-[1.05rem] tracking-tight text-ink-900 leading-none">
+        <span class="font-display font-bold text-[1.05rem] tracking-[-0.015em] text-ink-900 leading-none">
           Thinking About Policing
         </span>
       </a>
@@ -75,7 +75,7 @@ const hasAuth = Boolean(
             <a
               href={link.href}
               aria-current={isActive ? 'page' : undefined}
-              class={`relative px-3 py-2 font-sans text-[13.5px] font-semibold rounded-md transition-colors ${
+              class={`relative px-3 py-2 font-sans text-[13.5px] font-semibold rounded-2 transition-colors ${
                 isActive
                   ? 'text-ink-900'
                   : link.tool
@@ -85,7 +85,7 @@ const hasAuth = Boolean(
             >
               {link.label}
               {isActive && (
-                <span class="absolute left-3 right-3 -bottom-[1px] h-[2px] bg-accent rounded-full" aria-hidden="true"></span>
+                <span class="absolute left-2 right-2 -bottom-[2px] h-[3px] bg-accent" aria-hidden="true"></span>
               )}
             </a>
           );
@@ -121,7 +121,7 @@ const hasAuth = Boolean(
         <button
           type="button"
           data-search-open
-          class="group flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-md border border-ink-200 text-ink-500 hover:text-ink-900 hover:border-ink-300 transition-colors"
+          class="group flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-2 border border-ink-300 bg-paper-200/60 shadow-well text-ink-500 hover:text-ink-900 hover:border-accent/50 transition-colors"
           aria-label="Search"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -218,12 +218,12 @@ const hasAuth = Boolean(
   <!-- Mobile menu: full-width overlay panel below the masthead -->
   <nav
     id="mobile-menu"
-    class="hidden md:hidden absolute inset-x-0 top-full bg-paper-50 border-b border-ink-200 shadow-panel max-h-[calc(100dvh-70px)] overflow-y-auto"
+    class="hidden md:hidden absolute inset-x-0 top-full bg-paper-50 border-b-2 border-rule shadow-e4 max-h-[calc(100dvh-70px)] overflow-y-auto"
     aria-label="Site menu"
   >
     <div class="px-6 py-6 grid gap-6">
       <div>
-        <p class="u-kicker mb-2">Read</p>
+        <p class="u-datum u-datum--accent mb-2">Read</p>
         <ul class="mobile-menu-group">
           {primaryLinks.filter(l => !l.tool).map(link => (
             <li>
@@ -243,7 +243,7 @@ const hasAuth = Boolean(
       </div>
 
       <div>
-        <p class="u-kicker mb-2">Tools</p>
+        <p class="u-datum u-datum--accent mb-2">Tools</p>
         <ul class="mobile-menu-group">
           {primaryLinks.filter(l => l.tool).map(link => (
             <li>
@@ -256,7 +256,7 @@ const hasAuth = Boolean(
       </div>
 
       <div>
-        <p class="u-kicker u-kicker--dim mb-2">Site</p>
+        <p class="u-datum mb-2">Site</p>
         <ul class="mobile-menu-group">
           <li>
             <a href="/library" class="block py-2 font-sans text-[15px] text-ink-600 hover:text-ink-900">
@@ -298,7 +298,9 @@ const hasAuth = Boolean(
     height: 56px;
   }
   header[data-scrolled] {
-    box-shadow: 0 8px 24px -16px rgb(var(--shadow-rgb) / 0.25);
+    box-shadow:
+      inset 0 1px 0 rgb(var(--edge-lit) / var(--edge-lit-alpha)),
+      var(--e2);
   }
 
   /* Staggered rise for mobile menu groups. */

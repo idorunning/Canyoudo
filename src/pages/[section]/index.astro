@@ -43,10 +43,15 @@ const breadcrumbLd = {
 ---
 
 <BaseLayout title={SECTION_LABELS[section]} description={descriptions[section]} jsonLd={breadcrumbLd}>
-  <section class="border-b border-ink-200">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
+  <section class="relative overflow-hidden border-b-2 border-rule">
+    <div class="grid-ground absolute inset-0 pointer-events-none opacity-70 dark:opacity-40" aria-hidden="true"
+         style="-webkit-mask-image: radial-gradient(ellipse 90% 80% at 25% 0%, #000 25%, transparent 75%); mask-image: radial-gradient(ellipse 90% 80% at 25% 0%, #000 25%, transparent 75%);"></div>
+    <div class="relative max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: SECTION_LABELS[section] }]} />
-      <p class="u-kicker mb-5 u-tnum">Section · {articles.length} article{articles.length === 1 ? '' : 's'}</p>
+      <div class="flex items-center gap-3 mb-5">
+        <span class="h-[2px] w-8 bg-accent" aria-hidden="true"></span>
+        <p class="u-datum m-0">Section · {articles.length} article{articles.length === 1 ? '' : 's'}</p>
+      </div>
       <h1 class="font-display text-4xl md:text-5xl font-bold text-ink-900 leading-[1.05] tracking-[-0.025em] text-balance">
         {SECTION_LABELS[section]}
       </h1>
@@ -58,7 +63,7 @@ const breadcrumbLd = {
 
   <div class="max-w-wide mx-auto px-6 lg:px-10">
     <div class="lg:flex lg:gap-12 xl:gap-16">
-      <div class="min-w-0 lg:flex-1">
+      <div class="surface-reading rounded-b-3 min-w-0 lg:flex-1 px-5 sm:px-8 md:px-9">
         {articles.length > 0 ? (
           articles.map((article) => (
             <ArticleCard

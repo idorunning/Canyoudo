@@ -28,7 +28,7 @@ const forces = entries
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-3xl">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Crime Dashboard', href: '/data' }, { label: 'Crime Data Explorer', href: '/data/explore' }, { label: 'Force briefing' }]} />
-        <p class="u-kicker mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Force briefing</p>
+        <p class="u-datum mb-4"><a href="/data/explore" class="hover:text-accent-dark">Crime Data Explorer</a> · Force briefing</p>
         <h1 class="font-display text-3xl md:text-4xl font-semibold text-ink-900 leading-tight tracking-tight">The force briefing</h1>
         <p class="font-serif text-lg text-ink-700 leading-relaxed mt-5">
           A short, structured data briefing on one force — what's moving, the justice gap, stop &amp; search,
@@ -65,7 +65,7 @@ const forces = entries
 
         <div data-briefing-result hidden class="space-y-6">
           <div class="flex flex-wrap items-center gap-3">
-            <span data-confidence class="inline-block font-sans text-xs font-semibold uppercase tracking-[0.08em] border border-ink-300 text-ink-700 rounded-full px-3 py-1" hidden></span>
+            <span data-confidence class="chip" hidden></span>
             <span data-figure-check class="font-sans text-xs text-ink-500" hidden></span>
             <button type="button" data-download hidden class="ml-auto font-sans text-xs uppercase tracking-[0.12em] border border-ink-300 text-ink-700 px-4 py-2 rounded-md hover:border-accent hover:text-accent transition-colors">
               Download PDF

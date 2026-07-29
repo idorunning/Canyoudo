@@ -183,7 +183,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       </label>` : '') + (tier !== 1 ? `
       <label class="col-span-2 flex items-center gap-1.5 font-sans text-[11px] text-ink-700 py-1 mt-1 border-t border-ink-200 cursor-pointer">
         <input type="checkbox" data-cm-places class="accent-current" ${placesOn ? 'checked' : ''}>
-        Town &amp; city centres <span class="inline-block w-2 h-2 shrink-0" style="transform:rotate(45deg);background:${state.dark ? '#d6d9de' : '#2b2e34'}" aria-hidden="true"></span>
+        Town &amp; city centres <span class="inline-block w-2 h-2 shrink-0" style="transform:rotate(45deg);background:${state.dark ? '#d8dfe6' : '#243041'}" aria-hidden="true"></span>
       </label>` : '');
     legendNoteEl.textContent =
       tier === 2
@@ -338,7 +338,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
         <p class="font-sans text-xs text-ink-500 mt-1">Rolling 12 months${window12 ? ` to ${monthLabel(window12.to)}` : ''}</p>
         <p class="font-display text-2xl font-semibold text-ink-900 mt-2">${fmt.format(f.total)}
           <span class="font-sans text-xs font-normal text-ink-500">recorded crimes</span>
-          ${trend ? `<span class="font-sans text-[10px] font-medium uppercase tracking-[0.1em] text-ink-600 border border-ink-300 rounded-full px-2 py-0.5 align-middle ml-1">${trend}</span>` : ''}
+          ${trend ? `<span class="chip align-middle ml-1">${trend}</span>` : ''}
         </p>
         ${insights.map((l) => `<p class="font-serif text-sm text-ink-700 leading-relaxed mt-2">${esc(l)}</p>`).join('')}
       ` : `<p class="font-serif text-sm text-ink-600 mt-2">${esc(mapForcesError || 'No force-level data available right now.')}</p>`}
@@ -525,10 +525,10 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       if (!c) return;
       const visible = Object.fromEntries(Object.entries(f.byCategory).filter(([k]) => !state.hidden.has(canonicalCategory(k))));
       const dom = dominantCategory(visible);
-      const color = dom ? categoryColor(dom, state.dark) : (state.dark ? '#555b64' : '#c6cad1');
+      const color = dom ? categoryColor(dom, state.dark) : (state.dark ? '#5e6a79' : '#c3cbd5');
       const marker = L.circleMarker([c.lat, c.lng], {
         radius: dotRadius(values[i], maxVal),
-        color: state.dark ? '#101318' : '#ffffff',
+        color: state.dark ? '#0d1520' : '#ffffff',
         weight: 1.5,
         fillColor: color,
         fillOpacity: 0.85,
@@ -554,7 +554,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       if (present.has(id)) continue;
       const marker = L.circleMarker([c.lat, c.lng], {
         radius: 8,
-        color: state.dark ? '#9a9fa7' : '#81868f',
+        color: state.dark ? '#9aa4b0' : '#848f9c',
         weight: 1.5,
         dashArray: '3,3',
         fillColor: 'transparent',
@@ -614,7 +614,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
         if (!ll) { misses++; continue; }
         const marker = L.circleMarker(ll, {
           radius: dotRadius(r.count, max, { min: 3, max: 14 }),
-          color: state.dark ? '#101318' : '#ffffff',
+          color: state.dark ? '#0d1520' : '#ffffff',
           weight: 1,
           fillColor: heatShade(r.count, max, state.dark),
           fillOpacity: 0.85,
@@ -690,9 +690,9 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       for (const cl of clusters) {
         const marker = L.circleMarker([cl.lat, cl.lng], {
           radius: dotRadius(cl.n, CLUSTER_THRESHOLD / 4, { min: 6, max: 20 }),
-          color: state.dark ? '#101318' : '#ffffff',
+          color: state.dark ? '#0d1520' : '#ffffff',
           weight: 1.5,
-          fillColor: cl.dominant ? categoryColor(cl.dominant, state.dark) : '#888888',
+          fillColor: cl.dominant ? categoryColor(cl.dominant, state.dark) : '#697686',
           fillOpacity: 0.85,
         });
         marker.bindTooltip(`<strong>${fmt.format(cl.n)} crimes</strong><br>Mostly ${esc(categoryLabel(cl.dominant ?? 'other-crime'))} — click to zoom`, { direction: 'top' });
@@ -703,7 +703,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
       for (const p of shown) {
         const marker = L.circleMarker([p.lat, p.lng], {
           radius: 5,
-          color: state.dark ? '#101318' : '#ffffff',
+          color: state.dark ? '#0d1520' : '#ffffff',
           weight: 1,
           fillColor: categoryColor(p.category, state.dark),
           fillOpacity: 0.9,
@@ -802,7 +802,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
         icon: L.divIcon({
           className: '',
           iconSize: [size, size],
-          html: `<div style="width:${size}px;height:${size}px;transform:rotate(45deg);background:${state.dark ? '#d6d9de' : '#2b2e34'};border:1.5px solid ${state.dark ? '#101318' : '#ffffff'};" aria-hidden="true"></div>`,
+          html: `<div style="width:${size}px;height:${size}px;transform:rotate(45deg);background:${state.dark ? '#d8dfe6' : '#243041'};border:1.5px solid ${state.dark ? '#0d1520' : '#ffffff'};" aria-hidden="true"></div>`,
         }),
         interactive: true,
         keyboard: false,
@@ -827,7 +827,7 @@ export async function initCrimeMap(root: HTMLElement): Promise<void> {
     const interactive = currentTier === 1;
     const layer = L.geoJSON(boundaryData, {
       style: () => ({
-        color: state.dark ? '#4a5160' : '#a1a6ae',
+        color: state.dark ? '#3c4959' : '#a0aab6',
         weight: 1,
         fill: interactive,
         fillOpacity: 0,

@@ -49,10 +49,10 @@ const breadcrumbLd = {
   description={topic.description ?? `Articles touching on ${topic.label}.`}
   jsonLd={breadcrumbLd}
 >
-  <section class="border-b border-ink-200">
+  <section class="border-b-2 border-rule">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Topics', href: '/topics' }, { label: topic.label }]} />
-      <p class="u-kicker mb-5">Topic</p>
+      <p class="u-eyebrow mb-5">Topic</p>
       <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
         {topic.label}
       </h1>

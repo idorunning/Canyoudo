@@ -45,11 +45,11 @@ const explorerLinks = [
   title="Crime Dashboard"
   description="Explore recorded crime on a map of England, Wales & Northern Ireland — every force, every neighbourhood, every street, coloured by crime type. Built on data.police.uk."
 >
-  <section class="border-b border-ink-200">
+  <section class="border-b-2 border-rule">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
       <div class="max-w-2xl">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Research Tools', href: '/research-tools' }, { label: 'Crime Dashboard' }]} />
-        <p class="u-kicker mb-5">Evidence</p>
+        <p class="u-eyebrow mb-5">Evidence</p>
         <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
           Crime Dashboard
         </h1>
@@ -82,7 +82,7 @@ const explorerLinks = [
           </div>
 
           <div class="border-t border-ink-200 pt-8">
-            <p class="u-kicker u-kicker--dim mb-4">Go deeper</p>
+            <p class="u-datum mb-4">Go deeper</p>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {explorerLinks.map((l) => (
                 <a href={l.href} class="block border border-ink-200 rounded-lg p-4 hover:border-accent transition-colors group">
@@ -111,7 +111,7 @@ const explorerLinks = [
 
                 <div class="flex items-center gap-4">
                   <div>
-                    <p class="u-kicker u-kicker--dim mb-1">12-month searches</p>
+                    <p class="u-datum mb-1">12-month searches</p>
                     <p class="font-display text-3xl font-semibold text-ink-900">{fmt.format(ss.window.total)}</p>
                   </div>
                   <div class="text-accent"><Sparkline points={ss.series} width={160} /></div>
