@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-29T01:25:53.347Z",
+    "fetchedAt": "2026-07-29T13:42:44.734Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,12 +16,76 @@
   },
   "items": [
     {
-      "title": "Sloppy and clumsy but overwhelming - inside the rogue ChatGPT hack",
+      "title": "Oversight and funding of youth justice services",
+      "link": "https://www.gov.uk/government/consultations/oversight-and-funding-of-youth-justice-services",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-29T13:08:06.000Z",
+      "summary": "A consultation on proposals for a new performance and oversight framework for youth justice services, and reforms to how they are funded."
+    },
+    {
+      "title": "Update: Disclosure Review Working Group survey of legal sector stakeholders",
+      "link": "https://www.judiciary.uk/update-disclosure-review-working-group-survey-of-legal-sector-stakeholders/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-29T13:07:05.000Z",
+      "summary": "This summary of the survey results will help practitioners and other users of the Business and Property Courts The post Update: Disclosure Review Working Group survey of legal…"
+    },
+    {
+      "title": "Teenage Norwegian 'hitman' guilty of UK murder plot",
+      "link": "https://www.bbc.co.uk/news/articles/cwyqggvyp1do?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-29T12:57:49.000Z",
+      "summary": "Johannes Natland travelled to Huddersfield to carry out a 'hit' in March last year."
+    },
+    {
+      "title": "Pedestrian dies after being hit by several vehicles including police car",
+      "link": "https://www.bbc.co.uk/news/articles/cx2dvlld7j2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-29T12:21:33.000Z",
+      "summary": "Dyfed-Powys Police has referred itself to the Independent Office of Police Conduct."
+    },
+    {
+      "title": "Woman accused of breaching Donaldson victims' anonymity",
+      "link": "https://www.bbc.co.uk/news/articles/c39ezlkvr4go?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-29T10:49:51.000Z",
+      "summary": "The 55-year-old was arrested in the Ballynahinch area on Tuesday and will appear in court in August."
+    },
+    {
+      "title": "Tying the Knot: Reforming weddings law in England and Wales",
+      "link": "https://www.gov.uk/government/consultations/tying-the-knot-reforming-weddings-law-in-england-and-wales",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-29T09:27:53.000Z",
+      "summary": "A consultation on reforming weddings law in England and Wales. It follows the Law Commission’s 2022 report, Celebrating Marriage: A New Weddings Law and the government’s…"
+    },
+    {
+      "title": "Vacancy: Legal Members of the Education Tribunal for Wales",
+      "link": "https://www.judiciary.uk/vacancy-legal-members-of-the-education-tribunal-for-wales/",
+      "source": "Courts & Tribunals Judiciary",
+      "topic": "law",
+      "isoDate": "2026-07-29T09:09:25.000Z",
+      "summary": "Deadline for applications is Tuesday 18 August 2026 The post Vacancy: Legal Members of the Education Tribunal for Wales appeared first on Courts and Tribunals Judiciary ."
+    },
+    {
+      "title": "OpenAI says its rogue AI tried to hack other companies",
       "link": "https://www.bbc.co.uk/news/articles/c2el319vzr3o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
-      "isoDate": "2026-07-28T23:00:10.000Z",
-      "summary": "Details have been released of an emergency call with hundreds of cyber-security experts after the ChatGPT hack of a tech company."
+      "isoDate": "2026-07-29T08:49:27.000Z",
+      "summary": "The out-of-control AI found four logins which allowed it to access multiple unnamed online services."
+    },
+    {
+      "title": "From lawyer to plasterer?! Why do so many quit law?",
+      "link": "https://www.legalcheek.com/2026/07/from-lawyer-to-plasterer-why-do-so-many-quit-law/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-29T07:40:49.000Z",
+      "summary": "Career changers The post From lawyer to plasterer?! Why do so many quit law? appeared first on Legal Cheek ."
     },
     {
       "title": "Perplexity's tokenmaxxing Model Council gives you multiple bot perspectives",
@@ -48,36 +112,12 @@
       "summary": "What do we need to know about agentic AI?"
     },
     {
-      "title": "Man guilty of murdering two men found in woods",
-      "link": "https://www.bbc.co.uk/news/articles/cewrd42lx0eo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-28T16:35:14.000Z",
-      "summary": "James Desborough \"savagely desecrated\" his victims' bodies, a court hears."
-    },
-    {
-      "title": "Reform UK reports Zack Polanski to police over guillotine T-shirt post",
-      "link": "https://www.bbc.co.uk/news/articles/c5y063yqlleo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-28T16:33:04.000Z",
-      "summary": "The post included a photo of a man wearing a top featuring the name \"Nigel\" alongside an image of a guillotine."
-    },
-    {
       "title": "College prof hides prompt to catch AI cheaters, finds human nature is pretty much as we thought",
       "link": "https://www.theregister.com/ai-and-ml/2026/07/28/college-prof-hides-prompt-to-catch-ai-cheaters-finds-human-nature-is-pretty-much-as-we-thought/5279864",
       "source": "The Register",
       "topic": "ai",
       "isoDate": "2026-07-28T16:20:00.000Z",
       "summary": ""
-    },
-    {
-      "title": "Chairman stole £22k from junior football club to fund cocaine habit",
-      "link": "https://www.bbc.co.uk/news/articles/c89np1z2eq5o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-28T16:13:54.000Z",
-      "summary": "The club relied on fundraisers, parents and volunteers to raise the money to keep going after the fraud."
     },
     {
       "title": "Chief Constable joins Ceremony of Remembrance",
@@ -94,6 +134,14 @@
       "topic": "policing",
       "isoDate": "2026-07-28T13:54:37.000Z",
       "summary": "This call for evidence seeks input from people and organisations with experience of unauthorised fraud in the UK."
+    },
+    {
+      "title": "Paralegal barred from legal profession for forging signature, months before starting her training contract",
+      "link": "https://www.legalcheek.com/2026/07/paralegal-barred-from-legal-profession-for-forging-signature-months-before-starting-her-training-contract/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-28T11:20:17.000Z",
+      "summary": "Future trainee’s law dream over The post Paralegal barred from legal profession for forging signature, months before starting her training contract appeared first on Legal Cheek ."
     },
     {
       "title": "Milbank hands out even more money: Firm follows record trainee pay and NQ hike with new bonuses",
@@ -136,28 +184,12 @@
       "summary": "AI seems to have a liberal bias"
     },
     {
-      "title": "Crown Prosecution Service to increase trainee solicitor numbers from 80 to 120",
-      "link": "https://www.legalcheek.com/2026/07/crown-prosecution-service-to-increase-trainee-solicitor-numbers-from-80-to-120/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-27T14:10:47.000Z",
-      "summary": "But pay is a long way off City law firm salaries The post Crown Prosecution Service to increase trainee solicitor numbers from 80 to 120 appeared first on Legal Cheek ."
-    },
-    {
       "title": "GREAT Legal Services",
       "link": "https://www.gov.uk/guidance/great-legal-services",
       "source": "Ministry of Justice",
       "topic": "law",
       "isoDate": "2026-07-27T09:03:38.000Z",
       "summary": "How UK and global legal professionals and businesses can grow, partner and collaborate through the GREAT Legal Services campaign."
-    },
-    {
-      "title": "Mishcon’s NQ lawyer salary rises to £110k",
-      "link": "https://www.legalcheek.com/2026/07/mishcon-nq-salary-rises-to-110k/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-27T06:16:51.000Z",
-      "summary": "Trainees handed more cash too The post Mishcon’s NQ lawyer salary rises to £110k appeared first on Legal Cheek ."
     },
     {
       "title": "Warning shot or publicity stunt - how worried should we be about the OpenAI hack?",
@@ -168,28 +200,12 @@
       "summary": "Hugging Face said the hack was done at superhuman speed by an AI with little or no human guidance."
     },
     {
-      "title": "Winchester Prison",
-      "link": "https://www.gov.uk/guidance/winchester-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-24T15:01:10.000Z",
-      "summary": "Winchester is a men’s prison and young offender institution (YOI) in the centre of Winchester, Hampshire."
-    },
-    {
       "title": "President of the King’s Bench Division in conversation with Chair of the Bar",
       "link": "https://www.barcouncil.org.uk/training-events/calendar/in-conversation-with-dame-victoria-sharp.html",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-07-24T11:36:54.000Z",
       "summary": "Dame Victoria Sharp DBE looks back on the defining moments of her career, how the courts have changed over the years, and the future challenges facing the justice system The…"
-    },
-    {
-      "title": "Birmingham Prison",
-      "link": "https://www.gov.uk/guidance/birmingham-prison",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-24T11:03:16.000Z",
-      "summary": "Birmingham Prison is a men’s prison in the Winson Green area of Birmingham."
     },
     {
       "title": "Mock trial builds understanding of civil litigation process",
@@ -216,14 +232,6 @@
       "summary": "Information on the death in service of a Judge The post Circuit Judge – Death in Service appeared first on Courts and Tribunals Judiciary ."
     },
     {
-      "title": "Master of the Rolls celebrates centuries-old role at National Archives display",
-      "link": "https://www.judiciary.uk/master-of-the-rolls-celebrates-centuries-old-role-at-national-archives-display/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-07-23T12:20:34.000Z",
-      "summary": "Sir Geoffrey Vos, the Master of the Rolls, celebrated a rare viewing of historical documents at The National Archives The post Master of the Rolls celebrates centuries-old role…"
-    },
-    {
       "title": "Lynne Ford retires after 34 years protecting UK nuclear policing",
       "link": "https://www.gov.uk/government/news/lynne-ford-retires-after-34-years-protecting-uk-nuclear-policing",
       "source": "GOV.UK",
@@ -238,14 +246,6 @@
       "topic": "policing",
       "isoDate": "2026-07-22T15:02:02.000Z",
       "summary": "After 51 years in <mark>policing</mark>, Chief Inspector Steve Edwards retires, leaving a lasting legacy through the officers he trained, mentored and inspired."
-    },
-    {
-      "title": "New protocol for legal professionals wishing to raise concerns informally about coroner behaviour",
-      "link": "https://www.judiciary.uk/new-protocol-for-legal-professionals-wishing-to-raise-concerns-informally-about-coroner-behaviour/",
-      "source": "Courts & Tribunals Judiciary",
-      "topic": "law",
-      "isoDate": "2026-07-22T10:30:42.000Z",
-      "summary": "Read more about this informal route through which legal professionals may raise concerns about the behaviour of a coroner where early and constructive resolution is appropriate…"
     },
     {
       "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
