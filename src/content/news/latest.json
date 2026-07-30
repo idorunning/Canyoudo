@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-29T13:42:44.734Z",
+    "fetchedAt": "2026-07-30T01:18:29.165Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,6 +16,94 @@
   },
   "items": [
     {
+      "title": "Trump considering AI controls after OpenAI hacking incidents",
+      "link": "https://www.bbc.co.uk/news/articles/c20dppq3y90o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-30T00:41:28.000Z",
+      "summary": "It marks a change of tone for his administration, which has taken a more hands-off approach to the technology."
+    },
+    {
+      "title": "Microsoft's cloud brings rain of revenue but modest M365 AI revenue harvest",
+      "link": "https://www.theregister.com/software/2026/07/30/microsoft-earnings-q4-26-cloud-brings-revenue-rain/5280798",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-29T23:17:56.000Z",
+      "summary": "Capex spending? What? Me worry?"
+    },
+    {
+      "title": "Meta shares fall as frustration grows over AI spending plans",
+      "link": "https://www.bbc.co.uk/news/articles/ckgd31l5yrdo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-29T22:44:18.000Z",
+      "summary": "Mark Zuckerberg said Meta intends to sell for the first time AI tools to other companies"
+    },
+    {
+      "title": "Salman Rushdie attacker convicted of terror offenses",
+      "link": "https://www.bbc.co.uk/news/articles/c86ng1g5wy4o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-29T22:15:33.000Z",
+      "summary": "Hadi Matar, 28, was convicted of attempting to help Hezbollah by attacking the British-Indian author."
+    },
+    {
+      "title": "Police to take no further action against Polanski over guillotine re-post",
+      "link": "https://www.bbc.co.uk/news/articles/cwylrnxxl77o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-29T19:53:48.000Z",
+      "summary": "The Green Party leader has said he made an \"inadvertent mistake\" when he shared the image with his social media followers."
+    },
+    {
+      "title": "Amy Winehouse's dad ordered to pay £1m by court",
+      "link": "https://www.bbc.co.uk/news/articles/c80np54pd1yo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-29T17:37:26.000Z",
+      "summary": "Mitch Winehouse must pay nearly £1m to two of his daughter's friends over the auctioning of items."
+    },
+    {
+      "title": "Pedestrian dies after being hit by several vehicles including police car",
+      "link": "https://www.bbc.co.uk/news/articles/cx2dvlld7j2o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-29T16:39:12.000Z",
+      "summary": "Dyfed-Powys Police has referred itself to the Independent Office of Police Conduct."
+    },
+    {
+      "title": "Former police officer’s sentence increased for relationship with abuse victim",
+      "link": "https://www.gov.uk/government/news/former-police-officers-sentence-increased-for-relationship-with-abuse-victim",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-29T16:30:04.000Z",
+      "summary": "An ex-Dorset <mark>police</mark> officer found guilty of gross misconduct for pursuing an intimate relationship with a domestic abuse victim he met whilst on duty had his…"
+    },
+    {
+      "title": "New Chair of the Criminal Legal Aid Advisory Board",
+      "link": "https://www.gov.uk/government/news/new-chair-of-the-criminal-legal-aid-advisory-board",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-29T16:00:02.000Z",
+      "summary": "Ruth Evans has been appointed as the new Chair of the Criminal Legal Aid Advisory Board."
+    },
+    {
+      "title": "MOJ Lawtech Grant Competition Phase III",
+      "link": "https://www.gov.uk/government/news/moj-lawtech-grant-competition-phase-iii",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-29T13:58:13.000Z",
+      "summary": "The Ministry of Justice (MOJ) has launched a competition to award funding for the third phase of the LawtechUK programme."
+    },
+    {
+      "title": "Future of the Undercover Policing Inquiry",
+      "link": "https://www.gov.uk/government/consultations/future-of-the-undercover-policing-inquiry",
+      "source": "Home Office",
+      "topic": "policing",
+      "isoDate": "2026-07-29T13:43:47.000Z",
+      "summary": "This consultation seeks views on the future structure, scope and format of the Undercover Policing Inquiry."
+    },
+    {
       "title": "Oversight and funding of youth justice services",
       "link": "https://www.gov.uk/government/consultations/oversight-and-funding-of-youth-justice-services",
       "source": "Ministry of Justice",
@@ -30,30 +118,6 @@
       "topic": "law",
       "isoDate": "2026-07-29T13:07:05.000Z",
       "summary": "This summary of the survey results will help practitioners and other users of the Business and Property Courts The post Update: Disclosure Review Working Group survey of legal…"
-    },
-    {
-      "title": "Teenage Norwegian 'hitman' guilty of UK murder plot",
-      "link": "https://www.bbc.co.uk/news/articles/cwyqggvyp1do?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-29T12:57:49.000Z",
-      "summary": "Johannes Natland travelled to Huddersfield to carry out a 'hit' in March last year."
-    },
-    {
-      "title": "Pedestrian dies after being hit by several vehicles including police car",
-      "link": "https://www.bbc.co.uk/news/articles/cx2dvlld7j2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-29T12:21:33.000Z",
-      "summary": "Dyfed-Powys Police has referred itself to the Independent Office of Police Conduct."
-    },
-    {
-      "title": "Woman accused of breaching Donaldson victims' anonymity",
-      "link": "https://www.bbc.co.uk/news/articles/c39ezlkvr4go?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-29T10:49:51.000Z",
-      "summary": "The 55-year-old was arrested in the Ballynahinch area on Tuesday and will appear in court in August."
     },
     {
       "title": "Tying the Knot: Reforming weddings law in England and Wales",
@@ -94,14 +158,6 @@
       "topic": "ai",
       "isoDate": "2026-07-28T21:26:53.000Z",
       "summary": "Up to 8 AI models running in the cloud weighing in on ambiguous business issues? Sounds affordable"
-    },
-    {
-      "title": "Woman found dead was murdered, police say, as man's death still 'unexplained'",
-      "link": "https://www.bbc.co.uk/news/articles/c5y0677el3mo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-28T21:08:28.000Z",
-      "summary": "Stacy Mair, 35, was found near Corsliehill Road in Houston on Monday morning after police received a report of concern for a person."
     },
     {
       "title": "Tech Life",
@@ -168,36 +224,12 @@
       "summary": "Lifestyle creep The post ‘I’m not even two years qualified, and already hate the job… but the money’s too good to walk away’ appeared first on Legal Cheek ."
     },
     {
-      "title": "Some people's chats with Claude AI found to be publicly available online",
-      "link": "https://www.bbc.co.uk/news/articles/cly5qgjk5ywo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-28T07:10:37.000Z",
-      "summary": "Hundreds of conversations with Anthropic’s chatbot were discovered as being publicly accessible."
-    },
-    {
       "title": "Leading AI models (even Grok) are all a bunch of leftist punks",
       "link": "https://www.theregister.com/ai-and-ml/2026/07/27/leading-ai-models-even-grok-are-all-a-bunch-of-leftist-punks/5279208",
       "source": "The Register",
       "topic": "ai",
       "isoDate": "2026-07-27T22:05:00.000Z",
       "summary": "AI seems to have a liberal bias"
-    },
-    {
-      "title": "GREAT Legal Services",
-      "link": "https://www.gov.uk/guidance/great-legal-services",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-27T09:03:38.000Z",
-      "summary": "How UK and global legal professionals and businesses can grow, partner and collaborate through the GREAT Legal Services campaign."
-    },
-    {
-      "title": "Warning shot or publicity stunt - how worried should we be about the OpenAI hack?",
-      "link": "https://www.bbc.co.uk/news/articles/cd9w22n9e4go?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-25T10:14:41.000Z",
-      "summary": "Hugging Face said the hack was done at superhuman speed by an AI with little or no human guidance."
     },
     {
       "title": "President of the King’s Bench Division in conversation with Chair of the Bar",
@@ -216,44 +248,12 @@
       "summary": "CNC&#39;s Legal Services hosted a mock civil trial, giving officers and partners practical insight into court proceedings, evidence and legal decision-making."
     },
     {
-      "title": "OpenAI won't let some customers export their chats, but this tool will",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/23/openai-wont-let-some-customers-export-their-chats-but-this-tool-will/5277795",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-23T20:48:39.000Z",
-      "summary": "ChatGPT Business and Enterprise users lack the standard chat export option, so third-party utilities like scrapemychats fill the gap"
-    },
-    {
       "title": "Circuit Judge – Death in Service",
       "link": "https://www.judiciary.uk/circuit-judge-death-in-service-2/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-07-23T14:22:36.000Z",
       "summary": "Information on the death in service of a Judge The post Circuit Judge – Death in Service appeared first on Courts and Tribunals Judiciary ."
-    },
-    {
-      "title": "Lynne Ford retires after 34 years protecting UK nuclear policing",
-      "link": "https://www.gov.uk/government/news/lynne-ford-retires-after-34-years-protecting-uk-nuclear-policing",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-22T15:24:25.000Z",
-      "summary": "CNC’s Head of Cyber retires after 34 years, leaving a lasting legacy of strengthening cyber resilience to protect the UK’s nuclear infrastructure."
-    },
-    {
-      "title": "Chief Inspector Steve Edwards retires after 51 years of service",
-      "link": "https://www.gov.uk/government/news/chief-inspector-steve-edwards-retires-after-51-years-of-service",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-22T15:02:02.000Z",
-      "summary": "After 51 years in <mark>policing</mark>, Chief Inspector Steve Edwards retires, leaving a lasting legacy through the officers he trained, mentored and inspired."
-    },
-    {
-      "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
-      "link": "https://www.gov.uk/government/news/solicitor-general-announces-national-rollout-of-early-victims-right-to-review-scheme",
-      "source": "CPS",
-      "topic": "law",
-      "isoDate": "2026-07-06T09:18:34.000Z",
-      "summary": "Following a successful pilot, rape and sexual assault survivors across all of England and Wales will have the right to ask for their cases to be reviewed before a final…"
     }
   ]
 }
