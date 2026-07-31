@@ -3,37 +3,44 @@
 // og:image / twitter:image at the resulting URL, so this is the picture X,
 // LinkedIn, Facebook and WhatsApp show when someone shares an article.
 //
+// Three card types, chosen by what the article actually has rather than applied
+// uniformly — the system set out in docs/design/design-lab.html:
+//
+//   Type A  a photograph big enough to fill the frame, with the section, the
+//           headline and the byline in a scrim along the bottom
+//   Type B  a face or a square on a full-height plate, type on the left
+//   Type C  the typographic card (src/lib/og-card.mjs) for charts, diagrams,
+//           logos, and anything with no usable photograph
+//
+// Type A and B are composited here; the geometry and overlay artwork live in
+// src/lib/og-hero-card.mjs. Everything is rasterised with `sharp` (already a
+// devDependency, and the same technique scripts/generate-brand-assets.mjs uses
+// for the static default card), so there are no extra dependencies and no
+// vendored fonts.
+//
 // JPEG, not PNG: a photographic card is around 1.7MB as PNG and about a tenth of
 // that as JPEG, and WhatsApp quietly declines to show a preview much over half a
 // megabyte. Quality 86 with no chroma subsampling holds both the photograph and
-// the type in the brand band.
-//
-// The card leads with the article's own hero photograph, finished with the brand
-// band from src/lib/og-hero-card.mjs. Every platform prints the headline beside
-// the card already, so the card does not repeat it — a photograph earns the
-// click, a wall of text does not. Articles with no usable hero on disk fall back
-// to the hand-authored title card in src/lib/og-card.mjs. Both are rasterised
-// with `sharp` (already a devDependency, and the same technique
-// scripts/generate-brand-assets.mjs uses for the static default card), so there
-// are no extra dependencies and no vendored fonts.
+// the type.
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
-import { renderCardSvg, MARK_SIZE, MARK_X, MARK_Y, INK, PAPER } from '../../../lib/og-card.mjs';
+import { renderCardSvg, MARK_SIZE, MARK_X, MARK_Y, PAPER } from '../../../lib/og-card.mjs';
 import {
-  planHeroLayout,
+  planCard,
   paleGroundShare,
-  renderHeroOverlaySvg,
+  renderTypeA,
+  renderTypeB,
   WIDTH,
   HEIGHT,
-  MARK_SIZE as HERO_MARK_SIZE,
-  MARK_X as HERO_MARK_X,
-  MARK_Y as HERO_MARK_Y,
+  MARK_SIZE as PHOTO_MARK_SIZE,
 } from '../../../lib/og-hero-card.mjs';
 import { articleHero } from '../../../lib/article-hero.mjs';
 import { SECTION_LABELS } from '../../../content/config';
+
+type CardCopy = { title: string; section: string; author: string };
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // Same enumeration as src/pages/[section]/[slug].astro, so every published
@@ -54,29 +61,29 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 // The marks are raster artwork, so they are composited after rasterising rather
 // than inlined into the card SVG — which would base64 the whole logo into all
-// 30-odd cards. Read once and reused for every card in the build: the
-// ink-on-paper cut for the title card, the light cut for the hero card's dark
-// scrim. Lazily, so a build reads only the cut it actually needs.
+// 30-odd cards. Read once and reused for every card in the build: the light cut
+// for the two ink-grounded photo cards, the ink-on-paper cut for the
+// typographic one. Lazily, so a build reads only the cuts it needs.
+let photoMarkPromise: Promise<Buffer> | null = null;
+const photoCardMark = () => (photoMarkPromise ??= sharp('public/logo-mark-dark.png')
+  .resize(PHOTO_MARK_SIZE, PHOTO_MARK_SIZE)
+  .png()
+  .toBuffer());
+
 let titleMarkPromise: Promise<Buffer> | null = null;
 const titleCardMark = () => (titleMarkPromise ??= sharp('public/logo-mark.png')
   .resize(MARK_SIZE, MARK_SIZE)
   .png()
   .toBuffer());
 
-let heroMarkPromise: Promise<Buffer> | null = null;
-const heroCardMark = () => (heroMarkPromise ??= sharp('public/logo-mark-dark.png')
-  .resize(HERO_MARK_SIZE, HERO_MARK_SIZE)
-  .png()
-  .toBuffer());
-
-// One encoder for both card types, so they cannot drift apart.
+// One encoder for every card type, so they cannot drift apart.
 const encode = (image: sharp.Sharp) =>
   image.jpeg({ quality: 86, chromaSubsampling: '4:4:4', mozjpeg: true }).toBuffer();
 
 // Hero paths in content are site-absolute (/images/…), so they resolve inside
 // public/. Anything that escapes that directory, points at another origin, or
 // simply is not on disk yet (fetch-images.sh pulls some heroes during the
-// Netlify build) counts as "no hero" and takes the title card instead.
+// Netlify build) counts as "no hero" and takes the typographic card instead.
 const PUBLIC_DIR = path.resolve('public');
 function resolveHeroFile(hero: string | undefined): string | null {
   if (!hero || /^[a-z][a-z0-9+.-]*:/i.test(hero)) return null;
@@ -90,93 +97,82 @@ function resolveHeroFile(hero: string | undefined): string | null {
   return fs.existsSync(file) ? file : null;
 }
 
-async function renderHeroCard(file: string, section: string): Promise<Buffer | null> {
+// Decode the hero once, straighten it, and measure the two things the card
+// choice turns on: its shape and how pale its ground is.
+async function readHero(file: string) {
   const meta = await sharp(file).metadata();
-
-  // Normalise once: apply any EXIF rotation, and drop transparency onto paper
-  // rather than ink, because the transparent sources here are charts drawn dark
-  // on light. Both passes below then work from one plain RGB buffer.
+  // Apply any EXIF rotation, and drop transparency onto paper rather than ink,
+  // because the transparent sources here are charts drawn dark on light.
   const source = sharp(file).rotate();
-  const normalised = await (meta.hasAlpha ? source.flatten({ background: PAPER }) : source)
+  const buffer = await (meta.hasAlpha ? source.flatten({ background: PAPER }) : source)
     .png()
     .toBuffer();
-  const { width, height } = await sharp(normalised).metadata();
-
-  // How much of the frame is near-white, judged on a thumbnail: the tell that
-  // separates a chart or diagram, which must be letterboxed whole, from a
-  // photograph, which can be cropped to fill the card.
-  const thumb = await sharp(normalised)
+  const { width, height } = await sharp(buffer).metadata();
+  const thumb = await sharp(buffer)
     .resize(160, 160, { fit: 'inside' })
     .removeAlpha()
     .raw()
     .toBuffer({ resolveWithObject: true });
-  const plan = planHeroLayout({
+  return {
+    buffer,
     width,
     height,
     paleGround: paleGroundShare(thumb.data, thumb.info.channels),
-  });
-  if (!plan) return null;
+  };
+}
 
-  let base: sharp.Sharp;
-  if (plan.layout === 'cover') {
-    // Fill the frame, keeping whatever sharp judges to be the busiest part of
-    // the picture — which in a news photograph is the subject.
-    base = sharp(normalised).resize(WIDTH, HEIGHT, {
-      fit: 'cover',
-      position: sharp.strategy.attention,
-    });
-  } else {
-    // The whole picture, uncropped, on a blurred and dimmed blow-up of itself —
-    // the standard treatment for a square, a portrait or a chart that a 1.9:1
-    // crop would cut into.
-    const picture = await sharp(normalised)
-      .resize(plan.frame.width, plan.frame.height, { fit: 'fill' })
-      .png()
-      .toBuffer();
-    base = sharp(normalised)
-      .resize(WIDTH, HEIGHT, { fit: 'cover', position: 'centre' })
-      .blur(36)
-      .modulate({ brightness: 0.6, saturation: 0.85 })
-      .composite([{ input: picture, left: plan.frame.left, top: plan.frame.top }]);
-  }
-
-  const photo = await base.flatten({ background: INK }).png().toBuffer();
-  const overlay = renderHeroOverlaySvg({
-    section,
-    frame: plan.layout === 'inset' ? plan.frame : undefined,
-  });
+// Type A: the photograph fills the card, cropped on whatever sharp judges to be
+// the busiest part of it — which in a news photograph is the subject.
+async function renderPhotoCard(hero: Buffer, copy: CardCopy): Promise<Buffer> {
+  const { svg, mark } = renderTypeA(copy);
+  const photo = await sharp(hero)
+    .resize(WIDTH, HEIGHT, { fit: 'cover', position: sharp.strategy.attention })
+    .png()
+    .toBuffer();
   return encode(sharp(photo).composite([
-    { input: Buffer.from(overlay) },
-    { input: await heroCardMark(), left: HERO_MARK_X, top: HERO_MARK_Y },
+    { input: Buffer.from(svg) },
+    { input: await photoCardMark(), left: mark.left, top: mark.top },
   ]));
 }
 
-async function renderTitleCard(title: string, section: string, author: string): Promise<Buffer> {
-  const svg = renderCardSvg({ title, section, author });
-  return encode(sharp(Buffer.from(svg))
+// Type B: the face keeps its own plate, so it is never cropped to a letterbox.
+async function renderSplitCard(hero: Buffer, copy: CardCopy): Promise<Buffer> {
+  const { svg, mark, plate } = renderTypeB(copy);
+  const portrait = await sharp(hero)
+    .resize(plate.width, plate.height, { fit: 'cover', position: sharp.strategy.attention })
+    .png()
+    .toBuffer();
+  return encode(sharp(Buffer.from(svg)).composite([
+    { input: portrait, left: plate.left, top: plate.top },
+    { input: await photoCardMark(), left: mark.left, top: mark.top },
+  ]));
+}
+
+// Type C: the hand-authored typographic card, unchanged.
+async function renderTitleCard({ title, section, author }: CardCopy): Promise<Buffer> {
+  return encode(sharp(Buffer.from(renderCardSvg({ title, section, author })))
     .composite([{ input: await titleCardMark(), left: MARK_X, top: MARK_Y }]));
 }
 
 export const GET: APIRoute = async ({ props }) => {
-  const { title, section, author, hero } = props as {
-    title: string;
-    section: string;
-    author: string;
-    hero?: string;
-  };
+  const { title, section, author, hero } = props as CardCopy & { hero?: string };
+  const copy: CardCopy = { title, section, author };
 
   const heroFile = resolveHeroFile(hero);
   let png: Buffer | null = null;
   if (heroFile) {
     try {
-      png = await renderHeroCard(heroFile, section);
+      const image = await readHero(heroFile);
+      const type = planCard(image);
+      if (type === 'A') png = await renderPhotoCard(image.buffer, copy);
+      else if (type === 'B') png = await renderSplitCard(image.buffer, copy);
     } catch (err) {
-      // A hero sharp cannot decode must not fail the build. The title card is
-      // still a good share image, so log what happened and fall back to it.
-      console.warn(`[og] no hero card for ${hero}: ${(err as Error).message}`);
+      // A hero sharp cannot decode must not fail the build. The typographic card
+      // is still a good share image, so log what happened and fall back to it.
+      console.warn(`[og] no photo card for ${hero}: ${(err as Error).message}`);
     }
   }
-  png ??= await renderTitleCard(title, section, author);
+  png ??= await renderTitleCard(copy);
 
   return new Response(png, {
     headers: {
