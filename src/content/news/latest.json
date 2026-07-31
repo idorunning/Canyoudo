@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-31T01:45:46.174Z",
+    "fetchedAt": "2026-07-31T13:28:44.084Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,20 +16,76 @@
   },
   "items": [
     {
-      "title": "Three things we learned about AI from Big Tech earnings",
+      "title": "Greek police looking for 'American friends' of dead woman found in suitcase",
+      "link": "https://www.bbc.co.uk/news/articles/c235p4y37k9o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-31T12:34:27.000Z",
+      "summary": "The body of Elisabeth-Jane Ross was found in an abandoned building in the Kypseli district of Athens on 18 July."
+    },
+    {
+      "title": "High Court upholds decision to allow Chinese mega embassy",
+      "link": "https://www.bbc.co.uk/news/articles/cwylenj3znno?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-31T11:19:24.000Z",
+      "summary": "The government has given the green light to the site on the old Royal Mint, near the Tower of London."
+    },
+    {
+      "title": "Southport killer charged with prison attacks and possessing weapon",
+      "link": "https://www.bbc.co.uk/news/articles/ckg3dr3lgjko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-31T11:03:17.000Z",
+      "summary": "Axel Rudakubana, 19, is accused of attacking staff at HMP Belmarsh between May and October 2025."
+    },
+    {
+      "title": "Circular 011/2026: Annexes F, U and DA, Police Regulations 2003",
+      "link": "https://www.gov.uk/government/publications/circular-0112026-annexes-f-u-and-da-police-regulations-2003",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-31T09:47:07.000Z",
+      "summary": "Amendments to implement the 2025 to 2026 pay award, extend targeted payments, and reflect changes to unsatisfactory performance procedures."
+    },
+    {
+      "title": "TikToker faces police probe over secret filming using 'smart glasses'",
+      "link": "https://www.bbc.co.uk/news/articles/c4g369y5k8ko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-31T08:50:03.000Z",
+      "summary": "The \"content maker\" published videos of encounters with young women and a female Sikh shop worker where he talked of a plot to \"breed out the white race\"."
+    },
+    {
+      "title": "A&O Shearman posts 77% trainee retention rate",
+      "link": "https://www.legalcheek.com/2026/07/ao-shearman-posts-77-trainee-retention-rate/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-31T08:44:54.000Z",
+      "summary": "34 of 44 The post A&O Shearman posts 77% trainee retention rate appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Durham Prison",
+      "link": "https://www.gov.uk/guidance/durham-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-31T08:32:39.000Z",
+      "summary": "Durham Prison is a men’s prison in the city of Durham."
+    },
+    {
+      "title": "Viral TikTok video of BigLaw partner sparks privacy debate",
+      "link": "https://www.legalcheek.com/2026/07/viral-tiktok-video-of-biglaw-partner-sparks-privacy-debate/",
+      "source": "Legal Cheek",
+      "topic": "law",
+      "isoDate": "2026-07-31T06:55:35.000Z",
+      "summary": "Many are calling it the legal version of the Coldplay kiss cam scandal The post Viral TikTok video of BigLaw partner sparks privacy debate appeared first on Legal Cheek ."
+    },
+    {
+      "title": "Amazon and Apple just told us more about their AI plans - here are three things we learned",
       "link": "https://www.bbc.co.uk/news/articles/cp87m46g392o?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
       "isoDate": "2026-07-31T01:31:50.000Z",
       "summary": "Billions of dollars are being poured into a new wave of AI technology. But will it pay off?"
-    },
-    {
-      "title": "Teen hackers tell BBC how police are helping them use their skills for good",
-      "link": "https://www.bbc.co.uk/news/articles/cn0nqpy1rk4o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-31T00:42:48.000Z",
-      "summary": "Cyber Prevent is targeting predominantly boys and young men at risk of being drawn to cyber criminality."
     },
     {
       "title": "Preston Prison",
@@ -40,36 +96,12 @@
       "summary": "Preston Prison is a men’s prison in Preston, Lancashire."
     },
     {
-      "title": "TikToker faces police probe over secret filming using 'smart' glasses",
-      "link": "https://www.bbc.co.uk/news/articles/c4g369y5k8ko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-30T22:11:12.000Z",
-      "summary": "The \"content maker\" published videos of encounters with young women and a female Sikh shop worker where he talked of a plot to \"breed out the white race\"."
-    },
-    {
-      "title": "Palestine Action ban to be reviewed by Supreme Court",
-      "link": "https://www.bbc.co.uk/news/articles/c87n321w9qlo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-30T19:45:56.000Z",
-      "summary": "The UK's highest court gives Palestine Action's co-founder permission to appeal the government's proscription of the group under anti-terrorism legislation."
-    },
-    {
       "title": "Open source project fools AI scrapers with poisoned font",
       "link": "https://www.theregister.com/ai-and-ml/2026/07/30/open-source-project-fools-ai-scrapers-with-poisoned-font/5281303",
       "source": "The Register",
       "topic": "ai",
       "isoDate": "2026-07-30T17:19:23.000Z",
       "summary": "ShieldFont is available today if you've got copy that needs protecting"
-    },
-    {
-      "title": "Missing child, 5, dies after being found in water",
-      "link": "https://www.bbc.co.uk/news/articles/cy74n388vk7o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-30T15:34:49.000Z",
-      "summary": "West Mercia Police says the missing child was found unresponsive."
     },
     {
       "title": "Police misconduct processes to be reviewed",
@@ -144,44 +176,12 @@
       "summary": "An ex-Dorset <mark>police</mark> officer found guilty of gross misconduct for pursuing an intimate relationship with a domestic abuse victim he met whilst on duty had his…"
     },
     {
-      "title": "New Chair of the Criminal Legal Aid Advisory Board",
-      "link": "https://www.gov.uk/government/news/new-chair-of-the-criminal-legal-aid-advisory-board",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-29T16:00:02.000Z",
-      "summary": "Ruth Evans has been appointed as the new Chair of the Criminal Legal Aid Advisory Board."
-    },
-    {
-      "title": "MOJ Lawtech Grant Competition Phase III",
-      "link": "https://www.gov.uk/government/news/moj-lawtech-grant-competition-phase-iii",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-29T13:58:13.000Z",
-      "summary": "The Ministry of Justice (MOJ) has launched a competition to award funding for the third phase of the LawtechUK programme."
-    },
-    {
-      "title": "Future of the Undercover Policing Inquiry",
-      "link": "https://www.gov.uk/government/consultations/future-of-the-undercover-policing-inquiry",
-      "source": "Home Office",
-      "topic": "policing",
-      "isoDate": "2026-07-29T13:43:47.000Z",
-      "summary": "This consultation seeks views on the future structure, scope and format of the Undercover Policing Inquiry."
-    },
-    {
       "title": "Update: Disclosure Review Working Group survey of legal sector stakeholders",
       "link": "https://www.judiciary.uk/update-disclosure-review-working-group-survey-of-legal-sector-stakeholders/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-07-29T13:07:05.000Z",
       "summary": "This summary of the survey results will help practitioners and other users of the Business and Property Courts The post Update: Disclosure Review Working Group survey of legal…"
-    },
-    {
-      "title": "Tying the Knot: Reforming weddings law in England and Wales",
-      "link": "https://www.gov.uk/government/consultations/tying-the-knot-reforming-weddings-law-in-england-and-wales",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-29T09:27:53.000Z",
-      "summary": "A consultation on reforming weddings law in England and Wales. It follows the Law Commission’s 2022 report, Celebrating Marriage: A New Weddings Law and the government’s…"
     },
     {
       "title": "Vacancy: Legal Members of the Education Tribunal for Wales",
@@ -200,14 +200,6 @@
       "summary": "The out-of-control AI found four logins which allowed it to access multiple unnamed online services."
     },
     {
-      "title": "From lawyer to plasterer?! Why do so many quit law?",
-      "link": "https://www.legalcheek.com/2026/07/from-lawyer-to-plasterer-why-do-so-many-quit-law/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-29T07:40:49.000Z",
-      "summary": "Career changers The post From lawyer to plasterer?! Why do so many quit law? appeared first on Legal Cheek ."
-    },
-    {
       "title": "Perplexity's tokenmaxxing Model Council gives you multiple bot perspectives",
       "link": "https://www.theregister.com/ai-and-ml/2026/07/28/perplexitys-tokenmaxxing-model-council-gives-you-multiple-bot-perspectives/5279972",
       "source": "The Register",
@@ -222,14 +214,6 @@
       "topic": "ai",
       "isoDate": "2026-07-28T16:20:00.000Z",
       "summary": ""
-    },
-    {
-      "title": "Paralegal barred from legal profession for forging signature, months before starting her training contract",
-      "link": "https://www.legalcheek.com/2026/07/paralegal-barred-from-legal-profession-for-forging-signature-months-before-starting-her-training-contract/",
-      "source": "Legal Cheek",
-      "topic": "law",
-      "isoDate": "2026-07-28T11:20:17.000Z",
-      "summary": "Future trainee’s law dream over The post Paralegal barred from legal profession for forging signature, months before starting her training contract appeared first on Legal Cheek ."
     },
     {
       "title": "President of the King’s Bench Division in conversation with Chair of the Bar",
