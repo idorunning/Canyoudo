@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-07-30T13:24:14.560Z",
+    "fetchedAt": "2026-07-31T01:45:46.174Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,28 +16,76 @@
   },
   "items": [
     {
-      "title": "Victims of disgraced funeral boss 'unable to get refunds'",
-      "link": "https://www.bbc.co.uk/news/articles/ce347krneeno?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-30T12:48:54.000Z",
-      "summary": "Robert Bush defrauded 172 people who bought funeral plans out of £562,000, a court hears."
+      "title": "Three things we learned about AI from Big Tech earnings",
+      "link": "https://www.bbc.co.uk/news/articles/cp87m46g392o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-07-31T01:31:50.000Z",
+      "summary": "Billions of dollars are being poured into a new wave of AI technology. But will it pay off?"
     },
     {
-      "title": "Mum and boyfriend jailed for girl's murder",
-      "link": "https://www.bbc.co.uk/news/articles/cn9nyz12xe8o?at_medium=RSS&at_campaign=rss",
+      "title": "Teen hackers tell BBC how police are helping them use their skills for good",
+      "link": "https://www.bbc.co.uk/news/articles/cn0nqpy1rk4o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-30T12:44:31.000Z",
-      "summary": "Isabelle Welsh was subjected to \"sadistic\" violence and abuse before her murder, a court hears."
+      "isoDate": "2026-07-31T00:42:48.000Z",
+      "summary": "Cyber Prevent is targeting predominantly boys and young men at risk of being drawn to cyber criminality."
     },
     {
-      "title": "Suspected Kinahan gang leader faces extradition",
-      "link": "https://www.bbc.co.uk/news/articles/c7vgr0jl402o?at_medium=RSS&at_campaign=rss",
+      "title": "Preston Prison",
+      "link": "https://www.gov.uk/guidance/preston-prison",
+      "source": "Ministry of Justice",
+      "topic": "law",
+      "isoDate": "2026-07-30T23:01:03.000Z",
+      "summary": "Preston Prison is a men’s prison in Preston, Lancashire."
+    },
+    {
+      "title": "TikToker faces police probe over secret filming using 'smart' glasses",
+      "link": "https://www.bbc.co.uk/news/articles/c4g369y5k8ko?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-07-30T10:44:20.000Z",
-      "summary": "The ex-boxing promoter was previously named in court as the head of an international drug cartel."
+      "isoDate": "2026-07-30T22:11:12.000Z",
+      "summary": "The \"content maker\" published videos of encounters with young women and a female Sikh shop worker where he talked of a plot to \"breed out the white race\"."
+    },
+    {
+      "title": "Palestine Action ban to be reviewed by Supreme Court",
+      "link": "https://www.bbc.co.uk/news/articles/c87n321w9qlo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-30T19:45:56.000Z",
+      "summary": "The UK's highest court gives Palestine Action's co-founder permission to appeal the government's proscription of the group under anti-terrorism legislation."
+    },
+    {
+      "title": "Open source project fools AI scrapers with poisoned font",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/30/open-source-project-fools-ai-scrapers-with-poisoned-font/5281303",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-30T17:19:23.000Z",
+      "summary": "ShieldFont is available today if you've got copy that needs protecting"
+    },
+    {
+      "title": "Missing child, 5, dies after being found in water",
+      "link": "https://www.bbc.co.uk/news/articles/cy74n388vk7o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-07-30T15:34:49.000Z",
+      "summary": "West Mercia Police says the missing child was found unresponsive."
+    },
+    {
+      "title": "Police misconduct processes to be reviewed",
+      "link": "https://www.gov.uk/government/news/police-misconduct-processes-to-be-reviewed",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-30T13:34:43.000Z",
+      "summary": "Oversight of misconduct procedures is to be reviewed as part of an overhaul of <mark>policing</mark> standards."
+    },
+    {
+      "title": "Multi-agency crackdown on waste crime across East Lancashire",
+      "link": "https://www.gov.uk/government/news/multi-agency-crackdown-on-waste-crime-across-east-lancashire",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-07-30T13:30:20.000Z",
+      "summary": "Led by the Environment Agency - more than 35 officers from five organisations took part in an intelligence-led operation."
     },
     {
       "title": "Oversight and funding of youth justice services",
@@ -62,14 +110,6 @@
       "topic": "law",
       "isoDate": "2026-07-30T07:40:34.000Z",
       "summary": "'Satisfactory outcome' The post Macfarlanes revenue climbs, but partner profits stick at £3.1 million appeared first on Legal Cheek ."
-    },
-    {
-      "title": "Body of Scottish woman found inside suitcase in Greece",
-      "link": "https://www.bbc.co.uk/news/articles/clyx8762kj2o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-07-30T07:36:15.000Z",
-      "summary": "Police Scotland confirmed they are liaising with authorities after the woman was reportedly discovered by a homeless man in Athens earlier this month."
     },
     {
       "title": "Trump considering AI controls after OpenAI hacking incidents",
@@ -176,36 +216,12 @@
       "summary": "Up to 8 AI models running in the cloud weighing in on ambiguous business issues? Sounds affordable"
     },
     {
-      "title": "Tech Life",
-      "link": "https://www.bbc.co.uk/sounds/play/w3ct8jy6?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-28T20:00:00.000Z",
-      "summary": "What do we need to know about agentic AI?"
-    },
-    {
       "title": "College prof hides prompt to catch AI cheaters, finds human nature is pretty much as we thought",
       "link": "https://www.theregister.com/ai-and-ml/2026/07/28/college-prof-hides-prompt-to-catch-ai-cheaters-finds-human-nature-is-pretty-much-as-we-thought/5279864",
       "source": "The Register",
       "topic": "ai",
       "isoDate": "2026-07-28T16:20:00.000Z",
       "summary": ""
-    },
-    {
-      "title": "Chief Constable joins Ceremony of Remembrance",
-      "link": "https://www.gov.uk/government/news/chief-constable-joins-ceremony-of-remembrance",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-28T15:22:00.000Z",
-      "summary": "Chief Constable Simon Chesterman honoured fallen <mark>police</mark> officers at the UK <mark>Police</mark> Memorial, paying tribute to their courage, service and sacrifice."
-    },
-    {
-      "title": "Unauthorised fraud in the UK",
-      "link": "https://www.gov.uk/government/calls-for-evidence/unauthorised-fraud-in-the-uk",
-      "source": "Home Office",
-      "topic": "policing",
-      "isoDate": "2026-07-28T13:54:37.000Z",
-      "summary": "This call for evidence seeks input from people and organisations with experience of unauthorised fraud in the UK."
     },
     {
       "title": "Paralegal barred from legal profession for forging signature, months before starting her training contract",
@@ -216,22 +232,6 @@
       "summary": "Future trainee’s law dream over The post Paralegal barred from legal profession for forging signature, months before starting her training contract appeared first on Legal Cheek ."
     },
     {
-      "title": "Independent statutory regulation of probation practitioners",
-      "link": "https://www.gov.uk/government/consultations/independent-statutory-regulation-of-probation-practitioners",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-07-28T09:56:18.000Z",
-      "summary": "This consultation explores options to introduce independent regulation of probation practitioners."
-    },
-    {
-      "title": "Leading AI models (even Grok) are all a bunch of leftist punks",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/27/leading-ai-models-even-grok-are-all-a-bunch-of-leftist-punks/5279208",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-27T22:05:00.000Z",
-      "summary": "AI seems to have a liberal bias"
-    },
-    {
       "title": "President of the King’s Bench Division in conversation with Chair of the Bar",
       "link": "https://www.barcouncil.org.uk/training-events/calendar/in-conversation-with-dame-victoria-sharp.html",
       "source": "Courts & Tribunals Judiciary",
@@ -240,20 +240,20 @@
       "summary": "Dame Victoria Sharp DBE looks back on the defining moments of her career, how the courts have changed over the years, and the future challenges facing the justice system The…"
     },
     {
-      "title": "Mock trial builds understanding of civil litigation process",
-      "link": "https://www.gov.uk/government/news/mock-trial-builds-understanding-of-civil-litigation-process",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-24T10:36:29.000Z",
-      "summary": "CNC&#39;s Legal Services hosted a mock civil trial, giving officers and partners practical insight into court proceedings, evidence and legal decision-making."
-    },
-    {
       "title": "Circuit Judge – Death in Service",
       "link": "https://www.judiciary.uk/circuit-judge-death-in-service-2/",
       "source": "Courts & Tribunals Judiciary",
       "topic": "law",
       "isoDate": "2026-07-23T14:22:36.000Z",
       "summary": "Information on the death in service of a Judge The post Circuit Judge – Death in Service appeared first on Courts and Tribunals Judiciary ."
+    },
+    {
+      "title": "Solicitor General announces national rollout of Early Victims’ Right to Review scheme",
+      "link": "https://www.gov.uk/government/news/solicitor-general-announces-national-rollout-of-early-victims-right-to-review-scheme",
+      "source": "CPS",
+      "topic": "law",
+      "isoDate": "2026-07-06T09:18:34.000Z",
+      "summary": "Following a successful pilot, rape and sexual assault survivors across all of England and Wales will have the right to ask for their cases to be reviewed before a final…"
     }
   ]
 }
