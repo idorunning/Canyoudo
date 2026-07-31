@@ -1,10 +1,13 @@
-// Builds the 1200×630 branded title-card SVG used as the social-share image
-// (og:image / twitter:image) for every article. Kept as a plain module — with
+// Builds the 1200×630 branded title-card SVG — Type C of the share-card system
+// in docs/design/design-lab.html, used for charts, diagrams, logos and anything
+// with no usable photograph. Kept as a plain module — with
 // no Astro or sharp imports — so the wrapping logic can be unit-tested and so
 // the OG endpoint (src/pages/og/[section]/[slug].jpg.ts) can rasterise the SVG
 // with `sharp`, exactly as scripts/generate-brand-assets.mjs does for the static
 // default card. Mirrors that script's palette and serif styling so the
 // per-article cards stay brand-consistent with og-default.png.
+
+import { estimateWidth, fitLines, wrapToWidth } from './og-wrap.mjs';
 
 // The site's live palette, mirroring src/styles/global.css — paper-50, ink-900,
 // accent and ink-600 of the Blue Book system. A shared link should look like
@@ -35,52 +38,28 @@ export function escapeXml(str) {
   ));
 }
 
-// Greedy word-wrap into lines that fit `maxWidth` at `fontSize`. SVG <text>
-// does not wrap, so we estimate each line's width from an average glyph width
-// (~0.5em for this serif at display sizes) and break on whole words. Lines
-// beyond `maxLines` are dropped and the last kept line gets an ellipsis.
+// Wrapping and size-stepping live in og-wrap.mjs, so the type-C card, the two
+// photo cards and the OG endpoint all break lines the same way. `wrapTitle` is
+// kept as the estimate-only entry point.
 export function wrapTitle(title, { fontSize, maxWidth = USABLE, maxLines = 4 } = {}) {
-  const charWidth = fontSize * 0.5;
-  const maxChars = Math.max(8, Math.floor(maxWidth / charWidth));
-  const words = String(title ?? '').trim().split(/\s+/).filter(Boolean);
-
-  const lines = [];
-  let line = '';
-  for (const word of words) {
-    const candidate = line ? `${line} ${word}` : word;
-    if (candidate.length <= maxChars || !line) {
-      line = candidate;
-    } else {
-      lines.push(line);
-      line = word;
-    }
-  }
-  if (line) lines.push(line);
-
-  if (lines.length > maxLines) {
-    const kept = lines.slice(0, maxLines);
-    kept[maxLines - 1] = `${kept[maxLines - 1].replace(/[\s.,;:]+$/, '')}…`;
-    return kept;
-  }
-  return lines;
-}
-
-// Pick the largest font size at which the title fits within maxLines, so short
-// titles read big and long ones step down gracefully before any truncation.
-function chooseLayout(title) {
-  for (const fontSize of [80, 72, 64, 56]) {
-    const lines = wrapTitle(title, { fontSize, maxLines: 4 });
-    if (lines.length <= 3 || fontSize === 56) {
-      return { fontSize, lines, lineHeight: Math.round(fontSize * 1.12) };
-    }
-  }
-  const fontSize = 56;
-  return { fontSize, lines: wrapTitle(title, { fontSize, maxLines: 4 }), lineHeight: Math.round(fontSize * 1.12) };
+  return wrapToWidth(title, { fontSize, maxWidth, maxLines });
 }
 
 // Render the full card SVG for one article.
-export function renderCardSvg({ title, section, author = 'Nathan Tracey', domain = 'thinkingaboutpolicing.org' }) {
-  const { fontSize, lines, lineHeight } = chooseLayout(title);
+export function renderCardSvg({
+  title,
+  section,
+  author = 'Nathan Tracey',
+  domain = 'thinkingaboutpolicing.org',
+  widthOf = estimateWidth,
+}) {
+  const { fontSize, lines, lineHeight } = fitLines(title, {
+    widthOf,
+    sizes: [80, 72, 64, 56],
+    maxWidth: USABLE,
+    maxLines: 4,
+    lineHeightRatio: 1.12,
+  });
 
   // Vertically centre the title block in the area between the eyebrow and the
   // footer (roughly y=180–520), then lay the lines out from its top.

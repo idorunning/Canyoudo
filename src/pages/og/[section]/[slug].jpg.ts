@@ -27,7 +27,7 @@ import { getCollection } from 'astro:content';
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
-import { renderCardSvg, MARK_SIZE, MARK_X, MARK_Y, PAPER } from '../../../lib/og-card.mjs';
+import { renderCardSvg, escapeXml, MARK_SIZE, MARK_X, MARK_Y, PAPER } from '../../../lib/og-card.mjs';
 import {
   planCard,
   paleGroundShare,
@@ -41,6 +41,66 @@ import { articleHero } from '../../../lib/article-hero.mjs';
 import { SECTION_LABELS } from '../../../content/config';
 
 type CardCopy = { title: string; section: string; author: string };
+
+// ── Measuring type ─────────────────────────────────────────────────────────
+//
+// The cards name a font stack (Georgia, Times New Roman, serif) that no build
+// host has in full, so each falls back to its own serif — and those faces are
+// wide enough apart that a headline broken to fit one runs off the edge of the
+// card on another. Rather than guess, measure the face that is actually here:
+// rasterise a word on its own, trim the white, and read the width back.
+//
+// Widths are taken once at a reference size and scaled, because advance width is
+// linear in font size. Per-word, because kerning inside a word matters and
+// kerning across a space does not — so a line's width is the sum of its words
+// plus its spaces. Cached across the whole build: article titles share a lot of
+// short words.
+const REFERENCE_SIZE = 100;
+const SERIF_STACK = "Georgia, 'Times New Roman', serif";
+const widthCache = new Map<string, Promise<number>>();
+
+async function inkWidth(text: string, weight: number): Promise<number> {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="6000" height="200">`
+    + `<rect width="6000" height="200" fill="#fff"/>`
+    + `<text x="10" y="150" font-family="${SERIF_STACK}" font-size="${REFERENCE_SIZE}" `
+    + `font-weight="${weight}" fill="#000">${escapeXml(text)}</text></svg>`;
+  const { info } = await sharp(Buffer.from(svg)).trim().toBuffer({ resolveWithObject: true });
+  return info.width;
+}
+
+const cachedWidth = (text: string, weight: number) => {
+  const key = `${weight}|${text}`;
+  let width = widthCache.get(key);
+  if (!width) widthCache.set(key, (width = inkWidth(text, weight)));
+  return width;
+};
+
+// A trimmed width is the ink, which stops just short of the advance the glyphs
+// really occupy; a couple of per cent of headroom covers the difference and the
+// kerning this ignores.
+const SAFETY = 1.03;
+
+// Measure every word of a title up front, then hand back a synchronous
+// widthOf(text, fontSize) the pure card renderers can call while laying out.
+async function serifMeasurer(title: string, weight = 700) {
+  const words = String(title ?? '').trim().split(/\s+/).filter(Boolean);
+  const widths = new Map<string, number>();
+  await Promise.all(words.map(async (word) => widths.set(word, await cachedWidth(word, weight))));
+  // A space cannot be measured on its own — it leaves no ink — so take it as the
+  // difference two letters make with and without one between them.
+  const [apart, together] = await Promise.all([
+    cachedWidth('a a', weight),
+    cachedWidth('aa', weight),
+  ]);
+  const space = Math.max(0, apart - together);
+
+  return (text: string, fontSize: number) => {
+    const parts = String(text ?? '').trim().split(/\s+/).filter(Boolean);
+    const ink = parts.reduce((sum, part) => sum + (widths.get(part) ?? part.length * REFERENCE_SIZE * 0.55), 0);
+    const gaps = Math.max(0, parts.length - 1) * space;
+    return ((ink + gaps) * fontSize * SAFETY) / REFERENCE_SIZE;
+  };
+}
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // Same enumeration as src/pages/[section]/[slug].astro, so every published
@@ -124,7 +184,7 @@ async function readHero(file: string) {
 // Type A: the photograph fills the card, cropped on whatever sharp judges to be
 // the busiest part of it — which in a news photograph is the subject.
 async function renderPhotoCard(hero: Buffer, copy: CardCopy): Promise<Buffer> {
-  const { svg, mark } = renderTypeA(copy);
+  const { svg, mark } = renderTypeA({ ...copy, widthOf: await serifMeasurer(copy.title) });
   const photo = await sharp(hero)
     .resize(WIDTH, HEIGHT, { fit: 'cover', position: sharp.strategy.attention })
     .png()
@@ -137,7 +197,7 @@ async function renderPhotoCard(hero: Buffer, copy: CardCopy): Promise<Buffer> {
 
 // Type B: the face keeps its own plate, so it is never cropped to a letterbox.
 async function renderSplitCard(hero: Buffer, copy: CardCopy): Promise<Buffer> {
-  const { svg, mark, plate } = renderTypeB(copy);
+  const { svg, mark, plate } = renderTypeB({ ...copy, widthOf: await serifMeasurer(copy.title) });
   const portrait = await sharp(hero)
     .resize(plate.width, plate.height, { fit: 'cover', position: sharp.strategy.attention })
     .png()
@@ -150,7 +210,8 @@ async function renderSplitCard(hero: Buffer, copy: CardCopy): Promise<Buffer> {
 
 // Type C: the hand-authored typographic card, unchanged.
 async function renderTitleCard({ title, section, author }: CardCopy): Promise<Buffer> {
-  return encode(sharp(Buffer.from(renderCardSvg({ title, section, author })))
+  const widthOf = await serifMeasurer(title);
+  return encode(sharp(Buffer.from(renderCardSvg({ title, section, author, widthOf })))
     .composite([{ input: await titleCardMark(), left: MARK_X, top: MARK_Y }]));
 }
 

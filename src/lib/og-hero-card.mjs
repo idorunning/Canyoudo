@@ -14,7 +14,8 @@
 // unit-testable and the OG endpoint (src/pages/og/[section]/[slug].jpg.ts) can
 // do the pixel work with `sharp`.
 
-import { INK, PAPER, escapeXml, wrapTitle } from './og-card.mjs';
+import { INK, PAPER, escapeXml } from './og-card.mjs';
+import { estimateWidth, fitLines } from './og-wrap.mjs';
 
 export const WIDTH = 1200;
 export const HEIGHT = 630;
@@ -89,22 +90,6 @@ export function planCard({ width, height, paleGround = 0 } = {}) {
   return 'C';
 }
 
-// Step the headline down through `sizes` until it fits `maxLines` on the
-// measure, so a short title reads big and a long one settles rather than
-// truncating.
-function fitHeadline(title, { sizes, maxWidth, maxLines }) {
-  for (const fontSize of sizes) {
-    const lines = wrapTitle(title, { fontSize, maxWidth, maxLines: maxLines + 2 });
-    if (lines.length <= maxLines) return { fontSize, lines, lineHeight: Math.round(fontSize * 1.17) };
-  }
-  const fontSize = sizes[sizes.length - 1];
-  return {
-    fontSize,
-    lines: wrapTitle(title, { fontSize, maxWidth, maxLines }),
-    lineHeight: Math.round(fontSize * 1.17),
-  };
-}
-
 const headlineTspans = (lines, x, firstBaseline, lineHeight) => lines
   .map((l, i) => `<tspan x="${x}" y="${firstBaseline + i * lineHeight}">${escapeXml(l)}</tspan>`)
   .join('');
@@ -119,8 +104,15 @@ const A_RULE_Y = 552;
 // The transparent layer that goes over the photograph. The scrim rises only as
 // far as the type needs it to, so a short headline leaves more of the picture
 // in the clear. Returns the SVG and where the mark goes.
-export function renderTypeA({ title, section, author = 'Nathan Tracey', domain = DOMAIN }) {
-  const { fontSize, lines, lineHeight } = fitHeadline(title, {
+export function renderTypeA({
+  title,
+  section,
+  author = 'Nathan Tracey',
+  domain = DOMAIN,
+  widthOf = estimateWidth,
+}) {
+  const { fontSize, lines, lineHeight } = fitLines(title, {
+    widthOf,
     sizes: [56, 50, 44],
     maxWidth: A_MEASURE,
     maxLines: 3,
@@ -160,8 +152,15 @@ const B_TEXT_WIDTH = WIDTH - B_PLATE_WIDTH - B_SEAM - B_MARGIN * 2;
 // The whole card except the plate: an ink ground, the accent seam, and the type
 // centred on the left so a short headline is not stranded at the bottom.
 // Returns the SVG, where the mark goes, and where to composite the plate.
-export function renderTypeB({ title, section, author = 'Nathan Tracey', domain = DOMAIN }) {
-  const { fontSize, lines, lineHeight } = fitHeadline(title, {
+export function renderTypeB({
+  title,
+  section,
+  author = 'Nathan Tracey',
+  domain = DOMAIN,
+  widthOf = estimateWidth,
+}) {
+  const { fontSize, lines, lineHeight } = fitLines(title, {
+    widthOf,
     sizes: [46, 40, 35],
     maxWidth: B_TEXT_WIDTH,
     maxLines: 4,
