@@ -1,72 +1,66 @@
-// Geometry and overlay artwork for the photo-led social-share card: the
-// article's own hero image at 1200×630, finished with a brand band along the
-// bottom. This is what X, LinkedIn, Facebook and WhatsApp show when someone
-// shares an article, so the picture has to be the thing people see — the title
-// is already printed next to the card by every one of those platforms, which is
-// why nothing here repeats it.
+// The two photo-led social-share card types, and the rule that picks between
+// them and the typographic card. This is the system set out in
+// docs/design/design-lab.html, drawn in the site's live Blue Book palette:
+//
+//   Type A · Photograph    The hero fills the card; a scrim along the bottom
+//                          carries the section, the headline and the byline.
+//   Type B · Portrait split A face or a square keeps a full-height plate on the
+//                          right, the type takes the left, and the accent rule
+//                          is the seam between them.
+//   Type C · Typographic    Charts, diagrams, logos and anything with no usable
+//                          photograph — rendered by src/lib/og-card.mjs.
 //
 // Kept as a plain module with no Astro or sharp imports, so the layout maths is
 // unit-testable and the OG endpoint (src/pages/og/[section]/[slug].jpg.ts) can
-// do the pixel work with `sharp`. src/lib/og-card.mjs still renders the
-// text-only title card, which stands in for articles with no usable hero.
+// do the pixel work with `sharp`.
 
 import { INK, PAPER, escapeXml } from './og-card.mjs';
+import { estimateWidth, fitLines } from './og-wrap.mjs';
 
 export const WIDTH = 1200;
 export const HEIGHT = 630;
 
-// --accent-light from the night palette in src/styles/global.css. The band is
-// ink, so the section label takes the palette's brightest blue rather than the
-// light-surface accent, which would go muddy on a dark ground.
+// --accent-light from the night palette in src/styles/global.css. Both photo
+// card types set their labels on ink, so they take the palette's brightest blue
+// rather than the light-surface accent, which would go muddy on a dark ground.
 export const ACCENT_ON_INK = '#97d3ff';
 
+const SERIF = "Georgia, 'Times New Roman', serif";
+// The label voice. The rasteriser has no webfonts, so this resolves to whatever
+// sans the render host provides — tracked-out uppercase is what carries the
+// voice here, not the specific face.
+const SANS = "'DejaVu Sans', 'Liberation Sans', Helvetica, Arial, sans-serif";
+
 // The masthead rule: the same accent-into-ink two-segment rule that opens the
-// text card and sits above every h2 in an article.
+// typographic card and sits above every h2 in an article.
 const RULE_HEIGHT = 8;
 const RULE_ACCENT_WIDTH = 220;
 
-// The brand band. A gradient scrim rather than a solid bar, so it settles onto
-// the photograph instead of boxing it in.
-const BAND_TOP = 470;
+// The mark is raster artwork, so each renderer returns where to composite it
+// rather than inlining the logo into the SVG.
+export const MARK_SIZE = 44;
 
-// The mark, composited after rasterising (it is raster artwork, so inlining it
-// in the SVG would base64 the logo into every card). logo-mark-dark.png is the
-// light-on-dark cut, which is the one that belongs on the ink scrim.
-export const MARK_SIZE = 64;
-export const MARK_X = 64;
-export const MARK_Y = HEIGHT - MARK_SIZE - 38;
+const DOMAIN = 'thinkingaboutpolicing.org';
 
-// Text sits to the right of the mark, optically aligned with it.
-const TEXT_X = MARK_X + MARK_SIZE + 22;
-const WORDMARK_BASELINE = 562;
-const LABEL_BASELINE = 596;
+// ── Which card an article gets ─────────────────────────────────────────────
 
-// Where a letterboxed hero is allowed to sit: full width less a margin, and
-// clear of the brand band.
-export const INSET_BOX = { left: 60, top: 24, width: WIDTH - 120, height: 446 };
+// Type A needs a shape that survives the crop to 1.905:1, and enough pixels to
+// enlarge without falling apart. The floor is 500px rather than the card's own
+// 1200: a card is rendered around 600px wide in a feed, so a 500px source holds
+// up there even though it would not stand being printed. Below that there is
+// genuinely nothing to work with, which is what Type C is for.
+const A_MIN_ASPECT = 1.15;
+const A_MIN_WIDTH = 500;
 
-// A hero smaller than the card gets scaled up, but only so far — past this the
-// picture turns to mush and the card looks amateur rather than photographic.
-const MAX_UPSCALE = 1.6;
+// Type B's plate is 500×630, so a portrait or square only needs to fill that.
+const B_MAX_ASPECT = A_MIN_ASPECT;
+const B_MIN_EDGE = 380;
 
-// A hero only fills the frame when the crop needed to get it there is small
-// enough to read as framing. The card is 1.905:1, so between 1.3 and 2.15 a
-// cover-crop trims under a third of the height, or a tenth of the width, and
-// sharp's attention strategy spends that on the empty edges. Outside that range
-// — squares, portraits, tall photographs, wide charts — a crop would take the
-// subject's head off or cut an axis away, so the hero is letterboxed whole onto
-// a blurred blow-up of itself instead. Very small sources are letterboxed too:
-// better a crisp small picture on a soft ground than a full-bleed smear.
-const COVER_MIN_ASPECT = 1.3;
-const COVER_MAX_ASPECT = 2.15;
-const COVER_MIN_WIDTH = 380;
-
-// Aspect ratio alone cannot tell a wide photograph from a wide chart, and a
-// chart must never be cropped: the trim takes the axis labels, the legend or the
-// caption with it. What separates them is the ground they are drawn on. Across
-// this site's heroes, drawn artwork — charts, diagrams, screenshots — runs
-// 64–75% near-white pixels, while the palest photograph (a floodlit stadium)
-// reaches 16%, so a third of the frame is a safe line to draw between them.
+// Drawn artwork — a chart, a diagram, a logo — sits on a pale flat ground; a
+// photograph does not. Across this site's heroes drawn artwork runs 64–75%
+// near-white pixels while the palest photograph (a floodlit stadium) reaches
+// 16%, so a third of the frame is a safe line. Drawn artwork always takes
+// Type C: cropping a chart to either card shape takes the axis labels with it.
 export const PALE_GROUND_LIMIT = 0.35;
 const NEAR_WHITE = 238;
 
@@ -86,64 +80,115 @@ export function paleGroundShare(pixels, channels = 3) {
   return total ? pale / total : 0;
 }
 
-// Decide how one hero meets the card. Takes its pixel dimensions and, when it
-// has been measured, how pale its ground is (see paleGroundShare). Returns
-// { layout: 'cover' } or { layout: 'inset', frame: { left, top, width, height } },
-// where `frame` is where the whole picture lands on the card.
-export function planHeroLayout({ width, height, paleGround = 0 }) {
-  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) {
-    return null;
-  }
+// Pick the card type for one hero from its dimensions and how pale its ground
+// is. Returns 'A', 'B' or 'C'; a hero that cannot be measured at all is 'C'.
+export function planCard({ width, height, paleGround = 0 } = {}) {
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) return 'C';
+  if (paleGround > PALE_GROUND_LIMIT) return 'C';
 
   const aspect = width / height;
-  if (
-    aspect >= COVER_MIN_ASPECT
-    && aspect <= COVER_MAX_ASPECT
-    && width >= COVER_MIN_WIDTH
-    && paleGround <= PALE_GROUND_LIMIT
-  ) {
-    return { layout: 'cover' };
-  }
-
-  const scale = Math.min(INSET_BOX.width / width, INSET_BOX.height / height, MAX_UPSCALE);
-  const frameWidth = Math.max(1, Math.round(width * scale));
-  const frameHeight = Math.max(1, Math.round(height * scale));
-  return {
-    layout: 'inset',
-    frame: {
-      left: Math.round(INSET_BOX.left + (INSET_BOX.width - frameWidth) / 2),
-      top: Math.round(INSET_BOX.top + (INSET_BOX.height - frameHeight) / 2),
-      width: frameWidth,
-      height: frameHeight,
-    },
-  };
+  if (aspect >= A_MIN_ASPECT && width >= A_MIN_WIDTH) return 'A';
+  if (aspect < B_MAX_ASPECT && width >= B_MIN_EDGE && height >= B_MIN_EDGE) return 'B';
+  return 'C';
 }
 
-// The transparent overlay laid over the hero: masthead rule, scrim, mark
-// surround and brand line. `frame`, when given, draws a hairline around a
-// letterboxed hero so it reads as a placed picture rather than a mistake.
-export function renderHeroOverlaySvg({ section, siteName = 'Thinking About Policing', frame }) {
-  const serif = "Georgia, 'Times New Roman', serif";
-  const sans = "'DejaVu Sans', 'Liberation Sans', Helvetica, Arial, sans-serif";
+const headlineTspans = (lines, x, firstBaseline, lineHeight) => lines
+  .map((l, i) => `<tspan x="${x}" y="${firstBaseline + i * lineHeight}">${escapeXml(l)}</tspan>`)
+  .join('');
 
-  const frameStroke = frame
-    ? `<rect x="${frame.left}" y="${frame.top}" width="${frame.width}" height="${frame.height}" `
-      + `fill="none" stroke="${PAPER}" stroke-opacity="0.24" stroke-width="2"/>`
-    : '';
+// ── Type A · Photograph ────────────────────────────────────────────────────
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
+const A_MARGIN = 64;
+const A_MEASURE = 1000;
+const A_BYLINE_BASELINE = 590;
+const A_RULE_Y = 552;
+
+// The transparent layer that goes over the photograph. The scrim rises only as
+// far as the type needs it to, so a short headline leaves more of the picture
+// in the clear. Returns the SVG and where the mark goes.
+export function renderTypeA({
+  title,
+  section,
+  author = 'Nathan Tracey',
+  domain = DOMAIN,
+  widthOf = estimateWidth,
+}) {
+  const { fontSize, lines, lineHeight } = fitLines(title, {
+    widthOf,
+    sizes: [56, 50, 44],
+    maxWidth: A_MEASURE,
+    maxLines: 3,
+  });
+  const firstBaseline = A_RULE_Y - 32 - (lines.length - 1) * lineHeight;
+  const kicker = firstBaseline - fontSize - 26;
+  const scrimTop = Math.max(150, kicker - 96);
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
   <defs>
-    <linearGradient id="scrim" x1="0" y1="${BAND_TOP}" x2="0" y2="${HEIGHT}" gradientUnits="userSpaceOnUse">
+    <linearGradient id="scrim" x1="0" y1="${scrimTop}" x2="0" y2="${HEIGHT}" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="${INK}" stop-opacity="0"/>
-      <stop offset="0.42" stop-color="${INK}" stop-opacity="0.74"/>
-      <stop offset="1" stop-color="${INK}" stop-opacity="0.95"/>
+      <stop offset="0.38" stop-color="${INK}" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="${INK}" stop-opacity="0.96"/>
     </linearGradient>
   </defs>
-  ${frameStroke}
-  <rect x="0" y="${BAND_TOP}" width="${WIDTH}" height="${HEIGHT - BAND_TOP}" fill="url(#scrim)"/>
+  <rect x="0" y="${scrimTop}" width="${WIDTH}" height="${HEIGHT - scrimTop}" fill="url(#scrim)"/>
   <rect x="0" y="0" width="${WIDTH}" height="${RULE_HEIGHT}" fill="${INK}"/>
   <rect x="0" y="0" width="${RULE_ACCENT_WIDTH}" height="${RULE_HEIGHT}" fill="${ACCENT_ON_INK}"/>
-  <text x="${TEXT_X}" y="${WORDMARK_BASELINE}" font-family="${serif}" font-size="30" font-weight="700" fill="${PAPER}">${escapeXml(siteName)}</text>
-  <text x="${TEXT_X}" y="${LABEL_BASELINE}" font-family="${sans}" font-size="19" font-weight="600" letter-spacing="4" fill="${ACCENT_ON_INK}">${escapeXml(String(section ?? '').toUpperCase())}</text>
+  <rect x="${A_MARGIN}" y="${kicker - 32}" width="56" height="4" fill="${ACCENT_ON_INK}"/>
+  <text x="${A_MARGIN}" y="${kicker}" font-family="${SANS}" font-size="20" font-weight="600" letter-spacing="4.5" fill="${ACCENT_ON_INK}">${escapeXml(String(section ?? '').toUpperCase())}</text>
+  <text font-family="${SERIF}" font-size="${fontSize}" font-weight="700" fill="${PAPER}">${headlineTspans(lines, A_MARGIN, firstBaseline, lineHeight)}</text>
+  <rect x="${A_MARGIN}" y="${A_RULE_Y}" width="${WIDTH - A_MARGIN * 2}" height="1" fill="${PAPER}" fill-opacity="0.3"/>
+  <text x="${A_MARGIN + MARK_SIZE + 14}" y="${A_BYLINE_BASELINE}" font-family="${SANS}" font-size="21" letter-spacing="0.5" fill="${PAPER}" fill-opacity="0.82">${escapeXml(author)} · ${escapeXml(domain)}</text>
 </svg>`;
+
+  return { svg, mark: { left: A_MARGIN, top: A_BYLINE_BASELINE - 33, size: MARK_SIZE } };
+}
+
+// ── Type B · Portrait split ────────────────────────────────────────────────
+
+export const B_PLATE_WIDTH = 500;
+const B_SEAM = 5;
+const B_MARGIN = 56;
+const B_TEXT_WIDTH = WIDTH - B_PLATE_WIDTH - B_SEAM - B_MARGIN * 2;
+
+// The whole card except the plate: an ink ground, the accent seam, and the type
+// centred on the left so a short headline is not stranded at the bottom.
+// Returns the SVG, where the mark goes, and where to composite the plate.
+export function renderTypeB({
+  title,
+  section,
+  author = 'Nathan Tracey',
+  domain = DOMAIN,
+  widthOf = estimateWidth,
+}) {
+  const { fontSize, lines, lineHeight } = fitLines(title, {
+    widthOf,
+    sizes: [46, 40, 35],
+    maxWidth: B_TEXT_WIDTH,
+    maxLines: 4,
+  });
+
+  // Block: kicker (28 above the headline), headline, rule (40 below it), byline.
+  const blockHeight = 28 + fontSize + 28 + (lines.length - 1) * lineHeight + 40 + 38;
+  const kicker = Math.round((HEIGHT - blockHeight) / 2) + 28;
+  const firstBaseline = kicker + 28 + fontSize;
+  const ruleY = firstBaseline + (lines.length - 1) * lineHeight + 40;
+  const byline = ruleY + 38;
+  const seamX = WIDTH - B_PLATE_WIDTH - B_SEAM;
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}">
+  <rect width="${WIDTH}" height="${HEIGHT}" fill="${INK}"/>
+  <rect x="${seamX}" y="0" width="${B_SEAM}" height="${HEIGHT}" fill="${ACCENT_ON_INK}"/>
+  <rect x="0" y="0" width="${seamX}" height="${RULE_HEIGHT}" fill="${ACCENT_ON_INK}"/>
+  <text x="${B_MARGIN}" y="${kicker}" font-family="${SANS}" font-size="19" font-weight="600" letter-spacing="4.5" fill="${ACCENT_ON_INK}">${escapeXml(String(section ?? '').toUpperCase())}</text>
+  <text font-family="${SERIF}" font-size="${fontSize}" font-weight="700" fill="${PAPER}">${headlineTspans(lines, B_MARGIN, firstBaseline, lineHeight)}</text>
+  <rect x="${B_MARGIN}" y="${ruleY}" width="${B_TEXT_WIDTH}" height="1" fill="${PAPER}" fill-opacity="0.3"/>
+  <text x="${B_MARGIN + MARK_SIZE + 14}" y="${byline}" font-family="${SANS}" font-size="20" letter-spacing="0.5" fill="${PAPER}" fill-opacity="0.82">${escapeXml(author)} · ${escapeXml(domain)}</text>
+</svg>`;
+
+  return {
+    svg,
+    mark: { left: B_MARGIN, top: byline - 32, size: MARK_SIZE },
+    plate: { left: WIDTH - B_PLATE_WIDTH, top: 0, width: B_PLATE_WIDTH, height: HEIGHT },
+  };
 }

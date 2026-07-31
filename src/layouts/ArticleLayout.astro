@@ -84,15 +84,15 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const initialShares = (engagement as Record<string, { shares: number }>)[slug]?.shares ?? 0;
 const sharesLabel = (n: number) => (n > 0 ? `· shared ${n} time${n === 1 ? '' : 's'}` : '');
 
-// Every article's social preview is a generated 1200×630 card (src/pages/og/…)
-// built from its own hero photograph, with the site's brand band along the
-// bottom. X, LinkedIn and Facebook all print the headline beside the card, so
-// the card carries the picture and not the words.
+// Every article's social preview is a generated 1200×630 card (src/pages/og/…),
+// built from what the article actually has: its hero photograph filling the
+// frame, a portrait on its own plate, or the typographic card when there is no
+// usable picture. See docs/design/design-lab.html for the card system.
 //
 // The card URL never changes, and the platforms cache share previews against
 // it — so the version tag is what makes them re-fetch after the card artwork is
 // redesigned. Bump it when the card design changes; leave it alone otherwise.
-const OG_CARD_VERSION = 2;
+const OG_CARD_VERSION = 3;
 const ogCard = `/og/${section}/${slug}.jpg?v=${OG_CARD_VERSION}`;
 
 // Topics let the tag badges link through to their archive pages.
