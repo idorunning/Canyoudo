@@ -84,11 +84,16 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const initialShares = (engagement as Record<string, { shares: number }>)[slug]?.shares ?? 0;
 const sharesLabel = (n: number) => (n > 0 ? `· shared ${n} time${n === 1 ? '' : 's'}` : '');
 
-// Every article shares a generated, branded title-card (src/pages/og/…) as its
-// social-preview image — readable at feed-thumbnail size and independent of
-// whether the article has a hero photo. The hero, when present, stays the
-// in-page visual below.
-const ogCard = `/og/${section}/${slug}.png`;
+// Every article's social preview is a generated 1200×630 card (src/pages/og/…)
+// built from its own hero photograph, with the site's brand band along the
+// bottom. X, LinkedIn and Facebook all print the headline beside the card, so
+// the card carries the picture and not the words.
+//
+// The card URL never changes, and the platforms cache share previews against
+// it — so the version tag is what makes them re-fetch after the card artwork is
+// redesigned. Bump it when the card design changes; leave it alone otherwise.
+const OG_CARD_VERSION = 2;
+const ogCard = `/og/${section}/${slug}.jpg?v=${OG_CARD_VERSION}`;
 
 // Topics let the tag badges link through to their archive pages.
 const topics = await getTopics();

@@ -2,6 +2,7 @@
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import { articleHero } from '../../lib/article-hero.mjs';
 
 // One route for every article in every section. The URL is built from the
 // article's own `section` field, so changing that field in the editor moves
@@ -21,13 +22,11 @@ interface Props {
 const { article } = Astro.props;
 const { Content, headings } = await article.render();
 
-// In Influential People, the article opens with the person's face. When a
-// portrait is set, it takes the first-image (hero) slot — any non-portrait
-// hero is swapped out for it, so every profile leads with the portrait.
-const heroImage =
-  article.data.section === 'influential-people' && article.data.portrait
-    ? article.data.portrait
-    : article.data.heroImage;
+// In Influential People, the article opens with the person's face: when a
+// portrait is set it takes the first-image (hero) slot, so every profile leads
+// with the portrait. Shared with the share-card endpoint (src/pages/og/…) so a
+// timeline preview shows the same picture the page opens with.
+const heroImage = articleHero(article.data);
 ---
 
 <ArticleLayout

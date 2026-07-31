@@ -1,7 +1,7 @@
 // Builds the 1200×630 branded title-card SVG used as the social-share image
 // (og:image / twitter:image) for every article. Kept as a plain module — with
 // no Astro or sharp imports — so the wrapping logic can be unit-tested and so
-// the OG endpoint (src/pages/og/[section]/[slug].png.ts) can rasterise the SVG
+// the OG endpoint (src/pages/og/[section]/[slug].jpg.ts) can rasterise the SVG
 // with `sharp`, exactly as scripts/generate-brand-assets.mjs does for the static
 // default card. Mirrors that script's palette and serif styling so the
 // per-article cards stay brand-consistent with og-default.png.
