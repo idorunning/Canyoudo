@@ -30,6 +30,22 @@ const HEIGHT = 630;
 const MARGIN = 80;
 const USABLE = WIDTH - MARGIN * 2; // 1040px of text width
 
+// The band the headline sits in: under the section eyebrow at y=160, and clear
+// of the rule above the byline at y=540. A four-line title set too big would
+// otherwise cross that rule, so the size stepping below is held to this band.
+const TITLE_TOP = 180;
+const TITLE_BOTTOM = 520;
+const TITLE_MIN_TOP = 190;
+
+// Where the block starts: vertically centred in the band, never above its top.
+const blockTopFor = (lines, lineHeight) => Math.max(
+  TITLE_MIN_TOP,
+  Math.round((TITLE_TOP + TITLE_BOTTOM) / 2 - (lines.length * lineHeight) / 2)
+);
+
+const lastBaselineFor = (lines, lineHeight, fontSize) =>
+  blockTopFor(lines, lineHeight) + (lines.length - 1) * lineHeight + fontSize;
+
 // Escape the five XML entities so titles containing & < > " ' can't break the
 // SVG (article titles routinely contain ampersands and quotes).
 export function escapeXml(str) {
@@ -59,12 +75,10 @@ export function renderCardSvg({
     maxWidth: USABLE,
     maxLines: 4,
     lineHeightRatio: 1.12,
+    fits: (l) => lastBaselineFor(l.lines, l.lineHeight, l.fontSize) <= TITLE_BOTTOM,
   });
 
-  // Vertically centre the title block in the area between the eyebrow and the
-  // footer (roughly y=180–520), then lay the lines out from its top.
-  const blockHeight = lines.length * lineHeight;
-  const blockTop = Math.max(190, Math.round((180 + 520) / 2 - blockHeight / 2));
+  const blockTop = blockTopFor(lines, lineHeight);
   const serif = "Georgia, 'Times New Roman', serif";
   const sans = "'DejaVu Sans', 'Liberation Sans', Helvetica, Arial, sans-serif";
   // The label voice. The rasteriser has no webfonts, so this resolves to

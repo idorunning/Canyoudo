@@ -68,6 +68,33 @@ test('fitLines takes the largest size that fits, and steps down when it must', (
   }
 });
 
+test('fitLines respects a card whose headline has a fixed band to sit in', () => {
+  // Type C gives its headline the space between the section eyebrow and the rule
+  // above the byline. Counting lines alone let a four-line title be set at the
+  // top size, and four lines of that stand taller than the band — which is how
+  // headlines ended up printed across the rule.
+  const band = 340;
+  const opts = {
+    widthOf: evenWidth, sizes: [80, 72, 64, 56], maxWidth: 1040, maxLines: 4, lineHeightRatio: 1.12,
+  };
+  // Long enough to need all four lines at the top size: 26 characters fit a line
+  // at 80px, so nineteen five-letter words fill four of them.
+  const title = Array.from({ length: 19 }, () => 'word').join(' ');
+
+  const unbounded = fitLines(title, opts);
+  assert.equal(unbounded.fontSize, 80, 'the top size is accepted on line count alone');
+  assert.equal(unbounded.lines.length, 4);
+  assert.ok(unbounded.lines.length * unbounded.lineHeight > band, 'and the block overflows the band');
+
+  const bounded = fitLines(title, {
+    ...opts,
+    fits: ({ lines, lineHeight }) => lines.length * lineHeight <= band,
+  });
+  assert.ok(bounded.fontSize < unbounded.fontSize, `stepped down to ${bounded.fontSize}`);
+  assert.ok(bounded.lines.length * bounded.lineHeight <= band, 'the bounded block fits');
+  assert.ok(!bounded.lines.at(-1).endsWith('…'), 'and it fits without truncating');
+});
+
 test('fitLines reports a line height derived from the size it chose', () => {
   const { fontSize, lineHeight } = fitLines('Headline', {
     widthOf: evenWidth, sizes: [80], maxWidth: 700, maxLines: 2, lineHeightRatio: 1.12,

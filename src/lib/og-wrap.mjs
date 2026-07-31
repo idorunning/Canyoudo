@@ -52,20 +52,25 @@ export function wrapToWidth(title, { widthOf = estimateWidth, fontSize, maxWidth
   return lines;
 }
 
-// Take the largest size from `sizes` at which the title fits `maxLines`, so a
-// short headline reads big and a long one steps down rather than truncating.
+// Take the largest size from `sizes` at which the title fits `maxLines` — and,
+// where the card gives its headline a fixed band to sit in, at which the block
+// fits that too: pass `fits` and a size is only accepted if it returns true.
+// Without it a title that needs every line available can still be set so tall
+// that it runs into whatever sits below.
 export function fitLines(title, {
   widthOf = estimateWidth,
   sizes,
   maxWidth,
   maxLines,
   lineHeightRatio = 1.17,
+  fits = () => true,
 } = {}) {
   for (const fontSize of sizes) {
     // Probe with room to spare so the line count is the real one, not a clamp.
     const lines = wrapToWidth(title, { widthOf, fontSize, maxWidth, maxLines: maxLines + 3 });
-    if (lines.length <= maxLines) {
-      return { fontSize, lines, lineHeight: Math.round(fontSize * lineHeightRatio) };
+    const lineHeight = Math.round(fontSize * lineHeightRatio);
+    if (lines.length <= maxLines && fits({ fontSize, lines, lineHeight })) {
+      return { fontSize, lines, lineHeight };
     }
   }
   const fontSize = sizes[sizes.length - 1];
