@@ -44,11 +44,13 @@ const DOMAIN = 'thinkingaboutpolicing.org';
 
 // ── Which card an article gets ─────────────────────────────────────────────
 
-// Type A needs enough pixels to fill 1200×630 without turning to mush, and a
-// shape that survives the crop to 1.905:1. Below 900px wide there is too little
-// to crop from, which is what Type C is for.
+// Type A needs a shape that survives the crop to 1.905:1, and enough pixels to
+// enlarge without falling apart. The floor is 500px rather than the card's own
+// 1200: a card is rendered around 600px wide in a feed, so a 500px source holds
+// up there even though it would not stand being printed. Below that there is
+// genuinely nothing to work with, which is what Type C is for.
 const A_MIN_ASPECT = 1.15;
-const A_MIN_WIDTH = 900;
+const A_MIN_WIDTH = 500;
 
 // Type B's plate is 500×630, so a portrait or square only needs to fill that.
 const B_MAX_ASPECT = A_MIN_ASPECT;

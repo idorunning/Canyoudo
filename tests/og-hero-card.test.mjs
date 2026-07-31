@@ -49,8 +49,15 @@ test('drawn artwork takes Type C however big it is', () => {
   assert.equal(planCard({ width: 1694, height: 746, paleGround: 0.05 }), 'A');
 });
 
+test('a modest landscape photograph still fills the frame', () => {
+  // A card renders around 600px wide in a feed, so these hold up as Type A even
+  // though they would not stand being printed.
+  assert.equal(planCard({ width: 512, height: 279 }), 'A');
+  assert.equal(planCard({ width: 549, height: 364 }), 'A');
+});
+
 test('a hero too small for either photo card takes Type C', () => {
-  assert.equal(planCard({ width: 512, height: 279 }), 'C'); // right shape, too few pixels
+  assert.equal(planCard({ width: 420, height: 230 }), 'C'); // right shape, too few pixels
   assert.equal(planCard({ width: 180, height: 180 }), 'C'); // square, too small for a plate
   assert.equal(planCard({ width: 208, height: 277 }), 'C');
 });
