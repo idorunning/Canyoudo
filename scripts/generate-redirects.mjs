@@ -2,6 +2,8 @@
 // a Netlify `_redirects` file so that when an article moves between sections
 // (its `section` field changes, and with it its URL), the old paths 301 to the
 // new one. Runs automatically after `astro build` via the npm "postbuild" hook.
+//
+// It also keeps the retired `/og/…​.png` share-card paths alive (see below).
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -59,6 +61,13 @@ if (existsSync(CONTENT_DIR)) {
       if (f.replace(/\/$/, '') === target.replace(/\/$/, '')) continue; // no self-redirect
       rules.push(`${f}  ${target}  301`);
     }
+
+    // Share cards were PNG until the card became a photograph and moved to JPEG.
+    // X, Facebook and LinkedIn cache a card against the image URL they scraped,
+    // so a cached entry still asks for the .png — and a 404 there shows as no
+    // preview at all, not as the old card. Point it at the JPEG until those
+    // caches turn over. Safe to drop once they have.
+    rules.push(`/og/${section}/${slug}.png  /og/${section}/${slug}.jpg  301`);
   }
 }
 
