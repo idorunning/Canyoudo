@@ -11,6 +11,15 @@ export const MODEL_PRICES_USD_PER_MTOK = {
   'claude-sonnet-5': { input: 3, output: 15 },
   'claude-sonnet-4-6': { input: 3, output: 15 },
   'claude-haiku-4-5': { input: 1, output: 5 },
+  // The research tools' engine (src/lib/openai-core.mjs). Reasoning tokens are
+  // billed as output and arrive inside output_tokens, exactly as Anthropic's
+  // thinking tokens do — including pro mode, which bills the extra model work
+  // it does at these same rates, so no separate pro entry is needed. List
+  // prices; cached input is cheaper and very long inputs cost more, neither of
+  // which applies at the sizes these calls run at.
+  'gpt-5.6-sol': { input: 5, output: 30 },
+  'gpt-5.6-terra': { input: 2, output: 12 },
+  'gpt-5.6-luna': { input: 0.2, output: 1.2 },
 };
 
 // Unknown model ids (e.g. a future env override) are priced as Sonnet — a

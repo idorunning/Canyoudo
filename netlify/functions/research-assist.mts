@@ -9,7 +9,15 @@ import {
   OVERVIEW_MODEL,
   BRIEF_SYSTEM,
   PLAN_SYSTEM,
+  ASSIST_OPENAI_MODEL,
+  ASSIST_REASONING,
 } from '../../src/lib/research-assist-prompts';
+import {
+  responsesBody,
+  openaiCreate,
+  outputText,
+  usageOf,
+} from '../../src/lib/openai-core.mjs';
 import { sanitizeCitations } from '../../src/lib/citations.mjs';
 import { stableKey } from '../../src/lib/cache-key.mjs';
 import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-budget';
@@ -40,10 +48,24 @@ import { budgetExceeded, recordUsage, BUDGET_MESSAGE } from '../../src/lib/ai-bu
 // the monthly budget guard (lib/ai-budget.mts): over budget → friendly 503,
 // search unaffected.
 
+// v22: these four modes run on OpenAI (ASSIST_OPENAI_MODEL, standard mode at
+// low effort) whenever OPENAI_API_KEY2 is set. Low effort is a deliberate
+// choice, not a saving: every call here happens inside a SYNCHRONOUS function
+// with a hard ~10s ceiling, and each is a short JSON round-trip — a search
+// translation, three search angles, a paragraph on ten abstracts. The deep
+// thinking (pro mode, max effort) belongs to the one call that can afford it,
+// the streamed review in netlify/edge-functions/research-review.ts.
+//
+// The Claude ids below are the fallback engine, used when no OpenAI key is set.
 const TRANSLATE_MODEL: ModelId = 'claude-sonnet-4-6';
 const PLAN_MODEL: ModelId = 'claude-sonnet-4-6';
 const BRIEF_MODEL: ModelId = 'claude-sonnet-4-6';
 // OVERVIEW_MODEL comes from research-assist-prompts.ts (shared with the client).
+
+// The research tools' own key, separate from the OPENAI_API_KEY the build uses
+// for audio narration so either can be rotated on its own; the narration key
+// stands in if the dedicated one is missing.
+const openAiKey = () => process.env.OPENAI_API_KEY2 || process.env.OPENAI_API_KEY || '';
 
 const json = (status: number, body: unknown, cache: 'HIT' | 'MISS' | 'NONE' = 'NONE') =>
   new Response(JSON.stringify(body), {
@@ -73,6 +95,26 @@ function parseJsonObject(text: string): any {
     return JSON.parse(trimmed.slice(start, end + 1));
   }
   throw new SyntaxError('Model response was not JSON.');
+}
+
+/** One JSON round-trip on the OpenAI engine. Same contract as callClaude:
+ *  returns the parsed object, records the spend, throws on anything else. */
+async function callOpenAi(apiKey: string, model: string, system: string, user: string, maxTokens: number) {
+  const res = await openaiCreate(
+    apiKey,
+    responsesBody({
+      model,
+      system,
+      user,
+      // Reasoning tokens share this ceiling, so give the short JSON replies
+      // room to think before writing — a truncated reply is an unusable one.
+      maxOutputTokens: maxTokens + 2000,
+      ...ASSIST_REASONING,
+    })
+  );
+  const { input, output } = usageOf(res);
+  await recordUsage(model, input, output);
+  return parseJsonObject(outputText(res));
 }
 
 async function callClaude(model: ModelId, system: string, user: string, maxTokens: number) {
@@ -118,7 +160,9 @@ const numberedList = (items: object[]) =>
 
 export default async (req: Request) => {
   if (req.method !== 'POST') return new Response('Method Not Allowed', { status: 405 });
-  if (!process.env.ANTHROPIC_API_KEY) {
+  // OpenAI leads; Claude runs these modes only when no OpenAI key is set.
+  const openai = openAiKey();
+  if (!openai && !process.env.ANTHROPIC_API_KEY) {
     return json(503, { error: 'AI assistance is not configured yet.' });
   }
 
@@ -130,7 +174,12 @@ export default async (req: Request) => {
   }
 
   const mode = body?.mode;
-  let model: ModelId, system: string, user: string, maxTokens: number, input: Record<string, unknown>;
+  let model: string, system: string, user: string, maxTokens: number, input: Record<string, unknown>;
+  // One mid-tier model does all four modes on the OpenAI engine; on the Claude
+  // fallback each mode keeps its own pinned id. Either way `model` is what the
+  // cache key and the budget ledger record, so a switch never serves an answer
+  // the other engine wrote.
+  const modelFor = (claude: ModelId) => (openai ? ASSIST_OPENAI_MODEL : claude);
   // How many studies a citing mode (brief) or index-suggesting mode (overview)
   // was actually given — the upper bound for its indices.
   let citedItemCount = 0;
@@ -138,7 +187,7 @@ export default async (req: Request) => {
   if (mode === 'plan') {
     const problem = clipStr(body.problem, 600);
     if (!problem) return json(400, { error: 'Describe the problem first.' });
-    model = PLAN_MODEL;
+    model = modelFor(PLAN_MODEL);
     system = PLAN_SYSTEM;
     user = `Problem: ${problem}`;
     maxTokens = 500;
@@ -148,7 +197,7 @@ export default async (req: Request) => {
     const items = clipItems(body.items, 15, 600, true);
     if (items.length === 0) return json(400, { error: 'Nothing to brief from.' });
     citedItemCount = items.length;
-    model = BRIEF_MODEL;
+    model = modelFor(BRIEF_MODEL);
     system = BRIEF_SYSTEM;
     user = `Topic: ${topic}\n\nStudies:\n${numberedList(items)}`;
     maxTokens = 2000;
@@ -156,7 +205,7 @@ export default async (req: Request) => {
   } else if (mode === 'translate') {
     const question = clipStr(body.question, 400);
     if (!question) return json(400, { error: 'Ask a question first.' });
-    model = TRANSLATE_MODEL;
+    model = modelFor(TRANSLATE_MODEL);
     system = TRANSLATE_SYSTEM;
     user = `Question: ${question}`;
     maxTokens = 400;
@@ -166,7 +215,7 @@ export default async (req: Request) => {
     const items = clipItems(body.items, 10, 600);
     if (!query || items.length === 0) return json(400, { error: 'Nothing to summarise.' });
     citedItemCount = items.length;
-    model = OVERVIEW_MODEL as ModelId;
+    model = modelFor(OVERVIEW_MODEL as ModelId);
     system = OVERVIEW_SYSTEM;
     user = `Search query: ${query}\n\nResults:\n${numberedList(items)}`;
     maxTokens = 900;
@@ -192,7 +241,9 @@ export default async (req: Request) => {
 
   let out: any;
   try {
-    out = await callClaude(model, system, user, maxTokens);
+    out = openai
+      ? await callOpenAi(openai, model, system, user, maxTokens)
+      : await callClaude(model as ModelId, system, user, maxTokens);
   } catch {
     return json(502, { error: 'The assistant is unavailable right now. Search still works.' });
   }

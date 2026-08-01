@@ -20,12 +20,58 @@
 // v21: the briefing is restructured simplest-first — a plain-English "In brief"
 // summary and the practical "What you could do" options move to the top, the
 // evidence ladder/table and caveats drop below them (REVIEW_HEADINGS reordered).
-export const ASSIST_PROMPT_VERSION = 'v21';
+// v22: the engine changed — the research tools now run on OpenAI (GPT-5.6,
+// review at pro/max) rather than Claude, so every cached answer was written by
+// a different model against the same prompts; the bump retires them so the new
+// engine actually writes the next one.
+export const ASSIST_PROMPT_VERSION = 'v22';
 
 // Models, pinned here so the functions and the client-side provenance records
-// can never drift apart. They must be keys of INTERPRET_MODELS (personas.ts).
+// can never drift apart.
+//
+// The research tools run on OpenAI whenever OPENAI_API_KEY2 is set (it is, in
+// Netlify). The Claude ids below are the FALLBACK engine — used only when that
+// key is absent, or when RESEARCH_REVIEW_MODEL explicitly names a Claude model
+// — and they must stay keys of INTERPRET_MODELS (personas.ts). The crime
+// dashboard (interpret / db-interpret / force-briefing) is untouched and still
+// runs on Claude.
 export const OVERVIEW_MODEL = 'claude-sonnet-4-6';
 export const REVIEW_MODEL = 'claude-sonnet-5';
+
+// ---- the OpenAI engine (default) ------------------------------------------
+// Ids and labels live in src/lib/openai-core.mjs; these pick which one does
+// which job, and how hard it is asked to think.
+//
+// The deep synthesis — the one call whose quality the whole tool is judged on —
+// runs on the frontier model in PRO mode at MAX effort. Mode and effort are
+// independent controls: pro does more model work per answer, effort scales the
+// reasoning within it, so pro+max is the most careful setting the API offers.
+// It is also the slowest and most expensive, which is exactly why it sits here
+// and nowhere else: the review is already streamed from an edge function with
+// no wall-clock ceiling, heartbeats through silent thinking, and caches the
+// finished report, so latency costs the reader a progress line, not a failure.
+export const REVIEW_OPENAI_MODEL = 'gpt-5.6-sol';
+export const REVIEW_OPENAI_FALLBACKS = ['gpt-5.6-terra'] as const;
+export const REVIEW_REASONING = { mode: 'pro', effort: 'max' } as const;
+
+// Reasoning tokens are billed as output and count against max_output_tokens,
+// and pro/max spends a lot of them before the first word of the report — so the
+// ceiling is far above the ~2,500 tokens the briefing itself needs. Streaming
+// means an unused ceiling costs nothing; a truncated report is never cached.
+// At $30/MTok output this bounds one uncached review at roughly $1.20.
+export const REVIEW_OPENAI_MAX_TOKENS = 40000;
+
+// The screening pass that picks which pool studies reach the writer reads
+// headline metadata only and must stay fast — standard mode, low effort. The
+// depth belongs to the writing call.
+export const SELECT_REASONING = { mode: 'standard', effort: 'low' } as const;
+
+// The short JSON helpers (translate / plan / overview / brief) run inside a
+// SYNCHRONOUS Netlify function, which has a hard ~10s ceiling — so they use the
+// mid-tier model at low effort. Deep reasoning here would buy little and risk
+// the timeout that the whole streaming architecture exists to avoid.
+export const ASSIST_OPENAI_MODEL = 'gpt-5.6-terra';
+export const ASSIST_REASONING = { mode: 'standard', effort: 'low' } as const;
 
 // The review streams markdown; give it generous room — on Sonnet 5 the
 // adaptive-thinking tokens count against max_tokens too, and high-effort
