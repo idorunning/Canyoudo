@@ -303,7 +303,21 @@ still runs on Claude.
 |---|---|---|
 | translate / plan / brief / overview | `gpt-5.6-terra` (`ASSIST_OPENAI_MODEL`) | standard mode, **effort low** — these run inside a synchronous function with a hard ~10s ceiling |
 | review — selection pass | same model as the writer | standard mode, **effort low**, JSON-only, max 4,000 tokens (`SELECT_MAX_TOKENS`) |
-| review — writer | `gpt-5.6-sol` (`REVIEW_OPENAI_MODEL`), falls back to `gpt-5.6-terra`; `RESEARCH_REVIEW_MODEL` env override leads the chain if set | **reasoning mode `pro`, effort `max`** (`REVIEW_REASONING`), streamed (edge function), max 40,000 output tokens (`REVIEW_OPENAI_MAX_TOKENS`) |
+| review — writer | `gpt-5.6-sol` (`REVIEW_OPENAI_MODEL`), falls back to `gpt-5.6-terra`; `RESEARCH_REVIEW_MODEL` env override leads the chain if set | **reasoning mode `pro`, effort `max`** (`REVIEW_REASONING`; overridable per-deploy with `RESEARCH_REVIEW_MODE` / `RESEARCH_REVIEW_EFFORT`), **detached** (`background: true`), streamed (edge function), max 40,000 output tokens (`REVIEW_OPENAI_MAX_TOKENS`) |
+
+**Detached generation.** The writing call runs with `background: true` — the
+documented pattern for pro mode, and the piece that makes a multi-minute
+generation safe rather than a gamble. The job lives on OpenAI's side, not inside
+the edge isolate, so it keeps working when a reader's connection drops (a phone
+that locks, a closed tab, an intermediary that gives up). The job id is written
+to Blobs beside the report's cache key, so the next request for the same
+question re-attaches — replaying from the start if it's still thinking, or
+collecting the finished report if it completed while nobody was listening —
+instead of paying for a second generation. At roughly a dollar of thinking per
+review, a discarded generation is the expensive failure mode, and this removes
+it. Detaching does NOT turn on retention: background requests run with
+`store: false`, the arrangement zero-data-retention projects use, so readers'
+questions still aren't retained.
 
 **Why pro/max, and only there.** Mode and effort are independent controls: pro
 does more model work per answer, effort scales the reasoning within it, so

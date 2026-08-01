@@ -44,16 +44,26 @@ export const openAiLabel = (id) => OPENAI_MODELS[id] ?? String(id ?? '');
  * research questions are their own, and this site already caches finished
  * answers itself in Netlify Blobs.
  *
+ * `background: true` hands the job to OpenAI to run detached: it keeps working
+ * whether or not anyone is still listening, and can be polled or re-streamed by
+ * id. That is the documented pattern for pro mode, and it is what makes a
+ * multi-minute review survivable — a dropped connection stops being a lost
+ * generation. It does NOT require `store: true`: background requests run with
+ * `store: false` (the arrangement zero-data-retention projects use), so the
+ * detached job keeps only the ~10 minutes of working state it needs to be
+ * collected, and readers' questions still aren't retained.
+ *
  * @param {{ model: string, user: string, system?: string, maxOutputTokens?: number,
- *           effort?: string, mode?: string }} opts
+ *           effort?: string, mode?: string, background?: boolean }} opts
  * @returns {Record<string, unknown>}
  */
-export function responsesBody({ model, system, user, maxOutputTokens, effort, mode }) {
+export function responsesBody({ model, system, user, maxOutputTokens, effort, mode, background }) {
   const body = {
     model,
     input: [{ role: 'user', content: user }],
     store: false,
   };
+  if (background) body.background = true;
   if (system) body.instructions = system;
   if (Number.isFinite(maxOutputTokens)) body.max_output_tokens = maxOutputTokens;
   const reasoning = {};
@@ -131,6 +141,49 @@ export async function openaiCreate(apiKey, body, signal) {
   return res.json();
 }
 
+const responseUrl = (id) => `${OPENAI_RESPONSES_URL}/${encodeURIComponent(id)}`;
+
+async function openaiGet(apiKey, url, { stream = false, signal } = {}) {
+  const res = await fetch(url, {
+    headers: {
+      authorization: `Bearer ${apiKey}`,
+      ...(stream ? { accept: 'text/event-stream' } : {}),
+    },
+    signal,
+  });
+  if (!res.ok || (stream && !res.body)) {
+    const err = new Error(`OpenAI API ${res.status}`);
+    err.status = res.status;
+    try {
+      err.detail = (await res.text()).slice(0, 300);
+    } catch {
+      // Status is the useful part.
+    }
+    throw err;
+  }
+  return res;
+}
+
+/** Fetch a detached (background) job by id — status, output and usage. Throws
+ *  with `.status` 404 once the job has aged out of its collection window. */
+export async function openaiGetResponse(apiKey, id, signal) {
+  const res = await openaiGet(apiKey, responseUrl(id), { signal });
+  return res.json();
+}
+
+/**
+ * Re-attach to a detached job's event stream. Without `startingAfter` the
+ * stream replays from the beginning, so a reader who reconnects — or a
+ * different reader asking the same question — gets the whole report, not the
+ * tail. Pass the last `sequence_number` seen to resume instead of replay.
+ */
+export async function openaiResumeStream(apiKey, id, startingAfter, signal) {
+  const url = new URL(responseUrl(id));
+  url.searchParams.set('stream', 'true');
+  if (Number.isFinite(startingAfter)) url.searchParams.set('starting_after', String(startingAfter));
+  return openaiGet(apiKey, url.toString(), { stream: true, signal });
+}
+
 /** Raw SSE events from a streaming Responses call. Frames are blank-line
  *  separated; only the JSON on the `data:` line matters. A malformed frame is
  *  skipped rather than killing the stream. */
@@ -161,15 +214,20 @@ export async function* openaiSseEvents(res) {
 
 /**
  * The streaming shape the callers actually want, normalised:
+ *   { type: 'created', id }                      the job's id, first event
  *   { type: 'text', text }                       one chunk of the answer
  *   { type: 'done', usage, truncated }           terminal accounting
  * Reasoning summary events are ignored — only the answer reaches the reader.
+ * The `created` event carries the id a detached job can be re-attached to; a
+ * caller that doesn't persist it can simply ignore the event.
  * A `response.failed` or transport `error` event throws, so a failure mid-way
  * is handled the same as any other stream break.
  */
 export async function* openaiTextStream(res) {
   for await (const ev of openaiSseEvents(res)) {
-    if (ev.type === 'response.output_text.delta') {
+    if (ev.type === 'response.created' || ev.type === 'response.queued') {
+      if (ev.response?.id) yield { type: 'created', id: ev.response.id };
+    } else if (ev.type === 'response.output_text.delta') {
       if (typeof ev.delta === 'string' && ev.delta) yield { type: 'text', text: ev.delta };
     } else if (ev.type === 'response.completed' || ev.type === 'response.incomplete') {
       yield { type: 'done', usage: usageOf(ev.response), truncated: wasTruncated(ev.response) };

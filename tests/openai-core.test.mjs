@@ -44,6 +44,61 @@ test('the deep review body carries pro mode at max effort', () => {
   assert.equal(body.store, false);
 });
 
+/** A fake streaming Response body: SSE frames from a list of event objects,
+ *  split across chunk boundaries mid-frame to prove the parser reassembles. */
+function sseResponse(events) {
+  const text = events.map((e) => `event: ${e.type}\ndata: ${JSON.stringify(e)}\n\n`).join('');
+  const bytes = new TextEncoder().encode(text);
+  let i = 0;
+  return {
+    body: {
+      getReader: () => ({
+        read: async () => {
+          if (i >= bytes.length) return { done: true, value: undefined };
+          // Deliberately awkward chunk size — frames land split.
+          const value = bytes.slice(i, i + 7);
+          i += 7;
+          return { done: false, value };
+        },
+      }),
+    },
+  };
+}
+
+test('the review runs detached, and detaching does not turn on retention', () => {
+  // background: true is what lets a multi-minute pro/max generation survive the
+  // reader's connection dropping. It must not drag `store` along with it —
+  // background requests run with store: false, and readers' research questions
+  // stay unretained.
+  const body = responsesBody({
+    model: 'gpt-5.6-sol',
+    user: 'q',
+    background: true,
+    mode: 'pro',
+    effort: 'max',
+  });
+  assert.equal(body.background, true);
+  assert.equal(body.store, false);
+  // Everything else stays undetached — a short JSON round-trip has nothing to
+  // gain from a job it would only have to wait on anyway.
+  assert.equal('background' in responsesBody({ model: 'gpt-5.6-terra', user: 'q' }), false);
+});
+
+test('the stream surfaces the job id so it can be re-attached to', async () => {
+  const res = sseResponse([
+    { type: 'response.created', response: { id: 'resp_abc123', status: 'queued' } },
+    { type: 'response.output_text.delta', delta: 'the report' },
+    {
+      type: 'response.completed',
+      response: { status: 'completed', usage: { input_tokens: 1, output_tokens: 2 } },
+    },
+  ]);
+  const seen = [];
+  for await (const ev of openaiTextStream(res)) seen.push(ev);
+  assert.deepEqual(seen[0], { type: 'created', id: 'resp_abc123' });
+  assert.equal(seen[1].text, 'the report');
+});
+
 test('reasoning is omitted entirely when neither control is set', () => {
   // The access preflight sends the barest possible call — no reasoning block,
   // so nothing can be rejected as an unsupported parameter on a probe whose
@@ -79,27 +134,6 @@ test('a report cut off at the token ceiling is recognised as truncated', () => {
   assert.ok(wasTruncated({ status: 'incomplete', incomplete_details: { reason: 'max_output_tokens' } }));
   assert.ok(!wasTruncated({ status: 'completed' }));
 });
-
-/** A fake streaming Response body: SSE frames from a list of event objects,
- *  split across chunk boundaries mid-frame to prove the parser reassembles. */
-function sseResponse(events) {
-  const text = events.map((e) => `event: ${e.type}\ndata: ${JSON.stringify(e)}\n\n`).join('');
-  const bytes = new TextEncoder().encode(text);
-  let i = 0;
-  return {
-    body: {
-      getReader: () => ({
-        read: async () => {
-          if (i >= bytes.length) return { done: true, value: undefined };
-          // Deliberately awkward chunk size — frames land split.
-          const value = bytes.slice(i, i + 7);
-          i += 7;
-          return { done: false, value };
-        },
-      }),
-    },
-  };
-}
 
 test('the stream yields text deltas then one terminal accounting event', async () => {
   const res = sseResponse([

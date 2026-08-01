@@ -25,8 +25,11 @@ import {
   responsesBody,
   openaiRequest,
   openaiCreate,
+  openaiGetResponse,
+  openaiResumeStream,
   outputText,
   usageOf,
+  wasTruncated,
   openaiTextStream,
 } from '../../src/lib/openai-core.mjs';
 import { stableKey } from '../../src/lib/cache-key.mjs';
@@ -87,8 +90,16 @@ import { costUsd, monthKey } from '../../src/lib/ai-budget-core.mjs';
 // the API offers, on the one call the whole tool is judged on. Everything the
 // long note above describes is what makes that affordable in engineering terms:
 // edge execution is CPU-billed so minutes of thinking cost nothing, the
-// heartbeat holds the connection open through silence, a disconnect doesn't
-// abort the generation, and the finished report is cached. Both engines are
+// heartbeat holds the connection open through silence, and the finished report
+// is cached.
+//
+// One thing this route could NOT do before, and now does: the writing call runs
+// DETACHED (background: true). Pro/max thinks for minutes before its first word,
+// and the previous arrangement bet the whole generation on one connection
+// surviving that silence — when it didn't, the thinking was simply lost. A
+// detached job lives on OpenAI's side; its id is stored beside the report's
+// cache key, so the next request for the same question re-attaches to work
+// already in flight rather than paying for it twice. Both engines are
 // spoken to the same way — plain fetch, hand-parsed SSE, no SDK — and both
 // stream through one normalised event shape ({type:'text'} / {type:'done'}), so
 // only the request bodies really differ. Claude remains the fallback: no
@@ -660,15 +671,64 @@ export default async (req: Request) => {
     if (engine.provider === 'openai') {
       // THE DEEP CALL. Pro mode at max effort: the most model work per answer
       // the API offers, on the one call that decides whether the briefing is
-      // any good. Everything that makes this survivable is already in place —
-      // edge execution bills CPU only, the heartbeat holds the connection open
-      // through minutes of silent thinking, a reader's disconnect doesn't abort
-      // it, and the finished report caches so nobody waits twice.
+      // any good. It thinks for minutes before the first word — the whole-stream
+      // heartbeat is what keeps that silence from reading as a dead connection.
+      //
+      // It runs DETACHED (background: true), which is the documented pattern for
+      // pro mode and the one thing this route could not do before: the job lives
+      // on OpenAI's side, not inside this isolate, so it keeps working when the
+      // reader's connection drops — a phone that locks mid-report, a closed tab,
+      // an intermediary giving up. The job's id is written to Blobs beside the
+      // report's cache key, so the next request for the SAME question re-attaches
+      // to the work already in flight instead of paying for a second one. That
+      // matters more here than anywhere else on the site: a discarded pro/max
+      // generation is roughly a dollar of thinking thrown away.
       //
       // If pro mode is ever rejected for this account or model (a 4xx on the
       // parameter, not on auth — auth was proven by the preflight above), fall
       // back once to standard mode at high effort rather than failing the
       // report: a slightly less-considered briefing beats none.
+      const jobKey = `${keyFor(model)}:job`;
+      const rememberJob = async (id: string) => {
+        try {
+          if (store) await store.set(jobKey, JSON.stringify({ id }));
+        } catch {
+          // A job we can't remember just means the next reader starts a fresh
+          // one — wasteful, never wrong.
+        }
+      };
+
+      // Already in flight (or just finished) from an earlier request? Re-attach.
+      let priorId = '';
+      try {
+        const raw = store ? await store.get(jobKey) : null;
+        priorId = raw ? JSON.parse(raw).id ?? '' : '';
+      } catch {
+        priorId = '';
+      }
+      if (priorId) {
+        try {
+          const snapshot = await openaiGetResponse(engine.apiKey, priorId);
+          if (snapshot.status === 'completed') {
+            // Finished while nobody was listening — hand it over whole, and let
+            // the normal path cache it on the way out.
+            const text = outputText(snapshot);
+            const { input, output } = usageOf(snapshot);
+            return (async function* () {
+              if (text) yield { type: 'text', text };
+              yield { type: 'done', usage: { input, output }, truncated: wasTruncated(snapshot) };
+            })();
+          }
+          if (snapshot.status === 'queued' || snapshot.status === 'in_progress') {
+            // Still thinking: replay from the start, so this reader watches the
+            // whole report arrive rather than joining mid-sentence.
+            return openaiTextStream(await openaiResumeStream(engine.apiKey, priorId));
+          }
+        } catch {
+          // Aged out of its collection window, or failed — start a fresh job.
+        }
+      }
+
       const write = (reasoning: { mode?: string; effort?: string }) =>
         openaiRequest(
           engine.apiKey,
@@ -677,6 +737,7 @@ export default async (req: Request) => {
             system: REVIEW_SYSTEM,
             user,
             maxOutputTokens: REVIEW_OPENAI_MAX_TOKENS,
+            background: true,
             ...reasoning,
           }),
           { stream: true }
@@ -691,7 +752,15 @@ export default async (req: Request) => {
           throw e;
         }
       }
-      return openaiTextStream(res);
+      return (async function* () {
+        for await (const ev of openaiTextStream(res)) {
+          if (ev.type === 'created') {
+            await rememberJob(ev.id);
+            continue;
+          }
+          yield ev;
+        }
+      })();
     }
 
     // Claude fallback: high effort on Sonnet 5 — the proven, reliable config
