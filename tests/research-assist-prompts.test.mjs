@@ -12,8 +12,8 @@ const src = readFileSync(
   'utf8'
 );
 
-test('prompt version bumped to v21 (invalidates the assist cache)', () => {
-  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v21'/);
+test('prompt version bumped to v22 (invalidates the assist cache)', () => {
+  assert.match(src, /ASSIST_PROMPT_VERSION\s*=\s*'v22'/);
 });
 
 test('a fast selection pass screens the pool; the writer gets a briefing-length set', () => {
@@ -55,8 +55,29 @@ test('the writer knows its list is pre-screened and keeps original, sparse numbe
 });
 
 test('models are pinned where client and functions both read them', () => {
+  // The OpenAI engine (default) and the Claude engine (fallback) are both
+  // pinned here, so the functions, the client provenance line and the PDF can
+  // never disagree about what wrote a report.
+  assert.match(src, /REVIEW_OPENAI_MODEL\s*=\s*'gpt-5\.6-sol'/);
+  assert.match(src, /ASSIST_OPENAI_MODEL\s*=\s*'gpt-5\.6-terra'/);
   assert.match(src, /OVERVIEW_MODEL\s*=\s*'claude-sonnet-4-6'/);
   assert.match(src, /REVIEW_MODEL\s*=\s*'claude-sonnet-5'/);
+});
+
+test('the deep review runs at the top reasoning setting, the short modes do not', () => {
+  // The one call the tool is judged on gets pro mode at max effort; the
+  // screening pass and the four synchronous JSON modes stay at low effort so
+  // they finish inside a regular function's ~10s ceiling. Anything that
+  // quietly downgrades the review, or upgrades the short modes into timeout
+  // territory, should fail here first.
+  assert.match(src, /REVIEW_REASONING\s*=\s*\{\s*mode:\s*'pro',\s*effort:\s*'max'\s*\}/);
+  assert.match(src, /SELECT_REASONING\s*=\s*\{\s*mode:\s*'standard',\s*effort:\s*'low'\s*\}/);
+  assert.match(src, /ASSIST_REASONING\s*=\s*\{\s*mode:\s*'standard',\s*effort:\s*'low'\s*\}/);
+  // Reasoning tokens share max_output_tokens with the report, and pro/max
+  // spends a lot of them before the first word — the ceiling has to be well
+  // clear of the ~2,500 tokens the briefing itself needs.
+  const ceiling = Number(src.match(/REVIEW_OPENAI_MAX_TOKENS\s*=\s*(\d+)/)?.[1]);
+  assert.ok(ceiling >= 24000, `review ceiling too tight for pro/max: ${ceiling}`);
 });
 
 test('PLAN_SYSTEM demands JSON-only with framing + angles', () => {

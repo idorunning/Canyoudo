@@ -13,7 +13,22 @@ import {
   REVIEW_TABLE_MAX,
   SELECT_SYSTEM,
   SELECT_MAX_TOKENS,
+  REVIEW_OPENAI_MODEL,
+  REVIEW_OPENAI_FALLBACKS,
+  REVIEW_OPENAI_MAX_TOKENS,
+  REVIEW_REASONING,
+  SELECT_REASONING,
 } from '../../src/lib/research-assist-prompts.ts';
+import {
+  OPENAI_MODELS,
+  openAiLabel,
+  responsesBody,
+  openaiRequest,
+  openaiCreate,
+  outputText,
+  usageOf,
+  openaiTextStream,
+} from '../../src/lib/openai-core.mjs';
 import { stableKey } from '../../src/lib/cache-key.mjs';
 import { costUsd, monthKey } from '../../src/lib/ai-budget-core.mjs';
 
@@ -66,9 +81,35 @@ import { costUsd, monthKey } from '../../src/lib/ai-budget-core.mjs';
 // Model resolution, citation discipline, caching and the CONFIDENCE-line wire
 // protocol are otherwise identical to the previous implementation — see
 // docs/research-assistant-v4.md for the full contract.
+//
+// THE ENGINE (v22). The briefing is written by OpenAI's GPT-5.6 whenever
+// OPENAI_API_KEY2 is set — in PRO mode at MAX effort, the most careful setting
+// the API offers, on the one call the whole tool is judged on. Everything the
+// long note above describes is what makes that affordable in engineering terms:
+// edge execution is CPU-billed so minutes of thinking cost nothing, the
+// heartbeat holds the connection open through silence, a disconnect doesn't
+// abort the generation, and the finished report is cached. Both engines are
+// spoken to the same way — plain fetch, hand-parsed SSE, no SDK — and both
+// stream through one normalised event shape ({type:'text'} / {type:'done'}), so
+// only the request bodies really differ. Claude remains the fallback: no
+// OpenAI key, or a RESEARCH_REVIEW_MODEL naming a Claude id, and the previous
+// path runs unchanged.
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
+
+// The research tools' own key, kept separate from the OPENAI_API_KEY the build
+// uses for audio narration so either can be rotated or revoked on its own. The
+// narration key is accepted as a stand-in if the dedicated one is missing.
+const openAiKey = () => Deno.env.get('OPENAI_API_KEY2') || Deno.env.get('OPENAI_API_KEY') || '';
+
+// Which engine writes this review, resolved once per request. `models` is the
+// candidate chain: the first one this account can actually reach wins
+// (pickModel), so a single access gap never breaks the feature.
+type Engine = { provider: 'openai' | 'anthropic'; apiKey: string; models: string[] };
+
+const labelFor = (provider: Engine['provider'], model: string) =>
+  provider === 'openai' ? openAiLabel(model) : INTERPRET_MODELS[model as ModelId] ?? model;
 
 const json = (status: number, body: unknown) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
@@ -192,18 +233,13 @@ async function* streamMessages(
 
 // ---- the selection pass: which pool studies does the briefing get? --------
 
-/** Pull the JSON array of study numbers out of a selection response. Adaptive
- *  thinking means content[] may lead with a thinking block, and models
- *  sometimes wrap JSON in fences or a stray sentence — so this concatenates
- *  the text blocks and grabs the first [...] it can parse. Returns [] on any
- *  failure; the caller falls back deterministically. */
-function parseSelection(res: any, poolSize: number): number[] {
+/** Pull the JSON array of study numbers out of a selection response's text.
+ *  Models sometimes wrap JSON in fences or add a stray sentence — so this
+ *  grabs the first [...] it can parse. Returns [] on any failure; the caller
+ *  falls back deterministically. */
+function parseSelection(raw: string, poolSize: number): number[] {
   try {
-    const text = (Array.isArray(res?.content) ? res.content : [])
-      .filter((b: any) => b?.type === 'text' && typeof b.text === 'string')
-      .map((b: any) => b.text)
-      .join('\n')
-      .replace(/```[a-z]*\n?/gi, '');
+    const text = String(raw ?? '').replace(/```[a-z]*\n?/gi, '');
     const match = text.match(/\[[\d\s,]*\]/);
     const parsed = JSON.parse(match ? match[0] : text.trim());
     if (!Array.isArray(parsed)) return [];
@@ -231,74 +267,134 @@ function parseSelection(res: any, poolSize: number): number[] {
  * REVIEW_TABLE_MAX curated studies, so this can never break the review.
  */
 async function selectStudies(
-  apiKey: string,
-  model: ModelId,
+  engine: Engine,
+  model: string,
   problem: string,
   numberedLines: string[],
   signal?: AbortSignal
 ): Promise<number[]> {
+  const user = `Question: ${problem}\n\nStudies:\n${numberedLines.join('\n')}`;
   try {
+    if (engine.provider === 'openai') {
+      const res = await openaiCreate(
+        engine.apiKey,
+        responsesBody({
+          model,
+          system: SELECT_SYSTEM,
+          user,
+          maxOutputTokens: SELECT_MAX_TOKENS,
+          ...SELECT_REASONING,
+        }),
+        signal
+      );
+      const { input, output } = usageOf(res);
+      await recordUsage(model, input, output);
+      return parseSelection(outputText(res), numberedLines.length);
+    }
     const res = await messagesCreate(
-      apiKey,
+      engine.apiKey,
       {
         model,
         max_tokens: SELECT_MAX_TOKENS,
-        ...modelParams(model, 'low'),
+        ...modelParams(model as ModelId, 'low'),
         system: SELECT_SYSTEM,
-        messages: [
-          {
-            role: 'user',
-            content: `Question: ${problem}\n\nStudies:\n${numberedLines.join('\n')}`,
-          },
-        ],
+        messages: [{ role: 'user', content: user }],
       },
       signal
     );
     await recordUsage(model, res?.usage?.input_tokens ?? 0, res?.usage?.output_tokens ?? 0);
-    return parseSelection(res, numberedLines.length);
+    const text = (Array.isArray(res?.content) ? res.content : [])
+      .filter((b: any) => b?.type === 'text' && typeof b.text === 'string')
+      .map((b: any) => b.text)
+      .join('\n');
+    return parseSelection(text, numberedLines.length);
   } catch {
     return [];
   }
 }
 
-// The intended model first, then a fallback chain of top-tier reasoning models
-// so a single account-access gap doesn't break the whole feature. Deduped and
-// validated against the model registry; env override leads when set.
-function reviewCandidates(): ModelId[] {
-  const envModel = Deno.env.get('RESEARCH_REVIEW_MODEL');
-  const wanted = [envModel, REVIEW_MODEL, 'claude-opus-4-8', 'claude-sonnet-4-6'];
+const dedupe = (ids: (string | undefined)[], valid: (id: string) => boolean) => {
   const seen = new Set<string>();
-  const out: ModelId[] = [];
-  for (const m of wanted) {
-    if (m && m in INTERPRET_MODELS && !seen.has(m)) {
-      seen.add(m);
-      out.push(m as ModelId);
+  const out: string[] = [];
+  for (const id of ids) {
+    if (id && valid(id) && !seen.has(id)) {
+      seen.add(id);
+      out.push(id);
     }
   }
   return out;
+};
+
+/**
+ * Which engine and which candidate models write this review.
+ *
+ * OpenAI leads whenever its key is set. RESEARCH_REVIEW_MODEL is the escape
+ * hatch and works in both directions: name a GPT-5.6 id to pin one, or name a
+ * Claude id (with ANTHROPIC_API_KEY still set) to put the whole review back on
+ * the previous engine without a code change. Within an engine the intended
+ * model leads a fallback chain, so a single account-access gap doesn't break
+ * the feature.
+ */
+function chooseEngine(): Engine | null {
+  const envModel = (Deno.env.get('RESEARCH_REVIEW_MODEL') || '').trim();
+  const openai = openAiKey();
+  const anthropic = Deno.env.get('ANTHROPIC_API_KEY') || '';
+  const isClaude = (id: string) => id in INTERPRET_MODELS;
+  const isGpt = (id: string) => id in OPENAI_MODELS;
+
+  const anthropicEngine = (): Engine | null =>
+    anthropic
+      ? {
+          provider: 'anthropic',
+          apiKey: anthropic,
+          models: dedupe([envModel, REVIEW_MODEL, 'claude-opus-4-8', 'claude-sonnet-4-6'], isClaude),
+        }
+      : null;
+
+  // An explicit Claude override wins outright — that's what it's for.
+  if (envModel && isClaude(envModel) && anthropic) return anthropicEngine();
+  if (openai) {
+    return {
+      provider: 'openai',
+      apiKey: openai,
+      models: dedupe([envModel, REVIEW_OPENAI_MODEL, ...REVIEW_OPENAI_FALLBACKS], isGpt),
+    };
+  }
+  return anthropicEngine();
 }
 
 /**
- * The first candidate model this account can actually reach. A tiny
- * thinking-disabled call surfaces an access/auth error fast (before the
- * streaming 200 is committed) without generating a report. Returns the model
- * and its label, or a terminal error when none work.
+ * The first candidate model this account can actually reach. A tiny call with
+ * reasoning left at its default surfaces an access/auth error fast (before the
+ * streaming 200 is committed) without generating a report — a 16-token ceiling
+ * means it stops almost immediately whatever it answers. Returns the model and
+ * its label, or a terminal error when none work.
  */
-async function pickModel(
-  apiKey: string,
-  candidates: ModelId[]
-): Promise<{ model: ModelId; label: string } | { error: string }> {
+async function pickModel(engine: Engine): Promise<{ model: string; label: string } | { error: string }> {
   let lastStatus = 0;
-  for (const model of candidates) {
+  for (const model of engine.models) {
     try {
-      const probe = await messagesCreate(apiKey, {
-        model,
-        max_tokens: 16,
-        thinking: { type: 'disabled' },
-        messages: [{ role: 'user', content: 'ping' }],
-      });
-      await recordUsage(model, probe?.usage?.input_tokens ?? 0, probe?.usage?.output_tokens ?? 0);
-      return { model, label: INTERPRET_MODELS[model] };
+      if (engine.provider === 'openai') {
+        // No reasoning block and a small-but-not-minimal ceiling: the probe
+        // must fail ONLY for the reason it exists to catch (this key can't
+        // reach this model), never because a parameter was too tight for a
+        // reasoning model to answer at all.
+        const probe = await openaiCreate(
+          engine.apiKey,
+          responsesBody({ model, user: 'ping', maxOutputTokens: 128 })
+        );
+        const { input, output } = usageOf(probe);
+        await recordUsage(model, input, output);
+      } else {
+        const probe = await messagesCreate(engine.apiKey, {
+          model,
+          max_tokens: 16,
+          thinking: { type: 'disabled' },
+          messages: [{ role: 'user', content: 'ping' }],
+        });
+        await recordUsage(model, probe?.usage?.input_tokens ?? 0, probe?.usage?.output_tokens ?? 0);
+      }
+      return { model, label: labelFor(engine.provider, model) };
     } catch (e: any) {
       lastStatus = e?.status ?? lastStatus;
       // Try the next model in the chain (e.g. this account lacks access to it).
@@ -355,7 +451,7 @@ function streamMarkdown(
   let full = '';
   let inputTokens = 0;
   let outputTokens = 0;
-  let stopReason: string | null = null;
+  let truncated = false;
   const { store, key, model, modelLabel, preamble, shouldCache } = opts;
 
   const body = new ReadableStream({
@@ -377,17 +473,16 @@ function streamMarkdown(
         if (preamble) send(preamble);
         const events = await makeEvents();
         for await (const event of events) {
-          if (event.type === 'message_start') {
-            inputTokens = event.message?.usage?.input_tokens ?? 0;
-          } else if (event.type === 'message_delta') {
-            if (event.usage) outputTokens = event.usage.output_tokens ?? outputTokens;
-            stopReason = event.delta?.stop_reason ?? stopReason;
-          } else if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
-            full += event.delta.text;
-            send(event.delta.text);
+          if (event.type === 'text') {
+            full += event.text;
+            send(event.text);
+          } else if (event.type === 'done') {
+            inputTokens = event.usage?.input ?? inputTokens;
+            outputTokens = event.usage?.output ?? outputTokens;
+            truncated = event.truncated === true;
           }
         }
-        const complete = stopReason !== 'max_tokens';
+        const complete = !truncated;
         if (store && full.trim() && complete && shouldCache(full)) {
           await store.set(key, full);
         }
@@ -425,8 +520,10 @@ function streamMarkdown(
 
 export default async (req: Request) => {
   if (req.method !== 'POST') return new Response('Method Not Allowed', { status: 405 });
-  const apiKey = Deno.env.get('ANTHROPIC_API_KEY');
-  if (!apiKey) return json(503, { error: 'The research review is not configured yet.' });
+  const engine = chooseEngine();
+  if (!engine || engine.models.length === 0) {
+    return json(503, { error: 'The research review is not configured yet.' });
+  }
 
   let body: any;
   try {
@@ -480,9 +577,9 @@ export default async (req: Request) => {
     })}`
   );
 
-  const candidates = reviewCandidates();
+  const candidates = engine.models;
   const cacheInput = { p: problem.toLowerCase(), items };
-  const keyFor = (m: ModelId) => stableKey('review', cacheInput, m, ASSIST_PROMPT_VERSION);
+  const keyFor = (m: string) => stableKey('review', cacheInput, m, ASSIST_PROMPT_VERSION);
 
   // Cache: a finished report replays free. Check every candidate's key (the
   // report is keyed on the model that wrote it), so a repeat hits regardless of
@@ -497,7 +594,7 @@ export default async (req: Request) => {
           headers: {
             'content-type': 'text/markdown; charset=utf-8',
             'x-cache': 'HIT',
-            'x-model': INTERPRET_MODELS[m],
+            'x-model': labelFor(engine.provider, m),
             'x-assist-version': ASSIST_PROMPT_VERSION,
           },
         });
@@ -511,7 +608,7 @@ export default async (req: Request) => {
 
   // Resolve the model BEFORE streaming: once we return a 200 stream we can't
   // turn it into an error, so an access failure must be caught here.
-  const picked = await pickModel(apiKey, candidates);
+  const picked = await pickModel(engine);
   if ('error' in picked) return json(502, { error: picked.error });
   const { model, label: modelLabel } = picked;
 
@@ -524,7 +621,7 @@ export default async (req: Request) => {
   const makeEvents = async () => {
     let selected: number[] = [];
     if (items.length > REVIEW_TABLE_MAX) {
-      selected = await selectStudies(apiKey, model, problem, headlineLines);
+      selected = await selectStudies(engine, model, problem, headlineLines);
     }
     // A degenerate selection (failed call, unparseable output, or too few
     // rows to write a citable briefing from) falls back to the head of the
@@ -535,22 +632,73 @@ export default async (req: Request) => {
     const user = `Question: ${problem}\n\nStudies:\n${selected
       .map((n) => numberedLines[n - 1])
       .join('\n')}`;
-    return streamMessages(
-      apiKey,
-      {
-        model,
-        max_tokens: REVIEW_MAX_TOKENS,
-        // High effort on Sonnet 5 — the proven, reliable config. An earlier
-        // experiment (Opus 4.8 at xhigh "extra" effort) thought for minutes
-        // per report and dropped connections mid-generation in production;
-        // Sonnet 5 at high writes the same briefing in ~60–90s and is solid.
-        // The whole-stream heartbeat and disconnect-tolerant caching stay as
-        // belt-and-braces, but this engine rarely needs them.
-        ...modelParams(model, 'high'),
-        system: REVIEW_SYSTEM,
-        messages: [{ role: 'user', content: user }],
+
+    if (engine.provider === 'openai') {
+      // THE DEEP CALL. Pro mode at max effort: the most model work per answer
+      // the API offers, on the one call that decides whether the briefing is
+      // any good. Everything that makes this survivable is already in place —
+      // edge execution bills CPU only, the heartbeat holds the connection open
+      // through minutes of silent thinking, a reader's disconnect doesn't abort
+      // it, and the finished report caches so nobody waits twice.
+      //
+      // If pro mode is ever rejected for this account or model (a 4xx on the
+      // parameter, not on auth — auth was proven by the preflight above), fall
+      // back once to standard mode at high effort rather than failing the
+      // report: a slightly less-considered briefing beats none.
+      const write = (reasoning: { mode?: string; effort?: string }) =>
+        openaiRequest(
+          engine.apiKey,
+          responsesBody({
+            model,
+            system: REVIEW_SYSTEM,
+            user,
+            maxOutputTokens: REVIEW_OPENAI_MAX_TOKENS,
+            ...reasoning,
+          }),
+          { stream: true }
+        );
+      let res: Response;
+      try {
+        res = await write(REVIEW_REASONING);
+      } catch (e: any) {
+        if (e?.status && e.status >= 400 && e.status < 500) {
+          res = await write({ mode: 'standard', effort: 'high' });
+        } else {
+          throw e;
+        }
       }
-    );
+      return openaiTextStream(res);
+    }
+
+    // Claude fallback: high effort on Sonnet 5 — the proven, reliable config
+    // this route ran on before v22. An earlier experiment (Opus 4.8 at xhigh
+    // "extra" effort) thought for minutes per report and dropped connections
+    // mid-generation in production; Sonnet 5 at high writes the same briefing
+    // in ~60–90s and is solid. Anthropic's SSE events are normalised to the
+    // same {text}/{done} shape the OpenAI stream yields.
+    const events = streamMessages(engine.apiKey, {
+      model,
+      max_tokens: REVIEW_MAX_TOKENS,
+      ...modelParams(model as ModelId, 'high'),
+      system: REVIEW_SYSTEM,
+      messages: [{ role: 'user', content: user }],
+    });
+    return (async function* () {
+      let input = 0;
+      let output = 0;
+      let stopReason: string | null = null;
+      for await (const event of events) {
+        if (event.type === 'message_start') {
+          input = event.message?.usage?.input_tokens ?? 0;
+        } else if (event.type === 'message_delta') {
+          if (event.usage) output = event.usage.output_tokens ?? output;
+          stopReason = event.delta?.stop_reason ?? stopReason;
+        } else if (event.type === 'content_block_delta' && event.delta?.type === 'text_delta') {
+          yield { type: 'text', text: event.delta.text };
+        }
+      }
+      yield { type: 'done', usage: { input, output }, truncated: stopReason === 'max_tokens' };
+    })();
   };
 
   return streamMarkdown(makeEvents, {

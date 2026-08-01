@@ -36,7 +36,7 @@ import { curate, PREPRINT_CAP } from '../../lib/briefing-curate.mjs';
 import { sanitizeCitations } from '../../lib/citations.mjs';
 import {
   ASSIST_PROMPT_VERSION,
-  REVIEW_MODEL,
+  REVIEW_OPENAI_MODEL,
   REVIEW_CONFIDENCE_PREFIX,
   REVIEW_POOL_MAX,
   STRENGTH_COLUMN,
@@ -405,7 +405,9 @@ export async function runReviewPipeline(
     // account can reach, so it may not be the intended one) — reported via the
     // x-model header and stored so the page and PDF never claim a model that
     // didn't run.
-    let model = REVIEW_MODEL;
+    // Placeholder only — the server names the model that actually wrote the
+    // report in x-model, and overwrites this on the very next line.
+    let model = REVIEW_OPENAI_MODEL;
     // Idle watchdog: the server heartbeats a byte every ~15s while the model
     // thinks, so a healthy stream is never silent for long. A stream with NO
     // bytes at all for this long is genuinely dead (killed connection, hung

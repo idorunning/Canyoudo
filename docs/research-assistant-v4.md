@@ -1,6 +1,10 @@
 # Research Assistant v4 — three modes, function-first
 
 Status: **built** (July 2026). Supersedes the v3 "briefing depth slider".
+The ENGINE changed in v22 (August 2026): the research tools now run on OpenAI
+GPT-5.6, with the deep review at reasoning mode `pro`, effort `max` — see
+**Models**, below. The flow, prompts, citation contract and streaming
+architecture are unchanged.
 The review report's format was reworked again in v9 of the prompt (see
 **The review report**, below) into a proper two-page research briefing; v10
 renamed "Rules and policy to check" to "Powers and policies", pointed it at
@@ -289,16 +293,59 @@ is itself the progress indicator.
 
 ## Models
 
+The research tools run on **OpenAI GPT-5.6** (v22, August 2026), keyed on
+`OPENAI_API_KEY2` — its own key, kept separate from the build-time
+`OPENAI_API_KEY` used for audio narration so either can be rotated alone. The
+crime dashboard (`interpret`, `db-interpret`, `force-briefing`) is untouched and
+still runs on Claude.
+
 | Call | Model | Params |
 |---|---|---|
-| translate / plan / brief | `claude-sonnet-4-6` | adaptive thinking, effort low |
-| overview | `claude-sonnet-4-6` (`OVERVIEW_MODEL`) | adaptive thinking, effort low |
-| review — selection pass | same model as the writer | adaptive thinking, effort low, JSON-only, max 4,000 tokens (`SELECT_MAX_TOKENS`) |
-| review — writer | `claude-sonnet-5` (`REVIEW_MODEL`), falls back to Opus 4.8 → Sonnet 4.6; `RESEARCH_REVIEW_MODEL` env override leads the chain if set | adaptive thinking, **effort high**, streamed (edge function), max 16,000 tokens. Sonnet 5 at high is the proven-reliable config; a brief Opus-4.8-at-xhigh experiment thought for minutes per report and dropped connections, and was reverted. |
+| translate / plan / brief / overview | `gpt-5.6-terra` (`ASSIST_OPENAI_MODEL`) | standard mode, **effort low** — these run inside a synchronous function with a hard ~10s ceiling |
+| review — selection pass | same model as the writer | standard mode, **effort low**, JSON-only, max 4,000 tokens (`SELECT_MAX_TOKENS`) |
+| review — writer | `gpt-5.6-sol` (`REVIEW_OPENAI_MODEL`), falls back to `gpt-5.6-terra`; `RESEARCH_REVIEW_MODEL` env override leads the chain if set | **reasoning mode `pro`, effort `max`** (`REVIEW_REASONING`), streamed (edge function), max 40,000 output tokens (`REVIEW_OPENAI_MAX_TOKENS`) |
+
+**Why pro/max, and only there.** Mode and effort are independent controls: pro
+does more model work per answer, effort scales the reasoning within it, so
+pro+max is the deepest setting the API offers. It is spent on the single call
+the whole tool is judged on — the ~2-page cited briefing — and nowhere else,
+because everything that makes a slow call survivable is already built around
+that one route and no other: edge execution bills CPU only (waiting on the model
+is free), the U+FEFF heartbeat holds the connection open through minutes of
+silent thinking, a reader's disconnect does not abort the generation, and the
+finished report is cached so nobody waits twice for the same question. The
+screening pass and the four short JSON modes stay at low effort for the opposite
+reason — they run inside a synchronous function whose ~10s ceiling is the
+original failure this whole architecture exists to avoid.
+
+Reasoning tokens are billed as output and share `max_output_tokens` with the
+report itself, which is why the writer's ceiling is 40,000 rather than the
+16,000 the Claude config used: pro/max spends heavily before the first word.
+Streaming means an unused ceiling costs nothing, and a truncated report is never
+cached (the Responses API reports `status: "incomplete"`, the equivalent of
+Anthropic's `stop_reason: "max_tokens"`).
+
+**Cost.** `gpt-5.6-sol` lists at $5/$30 per million input/output tokens
+(`MODEL_PRICES_USD_PER_MTOK`), and pro mode bills its extra work at those same
+rates — so an uncached review runs roughly $0.50–$1.20 against ~$0.10 under the
+old Sonnet-5 config. The monthly cap (`AI_BUDGET_LIMIT_USD`, default $110)
+counts real token usage from both engines into the same Blobs ledger and pauses
+AI with a friendly message when it trips; Search and cache hits keep working.
+
+**Both engines, one shape.** Claude remains the fallback — no OpenAI key, or a
+`RESEARCH_REVIEW_MODEL` naming a Claude id, and the previous path runs unchanged
+at Sonnet 5 / effort high. Neither engine uses its vendor SDK: both are plain
+`fetch` with hand-parsed SSE (`src/lib/openai-core.mjs`, and the inline
+Anthropic helpers), for the reasons in **Why an edge function** — and both
+streams are normalised to one event shape (`{type:'text'}` / `{type:'done'}`),
+so the streaming, caching and accounting code is engine-agnostic.
 
 Model ids are pinned in `research-assist-prompts.ts` (shared by functions and
-client provenance records) and registered in `personas.ts`
-(`INTERPRET_MODELS`); `modelParams(id, effort)` gained the effort parameter.
+client provenance records); GPT ids and their display labels live in
+`openai-core.mjs` (`OPENAI_MODELS`), Claude ids in `personas.ts`
+(`INTERPRET_MODELS`). The `x-model` response header still reports the model that
+actually wrote each report, so the page and the PDF never claim one that didn't
+run.
 
 ## Removed in v4
 
@@ -321,6 +368,11 @@ client provenance records) and registered in `personas.ts`
 - `netlify/edge-functions/research-review.ts` — the streamed report. An **edge
   function**, not `netlify/functions/`, so the model has no execution-time
   ceiling to write against — see **Why an edge function**, above.
+- `src/lib/openai-core.mjs` — the OpenAI engine: Responses API request bodies
+  (including the `reasoning` mode/effort controls), the SSE stream normaliser,
+  usage and truncation readers. Dependency-free and env-free, so the Node
+  function and the Deno edge function share one implementation
+  (tests/openai-core.test.mjs).
 - `src/lib/ai-stream.ts` — `preamble` option (used by the Lambda-based
   functions; the edge function keeps its own copy — see above).
 - `src/lib/cache-key.mjs` — shared `stableKey` (tests/cache-key.test.mjs).
