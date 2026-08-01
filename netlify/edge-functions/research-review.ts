@@ -111,6 +111,30 @@ type Engine = { provider: 'openai' | 'anthropic'; apiKey: string; models: string
 const labelFor = (provider: Engine['provider'], model: string) =>
   provider === 'openai' ? openAiLabel(model) : INTERPRET_MODELS[model as ModelId] ?? model;
 
+// How hard the writer thinks, overridable per-deploy without a code change:
+// RESEARCH_REVIEW_MODE (standard | pro) and RESEARCH_REVIEW_EFFORT
+// (none … max). The default is the deepest setting the API offers
+// (REVIEW_REASONING = pro/max), and the two controls are independent — pro
+// does more model work per answer, effort scales the reasoning within it.
+//
+// These exist because the trade-off is a live one and belongs in the hands of
+// whoever runs the site: pro/max buys the most considered briefing the API can
+// write, and costs minutes of thinking before the first word appears. Turning
+// it down to standard/high is a Netlify variable and a redeploy, not a patch.
+// Unknown values are ignored rather than passed through — a typo must never
+// reach the API and fail a report.
+const MODES = ['standard', 'pro'];
+const EFFORTS = ['none', 'minimal', 'low', 'medium', 'high', 'xhigh', 'max'];
+
+function reviewReasoning(): { mode?: string; effort?: string } {
+  const mode = (Deno.env.get('RESEARCH_REVIEW_MODE') || '').trim();
+  const effort = (Deno.env.get('RESEARCH_REVIEW_EFFORT') || '').trim();
+  return {
+    mode: MODES.includes(mode) ? mode : REVIEW_REASONING.mode,
+    effort: EFFORTS.includes(effort) ? effort : REVIEW_REASONING.effort,
+  };
+}
+
 const json = (status: number, body: unknown) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
 
@@ -659,7 +683,7 @@ export default async (req: Request) => {
         );
       let res: Response;
       try {
-        res = await write(REVIEW_REASONING);
+        res = await write(reviewReasoning());
       } catch (e: any) {
         if (e?.status && e.status >= 400 && e.status < 500) {
           res = await write({ mode: 'standard', effort: 'high' });
