@@ -1,7 +1,7 @@
 {
   "provenance": {
-    "fetchedAt": "2026-08-01T12:53:02.372Z",
-    "feedCount": 8,
+    "fetchedAt": "2026-08-02T01:43:05.257Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
       "Home Office",
@@ -10,33 +10,42 @@
       "CPS",
       "Courts & Tribunals Judiciary",
       "Legal Cheek",
+      "The Register",
       "BBC Technology"
     ]
   },
   "items": [
+    {
+      "title": "Balaclava gang target children on bikes and police officers on river path",
+      "link": "https://www.bbc.co.uk/news/articles/cwyrwnnqnw0o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-01T20:00:14.000Z",
+      "summary": "Concerned parents say their children have been attacked while riding bikes on the trail since June."
+    },
+    {
+      "title": "Manhunt after prisoner escapes from van outside court",
+      "link": "https://www.bbc.co.uk/news/articles/cdx705xz2g7o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-01T13:36:02.000Z",
+      "summary": "Stephen Grzyb, 22, was being taken to Liverpool Magistrates' Court after being charged with burglary."
+    },
+    {
+      "title": "Greek police fast-tracking tests to find out how British woman found in suitcase died",
+      "link": "https://www.bbc.co.uk/news/articles/cz05yzzr93jo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-01T13:02:47.000Z",
+      "summary": "Authorities are yet unable to say whether the death of Elisabeth-Jane Ross is considered murder, but toxicology tests are being fast-tracked."
+    },
     {
       "title": "Police arrest men over alleged modern day slavery",
       "link": "https://www.bbc.co.uk/news/articles/c4g3j5zyr0go?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
       "isoDate": "2026-08-01T11:54:49.000Z",
-      "summary": "The arrests came after a police raid at a business in Gillingham, Kent."
-    },
-    {
-      "title": "Soap star Shane Richie facing drink-drive charge",
-      "link": "https://www.bbc.co.uk/news/articles/c5y32zmv6kjo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-01T10:15:08.000Z",
-      "summary": "The 62-year-old was arrested at a petrol station and is due in court in September, police say."
-    },
-    {
-      "title": "CPS to target assets of jailed funeral director",
-      "link": "https://www.bbc.co.uk/news/articles/ce97xg0zgp7o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-01T01:08:45.000Z",
-      "summary": "As Robert Bush starts a 20-year prison sentence, prosecutors want to claw back the money he stole."
+      "summary": "One of those arrested is a 20-year-old from Sussex, say officers."
     },
     {
       "title": "Bristol Prison",
@@ -119,6 +128,14 @@
       "summary": "Preston Prison is a men’s prison in Preston, Lancashire."
     },
     {
+      "title": "Open source project fools AI scrapers with poisoned font",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/30/open-source-project-fools-ai-scrapers-with-poisoned-font/5281303",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-30T17:19:23.000Z",
+      "summary": "ShieldFont is available today if you've got copy that needs protecting"
+    },
+    {
       "title": "Police misconduct processes to be reviewed",
       "link": "https://www.gov.uk/government/news/police-misconduct-processes-to-be-reviewed",
       "source": "GOV.UK",
@@ -159,6 +176,14 @@
       "summary": "It marks a change of tone for his administration, which has taken a more hands-off approach to the technology."
     },
     {
+      "title": "Microsoft's cloud brings rain of revenue but modest M365 AI revenue harvest",
+      "link": "https://www.theregister.com/software/2026/07/30/microsoft-earnings-q4-26-cloud-brings-revenue-rain/5280798",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-29T23:17:56.000Z",
+      "summary": "Capex spending? What? Me worry?"
+    },
+    {
       "title": "Former police officer’s sentence increased for relationship with abuse victim",
       "link": "https://www.gov.uk/government/news/former-police-officers-sentence-increased-for-relationship-with-abuse-victim",
       "source": "GOV.UK",
@@ -181,6 +206,22 @@
       "topic": "law",
       "isoDate": "2026-07-29T09:09:25.000Z",
       "summary": "Deadline for applications is Tuesday 18 August 2026 The post Vacancy: Legal Members of the Education Tribunal for Wales appeared first on Courts and Tribunals Judiciary ."
+    },
+    {
+      "title": "Perplexity's tokenmaxxing Model Council gives you multiple bot perspectives",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/28/perplexitys-tokenmaxxing-model-council-gives-you-multiple-bot-perspectives/5279972",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-28T21:26:53.000Z",
+      "summary": "Up to 8 AI models running in the cloud weighing in on ambiguous business issues? Sounds affordable"
+    },
+    {
+      "title": "College prof hides prompt to catch AI cheaters, finds human nature is pretty much as we thought",
+      "link": "https://www.theregister.com/ai-and-ml/2026/07/28/college-prof-hides-prompt-to-catch-ai-cheaters-finds-human-nature-is-pretty-much-as-we-thought/5279864",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-07-28T16:20:00.000Z",
+      "summary": ""
     },
     {
       "title": "President of the King’s Bench Division in conversation with Chair of the Bar",
