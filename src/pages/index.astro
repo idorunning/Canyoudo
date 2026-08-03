@@ -1,565 +1,128 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionBadge from '../components/SectionBadge.astro';
 import { getCollection } from 'astro:content';
-import { getTopics } from '../lib/topics';
-import { SECTIONS, SECTION_LABELS } from '../content/config';
-import engagement from '../lib/engagement-bundle.json';
+import { SECTION_LABELS } from '../content/config';
 import readingTime from 'reading-time';
 
 import type { Section } from '../content/config';
 
 const articles = await getCollection('articles', ({ data }) => !data.draft);
-
-// Masthead figures — real numbers from the collection, not copy.
-const totalReadingMinutes = articles.reduce(
-  (sum, a) => sum + Math.max(1, Math.ceil(readingTime(a.body ?? '').minutes)),
-  0
-);
-
-// Total article views: baked at build from article_engagement, brought live
-// in the browser by the script at the foot of this page.
-const bakedTotalViews = Object.values(
-  engagement as Record<string, { views?: number }>
-).reduce((sum, e) => sum + (e.views ?? 0), 0);
-
-type Item = {
-  slug: string;
-  data: typeof articles[number]['data'];
-  section: Section;
-};
-
+type Item = { slug: string; data: typeof articles[number]['data']; section: Section; body: string };
 const allArticles: Item[] = articles
-  .map(a => ({ slug: a.slug, data: a.data, section: a.data.section }))
+  .map((article) => ({ slug: article.slug, data: article.data, section: article.data.section, body: article.body ?? '' }))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
-// The lead story is always the newest published article — a "Recently
-// published" banner on the card makes that explicit.
 const feature = allArticles[0];
-const latestArticles = allArticles.slice(0, 8);
-
-// Themed section rows — every article in the section, newest first
-// (scrollable row), so every published article is reachable from the home
-// page rather than just the latest few.
-const bySection: Record<string, Item[]> = {};
-for (const a of allArticles) {
-  if (!bySection[a.section]) bySection[a.section] = [];
-  bySection[a.section].push(a);
-}
-const FEATURED_SECTIONS: Section[] = ['police-policy', 'public-policy', 'influential-people', 'data-stories'];
-
-// "Most read" is driven by real page views, tallied via the
-// article_engagement table (see supabase/migrations/0002_article_engagement.sql)
-// and baked in at build time by scripts/bundle-engagement.mjs. Before the site
-// has accumulated any views (a fresh deploy, or Supabase not configured), the
-// bundle is empty and we fall back to a hand-picked list so the section still
-// has something to show.
-const FALLBACK_MOST_READ_SLUGS = [
-  'sir-robert-peel-and-the-invention-of-policing-by-consent',
-  'policeai-a-police-leaders-guide',
-  'self-selection-policing-catching-serious-criminals-and-bad-cops-through-minor-offences',
-  'what-palantirs-advance-means-for-british-policing-and-should-we-trust-them',
-];
-const bySlug = new Map(allArticles.map(a => [a.slug, a]));
-const byViews = allArticles
-  .map(a => ({ article: a, views: (engagement as Record<string, { views: number }>)[a.slug]?.views ?? 0 }))
-  .filter(a => a.views > 0)
-  .sort((a, b) => b.views - a.views)
-  .slice(0, 8)
-  .map(a => a.article);
-const mostRead = byViews.length > 0
-  ? byViews
-  : FALLBACK_MOST_READ_SLUGS.map(s => bySlug.get(s)).filter((a): a is Item => Boolean(a));
-
-// Section article counts
-const counts: Record<string, number> = {};
-for (const s of SECTIONS) counts[s] = 0;
-for (const a of allArticles) counts[a.section] = (counts[a.section] ?? 0) + 1;
-
-// Section descriptions (short)
-const SECTION_DESC: Record<string, string> = {
-  'police-policy':       'What works, and the evidence behind it.',
-  'public-policy':       'Leadership, culture, and the wider questions that shape policing.',
-  'influential-people':  'The figures who shaped how we police.',
-  'data-stories':        'Technology, data, and digital innovation in policing.',
-  other:                 'Historical puzzles and tangents.',
+const moreStories = allArticles.slice(1, 4);
+const latestStories = allArticles.slice(4, 10);
+const articleUrl = (article: Item) => `/${article.section}/${article.slug}`;
+const minutes = (article: Item) => Math.max(1, Math.ceil(readingTime(article.body).minutes));
+const author = (article: Item) => article.data.author?.trim() || 'Nathan Tracey';
+const date = (article: Item, includeYear = true) => article.data.pubDate.toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'long', ...(includeYear ? { year: 'numeric' } : {}),
+});
+const sectionPaths: Record<Section, string> = {
+  'police-policy': '/police-policy', 'public-policy': '/public-policy',
+  'influential-people': '/influential-people', 'data-stories': '/data-stories', other: '/other',
 };
-
-const topics = await getTopics();
+const browseSections: Section[] = ['police-policy', 'public-policy', 'data-stories', 'influential-people'];
 
 const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
-const description =
-  'Evidence-based writing on policing, public policy, and the occasional historical puzzle.';
+const description = 'Independent evidence-led writing about policing, policy, leadership and technology.';
+const jsonLd = [{
+  '@context': 'https://schema.org', '@type': 'WebSite', name: 'Thinking About Policing',
+  url: `${site}/`, description, inLanguage: 'en-GB',
+  potentialAction: { '@type': 'SearchAction', target: { '@type': 'EntryPoint', urlTemplate: `${site}/search?q={search_term_string}` }, 'query-input': 'required name=search_term_string' },
+}, {
+  '@context': 'https://schema.org', '@type': 'Blog', name: 'Thinking About Policing',
+  url: `${site}/`, description, inLanguage: 'en-GB',
+  author: { '@type': 'Person', name: 'Nathan Tracey', url: `${site}/about` },
+}];
 
-const jsonLd = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Thinking About Policing',
-    url: `${site}/`,
-    description,
-    inLanguage: 'en-GB',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: { '@type': 'EntryPoint', urlTemplate: `${site}/search?q={search_term_string}` },
-      'query-input': 'required name=search_term_string',
-    },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Blog',
-    name: 'Thinking About Policing',
-    url: `${site}/`,
-    description,
-    inLanguage: 'en-GB',
-    author: { '@type': 'Person', name: 'Nathan Tracey', url: `${site}/about` },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Thinking About Policing',
-      url: `${site}/`,
-      logo: { '@type': 'ImageObject', url: `${site}/logo.png`, width: 512, height: 512 },
-    },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: 'Nathan Tracey',
-    url: `${site}/about`,
-    knowsAbout: topics.map(t => t.label),
-  },
-];
-
-// Baked view counts per slug (generics stay out of the template — the Astro
-// compiler mis-parses `Record<...>` casts inside JSX expressions).
-const viewsBySlug: Record<string, number> = {};
-for (const a of allArticles) {
-  viewsBySlug[a.slug] = (engagement as Record<string, { views?: number }>)[a.slug]?.views ?? 0;
-}
-
-// Compact slug index for the live most-read refresh (title/section per slug),
-// embedded as JSON so the browser can rebuild the ranking from live counts.
-const articlesIndex = Object.fromEntries(
-  allArticles.map((a) => [a.slug, { t: a.data.title, s: a.section, l: SECTION_LABELS[a.section] }])
-);
-
-const emailSubject = 'Article idea for Thinking About Policing';
-const emailBody = `Hi Nathan,\n\nI'd like to pitch an idea:\n\n- Working title:\n- What it argues / the evidence behind it:\n- A bit about me:\n`;
-const pitchMailto = `mailto:hello@thinkingaboutpolicing.org?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+const pitchSubject = encodeURIComponent('Article idea for Thinking About Policing');
+const pitchBody = encodeURIComponent("Hi Nathan,\n\nI'd like to pitch an idea:\n\nWorking title:\nWhat it argues and the evidence behind it:\nA bit about me:\n");
 ---
 
-<BaseLayout title="Thinking About Policing" jsonLd={jsonLd}>
-
-  <!-- ============ HAVE AN IDEA? ============ -->
-  <div class="bg-paper-100 border-b border-ink-200">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-2.5 flex items-center justify-center gap-3">
-      <span class="u-datum u-datum--accent hidden sm:inline">Contribute</span>
-      <p class="font-sans text-[13px] font-medium text-ink-700 leading-snug m-0">
-        Have an article you'd like to write or publish?
-        <a href={pitchMailto} class="font-semibold text-accent hover:text-accent-dark underline decoration-1 underline-offset-2 transition-colors">Pitch it here <span class="arrow">→</span></a>
-      </p>
-    </div>
-  </div>
-
-  <!-- ============ HERO ============ -->
-  {/* The masthead of the document: a measured ground, a title set against a
-      standing rule, and the site's own figures in the instrument voice. No
-      hero image, no gradient — the lead story provides the picture. */}
-  <section class="relative overflow-hidden border-b-2 border-rule">
-    <!-- Drafting-paper ground: hairlines on a 56px grid, faded out radially. -->
-    <div
-      class="grid-ground absolute inset-0 pointer-events-none opacity-70 dark:opacity-40"
-      aria-hidden="true"
-      style="-webkit-mask-image: radial-gradient(ellipse 90% 80% at 30% 0%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 90% 80% at 30% 0%, #000 30%, transparent 75%);"
-    ></div>
-
-    <div class="relative max-w-wide mx-auto px-6 lg:px-10 pt-14 pb-14 md:py-[68px]">
-      <div class="lg:grid lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 xl:gap-[60px] lg:items-center">
-
-        <!-- Left: headline + standfirst + figures -->
-        <div>
-          <!-- Publication line: what this is, and when it was last worked on. -->
-          <div class="flex items-center gap-3 mb-6">
-            <span class="h-[2px] w-8 bg-accent" aria-hidden="true"></span>
-            <span class="u-datum">Evidence-based analysis</span>
-            <span class="u-datum text-ink-400 hidden sm:inline">·</span>
-            <span class="u-datum text-ink-500 hidden sm:inline">Updated {feature ? feature.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}</span>
-          </div>
-
-          <h1 class="font-display font-bold text-[52px] md:text-[62px] leading-[1.02] tracking-[-0.03em] text-ink-900 text-balance m-0">
-            Thinking About Policing
-          </h1>
-
-          <p class="font-serif text-lg md:text-[20px] leading-relaxed text-ink-700 mt-6 max-w-[30em]">
-            Evidence-led analysis of policing, public policy,
-            leadership, and the decisions that shape public safety.
-          </p>
-
-          <!-- The site's own figures, read as instruments: label above, figure
-               below, ruled off. Four readings, one of them live. -->
-          <dl class="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-5 mt-10 pt-6 border-t-2 border-rule m-0">
-            <div>
-              <dt class="u-datum text-ink-500">Articles</dt>
-              <dd class="u-figure text-[26px] leading-none mt-1.5 m-0">{allArticles.length}</dd>
-            </div>
-            <div>
-              <dt class="u-datum text-ink-500">Topics</dt>
-              <dd class="u-figure text-[26px] leading-none mt-1.5 m-0">{topics.length}</dd>
-            </div>
-            <div>
-              <dt class="u-datum text-ink-500">Minutes</dt>
-              <dd class="u-figure text-[26px] leading-none mt-1.5 m-0">{totalReadingMinutes}</dd>
-            </div>
-            <div data-live-reads-stat class:list={[bakedTotalViews > 0 ? '' : 'hidden']}>
-              <dt class="u-datum text-accent">Views · live</dt>
-              <dd data-live-total-reads class="u-figure text-[26px] leading-none mt-1.5 m-0">{bakedTotalViews.toLocaleString('en-GB')}</dd>
-            </div>
-          </dl>
+<BaseLayout title="Thinking About Policing" description={description} jsonLd={jsonLd}>
+  <div class="newsroom-home">
+    {feature && (
+      <article class="lead-story">
+        <a class="lead-image" href={articleUrl(feature)}>
+          {(feature.data.heroImage || feature.data.portrait) ? (
+            <img src={feature.data.portrait ?? feature.data.heroImage} alt="" loading="eager" />
+          ) : <span class="image-fallback">{feature.data.title.charAt(0)}</span>}
+          <span class="read-chip">{minutes(feature)} min read</span>
+        </a>
+        <div class="lead-copy">
+          <span class="story-label">Latest analysis</span>
+          <h1><a href={articleUrl(feature)}>{feature.data.title}</a></h1>
+          <p class="standfirst">{feature.data.description}</p>
+          <div class="byline">By <strong>{author(feature)}</strong> · {date(feature)}</div>
         </div>
+      </article>
+    )}
 
-        <!-- Right: lead story -->
-        {feature && (
-          <div class="mt-12 lg:mt-0">
-            <a
-              href={`/${feature.section}/${feature.slug}`}
-              class="card-hairline group block rounded-3 overflow-hidden shadow-e2"
-            >
-              {(feature.data.heroImage || feature.data.portrait) && (
-                <div class="overflow-hidden h-[280px] border-b border-ink-200">
-                  <img
-                    src={feature.data.portrait ?? feature.data.heroImage}
-                    alt=""
-                    loading="eager"
-                    class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[600ms] ease-swift"
-                  />
-                </div>
-              )}
-              {!(feature.data.heroImage || feature.data.portrait) && (
-                <div class="h-[200px] surface-night flex items-center justify-center border-b border-night-line">
-                  <span class="font-display font-bold text-6xl text-night-ink/70">
-                    {(feature.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
-                  </span>
-                </div>
-              )}
-              <div class="p-7">
-                <div class="flex flex-wrap items-center gap-x-3 gap-y-2 mb-4">
-                  <span class="chip chip--accent">Latest</span>
-                  <span class="u-datum">
-                    {SECTION_LABELS[feature.section]} · {feature.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                  </span>
-                </div>
-                <h2 class="font-display font-bold text-[25px] leading-[1.18] tracking-[-0.02em] text-ink-900 group-hover:text-accent transition-colors m-0">
-                  {feature.data.title}
-                </h2>
-                <p class="font-sans text-[14.5px] leading-relaxed text-ink-700 mt-3">{feature.data.description}</p>
+    {moreStories.length > 0 && (
+      <section class="more-section" aria-labelledby="more-heading">
+        <div class="section-heading"><h2 id="more-heading">More to read</h2><a href="/topics">View all stories →</a></div>
+        <div class="story-grid">
+          {moreStories.map((article) => (
+            <a class="story-row" href={articleUrl(article)}>
+              <div>
+                <span class="row-kicker">{SECTION_LABELS[article.section]}</span>
+                <h3>{article.data.title}</h3>
+                <p>{article.data.description}</p>
+                <span class="row-meta">{minutes(article)} min read · {date(article, false)}</span>
               </div>
-            </a>
-          </div>
-        )}
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ MOST READ + LATEST WRITING ============ -->
-  <section class="bg-paper-100 border-b border-ink-200">
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-
-      <!-- Most read: baked at build, refreshed live from article_engagement -->
-      {mostRead.length > 0 && (
-        <div class="mb-14">
-          <div class="rule-head mb-5">
-            <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
-              <span class="u-datum u-datum--accent block mb-1.5">From the engagement data</span>
-              Most read
-            </h2>
-            <span data-most-read-live hidden class="u-datum">Live · refreshed on load</span>
-          </div>
-          <div data-most-read-row class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
-            {mostRead.map((article, i) => {
-              const views = viewsBySlug[article.slug] ?? 0;
-              return (
-                <a
-                  href={`/${article.section}/${article.slug}`}
-                  class="card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-3 p-5 hover:no-underline"
-                >
-                  <span class={`u-figure text-[22px] leading-[1.2] min-w-[34px] ${i === 0 ? 'text-accent' : 'text-ink-400'}`}>
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <div>
-                    <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
-                      {article.data.title}
-                    </h3>
-                    <div class="u-datum mt-1.5">
-                      {SECTION_LABELS[article.section]}{views > 0 ? ` · ${views.toLocaleString('en-GB')} views` : ''}
-                    </div>
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      <!-- Latest writing -->
-      <div>
-        <div class="rule-head mb-5">
-          <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
-            <span class="u-datum u-datum--accent block mb-1.5">Newest first</span>
-            Latest writing
-          </h2>
-          <span class="u-datum">{allArticles.length} in the archive</span>
-        </div>
-        <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
-          {latestArticles.map(article => (
-            <a
-              href={`/${article.section}/${article.slug}`}
-              class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-3 overflow-hidden hover:no-underline"
-            >
-              {(article.data.heroImage || article.data.portrait) ? (
-                <div class="overflow-hidden h-[150px] border-b border-ink-200">
-                  <img
-                    src={article.data.portrait ?? article.data.heroImage}
-                    alt=""
-                    loading="lazy"
-                    class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[600ms] ease-swift"
-                  />
-                </div>
-              ) : (
-                <div class="tile-blank h-[150px] border-b border-ink-200">
-                  <span class="text-4xl">
-                    {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
-                  </span>
-                </div>
-              )}
-              <div class="p-5 flex flex-col grow">
-                <div class="u-datum mb-2">
-                  {SECTION_LABELS[article.section]} · {article.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
-                </div>
-                <h3 class="font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0">
-                  {article.data.title}
-                </h3>
-                <p class="font-sans text-[13.5px] leading-[1.5] text-ink-700 mt-2 line-clamp-2">{article.data.description}</p>
-              </div>
+              <span class="row-arrow" aria-hidden="true">›</span>
             </a>
           ))}
         </div>
-      </div>
+      </section>
+    )}
 
-    </div>
-  </section>
-
-  <!-- ============ QUOTE ============ -->
-  <section class="max-w-wide mx-auto px-6 lg:px-10 py-4 md:py-6">
-    <figure class="surface-night rounded-4 px-10 md:px-16 py-12 md:py-14 relative overflow-hidden m-0 shadow-e3">
-      <div class="grid-ground--night absolute inset-0 pointer-events-none opacity-60" aria-hidden="true"
-           style="-webkit-mask-image: radial-gradient(ellipse 70% 100% at 100% 0%, #000 10%, transparent 70%); mask-image: radial-gradient(ellipse 70% 100% at 100% 0%, #000 10%, transparent 70%);"></div>
-      <div class="relative">
-        <div class="h-[2px] w-16 bg-accent-light mb-8" aria-hidden="true"></div>
-        <blockquote class="m-0">
-          <p class="font-serif text-[26px] md:text-[34px] lg:text-[36px] leading-[1.3] tracking-[-0.01em] text-night-ink text-balance m-0">
-            "We are all entitled to our own opinions,<br class="hidden md:block" />
-            <span class="text-accent-light font-semibold">but not to our own facts.</span>"
-          </p>
-        </blockquote>
-      <figcaption class="u-datum text-night-dim mt-7">
-        Lawrence Sherman ·{' '}
-        <a
-          href="https://cebcp.org/evidence-based-policing/what-is-evidence-based-policing/"
-          rel="noopener"
-          target="_blank"
-          class="underline underline-offset-2 hover:text-night-ink transition-colors"
-        >
-          Ideas in American Policing, 1998
-        </a>
-      </figcaption>
-      </div>
-    </figure>
-  </section>
-
-  <!-- ============ THEMED SECTION ROWS ============ -->
-  {FEATURED_SECTIONS.map(sectionKey => {
-    const articles = bySection[sectionKey] ?? [];
-    if (!articles.length) return null;
-    return (
-      <section class="border-b border-ink-200">
-        <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
-          <div class="rule-head mb-7">
-            <h2 class="font-display font-bold text-[22px] tracking-[-0.02em] text-ink-900 m-0">
-              <span class="u-datum u-datum--accent block mb-1.5">Section</span>
-              {SECTION_LABELS[sectionKey]}
-            </h2>
-            <a href={`/${sectionKey}`} class="u-datum u-datum--accent hover:text-accent-dark transition-colors whitespace-nowrap">
-              All {counts[sectionKey]} <span class="arrow">→</span>
+    {latestStories.length > 0 && (
+      <section class="latest-section" aria-labelledby="latest-heading">
+        <div class="section-heading"><h2 id="latest-heading">Latest stories</h2><a href="/topics">Browse every topic →</a></div>
+        <div class="latest-list">
+          {latestStories.map((article) => (
+            <a href={articleUrl(article)} class="latest-row">
+              <span class="latest-date">{article.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
+              <span><small>{SECTION_LABELS[article.section]}</small><strong>{article.data.title}</strong></span>
+              <span aria-hidden="true">→</span>
             </a>
-          </div>
-          <div class="row-fade flex gap-5 overflow-x-auto pb-2 snap-x snap-mandatory -mx-1 px-1">
-            {articles.map(article => (
-              <a
-                href={`/${article.section}/${article.slug}`}
-                class="card-hairline group shrink-0 snap-start w-[280px] flex flex-col rounded-3 overflow-hidden"
-              >
-                {(article.data.heroImage || article.data.portrait) ? (
-                  <div class="overflow-hidden h-[160px] border-b border-ink-200">
-                    <img
-                      src={article.data.portrait ?? article.data.heroImage}
-                      alt=""
-                      loading="lazy"
-                      class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[600ms] ease-swift"
-                    />
-                  </div>
-                ) : (
-                  <div class="tile-blank h-[160px] border-b border-ink-200">
-                    <span class="text-4xl">
-                      {(article.data.title.match(/[A-Za-z]/)?.[0] ?? '·').toUpperCase()}
-                    </span>
-                  </div>
-                )}
-                <div class="p-5 flex flex-col grow">
-                  <div class="u-datum mb-2">
-                    {article.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-                  </div>
-                  <h3 class="font-display font-bold text-[17.5px] leading-[1.25] tracking-[-0.015em] text-ink-900 group-hover:text-accent transition-colors m-0">
-                    {article.data.title}
-                  </h3>
-                  <p class="font-sans text-[13.5px] leading-[1.5] text-ink-600 mt-2 line-clamp-2">{article.data.description}</p>
-                </div>
-              </a>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
-    );
-  })}
+    )}
 
-  <!-- ============ RESEARCH TOOLS ============ -->
-  <section class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-16">
-    <a
-      href="/research-tools"
-      class="group block surface-night rounded-4 p-10 md:p-12 relative overflow-hidden shadow-e3 hover:-translate-y-1 hover:shadow-e4 transition-all duration-300 ease-swift"
-    >
-      <!-- The measured ground again, on the night surface. -->
-      <div
-        class="grid-ground--night absolute inset-0 pointer-events-none opacity-60"
-        aria-hidden="true"
-        style="-webkit-mask-image: radial-gradient(ellipse 80% 100% at 100% 100%, #000 20%, transparent 70%); mask-image: radial-gradient(ellipse 80% 100% at 100% 100%, #000 20%, transparent 70%);"
-      ></div>
-
-      <div class="relative flex flex-wrap items-center justify-between gap-8">
-        <div class="max-w-xl">
-          <div class="flex items-center gap-3 mb-4">
-            <span class="h-[2px] w-8 bg-accent-light" aria-hidden="true"></span>
-            <span class="u-datum !text-accent-light">Research Tools</span>
-          </div>
-          <h2 class="font-display font-bold text-[34px] tracking-[-0.03em] text-night-ink m-0">Put the evidence to work</h2>
-          <p class="font-sans text-[15px] leading-[1.55] text-night-dim mt-4">
-            Three free tools built for this site — a research assistant, a live crime dashboard, and a
-            media-perception explorer. Sign in once to unlock all three.
-          </p>
-          <div class="flex flex-wrap gap-2 mt-6">
-            {['Research Assistant', 'Crime Dashboard', 'Perception'].map(name => (
-              <span class="chip bg-night-ink/[0.05] border-night-line text-night-dim">
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-        <span class="btn btn--night shrink-0">
-          Explore the tools <span class="arrow">→</span>
-        </span>
-      </div>
-    </a>
-  </section>
-
-  {allArticles.length === 0 && (
-    <section>
-      <div class="max-w-wide mx-auto px-6 lg:px-10 py-20 text-center">
-        <p class="font-serif text-lg text-ink-600">
-          No articles yet. Add markdown files to <code class="text-sm bg-paper-100 px-2 py-1 rounded">src/content/</code> to get started.
-        </p>
+    <section class="browse-section" aria-labelledby="browse-heading">
+      <div class="section-heading"><h2 id="browse-heading">Browse by subject</h2></div>
+      <div class="browse-grid">
+        {browseSections.map((section) => (
+          <a href={sectionPaths[section]}><span>{SECTION_LABELS[section]}</span><span aria-hidden="true">→</span></a>
+        ))}
       </div>
     </section>
-  )}
 
-  <script type="application/json" id="tap-articles-index" set:html={JSON.stringify(articlesIndex)} />
-
+    <aside class="editor-note">
+      <div><strong>Thinking About Policing</strong><p>Independent analysis of evidence, policy and practice, written for people who want to understand what policing does and whether it works.</p></div>
+      <div class="editor-links"><a href="/about">About the publication →</a><a href={`mailto:hello@thinkingaboutpolicing.org?subject=${pitchSubject}&body=${pitchBody}`}>Pitch an article →</a></div>
+    </aside>
+  </div>
 </BaseLayout>
 
-<script>
-  // Live engagement: once the page is idle, pull current view counts from
-  // article_engagement (public read — see supabase/migrations/0002) and
-  // 1) refresh the total-views masthead figure, 2) rebuild the "Most read"
-  // row in true live order with current counts. The baked-at-build version
-  // stays for no-JS readers and keyless deploys.
-  const supaUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-  const supaKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-
-  function mostReadCard(rank: number, href: string, title: string, metaLine: string): HTMLAnchorElement {
-    const a = document.createElement('a');
-    a.href = href;
-    a.className = 'card-hairline group shrink-0 snap-start w-[280px] flex gap-4 rounded-3 p-5 hover:no-underline';
-    const num = document.createElement('span');
-    num.className = `u-figure text-[22px] leading-[1.2] min-w-[34px] ${rank === 1 ? 'text-accent' : 'text-ink-400'}`;
-    num.textContent = String(rank).padStart(2, '0');
-    const body = document.createElement('div');
-    const h = document.createElement('h3');
-    h.className = 'font-display font-bold text-[17.5px] leading-[1.25] text-ink-900 group-hover:text-accent transition-colors m-0';
-    h.textContent = title;
-    const meta = document.createElement('div');
-    meta.className = 'u-datum mt-1.5';
-    meta.textContent = metaLine;
-    body.appendChild(h);
-    body.appendChild(meta);
-    a.appendChild(num);
-    a.appendChild(body);
-    return a;
-  }
-
-  async function refreshEngagement() {
-    try {
-      const indexEl = document.getElementById('tap-articles-index');
-      if (!indexEl || !supaUrl || !supaKey) return;
-      const articles: Record<string, { t: string; s: string; l: string }> = JSON.parse(indexEl.textContent || '{}');
-
-      const { createClient } = await import('@supabase/supabase-js');
-      const supabase = createClient(supaUrl, supaKey, { auth: { persistSession: false } });
-      const { data, error } = await supabase
-        .from('article_engagement')
-        .select('slug, view_count')
-        .order('view_count', { ascending: false });
-      if (error || !Array.isArray(data)) return;
-
-      // Masthead total.
-      const total = data.reduce((s, r) => s + Number(r.view_count || 0), 0);
-      const totalEl = document.querySelector('[data-live-total-reads]');
-      const statWrap = document.querySelector('[data-live-reads-stat]');
-      if (totalEl && total > 0) {
-        totalEl.textContent = total.toLocaleString('en-GB');
-        statWrap?.classList.remove('hidden');
-      }
-
-      // Live most-read order.
-      const row = document.querySelector('[data-most-read-row]');
-      const liveBadge = document.querySelector<HTMLElement>('[data-most-read-live]');
-      const top = data
-        .filter((r) => articles[r.slug] && Number(r.view_count) > 0)
-        .slice(0, 8);
-      if (!row || top.length < 3) return;
-      row.replaceChildren(
-        ...top.map((r, i) => {
-          const a = articles[r.slug];
-          const views = Number(r.view_count);
-          return mostReadCard(i + 1, `/${a.s}/${r.slug}`, a.t, `${a.l} · ${views.toLocaleString('en-GB')} views`);
-        })
-      );
-      if (liveBadge) liveBadge.hidden = false;
-    } catch {}
-  }
-
-  if (supaUrl && supaKey) {
-    if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(refreshEngagement, { timeout: 4000 });
-    } else {
-      setTimeout(refreshEngagement, 1500);
-    }
-  }
-</script>
+<style>
+  .newsroom-home{--blue:#086db8;--orange:#ef5b2a;--ink:#101318;--muted:#626a74;--line:#dfe3e7;--wash:#f4f5f6;max-width:72rem;margin:0 auto;background:#fff;color:var(--ink)}
+  .newsroom-home a{color:inherit;text-decoration:none}.lead-story{border-bottom:1px solid var(--line)}
+  .lead-image{position:relative;display:block;overflow:hidden;aspect-ratio:16/9;background:#273747}.lead-image img{width:100%;height:100%;object-fit:cover}.image-fallback{display:grid;width:100%;height:100%;place-items:center;color:#fff;font-size:5rem;font-weight:800}
+  .read-chip{position:absolute;right:12px;bottom:11px;padding:6px 8px;background:rgba(12,16,22,.9);color:#fff;font-size:10px;font-weight:800;letter-spacing:.035em;text-transform:uppercase}
+  .lead-copy{padding:18px 18px 22px}.story-label{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}.story-label:before{width:19px;height:3px;content:"";background:var(--orange)}
+  h1{max-width:46rem;margin:9px 0 10px;font-size:clamp(30px,8.2vw,42px);font-weight:800;line-height:1.01;letter-spacing:-.05em}.standfirst{max-width:43rem;margin:0 0 14px;color:#424a54;font-family:Georgia,"Times New Roman",serif;font-size:15.5px;line-height:1.42}.byline{color:#69727d;font-size:11px;font-weight:650}.byline strong{color:#242930}
+  .more-section{padding:22px 17px 28px;border-top:7px solid var(--ink)}.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:7px}.section-heading h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.04em}.section-heading>a{color:var(--blue);font-size:12px;font-weight:800;white-space:nowrap}
+  .story-row{display:grid;grid-template-columns:minmax(0,1fr) 22px;gap:12px;padding:15px 0;border-top:1px solid var(--line)}.story-row:first-child{border-top:0}.row-kicker{display:block;margin-bottom:5px;color:var(--blue);font-size:10px;font-weight:850;letter-spacing:.07em;text-transform:uppercase}.story-row:nth-child(2) .row-kicker{color:#9c451f}.story-row:nth-child(3) .row-kicker{color:#56616d}.story-row h3{margin:0;font-size:18px;font-weight:800;line-height:1.14;letter-spacing:-.028em}.story-row p{margin:6px 0 0;color:var(--muted);font-family:Georgia,"Times New Roman",serif;font-size:12.5px;line-height:1.36}.row-meta{display:block;margin-top:7px;color:#79818b;font-size:10px;font-weight:750;text-transform:uppercase}.row-arrow{align-self:center;color:var(--blue);font-size:22px;font-weight:700}
+  .latest-section,.browse-section{padding:25px 17px;border-top:1px solid var(--line)}.latest-list{border-top:2px solid var(--ink)}.latest-row{display:grid;grid-template-columns:50px minmax(0,1fr) 18px;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}.latest-date{color:#727b85;font-size:10px;font-weight:800;text-transform:uppercase}.latest-row small{display:block;margin-bottom:3px;color:var(--blue);font-size:9px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}.latest-row strong{display:block;font-size:15px;line-height:1.2}.latest-row>span:last-child{color:var(--blue)}
+  .browse-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.browse-grid a{display:flex;min-height:66px;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);font-size:13px;font-weight:800}.browse-grid a span:last-child{color:var(--orange)}
+  .editor-note{display:grid;gap:13px;margin:3px 17px 30px;padding:17px 18px;border-left:4px solid var(--orange);background:var(--wash)}.editor-note strong{display:block;margin-bottom:4px;font-size:13px}.editor-note p{margin:0;color:#505964;font-size:12px;line-height:1.45}.editor-links{display:flex;flex-wrap:wrap;gap:8px 18px}.editor-links a{color:var(--blue);font-size:12px;font-weight:800}
+  @media(min-width:760px){.lead-story{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(350px,.88fr)}.lead-image{height:100%;min-height:470px;aspect-ratio:auto}.lead-copy{display:flex;flex-direction:column;justify-content:center;padding:45px}h1{font-size:52px}.standfirst{font-size:18px}.more-section{padding:28px 34px 38px}.story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}.story-row,.story-row:first-child{display:block;padding:18px 0 0;border-top:1px solid var(--line)}.story-row h3{font-size:21px}.story-row p{font-size:14px}.row-arrow{display:none}.latest-section,.browse-section{padding:34px}.latest-row{grid-template-columns:70px minmax(0,1fr) 25px;padding:16px 0}.latest-row strong{font-size:18px}.browse-grid{grid-template-columns:repeat(4,1fr)}.editor-note{grid-template-columns:minmax(0,1fr) auto;align-items:center;margin:0 34px 38px;padding:20px 22px}}
+</style>

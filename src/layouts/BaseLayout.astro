@@ -197,10 +197,10 @@ const fullTitle = title === siteTitle ? title : `${title} — ${siteTitle}`;
     </a>
     <Header />
     <WelcomeModal />
-<SupportCTA variant="banner" />
     <main id="main" class="flex-1" {...(type !== 'article' && !noindex ? { 'data-pagefind-body': true } : {})}>
       <slot />
     </main>
+    <SupportCTA variant="banner" />
     <Footer />
 
     {/* Offline support: register the service worker (see public/sw.js) on

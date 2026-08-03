@@ -4,14 +4,20 @@ import AccountBar from './AccountBar.astro';
 import { getEntry } from 'astro:content';
 
 const primaryLinks = [
+  { href: '/', label: 'Latest' },
   { href: '/police-policy', label: 'Evidence & Practice' },
   { href: '/public-policy', label: 'Leadership & Culture' },
+  { href: '/data-stories', label: 'Technology & Innovation' },
   { href: '/influential-people', label: 'Influential People' },
-  { href: '/research-tools', label: 'Research Tools', tool: true },
 ];
 
 const builtThis = await getEntry('pages', 'how-i-built-this');
-const metaLinks = [
+const menuLinks = [
+  ...primaryLinks,
+  { href: '/topics', label: 'Topics' },
+  { href: '/research-tools', label: 'Research tools' },
+  { href: '/resources', label: 'Further reading' },
+  { href: '/library', label: 'Your saved articles' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
   ...(builtThis && !builtThis.data.draft
@@ -19,370 +25,166 @@ const metaLinks = [
     : []),
 ];
 
-const moreLinks = [
-  { href: '/data-stories', label: 'Technology & Innovation' },
-  { href: '/topics', label: 'Topics' },
-  { href: '/resources', label: 'Further reading' },
-];
-
 const currentPath = Astro.url.pathname;
-
-const hasAuth = Boolean(
-  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
-);
+const originalUrl = new URL(`${Astro.url.pathname}${Astro.url.search}`, Astro.site ?? 'https://thinkingaboutpolicing.org').toString();
+const translations = [
+  { code: 'cy', flag: '🏴', name: 'Cymraeg', english: 'Welsh' },
+  { code: 'pl', flag: '🇵🇱', name: 'Polski', english: 'Polish' },
+  { code: 'ro', flag: '🇷🇴', name: 'Română', english: 'Romanian' },
+  { code: 'uk', flag: '🇺🇦', name: 'Українська', english: 'Ukrainian' },
+  { code: 'fr', flag: '🇫🇷', name: 'Français', english: 'French' },
+];
+const translatedUrl = (code: string) =>
+  `https://translate.google.com/translate?sl=en&tl=${code}&u=${encodeURIComponent(originalUrl)}`;
 ---
 
-<header
-  id="site-header"
-  class="sticky top-0 z-50 border-b-2 border-rule bg-paper-50/88 backdrop-blur-md shadow-edge transition-shadow duration-300 [view-transition-name:site-header]"
->
-  <div class="max-w-wide mx-auto px-6 lg:px-10">
-    <div
-      data-masthead
-      class="h-[70px] flex items-center justify-between gap-8 transition-[height] duration-300 ease-swift"
-    >
+<header id="site-header" class="magazine-header">
+  <div class="masthead">
+    <a class="brand" href="/" aria-label="Thinking About Policing home">
+      <span class="brand-mark">
+        <img src="/logo-mark.png" alt="" width="44" height="44" />
+      </span>
+      <span class="wordmark"><span>Thinking About</span><span>Policing</span></span>
+    </a>
 
-      <!-- Logo -->
-      <a href="/" class="flex items-center gap-2.5 shrink-0">
-        {/* The mark is black brushwork on white, so it disappears on the dark
-            theme. Two files, swapped the same way the theme-toggle icons are;
-            both are the same artwork with the ink remapped. */}
-        <img
-          src="/logo-mark.png"
-          alt="Thinking About Policing"
-          width="32"
-          height="32"
-          class="h-8 w-8 object-contain dark:hidden"
-        />
-        <img
-          src="/logo-mark-dark.png"
-          alt=""
-          aria-hidden="true"
-          width="32"
-          height="32"
-          class="h-8 w-8 object-contain hidden dark:block"
-        />
-        <span class="font-display font-bold text-[1.05rem] tracking-[-0.015em] text-ink-900 leading-none">
-          Thinking About Policing
-        </span>
+    <div class="desktop-actions">
+      <button type="button" class="icon-action" data-search-open aria-label="Search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      </button>
+      <a class="icon-action" href="/library" aria-label="Your saved articles">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.5L5 21V4a1 1 0 0 1 1-1z"/></svg>
       </a>
-
-      <!-- Desktop nav -->
-      <nav class="hidden md:flex items-center gap-1">
-        {primaryLinks.map(link => {
-          const isActive = currentPath.startsWith(link.href) && link.href !== '/';
-          return (
-            <a
-              href={link.href}
-              aria-current={isActive ? 'page' : undefined}
-              class={`relative px-3 py-2 font-sans text-[13.5px] font-semibold rounded-2 transition-colors ${
-                isActive
-                  ? 'text-ink-900'
-                  : link.tool
-                    ? 'text-accent hover:text-accent-dark'
-                    : 'text-ink-600 hover:text-ink-900 hover:bg-paper-100'
-              }`}
-            >
-              {link.label}
-              {isActive && (
-                <span class="absolute left-2 right-2 -bottom-[2px] h-[3px] bg-accent" aria-hidden="true"></span>
-              )}
-            </a>
-          );
-        })}
-      </nav>
-
-      <!-- Desktop actions -->
-      <div class="hidden md:flex items-center gap-2.5 shrink-0">
-        <a
-          href="/library"
-          class="p-2 rounded-2 text-ink-500 hover:text-ink-900 hover:bg-paper-100 transition-colors"
-          aria-label="Your library — saved articles"
-        >
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.5L5 21V4a1 1 0 0 1 1-1z" />
-          </svg>
-        </a>
-        <button
-          type="button"
-          data-theme-toggle
-          class="p-2 rounded-2 text-ink-500 hover:text-ink-900 hover:bg-paper-100 transition-colors"
-          aria-label="Toggle dark mode"
-        >
-          <svg class="dark:hidden" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-          <svg class="hidden dark:block" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="4.5" />
-            <path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8" />
-          </svg>
-        </button>
-
-        <button
-          type="button"
-          data-search-open
-          class="group flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-2 border border-ink-300 bg-paper-200/60 shadow-well text-ink-500 hover:text-ink-900 hover:border-accent/50 transition-colors"
-          aria-label="Search"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-          <span class="hidden lg:inline font-sans text-[13px] font-medium">Search</span>
-        </button>
-
-        <AccountBar part="trigger-desktop" />
-        {hasAuth && (
-          <button
-            type="button"
-            data-quick-signout
-            class="hidden p-2 rounded-2 text-ink-500 hover:text-flag hover:bg-paper-100 transition-colors"
-            aria-label="Sign out"
-            title="Sign out"
-          >
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" y1="12" x2="9" y2="12" />
-            </svg>
-          </button>
-        )}
-      </div>
-
-      <!-- Mobile actions -->
-      <div class="md:hidden flex items-center gap-1">
-        <AccountBar part="trigger-mobile" />
-        {hasAuth && (
-          <button
-            type="button"
-            data-quick-signout
-            class="hidden p-2 text-ink-500 hover:text-flag transition-colors"
-            aria-label="Sign out"
-            title="Sign out"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-              <polyline points="16 17 21 12 16 7" />
-              <line x1="21" y1="12" x2="9" y2="12" />
-            </svg>
-          </button>
-        )}
-        <button
-          type="button"
-          data-theme-toggle
-          class="p-2 text-ink-500 hover:text-ink-900 transition-colors"
-          aria-label="Toggle dark mode"
-        >
-          <svg class="dark:hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-          <svg class="hidden dark:block" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="4.5" />
-            <path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8" />
-          </svg>
-        </button>
-
-        <button
-          type="button"
-          data-search-open
-          class="p-2 text-ink-500 hover:text-ink-900 transition-colors"
-          aria-label="Search"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-        </button>
-
-        <button
-          id="mobile-menu-button"
-          class="text-ink-900 p-2 -mr-2"
-          aria-label="Toggle menu"
-          aria-controls="mobile-menu"
-          aria-expanded="false"
-        >
-          <svg data-icon-open width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <line x1="3" y1="7" x2="21" y2="7"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="17" x2="21" y2="17"/>
-          </svg>
-          <svg data-icon-close class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <line x1="5" y1="5" x2="19" y2="19"/>
-            <line x1="19" y1="5" x2="5" y2="19"/>
-          </svg>
-        </button>
-      </div>
+      <button type="button" class="icon-action" data-theme-toggle aria-label="Toggle dark mode">
+        <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+        <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2 6 6m12 12 1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18m12-12 1.8-1.8"/></svg>
+      </button>
+      <AccountBar part="trigger-desktop" />
     </div>
+
+    <button class="language-button" type="button" data-panel-open="language-panel" aria-controls="language-panel" aria-expanded="false" aria-label="Choose language">
+      <svg class="union-flag" viewBox="0 0 60 36" aria-hidden="true"><rect width="60" height="36" fill="#173f8a"/><path d="M0 0 60 36M60 0 0 36" stroke="#fff" stroke-width="8"/><path d="M0 0 60 36M60 0 0 36" stroke="#d6263b" stroke-width="3"/><path d="M30 0v36M0 18h60" stroke="#fff" stroke-width="12"/><path d="M30 0v36M0 18h60" stroke="#d6263b" stroke-width="6"/></svg>
+      <span>EN</span>
+    </button>
+
+    <button class="menu-button" type="button" data-panel-open="menu-panel" aria-controls="menu-panel" aria-expanded="false" aria-label="Open menu">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5h18M3 12h18M3 18.5h18"/></svg>
+    </button>
   </div>
 
-  <!-- Mobile menu: full-width overlay panel below the masthead -->
-  <nav
-    id="mobile-menu"
-    class="hidden md:hidden absolute inset-x-0 top-full bg-paper-50 border-b-2 border-rule shadow-e4 max-h-[calc(100dvh-70px)] overflow-y-auto"
-    aria-label="Site menu"
-  >
-    <div class="px-6 py-6 grid gap-6">
-      <div>
-        <p class="u-datum u-datum--accent mb-2">Read</p>
-        <ul class="mobile-menu-group">
-          {primaryLinks.filter(l => !l.tool).map(link => (
-            <li>
-              <a href={link.href} class="block py-2.5 font-sans text-[17px] font-semibold text-ink-900 hover:text-accent">
-                {link.label}
-              </a>
-            </li>
-          ))}
-          {moreLinks.map(link => (
-            <li>
-              <a href={link.href} class="block py-2.5 font-sans text-[17px] font-semibold text-ink-900 hover:text-accent">
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <p class="u-datum u-datum--accent mb-2">Tools</p>
-        <ul class="mobile-menu-group">
-          {primaryLinks.filter(l => l.tool).map(link => (
-            <li>
-              <a href={link.href} class="block py-2.5 font-sans text-[17px] font-semibold text-accent hover:text-accent-dark">
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div>
-        <p class="u-datum mb-2">Site</p>
-        <ul class="mobile-menu-group">
-          <li>
-            <a href="/library" class="block py-2 font-sans text-[15px] text-ink-600 hover:text-ink-900">
-              Your library
-            </a>
-          </li>
-          {metaLinks.map(link => (
-            <li>
-              <a href={link.href} class="block py-2 font-sans text-[15px] text-ink-600 hover:text-ink-900">
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+  <div class="brand-line" aria-hidden="true"></div>
+  <nav class="topic-rail" aria-label="Main topics">
+    {primaryLinks.map((link) => (
+      <a href={link.href} aria-current={currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) ? 'page' : undefined}>
+        {link.label}
+      </a>
+    ))}
   </nav>
 </header>
+
+<div id="language-panel" class="panel-backdrop" data-panel hidden>
+  <section class="panel-sheet" role="dialog" aria-modal="true" aria-labelledby="language-title">
+    <div class="panel-handle" aria-hidden="true"></div>
+    <header class="panel-head">
+      <h2 id="language-title">Read in your language</h2>
+      <button type="button" class="panel-close" data-panel-close aria-label="Close language menu">×</button>
+    </header>
+    <p class="translation-note">Translations are generated automatically by Google Translate. You can return to the original English page at any time.</p>
+    <ul class="panel-list">
+      <li><a href={originalUrl}><span class="flag-emoji">🇬🇧</span><span>English</span><small>Original</small></a></li>
+      {translations.map((language) => (
+        <li><a href={translatedUrl(language.code)} rel="nofollow"><span class="flag-emoji">{language.flag}</span><span>{language.name}</span><small>{language.english}</small></a></li>
+      ))}
+    </ul>
+  </section>
+</div>
+
+<div id="menu-panel" class="panel-backdrop" data-panel hidden>
+  <section class="panel-sheet menu-sheet" role="dialog" aria-modal="true" aria-labelledby="menu-title">
+    <div class="panel-handle" aria-hidden="true"></div>
+    <header class="panel-head">
+      <h2 id="menu-title">Explore</h2>
+      <button type="button" class="panel-close" data-panel-close aria-label="Close menu">×</button>
+    </header>
+    <div class="mobile-utilities">
+      <button type="button" data-search-open><span>Search the site</span><span aria-hidden="true">⌕</span></button>
+      <button type="button" data-theme-toggle><span>Change colour theme</span><span aria-hidden="true">◐</span></button>
+      <AccountBar part="trigger-mobile" />
+    </div>
+    <ul class="panel-list menu-list">
+      {menuLinks.map((link) => <li><a href={link.href}><span>{link.label}</span><span aria-hidden="true">→</span></a></li>)}
+    </ul>
+  </section>
+</div>
 
 <SearchModal />
 <AccountBar part="dialogs" />
 
 <style>
-  /* The masthead's height animates as [data-scrolled] toggles (see below). Its
-     height sits inside the viewport at the exact point the browser measures
-     for scroll anchoring, so as it resizes the browser "corrects" scrollY to
-     compensate — fighting the very scroll gesture that triggered the resize
-     and producing a jitter/flicker right at the top of the page (worst when a
-     banner sits just below the header, since that's exactly the scroll range
-     the toggle threshold falls in). Opting out of anchoring here is the fix:
-     the header is the thing changing size, not content we want the page to
-     stay anchored to. */
-  #site-header {
-    overflow-anchor: none;
-  }
-
-  /* Compact masthead once the page is scrolled. */
-  header[data-scrolled] [data-masthead] {
-    height: 56px;
-  }
-  header[data-scrolled] {
-    box-shadow:
-      inset 0 1px 0 rgb(var(--edge-lit) / var(--edge-lit-alpha)),
-      var(--e2);
-  }
-
-  /* Staggered rise for mobile menu groups. */
-  @media (prefers-reduced-motion: no-preference) {
-    #mobile-menu:not(.hidden) .mobile-menu-group li {
-      animation: menu-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-    #mobile-menu:not(.hidden) .mobile-menu-group li:nth-child(2) { animation-delay: 0.03s; }
-    #mobile-menu:not(.hidden) .mobile-menu-group li:nth-child(3) { animation-delay: 0.06s; }
-    #mobile-menu:not(.hidden) .mobile-menu-group li:nth-child(4) { animation-delay: 0.09s; }
-    #mobile-menu:not(.hidden) .mobile-menu-group li:nth-child(5) { animation-delay: 0.12s; }
-    #mobile-menu:not(.hidden) .mobile-menu-group li:nth-child(6) { animation-delay: 0.15s; }
-  }
-  @keyframes menu-in {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .magazine-header{position:sticky;top:0;z-index:50;background:#fff;color:#101318;border-bottom:1px solid #dfe3e7;box-shadow:0 1px 6px rgba(16,19,24,.04);overflow-anchor:none}
+  .masthead{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;min-height:64px;max-width:72rem;margin:0 auto;padding:0 8px 0 12px}
+  .brand{display:flex;min-width:0;align-items:center;gap:7px;color:#101318;text-decoration:none}
+  .brand-mark{position:relative;flex:0 0 40px;width:40px;height:40px;overflow:hidden;border-radius:50%;background:#fff}
+  .brand-mark img{position:absolute;width:52px;height:52px;max-width:none;left:-6px;top:-6px;object-fit:contain}
+  .wordmark{min-width:0;font-family:var(--font-sans,ui-sans-serif,system-ui,sans-serif);font-size:15px;font-weight:850;line-height:.96;letter-spacing:-.035em;white-space:nowrap}
+  .wordmark span{display:block}
+  .desktop-actions{display:none;align-items:center;gap:3px;margin-right:7px}
+  .icon-action{display:grid;width:38px;height:38px;place-items:center;border:0;border-radius:4px;background:transparent;color:#535b65}
+  .icon-action:hover{background:#f2f4f5;color:#101318}
+  .icon-action svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
+  .theme-sun{display:none}.dark .theme-moon{display:none}.dark .theme-sun{display:block}
+  .language-button{display:inline-flex;height:34px;align-items:center;gap:5px;padding:0 7px;border:1px solid #949ba3;border-radius:5px;background:#fff;color:#101318;font-size:11px;font-weight:850;cursor:pointer}
+  .union-flag{width:20px;height:14px;border:1px solid rgba(0,0,0,.14)}
+  .menu-button{display:grid;width:42px;height:42px;place-items:center;padding:0;border:0;background:transparent;color:#101318;cursor:pointer}
+  .menu-button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:2.4}
+  .brand-line{height:4px;background:linear-gradient(90deg,#08b9ea,#086db8 68%,#ef5b2a 68% 76%,#101318 76%)}
+  .topic-rail{display:flex;gap:21px;max-width:72rem;margin:0 auto;overflow-x:auto;padding:10px 15px 9px;background:#fff;font-size:11px;font-weight:850;letter-spacing:.025em;text-transform:uppercase;white-space:nowrap;scrollbar-width:none}
+  .topic-rail::-webkit-scrollbar{display:none}.topic-rail a{color:#30363d;text-decoration:none}.topic-rail a[aria-current=page]{color:#086db8}
+  .panel-backdrop{position:fixed;z-index:80;inset:0;display:flex;align-items:flex-end;background:rgba(8,10,14,.54);backdrop-filter:blur(2px)}
+  .panel-backdrop[hidden]{display:none}
+  .panel-sheet{width:100%;max-height:min(82dvh,650px);overflow:auto;border-radius:18px 18px 0 0;background:#fff;color:#101318;box-shadow:0 -20px 50px rgba(0,0,0,.22)}
+  .panel-handle{width:36px;height:4px;margin:9px auto 4px;border-radius:9px;background:#ccd1d6}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;padding:10px 17px 12px;border-bottom:1px solid #dfe3e7}
+  .panel-head h2{margin:0;font-size:19px;letter-spacing:-.025em}.panel-close{border:0;background:transparent;font-size:28px;line-height:1;cursor:pointer}
+  .translation-note{margin:10px 17px 2px;padding:11px 12px;background:#f4f5f6;color:#59626c;font-size:11px;line-height:1.4}
+  .panel-list{list-style:none;margin:0;padding:7px 17px 22px}.panel-list li a{display:flex;min-height:49px;align-items:center;gap:11px;border-bottom:1px solid #eceff1;color:#101318;font-size:15px;font-weight:700;text-decoration:none}
+  .panel-list small{margin-left:auto;color:#78818b;font-size:11px;font-weight:600}.flag-emoji{width:28px;font-size:22px}
+  .menu-list li a{justify-content:space-between;font-size:17px;font-weight:800}.menu-list li a span:last-child{color:#086db8}
+  .mobile-utilities{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:13px 17px 4px}.mobile-utilities button{display:flex;min-height:46px;align-items:center;justify-content:space-between;border:1px solid #dfe3e7;border-radius:5px;background:#f7f8f9;padding:0 11px;color:#30363d;font-size:12px;font-weight:750;text-align:left}
+  @media(min-width:760px){.masthead{min-height:72px;padding:0 20px}.brand-mark{flex-basis:45px;width:45px;height:45px}.brand-mark img{width:59px;height:59px;left:-7px;top:-7px}.wordmark{font-size:18px}.desktop-actions{display:flex}.topic-rail{justify-content:center;padding:12px 20px 11px;font-size:12px}.panel-backdrop{align-items:center;justify-content:center;padding:24px}.panel-sheet{max-width:540px;border-radius:14px}.panel-handle{display:none}}
+  @media(max-width:340px){.masthead{padding-left:8px}.brand-mark{flex-basis:37px;width:37px;height:37px}.brand-mark img{width:49px;height:49px}.wordmark{font-size:13px}.language-button{padding:0 5px}}
+  @media(prefers-reduced-motion:no-preference){.panel-sheet{animation:panel-rise .18s ease-out}@keyframes panel-rise{from{transform:translateY(18px);opacity:.8}to{transform:none;opacity:1}}}
 </style>
 
 <script>
-  const btn = document.getElementById('mobile-menu-button');
-  const menu = document.getElementById('mobile-menu');
-  const iconOpen = btn?.querySelector('[data-icon-open]');
-  const iconClose = btn?.querySelector('[data-icon-close]');
-
-  function setOpen(open: boolean) {
-    if (!menu || !btn) return;
-    menu.classList.toggle('hidden', !open);
-    btn.setAttribute('aria-expanded', String(open));
-    iconOpen?.classList.toggle('hidden', open);
-    iconClose?.classList.toggle('hidden', !open);
-    document.body.style.overflow = open ? 'hidden' : '';
+  let returnFocus: HTMLElement | null = null;
+  const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-panel]'));
+  function closePanels() {
+    panels.forEach((panel) => { panel.hidden = true; });
+    document.querySelectorAll('[data-panel-open]').forEach((button) => button.setAttribute('aria-expanded', 'false'));
+    document.body.style.overflow = '';
+    returnFocus?.focus();
   }
-
-  btn?.addEventListener('click', () => {
-    const open = menu?.classList.contains('hidden') ?? false;
-    setOpen(open);
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !menu?.classList.contains('hidden')) {
-      setOpen(false);
-      btn?.focus();
-    }
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!menu || menu.classList.contains('hidden')) return;
-    const target = e.target as Node;
-    if (!menu.contains(target) && !btn?.contains(target)) setOpen(false);
-  });
-
-  // Close when a link or button inside the mobile menu is tapped.
-  menu?.querySelectorAll('a, button').forEach((el) => {
-    el.addEventListener('click', () => setOpen(false));
-  });
-
-  document.querySelectorAll('[data-theme-toggle]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.toggle('dark');
-      try {
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      } catch (e) {}
+  document.querySelectorAll<HTMLElement>('[data-panel-open]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const id = button.getAttribute('data-panel-open');
+      const panel = id ? document.getElementById(id) : null;
+      if (!panel) return;
+      returnFocus = button;
+      panel.hidden = false;
+      button.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      panel.querySelector<HTMLElement>('[data-panel-close]')?.focus();
     });
   });
-
-  // Compact the masthead once the reader scrolls; rAF-throttled.
-  {
-    const header = document.getElementById('site-header');
-    let ticking = false;
-    function update() {
-      ticking = false;
-      if (!header) return;
-      if (window.scrollY > 12) header.setAttribute('data-scrolled', '');
-      else header.removeAttribute('data-scrolled');
-    }
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    }, { passive: true });
-    update();
-  }
+  panels.forEach((panel) => {
+    panel.addEventListener('click', (event) => { if (event.target === panel) closePanels(); });
+    panel.querySelectorAll('[data-panel-close], a, [data-search-open]').forEach((element) => element.addEventListener('click', closePanels));
+  });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closePanels(); });
+  document.querySelectorAll('[data-theme-toggle]').forEach((element) => {
+    element.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (error) {}
+    });
+  });
 </script>

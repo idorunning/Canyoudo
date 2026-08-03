@@ -41,11 +41,11 @@
 /* ------------------------------------------------------------------ */
 :root {
   /* The desk: the page ground itself, a step below any panel on it. */
-  --canvas: 233 239 246;     /* #e9eff6 */
+  --canvas: 255 255 255;     /* #e9eff6 */
   /* Surfaces: the sheet, a quiet band, and the cut well (inputs, code). */
-  --paper-50: 251 253 254;   /* #fbfdfe — raised sheet: cards, panels, chrome */
-  --paper-100: 240 245 250;  /* #f0f5fa — band / secondary surface */
-  --paper-200: 222 231 241;  /* #dee7f1 — well: inputs, code, chart grounds */
+  --paper-50: 255 255 255;   /* #fbfdfe — raised sheet: cards, panels, chrome */
+  --paper-100: 247 248 249;  /* #f0f5fa — band / secondary surface */
+  --paper-200: 238 240 242;  /* #dee7f1 — well: inputs, code, chart grounds */
   /* Text: a blue-black to blue-grey ramp, same hue axis as the accent. */
   --ink-900: 12 23 40;       /* #0c1728 — headline */
   --ink-800: 36 48 65;       /* #243041 — strong text */
@@ -53,15 +53,15 @@
   --ink-600: 93 105 120;     /* #5d6978 — meta text (4.5:1 on canvas) */
   --ink-500: 132 143 156;    /* #848f9c — muted text */
   --ink-400: 160 170 182;    /* #a0aab6 — lighter muted */
-  --ink-300: 195 203 213;    /* #c3cbd5 — strong borders */
-  --ink-200: 216 223 231;    /* #d8dfe7 — hairline / rule */
+  --ink-300: 197 203 209;    /* #c3cbd5 — strong borders */
+  --ink-200: 223 227 231;    /* #d8dfe7 — hairline / rule */
   /* Accent: one signal blue for everything interactive. */
-  --accent: 16 89 172;        /* #1059ac — links, controls, active state */
-  --accent-dark: 10 68 143;   /* #0a448f — hover / pressed */
-  --accent-light: 59 144 224; /* #3b90e0 — washes, and text on night */
+  --accent: 8 109 184;        /* #1059ac — links, controls, active state */
+  --accent-dark: 6 82 143;   /* #0a448f — hover / pressed */
+  --accent-light: 8 185 234; /* #3b90e0 — washes, and text on night */
   /* Signal: the second voice — a figure worth stopping on, a live reading.
      Never decorative, never a third brand colour. */
-  --signal: 167 99 25;        /* #a76319 */
+  --signal: 239 91 42;        /* #a76319 */
   /* Flag: harm, withdrawal, a claim that failed. Used sparingly and never
      as a hover state. */
   --flag: 181 52 52;          /* #b53434 */
@@ -76,7 +76,7 @@
      bottom edge, a table's header. It is ink at full strength on paper, but
      inverting it in dark mode would print a bright white bar across the page,
      so it has its own token rather than borrowing --ink-900. */
-  --rule: 12 23 40;          /* #0c1728 */
+  --rule: 16 19 24;          /* #0c1728 */
   /* Shadows carry the palette's hue: blue-black, so an elevated card reads
      as lit rather than dirty. */
   --shadow-rgb: 10 22 40;
@@ -954,15 +954,11 @@ html.dark {
    so it never competes with a line of type. */
 .paper-grain {
   background-color: rgb(var(--canvas));
-  background-image:
-    linear-gradient(rgb(var(--ink-900) / 0.028) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(var(--ink-900) / 0.028) 1px, transparent 1px);
-  background-size: 32px 32px, 32px 32px;
+  background-image: none;
 }
 .dark .paper-grain {
-  background-image:
-    linear-gradient(rgb(255 255 255 / 0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 0.022) 1px, transparent 1px);
+  background-color: rgb(var(--canvas));
+  background-image: none;
 }
 
 /* ------------------------------------------------------------------ */
