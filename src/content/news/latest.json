@@ -1,10 +1,9 @@
 {
   "provenance": {
-    "fetchedAt": "2026-08-02T12:55:23.639Z",
-    "feedCount": 9,
+    "fetchedAt": "2026-08-03T01:45:34.247Z",
+    "feedCount": 8,
     "sources": [
       "GOV.UK",
-      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "CPS",
@@ -16,36 +15,36 @@
   },
   "items": [
     {
+      "title": "The Papers: Police warn on early release and 'le rip-off'",
+      "link": "https://www.bbc.co.uk/news/articles/c5ywj4z65xwo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-03T00:47:23.000Z",
+      "summary": "A range of stories feature on Monday's front pages, with Andy Burnham's vow to cut the number of people arriving in the UK on small boats a focus for some."
+    },
+    {
+      "title": "Man admits transporting Scottish woman's body in suitcase, Greek police say",
+      "link": "https://www.bbc.co.uk/news/articles/c89ndd4g0gjo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-02T17:53:09.000Z",
+      "summary": "The man was arrested on suspicion of manslaughter, as well as robbery and weapons offences."
+    },
+    {
+      "title": "Four arrested over hate crime attack on ship crew",
+      "link": "https://www.bbc.co.uk/news/articles/cx2mppyzgedo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-02T15:16:54.000Z",
+      "summary": "Three of the four are arrested on suspicion of attempted murder, with one man seriously hurt."
+    },
+    {
       "title": "Teenager dies after 'medical episode' at Kendal Calling festival in Cumbria",
       "link": "https://www.bbc.co.uk/news/articles/cj9dz3xvz1wo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
       "isoDate": "2026-08-02T12:36:12.000Z",
       "summary": "Cumbria Police says the 17-year-old girl suffered a medical episode."
-    },
-    {
-      "title": "Gang of men hurl racist abuse at takeaway owner before violent attack",
-      "link": "https://www.bbc.co.uk/news/articles/c2eln8drwlmo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-02T08:43:53.000Z",
-      "summary": "The BBC understands police are treating the attack in Falkirk last month as a hate crime."
-    },
-    {
-      "title": "Trust, grief and betrayal: Inside the Legacy funeral case",
-      "link": "https://www.bbc.co.uk/news/articles/ce3456dw32no?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-02T06:55:52.000Z",
-      "summary": "From a police tip-off to sentencing, a correspondent reflects on covering an unprecedented case."
-    },
-    {
-      "title": "River path balaclava gang target children on bikes and police officers",
-      "link": "https://www.bbc.co.uk/news/articles/cwyrwnnqnw0o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-02T06:04:29.000Z",
-      "summary": "Concerned parents say their children have been attacked while riding bikes on the trail since June."
     },
     {
       "title": "Bristol Prison",
