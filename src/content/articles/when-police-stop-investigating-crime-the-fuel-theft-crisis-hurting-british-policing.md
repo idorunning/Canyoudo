@@ -1,159 +1,159 @@
 ---
-title: 'When Police Stop Investigating Crime: The Fuel Theft Crisis hurting British Policing'
+title: 'Fuel Theft Is Rising Again. The Police Response Still Does Not Add Up'
 section: police-policy
-description: Clear CCTV, a registration plate, precise timestamps — and still “case closed, no suspect identified”. How fuel theft became effectively decriminalised.
+description: An industry estimate puts fuel taken without payment at £194,000 a day. The figure needs care, but it exposes a police response that still fails to separate mistakes from repeat theft.
 keyTakeaways:
-  - Some 99% of fuel-theft crimes end without a prosecution, even when retailers hand police clear CCTV, ANPR data and payment records.
-  - Forecourts are "islands of enquiry" — continuously monitored, evidence-rich sites on the road network whose investigative value is being squandered.
-  - 'Non-response is breaking the relationship: retailers increasingly stop cooperating and turn to £35m-a-year private recovery instead of the police.'
-  - The real issue is bigger than the £100m of lost fuel — when police openly abandon a solvable category of crime, policing by consent erodes.
+  - Forecourt Eye estimates that fuel taken without payment reached £194,000 a day after the Iran conflict began, based on reports from 550 forecourts and extrapolated across the UK.
+  - The estimate combines deliberate drive-offs with no-means-of-payment cases, so it should not be presented as an official measure of proven theft.
+  - A 2025 investigation found that an average of 86% of recorded cases were closed without a suspect across 33 responding forces.
+  - Forces need a two-track response that removes genuine mistakes quickly but joins repeat vehicles, false plates, multiple sites and other evidence into proper investigations.
 pubDate: 2025-06-17
-updatedDate: 2026-07-10
+updatedDate: 2026-08-03
 author: ''
 thumbnail: /images/11543.webp
 heroImage: /images/11543.webp
 tags:
   - crime
   - evidence-based-policing
-  - history
   - law
   - news
   - police
   - policing
-  - politics
+  - retail-crime
 practicalSummary:
   problem: >-
-    Around 99% of fuel thefts end without prosecution even when retailers hand
-    police clear CCTV, number plates and timestamps — an open abandonment of a
-    solvable crime that is breaking retailer cooperation and eroding policing
-    by consent.
+    Fuel taken without payment is rising as pump prices increase, but police and
+    industry data still mix deliberate drive-offs, later payment and repeat
+    offending. Treating them as one low-value category hides both innocent
+    mistakes and the cases that most need investigation.
   evidence:
     - point: >-
-        Between 2020 and 2024 Sussex closed 94% of 2,892 fuel-theft cases with
-        no suspect identified, Humberside 83% and South Yorkshire 91%, despite
-        comprehensive CCTV, ANPR and payment evidence.
-      source: "Forecourt Trader FOI investigation"
+        Forecourt Eye reported a 20% rise in incidents and a 48% rise in their
+        value during the five months after 28 February 2026, estimating a UK
+        daily cost of £194,000 from a sample of 550 forecourts.
+      source: "ITV News, 3 August 2026"
+      url: "https://www.itv.com/news/2026-08-03/fuel-theft-nearly-200000-stolen-from-uk-forecourts-daily-during-iran-war"
+    - point: >-
+        A 2025 Freedom of Information investigation covering 33 forces found
+        that an average of 86% of reported cases were closed without a suspect;
+        Sussex recorded the highest cited rate at 94%.
+      source: "Forecourt Trader, 12 May 2025"
       url: "https://forecourttrader.co.uk/news/exclusive-65m-of-fuel-stolen-in-drive-offs-as-up-to-94-of-offenders-escape-justice/704134.article"
     - point: >-
-        Losses have reached £100m across 1.5 million incidents, and the
-        industry now recovers £35m a year through private civil channels
-        because criminal enforcement has withdrawn.
-      source: "British Oil Security Syndicate"
-      url: "https://www.boss-uk.com/"
-    - point: >-
-        Non-investigation is not a staffing problem — officer numbers hit an
-        all-time high of 147,745 in March 2024, making this a prioritisation
-        decision, not a shortage.
-      source: "Home Office police workforce statistics"
-      url: "https://www.gov.uk/government/statistics/police-workforce-england-and-wales-30-september-2025/police-workforce-england-and-wales-30-september-2025"
+        Home Office counting rules say a reported forecourt making-off must not
+        be treated as purely civil and will usually be recorded unless credible
+        evidence shows an innocent mistake.
+      source: "Home Office Crime Recording Rules, April 2026"
+      url: "https://assets.publishing.service.gov.uk/media/6a0f28cb9819be865f421c4b/crime-recording-rules-for-frontline-officers-and-staff-2026_27-April-update-v2.pdf"
   outcomes:
     - action: >-
-        audit how making-off-without-payment reports are closed, checking that
-        supplied CCTV is reviewed before a no-suspect message is sent
+        separate deliberate drive-offs, declared no-means-of-payment cases and
+        later-paid mistakes at the point of reporting
       benefit: >-
-        the force stops writing off solvable crimes, and victims who hand over
-        evidence see it actually examined.
+        civil recovery can deal with genuine debts while criminal indicators
+        reach investigators instead of disappearing inside one mixed category.
     - action: >-
-        treat forecourts as islands of enquiry and retrieve footage within the
-        31-day retention window
+        check registration, CCTV and repeat-location data before closing a case,
+        and join linked reports into one series investigation
       benefit: >-
-        investigators keep an evidence source that has already helped convict
-        murderers, and serious cases get timeline evidence before it is
-        overwritten.
+        forces concentrate effort on repeat offenders, false plates and organised
+        theft rather than repeatedly assessing each loss as an isolated £80 job.
     - action: >-
-        state prioritisation decisions openly instead of dressing them up as
-        evidential failure
+        audit no-suspect closures and publish whether the evidence supplied by
+        retailers was viewed and checked
       benefit: >-
-        the force protects its legitimacy with retailers and the low-trust
-        communities who staff overnight shifts, instead of eroding policing by
-        consent.
+        chief constables can distinguish proportionate screening from cases being
+        closed before an available line of enquiry was followed.
 ---
 
-Consider a business that reports a crime with clear CCTV footage, the suspect's vehicle registration and precise timestamps, and then receives a text message hours later saying "case closed, no suspect identified." For Britain's petrol station operators, this is not a hypothetical scenario. It is a routine experience.
+Fuel taken without payment is now estimated to be costing UK forecourts £194,000 a day. The number comes from [analysis reported by ITV News on 3 August 2026](https://www.itv.com/news/2026-08-03/fuel-theft-nearly-200000-stolen-from-uk-forecourts-daily-during-iran-war), after petrol and diesel prices rose sharply during the Iran conflict. If that daily rate continued for a year, it would amount to just under £71 million.
+
+That is a serious warning, but it is not an audited national loss figure. It is an industry estimate, extrapolated from 550 forecourts across a UK estate said to contain 8,359 sites. It also combines two different events: drivers who leave without attempting to pay and customers who say at the till that they have no means of payment.
+
+The police response should recognise that difference. A customer who provides accurate details and pays the next day is not the same problem as a vehicle using false plates to fill containers at several sites. Treating both as one low-value category wastes time on the first and misses the pattern in the second.
+
+That is the conclusion the new figures support. Police should not attend every unpaid filling. They should record reports properly, remove genuine mistakes quickly and join the remaining evidence across vehicles, offenders and locations. The present system too often does none of those things well.
+
+The ITV estimate covers the UK. The law, crime-recording rules and policing recommendations below concern England and Wales. Scotland and Northern Ireland have different criminal-law frameworks and should not be folded into an England and Wales policy answer.
 
 <figure>
   <img src="/images/fuel-filling-station.jpg" alt="A modern filling-station forecourt" loading="lazy" />
   <figcaption>A filling-station forecourt. Photo by Harrison Keely, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, via Wikimedia Commons.</figcaption>
 </figure>
 
-The figures are striking. Some 99% of fuel theft crimes do not result in prosecution, despite stations providing comprehensive evidence including high-definition CCTV, automatic number plate recognition (ANPR) data and payment transaction records. Across multiple UK police forces, what amounts to systematic non-investigation of these crimes has produced a serious breakdown in the relationship between law enforcement and a significant business sector, with implications that reach well beyond missing fuel payments.
+## £194,000 a day is an estimate, not a crime count
 
-This is not simply a matter of resource prioritisation. It undermines community trust in policing, particularly among the vulnerable groups who staff these 24/7 operations during high-risk overnight hours — and it is documented policy, not speculation.
+Forecourt Eye compared the five months after 28 February 2026 with the preceding five months. It reported 20% more incidents of fuel taken without payment and a 48% increase in their value. Petrol had reached an average of 160p a litre and diesel 179p by the end of July, according to the figures quoted by ITV.
 
-## The policies are real
+The difference between the 20% rise in incidents and the 48% rise in value matters. More events were being reported, but each unpaid fill had also become more expensive. The £194,000 headline therefore measures the combined effect of frequency, the amount taken and pump prices. It does not mean offending itself rose by 48%.
 
-Several police forces have publicly confirmed that they will not investigate most fuel theft cases. Devon and Cornwall Police drew attention in 2016 when Assistant Chief Constable Paul Netherton announced that officers would no longer attend fuel theft reports unless there was evidence of "linked offending" or "obvious criminal intent" such as false number plates. Freedom of Information data from 2019 showed that 69% of their 897 Making Off Without Payment cases were closed as "investigated as far as reasonably possible, no suspect identified."
+There are other limits. Forecourt Eye described the 550 sites as a representative sample, but ITV did not publish the sampling method, geographical spread or confidence interval. Reports made to a recovery company are not the same dataset as crimes recorded by police. The category also includes no-means-of-payment reports. Some will involve dishonesty; others will become an ordinary debt and be paid.
 
-More recently, Lincolnshire Police attracted criticism when Superintendent Fran Harrod suggested that drive-offs might involve someone "not having a great day" rather than criminal intent. The force explicitly recommended that station owners pursue civil action through industry bodies rather than criminal prosecution, citing "finite resources." At Empire Garage in Mablethorpe, owners Kavita and Sanjay Pilani reported 50 fuel thefts in six months and provided CCTV evidence for every incident. Police took no action.
+The company's distinction between “first-time” and repeat offenders needs similar care. In this context, first-time means not previously identified in its system. It is not proof that the person had never offended before.
 
-The scale of this is national. Sussex Police closed 94% of 2,892 cases between 2020-2024 with no suspect identified. Humberside Police closed 83% of 3,008 incidents the same way. South Yorkshire Police closed 91% of 3,483 cases. This pattern persists despite stations providing vehicle registrations, CCTV footage showing drivers' faces, and precise timestamps.
+None of this makes the increase unimportant. A [2023 peer-reviewed study by Aiden Sidebottom, Iain Agar and Justin Kurland](https://crimesciencejournal.biomedcentral.com/articles/10.1186/s40163-023-00182-7) examined 36,573 police-recorded incidents across six forces between January 2018 and July 2022. Across the full period, the relationship between price and theft was weak. During the exceptional price spike in 2022, however, higher prices were strongly associated with elevated theft. The current industry figures fit that pattern, although they do not prove that prices caused every additional incident.
 
-The legal reasoning the police cite is technically sound but difficult in practice. Under Section 3 of the Theft Act 1978, prosecutors must prove beyond reasonable doubt that defendants acted "dishonestly" with "intent to avoid payment." If a driver claims "I forgot" or "I was distracted," proving criminal dishonesty becomes more difficult without further investigation and engagement with the suspect. Civil recovery through the DVLA, by contrast, requires only demonstrating on the balance of probabilities (essentially 51% certainty) that the registered keeper's vehicle took fuel without payment.
+## Not every unpaid tank is the same offence
 
-The result is an awkward asymmetry: it is easier for a petrol station to sue someone for £50 of fuel than for the police to prosecute them for stealing it.
+In England and Wales, [section 3 of the Theft Act 1978](https://www.legislation.gov.uk/ukpga/1978/31/section/3) makes it an offence to dishonestly make off without paying when payment on the spot is required or expected, with the intention of avoiding payment permanently. Those final words carry much of the argument. Forgetting to pay, discovering that a bank card has failed or asking the retailer to accept later payment does not automatically establish the offence.
 
-## The cost of non-enforcement
+The [Crown Prosecution Service guidance](https://www.cps.gov.uk/prosecution-guidance/theft-act-offences) explains a further complication. If the retailer agrees to wait for payment, payment on the spot is no longer required. Making off without payment may then not be the correct offence, although fraud may be considered where false details were supplied dishonestly.
 
-Chief Constable Simon Cole, speaking as the National Police Chiefs' Council lead for local policing in 2018, suggested the industry "could design out bilking in 30 seconds by making people pay up front." He noted that stations do not do this "because the walk in their shops is part of their business offer."
+This does not allow forces to label every forecourt report a civil dispute. The [Home Office Crime Recording Rules in force from April 2026](https://assets.publishing.service.gov.uk/media/6a0f28cb9819be865f421c4b/crime-recording-rules-for-frontline-officers-and-staff-2026_27-April-update-v2.pdf) are unusually clear. A report of making off from a garage forecourt should be recorded under the National Crime Recording Standard, should not be delayed for investigation and “should not be treated as purely a civil matter”. A making-off will usually be enough to record a crime unless credible evidence shows an innocent mistake. Payment before police contact can support cancellation; payment only after police become involved does not necessarily do so.
 
-The industry described this as victim blaming. Brian Madderson of the Petrol Retailers Association pointed out that 70% of UK service stations are independent operators rather than oil company chains. Retrofitting pumps for mandatory prepayment costs around £20,000 per station, which is prohibitively expensive for small family businesses already losing an average of £12,500 annually to fuel theft. For rural stations where half the profit comes from non-fuel sales such as post offices and banking services, eliminating foot traffic would mean closure.
+The correct sequence is therefore record, assess and distinguish. It is not reject, send to civil recovery and assume that criminal intent will be impossible to prove.
 
-The annual cost has reached £100 million across 1.5 million non-payment incidents. The industry has been driven to create private recovery systems: the British Oil Security Syndicate's Payment Watch service recovers £35 million annually through civil channels, because the criminal justice system has effectively withdrawn.
+## The older figures were bad enough without exaggeration
 
-Fuel theft increased 362% from 2019 to 2023, with a further 49% jump from early 2024 to early 2025. Crime Science journal research identified a "tipping point" at which fuel price increases trigger theft surges. Notably, 47% of drive-offs in April 2025 were by repeat offenders, people who know they are unlikely to face consequences.
+In May 2025, [Forecourt Trader reported Freedom of Information data supplied by 33 forces](https://forecourttrader.co.uk/news/exclusive-65m-of-fuel-stolen-in-drive-offs-as-up-to-94-of-offenders-escape-justice/704134.article). The returns covered more than 130,000 reported drive-offs since 2020. Across the responding forces, an average of 86% were closed without a suspect being identified. Sussex Police recorded the highest cited rate: 94% of 2,892 cases. Humberside closed 83% of 3,008 in that way, while South Yorkshire closed 91% of 3,483. The accurate national comparison is therefore an 86% average no-suspect closure rate within the forces that responded, not a 99% non-prosecution rate.
 
-## Islands of enquiry: untapped investigative value
+Those figures show a poor outcome, but they need precise language. “Closed with no suspect identified” is not the same as “not prosecuted”, and it does not prove that no enquiry took place. Nor does a registration number prove who was driving. Plates may be cloned or stolen, a vehicle may have no current registered keeper and CCTV may show clothing rather than a usable face.
 
-This is where the underlying argument becomes more interesting. Modern petrol stations represent a sophisticated surveillance infrastructure. They feature high-definition CCTV with facial recognition capabilities, comprehensive ANPR systems integrated with national databases, digital payment transaction records with precise timestamps, and 24/7 staffing. They sit on every major road network in Britain, creating systematic data capture points for vehicle movements across the country.
+The same investigation illustrates why those limitations cannot become a blanket excuse. Industry data cited alongside it suggested that 13% of cases involved cloned or false plates, or vehicles with no registered keeper. Those are not reasons to abandon the report. They are indicators of preparation, repeat offending or links to other crime.
 
-A number of murder convictions have relied on petrol station evidence. When Wayne Couzens murdered Sarah Everard in 2021, CCTV from a Dover petrol station at 02:34 provided crucial timeline evidence. In the Mohammed Duraab Khan murder case in Nottingham, forecourt cameras captured the suspect's vehicle performing a U-turn after spotting the victim, tracked the car parking nearby, and even corroborated the attacker's knee injury. The Leicester explosion that killed five people was solved partly through CCTV tracking conspirators purchasing petrol at a forecourt before the arson attack.
+The data also remain incomplete. Twelve forces did not supply the requested information, recording practices differed and retailers who no longer report to police are absent. The £6.5 million of loss identified by the investigation was therefore a total within the returns, not the national cost of fuel theft.
 
-During the night, when most serious crimes occur and alternative surveillance is limited, well-lit forecourts become particularly valuable. They are often the only monitored locations on long stretches of road, capturing vehicle movements when criminal activity is most likely and least observed.
+## A number plate is a line of enquiry, not a solved case
 
-Yet this infrastructure remains underused. The standard 31-day CCTV retention period means evidence disappears if police do not act quickly, which they increasingly do not. Retailers report receiving generic text messages within hours stating "we have not been able to identify the suspect," without officers ever visiting to review the footage.
+The old argument was too simple: clear CCTV plus a number plate should equal an identified offender. Sometimes it will. Often it will not.
 
-## The cooperation crisis nobody is measuring
+The stronger criticism is that these are reasonable lines of enquiry which should be assessed before a case is closed. The [College of Policing investigation guidance](https://www.college.police.uk/app/investigation/investigation-process) requires investigators to follow reasonable and relevant lines of enquiry and explain what they did, what they did not do and why. It does not require an endless investigation into every £80 loss. It does require a defensible decision.
 
-South Yorkshire Police data revealed 75 cases in which retailers withdrew support for police action even after officers had identified suspects. That statistic suggests these relationships have deteriorated beyond frustration into active non-cooperation.
+Forecourts are useful “islands of enquiry” because they can combine a timed transaction, a vehicle image, CCTV and repeated visits. That does not mean every site has facial recognition or that every private ANPR camera is connected to a national police database. The value comes from joining ordinary evidence well.
 
-Industry bodies document the breakdown systematically. The Petrol Retailers Association reported that police forces fail to provide crime reference numbers after reports, that CCTV image quality deteriorates when submitted through police systems, and that some forces will not attend incidents below £100 in value. Retailers now tend to assume that reporting to the police is pointless, and instead rely on private sector recovery services.
+Case-by-case screening works against that. Ten separate losses by the same vehicle may each appear too small to allocate. Viewed as a series, they show persistence, intent and a much better prospect of identification. False plates, changes of vehicle, containers being filled, threats to staff and movement between force areas make the case stronger still.
 
-Clive Sheppard of Bodmin Moor Services captured the danger when he said police non-response "ultimately puts the public at risk as we are seemingly being encouraged to tackle crime ourselves." When legitimate businesses lose faith in law enforcement, the principle of policing by consent is weakened.
+This is where the industry's private recovery systems have an advantage. They see reports across multiple sites and can identify repetition earlier than a local police queue treating each crime separately. ITV reports that Forecourt Eye is now offering customers access to Facewatch reporting technology, with an option to join its live facial-recognition network. That development may help retailers prevent loss, but it also shows identification moving into a private system because public enforcement is seen as ineffective. Questions about accuracy, proportionality, data protection and redress do not disappear because the police are absent.
 
-## The diversity dimension: a critical evidence gap
+## Stop asking whether an officer should attend every forecourt
 
-Here the argument runs into a significant obstacle: no UK-specific data exists on petrol station workforce demographics. Despite approximately 8,000 petrol stations operating in Britain, systematic demographic information about who actually works in these roles, particularly during vulnerable overnight shifts, is not collected or published.
+Attendance is the wrong test for most fuel-theft reports. The useful question is whether evidence can be transferred quickly, checked once and linked to other offending.
 
-The broader context is nonetheless instructive. The UK retail sector generally employs diverse workforces with significant representation from minority ethnic communities. The trust data is clear: Black Caribbean communities show just 49% confidence in police compared with the 68% national average, and mixed ethnicity groups show 57% confidence. These gaps have widened rather than narrowed, despite decades of reform since the Macpherson report in 1999.
+Forces should require a short, structured digital report. It should distinguish an immediate drive-off from a customer who came to the till, record whether valid contact details were supplied, capture the registration and vehicle description, and allow the retailer to upload the full incident footage before it is overwritten. The report should also flag false or missing plates, containers, aggression, multiple visits and known repetition.
 
-Women's trust in police has been particularly damaged in London following high-profile cases of violence against women by serving officers, with women in the capital now showing lower confidence than men, a reversal of the usual pattern. Retail workers generally report that only 8% of violent incidents they report to police result in prosecution, contributing to a widespread perception that the police do not take crimes against retail workers seriously.
+A genuine mistake that is paid promptly can then leave the crime system quickly and transparently. A declared inability to pay with verified details can normally continue through the retailer's recovery process unless later conduct supplies evidence of dishonesty. Neither needs a response officer by default.
 
-If petrol station workforces reflect broader retail demographics, and particularly if they include substantial numbers of women working high-risk overnight shifts and workers from minority ethnic communities, then police non-engagement with these businesses means abandoning vulnerable populations who already have systemic reasons to distrust law enforcement.
+A deliberate drive-off with a usable line of enquiry should receive a basic desktop investigation. That means checking the registration, viewing the supplied footage and searching for linked reports before recording that no suspect can be identified. Where the same vehicle, person or method appears again, the reports should be combined and allocated as a series rather than closed one by one.
 
-The absence of demographic data is itself instructive. Vulnerable workforces often remain invisible in policy discussions precisely because nobody collects the information that would make their vulnerability apparent.
+Chief constables also need a threshold for escalation. Repetition across sites, false or cloned plates, fuel taken for resale, threats to staff and links to other acquisitive crime should move the case out of the low-value queue. Neighbourhood teams can then use problem-solving at persistently targeted sites, while investigators deal with the offender rather than the individual tank of fuel.
 
-## What it means when police stop policing
+Retailers carry part of the responsibility. Prompt reporting, complete footage and reliable no-means-of-payment records make the distinction possible. At sites or times with repeated losses, pre-authorisation, pay-at-pump or prepayment may be justified. Those controls have costs and can reduce visits to the shop, particularly for independent and rural forecourts, so “design it out” is not a complete police policy. It is still part of an honest prevention plan.
 
-The central issue here is not really fuel theft. The £100 million cost matters to the industry, but the deeper problem is what happens when law enforcement openly abandons entire categories of crime despite clear evidence and solvability.
+## The test is whether forces can find the pattern
 
-Her Majesty's Inspectorate of Constabulary found that police response to burglary, robbery and acquisitive crime "is not consistently good enough," with victims facing a "postcode lottery" in investigation quality. The broader pattern is consistent: volume crimes with lower individual values are systematically deprioritised, even where the evidence is strong and technology makes investigation straightforward.
+The latest price spike makes fuel theft more expensive and, on the available evidence, more frequent. It does not turn every unpaid filling into organised crime. Nor does the possibility of an innocent mistake justify treating deliberate drive-offs as someone else's debt collection problem.
 
-It is tempting to file this under resource constraint and move on. It does not fully hold up. Real-terms funding fell sharply through the 2010s, and the roughly 20,000 officers cut over that decade are the figure still quoted in most reporting on police capacity — but the Police Uplift Programme replaced all 20,000 by March 2023, and officer numbers hit an all-time high in March 2024 before dipping slightly since. Whatever is driving forces to text "no suspect identified" on a case with a number plate, a face on camera and a timestamp, it is happening at a point when policing has more officers than it has had in its history, not fewer. That makes this a prioritisation decision, not a staffing shortage — and the decision to direct victims towards civil courts while maintaining that "fuel theft is a crime" creates a logical incoherence that erodes legitimacy regardless of how many officers are on the books.
+The National Police Chiefs' Council and National Business Crime Centre should agree a common reporting dataset with the forecourt industry. Forces should then audit a sample of no-suspect closures and publish whether the available CCTV was viewed, the vehicle was checked and linked reports were searched. Charge rates alone will not show success; prompt repayment, prevented repeat offences and identified series matter too.
 
-When businesses that invest heavily in crime prevention technology, operate sophisticated surveillance systems and attempt to cooperate with police are met with template text messages and non-investigation, trust erodes. When those businesses may also employ vulnerable populations already experiencing low confidence in policing, the damage compounds.
-
-Petrol stations as "islands of enquiry" — systematically placed, continuously monitored and evidence-rich locations on the transport network — represent an unrealised potential that is squandered by policies that prioritise convenience over capability.
-
-The remaining question is whether anyone with the power to change this is paying attention to what these empty petrol station tills indicate about the state of British policing.
+The £194,000 figure will rise or fall with prices, reporting and the method used to extrapolate it. The operational failure is more stable. Police and retailers hold fragments of the same pattern, but too often process them in separate systems as isolated losses. Until those fragments are joined, genuine mistakes will continue to inflate the headline and repeat offenders will continue to hide inside it.
 
 ***
 
 ## Sources and further reading
 
-- The 99% non-prosecution figure and the force-by-force closure rates (Sussex 94% of 2,892 cases, Humberside 83% of 3,008, South Yorkshire 91% of 3,483, 2020–2024) are from a Freedom of Information investigation reported by [Forecourt Trader](https://forecourttrader.co.uk/news/exclusive-65m-of-fuel-stolen-in-drive-offs-as-up-to-94-of-offenders-escape-justice/704134.article) and commissioned via Crown Oil.
-- Devon and Cornwall Police's 2016 non-attendance policy and 2019 FOI closure data — widely reported at the time, including by the BBC and local press.
-- Petrol Retailers Association figures on independent-operator share, retrofitting costs and average annual losses — [Petrol Retailers Association](https://www.petrolretailersassociation.co.uk/).
-- British Oil Security Syndicate (BOSS) Payment Watch recovery figures — [BOSS](https://www.boss-uk.com/).
-- HMICFRS findings on inconsistent investigation of acquisitive crime — His Majesty's Inspectorate of Constabulary and Fire & Rescue Services, PEEL inspection reports.
-- Police workforce figures — [Home Office, "Police workforce, England and Wales"](https://www.gov.uk/government/statistics/police-workforce-england-and-wales-30-september-2025/police-workforce-england-and-wales-30-september-2025) and the [National Audit Office report on the Police Uplift Programme](https://www.nao.org.uk/reports/the-police-uplift-programme/): the 20,000-officer uplift target was met and sustained by March 2023, with officer numbers peaking at an all-time high of 147,745 FTE in March 2024 before a small decline to 145,550 FTE by September 2025.
-- Public confidence in the police by ethnicity — [GOV.UK Ethnicity facts and figures, "Confidence in the local police"](https://www.ethnicity-facts-figures.service.gov.uk/crime-justice-and-the-law/policing/confidence-in-the-local-police/latest/): 49% of people from the Black Caribbean ethnic group reported confidence in their local police in the year ending March 2023, against a 68% national average.
+- [ITV News, “Fuel theft: Nearly £200,000 stolen from UK forecourts daily during Iran war”, 3 August 2026](https://www.itv.com/news/2026-08-03/fuel-theft-nearly-200000-stolen-from-uk-forecourts-daily-during-iran-war).
+- [Forecourt Trader, “£6.5m of fuel stolen in drive-offs as up to 94% of offenders escape justice”, 12 May 2025](https://forecourttrader.co.uk/news/exclusive-65m-of-fuel-stolen-in-drive-offs-as-up-to-94-of-offenders-escape-justice/704134.article).
+- [Home Office, Crime Recording Rules for front-line officers and staff, April 2026](https://assets.publishing.service.gov.uk/media/6a0f28cb9819be865f421c4b/crime-recording-rules-for-frontline-officers-and-staff-2026_27-April-update-v2.pdf).
+- [Theft Act 1978, section 3](https://www.legislation.gov.uk/ukpga/1978/31/section/3) and [CPS guidance on making off without payment](https://www.cps.gov.uk/prosecution-guidance/theft-act-offences).
+- Aiden Sidebottom, Iain Agar and Justin Kurland, [“Do increases in the price of fuel increase levels of fuel theft? Evidence from England and Wales”, Crime Science 12, 2023](https://crimesciencejournal.biomedcentral.com/articles/10.1186/s40163-023-00182-7).
+- [College of Policing, Investigation process](https://www.college.police.uk/app/investigation/investigation-process).
