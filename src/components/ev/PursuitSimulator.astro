@@ -25,6 +25,7 @@ const EVS = [
     crr: 0.011,
     auxKw: 0.8,
     topMph: 93,
+    rapidKw: 100,
   },
   {
     id: 'model3',
@@ -36,6 +37,7 @@ const EVS = [
     crr: 0.011,
     auxKw: 0.8,
     topMph: 125,
+    rapidKw: 250,
   },
   {
     id: 'i4m50',
@@ -47,6 +49,7 @@ const EVS = [
     crr: 0.011,
     auxKw: 0.8,
     topMph: 140,
+    rapidKw: 200,
   },
   {
     id: 'ix50',
@@ -58,6 +61,7 @@ const EVS = [
     crr: 0.011,
     auxKw: 0.8,
     topMph: 124,
+    rapidKw: 200,
   },
 ] as const;
 
@@ -75,23 +79,26 @@ const DIESEL = {
 const PROFILES = [
   {
     id: 'urban',
-    name: 'Town chase',
+    name: 'Town pursuit',
     desc: 'Streets and junctions, hard bursts of speed',
     avgMph: 42,
+    peakMph: 70,
     intensity: 2.1,
   },
   {
     id: 'aroad',
-    name: 'A-road chase',
+    name: 'A-road pursuit',
     desc: 'Fast open road, sustained overtakes',
     avgMph: 72,
+    peakMph: 110,
     intensity: 1.5,
   },
   {
     id: 'motorway',
-    name: 'Motorway chase',
+    name: 'Motorway pursuit',
     desc: 'The rare long one, sustained three-figure speeds',
     avgMph: 118,
+    peakMph: 140,
     intensity: 1.15,
   },
 ] as const;
@@ -103,15 +110,18 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
 ---
 
 <div class="psim not-prose" data-psim>
-  <p class="psim-kicker">Interactive · the pursuit fuel test</p>
-  <h4 class="psim-title">What a chase leaves in the tank</h4>
+  <div class="psim-heading">
+    <div>
+      <p class="psim-kicker">Interactive model · duty-cycle stress test</p>
+      <h4 class="psim-title">Electric pursuit readiness calculator</h4>
+    </div>
+    <span class="psim-version">MODEL 2.0</span>
+  </div>
   <p class="psim-intro">
-    Pick an electric car and a type of chase. You'll see the same pursuit run
-    twice — in the EV, and in the diesel traffic car it would replace.
-    <strong class="psim-legend-good">Green</strong> means still fit for the
-    shift; <strong class="psim-legend-warn">amber</strong>, finished but
-    compromised; <strong class="psim-legend-crit">red</strong>, out of the
-    fight.
+    Test whether an electric vehicle can meet a representative pursuit profile
+    and finish above a force-set operating reserve. The diesel comparator starts
+    at the same fuel percentage. This is a planning model, not a vehicle approval
+    or pursuit decision tool.
   </p>
 
   <div class="psim-controls">
@@ -130,8 +140,8 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
     </div>
 
     <div class="psim-field">
-      <span class="psim-flabel">2 · Type of chase</span>
-      <div class="psim-choice" role="radiogroup" aria-label="Type of chase">
+      <span class="psim-flabel">2 · Type of pursuit</span>
+      <div class="psim-choice" role="radiogroup" aria-label="Type of pursuit">
         {simData.profiles.map((p, i) => (
           <label class="psim-opt">
             <input type="radio" name="psim-profile" value={p.id} checked={i === 0} />
@@ -150,15 +160,24 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
           <span class="psim-slider-label">Charge when it starts <b><output data-out="soc">65</output>%</b></span>
           <input type="range" data-in="soc" min="10" max="100" step="5" value="65" />
         </label>
+        <label class="psim-slider">
+          <span class="psim-slider-label">Minimum operating reserve <b><output data-out="reserve">25</output>%</b></span>
+          <input type="range" data-in="reserve" min="10" max="40" step="5" value="25" />
+        </label>
         <label class="psim-toggle">
           <input type="checkbox" data-in="winter" />
-          <span>Freezing January day</span>
+          <span>Apply 20% cold-weather energy stress</span>
         </label>
       </div>
     </div>
   </div>
 
   <div class="psim-scenario" data-scenario aria-hidden="true"></div>
+  <div class="psim-specs" aria-label="Selected pursuit assumptions">
+    <div><span>Target distance</span><b data-spec="distance">—</b></div>
+    <div><span>Required peak</span><b data-spec="peak">—</b></div>
+    <div><span>Operating reserve</span><b data-spec="reserve">—</b></div>
+  </div>
 
   <div class="psim-lanes" aria-live="polite">
     <div class="psim-lane" data-lane="ev">
@@ -211,10 +230,13 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
         <tr><th></th><th data-th="ev">EV</th><th>BMW 530d diesel</th></tr>
       </thead>
       <tbody>
-        <tr><th>Distance covered</th><td data-num="ev-dist">—</td><td data-num="ice-dist">—</td></tr>
+        <tr><th>Profile compatibility</th><td data-num="ev-capability">—</td><td data-num="ice-capability">—</td></tr>
+        <tr><th>Distance modelled</th><td data-num="ev-dist">—</td><td data-num="ice-dist">—</td></tr>
+        <tr><th>Consumption</th><td data-num="ev-rate">—</td><td data-num="ice-rate">—</td></tr>
         <tr><th>Energy / fuel used</th><td data-num="ev-used">—</td><td data-num="ice-used">—</td></tr>
-        <tr><th>Left at the end</th><td data-num="ev-end">—</td><td data-num="ice-end">—</td></tr>
-        <tr><th>Time to refill / recharge</th><td data-num="ev-refuel">—</td><td data-num="ice-refuel">5 min at any forecourt</td></tr>
+        <tr><th>State at the end</th><td data-num="ev-end">—</td><td data-num="ice-end">—</td></tr>
+        <tr><th>Time until reserve</th><td data-num="ev-reserve">—</td><td data-num="ice-reserve">—</td></tr>
+        <tr><th>Replace energy used</th><td data-num="ev-refuel">—</td><td data-num="ice-refuel">—</td></tr>
       </tbody>
     </table>
   </details>
@@ -223,23 +245,29 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
     <summary>How this is modelled</summary>
     <div class="psim-how">
       <p>
-        Steady-state power is rolling resistance plus aerodynamic drag
-        (P&nbsp;=&nbsp;(C<sub>rr</sub>·m·g&nbsp;+&nbsp;½ρ·C<sub>d</sub>A·v²)·v),
-        over a 90% drivetrain efficiency for the EVs, plus a constant
-        0.8&nbsp;kW for the blue-light and comms fit. A pursuit is not
-        steady-state, so each profile applies an intensity multiplier for the
-        accelerate-brake cycle — 2.1× in town (net of regen), 1.5× on A-roads,
-        1.15× on the motorway where speed itself is the cost. Mass is kerb
-        weight plus a double crew and a conversion allowance. A freezing day
-        adds a 20% consumption penalty to the EVs only, matching Recurrent's
-        2025 winter study (78% range retention at 0°C). As a check: at a steady
-        90 and 120&nbsp;km/h the model gives 157 and 206&nbsp;Wh/km for the BMW
-        i4&nbsp;M50 against Bjørn Nyland's measured 155 and 217 — close, and
-        kind to the EV. The diesel uses a fixed pursuit economy floor
-        (13&nbsp;mpg), because a hard-driven diesel's losses are the engine's,
-        not the air's. The model carries no tyre scrub, no battery-heat
-        derating and no low-charge power cut, so a real pursuit lands on the
-        worse side of these figures, not the better.
+        The EV calculation uses rolling resistance plus aerodynamic drag:
+        P&nbsp;=&nbsp;(C<sub>rr</sub>·m·g&nbsp;+&nbsp;½ρ·C<sub>d</sub>A·v²)·v.
+        Traction demand is divided by 90% drivetrain efficiency, then multiplied
+        by a scenario factor for repeated acceleration and braking: 2.1 in town,
+        1.5 on A-roads and 1.15 on a motorway. The fixed 0.8&nbsp;kW electrical
+        load for blue lights, radios and computing is added afterwards, so it is
+        not incorrectly multiplied as acceleration load. Vehicle mass includes
+        an indicative double crew and police conversion allowance.
+      </p>
+      <p>
+        The cold-weather switch is a transparent 20% stress factor, not a forecast
+        for a particular battery. The diesel comparison assumes 13 imperial mpg
+        throughout the pursuit. Rapid-charge time replaces only the energy used
+        and assumes average delivery at 65% of the vehicle's rated peak; connection,
+        queuing, battery temperature and charge-curve taper are excluded.
+      </p>
+      <p>
+        As an internal check, the road-load equation gives the BMW i4 M50 about
+        157&nbsp;Wh/km at 90&nbsp;km/h and 206&nbsp;Wh/km at 120&nbsp;km/h before
+        pursuit multipliers, close to the 155 and 217&nbsp;Wh/km measurements used
+        to calibrate the original model. The result is a sensitivity test. It does
+        not model gradient, wind, tyre scrub, battery heat derating, road conditions,
+        driver tactics or low-charge power restriction.
       </p>
     </div>
   </details>
@@ -250,15 +278,36 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
 <style>
   .psim {
     margin: 2.5rem 0;
-    border: 1px solid rgb(var(--ink-200));
-    border-radius: 10px;
-    padding: 1.35rem 1.4rem 1.5rem;
-    background: rgb(var(--paper-100));
+    border: 1px solid rgb(var(--ink-300));
+    border-top: 4px solid rgb(var(--accent));
+    border-radius: 14px;
+    padding: 1.45rem 1.5rem 1.6rem;
+    background:
+      linear-gradient(145deg, rgb(var(--accent) / 0.055), transparent 30%),
+      rgb(var(--paper-100));
+    box-shadow: 0 18px 45px rgb(var(--ink-900) / 0.08);
     font-family: theme('fontFamily.sans');
-    /* Traffic-light status ramp, from the site's themed chart tokens. */
     --st-good: var(--chart-green);
     --st-warn: var(--chart-orange);
     --st-crit: var(--chart-red);
+  }
+  .psim-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .psim-version {
+    flex-shrink: 0;
+    border: 1px solid rgb(var(--accent) / 0.45);
+    border-radius: 4px;
+    padding: 0.3rem 0.45rem;
+    background: rgb(var(--accent) / 0.08);
+    color: rgb(var(--accent));
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    font-variant-numeric: tabular-nums;
   }
   .psim-kicker {
     font-size: 0.68rem;
@@ -385,6 +434,40 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
     background: rgb(var(--ink-300));
     vertical-align: middle;
     margin: 0 0.6rem;
+  }
+  .psim-specs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0 0 1rem;
+    border: 1px solid rgb(var(--ink-200));
+    border-radius: 9px;
+    overflow: hidden;
+    background: rgb(var(--ink-900) / 0.025);
+  }
+  .psim-specs div {
+    padding: 0.65rem 0.75rem;
+    border-right: 1px solid rgb(var(--ink-200));
+  }
+  .psim-specs div:last-child { border-right: 0; }
+  .psim-specs span {
+    display: block;
+    margin-bottom: 0.12rem;
+    color: rgb(var(--ink-500));
+    font-size: 0.61rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .psim-specs b {
+    display: block;
+    color: rgb(var(--ink-900));
+    font-size: 0.86rem;
+    font-variant-numeric: tabular-nums;
+  }
+  @media (max-width: 520px) {
+    .psim { padding: 1.15rem 1rem 1.3rem; }
+    .psim-specs { grid-template-columns: 1fr; }
+    .psim-specs div { border-right: 0; border-bottom: 1px solid rgb(var(--ink-200)); }
+    .psim-specs div:last-child { border-bottom: 0; }
   }
 
   .psim-lanes {
@@ -560,6 +643,7 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
 
       const durIn = root.querySelector('[data-in="dur"]') as HTMLInputElement;
       const socIn = root.querySelector('[data-in="soc"]') as HTMLInputElement;
+      const reserveIn = root.querySelector('[data-in="reserve"]') as HTMLInputElement;
       const winterIn = root.querySelector('[data-in="winter"]') as HTMLInputElement;
       const evLane = root.querySelector('[data-lane="ev"]') as HTMLElement;
       const iceLane = root.querySelector('[data-lane="ice"]') as HTMLElement;
@@ -568,9 +652,10 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
       const RHO = 1.225;
       const G = 9.81;
       const ETA = 0.9;
-      const WINTER = 1.2;
-      const PATROL_MPH = 30;
-      const L_PER_GAL = 4.546;
+      const WINTER_FACTOR = 1.2;
+      const L_PER_GAL = 4.54609;
+      const DIESEL_PURSUIT_MPG = 13;
+      const RAPID_AVERAGE_FACTOR = 0.65;
 
       const TOKEN: Record<string, string> = {
         good: 'var(--st-good)',
@@ -578,14 +663,15 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
         crit: 'var(--st-crit)',
       };
 
-      function evPowerKw(v: any, mph: number) {
+      function evPowerKw(v: any, mph: number, intensity: number, winter: boolean) {
         const ms = mph * MPH_TO_MS;
-        const rolling = v.crr * v.massKg * G * ms;
-        const aero = 0.5 * RHO * v.cda * ms * ms * ms;
-        return (rolling + aero) / 1000 / ETA + v.auxKw;
+        const rollingKw = (v.crr * v.massKg * G * ms) / 1000;
+        const aeroKw = (0.5 * RHO * v.cda * ms * ms * ms) / 1000;
+        const tractionKw = ((rollingKw + aeroKw) / ETA) * intensity;
+        const totalKw = tractionKw + v.auxKw;
+        return winter ? totalKw * WINTER_FACTOR : totalKw;
       }
 
-      // Paint one lane: status token, glyph colour, badge, gauge, reading.
       function paint(
         lane: HTMLElement,
         st: 'good' | 'warn' | 'crit',
@@ -610,6 +696,16 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
         if (el) el.textContent = val;
       }
 
+      function spec(sel: string, val: string) {
+        const el = root.querySelector(`[data-spec="${sel}"]`);
+        if (el) el.textContent = val;
+      }
+
+      function minutesLabel(minutes: number) {
+        if (!Number.isFinite(minutes) || minutes <= 0) return 'already below reserve';
+        return `~${Math.max(1, Math.floor(minutes))} min`;
+      }
+
       function compute() {
         const carId = (root.querySelector('input[name="psim-car"]:checked') as HTMLInputElement)?.value;
         const profId = (root.querySelector('input[name="psim-profile"]:checked') as HTMLInputElement)?.value;
@@ -620,76 +716,110 @@ const carGlyph = `<svg viewBox="0 0 64 28" aria-hidden="true" focusable="false">
 
         const durMin = Number(durIn.value);
         const startPct = Number(socIn.value);
+        const reservePct = Number(reserveIn.value);
         const winter = winterIn.checked;
 
         (root.querySelector('[data-out="dur"]') as HTMLOutputElement).value = String(durMin);
         (root.querySelector('[data-out="soc"]') as HTMLOutputElement).value = String(startPct);
+        (root.querySelector('[data-out="reserve"]') as HTMLOutputElement).value = String(reservePct);
 
-        // Scenario strip + EV lane name + table header.
-        const evAvg = Math.min(prof.avgMph, ev.topMph * 0.85);
-        const evDist = (evAvg * durMin) / 60;
+        const targetDist = (prof.avgMph * durMin) / 60;
+        const evModelSpeed = Math.min(prof.avgMph, ev.topMph);
+        const evDist = (evModelSpeed * durMin) / 60;
+        const iceDist = targetDist;
+        const evCapability = ev.topMph >= prof.peakMph;
+        const iceCapability = diesel.topMph >= prof.peakMph;
+
         (root.querySelector('[data-scenario]') as HTMLElement).textContent =
-          `${prof.name} · ${durMin} minutes · about ${evDist.toFixed(0)} miles covered${winter ? ' · freezing' : ''}`;
+          `${prof.name} · ${durMin} minutes${winter ? ' · cold-weather stress applied' : ''}`;
+        spec('distance', `${targetDist.toFixed(0)} miles`);
+        spec('peak', `${prof.peakMph} mph`);
+        spec('reserve', `${reservePct}%`);
         (evLane.querySelector('[data-name]') as HTMLElement).textContent = ev.name;
-        (evLane.querySelector('[data-glyph]') as HTMLElement).style.color = ''; // uses --st
         const thEv = root.querySelector('[data-th="ev"]');
         if (thEv) thEv.textContent = ev.name;
 
-        // --- EV physics ---
-        let kw = evPowerKw(ev, evAvg) * prof.intensity;
-        if (winter) kw *= WINTER;
-        const usedKwh = (kw * durMin) / 60;
-        const startKwh = (startPct / 100) * ev.battKwh;
-        const endKwh = Math.max(0, startKwh - usedKwh);
-        const evEndPct = (endKwh / ev.battKwh) * 100;
-        let patrolKw = evPowerKw(ev, PATROL_MPH) * 1.3;
-        if (winter) patrolKw *= WINTER;
-        const evRangeLeft = endKwh > 0 ? (endKwh / patrolKw) * PATROL_MPH : 0;
+        const evKw = evPowerKw(ev, evModelSpeed, prof.intensity, winter);
+        const evUsedKwh = (evKw * durMin) / 60;
+        const evStartKwh = (startPct / 100) * ev.battKwh;
+        const evEndRawKwh = evStartKwh - evUsedKwh;
+        const evEndKwh = Math.max(0, evEndRawKwh);
+        const evEndPct = (evEndKwh / ev.battKwh) * 100;
+        const evReserveKwh = (reservePct / 100) * ev.battKwh;
+        const evMinutesToReserve = ((evStartKwh - evReserveKwh) / evKw) * 60;
+        const evRate = evDist > 0 ? (evUsedKwh / evDist) * 100 : 0;
+        const rapidAverageKw = ev.rapidKw * RAPID_AVERAGE_FACTOR;
+        const evReplaceMin = (Math.min(evUsedKwh, evStartKwh) / rapidAverageKw) * 60;
 
         let evSt: 'good' | 'warn' | 'crit';
         let evIcon: string, evWord: string, evRead: string;
-        if (endKwh <= 0) {
-          evSt = 'crit'; evIcon = '✕'; evWord = 'Out of the fight';
-          evRead = `The battery is <b>flat</b> before the chase ends. A control room would have pulled it out earlier — but it is not finishing this pursuit.`;
-        } else if (evEndPct < 20) {
-          evSt = 'crit'; evIcon = '✕'; evWord = 'Finished it, then out';
-          evRead = `Down to <b>${evEndPct.toFixed(0)}%</b>. It completes the chase and then leaves the fight — the next job happens without this car until it has sat on a rapid charger.`;
-        } else if (evEndPct < 40) {
-          evSt = 'warn'; evIcon = '!'; evWord = 'Finished — but low';
-          evRead = `Left with <b>${evEndPct.toFixed(0)}%</b>, roughly <b>${Math.round(evRangeLeft / 5) * 5} miles</b> of response driving. One more job like this takes it off the road; a diesel would splash-and-dash in five minutes.`;
+        if (!evCapability) {
+          evSt = 'crit'; evIcon = '×'; evWord = 'Profile mismatch';
+          evRead = `The profile requires a <b>${prof.peakMph} mph</b> peak; this vehicle is limited to <b>${ev.topMph} mph</b>. Its energy result is shown, but it does not meet the selected performance requirement.`;
+        } else if (startPct < reservePct) {
+          evSt = 'crit'; evIcon = '×'; evWord = 'Not deployable';
+          evRead = `It begins below the selected <b>${reservePct}% operating reserve</b>. That is a fleet-readiness failure before the pursuit starts.`;
+        } else if (evEndRawKwh <= 0) {
+          evSt = 'crit'; evIcon = '×'; evWord = 'Energy exhausted';
+          evRead = `The modelled battery is exhausted before the <b>${durMin}-minute</b> profile ends.`;
+        } else if (evEndPct < reservePct) {
+          evSt = 'crit'; evIcon = '×'; evWord = 'Below reserve';
+          evRead = `The pursuit finishes at <b>${evEndPct.toFixed(0)}%</b>, below the selected <b>${reservePct}%</b> operating reserve.`;
+        } else if (evEndPct < reservePct + 15) {
+          evSt = 'warn'; evIcon = '!'; evWord = 'Limited reserve';
+          evRead = `It finishes at <b>${evEndPct.toFixed(0)}%</b>, only <b>${(evEndPct - reservePct).toFixed(0)} percentage points</b> above the operating reserve.`;
         } else {
-          evSt = 'good'; evIcon = '✓'; evWord = 'Still fit for the shift';
-          evRead = `Still <b>${evEndPct.toFixed(0)}%</b>, about <b>${Math.round(evRangeLeft / 5) * 5} miles</b> left. This is the normal case — most chases are short, and short chases barely dent the pack.`;
+          evSt = 'good'; evIcon = '✓'; evWord = 'Within reserve';
+          evRead = `It finishes at <b>${evEndPct.toFixed(0)}%</b>, leaving <b>${(evEndPct - reservePct).toFixed(0)} percentage points</b> above the operating reserve.`;
         }
         paint(evLane, evSt, evIcon, evWord, startPct, evEndPct, evRead);
 
-        // --- Diesel physics (same pursuit, same starting %) ---
-        const iceAvg = Math.min(prof.avgMph, diesel.topMph * 0.85);
-        const iceDist = (iceAvg * durMin) / 60;
-        const usedL = (iceDist / diesel.pursuitMpgFloor) * L_PER_GAL;
-        const startL = (startPct / 100) * diesel.tankL;
-        const endL = Math.max(0, startL - usedL);
-        const iceEndPct = (endL / diesel.tankL) * 100;
-        const iceRangeLeft = (endL / L_PER_GAL) * diesel.cruiseMpg * 0.85;
+        const iceUsedL = (iceDist / DIESEL_PURSUIT_MPG) * L_PER_GAL;
+        const iceStartL = (startPct / 100) * diesel.tankL;
+        const iceEndRawL = iceStartL - iceUsedL;
+        const iceEndL = Math.max(0, iceEndRawL);
+        const iceEndPct = (iceEndL / diesel.tankL) * 100;
+        const iceReserveL = (reservePct / 100) * diesel.tankL;
+        const litresPerMinute = iceUsedL / durMin;
+        const iceMinutesToReserve = (iceStartL - iceReserveL) / litresPerMinute;
 
-        let iceSt: 'good' | 'warn' | 'crit', iceIcon: string, iceWord: string, iceRead: string;
-        if (endL <= 0) {
-          iceSt = 'warn'; iceIcon = '!'; iceWord = 'Running on fumes';
-          iceRead = `Even the big tank runs dry on a chase this long — but a five-minute splash of diesel fixes it, anywhere.`;
+        let iceSt: 'good' | 'warn' | 'crit';
+        let iceIcon: string, iceWord: string, iceRead: string;
+        if (!iceCapability) {
+          iceSt = 'crit'; iceIcon = '×'; iceWord = 'Profile mismatch';
+          iceRead = `The comparator does not meet the selected performance profile.`;
+        } else if (startPct < reservePct) {
+          iceSt = 'crit'; iceIcon = '×'; iceWord = 'Not deployable';
+          iceRead = `It also begins below the selected <b>${reservePct}% operating reserve</b>.`;
+        } else if (iceEndRawL <= 0) {
+          iceSt = 'crit'; iceIcon = '×'; iceWord = 'Fuel exhausted';
+          iceRead = `The modelled tank is exhausted before the profile ends.`;
+        } else if (iceEndPct < reservePct) {
+          iceSt = 'crit'; iceIcon = '×'; iceWord = 'Below reserve';
+          iceRead = `It finishes at <b>${iceEndPct.toFixed(0)}%</b>, below the same operating reserve.`;
+        } else if (iceEndPct < reservePct + 15) {
+          iceSt = 'warn'; iceIcon = '!'; iceWord = 'Limited reserve';
+          iceRead = `It finishes at <b>${iceEndPct.toFixed(0)}%</b>, only <b>${(iceEndPct - reservePct).toFixed(0)} percentage points</b> above reserve.`;
         } else {
-          iceSt = 'good'; iceIcon = '✓'; iceWord = 'Barely dented';
-          iceRead = `Still <b>${iceEndPct.toFixed(0)}%</b> in the tank, about <b>${Math.round(iceRangeLeft / 10) * 10} miles</b> left — and any forecourt refills it in five minutes. This is the bar the EV has to clear.`;
+          iceSt = 'good'; iceIcon = '✓'; iceWord = 'Within reserve';
+          iceRead = `It finishes at <b>${iceEndPct.toFixed(0)}%</b>, with a conventional refuelling fallback if it is immediately redeployed.`;
         }
         paint(iceLane, iceSt, iceIcon, iceWord, startPct, iceEndPct, iceRead);
 
-        // --- Numbers table ---
-        num('ev-dist', `${evDist.toFixed(0)} miles`);
+        num('ev-capability', evCapability ? `meets ${prof.peakMph} mph peak` : `fails: ${ev.topMph} mph limit`);
+        num('ice-capability', iceCapability ? `meets ${prof.peakMph} mph peak` : `fails: ${diesel.topMph} mph limit`);
+        num('ev-dist', evModelSpeed < prof.avgMph ? `${evDist.toFixed(0)} of ${targetDist.toFixed(0)} miles` : `${evDist.toFixed(0)} miles`);
         num('ice-dist', `${iceDist.toFixed(0)} miles`);
-        num('ev-used', `${usedKwh.toFixed(1)} kWh (${((usedKwh / ev.battKwh) * 100).toFixed(0)}% of pack)`);
-        num('ice-used', `${usedL.toFixed(1)} L (${((usedL / diesel.tankL) * 100).toFixed(0)}% of tank)`);
-        num('ev-end', endKwh <= 0 ? 'flat' : `${evEndPct.toFixed(0)}% · ~${Math.round(evRangeLeft / 5) * 5} mi`);
-        num('ice-end', endL <= 0 ? 'dry' : `${iceEndPct.toFixed(0)}% · ~${Math.round(iceRangeLeft / 10) * 10} mi`);
-        num('ev-refuel', '25–40 min on a rapid charger');
+        num('ev-rate', `${evRate.toFixed(0)} kWh/100 mi`);
+        num('ice-rate', `${DIESEL_PURSUIT_MPG} mpg (assumption)`);
+        num('ev-used', `${evUsedKwh.toFixed(1)} kWh · ${((evUsedKwh / ev.battKwh) * 100).toFixed(0)}% of usable pack`);
+        num('ice-used', `${iceUsedL.toFixed(1)} L · ${((iceUsedL / diesel.tankL) * 100).toFixed(0)}% of tank`);
+        num('ev-end', evEndRawKwh <= 0 ? '0% · exhausted' : `${evEndPct.toFixed(0)}% · ${evEndKwh.toFixed(1)} kWh`);
+        num('ice-end', iceEndRawL <= 0 ? '0% · exhausted' : `${iceEndPct.toFixed(0)}% · ${iceEndL.toFixed(1)} L`);
+        num('ev-reserve', minutesLabel(evMinutesToReserve));
+        num('ice-reserve', minutesLabel(iceMinutesToReserve));
+        num('ev-refuel', `~${Math.max(1, Math.ceil(evReplaceMin))} min ideal DC transfer`);
+        num('ice-refuel', `${iceUsedL.toFixed(1)} L · about 5 min stop`);
       }
 
       root.querySelectorAll('input').forEach((el) => {
