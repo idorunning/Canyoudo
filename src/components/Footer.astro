@@ -1,34 +1,33 @@
 ---
 const year = new Date().getFullYear();
-const supportUrl = import.meta.env.PUBLIC_SUPPORT_URL;
 
 const sectionLinks = [
-  { href: '/police-policy', label: 'Evidence & Practice' },
-  { href: '/public-policy', label: 'Leadership & Culture' },
-  { href: '/influential-people', label: 'Influential People' },
-  { href: '/other', label: 'Data Stories' },
-  { href: '/data-stories', label: 'Technology & Innovation' },
+  { href: "/police-policy", label: "Evidence & Practice" },
+  { href: "/public-policy", label: "Leadership & Culture" },
+  { href: "/influential-people", label: "Influential People" },
+  { href: "/other", label: "Data Stories" },
+  { href: "/data-stories", label: "Technology & Innovation" },
 ];
 
 const browseLinks = [
-  { href: '/research-tools', label: 'Research tools' },
-  { href: '/library', label: 'Your library' },
-  { href: '/topics', label: 'Topics' },
-  { href: '/resources', label: 'Further reading' },
-  { href: '/about', label: 'About · Contact' },
-  { href: '/sitemap', label: 'All articles' },
+  { href: "/research-tools", label: "Research tools" },
+  { href: "/library", label: "Your library" },
+  { href: "/topics", label: "Topics" },
+  { href: "/resources", label: "Further reading" },
+  { href: "/about", label: "About · Contact" },
+  { href: "/sitemap", label: "All articles" },
 ];
 ---
 
 <footer class="surface-night mt-24">
   <div class="max-w-wide mx-auto px-6 lg:px-10 pt-16 pb-10">
     <div class="grid gap-12 md:grid-cols-[minmax(16rem,1.4fr)_auto_auto]">
-
-      <!-- Brand + about -->
       <div class="max-w-xs">
-        <a href="/other" class="flex items-center gap-2.5 mb-4 group" aria-label="Thinking About Policing">
-          {/* The footer sits on the night surface, which stays dark in both
-              themes — so it always takes the light-ink variant of the mark. */}
+        <a
+          href="/other"
+          class="flex items-center gap-2.5 mb-4 group"
+          aria-label="Thinking About Policing"
+        >
           <img
             src="/logo-mark-dark.png"
             alt="Thinking About Policing"
@@ -36,57 +35,78 @@ const browseLinks = [
             height="30"
             class="h-[30px] w-[30px] object-contain"
           />
-          <span class="font-display font-bold text-[1.05rem] tracking-[-0.015em] text-night-ink leading-none">Thinking About Policing</span>
+          <span
+            class="font-display font-bold text-[1.05rem] tracking-[-0.015em] text-night-ink leading-none"
+            >Thinking About Policing</span
+          >
         </a>
         <p class="font-sans text-sm leading-relaxed text-night-dim">
-          Evidence-based writing on policing, public policy, and the occasional historical puzzle.
+          Evidence-based writing on policing, public policy, and the occasional
+          historical puzzle.
         </p>
-        {supportUrl && (
-          <div class="mt-5">
-            <a
-              href={supportUrl}
-              rel="noopener"
-              target="_blank"
-              class="btn btn--night btn--sm"
-            >
-              Buy me a coffee <span class="arrow">→</span>
-            </a>
-            <p class="font-sans text-xs text-night-dim/80 mt-2 leading-relaxed">
-              Any donations go towards API costs and time spent on the website. Thank you!
-            </p>
-          </div>
-        )}
       </div>
 
-      <!-- Links columns -->
       <div>
-        <p class="u-datum !text-accent-light mb-4 pb-2 border-b border-night-line">Sections</p>
+        <p
+          class="u-datum !text-accent-light mb-4 pb-2 border-b border-night-line"
+        >
+          Sections
+        </p>
         <ul class="space-y-2.5 font-sans text-sm">
-          {sectionLinks.map(link => (
-            <li><a href={link.href} class="text-night-dim hover:text-night-ink transition-colors">{link.label}</a></li>
-          ))}
+          {
+            sectionLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-night-dim hover:text-night-ink transition-colors"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
 
       <div>
-        <p class="u-datum !text-accent-light mb-4 pb-2 border-b border-night-line">Browse</p>
+        <p
+          class="u-datum !text-accent-light mb-4 pb-2 border-b border-night-line"
+        >
+          Browse
+        </p>
         <ul class="space-y-2.5 font-sans text-sm">
-          {browseLinks.map(link => (
-            <li><a href={link.href} class="text-night-dim hover:text-night-ink transition-colors">{link.label}</a></li>
-          ))}
+          {
+            browseLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="text-night-dim hover:text-night-ink transition-colors"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
           <li>
-            <a href="/rss.xml" class="text-night-dim hover:text-night-ink transition-colors">RSS feed</a>
+            <a
+              href="/rss.xml"
+              class="text-night-dim hover:text-night-ink transition-colors"
+              >RSS feed</a
+            >
           </li>
         </ul>
       </div>
-
     </div>
 
-    <!-- Bottom bar -->
-    <div class="border-t border-night-line mt-12 pt-6 flex flex-wrap justify-between items-center gap-3 u-datum !text-night-dim">
+    <div
+      class="border-t border-night-line mt-12 pt-6 flex flex-wrap justify-between items-center gap-3 u-datum !text-night-dim"
+    >
       <span>© {year} NATHAN TRACEY · VIEWS ARE PERSONAL</span>
       <span class="uppercase">Evidence · Integrity · Action</span>
-      <a href="/dashboard/" class="hover:text-night-ink transition-colors uppercase">Editor</a>
+      <a
+        href="/dashboard/"
+        class="hover:text-night-ink transition-colors uppercase">Editor</a
+      >
     </div>
   </div>
 </footer>

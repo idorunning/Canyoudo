@@ -1,128 +1,663 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import { SECTION_LABELS } from '../content/config';
-import readingTime from 'reading-time';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { SECTION_LABELS } from "../content/config";
+import readingTime from "reading-time";
 
-import type { Section } from '../content/config';
+import type { Section } from "../content/config";
 
-const articles = await getCollection('articles', ({ data }) => !data.draft);
-type Item = { slug: string; data: typeof articles[number]['data']; section: Section; body: string };
+const articles = await getCollection("articles", ({ data }) => !data.draft);
+type Item = {
+  slug: string;
+  data: (typeof articles)[number]["data"];
+  section: Section;
+  body: string;
+};
 const allArticles: Item[] = articles
-  .map((article) => ({ slug: article.slug, data: article.data, section: article.data.section, body: article.body ?? '' }))
+  .map((article) => ({
+    slug: article.slug,
+    data: article.data,
+    section: article.data.section,
+    body: article.body ?? "",
+  }))
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const feature = allArticles[0];
 const moreStories = allArticles.slice(1, 4);
 const latestStories = allArticles.slice(4, 10);
 const articleUrl = (article: Item) => `/${article.section}/${article.slug}`;
-const minutes = (article: Item) => Math.max(1, Math.ceil(readingTime(article.body).minutes));
-const author = (article: Item) => article.data.author?.trim() || 'Nathan Tracey';
-const date = (article: Item, includeYear = true) => article.data.pubDate.toLocaleDateString('en-GB', {
-  day: 'numeric', month: 'long', ...(includeYear ? { year: 'numeric' } : {}),
-});
-const sectionPaths: Record<Section, string> = {
-  'police-policy': '/police-policy', 'public-policy': '/public-policy',
-  'influential-people': '/influential-people', 'data-stories': '/data-stories', other: '/other',
+const cardImage = (article: Item, lead = false) => {
+  const selected = lead
+    ? (article.data.portrait ??
+      article.data.heroImage ??
+      article.data.thumbnail)
+    : (article.data.portrait ??
+      article.data.thumbnail ??
+      article.data.heroImage);
+  return selected ?? `/og/${article.section}/${article.slug}.jpg?v=3`;
 };
-const browseSections: Section[] = ['police-policy', 'public-policy', 'data-stories', 'influential-people'];
+const minutes = (article: Item) =>
+  Math.max(1, Math.ceil(readingTime(article.body).minutes));
+const author = (article: Item) =>
+  article.data.author?.trim() || "Nathan Tracey";
+const date = (article: Item, includeYear = true) =>
+  article.data.pubDate.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    ...(includeYear ? { year: "numeric" } : {}),
+  });
+const sectionPaths: Record<Section, string> = {
+  "police-policy": "/police-policy",
+  "public-policy": "/public-policy",
+  "influential-people": "/influential-people",
+  "data-stories": "/data-stories",
+  other: "/other",
+};
+const browseSections: Section[] = [
+  "police-policy",
+  "public-policy",
+  "data-stories",
+  "influential-people",
+];
 
-const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
-const description = 'Independent evidence-led writing about policing, policy, leadership and technology.';
-const jsonLd = [{
-  '@context': 'https://schema.org', '@type': 'WebSite', name: 'Thinking About Policing',
-  url: `${site}/`, description, inLanguage: 'en-GB',
-  potentialAction: { '@type': 'SearchAction', target: { '@type': 'EntryPoint', urlTemplate: `${site}/search?q={search_term_string}` }, 'query-input': 'required name=search_term_string' },
-}, {
-  '@context': 'https://schema.org', '@type': 'Blog', name: 'Thinking About Policing',
-  url: `${site}/`, description, inLanguage: 'en-GB',
-  author: { '@type': 'Person', name: 'Nathan Tracey', url: `${site}/about` },
-}];
+const site = (
+  Astro.site?.toString() ?? "https://thinkingaboutpolicing.org/"
+).replace(/\/$/, "");
+const description =
+  "Independent evidence-led writing about policing, policy, leadership and technology.";
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Thinking About Policing",
+    url: `${site}/`,
+    description,
+    inLanguage: "en-GB",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${site}/search?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "Thinking About Policing",
+    url: `${site}/`,
+    description,
+    inLanguage: "en-GB",
+    author: { "@type": "Person", name: "Nathan Tracey", url: `${site}/about` },
+  },
+];
 
-const pitchSubject = encodeURIComponent('Article idea for Thinking About Policing');
-const pitchBody = encodeURIComponent("Hi Nathan,\n\nI'd like to pitch an idea:\n\nWorking title:\nWhat it argues and the evidence behind it:\nA bit about me:\n");
+const pitchSubject = encodeURIComponent(
+  "Article idea for Thinking About Policing",
+);
+const pitchBody = encodeURIComponent(
+  "Hi Nathan,\n\nI'd like to pitch an idea:\n\nWorking title:\nWhat it argues and the evidence behind it:\nA bit about me:\n",
+);
 ---
 
-<BaseLayout title="Thinking About Policing" description={description} jsonLd={jsonLd}>
+<BaseLayout
+  title="Thinking About Policing"
+  description={description}
+  jsonLd={jsonLd}
+>
   <div class="newsroom-home">
-    {feature && (
-      <article class="lead-story">
-        <a class="lead-image" href={articleUrl(feature)}>
-          {(feature.data.heroImage || feature.data.portrait) ? (
-            <img src={feature.data.portrait ?? feature.data.heroImage} alt="" loading="eager" />
-          ) : <span class="image-fallback">{feature.data.title.charAt(0)}</span>}
-          <span class="read-chip">{minutes(feature)} min read</span>
-        </a>
-        <div class="lead-copy">
-          <span class="story-label">Latest analysis</span>
-          <h1><a href={articleUrl(feature)}>{feature.data.title}</a></h1>
-          <p class="standfirst">{feature.data.description}</p>
-          <div class="byline">By <strong>{author(feature)}</strong> · {date(feature)}</div>
-        </div>
-      </article>
-    )}
+    {
+      feature && (
+        <article class="lead-story">
+          <a class="lead-image" href={articleUrl(feature)}>
+            <img src={cardImage(feature, true)} alt="" loading="eager" />
+            <span class="read-chip">{minutes(feature)} min read</span>
+          </a>
+          <div class="lead-copy">
+            <span class="story-label">Latest analysis</span>
+            <h1>
+              <a href={articleUrl(feature)}>{feature.data.title}</a>
+            </h1>
+            <p class="standfirst">{feature.data.description}</p>
+            <div class="byline">
+              By <strong>{author(feature)}</strong> · {date(feature)}
+            </div>
+          </div>
+        </article>
+      )
+    }
 
-    {moreStories.length > 0 && (
-      <section class="more-section" aria-labelledby="more-heading">
-        <div class="section-heading"><h2 id="more-heading">More to read</h2><a href="/topics">View all stories →</a></div>
-        <div class="story-grid">
-          {moreStories.map((article) => (
-            <a class="story-row" href={articleUrl(article)}>
-              <div>
-                <span class="row-kicker">{SECTION_LABELS[article.section]}</span>
-                <h3>{article.data.title}</h3>
-                <p>{article.data.description}</p>
-                <span class="row-meta">{minutes(article)} min read · {date(article, false)}</span>
-              </div>
-              <span class="row-arrow" aria-hidden="true">›</span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
+    {
+      moreStories.length > 0 && (
+        <section class="more-section" aria-labelledby="more-heading">
+          <div class="section-heading">
+            <>
+              <h2 id="more-heading">More to read</h2>
+              <a href="/topics">View all stories →</a>
+            </>
+          </div>
+          <div class="story-grid">
+            {moreStories.map((article) => (
+              <a class="story-row" href={articleUrl(article)} data-reveal>
+                <span class="story-image">
+                  <img src={cardImage(article)} alt="" loading="lazy" />
+                </span>
+                <span class="story-copy">
+                  <span class="row-kicker">
+                    {SECTION_LABELS[article.section]}
+                  </span>
+                  <h3>{article.data.title}</h3>
+                  <p>{article.data.description}</p>
+                  <span class="row-meta">
+                    {minutes(article)} min read · {date(article, false)}
+                  </span>
+                </span>
+                <span class="row-arrow" aria-hidden="true">
+                  ›
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
 
-    {latestStories.length > 0 && (
-      <section class="latest-section" aria-labelledby="latest-heading">
-        <div class="section-heading"><h2 id="latest-heading">Latest stories</h2><a href="/topics">Browse every topic →</a></div>
-        <div class="latest-list">
-          {latestStories.map((article) => (
-            <a href={articleUrl(article)} class="latest-row">
-              <span class="latest-date">{article.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
-              <span><small>{SECTION_LABELS[article.section]}</small><strong>{article.data.title}</strong></span>
-              <span aria-hidden="true">→</span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
+    {
+      latestStories.length > 0 && (
+        <section class="latest-section" aria-labelledby="latest-heading">
+          <div class="section-heading">
+            <>
+              <h2 id="latest-heading">Latest stories</h2>
+              <a href="/topics">Browse every topic →</a>
+            </>
+          </div>
+          <div class="latest-list">
+            {latestStories.map((article) => (
+              <a href={articleUrl(article)} class="latest-row" data-reveal>
+                <span class="latest-image">
+                  <img src={cardImage(article)} alt="" loading="lazy" />
+                </span>
+                <span class="latest-copy">
+                  <small>
+                    {SECTION_LABELS[article.section]} ·{" "}
+                    {article.data.pubDate.toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                    })}
+                  </small>
+                  <strong>{article.data.title}</strong>
+                </span>
+                <span class="latest-arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     <section class="browse-section" aria-labelledby="browse-heading">
-      <div class="section-heading"><h2 id="browse-heading">Browse by subject</h2></div>
+      <div class="section-heading">
+        <h2 id="browse-heading">Browse by subject</h2>
+      </div>
       <div class="browse-grid">
-        {browseSections.map((section) => (
-          <a href={sectionPaths[section]}><span>{SECTION_LABELS[section]}</span><span aria-hidden="true">→</span></a>
-        ))}
+        {
+          browseSections.map((section) => (
+            <a href={sectionPaths[section]}>
+              <>
+                <span>{SECTION_LABELS[section]}</span>
+                <span aria-hidden="true">→</span>
+              </>
+            </a>
+          ))
+        }
       </div>
     </section>
 
     <aside class="editor-note">
-      <div><strong>Thinking About Policing</strong><p>Independent analysis of evidence, policy and practice, written for people who want to understand what policing does and whether it works.</p></div>
-      <div class="editor-links"><a href="/about">About the publication →</a><a href={`mailto:hello@thinkingaboutpolicing.org?subject=${pitchSubject}&body=${pitchBody}`}>Pitch an article →</a></div>
+      <div>
+        <strong>Thinking About Policing</strong><p>
+          Independent analysis of evidence, policy and practice, written for
+          people who want to understand what policing does and whether it works.
+        </p>
+      </div>
+      <div class="editor-links">
+        <a href="/about">About the publication →</a><a
+          href={`mailto:hello@thinkingaboutpolicing.org?subject=${pitchSubject}&body=${pitchBody}`}
+          >Pitch an article →</a
+        >
+      </div>
     </aside>
   </div>
 </BaseLayout>
 
 <style>
-  .newsroom-home{--blue:#086db8;--orange:#ef5b2a;--ink:#101318;--muted:#626a74;--line:#dfe3e7;--wash:#f4f5f6;max-width:72rem;margin:0 auto;background:#fff;color:var(--ink)}
-  .newsroom-home a{color:inherit;text-decoration:none}.lead-story{border-bottom:1px solid var(--line)}
-  .lead-image{position:relative;display:block;overflow:hidden;aspect-ratio:16/9;background:#273747}.lead-image img{width:100%;height:100%;object-fit:cover}.image-fallback{display:grid;width:100%;height:100%;place-items:center;color:#fff;font-size:5rem;font-weight:800}
-  .read-chip{position:absolute;right:12px;bottom:11px;padding:6px 8px;background:rgba(12,16,22,.9);color:#fff;font-size:10px;font-weight:800;letter-spacing:.035em;text-transform:uppercase}
-  .lead-copy{padding:18px 18px 22px}.story-label{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-size:11px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}.story-label:before{width:19px;height:3px;content:"";background:var(--orange)}
-  h1{max-width:46rem;margin:9px 0 10px;font-size:clamp(30px,8.2vw,42px);font-weight:800;line-height:1.01;letter-spacing:-.05em}.standfirst{max-width:43rem;margin:0 0 14px;color:#424a54;font-family:Georgia,"Times New Roman",serif;font-size:15.5px;line-height:1.42}.byline{color:#69727d;font-size:11px;font-weight:650}.byline strong{color:#242930}
-  .more-section{padding:22px 17px 28px;border-top:7px solid var(--ink)}.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:7px}.section-heading h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.04em}.section-heading>a{color:var(--blue);font-size:12px;font-weight:800;white-space:nowrap}
-  .story-row{display:grid;grid-template-columns:minmax(0,1fr) 22px;gap:12px;padding:15px 0;border-top:1px solid var(--line)}.story-row:first-child{border-top:0}.row-kicker{display:block;margin-bottom:5px;color:var(--blue);font-size:10px;font-weight:850;letter-spacing:.07em;text-transform:uppercase}.story-row:nth-child(2) .row-kicker{color:#9c451f}.story-row:nth-child(3) .row-kicker{color:#56616d}.story-row h3{margin:0;font-size:18px;font-weight:800;line-height:1.14;letter-spacing:-.028em}.story-row p{margin:6px 0 0;color:var(--muted);font-family:Georgia,"Times New Roman",serif;font-size:12.5px;line-height:1.36}.row-meta{display:block;margin-top:7px;color:#79818b;font-size:10px;font-weight:750;text-transform:uppercase}.row-arrow{align-self:center;color:var(--blue);font-size:22px;font-weight:700}
-  .latest-section,.browse-section{padding:25px 17px;border-top:1px solid var(--line)}.latest-list{border-top:2px solid var(--ink)}.latest-row{display:grid;grid-template-columns:50px minmax(0,1fr) 18px;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}.latest-date{color:#727b85;font-size:10px;font-weight:800;text-transform:uppercase}.latest-row small{display:block;margin-bottom:3px;color:var(--blue);font-size:9px;font-weight:850;letter-spacing:.06em;text-transform:uppercase}.latest-row strong{display:block;font-size:15px;line-height:1.2}.latest-row>span:last-child{color:var(--blue)}
-  .browse-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.browse-grid a{display:flex;min-height:66px;align-items:center;justify-content:space-between;gap:10px;padding:12px;border:1px solid var(--line);font-size:13px;font-weight:800}.browse-grid a span:last-child{color:var(--orange)}
-  .editor-note{display:grid;gap:13px;margin:3px 17px 30px;padding:17px 18px;border-left:4px solid var(--orange);background:var(--wash)}.editor-note strong{display:block;margin-bottom:4px;font-size:13px}.editor-note p{margin:0;color:#505964;font-size:12px;line-height:1.45}.editor-links{display:flex;flex-wrap:wrap;gap:8px 18px}.editor-links a{color:var(--blue);font-size:12px;font-weight:800}
-  @media(min-width:760px){.lead-story{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(350px,.88fr)}.lead-image{height:100%;min-height:470px;aspect-ratio:auto}.lead-copy{display:flex;flex-direction:column;justify-content:center;padding:45px}h1{font-size:52px}.standfirst{font-size:18px}.more-section{padding:28px 34px 38px}.story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}.story-row,.story-row:first-child{display:block;padding:18px 0 0;border-top:1px solid var(--line)}.story-row h3{font-size:21px}.story-row p{font-size:14px}.row-arrow{display:none}.latest-section,.browse-section{padding:34px}.latest-row{grid-template-columns:70px minmax(0,1fr) 25px;padding:16px 0}.latest-row strong{font-size:18px}.browse-grid{grid-template-columns:repeat(4,1fr)}.editor-note{grid-template-columns:minmax(0,1fr) auto;align-items:center;margin:0 34px 38px;padding:20px 22px}}
+  .newsroom-home {
+    --bg: #fff;
+    --blue: #086db8;
+    --orange: #ef5b2a;
+    --ink: #101318;
+    --muted: #626a74;
+    --line: #dfe3e7;
+    --wash: #f4f5f6;
+    max-width: 72rem;
+    margin: 0 auto;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  :global(html.dark) .newsroom-home {
+    --bg: #09111d;
+  }
+  .newsroom-home a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .lead-story {
+    border-bottom: 1px solid var(--line);
+  }
+  .lead-image {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    background: #273747;
+  }
+  .lead-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .lead-image:after {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 18%;
+    content: "";
+    background: linear-gradient(to bottom, transparent, var(--bg));
+    pointer-events: none;
+  }
+  .read-chip {
+    position: absolute;
+    z-index: 2;
+    right: 12px;
+    bottom: 11px;
+    padding: 6px 8px;
+    background: rgba(12, 16, 22, 0.9);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+  }
+  .lead-copy {
+    padding: 18px 18px 22px;
+  }
+  .story-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .story-label:before {
+    width: 19px;
+    height: 3px;
+    content: "";
+    background: var(--orange);
+  }
+  h1 {
+    max-width: 46rem;
+    margin: 9px 0 10px;
+    font-size: clamp(30px, 8.2vw, 42px);
+    font-weight: 800;
+    line-height: 1.01;
+    letter-spacing: -0.05em;
+  }
+  .standfirst {
+    max-width: 43rem;
+    margin: 0 0 14px;
+    color: #424a54;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 15.5px;
+    line-height: 1.42;
+  }
+  .byline {
+    color: #69727d;
+    font-size: 11px;
+    font-weight: 650;
+  }
+  .byline strong {
+    color: #242930;
+  }
+  .more-section {
+    padding: 22px 17px 28px;
+    border-top: 7px solid var(--ink);
+  }
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 7px;
+  }
+  .section-heading h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+  .section-heading > a {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .story-row {
+    display: grid;
+    grid-template-columns: 118px minmax(0, 1fr) 18px;
+    gap: 12px;
+    align-items: center;
+    padding: 15px 0;
+    border-top: 1px solid var(--line);
+  }
+  .story-row:first-child {
+    border-top: 0;
+  }
+  .story-image,
+  .latest-image {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background: #26384a;
+  }
+  .story-image {
+    width: 118px;
+    aspect-ratio: 4/3;
+  }
+  .story-image img,
+  .latest-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .story-image:after,
+  .latest-image:after {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 24%;
+    content: "";
+    background: linear-gradient(to right, transparent, var(--bg));
+    pointer-events: none;
+  }
+  .story-row:hover img,
+  .latest-row:hover img {
+    transform: scale(1.025);
+  }
+  .story-copy {
+    min-width: 0;
+  }
+  .row-kicker {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+  }
+  .story-row:nth-child(2) .row-kicker {
+    color: #9c451f;
+  }
+  .story-row:nth-child(3) .row-kicker {
+    color: #56616d;
+  }
+  .story-row h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.14;
+    letter-spacing: -0.028em;
+  }
+  .story-row p {
+    display: none;
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12.5px;
+    line-height: 1.36;
+  }
+  .row-meta {
+    display: block;
+    margin-top: 7px;
+    color: #79818b;
+    font-size: 10px;
+    font-weight: 750;
+    text-transform: uppercase;
+  }
+  .row-arrow {
+    align-self: center;
+    color: var(--blue);
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .latest-section,
+  .browse-section {
+    padding: 25px 17px;
+    border-top: 1px solid var(--line);
+  }
+  .latest-list {
+    border-top: 2px solid var(--ink);
+  }
+  .latest-row {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) 18px;
+    gap: 11px;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .latest-image {
+    width: 96px;
+    height: 72px;
+  }
+  .latest-copy {
+    min-width: 0;
+  }
+  .latest-row small {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--blue);
+    font-size: 9px;
+    font-weight: 850;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+  }
+  .latest-row strong {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 15px;
+    line-height: 1.2;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  .latest-arrow {
+    color: var(--blue);
+  }
+  .browse-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 13px;
+  }
+  .browse-grid a {
+    display: flex;
+    min-height: 66px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--line);
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .browse-grid a span:last-child {
+    color: var(--orange);
+  }
+  .editor-note {
+    display: grid;
+    gap: 13px;
+    margin: 3px 17px 30px;
+    padding: 17px 18px;
+    border-left: 4px solid var(--orange);
+    background: var(--wash);
+  }
+  .editor-note strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+  .editor-note p {
+    margin: 0;
+    color: #505964;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .editor-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+  }
+  .editor-links a {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 800;
+  }
+  @media (min-width: 760px) {
+    .lead-story {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(350px, 0.88fr);
+    }
+    .lead-image {
+      height: 100%;
+      min-height: 470px;
+      aspect-ratio: auto;
+    }
+    .lead-image:after {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: auto;
+      width: 14%;
+      height: auto;
+      background: linear-gradient(to right, transparent, var(--bg));
+    }
+    .lead-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 45px;
+    }
+    h1 {
+      font-size: 52px;
+    }
+    .standfirst {
+      font-size: 18px;
+    }
+    .more-section {
+      padding: 28px 34px 38px;
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+    .story-row,
+    .story-row:first-child {
+      display: block;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+    }
+    .story-image {
+      width: 100%;
+      margin-bottom: 14px;
+      aspect-ratio: 16/9;
+    }
+    .story-image:after {
+      inset: auto 0 0;
+      height: 22%;
+      width: auto;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+    }
+    .story-row h3 {
+      font-size: 21px;
+    }
+    .story-row p {
+      display: block;
+      font-size: 14px;
+    }
+    .row-arrow {
+      display: none;
+    }
+    .latest-section,
+    .browse-section {
+      padding: 34px;
+    }
+    .latest-row {
+      grid-template-columns: 160px minmax(0, 1fr) 25px;
+      gap: 20px;
+      padding: 16px 0;
+    }
+    .latest-image {
+      width: 160px;
+      height: 100px;
+    }
+    .latest-row strong {
+      font-size: 18px;
+    }
+    .browse-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .editor-note {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      margin: 0 34px 38px;
+      padding: 20px 22px;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lead-image img {
+      animation: image-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .story-row[data-reveal],
+    .latest-row[data-reveal] {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 0.45s ease,
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .story-row[data-reveal].is-revealed,
+    .latest-row[data-reveal].is-revealed {
+      opacity: 1;
+      transform: none;
+    }
+    @keyframes image-enter {
+      from {
+        opacity: 0;
+        transform: scale(1.015);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
 </style>

@@ -39,6 +39,12 @@ export type CloudflareTraffic = {
   period: PeriodKey;
   start: string;
   end: string;
+  coverage: {
+    httpStart: string;
+    securityStart: string;
+    httpLimited: boolean;
+    securityLimited: boolean;
+  };
   summary: StatSection<EdgeSummary>;
   trend: StatSection<EdgePoint[]>;
   statusCodes: StatSection<EdgeCount[]>;
@@ -49,6 +55,15 @@ export type CloudflareTraffic = {
 };
 
 type CfConfig = { zone: string; token: string };
+type DatasetLimit = {
+  enabled: boolean;
+  maxDuration: number;
+  notOlderThan: number;
+};
+type DatasetLimits = {
+  http: DatasetLimit | null;
+  firewall: DatasetLimit | null;
+};
 
 const PERIOD_DAYS: Record<PeriodKey, number> = {
   "24h": 1,
@@ -70,6 +85,22 @@ function rangeFor(period: PeriodKey): { start: string; end: string } {
     end.getTime() - PERIOD_DAYS[period] * 24 * 60 * 60 * 1000,
   );
   return { start: start.toISOString(), end: end.toISOString() };
+}
+
+function boundedRange(
+  requestedStart: string,
+  end: string,
+  limit: DatasetLimit | null,
+): { start: string; limited: boolean } {
+  if (!limit?.enabled) return { start: requestedStart, limited: false };
+  const requested = Date.parse(requestedStart);
+  const endTime = Date.parse(end);
+  const durationFloor =
+    limit.maxDuration > 0 ? endTime - limit.maxDuration * 1000 + 60_000 : requested;
+  const retentionFloor =
+    limit.notOlderThan > 0 ? Date.now() - limit.notOlderThan * 1000 + 60_000 : requested;
+  const actual = Math.max(requested, durationFloor, retentionFloor);
+  return { start: new Date(actual).toISOString(), limited: actual > requested + 1000 };
 }
 
 function httpFilter(start: string, end: string, extra = ""): string {
@@ -124,6 +155,33 @@ async function query(
   } catch {
     return { ok: false, reason: "Could not reach Cloudflare." };
   }
+}
+
+async function getDatasetLimits(cf: CfConfig): Promise<DatasetLimits | null> {
+  const result = await query(
+    cf,
+    `{
+      viewer { zones(filter: { zoneTag: "${cf.zone}" }) {
+        settings {
+          httpRequestsAdaptiveGroups { enabled maxDuration notOlderThan }
+          firewallEventsAdaptive { enabled maxDuration notOlderThan }
+        }
+      } }
+    }`,
+  );
+  if (!result.ok) return null;
+  const normalise = (value: any): DatasetLimit | null =>
+    value
+      ? {
+          enabled: Boolean(value.enabled),
+          maxDuration: Number(value.maxDuration ?? 0),
+          notOlderThan: Number(value.notOlderThan ?? 0),
+        }
+      : null;
+  return {
+    http: normalise(result.data.settings?.httpRequestsAdaptiveGroups),
+    firewall: normalise(result.data.settings?.firewallEventsAdaptive),
+  };
 }
 
 async function getSummary(
@@ -297,43 +355,43 @@ async function getSecurity(
   cf: CfConfig,
   start: string,
   end: string,
+  enabled = true,
 ): Promise<StatSection<SecuritySummary>> {
-  const filter = firewallFilter(start, end);
+  if (!enabled) {
+    return { ok: true, data: { total: 0, actions: [], countries: [] } };
+  }
+
   const result = await query(
     cf,
     `{
-    viewer { zones(filter: { zoneTag: "${cf.zone}" }) {
-      actions: firewallEventsAdaptiveGroups(
-        filter: ${filter}, limit: 12, orderBy: [count_DESC]
-      ) { count dimensions { action source } }
-      countries: firewallEventsAdaptiveGroups(
-        filter: ${filter}, limit: 10, orderBy: [count_DESC]
-      ) { count dimensions { clientCountryName } }
-    } }
-  }`,
+      viewer { zones(filter: { zoneTag: "${cf.zone}" }) {
+        rows: firewallEventsAdaptive(
+          filter: ${firewallFilter(start, end)}, limit: 5000, orderBy: [datetime_DESC]
+        ) { action source clientCountryName }
+      } }
+    }`,
   );
   if (!result.ok) return result;
 
-  const actions = (result.data.actions ?? []).map((row: any) => ({
-    name:
-      [row?.dimensions?.action, row?.dimensions?.source]
-        .filter(Boolean)
-        .join(" · ") || "Unknown",
-    count: Number(row?.count ?? 0),
-  }));
-  const countries = (result.data.countries ?? []).map((row: any) => ({
-    code: String(row?.dimensions?.clientCountryName ?? ""),
-    count: Number(row?.count ?? 0),
-  }));
+  const actionCounts = new Map<string, number>();
+  const countryCounts = new Map<string, number>();
+  const rows = result.data.rows ?? [];
+  for (const row of rows) {
+    const action =
+      [row?.action, row?.source].filter(Boolean).join(" · ") || "Unknown";
+    const country = String(row?.clientCountryName ?? "");
+    actionCounts.set(action, (actionCounts.get(action) ?? 0) + 1);
+    if (country) countryCounts.set(country, (countryCounts.get(country) ?? 0) + 1);
+  }
+
+  const byCount = (a: { count: number }, b: { count: number }) =>
+    b.count - a.count;
   return {
     ok: true,
     data: {
-      total: actions.reduce(
-        (sum: number, item: EdgeCount) => sum + item.count,
-        0,
-      ),
-      actions,
-      countries,
+      total: rows.length,
+      actions: [...actionCounts].map(([name, count]) => ({ name, count })).sort(byCount).slice(0, 12),
+      countries: [...countryCounts].map(([code, count]) => ({ code, count })).sort(byCount).slice(0, 10),
     },
   };
 }
@@ -353,6 +411,12 @@ export async function getCloudflareTraffic(
       period,
       start,
       end,
+      coverage: {
+        httpStart: start,
+        securityStart: start,
+        httpLimited: false,
+        securityLimited: false,
+      },
       summary: missing,
       trend: missing,
       statusCodes: missing,
@@ -363,6 +427,10 @@ export async function getCloudflareTraffic(
     };
   }
 
+  const limits = await getDatasetLimits(cf);
+  const httpRange = boundedRange(start, end, limits?.http ?? null);
+  const securityRange = boundedRange(start, end, limits?.firewall ?? null);
+
   const [
     summary,
     trend,
@@ -372,19 +440,25 @@ export async function getCloudflareTraffic(
     countries,
     security,
   ] = await Promise.all([
-    getSummary(cf, start, end),
-    getTrend(cf, period, start, end),
-    getBreakdown(cf, start, end, "edgeResponseStatus", 12),
-    getBreakdown(cf, start, end, "cacheStatus", 12),
-    getTopPaths(cf, start, end),
-    getCountries(cf, start, end),
-    getSecurity(cf, start, end),
+    getSummary(cf, httpRange.start, end),
+    getTrend(cf, period, httpRange.start, end),
+    getBreakdown(cf, httpRange.start, end, "edgeResponseStatus", 12),
+    getBreakdown(cf, httpRange.start, end, "cacheStatus", 12),
+    getTopPaths(cf, httpRange.start, end),
+    getCountries(cf, httpRange.start, end),
+    getSecurity(cf, securityRange.start, end, limits?.firewall?.enabled ?? true),
   ]);
 
   return {
     period,
     start,
     end,
+    coverage: {
+      httpStart: httpRange.start,
+      securityStart: securityRange.start,
+      httpLimited: httpRange.limited,
+      securityLimited: securityRange.limited,
+    },
     summary,
     trend,
     statusCodes,

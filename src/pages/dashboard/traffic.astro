@@ -137,6 +137,15 @@ const securityCountryBars = edge?.security.ok
 const bandwidthPaths = edge?.topPaths.ok
   ? edge.topPaths.data.map((item) => ({ ...item, ...labelFor(item.path) }))
   : [];
+const coverageDate = (raw: string) =>
+  new Date(raw).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+const edgePeriodLabel = edge?.coverage.httpLimited
+  ? `available since ${coverageDate(edge.coverage.httpStart)}`
+  : activePeriod?.label.toLowerCase();
 ---
 
 <DashboardLayout title="Traffic" active="traffic" auth={auth} wide={true}>
@@ -171,6 +180,18 @@ const bandwidthPaths = edge?.topPaths.ok
       The two totals should not match.
     </p>
   </div>
+
+  {
+    edge?.coverage.httpLimited && (
+      <div class="rounded-3 border border-accent/30 bg-accent/5 px-5 py-4 mb-6">
+        <p class="text-sm text-ink-700 leading-relaxed m-0">
+          Cloudflare's retention limit shortens the edge figures for this selection.
+          They cover {coverageDate(edge.coverage.httpStart)} onwards. GoatCounter reader
+          traffic still covers the full selected period.
+        </p>
+      </div>
+    )
+  }
 
   <section aria-labelledby="reader-traffic" class="mb-12">
     <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
@@ -436,7 +457,7 @@ const bandwidthPaths = edge?.topPaths.ok
     <div class="border border-ink-200 rounded-3 p-5 mb-6">
       <div class="flex flex-wrap items-baseline justify-between gap-3 mb-4">
         <p class="text-xs uppercase tracking-wide text-ink-500">
-          Edge requests — {activePeriod?.label.toLowerCase()}
+          Edge requests — {edgePeriodLabel}
         </p>
         {
           edgePoints.length > 0 && (

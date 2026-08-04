@@ -1,8 +1,8 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
-import { SECTIONS, SECTION_LABELS, type Section } from '../../content/config';
-import readingTime from 'reading-time';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { SECTIONS, SECTION_LABELS, type Section } from "../../content/config";
+import readingTime from "reading-time";
 
 export async function getStaticPaths() {
   return SECTIONS.map((section) => ({ params: { section } }));
@@ -10,88 +10,461 @@ export async function getStaticPaths() {
 
 const section = Astro.params.section as Section;
 const descriptions: Record<Section, string> = {
-  'police-policy': 'Evidence, practice and the operational choices that shape policing — from neighbourhood work and officer wellbeing to misconduct prevention and use of force.',
-  'public-policy': 'Leadership, organisational culture, legitimacy and the public-policy decisions that shape how policing is directed and experienced.',
-  'influential-people': 'The researchers, reformers and practitioners whose ideas and work have shaped modern policing.',
-  other: 'Historical puzzles, research methods and arguments that do not fit neatly into the other sections.',
-  'data-stories': 'Technology, data and analytical tools examined through what they can actually tell police leaders, practitioners and the public.',
+  "police-policy":
+    "Evidence, practice and the operational choices that shape policing — from neighbourhood work and officer wellbeing to misconduct prevention and use of force.",
+  "public-policy":
+    "Leadership, organisational culture, legitimacy and the public-policy decisions that shape how policing is directed and experienced.",
+  "influential-people":
+    "The researchers, reformers and practitioners whose ideas and work have shaped modern policing.",
+  other:
+    "Historical puzzles, research methods and arguments that do not fit neatly into the other sections.",
+  "data-stories":
+    "Technology, data and analytical tools examined through what they can actually tell police leaders, practitioners and the public.",
 };
 
 const articles = (
-  await getCollection('articles', ({ data }) => !data.draft && data.section === section)
+  await getCollection(
+    "articles",
+    ({ data }) => !data.draft && data.section === section,
+  )
 ).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 const lead = articles[0];
 const remaining = articles.slice(1);
-const minutes = (body = '') => Math.max(1, Math.ceil(readingTime(body).minutes));
-const shortDate = (date: Date) => date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const minutes = (body = "") =>
+  Math.max(1, Math.ceil(readingTime(body).minutes));
+const shortDate = (date: Date) =>
+  date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+const cardImage = (article: (typeof articles)[number], lead = false) => {
+  const selected = lead
+    ? (article.data.portrait ??
+      article.data.heroImage ??
+      article.data.thumbnail)
+    : (article.data.portrait ??
+      article.data.thumbnail ??
+      article.data.heroImage);
+  return selected ?? `/og/${section}/${article.slug}.jpg?v=3`;
+};
 
-const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
+const site = (
+  Astro.site?.toString() ?? "https://thinkingaboutpolicing.org/"
+).replace(/\/$/, "");
 const breadcrumbLd = {
-  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: `${site}/` },
-    { '@type': 'ListItem', position: 2, name: SECTION_LABELS[section], item: `${site}/${section}` },
+    { "@type": "ListItem", position: 1, name: "Home", item: `${site}/` },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: SECTION_LABELS[section],
+      item: `${site}/${section}`,
+    },
   ],
 };
 ---
 
-<BaseLayout title={SECTION_LABELS[section]} description={descriptions[section]} jsonLd={breadcrumbLd}>
+<BaseLayout
+  title={SECTION_LABELS[section]}
+  description={descriptions[section]}
+  jsonLd={breadcrumbLd}
+>
   <main class="section-newsroom">
     <header class="section-intro">
       <a href="/" class="back-link">Latest stories</a>
-      <p>{articles.length} article{articles.length === 1 ? '' : 's'}</p>
+      <p>{articles.length} article{articles.length === 1 ? "" : "s"}</p>
       <h1>{SECTION_LABELS[section]}</h1>
       <div class="intro-rule" aria-hidden="true"></div>
       <div class="intro-copy">{descriptions[section]}</div>
     </header>
 
-    {lead ? (
-      <article class="section-lead">
-        <a href={`/${section}/${lead.slug}`} class="section-lead-image">
-          {(lead.data.heroImage || lead.data.portrait) ? (
-            <img src={lead.data.portrait ?? lead.data.heroImage} alt="" loading="eager" />
-          ) : <span>{lead.data.title.charAt(0)}</span>}
-          <small>{minutes(lead.body)} min read</small>
-        </a>
-        <div class="section-lead-copy">
-          <span class="latest-label">Latest in this section</span>
-          <h2><a href={`/${section}/${lead.slug}`}>{lead.data.title}</a></h2>
-          <p>{lead.data.description}</p>
-          <div>{shortDate(lead.data.pubDate)}</div>
-        </div>
-      </article>
-    ) : (
-      <p class="empty-section">No articles in this section yet.</p>
-    )}
+    {
+      lead ? (
+        <article class="section-lead">
+          <a href={`/${section}/${lead.slug}`} class="section-lead-image">
+            <img src={cardImage(lead, true)} alt="" loading="eager" />
+            <small>{minutes(lead.body)} min read</small>
+          </a>
+          <div class="section-lead-copy">
+            <span class="latest-label">Latest in this section</span>
+            <h2>
+              <a href={`/${section}/${lead.slug}`}>{lead.data.title}</a>
+            </h2>
+            <p>{lead.data.description}</p>
+            <div>{shortDate(lead.data.pubDate)}</div>
+          </div>
+        </article>
+      ) : (
+        <p class="empty-section">No articles in this section yet.</p>
+      )
+    }
 
-    {remaining.length > 0 && (
-      <section class="section-archive" aria-labelledby="archive-title">
-        <header><h2 id="archive-title">More from {SECTION_LABELS[section]}</h2></header>
-        <div class="archive-list">
-          {remaining.map((article) => (
-            <a class="archive-row" href={`/${section}/${article.slug}`}>
-              {(article.data.heroImage || article.data.portrait) ? (
-                <img src={article.data.portrait ?? article.data.heroImage} alt="" loading="lazy" />
-              ) : <span class="archive-fallback">{article.data.title.charAt(0)}</span>}
-              <span class="archive-copy">
-                <small>{shortDate(article.data.pubDate)} · {minutes(article.body)} min read</small>
-                <strong>{article.data.title}</strong>
-                <span>{article.data.description}</span>
-              </span>
-              <span class="archive-arrow" aria-hidden="true">→</span>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
+    {
+      remaining.length > 0 && (
+        <section class="section-archive" aria-labelledby="archive-title">
+          <header>
+            <h2 id="archive-title">More from {SECTION_LABELS[section]}</h2>
+          </header>
+          <div class="archive-list">
+            {remaining.map((article) => (
+              <a
+                class="archive-row"
+                href={`/${section}/${article.slug}`}
+                data-reveal
+              >
+                <span class="archive-image">
+                  <img src={cardImage(article)} alt="" loading="lazy" />
+                </span>
+                <span class="archive-copy">
+                  <small>
+                    {shortDate(article.data.pubDate)} · {minutes(article.body)}{" "}
+                    min read
+                  </small>
+                  <strong>{article.data.title}</strong>
+                  <span>{article.data.description}</span>
+                </span>
+                <span class="archive-arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
   </main>
 </BaseLayout>
 
 <style>
-  .section-newsroom{--bg:#fff;--ink:#101318;--muted:#5f6872;--line:#dfe3e7;--wash:#f4f5f6;--blue:#086db8;--orange:#ef5b2a;max-width:72rem;margin:0 auto;background:var(--bg);color:var(--ink)}
-  :global(html.dark) .section-newsroom{--bg:#09111d;--ink:#edf3f8;--muted:#b6c0ca;--line:#2a394a;--wash:#111e2c;--blue:#43b9ee;--orange:#ff7a49}
-  .section-newsroom a{color:inherit;text-decoration:none}.section-intro{padding:27px 18px 30px;border-bottom:7px solid var(--ink)}.back-link{display:inline-block;color:var(--blue)!important;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}.back-link:before{content:'← ';}.section-intro>p{margin:21px 0 7px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.section-intro h1{max-width:780px;margin:0;font-size:clamp(35px,10vw,55px);font-weight:850;line-height:.98;letter-spacing:-.055em}.intro-rule{width:34px;height:3px;margin:20px 0 14px;background:var(--orange)}.intro-copy{max-width:780px;color:var(--muted);font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.52}
-  .section-lead{border-bottom:1px solid var(--line)}.section-lead-image{position:relative;display:block;overflow:hidden;aspect-ratio:16/9;background:#26384a}.section-lead-image img{width:100%;height:100%;object-fit:cover}.section-lead-image>span{display:grid;width:100%;height:100%;place-items:center;color:#fff;font-size:80px;font-weight:850}.section-lead-image small{position:absolute;right:12px;bottom:11px;padding:6px 8px;background:rgba(12,16,22,.9);color:#fff;font-size:10px;font-weight:800;text-transform:uppercase}.section-lead-copy{padding:19px 18px 25px}.latest-label{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-size:10px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}.latest-label:before{width:19px;height:3px;content:'';background:var(--orange)}.section-lead-copy h2{max-width:760px;margin:9px 0 9px;font-size:clamp(27px,7.5vw,40px);font-weight:830;line-height:1.04;letter-spacing:-.045em}.section-lead-copy p{max-width:720px;margin:0;color:var(--muted);font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.45}.section-lead-copy>div{margin-top:13px;color:var(--muted);font-size:10px;font-weight:750;text-transform:uppercase}
-  .section-archive{padding:25px 17px 38px}.section-archive>header{padding-bottom:9px;border-bottom:2px solid var(--ink)}.section-archive h2{margin:0;font-size:21px;font-weight:830;letter-spacing:-.035em}.archive-row{display:grid;grid-template-columns:88px minmax(0,1fr) 16px;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.archive-row img,.archive-fallback{width:88px;height:68px;object-fit:cover;background:#26384a}.archive-fallback{display:grid;place-items:center;color:#fff;font-size:28px;font-weight:800}.archive-copy{min-width:0}.archive-copy small{display:block;margin-bottom:5px;color:var(--blue);font-size:9px;font-weight:800;text-transform:uppercase}.archive-copy strong{display:block;font-size:16px;line-height:1.16;letter-spacing:-.02em}.archive-copy>span{display:none}.archive-arrow{color:var(--blue);font-size:18px}.empty-section{padding:50px 18px;color:var(--muted)}
-  @media(min-width:760px){.section-intro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(330px,.9fr);column-gap:55px;align-items:end;padding:48px 35px 45px}.back-link,.section-intro>p{grid-column:1/-1}.section-intro>p{margin-top:28px}.section-intro h1{font-size:58px}.intro-rule{display:none}.intro-copy{font-size:19px}.section-lead{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr)}.section-lead-image{min-height:420px;aspect-ratio:auto}.section-lead-copy{display:flex;flex-direction:column;justify-content:center;padding:44px}.section-lead-copy h2{font-size:42px}.section-lead-copy p{font-size:17px}.section-archive{padding:36px 35px 55px}.archive-row{grid-template-columns:160px minmax(0,1fr) 22px;gap:22px;padding:20px 0}.archive-row img,.archive-fallback{width:160px;height:104px}.archive-copy strong{font-size:22px}.archive-copy>span{display:block;max-width:720px;margin-top:7px;color:var(--muted);font-family:Georgia,'Times New Roman',serif;font-size:14px;line-height:1.4}}
+  .section-newsroom {
+    --bg: #fff;
+    --ink: #101318;
+    --muted: #5f6872;
+    --line: #dfe3e7;
+    --wash: #f4f5f6;
+    --blue: #086db8;
+    --orange: #ef5b2a;
+    max-width: 72rem;
+    margin: 0 auto;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  :global(html.dark) .section-newsroom {
+    --bg: #09111d;
+    --ink: #edf3f8;
+    --muted: #b6c0ca;
+    --line: #2a394a;
+    --wash: #111e2c;
+    --blue: #43b9ee;
+    --orange: #ff7a49;
+  }
+  .section-newsroom a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .section-intro {
+    padding: 27px 18px 30px;
+    border-bottom: 7px solid var(--ink);
+  }
+  .back-link {
+    display: inline-block;
+    color: var(--blue) !important;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .back-link:before {
+    content: "← ";
+  }
+  .section-intro > p {
+    margin: 21px 0 7px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .section-intro h1 {
+    max-width: 780px;
+    margin: 0;
+    font-size: clamp(35px, 10vw, 55px);
+    font-weight: 850;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+  }
+  .intro-rule {
+    width: 34px;
+    height: 3px;
+    margin: 20px 0 14px;
+    background: var(--orange);
+  }
+  .intro-copy {
+    max-width: 780px;
+    color: var(--muted);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 17px;
+    line-height: 1.52;
+  }
+  .section-lead {
+    border-bottom: 1px solid var(--line);
+  }
+  .section-lead-image {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    background: #26384a;
+  }
+  .section-lead-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .section-lead-image:after {
+    position: absolute;
+    z-index: 1;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 18%;
+    content: "";
+    background: linear-gradient(to bottom, transparent, var(--bg));
+    pointer-events: none;
+  }
+  .section-lead-image small {
+    position: absolute;
+    z-index: 2;
+    right: 12px;
+    bottom: 11px;
+    padding: 6px 8px;
+    background: rgba(12, 16, 22, 0.9);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .section-lead-copy {
+    padding: 19px 18px 25px;
+  }
+  .latest-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .latest-label:before {
+    width: 19px;
+    height: 3px;
+    content: "";
+    background: var(--orange);
+  }
+  .section-lead-copy h2 {
+    max-width: 760px;
+    margin: 9px 0 9px;
+    font-size: clamp(27px, 7.5vw, 40px);
+    font-weight: 830;
+    line-height: 1.04;
+    letter-spacing: -0.045em;
+  }
+  .section-lead-copy p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--muted);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .section-lead-copy > div {
+    margin-top: 13px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 750;
+    text-transform: uppercase;
+  }
+  .section-archive {
+    padding: 25px 17px 38px;
+  }
+  .section-archive > header {
+    padding-bottom: 9px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .section-archive h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 830;
+    letter-spacing: -0.035em;
+  }
+  .archive-row {
+    display: grid;
+    grid-template-columns: 108px minmax(0, 1fr) 16px;
+    gap: 12px;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .archive-image {
+    position: relative;
+    display: block;
+    width: 108px;
+    height: 78px;
+    overflow: hidden;
+    background: #26384a;
+  }
+  .archive-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .archive-image:after {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 24%;
+    content: "";
+    background: linear-gradient(to right, transparent, var(--bg));
+    pointer-events: none;
+  }
+  .archive-row:hover img {
+    transform: scale(1.025);
+  }
+  .archive-copy {
+    min-width: 0;
+  }
+  .archive-copy small {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--blue);
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+  .archive-copy strong {
+    display: block;
+    font-size: 16px;
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+  }
+  .archive-copy > span {
+    display: none;
+  }
+  .archive-arrow {
+    color: var(--blue);
+    font-size: 18px;
+  }
+  .empty-section {
+    padding: 50px 18px;
+    color: var(--muted);
+  }
+  @media (min-width: 760px) {
+    .section-intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(330px, 0.9fr);
+      column-gap: 55px;
+      align-items: end;
+      padding: 48px 35px 45px;
+    }
+    .back-link,
+    .section-intro > p {
+      grid-column: 1/-1;
+    }
+    .section-intro > p {
+      margin-top: 28px;
+    }
+    .section-intro h1 {
+      font-size: 58px;
+    }
+    .intro-rule {
+      display: none;
+    }
+    .intro-copy {
+      font-size: 19px;
+    }
+    .section-lead {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, 0.92fr);
+    }
+    .section-lead-image {
+      min-height: 420px;
+      aspect-ratio: auto;
+    }
+    .section-lead-image:after {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: auto;
+      width: 14%;
+      height: auto;
+      background: linear-gradient(to right, transparent, var(--bg));
+    }
+    .section-lead-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 44px;
+    }
+    .section-lead-copy h2 {
+      font-size: 42px;
+    }
+    .section-lead-copy p {
+      font-size: 17px;
+    }
+    .section-archive {
+      padding: 36px 35px 55px;
+    }
+    .archive-row {
+      grid-template-columns: 190px minmax(0, 1fr) 22px;
+      gap: 22px;
+      padding: 20px 0;
+    }
+    .archive-image {
+      width: 190px;
+      height: 120px;
+    }
+    .archive-copy strong {
+      font-size: 22px;
+    }
+    .archive-copy > span {
+      display: block;
+      max-width: 720px;
+      margin-top: 7px;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .section-lead-image img {
+      animation: image-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .archive-row[data-reveal] {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 0.45s ease,
+        transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .archive-row[data-reveal].is-revealed {
+      opacity: 1;
+      transform: none;
+    }
+    @keyframes image-enter {
+      from {
+        opacity: 0;
+        transform: scale(1.015);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
 </style>
