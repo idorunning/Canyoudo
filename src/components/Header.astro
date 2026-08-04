@@ -26,7 +26,7 @@ const menuLinks = [
 ];
 
 const currentPath = Astro.url.pathname;
-const originalUrl = new URL(`${Astro.url.pathname}${Astro.url.search}`, Astro.site ?? 'https://thinkingaboutpolicing.org').toString();
+const originalPath = `${currentPath}${Astro.url.search}`;
 const translations = [
   { code: 'cy', flag: '🏴', name: 'Cymraeg', english: 'Welsh' },
   { code: 'pl', flag: '🇵🇱', name: 'Polski', english: 'Polish' },
@@ -35,15 +35,13 @@ const translations = [
   { code: 'fr', flag: '🇫🇷', name: 'Français', english: 'French' },
 ];
 const translatedUrl = (code: string) =>
-  `https://translate.google.com/translate?sl=en&tl=${code}&u=${encodeURIComponent(originalUrl)}`;
+  `/translate/${code}${currentPath === '/' ? '/' : currentPath}${Astro.url.search}`;
 ---
 
 <header id="site-header" class="magazine-header">
   <div class="masthead">
     <a class="brand" href="/" aria-label="Thinking About Policing home">
-      <span class="brand-mark">
-        <img src="/logo-mark.png" alt="" width="44" height="44" />
-      </span>
+      <span class="brand-mark"><img src="/logo-mark.png" alt="" width="44" height="44" /></span>
       <span class="wordmark"><span>Thinking About</span><span>Policing</span></span>
     </a>
 
@@ -54,7 +52,7 @@ const translatedUrl = (code: string) =>
       <a class="icon-action" href="/library" aria-label="Your saved articles">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.5L5 21V4a1 1 0 0 1 1-1z"/></svg>
       </a>
-      <button type="button" class="icon-action" data-theme-toggle aria-label="Toggle dark mode">
+      <button type="button" class="icon-action" data-theme-toggle aria-label="Switch to dark theme">
         <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
         <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2 6 6m12 12 1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18m12-12 1.8-1.8"/></svg>
       </button>
@@ -74,9 +72,7 @@ const translatedUrl = (code: string) =>
   <div class="brand-line" aria-hidden="true"></div>
   <nav class="topic-rail" aria-label="Main topics">
     {primaryLinks.map((link) => (
-      <a href={link.href} aria-current={currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) ? 'page' : undefined}>
-        {link.label}
-      </a>
+      <a href={link.href} aria-current={currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href)) ? 'page' : undefined}>{link.label}</a>
     ))}
   </nav>
 </header>
@@ -88,9 +84,9 @@ const translatedUrl = (code: string) =>
       <h2 id="language-title">Read in your language</h2>
       <button type="button" class="panel-close" data-panel-close aria-label="Close language menu">×</button>
     </header>
-    <p class="translation-note">Translations are generated automatically by Google Translate. You can return to the original English page at any time.</p>
+    <p class="translation-note">Translations are generated automatically and cached after the first request. You can return to the original English page at any time.</p>
     <ul class="panel-list">
-      <li><a href={originalUrl}><span class="flag-emoji">🇬🇧</span><span>English</span><small>Original</small></a></li>
+      <li><a href={originalPath} data-original-language><span class="flag-emoji">🇬🇧</span><span>English</span><small>Original</small></a></li>
       {translations.map((language) => (
         <li><a href={translatedUrl(language.code)} rel="nofollow"><span class="flag-emoji">{language.flag}</span><span>{language.name}</span><small>{language.english}</small></a></li>
       ))}
@@ -107,7 +103,7 @@ const translatedUrl = (code: string) =>
     </header>
     <div class="mobile-utilities">
       <button type="button" data-search-open><span>Search the site</span><span aria-hidden="true">⌕</span></button>
-      <button type="button" data-theme-toggle><span>Change colour theme</span><span aria-hidden="true">◐</span></button>
+      <button type="button" data-theme-toggle><span data-theme-label>Switch to dark theme</span><span aria-hidden="true">◐</span></button>
       <AccountBar part="trigger-mobile" />
     </div>
     <ul class="panel-list menu-list">
@@ -120,37 +116,19 @@ const translatedUrl = (code: string) =>
 <AccountBar part="dialogs" />
 
 <style>
-  .magazine-header{position:sticky;top:0;z-index:50;background:#fff;color:#101318;border-bottom:1px solid #dfe3e7;box-shadow:0 1px 6px rgba(16,19,24,.04);overflow-anchor:none}
+  .magazine-header,.panel-sheet{--head-bg:#fff;--head-ink:#101318;--head-muted:#535b65;--head-soft:#f2f4f5;--head-line:#dfe3e7;--head-blue:#086db8;--head-panel:#f7f8f9;background:var(--head-bg);color:var(--head-ink)}
+  :global(html.dark) .magazine-header,:global(html.dark) .panel-sheet{--head-bg:#09111d;--head-ink:#edf3f8;--head-muted:#b8c2cc;--head-soft:#142131;--head-line:#2a394a;--head-blue:#43b9ee;--head-panel:#111e2c}
+  .magazine-header{position:sticky;top:0;z-index:50;border-bottom:1px solid var(--head-line);box-shadow:0 1px 6px rgba(16,19,24,.08);overflow-anchor:none}
   .masthead{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;min-height:64px;max-width:72rem;margin:0 auto;padding:0 8px 0 12px}
-  .brand{display:flex;min-width:0;align-items:center;gap:7px;color:#101318;text-decoration:none}
-  .brand-mark{position:relative;flex:0 0 40px;width:40px;height:40px;overflow:hidden;border-radius:50%;background:#fff}
-  .brand-mark img{position:absolute;width:52px;height:52px;max-width:none;left:-6px;top:-6px;object-fit:contain}
-  .wordmark{min-width:0;font-family:var(--font-sans,ui-sans-serif,system-ui,sans-serif);font-size:15px;font-weight:850;line-height:.96;letter-spacing:-.035em;white-space:nowrap}
-  .wordmark span{display:block}
-  .desktop-actions{display:none;align-items:center;gap:3px;margin-right:7px}
-  .icon-action{display:grid;width:38px;height:38px;place-items:center;border:0;border-radius:4px;background:transparent;color:#535b65}
-  .icon-action:hover{background:#f2f4f5;color:#101318}
-  .icon-action svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
-  .theme-sun{display:none}.dark .theme-moon{display:none}.dark .theme-sun{display:block}
-  .language-button{display:inline-flex;height:34px;align-items:center;gap:5px;padding:0 7px;border:1px solid #949ba3;border-radius:5px;background:#fff;color:#101318;font-size:11px;font-weight:850;cursor:pointer}
-  .union-flag{width:20px;height:14px;border:1px solid rgba(0,0,0,.14)}
-  .menu-button{display:grid;width:42px;height:42px;place-items:center;padding:0;border:0;background:transparent;color:#101318;cursor:pointer}
-  .menu-button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:2.4}
-  .brand-line{height:4px;background:linear-gradient(90deg,#08b9ea,#086db8 68%,#ef5b2a 68% 76%,#101318 76%)}
-  .topic-rail{display:flex;gap:21px;max-width:72rem;margin:0 auto;overflow-x:auto;padding:10px 15px 9px;background:#fff;font-size:11px;font-weight:850;letter-spacing:.025em;text-transform:uppercase;white-space:nowrap;scrollbar-width:none}
-  .topic-rail::-webkit-scrollbar{display:none}.topic-rail a{color:#30363d;text-decoration:none}.topic-rail a[aria-current=page]{color:#086db8}
-  .panel-backdrop{position:fixed;z-index:80;inset:0;display:flex;align-items:flex-end;background:rgba(8,10,14,.54);backdrop-filter:blur(2px)}
-  .panel-backdrop[hidden]{display:none}
-  .panel-sheet{width:100%;max-height:min(82dvh,650px);overflow:auto;border-radius:18px 18px 0 0;background:#fff;color:#101318;box-shadow:0 -20px 50px rgba(0,0,0,.22)}
-  .panel-handle{width:36px;height:4px;margin:9px auto 4px;border-radius:9px;background:#ccd1d6}
-  .panel-head{display:flex;align-items:center;justify-content:space-between;padding:10px 17px 12px;border-bottom:1px solid #dfe3e7}
-  .panel-head h2{margin:0;font-size:19px;letter-spacing:-.025em}.panel-close{border:0;background:transparent;font-size:28px;line-height:1;cursor:pointer}
-  .translation-note{margin:10px 17px 2px;padding:11px 12px;background:#f4f5f6;color:#59626c;font-size:11px;line-height:1.4}
-  .panel-list{list-style:none;margin:0;padding:7px 17px 22px}.panel-list li a{display:flex;min-height:49px;align-items:center;gap:11px;border-bottom:1px solid #eceff1;color:#101318;font-size:15px;font-weight:700;text-decoration:none}
-  .panel-list small{margin-left:auto;color:#78818b;font-size:11px;font-weight:600}.flag-emoji{width:28px;font-size:22px}
-  .menu-list li a{justify-content:space-between;font-size:17px;font-weight:800}.menu-list li a span:last-child{color:#086db8}
-  .mobile-utilities{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:13px 17px 4px}.mobile-utilities button{display:flex;min-height:46px;align-items:center;justify-content:space-between;border:1px solid #dfe3e7;border-radius:5px;background:#f7f8f9;padding:0 11px;color:#30363d;font-size:12px;font-weight:750;text-align:left}
-  @media(min-width:760px){.masthead{min-height:72px;padding:0 20px}.brand-mark{flex-basis:45px;width:45px;height:45px}.brand-mark img{width:59px;height:59px;left:-7px;top:-7px}.wordmark{font-size:18px}.desktop-actions{display:flex}.topic-rail{justify-content:center;padding:12px 20px 11px;font-size:12px}.panel-backdrop{align-items:center;justify-content:center;padding:24px}.panel-sheet{max-width:540px;border-radius:14px}.panel-handle{display:none}}
+  .brand{display:flex;min-width:0;align-items:center;gap:7px;color:var(--head-ink);text-decoration:none}.brand-mark{position:relative;flex:0 0 40px;width:40px;height:40px;overflow:hidden;border-radius:50%;background:#fff}.brand-mark img{position:absolute;width:52px;height:52px;max-width:none;left:-6px;top:-6px;object-fit:contain}.wordmark{min-width:0;font-family:var(--font-sans,ui-sans-serif,system-ui,sans-serif);font-size:15px;font-weight:850;line-height:.96;letter-spacing:-.035em;white-space:nowrap}.wordmark span{display:block}
+  .desktop-actions{display:none;align-items:center;gap:3px;margin-right:7px}.icon-action{display:grid;width:38px;height:38px;place-items:center;border:0;border-radius:4px;background:transparent;color:var(--head-muted)}.icon-action:hover{background:var(--head-soft);color:var(--head-ink)}.icon-action svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}.theme-sun{display:none}:global(.dark) .theme-moon{display:none}:global(.dark) .theme-sun{display:block}
+  .language-button{display:inline-flex;height:34px;align-items:center;gap:5px;padding:0 7px;border:1px solid var(--head-muted);border-radius:5px;background:var(--head-bg);color:var(--head-ink);font-size:11px;font-weight:850;cursor:pointer}.union-flag{width:20px;height:14px;border:1px solid rgba(0,0,0,.14)}.current-language-flag{font-size:18px;line-height:1}.menu-button{display:grid;width:42px;height:42px;place-items:center;padding:0;border:0;background:transparent;color:var(--head-ink);cursor:pointer}.menu-button svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:2.4}
+  .brand-line{height:4px;background:linear-gradient(90deg,#08b9ea,#086db8 68%,#ef5b2a 68% 76%,#101318 76%)}.topic-rail{display:flex;gap:21px;max-width:72rem;margin:0 auto;overflow-x:auto;padding:10px 15px 9px;background:var(--head-bg);font-size:11px;font-weight:850;letter-spacing:.025em;text-transform:uppercase;white-space:nowrap;scrollbar-width:none}.topic-rail::-webkit-scrollbar{display:none}.topic-rail a{color:var(--head-ink);text-decoration:none}.topic-rail a[aria-current=page]{color:var(--head-blue)}
+  .panel-backdrop{position:fixed;z-index:80;inset:0;display:flex;align-items:flex-end;background:rgba(8,10,14,.62);backdrop-filter:blur(2px)}.panel-backdrop[hidden]{display:none}.panel-sheet{width:100%;max-height:min(82dvh,650px);overflow:auto;border-radius:18px 18px 0 0;box-shadow:0 -20px 50px rgba(0,0,0,.28)}.panel-handle{width:36px;height:4px;margin:9px auto 4px;border-radius:9px;background:var(--head-line)}.panel-head{display:flex;align-items:center;justify-content:space-between;padding:10px 17px 12px;border-bottom:1px solid var(--head-line)}.panel-head h2{margin:0;font-size:19px;letter-spacing:-.025em}.panel-close{border:0;background:transparent;color:var(--head-ink);font-size:28px;line-height:1;cursor:pointer}.translation-note{margin:10px 17px 2px;padding:11px 12px;background:var(--head-panel);color:var(--head-muted);font-size:11px;line-height:1.4}.panel-list{list-style:none;margin:0;padding:7px 17px 22px}.panel-list li a{display:flex;min-height:49px;align-items:center;gap:11px;border-bottom:1px solid var(--head-line);color:var(--head-ink);font-size:15px;font-weight:700;text-decoration:none}.panel-list small{margin-left:auto;color:var(--head-muted);font-size:11px;font-weight:600}.flag-emoji{width:28px;font-size:22px}.menu-list li a{justify-content:space-between;font-size:17px;font-weight:800}.menu-list li a span:last-child{color:var(--head-blue)}.mobile-utilities{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:13px 17px 4px}.mobile-utilities button{display:flex;min-height:46px;align-items:center;justify-content:space-between;border:1px solid var(--head-line);border-radius:5px;background:var(--head-panel);padding:0 11px;color:var(--head-ink);font-size:12px;font-weight:750;text-align:left}
+  :global(html.dark .newsroom-home){--ink:#edf3f8!important;--muted:#b6c0ca!important;--line:#2a394a!important;--wash:#111e2c!important;background:#09111d!important;color:#edf3f8!important}
+  :global(html.dark .newsroom-home .standfirst),:global(html.dark .newsroom-home .byline),:global(html.dark .newsroom-home .row-meta),:global(html.dark .newsroom-home .latest-date),:global(html.dark .newsroom-home .editor-note p){color:#b6c0ca!important}
+  :global(html.dark .newsroom-home .byline strong){color:#edf3f8!important}
+  @media(min-width:760px){.masthead{grid-template-columns:minmax(0,1fr) auto auto auto;min-height:72px;padding:0 20px}.brand-mark{flex-basis:45px;width:45px;height:45px}.brand-mark img{width:59px;height:59px;left:-7px;top:-7px}.wordmark{font-size:18px}.desktop-actions{display:flex}.topic-rail{justify-content:center;padding:12px 20px 11px;font-size:12px}.panel-backdrop{align-items:center;justify-content:center;padding:24px}.panel-sheet{max-width:540px;border-radius:14px}.panel-handle{display:none}}
   @media(max-width:340px){.masthead{padding-left:8px}.brand-mark{flex-basis:37px;width:37px;height:37px}.brand-mark img{width:49px;height:49px}.wordmark{font-size:13px}.language-button{padding:0 5px}}
   @media(prefers-reduced-motion:no-preference){.panel-sheet{animation:panel-rise .18s ease-out}@keyframes panel-rise{from{transform:translateY(18px);opacity:.8}to{transform:none;opacity:1}}}
 </style>
@@ -169,11 +147,8 @@ const translatedUrl = (code: string) =>
       const id = button.getAttribute('data-panel-open');
       const panel = id ? document.getElementById(id) : null;
       if (!panel) return;
-      returnFocus = button;
-      panel.hidden = false;
-      button.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-      panel.querySelector<HTMLElement>('[data-panel-close]')?.focus();
+      returnFocus = button; panel.hidden = false; button.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden'; panel.querySelector<HTMLElement>('[data-panel-close]')?.focus();
     });
   });
   panels.forEach((panel) => {
@@ -181,10 +156,21 @@ const translatedUrl = (code: string) =>
     panel.querySelectorAll('[data-panel-close], a, [data-search-open]').forEach((element) => element.addEventListener('click', closePanels));
   });
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closePanels(); });
+
+  function showTheme(isDark: boolean) {
+    document.querySelectorAll<HTMLElement>('[data-theme-label]').forEach((label) => {
+      label.textContent = isDark ? 'Switch to light theme' : 'Switch to dark theme';
+    });
+    document.querySelectorAll<HTMLElement>('[data-theme-toggle]').forEach((button) => {
+      button.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+    });
+  }
+  showTheme(document.documentElement.classList.contains('dark'));
   document.querySelectorAll('[data-theme-toggle]').forEach((element) => {
     element.addEventListener('click', () => {
       const isDark = document.documentElement.classList.toggle('dark');
       try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (error) {}
+      showTheme(isDark);
     });
   });
 </script>

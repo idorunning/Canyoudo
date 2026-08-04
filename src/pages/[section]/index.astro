@@ -1,40 +1,33 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import ArticleCard from '../../components/ArticleCard.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import ExplorePanel from '../../components/ExplorePanel.astro';
 import { getCollection } from 'astro:content';
 import { SECTIONS, SECTION_LABELS, type Section } from '../../content/config';
+import readingTime from 'reading-time';
 
-// One route per section. Adding a section to SECTIONS adds its listing page
-// automatically — no new file to write.
 export async function getStaticPaths() {
   return SECTIONS.map((section) => ({ params: { section } }));
 }
 
 const section = Astro.params.section as Section;
-
 const descriptions: Record<Section, string> = {
-  'police-policy':
-    'The operational and organisational side of policing — misconduct prevention, officer wellbeing, use of force, neighbourhood policing, and evidence-based practice.',
-  'public-policy':
-    'Where policing meets the wider world — drugs, the economy, criminal justice, and the policy choices that shape public safety.',
-  'influential-people':
-    'Profiles of the people whose ideas and work have shaped modern policing — the researchers, reformers and practitioners worth knowing.',
-  other:
-    'Essays that do not fit a neat box — historical puzzles, methods, and the occasional digression.',
-  'data-stories':
-    'Reading police numbers honestly — taking them one at a time, showing what they do and do not support, and revisiting a first interpretation when the evidence demands it.',
+  'police-policy': 'Evidence, practice and the operational choices that shape policing — from neighbourhood work and officer wellbeing to misconduct prevention and use of force.',
+  'public-policy': 'Leadership, organisational culture, legitimacy and the public-policy decisions that shape how policing is directed and experienced.',
+  'influential-people': 'The researchers, reformers and practitioners whose ideas and work have shaped modern policing.',
+  other: 'Historical puzzles, research methods and arguments that do not fit neatly into the other sections.',
+  'data-stories': 'Technology, data and analytical tools examined through what they can actually tell police leaders, practitioners and the public.',
 };
 
 const articles = (
   await getCollection('articles', ({ data }) => !data.draft && data.section === section)
 ).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const lead = articles[0];
+const remaining = articles.slice(1);
+const minutes = (body = '') => Math.max(1, Math.ceil(readingTime(body).minutes));
+const shortDate = (date: Date) => date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
 const site = (Astro.site?.toString() ?? 'https://thinkingaboutpolicing.org/').replace(/\/$/, '');
 const breadcrumbLd = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
+  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: `${site}/` },
     { '@type': 'ListItem', position: 2, name: SECTION_LABELS[section], item: `${site}/${section}` },
@@ -43,51 +36,62 @@ const breadcrumbLd = {
 ---
 
 <BaseLayout title={SECTION_LABELS[section]} description={descriptions[section]} jsonLd={breadcrumbLd}>
-  <section class="relative overflow-hidden border-b-2 border-rule">
-    <div class="grid-ground absolute inset-0 pointer-events-none opacity-70 dark:opacity-40" aria-hidden="true"
-         style="-webkit-mask-image: radial-gradient(ellipse 90% 80% at 25% 0%, #000 25%, transparent 75%); mask-image: radial-gradient(ellipse 90% 80% at 25% 0%, #000 25%, transparent 75%);"></div>
-    <div class="relative max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: SECTION_LABELS[section] }]} />
-      <div class="flex items-center gap-3 mb-5">
-        <span class="h-[2px] w-8 bg-accent" aria-hidden="true"></span>
-        <p class="u-datum m-0">Section · {articles.length} article{articles.length === 1 ? '' : 's'}</p>
-      </div>
-      <h1 class="font-display text-4xl md:text-5xl font-bold text-ink-900 leading-[1.05] tracking-[-0.025em] text-balance">
-        {SECTION_LABELS[section]}
-      </h1>
-      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
-        {descriptions[section]}
-      </p>
-    </div>
-  </section>
+  <main class="section-newsroom">
+    <header class="section-intro">
+      <a href="/" class="back-link">Latest stories</a>
+      <p>{articles.length} article{articles.length === 1 ? '' : 's'}</p>
+      <h1>{SECTION_LABELS[section]}</h1>
+      <div class="intro-rule" aria-hidden="true"></div>
+      <div class="intro-copy">{descriptions[section]}</div>
+    </header>
 
-  <div class="max-w-wide mx-auto px-6 lg:px-10">
-    <div class="lg:flex lg:gap-12 xl:gap-16">
-      <div class="surface-reading rounded-b-3 min-w-0 lg:flex-1 px-5 sm:px-8 md:px-9">
-        {articles.length > 0 ? (
-          articles.map((article) => (
-            <ArticleCard
-              href={`/${section}/${article.slug}`}
-              title={article.data.title}
-              description={article.data.description}
-              pubDate={article.data.pubDate}
-              section={section}
-              portrait={article.data.portrait}
-              heroImage={article.data.heroImage}
-            />
-          ))
-        ) : (
-          <p class="font-serif text-ink-600 py-16">
-            No articles in this section yet.
-          </p>
-        )}
-      </div>
-
-      <aside class="mt-10 border-t border-ink-200 pt-10 pb-16 lg:mt-0 lg:w-64 xl:w-72 lg:shrink-0 lg:border-t-0 lg:border-l lg:pl-12 lg:pt-16">
-        <div class="lg:sticky lg:top-24">
-          <ExplorePanel />
+    {lead ? (
+      <article class="section-lead">
+        <a href={`/${section}/${lead.slug}`} class="section-lead-image">
+          {(lead.data.heroImage || lead.data.portrait) ? (
+            <img src={lead.data.portrait ?? lead.data.heroImage} alt="" loading="eager" />
+          ) : <span>{lead.data.title.charAt(0)}</span>}
+          <small>{minutes(lead.body)} min read</small>
+        </a>
+        <div class="section-lead-copy">
+          <span class="latest-label">Latest in this section</span>
+          <h2><a href={`/${section}/${lead.slug}`}>{lead.data.title}</a></h2>
+          <p>{lead.data.description}</p>
+          <div>{shortDate(lead.data.pubDate)}</div>
         </div>
-      </aside>
-    </div>
-  </div>
+      </article>
+    ) : (
+      <p class="empty-section">No articles in this section yet.</p>
+    )}
+
+    {remaining.length > 0 && (
+      <section class="section-archive" aria-labelledby="archive-title">
+        <header><h2 id="archive-title">More from {SECTION_LABELS[section]}</h2></header>
+        <div class="archive-list">
+          {remaining.map((article) => (
+            <a class="archive-row" href={`/${section}/${article.slug}`}>
+              {(article.data.heroImage || article.data.portrait) ? (
+                <img src={article.data.portrait ?? article.data.heroImage} alt="" loading="lazy" />
+              ) : <span class="archive-fallback">{article.data.title.charAt(0)}</span>}
+              <span class="archive-copy">
+                <small>{shortDate(article.data.pubDate)} · {minutes(article.body)} min read</small>
+                <strong>{article.data.title}</strong>
+                <span>{article.data.description}</span>
+              </span>
+              <span class="archive-arrow" aria-hidden="true">→</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
 </BaseLayout>
+
+<style>
+  .section-newsroom{--bg:#fff;--ink:#101318;--muted:#5f6872;--line:#dfe3e7;--wash:#f4f5f6;--blue:#086db8;--orange:#ef5b2a;max-width:72rem;margin:0 auto;background:var(--bg);color:var(--ink)}
+  :global(html.dark) .section-newsroom{--bg:#09111d;--ink:#edf3f8;--muted:#b6c0ca;--line:#2a394a;--wash:#111e2c;--blue:#43b9ee;--orange:#ff7a49}
+  .section-newsroom a{color:inherit;text-decoration:none}.section-intro{padding:27px 18px 30px;border-bottom:7px solid var(--ink)}.back-link{display:inline-block;color:var(--blue)!important;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}.back-link:before{content:'← ';}.section-intro>p{margin:21px 0 7px;color:var(--muted);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.section-intro h1{max-width:780px;margin:0;font-size:clamp(35px,10vw,55px);font-weight:850;line-height:.98;letter-spacing:-.055em}.intro-rule{width:34px;height:3px;margin:20px 0 14px;background:var(--orange)}.intro-copy{max-width:780px;color:var(--muted);font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.52}
+  .section-lead{border-bottom:1px solid var(--line)}.section-lead-image{position:relative;display:block;overflow:hidden;aspect-ratio:16/9;background:#26384a}.section-lead-image img{width:100%;height:100%;object-fit:cover}.section-lead-image>span{display:grid;width:100%;height:100%;place-items:center;color:#fff;font-size:80px;font-weight:850}.section-lead-image small{position:absolute;right:12px;bottom:11px;padding:6px 8px;background:rgba(12,16,22,.9);color:#fff;font-size:10px;font-weight:800;text-transform:uppercase}.section-lead-copy{padding:19px 18px 25px}.latest-label{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-size:10px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}.latest-label:before{width:19px;height:3px;content:'';background:var(--orange)}.section-lead-copy h2{max-width:760px;margin:9px 0 9px;font-size:clamp(27px,7.5vw,40px);font-weight:830;line-height:1.04;letter-spacing:-.045em}.section-lead-copy p{max-width:720px;margin:0;color:var(--muted);font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.45}.section-lead-copy>div{margin-top:13px;color:var(--muted);font-size:10px;font-weight:750;text-transform:uppercase}
+  .section-archive{padding:25px 17px 38px}.section-archive>header{padding-bottom:9px;border-bottom:2px solid var(--ink)}.section-archive h2{margin:0;font-size:21px;font-weight:830;letter-spacing:-.035em}.archive-row{display:grid;grid-template-columns:88px minmax(0,1fr) 16px;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.archive-row img,.archive-fallback{width:88px;height:68px;object-fit:cover;background:#26384a}.archive-fallback{display:grid;place-items:center;color:#fff;font-size:28px;font-weight:800}.archive-copy{min-width:0}.archive-copy small{display:block;margin-bottom:5px;color:var(--blue);font-size:9px;font-weight:800;text-transform:uppercase}.archive-copy strong{display:block;font-size:16px;line-height:1.16;letter-spacing:-.02em}.archive-copy>span{display:none}.archive-arrow{color:var(--blue);font-size:18px}.empty-section{padding:50px 18px;color:var(--muted)}
+  @media(min-width:760px){.section-intro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(330px,.9fr);column-gap:55px;align-items:end;padding:48px 35px 45px}.back-link,.section-intro>p{grid-column:1/-1}.section-intro>p{margin-top:28px}.section-intro h1{font-size:58px}.intro-rule{display:none}.intro-copy{font-size:19px}.section-lead{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr)}.section-lead-image{min-height:420px;aspect-ratio:auto}.section-lead-copy{display:flex;flex-direction:column;justify-content:center;padding:44px}.section-lead-copy h2{font-size:42px}.section-lead-copy p{font-size:17px}.section-archive{padding:36px 35px 55px}.archive-row{grid-template-columns:160px minmax(0,1fr) 22px;gap:22px;padding:20px 0}.archive-row img,.archive-fallback{width:160px;height:104px}.archive-copy strong{font-size:22px}.archive-copy>span{display:block;max-width:720px;margin-top:7px;color:var(--muted);font-family:Georgia,'Times New Roman',serif;font-size:14px;line-height:1.4}}
+</style>
