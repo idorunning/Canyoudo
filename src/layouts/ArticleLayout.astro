@@ -92,7 +92,7 @@ const sharesLabel = (n: number) => (n > 0 ? `· shared ${n} time${n === 1 ? '' :
 // The card URL never changes, and the platforms cache share previews against
 // it — so the version tag is what makes them re-fetch after the card artwork is
 // redesigned. Bump it when the card design changes; leave it alone otherwise.
-const OG_CARD_VERSION = 3;
+const OG_CARD_VERSION = 4;
 const ogCard = `/og/${section}/${slug}.jpg?v=${OG_CARD_VERSION}`;
 
 // Topics let the tag badges link through to their archive pages.
