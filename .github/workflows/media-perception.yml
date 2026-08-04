@@ -1,0 +1,44 @@
+name: Refresh media perception monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+  push:
+    branches-ignore: [main]
+    paths:
+      - '.github/workflows/media-perception.yml'
+      - 'scripts/perception/refresh-media-monitor.mjs'
+      - 'src/data/media-perception.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: media-perception-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Fetch feeds and rebuild evidence file
+        run: node scripts/perception/refresh-media-monitor.mjs
+      - name: Commit changed evidence
+        run: |
+          if [ -z "$(git status --porcelain public/perception-live.json)" ]; then
+            echo "No article or feed-health change."
+            exit 0
+          fi
+          git config user.name "media-perception-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/perception-live.json
+          git commit -m "Refresh media perception evidence ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git push origin "HEAD:${{ github.ref_name }}"

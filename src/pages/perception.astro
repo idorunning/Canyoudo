@@ -1,35 +1,23 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MemberGate from '../components/MemberGate.astro';
-import PerceptionExplorer from '../components/perception/PerceptionExplorer.astro';
+import MediaPerceptionMonitor from '../components/perception/MediaPerceptionMonitor.astro';
 
-// Gating uses the same Supabase project as /research and /data — one sign-in
-// unlocks the whole members area. The gate engages only when auth is configured
-// at build time; a keyless deploy shows the explorer to everyone (graceful
-// degrade, identical to /research). Mirrors src/pages/research.astro:14-16.
 const hasAuth = Boolean(
   import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
 );
 
-// The three interactive members tools, summarised for a logged-out visitor so
-// the page "before login" explains the whole suite, not just this one.
 const tools = [
   { href: '/research', label: 'Research Assistant', desc: 'State a policing problem in plain English and get a cited evidence briefing with next steps.' },
-  { href: '/data', label: 'Crime Dashboard', desc: 'The latest month of stop & search and recorded crime, read for you by force and area.' },
-  { href: '/perception', label: 'Perception Explorer', desc: 'A quarter-century of UK news language about the police — words, sentiment, themes and who gets named, year by year.', current: true },
+  { href: '/data', label: 'Crime Dashboard', desc: 'The latest month of stop and search and recorded crime, read by force and area.' },
+  { href: '/perception', label: 'Media Perception Monitor', desc: 'Live UK policing coverage, target-aware stance evidence, public polling and dated milestones.', current: true }
 ];
 ---
 
 <BaseLayout
-  title="Perception explorer"
-  description="A word analysis of a quarter-century of UK news coverage about the police — the institution, the forces, and the people who lead them. Explore the words, sentiment, themes and named figures, year by year."
+  title="Media perception monitor"
+  description="Track UK media coverage of policing by publisher, preliminary stance, keywords and evidence alongside official public-opinion measures and dated milestones."
 >
-  {/* The three-tool summary is the logged-OUT landing: it's hidden once signed
-      in (gate.ts sets html[data-members-unlocked]), leaving just the hero + the
-      explorer. The token pre-check sets data-maybe-authed so a returning member
-      never sees it flash before the Supabase session resolves — mirrors
-      src/pages/research.astro. The CSS is emitted unconditionally so the keyless
-      path (MemberGate sets data-members-unlocked immediately) hides it too. */}
   <style is:inline set:html={`html[data-maybe-authed] [data-loggedout-only],html[data-members-unlocked] [data-loggedout-only]{display:none !important}`}></style>
   {hasAuth && (
     <script is:inline>
@@ -47,51 +35,20 @@ const tools = [
 
   <section class="border-b-2 border-rule">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-14 md:py-20">
-      <p class="u-eyebrow mb-5">Perception</p>
-      <h1 class="font-display text-4xl md:text-5xl font-semibold text-ink-900 leading-[1.05] tracking-tight">
-        Perception explorer
-      </h1>
-      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-2xl">
-        How do we know what the country thinks of its police? We can read. Every year the
-        press writes about the police hundreds of thousands of times — and the words it
-        chooses are a record of perception in their own right. This tool reads a quarter-century
-        of that record at once: which words recur, whether the tone leans favourable or hostile,
-        how five themes surface, and which forces and figures get named — for every year from
-        2000 to 2025.
-      </p>
-      <p class="font-serif text-base text-ink-600 leading-relaxed mt-4 max-w-2xl">
-        For the full narrative and method, read the data story:
-        <a href="/data-stories/the-perception-of-the-police-in-online-media" class="underline underline-offset-2 hover:text-accent">The Perception of the Police in Online Media</a>.
-      </p>
+      <p class="u-eyebrow mb-5">Evidence & Research Lab</p>
+      <h1 class="font-display text-4xl md:text-6xl font-semibold text-ink-900 leading-[1.02] tracking-tight max-w-4xl">Media perception monitor</h1>
+      <p class="font-serif text-lg md:text-xl text-ink-700 leading-relaxed mt-6 max-w-3xl">Coverage of the police is measurable, but not with one persuasive-looking sentiment score. This monitor keeps publisher, article stance, keywords, public opinion and significant events separate, then lets readers compare them with the source evidence still attached.</p>
     </div>
   </section>
 
-  {/* The three members tools, summarised — the logged-out landing for this page
-      (hidden once signed in; see the flash/hide rule above). */}
   <section data-loggedout-only class="border-b border-ink-200 bg-paper-50">
     <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-12">
       <p class="u-datum mb-6">Three free tools, one sign-in</p>
       <div class="grid sm:grid-cols-3 gap-5">
-        {tools.map((t) => (
-          <a
-            href={t.href}
-            aria-current={t.current ? 'page' : undefined}
-            class:list={[
-              'group block border rounded-2 p-6 transition-colors',
-              t.current
-                ? 'border-accent/50 bg-accent/[0.06]'
-                : 'border-accent/30 bg-accent/[0.04] hover:bg-accent/[0.08] hover:border-accent/50',
-            ]}
-          >
-            <h2 class="font-display text-lg font-semibold text-accent group-hover:text-accent-dark transition-colors leading-snug">
-              {t.label}
-              {t.current && (
-                <span class="chip chip--accent align-middle ml-2">
-                  You’re here
-                </span>
-              )}
-            </h2>
-            <p class="font-serif text-sm text-ink-700 leading-relaxed mt-2">{t.desc}</p>
+        {tools.map((tool) => (
+          <a href={tool.href} aria-current={tool.current ? 'page' : undefined} class:list={['group block border rounded-2 p-6 transition-colors', tool.current ? 'border-accent/50 bg-accent/[0.06]' : 'border-accent/30 bg-accent/[0.04] hover:bg-accent/[0.08] hover:border-accent/50']}>
+            <h2 class="font-display text-lg font-semibold text-accent group-hover:text-accent-dark transition-colors leading-snug">{tool.label}{tool.current && <span class="chip chip--accent align-middle ml-2">You’re here</span>}</h2>
+            <p class="font-serif text-sm text-ink-700 leading-relaxed mt-2">{tool.desc}</p>
           </a>
         ))}
       </div>
@@ -99,9 +56,9 @@ const tools = [
   </section>
 
   <section>
-    <div class="max-w-wide mx-auto px-6 lg:px-10 py-12 md:py-16">
-      <MemberGate hasAuth={hasAuth} feature="the perception explorer">
-        <PerceptionExplorer />
+    <div class="max-w-wide mx-auto px-6 lg:px-10 py-10 md:py-14">
+      <MemberGate hasAuth={hasAuth} feature="the media perception monitor">
+        <MediaPerceptionMonitor />
       </MemberGate>
     </div>
   </section>

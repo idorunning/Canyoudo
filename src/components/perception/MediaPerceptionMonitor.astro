@@ -1,0 +1,201 @@
+---
+import registry from '../../data/media-perception.json';
+import perceptionContext from '../../content/perception/context.json';
+
+const mediaSources = registry.sources.filter((source) => source.class === 'media');
+const clientMeta = JSON.stringify({
+  sources: registry.sources,
+  polling: registry.polling,
+  milestones: registry.milestones,
+  confidence: perceptionContext.confidence
+}).replace(/</g, '\\u003c');
+---
+
+<section class="monitor" data-media-monitor aria-labelledby="monitor-title">
+  <script type="application/json" data-monitor-meta set:html={clientMeta}></script>
+
+  <div class="monitor-hero">
+    <div>
+      <p class="monitor-kicker">Live evidence monitor</p>
+      <h2 id="monitor-title">Media coverage, public confidence and the events between them</h2>
+      <p class="monitor-lede">Police-related reporting from across the UK media is collected every six hours, classified by its stance towards policing and retained with its source evidence. Public-opinion measures and dated milestones are shown alongside it, but never treated as proof that coverage caused a change in trust.</p>
+    </div>
+    <aside class="monitor-principles" aria-label="How to read this monitor">
+      <strong>Three rules govern the data</strong>
+      <span>Stance is about the article’s position towards policing, not general emotion.</span>
+      <span>Publisher descriptions use publishers’ own words or say that none was found.</span>
+      <span>Every automated label remains preliminary until a person reviews it.</span>
+    </aside>
+  </div>
+
+  <div class="monitor-status" aria-live="polite">
+    <div><span>Last feed refresh</span><strong data-updated>Loading…</strong></div>
+    <div><span>Articles retained</span><strong data-article-count>—</strong></div>
+    <div><span>Healthy feeds</span><strong data-feed-count>—</strong></div>
+    <div><span>Coverage begins</span><strong data-started>—</strong></div>
+  </div>
+
+  <nav class="monitor-tabs" role="tablist" aria-label="Media perception monitor views">
+    <button type="button" role="tab" aria-selected="true" data-monitor-tab="coverage">Coverage</button>
+    <button type="button" role="tab" aria-selected="false" data-monitor-tab="timeline">Timeline</button>
+    <button type="button" role="tab" aria-selected="false" data-monitor-tab="evidence">Evidence</button>
+    <button type="button" role="tab" aria-selected="false" data-monitor-tab="polling">Polling</button>
+    <button type="button" role="tab" aria-selected="false" data-monitor-tab="sources">Sources & method</button>
+  </nav>
+
+  <div class="monitor-controls" data-controls>
+    <label>Publisher
+      <select data-source-filter>
+        <option value="all">All public-media publishers</option>
+        {mediaSources.map((source) => <option value={source.id}>{source.name}</option>)}
+      </select>
+    </label>
+    <label>Jurisdiction
+      <select data-jurisdiction-filter>
+        <option value="all">All UK jurisdictions</option>
+        <option>England & Wales</option><option>London</option><option>Wales</option><option>Scotland</option><option>Northern Ireland</option><option>UK / not resolved</option>
+      </select>
+    </label>
+    <label>Stance
+      <select data-stance-filter>
+        <option value="all">All labels</option><option value="favourable">Favourable</option><option value="critical">Critical</option><option value="balanced">Balanced / mixed</option><option value="neutral">Neutral</option><option value="context">Context only</option>
+      </select>
+    </label>
+    <label>Search evidence<input type="search" data-search placeholder="Headline, keyword or topic" /></label>
+  </div>
+
+  <div data-monitor-panel="coverage">
+    <div class="monitor-grid monitor-grid--summary">
+      <article class="monitor-card">
+        <p class="monitor-card-kicker">Selected coverage</p><h3>Preliminary stance distribution</h3>
+        <div class="stance-bars" data-stance-bars></div>
+        <p class="monitor-note">A neutral headline can conceal a strongly evaluative article. These labels use only the RSS headline and any summary the publisher supplies.</p>
+      </article>
+      <article class="monitor-card">
+        <p class="monitor-card-kicker">What is recurring</p><h3>Keywords and topics</h3>
+        <div class="keyword-cloud" data-keywords><span>Loading the latest feed data…</span></div>
+        <p class="monitor-note">Select a term to filter the evidence records that produced it.</p>
+      </article>
+    </div>
+    <div class="monitor-section-heading"><div><p class="monitor-card-kicker">Most recent</p><h3>Articles in the selected corpus</h3></div><span data-result-count>—</span></div>
+    <div class="article-list" data-recent-articles></div>
+    <div class="monitor-empty" data-empty hidden>No article currently matches these filters.</div>
+  </div>
+
+  <div data-monitor-panel="timeline" hidden>
+    <div class="monitor-section-heading"><div><p class="monitor-card-kicker">Parallel trends</p><h3>Coverage records and public opinion</h3></div><span>Association, not causation</span></div>
+    <div class="timeline-grid">
+      <article class="monitor-card"><h3 data-timeline-title>Monthly stance balance</h3><div class="timeline-chart" data-coverage-chart role="img" aria-label="Monthly media stance balance chart"></div><p class="monitor-note">The balance is favourable minus critical articles as a share of classifiable coverage. Collection starts at launch; no historical media values are fabricated.</p></article>
+      <article class="monitor-card"><h3>CSEW public perceptions</h3><div class="timeline-chart" data-polling-chart role="img" aria-label="Crime Survey for England and Wales police perception trend"></div><p class="monitor-note">Percentages use the survey’s own measures. The 2021 and 2022 gap records the pandemic interruption; the line does not bridge it.</p></article>
+    </div>
+    <div class="monitor-section-heading"><div><p class="monitor-card-kicker">Dated context</p><h3>Events that may help frame a hypothesis</h3></div></div>
+    <div class="milestone-grid">
+      {registry.milestones.map((milestone) => (
+        <article class:list={['milestone-card', `milestone-card--${milestone.category}`]}><span>{milestone.date}</span><h4>{milestone.title}</h4><p>{milestone.detail}</p><a href={milestone.sourceUrl} target="_blank" rel="noreferrer">Open primary or official source ↗</a></article>
+      ))}
+    </div>
+  </div>
+
+  <div data-monitor-panel="evidence" hidden>
+    <div class="monitor-section-heading"><div><p class="monitor-card-kicker">Audit trail</p><h3>Every visible trend resolves to article records</h3></div><span data-evidence-count>—</span></div>
+    <div class="evidence-table-wrap"><table class="evidence-table"><thead><tr><th>Date / source</th><th>Article</th><th>Role</th><th>Stance</th><th>Confidence</th><th>Record</th></tr></thead><tbody data-evidence-rows></tbody></table></div>
+  </div>
+
+  <div data-monitor-panel="polling" hidden>
+    <div class="monitor-section-heading"><div><p class="monitor-card-kicker">Public opinion</p><h3>Separate series for separate questions and jurisdictions</h3></div><span>Checked 4 August 2026</span></div>
+    <div class="polling-grid">
+      {registry.polling.map((poll) => (
+        <article class="poll-card"><span>{poll.scope} · {poll.publisher}</span><h3>{poll.measure}</h3><strong>{poll.value === null ? 'Tracked' : `${poll.value}%`}</strong><p>{poll.period}</p><details><summary>Question and limits</summary><p>{poll.question}</p><p>{poll.note}</p></details><a href={poll.sourceUrl} target="_blank" rel="noreferrer">Open source ↗</a></article>
+      ))}
+    </div>
+  </div>
+
+  <div data-monitor-panel="sources" hidden>
+    <div class="monitor-section-heading"><div><p class="monitor-card-kicker">Source register</p><h3>Publishers are not assigned political labels by this tool</h3></div><span>{registry.sources.length} feeds registered</span></div>
+    <p class="source-rule">Where a publisher describes itself as liberal, progressive, left, socialist or politically non-aligned, the register records and links that wording. Otherwise it says no left/right self-description was found. That is evidence of how a publisher presents itself, not an independent finding about political position.</p>
+    <div class="evidence-table-wrap"><table class="source-table"><thead><tr><th>Source</th><th>Class</th><th>Publisher’s own description</th><th>Role</th><th>Feed</th><th>Latest health</th></tr></thead><tbody>
+      {registry.sources.map((source) => (
+        <tr data-source-row={source.id}><td><strong>{source.name}</strong></td><td>{source.class}</td><td><a href={source.aboutUrl} target="_blank" rel="noreferrer">{source.selfDescription} ↗</a></td><td>{source.role}</td><td><a href={source.feedUrl} target="_blank" rel="noreferrer">RSS / Atom ↗</a></td><td><span class:list={['feed-state', `feed-state--${source.state}`]} data-feed-health={source.id}>{source.state === 'quarantine' ? 'Quarantined' : 'Awaiting refresh'}</span></td></tr>
+      ))}
+    </tbody></table></div>
+    <div class="method-grid">
+      <article><h3>What is stored</h3><p>Canonical URL, publisher and feed, timestamps, jurisdiction, relevance role, preliminary stance, confidence, triggering phrases, topics, keywords and a concise rationale. Full article bodies are not copied.</p></article>
+      <article><h3>How stance works</h3><p>Rules look for evaluative phrases attached to a policing target. Favourable and critical evidence in the same feed text produces a balanced label. No trigger produces neutral, not favourable.</p></article>
+      <article><h3>What can fail</h3><p>Feeds can disappear, summaries can be thin, duplicated stories can survive and a headline can misrepresent the full article. Feed failures remain visible and low-confidence labels need review.</p></article>
+      <article><h3>What the comparison cannot prove</h3><p>Coverage and polling can move at the same time for many reasons. A causal claim would need a separate design with exposure, timing and plausible alternative explanations tested.</p></article>
+    </div>
+    <details class="historical-note"><summary>Historical baseline and method note</summary><p>The earlier 2000–2025 series remains the historical baseline in the linked data story. It is largely Guardian-led, uses a headline lexicon and calculates source diversity from a capped provenance sample. It must not be presented as the same measure as this multi-source, target-aware monitor.</p><a href="/data-stories/the-perception-of-the-police-in-online-media">Read the historical data story →</a></details>
+  </div>
+
+  <dialog class="evidence-dialog" data-evidence-dialog><button type="button" class="dialog-close" data-dialog-close aria-label="Close evidence record">Close</button><p class="monitor-card-kicker" data-dialog-id></p><h3 data-dialog-title></h3><div data-dialog-body></div><a data-dialog-link target="_blank" rel="noreferrer">Open source article ↗</a></dialog>
+  <noscript><p class="monitor-empty">JavaScript is required to load the refreshed RSS evidence. The polling, milestones, source register and method remain available.</p></noscript>
+</section>
+
+<style>
+  .monitor{--m-ink:#14263a;--m-muted:#5d6873;--m-line:#d8d0c2;--m-paper:#f5f1e8;--m-card:#fffdf8;--m-blue:#176b87;--m-orange:#d9642b;--m-green:#27745b;--m-red:#a64040;color:var(--m-ink);font-family:var(--font-sans,system-ui,sans-serif)}
+  .monitor *{box-sizing:border-box}.monitor a{color:var(--m-blue);text-underline-offset:3px}.monitor h2,.monitor h3,.monitor h4{font-family:var(--font-display,Georgia,serif);letter-spacing:-.025em}.monitor-hero{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,.65fr);gap:clamp(1.5rem,4vw,4rem);align-items:end;padding:1rem 0 2rem}.monitor-kicker,.monitor-card-kicker{margin:0 0 .45rem;color:var(--m-orange);font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.monitor-hero h2{font-size:clamp(2rem,4.5vw,4rem);line-height:1.03;margin:.3rem 0 1rem;max-width:15ch}.monitor-lede{font-family:var(--font-serif,Georgia,serif);font-size:1.1rem;line-height:1.65;color:#3f4d5b;max-width:72ch}.monitor-principles{display:grid;gap:.7rem;border:1px solid var(--m-line);border-top:4px solid var(--m-blue);border-radius:14px;background:var(--m-card);padding:1.2rem}.monitor-principles span{padding-top:.7rem;border-top:1px solid var(--m-line);font-size:.85rem;line-height:1.45;color:var(--m-muted)}
+  .monitor-status{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--m-line);border-radius:12px;background:var(--m-card);overflow:hidden}.monitor-status div{padding:1rem;border-left:1px solid var(--m-line)}.monitor-status div:first-child{border-left:0}.monitor-status span{display:block;color:var(--m-muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800}.monitor-status strong{display:block;margin-top:.25rem;font-size:.95rem}.monitor-tabs{display:flex;gap:.3rem;overflow:auto;margin-top:1rem;border-bottom:1px solid var(--m-line)}.monitor-tabs button{appearance:none;border:0;border-bottom:3px solid transparent;background:transparent;color:var(--m-muted);padding:.8rem .9rem;font-weight:750;white-space:nowrap;cursor:pointer}.monitor-tabs button[aria-selected="true"]{color:var(--m-ink);border-bottom-color:var(--m-orange)}
+  .monitor-controls{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;background:var(--m-paper);padding:1rem;margin:1rem 0 1.5rem;border-radius:12px;position:sticky;top:.5rem;z-index:8;box-shadow:0 5px 22px rgba(20,38,58,.08)}.monitor-controls label{font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;color:var(--m-muted);font-weight:800}.monitor-controls select,.monitor-controls input{display:block;width:100%;margin-top:.35rem;min-height:42px;border:1px solid #bdb5a8;border-radius:8px;background:#fff;color:var(--m-ink);padding:.55rem;font-size:.88rem;text-transform:none;letter-spacing:normal}.monitor-grid{display:grid;gap:1rem}.monitor-grid--summary{grid-template-columns:1fr 1fr}.monitor-card,.poll-card{border:1px solid var(--m-line);border-radius:14px;background:var(--m-card);padding:1.2rem}.monitor-card h3,.poll-card h3{font-size:1.35rem;margin:.2rem 0 1rem}.monitor-note{color:var(--m-muted);font-size:.78rem;line-height:1.5;margin:.9rem 0 0}.stance-bars{display:grid;gap:.65rem}.stance-row{display:grid;grid-template-columns:92px 1fr 34px;gap:.6rem;align-items:center;font-size:.78rem}.stance-track{height:10px;background:#e7e1d7;border-radius:99px;overflow:hidden}.stance-fill{height:100%;border-radius:inherit}.stance-fill--favourable{background:var(--m-green)}.stance-fill--critical{background:var(--m-red)}.stance-fill--balanced{background:#9b6b18}.stance-fill--neutral{background:#657687}.stance-fill--context{background:#88749f}.keyword-cloud{display:flex;flex-wrap:wrap;gap:.5rem;align-content:flex-start}.keyword-cloud button,.keyword-cloud span{border:1px solid var(--m-line);border-radius:99px;background:var(--m-paper);padding:.4rem .65rem;font-size:.78rem;color:var(--m-ink)}.keyword-cloud button{cursor:pointer}.keyword-cloud button:hover{border-color:var(--m-orange)}
+  .monitor-section-heading{display:flex;justify-content:space-between;gap:1rem;align-items:end;margin:2rem 0 .9rem}.monitor-section-heading h3{font-size:1.55rem;margin:0}.monitor-section-heading>span{font-size:.75rem;color:var(--m-muted)}.article-list{display:grid;gap:.65rem}.article-card{display:grid;grid-template-columns:150px minmax(0,1fr) auto;gap:1rem;align-items:center;border-top:1px solid var(--m-line);padding:.9rem .25rem}.article-card:first-child{border-top:0}.article-meta{font-size:.72rem;color:var(--m-muted)}.article-card h4{font-family:var(--font-serif,Georgia,serif);font-size:1rem;line-height:1.4;margin:0}.article-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.4rem}.stance-pill,.topic-pill{display:inline-flex;border-radius:99px;padding:.24rem .5rem;font-size:.65rem;font-weight:750}.stance-pill--favourable{background:#dcebe5;color:#1f5f4a}.stance-pill--critical{background:#f2dede;color:#8b3434}.stance-pill--balanced{background:#f4e9cb;color:#735012}.stance-pill--neutral{background:#e4e9ec;color:#4b5d69}.stance-pill--context{background:#ece6f2;color:#665577}.topic-pill{background:var(--m-paper);color:var(--m-muted)}.record-button,.dialog-close{border:1px solid var(--m-line);border-radius:99px;background:transparent;padding:.45rem .65rem;color:var(--m-ink);font-size:.73rem;cursor:pointer}.monitor-empty{border:1px dashed var(--m-line);border-radius:12px;padding:2rem;text-align:center;color:var(--m-muted)}
+  .timeline-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.timeline-chart{min-height:250px;display:grid;place-items:center;background:var(--m-paper);border-radius:10px;overflow:hidden}.timeline-chart svg{width:100%;height:auto}.timeline-chart .chart-empty{padding:2rem;text-align:center;color:var(--m-muted);font-size:.83rem}.milestone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}.milestone-card{border:1px solid var(--m-line);border-left:4px solid var(--m-blue);border-radius:10px;padding:1rem;background:var(--m-card)}.milestone-card--case{border-left-color:var(--m-red)}.milestone-card--disorder{border-left-color:#9b6b18}.milestone-card--platform{border-left-color:var(--m-orange)}.milestone-card--measurement{border-left-color:#7b66a5}.milestone-card span{font-size:.67rem;text-transform:uppercase;letter-spacing:.07em;color:var(--m-muted);font-weight:800}.milestone-card h4{font-size:1rem;margin:.35rem 0}.milestone-card p,.milestone-card a{font-size:.75rem;line-height:1.5}
+  .evidence-table-wrap{overflow:auto;border:1px solid var(--m-line);border-radius:12px}.evidence-table,.source-table{width:100%;border-collapse:collapse;min-width:850px;background:var(--m-card);font-size:.77rem}.evidence-table th,.source-table th{text-align:left;background:var(--m-paper);color:var(--m-muted);font-size:.65rem;text-transform:uppercase;letter-spacing:.06em}.evidence-table th,.evidence-table td,.source-table th,.source-table td{padding:.75rem;border-bottom:1px solid var(--m-line);vertical-align:top}.polling-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.poll-card{display:flex;flex-direction:column;min-height:300px}.poll-card>span{color:var(--m-orange);font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;font-weight:800}.poll-card>strong{font-family:var(--font-display,Georgia,serif);font-size:2.4rem}.poll-card p,.poll-card details,.poll-card a{font-size:.75rem;line-height:1.5}.poll-card a{margin-top:auto}.source-rule{font-family:var(--font-serif,Georgia,serif);max-width:85ch;line-height:1.65}.feed-state{font-size:.68rem;font-weight:800}.feed-state--healthy{color:var(--m-green)}.feed-state--failed,.feed-state--quarantine{color:var(--m-red)}.feed-state--candidate{color:#8b641b}.method-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1rem}.method-grid article{border-top:3px solid var(--m-blue);background:var(--m-paper);padding:1rem}.method-grid h3{font-size:1rem;margin:0 0 .5rem}.method-grid p,.historical-note{font-size:.78rem;line-height:1.6;color:var(--m-muted)}.historical-note{margin-top:1rem;border:1px solid var(--m-line);border-radius:10px;padding:1rem}.historical-note summary{color:var(--m-ink);font-weight:800;cursor:pointer}
+  .evidence-dialog{width:min(680px,calc(100% - 2rem));border:1px solid var(--m-line);border-radius:16px;padding:1.4rem;color:var(--m-ink);background:var(--m-card)}.evidence-dialog::backdrop{background:rgba(20,38,58,.6)}.dialog-close{float:right}.evidence-dialog h3{font-size:1.4rem;padding-right:5rem}.evidence-dialog [data-dialog-body]{display:grid;gap:.7rem;font-size:.82rem;line-height:1.6;margin:1rem 0}.evidence-dialog [data-dialog-body] p{margin:0;padding-top:.65rem;border-top:1px solid var(--m-line)}
+  @media(max-width:900px){.monitor-hero,.monitor-grid--summary,.timeline-grid{grid-template-columns:1fr}.monitor-status{grid-template-columns:repeat(2,1fr)}.monitor-status div:nth-child(3){border-left:0;border-top:1px solid var(--m-line)}.monitor-status div:nth-child(4){border-top:1px solid var(--m-line)}.monitor-controls{grid-template-columns:repeat(2,1fr);position:static}.milestone-grid,.polling-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.monitor-status,.monitor-controls,.milestone-grid,.polling-grid,.method-grid{grid-template-columns:1fr}.monitor-status div{border-left:0!important;border-top:1px solid var(--m-line)}.monitor-status div:first-child{border-top:0}.article-card{grid-template-columns:1fr}.record-button{justify-self:start}.monitor-section-heading{align-items:start;flex-direction:column}.monitor-hero h2{font-size:2.45rem}}
+</style>
+
+<script is:inline>
+  (() => {
+    const root = document.querySelector('[data-media-monitor]'); if (!root) return;
+    const meta = JSON.parse(root.querySelector('[data-monitor-meta]').textContent || '{}');
+    let payload = { articles: [], rollups: [], feedHealth: [] }; let filtered = [];
+    const label = { favourable: 'Favourable', critical: 'Critical', balanced: 'Balanced / mixed', neutral: 'Neutral', context: 'Context only' };
+    const qs = (selector) => root.querySelector(selector); const all = (selector) => [...root.querySelectorAll(selector)];
+    const fmtDate = (value, options = { dateStyle: 'medium' }) => { const date = new Date(value); return Number.isNaN(date.getTime()) ? 'Unknown' : new Intl.DateTimeFormat('en-GB', options).format(date); };
+    const selected = (selector) => qs(selector)?.value || 'all';
+    const el = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
+
+    function activateTab(id) { all('[data-monitor-tab]').forEach((button) => button.setAttribute('aria-selected', String(button.dataset.monitorTab === id))); all('[data-monitor-panel]').forEach((panel) => { panel.hidden = panel.dataset.monitorPanel !== id; }); qs('[data-controls]').hidden = id === 'polling' || id === 'sources'; if (id === 'timeline') renderCharts(); }
+    all('[data-monitor-tab]').forEach((button) => button.addEventListener('click', () => activateTab(button.dataset.monitorTab)));
+
+    function applyFilters() {
+      const source = selected('[data-source-filter]'), jurisdiction = selected('[data-jurisdiction-filter]'), stance = selected('[data-stance-filter]'), query = (qs('[data-search]').value || '').trim().toLowerCase();
+      filtered = (payload.articles || []).filter((article) => { const jurisdictionMatch = jurisdiction === 'all' || article.jurisdiction === jurisdiction || (jurisdiction === 'England & Wales' && ['London', 'Wales'].includes(article.jurisdiction)); const haystack = [article.title, article.sourceName, article.excerpt, ...(article.topics || []), ...(article.keywords || [])].join(' ').toLowerCase(); return article.sourceClass === 'media' && (source === 'all' || article.sourceId === source) && jurisdictionMatch && (stance === 'all' || article.stance === stance) && (!query || haystack.includes(query)); });
+      renderCoverage(); renderEvidence();
+    }
+
+    function renderCoverage() {
+      const counts = { favourable: 0, critical: 0, balanced: 0, neutral: 0, context: 0 }; filtered.forEach((article) => { if (Object.hasOwn(counts, article.stance)) counts[article.stance] += 1; }); const total = Math.max(1, filtered.length);
+      const barHost = qs('[data-stance-bars]'); barHost.replaceChildren(); Object.entries(counts).forEach(([stance, count]) => { const row = el('div', 'stance-row'); row.append(el('span', '', label[stance])); const track = el('div', 'stance-track'), fill = el('div', `stance-fill stance-fill--${stance}`); fill.style.width = `${count / total * 100}%`; track.append(fill); row.append(track, el('strong', '', String(count))); barHost.append(row); });
+      const wordCounts = new Map(); filtered.forEach((article) => [...(article.topics || []), ...(article.keywords || [])].forEach((word) => wordCounts.set(word, (wordCounts.get(word) || 0) + 1))); const keywordHost = qs('[data-keywords]'); keywordHost.replaceChildren(); [...wordCounts].sort((a,b) => b[1]-a[1] || a[0].localeCompare(b[0])).slice(0,18).forEach(([word,count]) => { const button = el('button', '', `${word} · ${count}`); button.type = 'button'; button.addEventListener('click', () => { qs('[data-search]').value = word; applyFilters(); }); keywordHost.append(button); }); if (!keywordHost.children.length) keywordHost.append(el('span', '', 'No recurring terms in this selection yet.'));
+      const list = qs('[data-recent-articles]'); list.replaceChildren(); filtered.slice(0,12).forEach((article) => list.append(articleCard(article))); qs('[data-result-count]').textContent = `${filtered.length.toLocaleString('en-GB')} records`; qs('[data-empty]').hidden = filtered.length > 0;
+    }
+
+    function articleCard(article) {
+      const card = el('article', 'article-card'), metaCell = el('div', 'article-meta'); metaCell.append(document.createTextNode(`${fmtDate(article.publishedAt)}\n`), el('strong','',article.sourceName)); metaCell.style.whiteSpace = 'pre-line'; const main = el('div'), title = el('h4'), link = el('a','',article.title); link.href = article.url; link.target = '_blank'; link.rel = 'noreferrer'; title.append(link); main.append(title); const tags = el('div','article-tags'); tags.append(el('span',`stance-pill stance-pill--${article.stance}`,label[article.stance] || article.stance)); (article.topics || []).slice(0,3).forEach((topic) => tags.append(el('span','topic-pill',topic))); main.append(tags); const button = el('button','record-button','Why?'); button.type='button'; button.addEventListener('click',()=>openRecord(article)); card.append(metaCell,main,button); return card;
+    }
+
+    function renderEvidence() {
+      const body = qs('[data-evidence-rows]'); body.replaceChildren(); filtered.slice(0,250).forEach((article) => { const row = document.createElement('tr'), source = document.createElement('td'); source.append(el('strong','',fmtDate(article.publishedAt)), document.createElement('br'), document.createTextNode(article.sourceName)); const headline = document.createElement('td'), link = el('a','',article.title); link.href=article.url; link.target='_blank'; link.rel='noreferrer'; headline.append(link); const role = el('td','',article.role), stance = document.createElement('td'); stance.append(el('span',`stance-pill stance-pill--${article.stance}`,label[article.stance] || article.stance)); const confidence = el('td','',`${Math.round((article.confidence || 0)*100)}%`), action = document.createElement('td'), button=el('button','record-button','Open'); button.type='button'; button.addEventListener('click',()=>openRecord(article)); action.append(button); row.append(source,headline,role,stance,confidence,action); body.append(row); }); qs('[data-evidence-count]').textContent = `${filtered.length.toLocaleString('en-GB')} matching records`;
+    }
+
+    function openRecord(article) {
+      qs('[data-dialog-id]').textContent = `${article.id} · ${article.sourceName}`; qs('[data-dialog-title]').textContent = article.title; const body = qs('[data-dialog-body]'); body.replaceChildren(); [['Classification', `${label[article.stance] || article.stance}; ${Math.round((article.confidence || 0)*100)}% rule confidence; ${article.reviewStatus}.`], ['Target and role', `${article.role}; ${article.jurisdiction}.`], ['Input used', article.inputUsed], ['Rationale', article.rationale], ['Trigger evidence', (article.evidence || []).join(', ') || 'No evaluative trigger; preliminary neutral label.'], ['Topics and keywords', [...(article.topics || []), ...(article.keywords || [])].join(', ') || 'None extracted.'], ['Provenance', `Published ${fmtDate(article.publishedAt, {dateStyle:'medium',timeStyle:'short'})}; fetched ${fmtDate(article.fetchedAt, {dateStyle:'medium',timeStyle:'short'})}.`]].forEach(([name,value]) => { const p = el('p'); p.append(el('strong','',`${name}: `), document.createTextNode(value || 'Not recorded')); body.append(p); }); const link = qs('[data-dialog-link]'); link.href=article.url; qs('[data-evidence-dialog]').showModal();
+    }
+    qs('[data-dialog-close]').addEventListener('click',()=>qs('[data-evidence-dialog]').close());
+
+    function chartSvg(points, valueKey, colour, min, max) {
+      if (!points.length) return '<div class="chart-empty">The live collection has not yet accumulated enough monthly points for a trend. The evidence table is still available.</div>';
+      const w=640,h=260,p=42,usableW=w-p*2,usableH=h-p*2,x=(i)=>p+(points.length===1?usableW/2:i/(points.length-1)*usableW),y=(v)=>h-p-((v-min)/(max-min||1))*usableH; let paths=[],current=[]; points.forEach((point,i)=>{const v=point[valueKey];if(v===null||v===undefined){if(current.length)paths.push(current),current=[];return;}current.push(`${current.length?'L':'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`);});if(current.length)paths.push(current);
+      const grid=[min,(min+max)/2,max].map(v=>`<g><line x1="${p}" y1="${y(v)}" x2="${w-p}" y2="${y(v)}" stroke="#d8d0c2"/><text x="${p-7}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#5d6873">${Math.round(v)}</text></g>`).join(''), labels=points.map((point,i)=>i===0||i===points.length-1||i===Math.floor(points.length/2)?`<text x="${x(i)}" y="${h-12}" text-anchor="middle" font-size="11" fill="#5d6873">${point.month||point.year}</text>`:'').join(''), dots=points.map((point,i)=>point[valueKey]===null||point[valueKey]===undefined?'':`<circle cx="${x(i)}" cy="${y(point[valueKey])}" r="3" fill="${colour}"><title>${point.month||point.year}: ${point[valueKey]}</title></circle>`).join(''); return `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true">${grid}${paths.map(d=>`<path d="${d.join(' ')}" fill="none" stroke="${colour}" stroke-width="3"/>`).join('')}${dots}${labels}</svg>`;
+    }
+
+    function renderCharts() {
+      const source=selected('[data-source-filter]'), rollups=(payload.rollups||[]).filter(row=>source==='all'||row.sourceId===source), byMonth=new Map(); rollups.forEach(row=>{const acc=byMonth.get(row.month)||{month:row.month,favourable:0,critical:0,total:0};acc.favourable+=row.favourable;acc.critical+=row.critical;acc.total+=row.total;byMonth.set(row.month,acc);}); const coverage=[...byMonth.values()].sort((a,b)=>a.month.localeCompare(b.month)).map(row=>({...row,balance:row.total?Math.round((row.favourable-row.critical)/row.total*100):0})); qs('[data-coverage-chart]').innerHTML=chartSvg(coverage,'balance','#d9642b',-100,100); const confidence=(meta.confidence||[]).map(row=>({year:row.year,goodJob:row.goodJob})); qs('[data-polling-chart]').innerHTML=chartSvg(confidence,'goodJob','#176b87',40,70); const chosen=meta.sources.find(item=>item.id===source); qs('[data-timeline-title]').textContent=`Monthly stance balance · ${chosen?chosen.name:'all media publishers'}`;
+    }
+
+    function renderHealth() { const healthMap=new Map((payload.feedHealth||[]).map(item=>[item.sourceId,item])); all('[data-feed-health]').forEach((node)=>{const item=healthMap.get(node.dataset.feedHealth);if(!item)return;node.textContent=item.state==='healthy'?`Healthy · ${item.itemCount} relevant`:'Fetch failed';node.className=`feed-state feed-state--${item.state}`;node.title=item.error||`Responded in ${item.responseMs} ms`;}); }
+    ['[data-source-filter]','[data-jurisdiction-filter]','[data-stance-filter]'].forEach(selector=>qs(selector).addEventListener('change',()=>{applyFilters();renderCharts();})); qs('[data-search]').addEventListener('input',applyFilters);
+    fetch('/perception-live.json',{cache:'no-store'}).then(response=>{if(!response.ok)throw new Error(`HTTP ${response.status}`);return response.json();}).then(data=>{payload=data;qs('[data-updated]').textContent=fmtDate(data.generatedAt,{dateStyle:'medium',timeStyle:'short'});qs('[data-started]').textContent=fmtDate(data.collectionStartedAt);qs('[data-article-count]').textContent=(data.articles||[]).length.toLocaleString('en-GB');const healthy=(data.feedHealth||[]).filter(feed=>feed.state==='healthy').length;qs('[data-feed-count]').textContent=`${healthy} of ${(data.feedHealth||[]).length}`;renderHealth();applyFilters();}).catch(()=>{qs('[data-updated]').textContent='Refresh unavailable';qs('[data-feed-count]').textContent='See source register';applyFilters();}); renderCharts();
+  })();
+</script>
