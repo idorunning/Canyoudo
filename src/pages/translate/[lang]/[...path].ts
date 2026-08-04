@@ -191,10 +191,10 @@ export const GET: APIRoute = async ({ params, request }) => {
 
   const path = (params.path ?? '').replace(/^\/+/, '');
   if (path.startsWith('translate/') || path.includes('..')) return new Response('Invalid path', { status: 400 });
-  // Use the current deploy origin, not Astro.site. This keeps deploy previews
-  // self-contained and means a newly deployed article is translated from the
-  // same atomic release rather than an older production copy.
-  const origin = new URL(request.url).origin;
+  // Netlify exposes the immutable URL for the exact atomic deploy. Fetching
+  // through it avoids a custom-domain loop from inside the server function and
+  // prevents a translation from reading an older release during deployment.
+  const origin = process.env.DEPLOY_PRIME_URL ?? process.env.URL ?? new URL(request.url).origin;
   const sourceUrl = new URL(`/${path}`, origin);
 
   try {
