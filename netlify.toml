@@ -25,6 +25,15 @@
   PUBLIC_MAILERLITE_ACCOUNT_ID = "2415278"
   PUBLIC_MAILERLITE_FORM_ID = "vYwUFz"
 
+# The tools portal moved to the Evidence & Research Lab. Keeping this at the
+# edge preserves old bookmarks and sign-in return paths while ensuring deploy
+# previews stay on their own origin rather than jumping to production.
+[[redirects]]
+  from = "/research-tools"
+  to = "/research-lab"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]

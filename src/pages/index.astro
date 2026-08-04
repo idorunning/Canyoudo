@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { SECTION_LABELS } from "../content/config";
 import readingTime from "reading-time";
+import ResearchLabPromo from "../components/ResearchLabPromo.astro";
 
 import type { Section } from "../content/config";
 
@@ -127,6 +128,8 @@ const pitchBody = encodeURIComponent(
         </article>
       )
     }
+
+    <ResearchLabPromo />
 
     {
       moreStories.length > 0 && (

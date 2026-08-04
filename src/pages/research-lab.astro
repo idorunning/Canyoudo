@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MemberGate from '../components/MemberGate.astro';
+
+const hasAuth = Boolean(
+  import.meta.env.PUBLIC_SUPABASE_URL && import.meta.env.PUBLIC_SUPABASE_ANON_KEY
+);
+
+const tools = [
+  {
+    number: '01',
+    href: '/research',
+    title: 'Research Assistant',
+    purpose: 'Find and synthesise',
+    description: 'Start with a policing question. Search trusted sources, see what is worth reading first or generate a longer cited research review.',
+    meta: 'Search · Overview · Full review',
+    visual: 'sources',
+  },
+  {
+    number: '02',
+    href: '/data',
+    title: 'Crime Dashboard',
+    purpose: 'Explore recorded patterns',
+    description: 'Work through the latest recorded-crime and stop-and-search data by force and area, with the limits kept visible.',
+    meta: '43 forces · Refreshed monthly',
+    visual: 'bars',
+  },
+  {
+    number: '03',
+    href: '/perception',
+    title: 'Media Perception',
+    purpose: 'Test the public narrative',
+    description: 'Watch the language used about police in UK news grow, shrink and change in tone across more than a quarter of a century.',
+    meta: 'UK news · 1999–2026',
+    visual: 'words',
+  },
+  {
+    number: '04',
+    href: '/practical-summaries',
+    title: 'Practical Summaries',
+    purpose: 'Turn evidence into decisions',
+    description: 'Read the problem, the evidence and the operational implication without having to reconstruct the argument from a long article.',
+    meta: 'Briefings · Sources retained',
+    visual: 'brief',
+  },
+];
+---
+
+<BaseLayout
+  title="Evidence & Research Lab"
+  description="A practical evidence and research lab for policing: search trusted sources, explore crime data, examine media language and turn research into usable briefings."
+>
+  <div class="research-lab">
+    <header class="lab-hero">
+      <div class="lab-hero__copy">
+        <span class="lab-kicker">Evidence &amp; Research Lab</span>
+        <h1>Put a policing question on the workbench</h1>
+        <p>
+          A place to test ideas, explore evidence and learn by using the tools.
+          Start with a question, follow the sources and see where the evidence takes you.
+        </p>
+        <div class="lab-status" aria-label="Lab access information">
+          <span>Free member access</span>
+          <span>One account unlocks all</span>
+          <span>Four working tools</span>
+        </div>
+      </div>
+
+      <div class="lab-method" aria-label="Research method">
+        <span><small>01</small><strong>Ask</strong><em>Frame the question</em></span>
+        <span><small>02</small><strong>Interrogate</strong><em>Check the sources</em></span>
+        <span><small>03</small><strong>Understand</strong><em>Test the pattern</em></span>
+        <span><small>04</small><strong>Use</strong><em>Make the decision</em></span>
+      </div>
+    </header>
+
+    <section class="instrument-section" aria-labelledby="instrument-heading">
+      <header class="section-title">
+        <div>
+          <span>Open instruments</span>
+          <h2 id="instrument-heading">Choose how you want to investigate</h2>
+        </div>
+        <p>The lab will grow as new ideas are tested and earn their place.</p>
+      </header>
+
+      <MemberGate hasAuth={hasAuth} feature="the Evidence & Research Lab">
+        <div class="instrument-grid">
+          {tools.map((tool) => (
+            <a class="instrument" href={tool.href}>
+              <div class="instrument__head">
+                <span>{tool.number}</span>
+                <small>{tool.purpose}</small>
+              </div>
+
+              <div class={`instrument__visual instrument__visual--${tool.visual}`} aria-hidden="true">
+                {tool.visual === 'sources' && (
+                  <><i></i><i></i><i></i><b></b></>
+                )}
+                {tool.visual === 'bars' && (
+                  <><i style="height:38%"></i><i style="height:61%"></i><i style="height:48%"></i><i style="height:79%"></i><i style="height:100%"></i><i style="height:70%"></i></>
+                )}
+                {tool.visual === 'words' && (
+                  <><i style="width:88%"></i><i style="width:64%"></i><i style="width:74%"></i><i style="width:43%"></i></>
+                )}
+                {tool.visual === 'brief' && (
+                  <><i></i><i></i><i></i><b></b></>
+                )}
+              </div>
+
+              <div class="instrument__copy">
+                <h3>{tool.title}</h3>
+                <p>{tool.description}</p>
+              </div>
+              <div class="instrument__foot">
+                <small>{tool.meta}</small>
+                <strong>Open tool <span aria-hidden="true">→</span></strong>
+              </div>
+            </a>
+          ))}
+        </div>
+      </MemberGate>
+    </section>
+
+    <section class="lab-notes" aria-labelledby="lab-notes-heading">
+      <div>
+        <span>Lab note 001</span>
+        <h2 id="lab-notes-heading">The source is still more important than the summary</h2>
+      </div>
+      <p>
+        These tools are designed to help you find, compare and understand evidence. They do not
+        remove the need to read the underlying source, check the jurisdiction or apply professional
+        judgement. Treat generated analysis as the start of scrutiny, not the end of it.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .research-lab{--lab-bg:#fff;--lab-ink:#101318;--lab-muted:#596571;--lab-line:#d8e0e6;--lab-wash:#edf6fb;--lab-blue:#086db8;--lab-orange:#ef5b2a;max-width:72rem;margin:0 auto;background:var(--lab-bg);color:var(--lab-ink)}
+  :global(html.dark) .research-lab{--lab-bg:#09111d;--lab-ink:#edf3f8;--lab-muted:#b7c2cd;--lab-line:#2a3c4e;--lab-wash:#102234;--lab-blue:#43b9ee;--lab-orange:#ff7a49}
+  .research-lab a{color:inherit;text-decoration:none}.lab-hero{border-bottom:7px solid var(--lab-ink);background:var(--lab-wash)}.lab-hero__copy{padding:35px 18px 31px}.lab-kicker,.section-title span,.lab-notes span{display:inline-flex;align-items:center;gap:8px;color:var(--lab-blue);font-size:10px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}.lab-kicker:before{width:24px;height:3px;content:'';background:var(--lab-orange)}.lab-hero h1{max-width:780px;margin:12px 0 13px;font-size:clamp(38px,11vw,64px);font-weight:880;line-height:.94;letter-spacing:-.06em}.lab-hero__copy>p{max-width:700px;margin:0;color:var(--lab-muted);font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.48}.lab-status{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}.lab-status span{padding:7px 9px;border:1px solid var(--lab-line);background:var(--lab-bg);font-size:10px;font-weight:800;text-transform:uppercase}
+  .lab-method{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--lab-line);background:var(--lab-bg)}.lab-method span{display:flex;min-height:91px;flex-direction:column;justify-content:center;padding:14px 16px;border-right:1px solid var(--lab-line);border-bottom:1px solid var(--lab-line)}.lab-method small{color:var(--lab-blue);font-size:9px;font-weight:850}.lab-method strong{margin-top:3px;font-size:16px}.lab-method em{margin-top:3px;color:var(--lab-muted);font-family:Georgia,'Times New Roman',serif;font-size:12px;font-style:normal}
+  .instrument-section{padding:31px 17px 44px}.section-title{display:grid;gap:12px;margin-bottom:20px;padding-bottom:15px;border-bottom:2px solid var(--lab-ink)}.section-title h2{max-width:620px;margin:5px 0 0;font-size:26px;font-weight:850;line-height:1.04;letter-spacing:-.04em}.section-title>p{max-width:420px;margin:0;color:var(--lab-muted);font-family:Georgia,'Times New Roman',serif;font-size:13px;line-height:1.4}.instrument-grid{display:grid;gap:12px}.instrument{display:flex;min-height:360px;flex-direction:column;border:1px solid var(--lab-line);background:var(--lab-bg);transition:transform .2s ease,box-shadow .2s ease}.instrument:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(13,32,48,.09)}.instrument__head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--lab-line)}.instrument__head>span{color:var(--lab-blue);font-size:10px;font-weight:850;letter-spacing:.1em}.instrument__head small{color:var(--lab-muted);font-size:9px;font-weight:800;text-transform:uppercase}.instrument__visual{position:relative;height:96px;margin:18px 14px 4px;overflow:hidden;background:var(--lab-wash)}.instrument__visual--bars{display:flex;align-items:flex-end;gap:6px;padding:17px 18px}.instrument__visual--bars i{flex:1;background:var(--lab-blue);opacity:.8}.instrument__visual--bars i:nth-child(-n+2){opacity:.3}.instrument__visual--words{display:flex;flex-direction:column;justify-content:center;gap:7px;padding:16px 18px}.instrument__visual--words i{display:block;height:8px;background:var(--lab-blue)}.instrument__visual--words i:nth-child(2),.instrument__visual--words i:nth-child(4){background:var(--lab-orange)}.instrument__visual--sources i{position:absolute;width:35px;height:35px;border:2px solid var(--lab-blue);border-radius:50%;top:29px}.instrument__visual--sources i:nth-child(1){left:17%}.instrument__visual--sources i:nth-child(2){left:calc(50% - 17px)}.instrument__visual--sources i:nth-child(3){right:17%}.instrument__visual--sources b{position:absolute;left:22%;right:22%;top:46px;border-top:2px dashed var(--lab-orange)}.instrument__visual--brief{padding:18px}.instrument__visual--brief i{display:block;width:78%;height:5px;margin-bottom:8px;background:var(--lab-line)}.instrument__visual--brief i:first-child{width:48%;height:9px;background:var(--lab-ink)}.instrument__visual--brief b{display:block;width:30%;height:4px;margin-top:15px;background:var(--lab-orange)}.instrument__copy{padding:13px 15px 18px}.instrument__copy h3{margin:0 0 8px;font-size:23px;font-weight:850;letter-spacing:-.035em}.instrument__copy p{margin:0;color:var(--lab-muted);font-family:Georgia,'Times New Roman',serif;font-size:14px;line-height:1.45}.instrument__foot{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-top:auto;padding:14px 15px;border-top:1px solid var(--lab-line)}.instrument__foot small{max-width:55%;color:var(--lab-muted);font-size:9px;font-weight:800;text-transform:uppercase}.instrument__foot strong{color:var(--lab-blue);font-size:12px}.instrument__foot strong span{margin-left:7px;color:var(--lab-orange)}
+  .lab-notes{display:grid;gap:15px;padding:28px 18px 35px;border-top:7px solid var(--lab-ink);background:var(--lab-wash)}.lab-notes h2{max-width:570px;margin:7px 0 0;font-size:25px;font-weight:850;line-height:1.07;letter-spacing:-.04em}.lab-notes p{max-width:620px;margin:0;color:var(--lab-muted);font-family:Georgia,'Times New Roman',serif;font-size:14px;line-height:1.55}
+  @media(min-width:760px){.lab-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr)}.lab-hero__copy{display:flex;min-height:465px;flex-direction:column;justify-content:center;padding:55px 46px}.lab-hero h1{font-size:67px}.lab-hero__copy>p{font-size:19px}.lab-method{grid-template-columns:1fr;border-top:0;border-left:1px solid var(--lab-line)}.lab-method span{min-height:0;padding:18px 23px}.lab-method strong{font-size:18px}.instrument-section{padding:45px 35px 60px}.section-title{grid-template-columns:minmax(0,1fr) minmax(260px,.55fr);align-items:end}.section-title h2{font-size:34px}.instrument-grid{grid-template-columns:1fr 1fr;gap:18px}.instrument{min-height:375px}.lab-notes{grid-template-columns:minmax(0,.9fr) minmax(420px,1.1fr);align-items:center;padding:42px 46px 48px}.lab-notes h2{font-size:32px}.lab-notes p{font-size:16px}}
+  @media(prefers-reduced-motion:reduce){.instrument{transition:none}}
+</style>

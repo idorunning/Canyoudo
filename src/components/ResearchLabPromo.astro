@@ -1,0 +1,119 @@
+<section class="lab-promo" aria-labelledby="research-lab-heading" data-reveal>
+  <a class="lab-promo__main" href="/research-lab">
+    <span class="lab-promo__eyebrow">Evidence &amp; Research Lab</span>
+    <h2 id="research-lab-heading">Put a policing question on the workbench</h2>
+    <p>
+      Search the evidence, explore live crime data, test how policing is described
+      in the news and turn long research into a practical briefing.
+    </p>
+    <span class="lab-promo__action">Enter the lab <span aria-hidden="true">→</span></span>
+  </a>
+
+  <a class="lab-promo__instruments" href="/research-lab" aria-label="Explore all four tools in the Evidence and Research Lab">
+    <span><strong>01</strong> Research Assistant</span>
+    <span><strong>02</strong> Crime Dashboard</span>
+    <span><strong>03</strong> Media Perception</span>
+    <span><strong>04</strong> Practical Summaries</span>
+  </a>
+</section>
+
+<style>
+  .lab-promo {
+    --lab-blue: #086db8;
+    --lab-orange: #ef5b2a;
+    --lab-ink: #101318;
+    --lab-paper: #eef6fb;
+    display: grid;
+    margin: 0;
+    border-top: 7px solid var(--lab-ink);
+    border-bottom: 1px solid #cbd8e1;
+    background: var(--lab-paper);
+    color: var(--lab-ink);
+  }
+  :global(html.dark) .lab-promo {
+    --lab-ink: #edf3f8;
+    --lab-paper: #102234;
+    border-bottom-color: #2a4358;
+  }
+  .lab-promo a { color: inherit; text-decoration: none; }
+  .lab-promo__main { padding: 25px 18px 27px; }
+  .lab-promo__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--lab-blue);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .lab-promo__eyebrow:before {
+    width: 22px;
+    height: 3px;
+    content: '';
+    background: var(--lab-orange);
+  }
+  .lab-promo h2 {
+    max-width: 38rem;
+    margin: 10px 0 9px;
+    font-size: clamp(27px, 7vw, 38px);
+    font-weight: 850;
+    line-height: 1.02;
+    letter-spacing: -.045em;
+  }
+  .lab-promo p {
+    max-width: 39rem;
+    margin: 0;
+    color: #44515d;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 15px;
+    line-height: 1.48;
+  }
+  :global(html.dark) .lab-promo p { color: #bdc9d4; }
+  .lab-promo__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 18px;
+    color: var(--lab-blue);
+    font-size: 13px;
+    font-weight: 850;
+  }
+  .lab-promo__action span { color: var(--lab-orange); font-size: 18px; }
+  .lab-promo__instruments {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid #cbd8e1;
+    background: rgba(255,255,255,.52);
+  }
+  :global(html.dark) .lab-promo__instruments {
+    border-top-color: #2a4358;
+    background: rgba(5,13,23,.24);
+  }
+  .lab-promo__instruments > span {
+    min-height: 62px;
+    padding: 13px 12px;
+    border-right: 1px solid #cbd8e1;
+    border-bottom: 1px solid #cbd8e1;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  :global(html.dark) .lab-promo__instruments > span { border-color: #2a4358; }
+  .lab-promo__instruments strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--lab-blue);
+    font-size: 9px;
+    letter-spacing: .08em;
+  }
+  @media (min-width: 760px) {
+    .lab-promo { grid-template-columns: minmax(0, 1.3fr) minmax(330px, .7fr); }
+    .lab-promo__main { padding: 35px 34px 38px; }
+    .lab-promo h2 { font-size: 40px; }
+    .lab-promo p { font-size: 17px; }
+    .lab-promo__instruments { border-top: 0; border-left: 1px solid #cbd8e1; }
+    :global(html.dark) .lab-promo__instruments { border-left-color: #2a4358; }
+    .lab-promo__instruments > span { display: flex; min-height: 0; flex-direction: column; justify-content: center; padding: 17px 20px; font-size: 14px; }
+  }
+</style>
