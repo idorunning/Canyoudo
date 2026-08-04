@@ -104,7 +104,10 @@ function boundedRange(
 }
 
 function httpFilter(start: string, end: string, extra = ""): string {
-  return `{ datetime_geq: "${start}", datetime_lt: "${end}", requestSource: "eyeball"${extra} }`;
+  // This dashboard reports every edge request. Do not require the optional
+  // requestSource filter: Cloudflare exposes filter fields per zone and plan,
+  // and rejecting one optional field otherwise takes down every HTTP dataset.
+  return `{ datetime_geq: "${start}", datetime_lt: "${end}"${extra} }`;
 }
 
 function firewallFilter(start: string, end: string): string {
@@ -112,19 +115,29 @@ function firewallFilter(start: string, end: string): string {
 }
 
 function errorReason(status: number, errors: unknown): string {
-  if (status === 401 || status === 403) {
-    return "Cloudflare access was refused. Check that the token has read-only Analytics access for this zone.";
-  }
   const messages = Array.isArray(errors)
     ? errors
         .map((e: any) => String(e?.message ?? ""))
         .filter(Boolean)
         .join(" ")
     : "";
+  if (
+    status === 401 ||
+    status === 403 ||
+    /permission|not authorised|not authorized|access denied|does not have access/i.test(messages)
+  ) {
+    return "Cloudflare access was refused. Check that the token has Zone Analytics: Read permission for this zone.";
+  }
   if (/older than|maxDuration|time range|notOlderThan/i.test(messages)) {
     return "Cloudflare does not retain this much detail on the current plan. Choose a shorter period.";
   }
-  return "Cloudflare did not return this dataset for the selected period or plan.";
+  if (/cannot query field|unknown argument|field .* is not available/i.test(messages)) {
+    return "Cloudflare does not expose one of the requested analytics fields for this zone or plan.";
+  }
+  if (/zone|dataset.*not enabled|not enabled.*dataset/i.test(messages)) {
+    return "Cloudflare Analytics is not enabled for this zone or dataset.";
+  }
+  return "Cloudflare returned an analytics error for this dataset.";
 }
 
 async function query(
@@ -358,7 +371,10 @@ async function getSecurity(
   enabled = true,
 ): Promise<StatSection<SecuritySummary>> {
   if (!enabled) {
-    return { ok: true, data: { total: 0, actions: [], countries: [] } };
+    return {
+      ok: false,
+      reason: "Cloudflare Security Events is not enabled for this zone or plan.",
+    };
   }
 
   const result = await query(
