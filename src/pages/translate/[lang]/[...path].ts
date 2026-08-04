@@ -194,7 +194,11 @@ export const GET: APIRoute = async ({ params, request }) => {
   // Netlify exposes the immutable URL for the exact atomic deploy. Fetching
   // through it avoids a custom-domain loop from inside the server function and
   // prevents a translation from reading an older release during deployment.
-  const origin = process.env.DEPLOY_PRIME_URL ?? process.env.URL ?? new URL(request.url).origin;
+  const origin = import.meta.env.DEPLOY_URL
+    ?? import.meta.env.DEPLOY_PRIME_URL
+    ?? process.env.DEPLOY_URL
+    ?? process.env.DEPLOY_PRIME_URL
+    ?? 'https://thinkingaboutpolicing.netlify.app';
   const sourceUrl = new URL(`/${path}`, origin);
 
   try {
