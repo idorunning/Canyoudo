@@ -3,8 +3,8 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
@@ -13,16 +13,6 @@
   "stopSearch": {
     "latest": null,
     "series": [
-      {
-        "month": "2025-05",
-        "total": 275,
-        "findRate": 0.229
-      },
-      {
-        "month": "2025-06",
-        "total": 241,
-        "findRate": 0.224
-      },
       {
         "month": "2025-07",
         "total": 301,
@@ -72,106 +62,112 @@
         "month": "2026-04",
         "total": 0,
         "findRate": null
+      },
+      {
+        "month": "2026-05",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-06",
+        "total": 0,
+        "findRate": null
       }
     ],
     "window": {
-      "total": 2020,
+      "total": 1504,
       "byOutcome": [
         {
           "label": "Not stated",
-          "count": 1600
-        },
-        {
-          "label": "A No Further Action Disposal",
-          "count": 133
-        },
-        {
-          "label": "Community Resolution",
-          "count": 132
+          "count": 1257
         },
         {
           "label": "Arrest",
-          "count": 129
+          "count": 100
+        },
+        {
+          "label": "Community Resolution",
+          "count": 88
+        },
+        {
+          "label": "A No Further Action Disposal",
+          "count": 37
         },
         {
           "label": "Khat Or Cannabis Warning",
-          "count": 23
-        },
-        {
-          "label": "Caution (Simple Or Conditional)",
-          "count": 2
+          "count": 20
         },
         {
           "label": "Summons / Charged By Post",
+          "count": 1
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
           "count": 1
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 1927
+          "count": 1431
         },
         {
           "label": "Not stated",
-          "count": 36
+          "count": 29
         },
         {
           "label": "Asian",
-          "count": 31
+          "count": 26
         },
         {
           "label": "Black",
-          "count": 17
+          "count": 11
         },
         {
           "label": "Other",
-          "count": 9
+          "count": 7
         }
       ],
       "byObjectOfSearch": [
         {
-          "label": "Controlled Drugs",
-          "count": 666
+          "label": "Not stated",
+          "count": 496
         },
         {
-          "label": "Not stated",
-          "count": 629
+          "label": "Controlled Drugs",
+          "count": 438
         },
         {
           "label": "Offensive Weapons",
-          "count": 304
+          "count": 245
         },
         {
           "label": "Stolen Goods",
-          "count": 150
+          "count": 118
         },
         {
           "label": "Article For Use In Theft",
-          "count": 108
+          "count": 79
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 76
+          "count": 62
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 39
+          "count": 34
         },
         {
           "label": "Crossbows",
-          "count": 14
-        },
-        {
-          "label": "Firearms",
-          "count": 13
-        },
-        {
-          "label": "Game Or Poaching Equipment",
           "count": 10
         },
         {
-          "label": "Anything To Threaten Or Harm Anyone",
-          "count": 6
+          "label": "Game Or Poaching Equipment",
+          "count": 9
+        },
+        {
+          "label": "Firearms",
+          "count": 8
         },
         {
           "label": "Evidence Of Wildlife Offences",

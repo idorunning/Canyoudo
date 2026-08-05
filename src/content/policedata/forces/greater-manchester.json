@@ -3,8 +3,8 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
@@ -13,16 +13,6 @@
   "stopSearch": {
     "latest": null,
     "series": [
-      {
-        "month": "2025-05",
-        "total": 0,
-        "findRate": null
-      },
-      {
-        "month": "2025-06",
-        "total": 0,
-        "findRate": null
-      },
       {
         "month": "2025-07",
         "total": 0,
@@ -70,6 +60,16 @@
       },
       {
         "month": "2026-04",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-05",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-06",
         "total": 0,
         "findRate": null
       }

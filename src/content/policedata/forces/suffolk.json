@@ -3,8 +3,8 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
@@ -13,16 +13,6 @@
   "stopSearch": {
     "latest": null,
     "series": [
-      {
-        "month": "2025-05",
-        "total": 222,
-        "findRate": 0.342
-      },
-      {
-        "month": "2025-06",
-        "total": 188,
-        "findRate": 0.378
-      },
       {
         "month": "2025-07",
         "total": 264,
@@ -72,82 +62,88 @@
         "month": "2026-04",
         "total": 0,
         "findRate": null
+      },
+      {
+        "month": "2026-05",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-06",
+        "total": 0,
+        "findRate": null
       }
     ],
     "window": {
-      "total": 1773,
+      "total": 1363,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 1155
+          "count": 913
         },
         {
           "label": "Arrest",
-          "count": 398
+          "count": 289
         },
         {
           "label": "Community Resolution",
-          "count": 204
+          "count": 151
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 13
+          "count": 8
         },
         {
           "label": "Caution (Simple Or Conditional)",
           "count": 2
-        },
-        {
-          "label": "Khat Or Cannabis Warning",
-          "count": 1
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 1394
+          "count": 1057
         },
         {
           "label": "Black",
-          "count": 153
-        },
-        {
-          "label": "Other",
-          "count": 94
+          "count": 122
         },
         {
           "label": "Asian",
-          "count": 84
+          "count": 73
+        },
+        {
+          "label": "Other",
+          "count": 73
         },
         {
           "label": "Not stated",
-          "count": 48
+          "count": 38
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 1170
+          "count": 901
         },
         {
           "label": "Offensive Weapons",
-          "count": 286
+          "count": 223
         },
         {
           "label": "Article For Use In Theft",
-          "count": 161
+          "count": 114
         },
         {
           "label": "Stolen Goods",
-          "count": 119
+          "count": 93
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 16
+          "count": 13
         },
         {
           "label": "Firearms",
-          "count": 13
+          "count": 11
         },
         {
           "label": "Goods On Which Duty Has Not Been Paid Etc.",

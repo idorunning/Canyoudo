@@ -3,8 +3,8 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
@@ -12,24 +12,32 @@
   "name": "Derbyshire Constabulary",
   "stopSearch": {
     "latest": {
-      "total": 653,
-      "findRate": 0.998,
+      "total": 643,
+      "findRate": 0.991,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 502
+          "count": 516
         },
         {
           "label": "Arrest",
-          "count": 66
+          "count": 50
         },
         {
           "label": "Community Resolution",
-          "count": 47
+          "count": 38
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 37
+          "count": 27
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 7
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 4
         },
         {
           "label": "Caution (Simple Or Conditional)",
@@ -39,75 +47,57 @@
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 520
+          "count": 426
         },
         {
           "label": "Asian",
-          "count": 44
+          "count": 72
         },
         {
           "label": "Black",
-          "count": 43
+          "count": 70
         },
         {
           "label": "Not stated",
-          "count": 35
+          "count": 59
         },
         {
           "label": "Other",
-          "count": 11
+          "count": 16
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 456
+          "count": 481
         },
         {
-          "label": "Offensive Weapons",
-          "count": 92
+          "label": "Anything To Threaten Or Harm Anyone",
+          "count": 86
         },
         {
           "label": "Article For Use In Theft",
-          "count": 61
-        },
-        {
-          "label": "Stolen Goods",
-          "count": 16
-        },
-        {
-          "label": "Fireworks",
-          "count": 9
-        },
-        {
-          "label": "Firearms",
-          "count": 9
+          "count": 53
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 5
+          "count": 16
+        },
+        {
+          "label": "Firearms",
+          "count": 3
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 4
+          "count": 2
         },
         {
           "label": "Goods On Which Duty Has Not Been Paid Etc.",
-          "count": 1
+          "count": 2
         }
       ]
     },
     "series": [
-      {
-        "month": "2025-05",
-        "total": 373,
-        "findRate": 0.89
-      },
-      {
-        "month": "2025-06",
-        "total": 293,
-        "findRate": 0.877
-      },
       {
         "month": "2025-07",
         "total": 381,
@@ -157,102 +147,108 @@
         "month": "2026-04",
         "total": 653,
         "findRate": 0.998
+      },
+      {
+        "month": "2026-05",
+        "total": 551,
+        "findRate": 0.998
+      },
+      {
+        "month": "2026-06",
+        "total": 643,
+        "findRate": 0.991
       }
     ],
     "window": {
-      "total": 5490,
+      "total": 6018,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 3975
+          "count": 4439
         },
         {
           "label": "Arrest",
-          "count": 799
+          "count": 767
         },
         {
           "label": "Community Resolution",
-          "count": 358
+          "count": 406
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 306
+          "count": 353
         },
         {
           "label": "Caution (Simple Or Conditional)",
-          "count": 31
+          "count": 26
         },
         {
           "label": "Khat Or Cannabis Warning",
-          "count": 16
-        },
-        {
-          "label": "Not stated",
-          "count": 4
+          "count": 22
         },
         {
           "label": "Penalty Notice For Disorder",
-          "count": 1
+          "count": 5
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 4348
+          "count": 4675
         },
         {
           "label": "Asian",
-          "count": 390
+          "count": 455
         },
         {
           "label": "Black",
-          "count": 375
+          "count": 437
         },
         {
           "label": "Not stated",
-          "count": 292
+          "count": 352
         },
         {
           "label": "Other",
-          "count": 85
+          "count": 99
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 3859
+          "count": 4321
         },
         {
           "label": "Offensive Weapons",
-          "count": 747
+          "count": 703
         },
         {
           "label": "Article For Use In Theft",
-          "count": 496
+          "count": 520
         },
         {
           "label": "Stolen Goods",
-          "count": 204
+          "count": 195
+        },
+        {
+          "label": "Anything To Threaten Or Harm Anyone",
+          "count": 102
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 57
+          "count": 71
         },
         {
           "label": "Firearms",
-          "count": 54
+          "count": 48
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 23
+          "count": 21
         },
         {
           "label": "Fireworks",
           "count": 17
-        },
-        {
-          "label": "Anything To Threaten Or Harm Anyone",
-          "count": 14
         },
         {
           "label": "Evidence Of Wildlife Offences",
@@ -260,14 +256,14 @@
         },
         {
           "label": "Goods On Which Duty Has Not Been Paid Etc.",
-          "count": 5
-        },
-        {
-          "label": "Detailed Object Of Search Unavailable",
-          "count": 3
+          "count": 7
         },
         {
           "label": "Game Or Poaching Equipment",
+          "count": 2
+        },
+        {
+          "label": "Detailed Object Of Search Unavailable",
           "count": 2
         },
         {

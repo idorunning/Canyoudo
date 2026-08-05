@@ -3,8 +3,8 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
@@ -13,16 +13,6 @@
   "stopSearch": {
     "latest": null,
     "series": [
-      {
-        "month": "2025-05",
-        "total": 376,
-        "findRate": 0.633
-      },
-      {
-        "month": "2025-06",
-        "total": 294,
-        "findRate": 0.746
-      },
       {
         "month": "2025-07",
         "total": 388,
@@ -70,28 +60,38 @@
       },
       {
         "month": "2026-04",
+        "total": 393,
+        "findRate": 0.596
+      },
+      {
+        "month": "2026-05",
+        "total": 0,
+        "findRate": null
+      },
+      {
+        "month": "2026-06",
         "total": 0,
         "findRate": null
       }
     ],
     "window": {
-      "total": 3923,
+      "total": 3646,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 2749
+          "count": 2573
         },
         {
           "label": "Arrest",
-          "count": 507
+          "count": 461
         },
         {
           "label": "Community Resolution",
-          "count": 491
+          "count": 439
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 156
+          "count": 152
         },
         {
           "label": "Caution (Simple Or Conditional)",
@@ -99,66 +99,66 @@
         },
         {
           "label": "Khat Or Cannabis Warning",
-          "count": 9
+          "count": 10
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 2047
+          "count": 1902
         },
         {
           "label": "Asian",
-          "count": 875
+          "count": 830
         },
         {
           "label": "Black",
-          "count": 691
+          "count": 616
         },
         {
           "label": "Not stated",
-          "count": 239
+          "count": 224
         },
         {
           "label": "Other",
-          "count": 71
+          "count": 74
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 2727
+          "count": 2478
         },
         {
           "label": "Article For Use In Theft",
-          "count": 500
+          "count": 493
         },
         {
           "label": "Offensive Weapons",
-          "count": 479
+          "count": 472
         },
         {
           "label": "Stolen Goods",
-          "count": 145
+          "count": 129
         },
         {
           "label": "Firearms",
-          "count": 40
+          "count": 37
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 14
+          "count": 20
         },
         {
           "label": "Fireworks",
           "count": 7
         },
         {
-          "label": "Psychoactive Substances",
-          "count": 5
+          "label": "Items Related To Protests",
+          "count": 4
         },
         {
-          "label": "Items Related To Protests",
+          "label": "Psychoactive Substances",
           "count": 4
         },
         {

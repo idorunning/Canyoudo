@@ -3,8 +3,8 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
@@ -12,106 +12,100 @@
   "name": "Wiltshire Police",
   "stopSearch": {
     "latest": {
-      "total": 267,
-      "findRate": 0.514,
+      "total": 225,
+      "findRate": 0.67,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 162
+          "count": 137
         },
         {
           "label": "Arrest",
-          "count": 52
-        },
-        {
-          "label": "Not stated",
-          "count": 23
+          "count": 44
         },
         {
           "label": "Community Resolution",
           "count": 22
         },
         {
-          "label": "Caution (Simple Or Conditional)",
-          "count": 5
+          "label": "Not stated",
+          "count": 18
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 3
+          "count": 2
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 1
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 1
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 157
+          "count": 101
         },
         {
           "label": "Not stated",
-          "count": 77
+          "count": 75
         },
         {
           "label": "Black",
-          "count": 19
+          "count": 29
         },
         {
           "label": "Asian",
-          "count": 11
+          "count": 14
         },
         {
           "label": "Other",
-          "count": 3
+          "count": 6
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 146
+          "count": 135
         },
         {
           "label": "Offensive Weapons",
-          "count": 47
+          "count": 32
         },
         {
           "label": "Stolen Goods",
-          "count": 30
-        },
-        {
-          "label": "Evidence Of Offences Under The Act",
-          "count": 18
+          "count": 27
         },
         {
           "label": "Not stated",
-          "count": 13
+          "count": 12
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 4
+          "count": 7
         },
         {
-          "label": "Game Or Poaching Equipment",
-          "count": 4
+          "label": "Evidence Of Offences Under The Act",
+          "count": 5
         },
         {
           "label": "Firearms",
-          "count": 3
+          "count": 4
         },
         {
           "label": "Article For Use In Theft",
           "count": 2
+        },
+        {
+          "label": "Game Or Poaching Equipment",
+          "count": 1
         }
       ]
     },
     "series": [
-      {
-        "month": "2025-05",
-        "total": 243,
-        "findRate": 0.544
-      },
-      {
-        "month": "2025-06",
-        "total": 219,
-        "findRate": 0.614
-      },
       {
         "month": "2025-07",
         "total": 212,
@@ -161,34 +155,44 @@
         "month": "2026-04",
         "total": 267,
         "findRate": 0.514
+      },
+      {
+        "month": "2026-05",
+        "total": 224,
+        "findRate": 0.607
+      },
+      {
+        "month": "2026-06",
+        "total": 225,
+        "findRate": 0.67
       }
     ],
     "window": {
-      "total": 3143,
+      "total": 3130,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 1835
+          "count": 1809
         },
         {
           "label": "Arrest",
-          "count": 740
+          "count": 736
         },
         {
           "label": "Community Resolution",
-          "count": 265
+          "count": 264
         },
         {
           "label": "Not stated",
-          "count": 227
+          "count": 241
         },
         {
           "label": "Caution (Simple Or Conditional)",
-          "count": 43
+          "count": 45
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 23
+          "count": 25
         },
         {
           "label": "Khat Or Cannabis Warning",
@@ -198,61 +202,61 @@
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 2124
+          "count": 2030
         },
         {
           "label": "Not stated",
-          "count": 590
+          "count": 672
         },
         {
           "label": "Black",
-          "count": 274
+          "count": 271
         },
         {
           "label": "Asian",
-          "count": 140
+          "count": 136
         },
         {
           "label": "Other",
-          "count": 15
+          "count": 21
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 1802
+          "count": 1780
         },
         {
           "label": "Offensive Weapons",
-          "count": 574
+          "count": 606
         },
         {
           "label": "Stolen Goods",
-          "count": 342
+          "count": 345
         },
         {
           "label": "Not stated",
-          "count": 139
-        },
-        {
-          "label": "Articles For Use In Criminal Damage",
-          "count": 81
+          "count": 137
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 75
+          "count": 82
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 60
         },
         {
           "label": "Article For Use In Theft",
-          "count": 73
+          "count": 60
         },
         {
           "label": "Firearms",
-          "count": 32
+          "count": 34
         },
         {
           "label": "Game Or Poaching Equipment",
-          "count": 12
+          "count": 13
         },
         {
           "label": "Fireworks",

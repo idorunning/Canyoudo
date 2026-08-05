@@ -3,26 +3,117 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
   "id": "west-midlands",
   "name": "West Midlands Police",
   "stopSearch": {
-    "latest": null,
+    "latest": {
+      "total": 2498,
+      "findRate": 0.786,
+      "byOutcome": [
+        {
+          "label": "A No Further Action Disposal",
+          "count": 1564
+        },
+        {
+          "label": "Arrest",
+          "count": 439
+        },
+        {
+          "label": "Community Resolution",
+          "count": 275
+        },
+        {
+          "label": "Not stated",
+          "count": 182
+        },
+        {
+          "label": "Summons / Charged By Post",
+          "count": 12
+        },
+        {
+          "label": "Penalty Notice For Disorder",
+          "count": 12
+        },
+        {
+          "label": "Khat Or Cannabis Warning",
+          "count": 11
+        },
+        {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 3
+        }
+      ],
+      "byOfficerEthnicity": [
+        {
+          "label": "White",
+          "count": 819
+        },
+        {
+          "label": "Asian",
+          "count": 630
+        },
+        {
+          "label": "Not stated",
+          "count": 551
+        },
+        {
+          "label": "Black",
+          "count": 465
+        },
+        {
+          "label": "Other",
+          "count": 33
+        }
+      ],
+      "byObjectOfSearch": [
+        {
+          "label": "Controlled Drugs",
+          "count": 1190
+        },
+        {
+          "label": "Offensive Weapons",
+          "count": 720
+        },
+        {
+          "label": "Stolen Goods",
+          "count": 294
+        },
+        {
+          "label": "Article For Use In Theft",
+          "count": 211
+        },
+        {
+          "label": "Firearms",
+          "count": 58
+        },
+        {
+          "label": "Articles For Use In Criminal Damage",
+          "count": 17
+        },
+        {
+          "label": "Fireworks",
+          "count": 4
+        },
+        {
+          "label": "Evidence Of Offences Under The Act",
+          "count": 2
+        },
+        {
+          "label": "Psychoactive Substances",
+          "count": 1
+        },
+        {
+          "label": "Goods On Which Duty Has Not Been Paid Etc.",
+          "count": 1
+        }
+      ]
+    },
     "series": [
-      {
-        "month": "2025-05",
-        "total": 2286,
-        "findRate": 0.875
-      },
-      {
-        "month": "2025-06",
-        "total": 2390,
-        "findRate": 0.714
-      },
       {
         "month": "2025-07",
         "total": 2379,
@@ -70,107 +161,121 @@
       },
       {
         "month": "2026-04",
-        "total": 0,
-        "findRate": null
+        "total": 2539,
+        "findRate": 0.636
+      },
+      {
+        "month": "2026-05",
+        "total": 2959,
+        "findRate": 0.818
+      },
+      {
+        "month": "2026-06",
+        "total": 2498,
+        "findRate": 0.786
       }
     ],
     "window": {
-      "total": 26891,
+      "total": 30211,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 16869
+          "count": 18704
         },
         {
           "label": "Arrest",
-          "count": 4574
+          "count": 5232
         },
         {
           "label": "Community Resolution",
-          "count": 2960
+          "count": 3459
         },
         {
           "label": "Not stated",
-          "count": 2002
+          "count": 2281
         },
         {
           "label": "Khat Or Cannabis Warning",
-          "count": 197
+          "count": 203
         },
         {
           "label": "Penalty Notice For Disorder",
-          "count": 152
+          "count": 170
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 80
+          "count": 94
         },
         {
           "label": "Caution (Simple Or Conditional)",
-          "count": 57
+          "count": 68
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 9616
-        },
-        {
-          "label": "Not stated",
-          "count": 6806
+          "count": 10721
         },
         {
           "label": "Asian",
-          "count": 6526
+          "count": 7585
+        },
+        {
+          "label": "Not stated",
+          "count": 7224
         },
         {
           "label": "Black",
-          "count": 3753
+          "count": 4404
         },
         {
           "label": "Other",
-          "count": 190
+          "count": 277
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 13539
+          "count": 15232
         },
         {
           "label": "Offensive Weapons",
-          "count": 6716
+          "count": 7452
         },
         {
           "label": "Stolen Goods",
-          "count": 3057
+          "count": 3529
         },
         {
           "label": "Article For Use In Theft",
-          "count": 2641
+          "count": 2956
         },
         {
           "label": "Firearms",
-          "count": 620
+          "count": 673
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 176
+          "count": 216
         },
         {
           "label": "Fireworks",
-          "count": 103
+          "count": 112
         },
         {
           "label": "Psychoactive Substances",
           "count": 35
         },
         {
+          "label": "Not stated",
+          "count": 2
+        },
+        {
           "label": "Goods On Which Duty Has Not Been Paid Etc.",
           "count": 2
         },
         {
-          "label": "Not stated",
+          "label": "Evidence Of Offences Under The Act",
           "count": 2
         }
       ]

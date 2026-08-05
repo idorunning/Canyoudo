@@ -3,8 +3,8 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
@@ -12,34 +12,30 @@
   "name": "Northamptonshire Police",
   "stopSearch": {
     "latest": {
-      "total": 264,
-      "findRate": 0.254,
+      "total": 210,
+      "findRate": 0.214,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 230
+          "count": 183
         },
         {
           "label": "Arrest",
-          "count": 20
-        },
-        {
-          "label": "Community Resolution",
-          "count": 11
+          "count": 18
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 2
+          "count": 5
         },
         {
-          "label": "Caution (Simple Or Conditional)",
-          "count": 1
+          "label": "Community Resolution",
+          "count": 4
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 184
+          "count": 140
         },
         {
           "label": "Black",
@@ -47,59 +43,45 @@
         },
         {
           "label": "Asian",
-          "count": 15
-        },
-        {
-          "label": "Other",
-          "count": 8
+          "count": 10
         },
         {
           "label": "Not stated",
-          "count": 7
+          "count": 8
+        },
+        {
+          "label": "Other",
+          "count": 2
         }
       ],
       "byObjectOfSearch": [
         {
-          "label": "Controlled Drugs",
-          "count": 93
+          "label": "Evidence Of Offences Under The Act",
+          "count": 76
         },
         {
-          "label": "Evidence Of Offences Under The Act",
-          "count": 86
+          "label": "Controlled Drugs",
+          "count": 58
         },
         {
           "label": "Offensive Weapons",
-          "count": 43
+          "count": 46
         },
         {
           "label": "Article For Use In Theft",
-          "count": 22
+          "count": 16
         },
         {
           "label": "Stolen Goods",
-          "count": 14
+          "count": 10
         },
         {
           "label": "Firearms",
-          "count": 3
-        },
-        {
-          "label": "Articles For Use In Criminal Damage",
-          "count": 3
+          "count": 4
         }
       ]
     },
     "series": [
-      {
-        "month": "2025-05",
-        "total": 286,
-        "findRate": 0.29
-      },
-      {
-        "month": "2025-06",
-        "total": 329,
-        "findRate": 0.286
-      },
       {
         "month": "2025-07",
         "total": 372,
@@ -149,44 +131,54 @@
         "month": "2026-04",
         "total": 264,
         "findRate": 0.254
+      },
+      {
+        "month": "2026-05",
+        "total": 269,
+        "findRate": 0.242
+      },
+      {
+        "month": "2026-06",
+        "total": 210,
+        "findRate": 0.214
       }
     ],
     "window": {
-      "total": 3486,
+      "total": 3350,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 2883
+          "count": 2830
         },
         {
           "label": "Arrest",
-          "count": 368
+          "count": 337
         },
         {
           "label": "Community Resolution",
-          "count": 189
-        },
-        {
-          "label": "Caution (Simple Or Conditional)",
-          "count": 21
+          "count": 144
         },
         {
           "label": "Summons / Charged By Post",
           "count": 18
         },
         {
+          "label": "Caution (Simple Or Conditional)",
+          "count": 17
+        },
+        {
           "label": "Khat Or Cannabis Warning",
-          "count": 7
+          "count": 4
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 2506
+          "count": 2393
         },
         {
           "label": "Black",
-          "count": 666
+          "count": 641
         },
         {
           "label": "Asian",
@@ -194,41 +186,41 @@
         },
         {
           "label": "Not stated",
-          "count": 75
+          "count": 79
         },
         {
           "label": "Other",
-          "count": 37
+          "count": 35
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 1832
+          "count": 1560
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 633
+          "count": 796
         },
         {
           "label": "Offensive Weapons",
-          "count": 527
+          "count": 526
         },
         {
           "label": "Article For Use In Theft",
-          "count": 263
+          "count": 260
         },
         {
           "label": "Stolen Goods",
-          "count": 152
+          "count": 137
         },
         {
           "label": "Firearms",
-          "count": 53
+          "count": 49
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 19
+          "count": 15
         },
         {
           "label": "Fireworks",

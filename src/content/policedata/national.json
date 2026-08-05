@@ -3,18 +3,22 @@
   "provenance": {
     "source": "https://data.police.uk",
     "licence": "Open Government Licence v3.0",
-    "datasetMonth": "2026-04",
-    "fetchedAt": "2026-07-05T08:38:45.359Z",
+    "datasetMonth": "2026-06",
+    "fetchedAt": "2026-08-05T08:14:19.439Z",
     "windowMonths": 12,
     "sample": false
   },
   "forcesCount": 44,
   "forcesMissing": [
     "bedfordshire",
+    "cambridgeshire",
+    "cheshire",
+    "cleveland",
     "gloucestershire",
     "greater-manchester",
     "gwent",
     "dyfed-powys",
+    "hertfordshire",
     "humberside",
     "lincolnshire",
     "metropolitan",
@@ -22,28 +26,18 @@
     "north-yorkshire",
     "nottinghamshire",
     "northern-ireland",
-    "suffolk",
-    "west-midlands"
+    "south-wales",
+    "suffolk"
   ],
   "stopSearch": {
     "latest": {
-      "total": 29588,
-      "findRate": 0.515
+      "total": 24523,
+      "findRate": 0.539
     },
     "series": [
       {
-        "month": "2025-05",
-        "total": 40600,
-        "findRate": 0.305
-      },
-      {
-        "month": "2025-06",
-        "total": 38807,
-        "findRate": 0.29
-      },
-      {
         "month": "2025-07",
-        "total": 39250,
+        "total": 39247,
         "findRate": 0.289
       },
       {
@@ -53,12 +47,12 @@
       },
       {
         "month": "2025-09",
-        "total": 37608,
+        "total": 37607,
         "findRate": 0.277
       },
       {
         "month": "2025-10",
-        "total": 42768,
+        "total": 42767,
         "findRate": 0.29
       },
       {
@@ -88,140 +82,150 @@
       },
       {
         "month": "2026-04",
-        "total": 29588,
-        "findRate": 0.515
+        "total": 44770,
+        "findRate": 0.282
+      },
+      {
+        "month": "2026-05",
+        "total": 39499,
+        "findRate": 0.283
+      },
+      {
+        "month": "2026-06",
+        "total": 24523,
+        "findRate": 0.539
       }
     ],
     "window": {
-      "total": 461540,
+      "total": 461332,
       "byOutcome": [
         {
           "label": "A No Further Action Disposal",
-          "count": 290231
+          "count": 294234
         },
         {
           "label": "Arrest",
-          "count": 67867
+          "count": 68857
         },
         {
           "label": "Community Resolution",
-          "count": 47022
+          "count": 48442
         },
         {
           "label": "Not stated",
-          "count": 42012
+          "count": 34922
         },
         {
           "label": "Summons / Charged By Post",
-          "count": 7565
+          "count": 7997
         },
         {
           "label": "Penalty Notice For Disorder",
-          "count": 3722
+          "count": 3789
         },
         {
           "label": "Caution (Simple Or Conditional)",
-          "count": 2179
+          "count": 2124
         },
         {
           "label": "Khat Or Cannabis Warning",
-          "count": 942
+          "count": 967
         }
       ],
       "byOfficerEthnicity": [
         {
           "label": "White",
-          "count": 280518
+          "count": 274680
         },
         {
           "label": "Black",
-          "count": 74998
+          "count": 76233
         },
         {
           "label": "Asian",
-          "count": 51093
+          "count": 52489
         },
         {
           "label": "Not stated",
-          "count": 36427
+          "count": 40154
         },
         {
           "label": "Other",
-          "count": 16498
+          "count": 15774
         },
         {
           "label": "Mixed",
-          "count": 2006
+          "count": 2002
         }
       ],
       "byObjectOfSearch": [
         {
           "label": "Controlled Drugs",
-          "count": 245734
+          "count": 250815
         },
         {
           "label": "Not stated",
-          "count": 67779
+          "count": 60155
         },
         {
           "label": "Offensive Weapons",
-          "count": 52129
+          "count": 53858
         },
         {
           "label": "Stolen Goods",
-          "count": 47048
+          "count": 47920
         },
         {
           "label": "Article For Use In Theft",
-          "count": 22886
+          "count": 22552
         },
         {
           "label": "Evidence Of Offences Under The Act",
-          "count": 8521
+          "count": 8659
         },
         {
           "label": "Articles For Use In Criminal Damage",
-          "count": 5257
+          "count": 5232
         },
         {
           "label": "Anything To Threaten Or Harm Anyone",
-          "count": 4199
+          "count": 4181
         },
         {
           "label": "Firearms",
-          "count": 3085
+          "count": 3099
         },
         {
           "label": "Detailed Object Of Search Unavailable",
-          "count": 2284
+          "count": 2246
         },
         {
           "label": "Fireworks",
-          "count": 1792
+          "count": 1750
         },
         {
           "label": "Psychoactive Substances",
-          "count": 370
+          "count": 358
         },
         {
           "label": "Game Or Poaching Equipment",
-          "count": 191
+          "count": 209
         },
         {
           "label": "Goods On Which Duty Has Not Been Paid Etc.",
-          "count": 121
+          "count": 135
         },
         {
           "label": "Evidence Of Wildlife Offences",
-          "count": 62
+          "count": 90
         },
         {
           "label": "Cash",
-          "count": 47
+          "count": 43
         },
         {
           "label": "Crossbows",
-          "count": 22
+          "count": 17
         },
         {
           "label": "Items Related To Protests",
