@@ -1,9 +1,10 @@
 {
   "provenance": {
-    "fetchedAt": "2026-08-04T13:43:57.394Z",
-    "feedCount": 8,
+    "fetchedAt": "2026-08-05T01:26:56.109Z",
+    "feedCount": 9,
     "sources": [
       "GOV.UK",
+      "Home Office",
       "BBC News",
       "Ministry of Justice",
       "CPS",
@@ -15,20 +16,36 @@
   },
   "items": [
     {
-      "title": "Prison overcrowding crisis limits ability to cut early releases, minister says",
-      "link": "https://www.bbc.co.uk/news/articles/c20e15d0z6zo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-04T12:51:49.000Z",
-      "summary": "Some offenders will be barred from the scheme, but those guilty of manslaughter may be eligible, leaving PC Harper's family \"devastated\"."
+      "title": "AI used new levels of 'autonomy and deception' to trick people in safety test",
+      "link": "https://www.bbc.co.uk/news/articles/c1w1lvn7d9go?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-08-05T00:02:18.000Z",
+      "summary": "The UK's AI Safety Institute said recent behaviour from Anthropic and OpenAI models was malicious and unprecedented."
     },
     {
-      "title": "Afghan boxer arrested in connection with death of Scottish woman in Greece",
-      "link": "https://www.bbc.co.uk/news/articles/c0m7xpr8zvvo?at_medium=RSS&at_campaign=rss",
+      "title": "Knife crime homicides fall to 30-year low",
+      "link": "https://www.gov.uk/government/news/knife-crime-homicides-fall-to-30-year-low",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-08-04T23:01:06.000Z",
+      "summary": "Knife-related homicides down by 26% under this government. More than 15,000 knives and offensive weapons removed from the streets."
+    },
+    {
+      "title": "Robbers who pretended to be from Liverpool jailed",
+      "link": "https://www.bbc.co.uk/news/videos/cn4n03191vvo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-08-04T12:19:50.000Z",
-      "summary": "Sharif Ahmadzai, from Afghanistan, is expected to appear in court in Athens on Wednesday."
+      "isoDate": "2026-08-04T15:35:25.000Z",
+      "summary": "The men lived only about five minutes away from the shop they robbed, police say."
+    },
+    {
+      "title": "What's behind having to release some prisoners early?",
+      "link": "https://www.bbc.co.uk/news/articles/cp3rxlyz6w3o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-04T15:04:59.000Z",
+      "summary": "More people going to prison, and for longer, is why governments including the current one have had to release prisoners early."
     },
     {
       "title": "Criminal investigation starts after four men arrested and illegal meat removed",
@@ -37,6 +54,14 @@
       "topic": "policing",
       "isoDate": "2026-08-04T12:10:10.000Z",
       "summary": "A partnership operation by Dudley Council and National Food Crime Unit (NFCU) has resulted in four arrests and the disposal of over four tonnes of illegal meat."
+    },
+    {
+      "title": "Man 'driven insane' by noise admits killing fish",
+      "link": "https://www.bbc.co.uk/news/articles/c8rn0366en5o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-04T12:08:21.000Z",
+      "summary": "Gerry Duffy could not sleep due to the noise of the pond's water pump, a court hears."
     },
     {
       "title": "Solicitor who posed as police officer to spy on ex-partner at Nando’s handed community order",
@@ -103,22 +128,6 @@
       "summary": "Buyers of AI services are struggling to control costs and sellers are not sure how much to charge."
     },
     {
-      "title": "Police dog sniffs out man hiding behind fake wall on 300-plant cannabis farm",
-      "link": "https://www.bbc.co.uk/news/articles/cly54vzq01zo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-03T18:12:17.000Z",
-      "summary": "Albert Hysaj pleaded guilty to producing cannabis at Cardiff Crown Court."
-    },
-    {
-      "title": "Author La Plante banned from driving for six months",
-      "link": "https://www.bbc.co.uk/news/articles/cj36z5zydrgo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-03T17:01:11.000Z",
-      "summary": "The best-selling crime author is disqualified from driving despite saying a ban would end her career."
-    },
-    {
       "title": "High Court of Justice – Summer vacation notice 2026",
       "link": "https://www.judiciary.uk/high-court-of-justice-summer-vacation-notice-2026/",
       "source": "Courts & Tribunals Judiciary",
@@ -167,14 +176,6 @@
       "summary": "Amendments to implement the 2025 to 2026 pay award, extend targeted payments, and reflect changes to unsatisfactory performance procedures."
     },
     {
-      "title": "Amazon and Apple just told us more about their AI plans - here are three things we learned",
-      "link": "https://www.bbc.co.uk/news/articles/cp87m46g392o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-31T01:31:50.000Z",
-      "summary": "Billions of dollars are being poured into a new wave of AI technology. But will it pay off?"
-    },
-    {
       "title": "Open source project fools AI scrapers with poisoned font",
       "link": "https://www.theregister.com/ai-and-ml/2026/07/30/open-source-project-fools-ai-scrapers-with-poisoned-font/5281303",
       "source": "The Register",
@@ -189,14 +190,6 @@
       "topic": "policing",
       "isoDate": "2026-07-30T13:34:43.000Z",
       "summary": "Oversight of misconduct procedures is to be reviewed as part of an overhaul of <mark>policing</mark> standards."
-    },
-    {
-      "title": "Multi-agency crackdown on waste crime across East Lancashire",
-      "link": "https://www.gov.uk/government/news/multi-agency-crackdown-on-waste-crime-across-east-lancashire",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-30T13:30:20.000Z",
-      "summary": "Led by the Environment Agency - more than 35 officers from five organisations took part in an intelligence-led operation."
     },
     {
       "title": "Microsoft's cloud brings rain of revenue but modest M365 AI revenue harvest",
