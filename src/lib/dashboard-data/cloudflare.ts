@@ -115,12 +115,25 @@ function firewallFilter(start: string, end: string): string {
 }
 
 function errorReason(status: number, errors: unknown): string {
-  const messages = Array.isArray(errors)
-    ? errors
-        .map((e: any) => String(e?.message ?? ""))
-        .filter(Boolean)
-        .join(" ")
-    : "";
+  const list = Array.isArray(errors) ? errors : [];
+  const messages = list
+    .map((e: any) => String(e?.message ?? ""))
+    .filter(Boolean)
+    .join(" ");
+  const codes = list
+    .map((e: any) => String(e?.extensions?.code ?? ""))
+    .filter(Boolean)
+    .join(" ");
+  // Cloudflare answers "Zone not found" (code authz) both when the zone ID is
+  // wrong and when the token simply doesn't include the zone — so name both.
+  if (/zone not found|not authorized/i.test(messages) || /\bauthz\b/.test(codes)) {
+    return (
+      "Cloudflare refused access to this zone. Check that CLOUDFLARE_ZONE_ID " +
+      "matches the Zone ID on the domain's Cloudflare overview page, and that " +
+      "CLOUDFLARE_API_TOKEN was created with Analytics Read for that specific " +
+      "zone — a token scoped to no zones authenticates but sees nothing."
+    );
+  }
   if (
     status === 401 ||
     status === 403 ||
@@ -134,7 +147,7 @@ function errorReason(status: number, errors: unknown): string {
   if (/cannot query field|unknown argument|field .* is not available/i.test(messages)) {
     return "Cloudflare does not expose one of the requested analytics fields for this zone or plan.";
   }
-  if (/zone|dataset.*not enabled|not enabled.*dataset/i.test(messages)) {
+  if (/not enabled/i.test(messages)) {
     return "Cloudflare Analytics is not enabled for this zone or dataset.";
   }
   return "Cloudflare returned an analytics error for this dataset.";
