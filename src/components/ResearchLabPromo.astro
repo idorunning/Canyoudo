@@ -1,20 +1,72 @@
+---
+const tools = [
+  {
+    number: '01',
+    href: '/research',
+    title: 'Research Assistant',
+    description: 'Ask a policing question in plain English. It searches trusted sources and gives you a quick overview or a full cited research review.',
+  },
+  {
+    number: '02',
+    href: '/data',
+    title: 'Crime Dashboard',
+    description: 'Recorded crime and stop-and-search figures for all 43 forces, broken down by area and refreshed every month.',
+  },
+  {
+    number: '03',
+    href: '/perception',
+    title: 'Media Perception Monitor',
+    description: 'See how UK news language about the police has grown, shrunk and changed in tone since 1999, alongside public opinion.',
+  },
+  {
+    number: '04',
+    href: '/practical-summaries',
+    title: 'Practical Summaries',
+    description: 'The problem, the evidence and the operational takeaway for every article — for readers who need the decision, not the essay.',
+  },
+];
+
+const benefits = [
+  'Use every tool above — free, no trial and no card details',
+  'Save articles and practical summaries to your library',
+  'Download cited research briefings as PDFs',
+];
+---
+
 <section class="lab-promo" aria-labelledby="research-lab-heading" data-reveal>
-  <a class="lab-promo__main" href="/research-lab">
+  <div class="lab-promo__main">
     <span class="lab-promo__eyebrow">Evidence &amp; Research Lab</span>
-    <h2 id="research-lab-heading">Put a policing question on the workbench</h2>
+    <h2 id="research-lab-heading">
+      <a href="/research-lab">Put a policing question on the workbench</a>
+    </h2>
     <p>
       Search the evidence, explore live crime data, test how policing is described
       in the news and turn long research into a practical briefing.
     </p>
-    <span class="lab-promo__action">Enter the lab <span aria-hidden="true">→</span></span>
-  </a>
+    <div class="lab-promo__free">
+      <strong>Free login to use.</strong> One free account unlocks all four tools —
+      no subscription, no card details.
+      <ul>
+        {benefits.map((benefit) => (
+          <li>{benefit}</li>
+        ))}
+      </ul>
+    </div>
+    <a class="lab-promo__action" href="/research-lab">Enter the lab <span aria-hidden="true">→</span></a>
+  </div>
 
-  <a class="lab-promo__instruments" href="/research-lab" aria-label="Explore all four tools in the Evidence and Research Lab">
-    <span><strong>01</strong> Research Assistant</span>
-    <span><strong>02</strong> Crime Dashboard</span>
-    <span><strong>03</strong> Media Perception</span>
-    <span><strong>04</strong> Practical Summaries</span>
-  </a>
+  <div class="lab-promo__instruments" aria-label="The four tools in the Evidence and Research Lab">
+    {tools.map((tool) => (
+      <a href={tool.href} class="lab-promo__tool">
+        <span class="lab-promo__tool-head">
+          <strong>{tool.number}</strong>
+          {tool.title}
+        </span>
+        <span class="lab-promo__tool-desc">{tool.description}</span>
+        <span class="lab-promo__tool-foot">Free with sign-in <span aria-hidden="true">→</span></span>
+      </a>
+    ))}
+  </div>
 </section>
 
 <style>
@@ -70,6 +122,41 @@
     line-height: 1.48;
   }
   :global(html.dark) .lab-promo p { color: #bdc9d4; }
+  .lab-promo__free {
+    max-width: 39rem;
+    margin: 18px 0 0;
+    padding: 14px 16px;
+    border: 1px solid #cbd8e1;
+    background: rgba(255,255,255,.6);
+    color: var(--lab-ink);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  :global(html.dark) .lab-promo__free {
+    border-color: #2a4358;
+    background: rgba(5,13,23,.3);
+  }
+  .lab-promo__free strong { color: var(--lab-blue); }
+  .lab-promo__free ul {
+    display: grid;
+    gap: 5px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .lab-promo__free li {
+    padding-left: 15px;
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12.5px;
+  }
+  .lab-promo__free li:before {
+    position: absolute;
+    left: 0;
+    color: var(--lab-orange);
+    font-weight: 800;
+    content: '+';
+  }
   .lab-promo__action {
     display: inline-flex;
     align-items: center;
@@ -90,30 +177,55 @@
     border-top-color: #2a4358;
     background: rgba(5,13,23,.24);
   }
-  .lab-promo__instruments > span {
-    min-height: 62px;
+  .lab-promo__tool {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 128px;
     padding: 13px 12px;
     border-right: 1px solid #cbd8e1;
     border-bottom: 1px solid #cbd8e1;
-    font-size: 12px;
-    font-weight: 800;
-    line-height: 1.2;
+    transition: background .15s ease;
   }
-  :global(html.dark) .lab-promo__instruments > span { border-color: #2a4358; }
-  .lab-promo__instruments strong {
-    display: block;
-    margin-bottom: 5px;
+  .lab-promo__tool:hover { background: rgba(255,255,255,.85); }
+  :global(html.dark) .lab-promo__tool:hover { background: rgba(255,255,255,.05); }
+  :global(html.dark) .lab-promo__tool { border-color: #2a4358; }
+  .lab-promo__tool-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 800;
+  }
+  .lab-promo__tool-head strong {
     color: var(--lab-blue);
     font-size: 9px;
     letter-spacing: .08em;
+  }
+  .lab-promo__tool-desc {
+    color: #4b5862;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12px;
+    line-height: 1.42;
+  }
+  :global(html.dark) .lab-promo__tool-desc { color: #a9b7c3; }
+  .lab-promo__tool-foot {
+    margin-top: auto;
+    color: var(--lab-orange);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .03em;
   }
   @media (min-width: 760px) {
     .lab-promo { grid-template-columns: minmax(0, 1.3fr) minmax(330px, .7fr); }
     .lab-promo__main { padding: 35px 34px 38px; }
     .lab-promo h2 { font-size: 40px; }
     .lab-promo p { font-size: 17px; }
-    .lab-promo__instruments { border-top: 0; border-left: 1px solid #cbd8e1; }
+    .lab-promo__free { font-size: 14px; }
+    .lab-promo__free li { font-size: 13px; }
+    .lab-promo__instruments { grid-template-columns: 1fr; border-top: 0; border-left: 1px solid #cbd8e1; }
     :global(html.dark) .lab-promo__instruments { border-left-color: #2a4358; }
-    .lab-promo__instruments > span { display: flex; min-height: 0; flex-direction: column; justify-content: center; padding: 17px 20px; font-size: 14px; }
+    .lab-promo__tool { min-height: 0; padding: 17px 20px; }
   }
 </style>

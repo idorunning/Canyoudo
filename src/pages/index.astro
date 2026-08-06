@@ -25,7 +25,7 @@ const allArticles: Item[] = articles
 
 const feature = allArticles[0];
 const moreStories = allArticles.slice(1, 4);
-const latestStories = allArticles.slice(4, 10);
+const latestStories = allArticles.slice(4, 14);
 const articleUrl = (article: Item) => `/${article.section}/${article.slug}`;
 const cardImage = (article: Item, lead = false) => {
   const selected = lead
@@ -60,6 +60,39 @@ const browseSections: Section[] = [
   "data-stories",
   "influential-people",
 ];
+
+const topicSections: {
+  key: Section;
+  heading: string;
+  blurb: string;
+  count: number;
+}[] = [
+  {
+    key: "police-policy",
+    heading: "Evidence & Practice",
+    blurb:
+      "What the research actually says about neighbourhood policing, use of force, misconduct prevention and officer wellbeing — and what it means for how forces operate day to day.",
+    count: 6,
+  },
+  {
+    key: "public-policy",
+    heading: "Leadership & Culture",
+    blurb:
+      "How policing is led, directed and held to account: legitimacy, organisational culture and the public-policy decisions made above force level.",
+    count: 6,
+  },
+  {
+    key: "data-stories",
+    heading: "Technology & Innovation",
+    blurb:
+      "The data, tools and technology reshaping policing — predictive systems, facial recognition and analytics platforms — examined for what they can actually deliver.",
+    count: 6,
+  },
+];
+const topicFeeds = topicSections.map((topic) => ({
+  ...topic,
+  items: allArticles.filter((article) => article.section === topic.key).slice(0, topic.count),
+}));
 
 const site = (
   Astro.site?.toString() ?? "https://thinkingaboutpolicing.org/"
@@ -198,6 +231,45 @@ const pitchBody = encodeURIComponent(
             ))}
           </div>
         </section>
+      )
+    }
+
+    {
+      topicFeeds.map(
+        (topic) =>
+          topic.items.length > 0 && (
+            <section class="more-section topic-section" aria-labelledby={`topic-${topic.key}-heading`}>
+              <div class="section-heading">
+                <>
+                  <h2 id={`topic-${topic.key}-heading`}>{topic.heading}</h2>
+                  <a href={sectionPaths[topic.key]}>View all {topic.heading} →</a>
+                </>
+              </div>
+              <p class="topic-blurb">{topic.blurb}</p>
+              <div class="story-grid">
+                {topic.items.map((article) => (
+                  <a class="story-row" href={articleUrl(article)} data-reveal>
+                    <span class="story-image">
+                      <img src={cardImage(article)} alt="" loading="lazy" />
+                    </span>
+                    <span class="story-copy">
+                      <span class="row-kicker">
+                        {date(article, false)}
+                      </span>
+                      <h3>{article.data.title}</h3>
+                      <p>{article.data.description}</p>
+                      <span class="row-meta">
+                        {minutes(article)} min read
+                      </span>
+                    </span>
+                    <span class="row-arrow" aria-hidden="true">
+                      ›
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ),
       )
     }
 
@@ -361,6 +433,14 @@ const pitchBody = encodeURIComponent(
     font-size: 12px;
     font-weight: 800;
     white-space: nowrap;
+  }
+  .topic-blurb {
+    max-width: 46rem;
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 13.5px;
+    line-height: 1.48;
   }
   .story-row {
     display: grid;
@@ -576,6 +656,9 @@ const pitchBody = encodeURIComponent(
     }
     .more-section {
       padding: 28px 34px 38px;
+    }
+    .topic-blurb {
+      font-size: 15px;
     }
     .story-grid {
       display: grid;
