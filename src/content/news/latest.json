@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-08-05T13:39:53.728Z",
+    "fetchedAt": "2026-08-06T01:24:03.413Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,20 +16,60 @@
   },
   "items": [
     {
+      "title": "UK papers: 'Plagiarism row professor resigns' and 'West End stab rampage'",
+      "link": "https://www.bbc.co.uk/news/articles/c4gkezxzz7xo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-06T00:28:10.000Z",
+      "summary": "A Cambridge University professor's resignation dominates many of Thursday's papers."
+    },
+    {
+      "title": "AI or real? BBC analyses viral China disaster videos",
+      "link": "https://www.bbc.co.uk/news/videos/ckg9d2egn11o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-08-05T22:00:32.000Z",
+      "summary": "As weather events become more extreme, fake videos are being shared rapidly online, and it’s causing real world problems in China."
+    },
+    {
       "title": "No misconduct case for officer who shot Chris Kaba",
       "link": "https://www.bbc.co.uk/news/articles/cvg0rmpydrmo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-08-05T13:02:00.000Z",
+      "isoDate": "2026-08-05T18:13:52.000Z",
       "summary": "Sir Mark Rowley welcomes the IOPC's decision but calls the accountability process \"disgraceful\"."
     },
     {
-      "title": "Family 'devastated' by death of girl, 9, injured on Scottish industrial estate",
-      "link": "https://www.bbc.co.uk/news/articles/c235evj1r04o?at_medium=RSS&at_campaign=rss",
+      "title": "Woman arrested after four stabbed in central London",
+      "link": "https://www.bbc.co.uk/news/articles/cn0nk17881yo?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-08-05T12:05:13.000Z",
-      "summary": "A 35-year old man is due in court in connection with the death of Minnie Merriman, who was found injured on Monday."
+      "isoDate": "2026-08-05T16:34:52.000Z",
+      "summary": "A woman is arrested after four men are stabbed in central London, the Metropolitan Police said."
+    },
+    {
+      "title": "Cornwall man arrested in Environment Agency waste crime operation",
+      "link": "https://www.gov.uk/government/news/cornwall-man-arrested-in-environment-agency-waste-crime-operation",
+      "source": "GOV.UK",
+      "topic": "policing",
+      "isoDate": "2026-08-05T15:47:43.000Z",
+      "summary": "A man has been arrested in connection with waste activities in the Camborne area, Cornwall"
+    },
+    {
+      "title": "Police chief considers joining legal action over PC Harper killers' early release",
+      "link": "https://www.bbc.co.uk/news/articles/cx2v5kj9zzko?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-05T15:36:37.000Z",
+      "summary": "Two of PC Andrew Harper's killers are set to be included in the government's early release scheme, which begins in October."
+    },
+    {
+      "title": "SpaceX shares sink after first earnings report reveals huge AI spending plans",
+      "link": "https://www.bbc.co.uk/news/articles/c0qvpveg20vo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-08-05T14:04:43.000Z",
+      "summary": "Elon Musk told investors that people were \"underestimating\" his company."
     },
     {
       "title": "Police Pension Scheme 2015: CPI revaluation",
@@ -48,36 +88,12 @@
       "summary": "Littlehey is a prison near Huntingdon, Cambridgeshire for men convicted of a sex offence."
     },
     {
-      "title": "Anthropic AI created fake profiles and impersonated people in attempted hack",
+      "title": "Anthropic AI used fake profiles to target people in hack then hid the evidence",
       "link": "https://www.bbc.co.uk/news/articles/c1w1lvn7d9go?at_medium=RSS&at_campaign=rss",
       "source": "BBC Technology",
       "topic": "ai",
       "isoDate": "2026-08-05T09:24:18.000Z",
       "summary": "The UK's AI Safety Institute said recent behaviour from Anthropic and OpenAI models was malicious and unprecedented."
-    },
-    {
-      "title": "Afghan boxer appears in court in connection with death of Scottish woman",
-      "link": "https://www.bbc.co.uk/news/articles/cq56qejll6vo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-05T09:22:52.000Z",
-      "summary": "Sharif Ahmadzai, 26, is being held in connection with the death of Elisabeth Ross from Edinburgh."
-    },
-    {
-      "title": "Police chief considers joining legal action over PC Harper killers' early release",
-      "link": "https://www.bbc.co.uk/news/articles/cx2v5kj9zzko?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-05T09:02:25.000Z",
-      "summary": "Two of PC Andrew Harper's killers are set to be included in the government's early release scheme, which begins in October."
-    },
-    {
-      "title": "SpaceX shares sink after first earnings report reveals huge AI spending plans",
-      "link": "https://www.bbc.co.uk/news/articles/c0qvpveg20vo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-08-05T08:53:40.000Z",
-      "summary": "Elon Musk told investors that people were \"underestimating\" his company."
     },
     {
       "title": "‘I passed SQE1. 6 practical tips so you can too’",
@@ -96,11 +112,11 @@
       "summary": "Amenities aplenty The post Latham & Watkins gives sneak peek inside new London HQ, complete with juice stations, client fine dining and private fitness suites appeared first on…"
     },
     {
-      "title": "Knife crime homicides fall to 30-year low",
+      "title": "Knife crime homicides fall to 35-year low",
       "link": "https://www.gov.uk/government/news/knife-crime-homicides-fall-to-30-year-low",
       "source": "GOV.UK",
       "topic": "policing",
-      "isoDate": "2026-08-04T23:01:06.000Z",
+      "isoDate": "2026-08-04T23:01:00.000Z",
       "summary": "Knife-related homicides down by 26% under this government. More than 15,000 knives and offensive weapons removed from the streets."
     },
     {
@@ -176,14 +192,6 @@
       "summary": "Find out which judges are covering the various courts during the summer vacation from now until Thursday 1 October 2026 The post High Court of Justice – Summer vacation notice…"
     },
     {
-      "title": "Snapchat joins other popular platforms in fight against 'AI slop'",
-      "link": "https://www.bbc.co.uk/news/articles/c77g6dm5pr8o?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-07-31T21:57:59.000Z",
-      "summary": "Snapchat, YouTube, LinkedIn, and Substack are trying to combat the proliferation of fake AI content."
-    },
-    {
       "title": "Circular 011/2026: Annexes F, U and DA, Police Regulations 2003",
       "link": "https://www.gov.uk/government/publications/circular-0112026-annexes-f-u-and-da-police-regulations-2003",
       "source": "GOV.UK",
@@ -198,14 +206,6 @@
       "topic": "ai",
       "isoDate": "2026-07-30T17:19:23.000Z",
       "summary": "ShieldFont is available today if you've got copy that needs protecting"
-    },
-    {
-      "title": "Police misconduct processes to be reviewed",
-      "link": "https://www.gov.uk/government/news/police-misconduct-processes-to-be-reviewed",
-      "source": "GOV.UK",
-      "topic": "policing",
-      "isoDate": "2026-07-30T13:34:43.000Z",
-      "summary": "Oversight of misconduct procedures is to be reviewed as part of an overhaul of <mark>policing</mark> standards."
     },
     {
       "title": "Microsoft's cloud brings rain of revenue but modest M365 AI revenue harvest",
