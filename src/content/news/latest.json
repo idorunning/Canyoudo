@@ -1,6 +1,6 @@
 {
   "provenance": {
-    "fetchedAt": "2026-08-06T13:38:24.049Z",
+    "fetchedAt": "2026-08-07T02:02:46.846Z",
     "feedCount": 9,
     "sources": [
       "GOV.UK",
@@ -16,12 +16,52 @@
   },
   "items": [
     {
-      "title": "Farmer jailed for lodger's 'body in barrel' murder",
-      "link": "https://www.bbc.co.uk/news/articles/c8jnwennnkdo?at_medium=RSS&at_campaign=rss",
+      "title": "How a diary entry solved the murder of a missing man",
+      "link": "https://www.bbc.co.uk/news/articles/c62vzv2xyq9o?at_medium=RSS&at_campaign=rss",
       "source": "BBC News",
       "topic": "policing",
-      "isoDate": "2026-08-06T12:30:45.000Z",
-      "summary": "Richard Dyson's body was not found until nearly six years after he disappeared in rural Barnsley."
+      "isoDate": "2026-08-06T23:13:11.000Z",
+      "summary": "A detective shares how a six-year long investigation brought answers to a family in turmoil."
+    },
+    {
+      "title": "Met Police boss admits mistake over plagiarism row",
+      "link": "https://www.bbc.co.uk/news/articles/c0rd9y99grzo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-06T21:37:04.000Z",
+      "summary": "Sir Mark Rowley says his force \"dropped the ball\" after it investigated a reporter looking into claims about Jason Arday."
+    },
+    {
+      "title": "Amanda Knox defends Fringe comedy show after claims it will 'trivialise violence'",
+      "link": "https://www.bbc.co.uk/news/articles/c0m7pyv3y7no?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-06T19:39:43.000Z",
+      "summary": "Knox, who was convicted and later acquitted of the murder of a British student, said she does not downplay the seriousness of Meredith Kercher's death."
+    },
+    {
+      "title": "Boxer charged with killing aid worker in Athens after his wife gave police 'key' details",
+      "link": "https://www.bbc.co.uk/news/articles/cj6390k0e26o?at_medium=RSS&at_campaign=rss",
+      "source": "BBC News",
+      "topic": "policing",
+      "isoDate": "2026-08-06T17:26:56.000Z",
+      "summary": "Sharif Ahmadzai, who is 26 and from Afghanistan, faces charges of homicide with intent, robbery and weapons offences."
+    },
+    {
+      "title": "Humans in the loop miss a third of dangerous AI coding agent requests",
+      "link": "https://www.theregister.com/ai-and-ml/2026/08/06/humans-in-the-loop-miss-a-third-of-dangerous-ai-coding-agent-requests/5284236",
+      "source": "The Register",
+      "topic": "ai",
+      "isoDate": "2026-08-06T16:44:29.000Z",
+      "summary": "You wouldn't let Claude Code cat your AWS credentials or Kubernetes config on request, would you?"
+    },
+    {
+      "title": "First OpenAI, now Meta - why do AI hacks keep happening?",
+      "link": "https://www.bbc.co.uk/news/articles/cp30989ee1wo?at_medium=RSS&at_campaign=rss",
+      "source": "BBC Technology",
+      "topic": "ai",
+      "isoDate": "2026-08-06T15:59:34.000Z",
+      "summary": "A flood of companies are revealing AI models gained access to the internet - with real consequences."
     },
     {
       "title": "Usk Prison",
@@ -120,14 +160,6 @@
       "summary": "Knife-related homicides down by 26% under this government. More than 15,000 knives and offensive weapons removed from the streets."
     },
     {
-      "title": "Robbers who pretended to be from Liverpool jailed",
-      "link": "https://www.bbc.co.uk/news/videos/cn4n03191vvo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC News",
-      "topic": "policing",
-      "isoDate": "2026-08-04T15:35:25.000Z",
-      "summary": "The men lived only about five minutes away from the shop they robbed, police say."
-    },
-    {
       "title": "Criminal investigation starts after four men arrested and illegal meat removed",
       "link": "https://www.gov.uk/government/news/criminal-investigation-starts-after-four-men-arrested-and-illegal-meat-removed",
       "source": "GOV.UK",
@@ -144,28 +176,12 @@
       "summary": "Nottingham Prison is a men’s prison in the Sherwood area of Nottingham and serves courts in Nottinghamshire and Derbyshire."
     },
     {
-      "title": "Rape, serious child sex and grooming offences barred from sentencing changes",
-      "link": "https://www.gov.uk/government/news/rape-serious-child-sex-and-grooming-offences-barred-from-sentencing-changes",
-      "source": "Ministry of Justice",
-      "topic": "law",
-      "isoDate": "2026-08-04T10:10:00.000Z",
-      "summary": "The Prime Minister has ordered that rape, serious child sex and other grooming offences will be barred from upcoming changes to prison sentences, protecting the public from…"
-    },
-    {
       "title": "UK mulls making employers ask before installing bossware",
       "link": "https://www.theregister.com/software/2026/08/04/uk-mulls-making-employers-ask-before-installing-bossware/5282440",
       "source": "The Register",
       "topic": "ai",
       "isoDate": "2026-08-04T07:30:00.000Z",
       "summary": "Proposals span AI productivity scores, keystroke logging, biometrics, and other ways to watch workers"
-    },
-    {
-      "title": "Tokenomics: Why making AI pay is tricky",
-      "link": "https://www.bbc.co.uk/news/articles/c872r52x7jgo?at_medium=RSS&at_campaign=rss",
-      "source": "BBC Technology",
-      "topic": "ai",
-      "isoDate": "2026-08-03T23:21:10.000Z",
-      "summary": "Buyers of AI services are struggling to control costs and sellers are not sure how much to charge."
     },
     {
       "title": "High Court of Justice – Summer vacation notice 2026",
@@ -214,14 +230,6 @@
       "topic": "law",
       "isoDate": "2026-07-29T09:09:25.000Z",
       "summary": "Deadline for applications is Tuesday 18 August 2026 The post Vacancy: Legal Members of the Education Tribunal for Wales appeared first on Courts and Tribunals Judiciary ."
-    },
-    {
-      "title": "Perplexity's tokenmaxxing Model Council gives you multiple bot perspectives",
-      "link": "https://www.theregister.com/ai-and-ml/2026/07/28/perplexitys-tokenmaxxing-model-council-gives-you-multiple-bot-perspectives/5279972",
-      "source": "The Register",
-      "topic": "ai",
-      "isoDate": "2026-07-28T21:26:53.000Z",
-      "summary": "Up to 8 AI models running in the cloud weighing in on ambiguous business issues? Sounds affordable"
     },
     {
       "title": "President of the King’s Bench Division in conversation with Chair of the Bar",
