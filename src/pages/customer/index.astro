@@ -1,27 +1,100 @@
 ---
 import Base from '../../layouts/Base.astro';
 ---
-<Base title="My bookings — CanYouDo?">
+<Base title="My account — CanYouDo?">
   <section class="section" style="padding-top:44px">
-    <div class="wrap" style="max-width:860px">
+    <div class="wrap" style="max-width:880px">
       <div class="app-title">
         <div>
-          <p class="kicker" style="margin-bottom:2px">Customer portal</p>
-          <h1 style="font-size:1.9rem;margin:0">My bookings</h1>
+          <p class="kicker" style="margin-bottom:2px">Customer</p>
+          <h1 style="font-size:1.9rem;margin:0" id="hello">My account</h1>
         </div>
-        <a class="btn btn-primary" href="/find-a-cleaner/">+ New booking</a>
+        <a class="btn btn-primary" href="/find-a-cleaner/">Find a cleaner</a>
       </div>
+
+      <div class="tabs" id="tabs">
+        <button data-tab="bookings" class="on">Bookings</button>
+        <button data-tab="requests">What I need</button>
+        <button data-tab="favourites">Favourites</button>
+      </div>
+
       <div id="app"><p class="hint">Loading…</p></div>
     </div>
   </section>
 
-  <!-- rating dialog -->
+  <!-- new request -->
+  <dialog id="req-dialog" style="border:none;border-radius:var(--radius);max-width:540px;width:92vw;padding:0;box-shadow:var(--shadow)">
+    <div style="padding:26px">
+      <h2 style="font-size:1.3rem">Post what you need</h2>
+      <p class="hint">This goes on the open board for local providers to see. Only your postcode is shown — never your full address.</p>
+      <form id="req-form">
+        <label>Type of request</label>
+        <div class="grid-2" style="gap:10px">
+          <label class="role-pick" style="margin:0"><input type="radio" name="request_type" value="rolling" checked style="width:auto;margin-right:8px" />Regular slot</label>
+          <label class="role-pick" style="margin:0"><input type="radio" name="request_type" value="ad_hoc" style="width:auto;margin-right:8px" />One-off date</label>
+        </div>
+
+        <div id="rolling-fields">
+          <label for="weekday">Which day suits you?</label>
+          <select id="weekday" name="weekday">
+            <option value="1">Monday</option><option value="2">Tuesday</option>
+            <option value="3">Wednesday</option><option value="4">Thursday</option>
+            <option value="5">Friday</option><option value="6">Saturday</option><option value="0">Sunday</option>
+          </select>
+          <label for="recurrence">How often?</label>
+          <select id="recurrence" name="recurrence">
+            <option value="weekly">Every week</option>
+            <option value="fortnightly">Every fortnight</option>
+            <option value="monthly">Every month</option>
+          </select>
+        </div>
+
+        <div id="adhoc-fields" class="hidden">
+          <label for="preferred_date">Date you want</label>
+          <input id="preferred_date" name="preferred_date" type="date" />
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label for="req_time">Preferred start time</label>
+            <input id="req_time" name="start_time" type="time" value="09:00" />
+          </div>
+          <div>
+            <label for="req_hours">Hours needed</label>
+            <input id="req_hours" name="hours" type="number" min="1" max="8" step="0.5" value="2" required />
+          </div>
+        </div>
+
+        <label for="req_postcode">Postcode</label>
+        <input id="req_postcode" name="postcode" required />
+
+        <label for="req_areas">What needs cleaning?</label>
+        <textarea id="req_areas" name="areas_requested" rows="3" required placeholder="e.g. Kitchen, two bathrooms, hallway and stairs"></textarea>
+
+        <label for="req_notes">Anything else providers should know?</label>
+        <textarea id="req_notes" name="notes" rows="2" placeholder="Two friendly dogs. Parking on the street."></textarea>
+
+        <label style="display:flex;align-items:center;margin-top:14px;font-weight:500">
+          <input type="checkbox" id="req_urgent" name="urgent" style="width:auto;margin-right:8px" />
+          Mark as urgent / short notice
+        </label>
+        <p class="hint">Urgent jobs offer the provider an uplift on their own rate for stepping in quickly.</p>
+
+        <div id="req-msg"></div>
+        <div style="display:flex;gap:12px;margin-top:18px">
+          <button class="btn btn-primary" type="submit">Post to the board</button>
+          <button class="btn btn-secondary" type="button" id="req-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- review -->
   <dialog id="rate-dialog" style="border:none;border-radius:var(--radius);max-width:520px;width:92vw;padding:0;box-shadow:var(--shadow)">
     <div style="padding:26px">
-      <h2 style="font-size:1.3rem">Rate this clean</h2>
-      <p class="hint">Factual answers, please — these scores decide your cleaner's monthly bonus.</p>
+      <h2 style="font-size:1.3rem">Leave a review</h2>
+      <p class="hint">Reviews are public and build your provider's grading. Please be factual and fair.</p>
       <form id="rate-form">
-        <div id="rate-questions"></div>
         <label for="overall">Overall rating</label>
         <select id="overall" name="overall" required>
           <option value="5">★★★★★ Excellent</option>
@@ -30,11 +103,14 @@ import Base from '../../layouts/Base.astro';
           <option value="2">★★ Poor</option>
           <option value="1">★ Very poor</option>
         </select>
-        <label for="comment">Comment (optional)</label>
-        <textarea id="comment" name="comment" rows="2"></textarea>
+        <label for="title">Headline</label>
+        <input id="title" name="title" maxlength="80" placeholder="e.g. Spotless every time" />
+        <div id="rate-questions"></div>
+        <label for="comment">Your review</label>
+        <textarea id="comment" name="comment" rows="3" placeholder="What went well? Anything to improve?"></textarea>
         <div id="rate-msg"></div>
         <div style="display:flex;gap:12px;margin-top:18px">
-          <button class="btn btn-primary" type="submit">Submit rating</button>
+          <button class="btn btn-primary" type="submit">Publish review</button>
           <button class="btn btn-secondary" type="button" id="rate-cancel">Cancel</button>
         </div>
       </form>
@@ -42,67 +118,65 @@ import Base from '../../layouts/Base.astro';
   </dialog>
 
   <script>
-    import { requireAuth, esc, fmtDate, api, RATES } from '../../lib/supabase.js';
+    import { requireAuth, esc, fmtDate, api, money, stars, gradingBadge, bookingTotals, DAYS } from '../../lib/supabase.js';
 
     const QUESTIONS = [
-      ['arrived_on_time', 'Did your cleaner arrive on time?'],
+      ['arrived_on_time', 'Did they arrive on time?'],
       ['completed_requested_areas', 'Did they clean all the areas you asked for?'],
       ['followed_instructions', 'Did they follow your instructions?'],
       ['friendly_professional', 'Were they friendly and professional?'],
     ];
     const STATUS_BADGE = {
-      pending: '<span class="badge badge-amber">Awaiting cleaner</span>',
+      pending: '<span class="badge badge-amber">Awaiting provider</span>',
       confirmed: '<span class="badge badge-green">Confirmed</span>',
       completed: '<span class="badge badge-grey">Completed</span>',
       declined: '<span class="badge badge-red">Declined</span>',
       cancelled: '<span class="badge badge-red">Cancelled</span>',
     };
 
-    let ctx, ratingBooking = null;
+    let ctx, tab = 'bookings', ratingBooking = null;
 
-    async function load() {
+    async function loadBookings() {
       const { client } = ctx;
       const { data: bookings, error } = await client
         .from('bookings')
-        .select('*, cleaner:profiles!bookings_cleaner_id_fkey(full_name), rating:ratings(booking_id)')
+        .select('*, provider:profiles!bookings_cleaner_id_fkey(full_name), rating:ratings(booking_id)')
         .order('booking_date', { ascending: false });
       const app = document.getElementById('app');
-      if (error) {
-        app.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>';
-        return;
-      }
+      if (error) { app.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>'; return; }
       if (new URLSearchParams(window.location.search).get('paid')) {
         history.replaceState(null, '', '/customer/');
-        app.insertAdjacentHTML('beforebegin', '<div class="notice notice-info"><strong>Thanks!</strong> Your introduction fee payment is being confirmed.</div>');
+        app.insertAdjacentHTML('beforebegin', '<div class="notice notice-info"><strong>Thanks!</strong> Your service charge payment is being confirmed.</div>');
       }
       if (!bookings.length) {
-        app.innerHTML = '<div class="notice notice-info">No bookings yet. <a href="/find-a-cleaner/">Find your first cleaner →</a></div>';
+        app.innerHTML = '<div class="notice notice-info">No bookings yet. <a href="/find-a-cleaner/">Find a cleaner →</a> or post what you need on the board.</div>';
         return;
       }
       app.innerHTML = bookings.map((b) => {
-        const first = (b.cleaner?.full_name || 'your cleaner').split(' ')[0];
-        const cleanerPay = (b.hours * RATES.cleaner).toFixed(2).replace(/\.00$/, '');
-        const fee = (b.hours * RATES.fee).toFixed(2).replace(/\.00$/, '');
+        const t = bookingTotals(b);
+        const first = (b.provider?.full_name || 'your provider').split(' ')[0];
         const rated = b.rating && b.rating.length > 0;
         return `
         <div class="card booking-card" data-id="${b.id}">
           <div class="booking-head">
-            <strong style="font-family:var(--font-head)">${fmtDate(b.booking_date)} · ${b.start_time.slice(0, 5)} · ${b.hours}h with ${esc(b.cleaner?.full_name || '—')}</strong>
+            <strong style="font-family:var(--font-head)">${fmtDate(b.booking_date)} · ${b.start_time.slice(0,5)} · ${b.hours}h with ${esc(b.provider?.full_name || '—')}</strong>
             ${STATUS_BADGE[b.status] || ''}
           </div>
           <p style="margin:0;font-size:0.92rem;color:var(--ink-600)">${esc(b.address)}, ${esc(b.postcode)} — ${esc(b.areas_requested)}</p>
+          ${b.urgent ? '<p style="margin:0"><span class="badge badge-amber">Urgent / short notice</span></p>' : ''}
+          ${b.booking_type === 'rolling' ? `<p style="margin:0"><span class="badge badge-green">Regular · ${esc(b.recurrence || '')}</span></p>` : ''}
           ${b.ai_summary ? `<p class="hint" style="margin:0">🤖 ${esc(b.ai_summary)}</p>` : ''}
           <p style="margin:0;font-size:0.9rem">
-            <strong>£${cleanerPay}</strong> to ${esc(first)} on the day · <strong>£${fee}</strong> intro fee ${b.fee_paid ? '<span class="badge badge-green">paid</span>' : '<span class="badge badge-amber">unpaid</span>'}
+            <strong>${money(t.providerTotal)}</strong> direct to ${esc(first)} · <strong>${money(t.fee)}</strong> service charge ${b.fee_paid ? '<span class="badge badge-green">paid</span>' : '<span class="badge badge-amber">unpaid</span>'}
           </p>
-          <div id="paydetails-${b.id}"></div>
+          <div id="contact-${b.id}"></div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
-            ${!b.fee_paid && ['pending', 'confirmed'].includes(b.status) ? `<button class="btn btn-amber btn-sm" data-act="pay">Pay £${fee} intro fee</button>` : ''}
-            ${['confirmed', 'completed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="paydetails">How to pay ' + esc(first) + '</button>' : ''}
-            ${b.status === 'completed' && !rated ? '<button class="btn btn-primary btn-sm" data-act="rate">Rate this clean</button>' : ''}
-            ${rated ? '<span class="badge badge-green" style="align-self:center">✓ Rated — thank you</span>' : ''}
-            ${['pending', 'confirmed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="msg">Messages</button>' : ''}
-            ${['pending', 'confirmed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="cancel" style="color:var(--danger);border-color:var(--danger)">Cancel</button>' : ''}
+            ${!b.fee_paid && ['pending','confirmed'].includes(b.status) ? `<button class="btn btn-amber btn-sm" data-act="pay">Pay ${money(t.fee)} service charge</button>` : ''}
+            ${['confirmed','completed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="contact">Contact &amp; payment details</button>' : ''}
+            ${b.status === 'completed' && !rated ? '<button class="btn btn-primary btn-sm" data-act="rate">Leave a review</button>' : ''}
+            ${rated ? '<span class="badge badge-green" style="align-self:center">✓ Reviewed</span>' : ''}
+            ${['pending','confirmed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="msg">Messages</button>' : ''}
+            ${['pending','confirmed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="cancel" style="color:var(--danger);border-color:var(--danger)">Cancel</button>' : ''}
           </div>
           <div class="msg-panel hidden" id="msgs-${b.id}">
             <div class="msg-list" id="msglist-${b.id}"></div>
@@ -113,11 +187,14 @@ import Base from '../../layouts/Base.astro';
           </div>
         </div>`;
       }).join('');
+      wireBookings(bookings);
+    }
 
+    function wireBookings(bookings) {
+      const app = document.getElementById('app');
       app.querySelectorAll('[data-act]').forEach((btn) => {
-        const card = btn.closest('[data-id]');
-        const b = bookings.find((x) => x.id === card.dataset.id);
-        btn.addEventListener('click', () => actions[btn.dataset.act](b, card));
+        const b = bookings.find((x) => x.id === btn.closest('[data-id]').dataset.id);
+        btn.addEventListener('click', () => actions[btn.dataset.act](b));
       });
       app.querySelectorAll('[data-msgform]').forEach((form) =>
         form.addEventListener('submit', async (e) => {
@@ -142,29 +219,30 @@ import Base from '../../layouts/Base.astro';
       pay: async (b) => {
         const pay = await api('create-checkout', { booking_id: b.id, origin: window.location.origin });
         if (pay && pay.url) window.location.href = pay.url;
-        else alert('Online payment isn\'t live yet — the introduction fee will be invoiced separately.');
+        else alert('Online payment isn\'t live yet — the service charge will be invoiced separately.');
       },
-      paydetails: async (b) => {
-        const el = document.getElementById('paydetails-' + b.id);
-        const { data, error } = await ctx.client.rpc('get_cleaner_payment_details', { bid: b.id });
-        el.innerHTML = error || !data
-          ? '<div class="notice notice-warn">Payment details aren\'t available yet — ask via messages.</div>'
-          : '<div class="notice notice-info"><strong>Pay your cleaner directly:</strong> ' + esc(data) + '</div>';
+      contact: async (b) => {
+        const el = document.getElementById('contact-' + b.id);
+        const { data, error } = await ctx.client.rpc('get_provider_contact', { bid: b.id });
+        if (error || !data) { el.innerHTML = '<div class="notice notice-warn">Details aren\'t available yet — ask via messages.</div>'; return; }
+        el.innerHTML = `<div class="notice notice-info">
+          <strong>Pay them directly:</strong> ${esc(data.payment_details || 'not provided yet')}<br />
+          ${data.contact_email ? `<strong>Email:</strong> ${esc(data.contact_email)} ` : ''}
+          ${data.contact_phone ? `<strong>Phone:</strong> ${esc(data.contact_phone)}` : ''}
+          ${data.insurer_name ? `<br /><strong>Insurance on file:</strong> ${esc(data.insurer_name)}${data.policy_expiry ? ' (to ' + data.policy_expiry + ')' : ''} — please confirm cover directly with them; CanYouDo? does not verify insurance.` : ''}
+        </div>`;
       },
-      msg: async (b) => {
-        document.getElementById('msgs-' + b.id).classList.toggle('hidden');
-        loadMessages(b.id);
-      },
+      msg: (b) => { document.getElementById('msgs-' + b.id).classList.toggle('hidden'); loadMessages(b.id); },
       cancel: async (b) => {
         if (!confirm('Cancel this booking?')) return;
         await ctx.client.from('bookings').update({ status: 'cancelled' }).eq('id', b.id);
         api('notify', { type: 'booking_cancelled', booking_id: b.id });
-        load();
+        loadBookings();
       },
       rate: (b) => {
         ratingBooking = b;
         document.getElementById('rate-questions').innerHTML = QUESTIONS.map(([k, q]) => `
-          <label style="margin-top:14px">${q}</label>
+          <label style="margin-top:12px">${q}</label>
           <div style="display:flex;gap:16px">
             <label style="font-weight:400;margin:0"><input type="radio" name="${k}" value="true" required style="width:auto;margin-right:6px" />Yes</label>
             <label style="font-weight:400;margin:0"><input type="radio" name="${k}" value="false" style="width:auto;margin-right:6px" />No</label>
@@ -173,27 +251,154 @@ import Base from '../../layouts/Base.astro';
       },
     };
 
+    async function loadRequests() {
+      const { data, error } = await ctx.client.from('customer_requests').select('*').order('created_at', { ascending: false });
+      const app = document.getElementById('app');
+      if (error) { app.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>'; return; }
+      app.innerHTML = `
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+          <div><strong style="font-family:var(--font-head)">Tell providers when you need someone</strong>
+            <p class="hint" style="margin:2px 0 0">Post a regular slot or a one-off date. Local providers browse the board and get in touch.</p></div>
+          <button class="btn btn-primary" id="new-req">+ Post a request</button>
+        </div>
+        ${(data || []).length ? data.map((r) => `
+          <div class="card booking-card" style="margin-top:14px">
+            <div class="booking-head">
+              <strong style="font-family:var(--font-head)">
+                ${r.request_type === 'rolling' ? `Every ${esc(r.recurrence || '')} on ${DAYS[r.weekday]}` : fmtDate(r.preferred_date)}
+                ${r.start_time ? ' · ' + r.start_time.slice(0,5) : ''} · ${r.hours}h
+              </strong>
+              <span>
+                ${r.urgent ? '<span class="badge badge-amber">Urgent</span> ' : ''}
+                <span class="badge ${r.status === 'open' ? 'badge-green' : 'badge-grey'}">${r.status}</span>
+              </span>
+            </div>
+            <p style="margin:0;font-size:0.92rem;color:var(--ink-600)">${esc(r.postcode)} — ${esc(r.areas_requested)}</p>
+            ${r.notes ? `<p class="hint" style="margin:0">${esc(r.notes)}</p>` : ''}
+            <div style="margin-top:6px">
+              ${r.status === 'open' ? `<button class="btn btn-secondary btn-sm" data-close="${r.id}">Close request</button>` : ''}
+              <button class="btn btn-secondary btn-sm" data-del="${r.id}" style="color:var(--danger);border-color:var(--danger)">Delete</button>
+            </div>
+          </div>`).join('') : '<div class="notice notice-info" style="margin-top:14px">You haven\'t posted anything yet.</div>'}`;
+
+      document.getElementById('new-req').addEventListener('click', () => document.getElementById('req-dialog').showModal());
+      app.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', async () => {
+        await ctx.client.from('customer_requests').update({ status: 'closed' }).eq('id', b.dataset.close);
+        loadRequests();
+      }));
+      app.querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', async () => {
+        if (!confirm('Delete this request?')) return;
+        await ctx.client.from('customer_requests').delete().eq('id', b.dataset.del);
+        loadRequests();
+      }));
+    }
+
+    async function loadFavourites() {
+      const { data: favs } = await ctx.client.from('favourites').select('cleaner_id');
+      const ids = (favs || []).map((f) => f.cleaner_id);
+      const app = document.getElementById('app');
+      if (!ids.length) {
+        app.innerHTML = '<div class="notice notice-info">No favourites yet. Tap the ♡ on any provider to save them here. <a href="/find-a-cleaner/">Browse providers →</a></div>';
+        return;
+      }
+      const { data } = await ctx.client.from('cleaner_directory').select('*').in('profile_id', ids);
+      app.innerHTML = '<div class="grid-2">' + (data || []).map((c) => `
+        <div class="card">
+          <div class="booking-head">
+            <h3 style="margin:0"><a href="/p/?id=${c.profile_id}" style="color:inherit;text-decoration:none">${esc(c.display_name)}</a></h3>
+            <button class="fav-btn on" data-unfav="${c.profile_id}" aria-label="Remove favourite">♥</button>
+          </div>
+          <p style="margin:4px 0">${gradingBadge(c.grading)}</p>
+          <p class="hint" style="margin:0">${esc(c.service_area || '')}</p>
+          <p style="margin:6px 0;font-size:0.9rem">${c.jobs_done ? stars(c.avg_rating) + ' ' + Number(c.avg_rating).toFixed(1) : '<em class="hint">No reviews yet</em>'}</p>
+          <div class="rate-line">${c.customer_total_rate !== null ? money(c.customer_total_rate) + '/hr' : 'Rate not set'}<small>${c.customer_total_rate !== null ? money(c.hourly_rate) + ' to them + ' + Number(c.fee_pct) + '% service charge' : ''}</small></div>
+          <p style="margin-top:10px"><a class="btn btn-primary btn-sm" href="/p/?id=${c.profile_id}">View &amp; book</a></p>
+        </div>`).join('') + '</div>';
+      app.querySelectorAll('[data-unfav]').forEach((b) => b.addEventListener('click', async () => {
+        await ctx.client.from('favourites').delete().eq('customer_id', ctx.session.user.id).eq('cleaner_id', b.dataset.unfav);
+        loadFavourites();
+      }));
+    }
+
+    function show(t) {
+      tab = t;
+      document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
+      document.getElementById('app').innerHTML = '<p class="hint">Loading…</p>';
+      if (t === 'bookings') loadBookings();
+      else if (t === 'requests') loadRequests();
+      else loadFavourites();
+    }
+
     async function init() {
       ctx = await requireAuth('customer');
       if (!ctx) return;
-      await load();
+      document.getElementById('hello').textContent = 'Hello, ' + (ctx.profile.full_name || 'there').split(' ')[0] + ' 👋';
+      document.querySelectorAll('#tabs button').forEach((b) => b.addEventListener('click', () => show(b.dataset.tab)));
+      show('bookings');
 
+      // request dialog
+      document.querySelectorAll('input[name="request_type"]').forEach((r) =>
+        r.addEventListener('change', () => {
+          const rolling = document.querySelector('input[name="request_type"]:checked').value === 'rolling';
+          document.getElementById('rolling-fields').classList.toggle('hidden', !rolling);
+          document.getElementById('adhoc-fields').classList.toggle('hidden', rolling);
+        })
+      );
+      document.getElementById('req-cancel').addEventListener('click', () => document.getElementById('req-dialog').close());
+      document.getElementById('req-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const f = new FormData(e.target);
+        const type = f.get('request_type');
+        const row = {
+          customer_id: ctx.session.user.id,
+          request_type: type,
+          hours: Number(f.get('hours')),
+          start_time: f.get('start_time') || null,
+          postcode: (f.get('postcode') || '').toUpperCase().trim(),
+          areas_requested: f.get('areas_requested'),
+          notes: f.get('notes') || '',
+          urgent: document.getElementById('req_urgent').checked,
+          weekday: type === 'rolling' ? Number(f.get('weekday')) : null,
+          recurrence: type === 'rolling' ? f.get('recurrence') : null,
+          preferred_date: type === 'ad_hoc' ? f.get('preferred_date') : null,
+        };
+        if (type === 'ad_hoc' && !row.preferred_date) {
+          document.getElementById('req-msg').innerHTML = '<div class="notice notice-warn">Please choose a date.</div>';
+          return;
+        }
+        const { error } = await ctx.client.from('customer_requests').insert(row);
+        if (error) { document.getElementById('req-msg').innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>'; return; }
+        document.getElementById('req-dialog').close();
+        e.target.reset();
+        show('requests');
+      });
+
+      // review dialog
       document.getElementById('rate-cancel').addEventListener('click', () => document.getElementById('rate-dialog').close());
       document.getElementById('rate-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const f = new FormData(e.target);
-        const row = { booking_id: ratingBooking.id, cleaner_id: ratingBooking.cleaner_id, customer_id: ctx.session.user.id, overall: Number(f.get('overall')), comment: f.get('comment') || '' };
+        const row = {
+          booking_id: ratingBooking.id,
+          cleaner_id: ratingBooking.cleaner_id,
+          customer_id: ctx.session.user.id,
+          overall: Number(f.get('overall')),
+          title: f.get('title') || '',
+          comment: f.get('comment') || '',
+        };
         for (const [k] of QUESTIONS) row[k] = f.get(k) === 'true';
         const { error } = await ctx.client.from('ratings').insert(row);
-        if (error) {
-          document.getElementById('rate-msg').innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>';
-          return;
-        }
+        if (error) { document.getElementById('rate-msg').innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>'; return; }
         document.getElementById('rate-dialog').close();
         e.target.reset();
-        load();
+        show('bookings');
       });
     }
     init();
   </script>
 </Base>
+
+<style>
+  .role-pick { display:flex; align-items:center; border:1.5px solid var(--line); border-radius: var(--radius-sm); padding: 10px 12px; cursor: pointer; font-weight:600; font-size:0.9rem; }
+  .role-pick:has(input:checked) { border-color: var(--green-700); background: var(--green-50); }
+</style>

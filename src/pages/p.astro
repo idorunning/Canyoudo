@@ -1,0 +1,317 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Provider profile — CanYouDo?">
+  <section class="section" style="padding-top:44px">
+    <div class="wrap" style="max-width:900px">
+      <p style="margin-bottom:14px"><a href="/find-a-cleaner/">← Back to all providers</a></p>
+      <div id="app"><p class="hint">Loading…</p></div>
+    </div>
+  </section>
+
+  <dialog id="book-dialog" style="border:none;border-radius:var(--radius);max-width:580px;width:92vw;padding:0;box-shadow:var(--shadow)">
+    <div style="padding:26px">
+      <h2 id="book-title" style="font-size:1.35rem">Book</h2>
+      <form id="book-form">
+        <label>What kind of booking?</label>
+        <div class="grid-2" style="gap:10px">
+          <label class="role-pick" style="margin:0"><input type="radio" name="booking_type" value="one_off" checked style="width:auto;margin-right:8px" />One-off</label>
+          <label class="role-pick" style="margin:0"><input type="radio" name="booking_type" value="rolling" style="width:auto;margin-right:8px" />Regular slot</label>
+        </div>
+        <div id="recur-wrap" class="hidden">
+          <label for="recurrence">How often?</label>
+          <select id="recurrence" name="recurrence">
+            <option value="weekly">Every week</option>
+            <option value="fortnightly">Every fortnight</option>
+            <option value="monthly">Every month</option>
+          </select>
+          <p class="hint">We'll book the first visit now; you can repeat it from your bookings page.</p>
+        </div>
+
+        <label style="margin-top:16px">Pick a date</label>
+        <div class="cal-head">
+          <button type="button" class="btn btn-secondary btn-sm" id="cal-prev">‹</button>
+          <strong id="cal-label"></strong>
+          <button type="button" class="btn btn-secondary btn-sm" id="cal-next">›</button>
+        </div>
+        <div class="cal" id="cal"></div>
+        <p class="hint" id="cal-hint">Greyed dates are outside their availability or blocked out.</p>
+
+        <div class="field-row">
+          <div>
+            <label for="start_time">Start time</label>
+            <input id="start_time" name="start_time" type="time" required min="07:00" max="20:00" value="09:00" />
+          </div>
+          <div>
+            <label for="hours">Hours</label>
+            <input id="hours" name="hours" type="number" min="1" max="8" step="0.5" value="2" required />
+          </div>
+        </div>
+
+        <label style="display:flex;align-items:center;margin-top:14px;font-weight:500">
+          <input type="checkbox" id="urgent" name="urgent" style="width:auto;margin-right:8px" />
+          This is urgent / short notice
+        </label>
+        <p class="hint" id="urgent-hint">Offers the provider an uplift on their own rate for taking it on at short notice. The uplift goes to them; they can still decline.</p>
+
+        <label for="address">Address of the clean</label>
+        <input id="address" name="address" required autocomplete="street-address" />
+        <div class="field-row">
+          <div>
+            <label for="postcode">Postcode</label>
+            <input id="postcode" name="postcode" required />
+          </div>
+          <div></div>
+        </div>
+
+        <label for="areas_requested">Which areas should be cleaned?</label>
+        <textarea id="areas_requested" name="areas_requested" rows="3" required placeholder="e.g. Kitchen (incl. oven), bathroom, lounge, hallway floors"></textarea>
+        <p class="hint">Be specific — your review afterwards asks whether they cleaned the areas requested.</p>
+
+        <label for="notes">Notes (access, pets, products, anything else)</label>
+        <textarea id="notes" name="notes" rows="2" placeholder="Key safe code sent by message. Products are under the sink."></textarea>
+
+        <div class="card" id="quote" style="margin-top:16px;background:var(--green-50);box-shadow:none"></div>
+        <div class="notice notice-warn" style="font-size:0.85rem">Insurance is between you and your provider. Please agree what cover is in place before work begins — CanYouDo? does not provide or verify insurance.</div>
+
+        <div id="book-msg"></div>
+        <div style="display:flex;gap:12px;margin-top:16px">
+          <button class="btn btn-primary" type="submit">Request booking</button>
+          <button class="btn btn-secondary" type="button" id="book-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script>
+    import { getClient, requireBackend, getProfile, esc, money, stars, gradingBadge, DAYS, isBlocked, api } from '../lib/supabase.js';
+
+    const id = new URLSearchParams(window.location.search).get('id');
+    let p = null, reviews = [], me = null, isFav = false, settings = null;
+    let calMonth = new Date(); calMonth.setDate(1);
+    let chosenDate = '';
+
+    function renderProfile() {
+      const initials = (p.display_name || '?').split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+      document.getElementById('app').innerHTML = `
+        <div class="card">
+          <div class="provider-head">
+            ${p.avatar_url ? `<img class="avatar" style="width:76px;height:76px" src="${esc(p.avatar_url)}" alt="" />`
+                           : `<div class="avatar avatar-fallback" style="width:76px;height:76px;font-size:1.6rem">${esc(initials)}</div>`}
+            <div style="flex:1">
+              <div class="booking-head">
+                <h1 style="font-size:1.8rem;margin:0">${esc(p.display_name)}</h1>
+                <button class="fav-btn ${isFav ? 'on' : ''}" id="fav" aria-label="Favourite">${isFav ? '♥' : '♡'}</button>
+              </div>
+              <p style="margin:6px 0">${gradingBadge(p.grading)} ${p.insurance_on_file ? '<span class="badge badge-green">Insurance details on file</span>' : '<span class="badge badge-grey">No insurance details on file</span>'}</p>
+              <p class="hint" style="margin:0">${esc(p.service_area || '')}${p.years_experience ? ' · ' + p.years_experience + ' years experience' : ''} · ${p.favourite_count} favourite${p.favourite_count === 1 ? '' : 's'}</p>
+            </div>
+          </div>
+
+          <p style="margin-top:16px">${esc(p.bio || 'No bio yet.')}</p>
+          <p>${(p.services || []).map((s) => `<span class="badge badge-amber" style="margin:0 5px 5px 0">${esc(s)}</span>`).join('')}</p>
+          ${(p.photos || []).length ? `<div class="photo-strip" style="margin-top:8px">${p.photos.map((ph) => `<img src="${esc(ph)}" alt="Example of their work" loading="lazy" style="height:150px;width:200px" />`).join('')}</div>` : ''}
+
+          <div class="grid-2" style="margin-top:20px;align-items:center">
+            <div>
+              <div class="rate-line" style="font-size:1.5rem">
+                ${p.customer_total_rate !== null ? money(p.customer_total_rate) + '/hr' : 'Rate not published'}
+                ${p.customer_total_rate !== null ? `<small>${money(p.hourly_rate)}/hr to ${esc(p.display_name.split(' ')[0])} + ${Number(p.fee_pct)}% CanYouDo? service charge</small>` : ''}
+              </div>
+            </div>
+            <div style="text-align:right">
+              <button class="btn btn-primary" id="book-btn" ${p.hourly_rate === null ? 'disabled' : ''}>Request a booking</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:20px">
+          <div class="card">
+            <h3>Availability</h3>
+            <p style="margin:0">${(p.availability || []).length
+              ? p.availability.map((s) => `<strong>${DAYS[s.weekday]}</strong> ${s.start_time.slice(0,5)}–${s.end_time.slice(0,5)}`).join('<br />')
+              : '<span class="hint">Not set yet.</span>'}</p>
+            ${(p.blocked_dates || []).length ? `<p class="hint" style="margin-top:10px">🏖️ Away: ${p.blocked_dates.map((b) => b.start_date === b.end_date ? b.start_date : `${b.start_date} → ${b.end_date}`).join(', ')}</p>` : ''}
+          </div>
+          <div class="card">
+            <h3>Track record</h3>
+            ${p.jobs_done > 0 ? `
+              <p style="margin:0;font-size:1.1rem">${stars(p.avg_rating)} <strong>${Number(p.avg_rating).toFixed(1)}</strong> <span class="hint">from ${p.jobs_done} rated job${p.jobs_done === 1 ? '' : 's'}</span></p>
+              <p style="margin:8px 0 0;font-size:0.92rem">⏱ On time: <strong>${Math.round(p.on_time_pct)}%</strong><br />✅ Cleaned all areas asked: <strong>${Math.round(p.areas_pct)}%</strong></p>`
+              : '<p class="hint" style="margin:0">New to the board — no rated jobs yet. Everyone starts somewhere.</p>'}
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:20px">
+          <h3>Reviews ${reviews.length ? `<span class="hint" style="font-weight:400">(${reviews.length})</span>` : ''}</h3>
+          ${reviews.length ? reviews.map((r) => `
+            <div class="review">
+              <div class="review-head">
+                <strong>${esc(r.title || 'Review')}</strong>
+                <span class="review-meta">${esc(r.reviewer_name)} · ${new Date(r.created_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</span>
+              </div>
+              <p style="margin:4px 0">${stars(r.overall)}</p>
+              ${r.comment ? `<p style="margin:4px 0">${esc(r.comment)}</p>` : ''}
+              <div class="chip-row">
+                <span class="chip ${r.arrived_on_time ? '' : 'no'}">${r.arrived_on_time ? '✓' : '✗'} On time</span>
+                <span class="chip ${r.completed_requested_areas ? '' : 'no'}">${r.completed_requested_areas ? '✓' : '✗'} All areas</span>
+                <span class="chip ${r.followed_instructions ? '' : 'no'}">${r.followed_instructions ? '✓' : '✗'} Followed instructions</span>
+                <span class="chip ${r.friendly_professional ? '' : 'no'}">${r.friendly_professional ? '✓' : '✗'} Professional</span>
+              </div>
+            </div>`).join('') : '<p class="hint">No reviews yet.</p>'}
+        </div>
+
+        <div class="notice notice-warn" style="margin-top:20px">
+          <strong>About insurance:</strong> providers on CanYouDo? are independent businesses who arrange their own insurance. Where we show "insurance details on file", that is a record the provider gave us — not a verification or guarantee by CanYouDo?. Please discuss and agree insurance arrangements directly with your provider before work begins.
+        </div>`;
+
+      document.getElementById('fav').addEventListener('click', toggleFav);
+      const bb = document.getElementById('book-btn');
+      if (bb) bb.addEventListener('click', openBooking);
+    }
+
+    async function toggleFav() {
+      if (!me) { window.location.href = '/login/?next=' + encodeURIComponent(window.location.pathname + window.location.search); return; }
+      const c = getClient();
+      if (isFav) await c.from('favourites').delete().eq('customer_id', me.id).eq('cleaner_id', id);
+      else await c.from('favourites').insert({ customer_id: me.id, cleaner_id: id });
+      isFav = !isFav;
+      renderProfile();
+    }
+
+    // ---- calendar ----
+    function drawCal() {
+      const y = calMonth.getFullYear(), m = calMonth.getMonth();
+      document.getElementById('cal-label').textContent = calMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      const first = new Date(y, m, 1), days = new Date(y, m + 1, 0).getDate();
+      const lead = (first.getDay() + 6) % 7; // Monday-first grid
+      const today = new Date().toISOString().slice(0, 10);
+      const openDays = new Set((p.availability || []).map((s) => s.weekday));
+      let html = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((d) => `<div class="dow">${d}</div>`).join('');
+      html += '<div class="cal-pad" style="grid-column:span ' + (lead || 0) + '"></div>'.repeat(0);
+      for (let i = 0; i < lead; i++) html += '<button type="button" class="empty" disabled></button>';
+      for (let d = 1; d <= days; d++) {
+        const ds = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const weekday = new Date(y, m, d).getDay();
+        const past = ds <= today;
+        const blocked = isBlocked(ds, p.blocked_dates) || (openDays.size > 0 && !openDays.has(weekday));
+        const cls = ds === chosenDate ? 'sel' : (past || blocked ? 'blocked' : '');
+        html += `<button type="button" class="${cls}" data-date="${ds}" ${past || blocked ? 'disabled' : ''}>${d}</button>`;
+      }
+      const cal = document.getElementById('cal');
+      cal.innerHTML = html;
+      cal.querySelectorAll('[data-date]').forEach((b) =>
+        b.addEventListener('click', () => { chosenDate = b.dataset.date; drawCal(); quote(); })
+      );
+    }
+
+    function quote() {
+      const hours = Number(document.getElementById('hours').value) || 0;
+      const urgent = document.getElementById('urgent').checked;
+      const uplift = urgent ? Number(settings.urgent_uplift_pct) : 0;
+      const base = Number(p.hourly_rate) * hours;
+      const up = base * (uplift / 100);
+      const provTotal = base + up;
+      const fee = provTotal * (Number(settings.fee_pct) / 100);
+      document.getElementById('quote').innerHTML = `
+        <strong style="font-family:var(--font-head)">Your quote${chosenDate ? ' for ' + chosenDate : ''}</strong>
+        <table style="margin-top:8px">
+          <tbody>
+            <tr><td>${hours}h at ${money(p.hourly_rate)}/hr — paid directly to them</td><td style="text-align:right">${money(base)}</td></tr>
+            ${urgent ? `<tr><td>Short-notice uplift (${uplift}%) — also to them</td><td style="text-align:right">${money(up)}</td></tr>` : ''}
+            <tr><td>CanYouDo? service charge (${Number(settings.fee_pct)}%) — paid online</td><td style="text-align:right">${money(fee)}</td></tr>
+            <tr><td><strong>Total</strong></td><td style="text-align:right"><strong>${money(provTotal + fee)}</strong></td></tr>
+          </tbody>
+        </table>`;
+    }
+
+    async function openBooking() {
+      const client = getClient();
+      const { session, profile } = await getProfile(client);
+      if (!session) { window.location.href = '/login/?next=' + encodeURIComponent(window.location.pathname + window.location.search); return; }
+      if (profile?.role !== 'customer') { alert('Provider accounts can\'t make bookings — sign up separately as a customer.'); return; }
+      document.getElementById('book-title').textContent = 'Book ' + p.display_name;
+      document.getElementById('postcode').value = profile.postcode || '';
+      drawCal(); quote();
+      document.getElementById('book-dialog').showModal();
+    }
+
+    async function init() {
+      if (!requireBackend('app')) return;
+      if (!id) { document.getElementById('app').innerHTML = '<div class="notice notice-error">No provider specified.</div>'; return; }
+      const client = getClient();
+
+      const [{ data: dir }, { data: revs }, { data: st }, { session, profile }] = await Promise.all([
+        client.from('cleaner_directory').select('*').eq('profile_id', id).single(),
+        client.from('provider_reviews').select('*').eq('cleaner_id', id).order('created_at', { ascending: false }),
+        client.from('platform_settings').select('*').single(),
+        getProfile(client),
+      ]);
+      if (!dir) { document.getElementById('app').innerHTML = '<div class="notice notice-error">That provider could not be found.</div>'; return; }
+      p = dir; reviews = revs || []; settings = st || { fee_pct: 20, urgent_uplift_pct: 25 };
+
+      if (session && profile?.role === 'customer') {
+        me = session.user;
+        const { data: f } = await client.from('favourites').select('cleaner_id').eq('customer_id', me.id).eq('cleaner_id', id);
+        isFav = (f || []).length > 0;
+      }
+      renderProfile();
+
+      document.getElementById('cal-prev').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() - 1); drawCal(); });
+      document.getElementById('cal-next').addEventListener('click', () => { calMonth.setMonth(calMonth.getMonth() + 1); drawCal(); });
+      document.getElementById('hours').addEventListener('input', quote);
+      document.getElementById('urgent').addEventListener('change', quote);
+      document.getElementById('book-cancel').addEventListener('click', () => document.getElementById('book-dialog').close());
+      document.querySelectorAll('input[name="booking_type"]').forEach((r) =>
+        r.addEventListener('change', () => document.getElementById('recur-wrap').classList.toggle('hidden', r.value !== 'rolling' || !r.checked))
+      );
+
+      document.getElementById('book-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = document.getElementById('book-msg');
+        if (!chosenDate) { msg.innerHTML = '<div class="notice notice-warn">Please choose a date.</div>'; return; }
+        const f = new FormData(e.target);
+        const btn = e.target.querySelector('button[type=submit]');
+        btn.disabled = true;
+        const type = f.get('booking_type');
+        const urgent = document.getElementById('urgent').checked;
+        const { data: booking, error } = await client.from('bookings').insert({
+          customer_id: me.id,
+          cleaner_id: id,
+          booking_date: chosenDate,
+          start_time: f.get('start_time'),
+          hours: Number(f.get('hours')),
+          address: f.get('address'),
+          postcode: (f.get('postcode') || '').toUpperCase().trim(),
+          areas_requested: f.get('areas_requested'),
+          notes: f.get('notes') || '',
+          booking_type: type,
+          recurrence: type === 'rolling' ? f.get('recurrence') : null,
+          urgent,
+          urgent_uplift_pct: urgent ? Number(settings.urgent_uplift_pct) : 0,
+          provider_hourly_rate: p.hourly_rate,
+          platform_fee_pct: Number(settings.fee_pct),
+        }).select().single();
+        if (error) {
+          msg.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>';
+          btn.disabled = false;
+          return;
+        }
+        api('notify', { type: 'booking_created', booking_id: booking.id });
+        api('ai-assist', { action: 'review_booking', booking_id: booking.id });
+        const pay = await api('create-checkout', { booking_id: booking.id, origin: window.location.origin });
+        if (pay && pay.url) { window.location.href = pay.url; return; }
+        msg.innerHTML = '<div class="notice notice-info"><strong>Request sent!</strong> ' +
+          (pay && pay.error === 'payments_not_configured' ? 'Online payment isn\'t live yet — the service charge will be invoiced separately. ' : '') +
+          'Track it in <a href="/customer/">your bookings</a>.</div>';
+        btn.disabled = false;
+      });
+    }
+    init();
+  </script>
+</Base>
+
+<style>
+  .role-pick { display:flex; align-items:center; border:1.5px solid var(--line); border-radius: var(--radius-sm); padding: 10px 12px; cursor: pointer; font-weight:600; font-size:0.9rem; }
+  .role-pick:has(input:checked) { border-color: var(--green-700); background: var(--green-50); }
+</style>

@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Signing you in — CanYouDo?">
+  <section class="section">
+    <div class="wrap-narrow" style="max-width:460px;text-align:center">
+      <div id="app">
+        <div class="card" style="margin-top:20px">
+          <h1 style="font-size:1.4rem">Signing you in…</h1>
+          <p class="hint" id="status">One moment.</p>
+          <div id="role-pick" class="hidden" style="text-align:left">
+            <p style="margin-top:10px">Almost there — how will you be using CanYouDo?</p>
+            <div class="grid-2" style="gap:12px">
+              <button class="btn btn-secondary" data-role="customer">I want to book a cleaner</button>
+              <button class="btn btn-secondary" data-role="cleaner">I offer my services</button>
+            </div>
+            <label for="postcode" style="margin-top:16px">Your postcode</label>
+            <input id="postcode" placeholder="e.g. M1 2AB" />
+            <div id="cb-msg"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { getClient, requireBackend, esc } from '../../lib/supabase.js';
+
+    async function go() {
+      if (!requireBackend('app')) return;
+      const client = getClient();
+      const status = document.getElementById('status');
+
+      // Supabase parses the OAuth/confirmation fragment automatically.
+      const { data: { session }, error } = await client.auth.getSession();
+      if (error || !session) {
+        // Give the SDK a beat to process the URL hash, then re-check.
+        await new Promise((r) => setTimeout(r, 800));
+      }
+      const { data: { session: s2 } } = await client.auth.getSession();
+      if (!s2) {
+        status.innerHTML = 'We couldn\'t complete the sign-in. <a href="/login/">Try again</a>.';
+        return;
+      }
+
+      const { data: profile } = await client.from('profiles').select('role, postcode').eq('id', s2.user.id).single();
+
+      // A Google account with no postcode yet is a first-time sign-up: the
+      // trigger can't know which side of the board they're on, so ask once.
+      const wantedRole = new URLSearchParams(window.location.search).get('role');
+      const isNew = !profile || !profile.postcode;
+
+      if (isNew) {
+        status.textContent = '';
+        document.getElementById('role-pick').classList.remove('hidden');
+        if (wantedRole) {
+          const pre = document.querySelector(`[data-role="${wantedRole}"]`);
+          if (pre) { pre.classList.remove('btn-secondary'); pre.classList.add('btn-primary'); }
+        }
+        document.querySelectorAll('[data-role]').forEach((b) =>
+          b.addEventListener('click', async () => {
+            const postcode = (document.getElementById('postcode').value || '').toUpperCase().trim();
+            if (!postcode) {
+              document.getElementById('cb-msg').innerHTML = '<div class="notice notice-warn">Please add your postcode.</div>';
+              return;
+            }
+            const role = b.dataset.role;
+            const { error: e1 } = await client.from('profiles')
+              .update({ role, postcode, full_name: s2.user.user_metadata?.full_name || '' })
+              .eq('id', s2.user.id);
+            if (e1) {
+              document.getElementById('cb-msg').innerHTML = '<div class="notice notice-error">' + esc(e1.message) + '</div>';
+              return;
+            }
+            if (role === 'cleaner') await client.from('cleaner_details').upsert({ profile_id: s2.user.id });
+            window.location.href = role === 'cleaner' ? '/provider/profile/' : '/customer/';
+          })
+        );
+        return;
+      }
+
+      window.location.href = profile.role === 'cleaner' ? '/provider/' : '/customer/';
+    }
+    go();
+  </script>
+</Base>

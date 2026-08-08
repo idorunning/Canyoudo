@@ -1,5 +1,7 @@
 [build]
-  command = "npm run build"
+  # Netlify reuses its build directory between deploys and uploads never
+  # delete removed files, so clear stale paths before building.
+  command = "rm -rf src/pages/cleaner && npm run build"
   publish = "dist"
 
 [functions]

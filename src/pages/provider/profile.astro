@@ -1,0 +1,240 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="My profile — CanYouDo?">
+  <section class="section" style="padding-top:44px">
+    <div class="wrap" style="max-width:760px">
+      <div class="app-title">
+        <div>
+          <p class="kicker" style="margin-bottom:2px">Service provider</p>
+          <h1 style="font-size:1.9rem;margin:0">Profile, rate &amp; availability</h1>
+        </div>
+        <a class="btn btn-secondary" href="/provider/">← Back to my work</a>
+      </div>
+
+      <div id="app">
+        <form id="profile-form">
+          <div class="card">
+            <h3>About you</h3>
+            <label for="bio">Short bio (shown to customers)</label>
+            <textarea id="bio" name="bio" rows="3" placeholder="e.g. Reliable, thorough cleaner with 6 years' experience. I love a sparkling kitchen."></textarea>
+            <div class="field-row">
+              <div>
+                <label for="service_area">Area you cover</label>
+                <input id="service_area" name="service_area" placeholder="e.g. Manchester south (M1–M20)" />
+              </div>
+              <div>
+                <label for="years_experience">Years of experience</label>
+                <input id="years_experience" name="years_experience" type="number" min="0" max="60" />
+              </div>
+            </div>
+            <label>Services you offer</label>
+            <div class="grid-2" style="gap:6px" id="services-boxes"></div>
+          </div>
+
+          <div class="card" style="margin-top:20px">
+            <h3>Your hourly rate</h3>
+            <p class="hint" style="margin-top:0">You decide what your time is worth. Customers pay this to you directly and in full — our service charge is added on top and paid to us separately, so it never comes out of your rate.</p>
+            <label for="hourly_rate">Hourly rate (£)</label>
+            <input id="hourly_rate" name="hourly_rate" type="number" min="1" max="200" step="0.50" placeholder="e.g. 18.00" />
+            <div id="rate-preview" class="notice notice-info hidden"></div>
+          </div>
+
+          <div class="card" style="margin-top:20px">
+            <h3>Photos of your work</h3>
+            <p class="hint" style="margin-top:0">Add image links to show what you do. Only upload photos you own or have permission to use.</p>
+            <div id="photo-list"></div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <input id="photo-url" placeholder="https://… image link" style="flex:1" />
+              <button class="btn btn-secondary btn-sm" type="button" id="add-photo">Add</button>
+            </div>
+            <label for="avatar_url" style="margin-top:14px">Profile picture link (optional)</label>
+            <input id="avatar_url" name="avatar_url" placeholder="https://…" />
+          </div>
+
+          <div class="card" style="margin-top:20px">
+            <h3>Your independent insurance</h3>
+            <div class="notice notice-warn" style="margin-top:0">
+              You arrange and hold your own independent insurance — <strong>CanYouDo? does not provide, arrange or verify any insurance</strong>. Recording details here simply shows customers that details are on file. What cover applies to any particular job is for you and the customer to discuss and agree directly.
+            </div>
+            <div class="field-row">
+              <div>
+                <label for="insurer_name">Insurer</label>
+                <input id="insurer_name" name="insurer_name" placeholder="e.g. Simply Business" />
+              </div>
+              <div>
+                <label for="policy_number">Policy number</label>
+                <input id="policy_number" name="policy_number" />
+              </div>
+            </div>
+            <p class="hint">Your policy number is never shown publicly — customers only see that details are on file.</p>
+            <label for="policy_expiry">Policy expiry date</label>
+            <input id="policy_expiry" name="policy_expiry" type="date" />
+            <label for="insurance_doc_url">Link to your policy document (optional)</label>
+            <input id="insurance_doc_url" name="insurance_doc_url" placeholder="https://…" />
+          </div>
+
+          <div class="card" style="margin-top:20px">
+            <h3>Contact &amp; payment</h3>
+            <p class="hint" style="margin-top:0">Shared only with customers who have a confirmed booking with you.</p>
+            <div class="field-row">
+              <div>
+                <label for="contact_email">Contact email</label>
+                <input id="contact_email" name="contact_email" type="email" />
+              </div>
+              <div>
+                <label for="contact_phone">Contact phone</label>
+                <input id="contact_phone" name="contact_phone" type="tel" />
+              </div>
+            </div>
+            <label for="payment_details">How customers pay you</label>
+            <textarea id="payment_details" name="payment_details" rows="2" placeholder="e.g. Bank transfer to S. Taylor, sort 01-02-03, account 12345678 — or cash on the day."></textarea>
+          </div>
+
+          <div class="card" style="margin-top:20px">
+            <h3>Weekly availability</h3>
+            <p class="hint" style="margin-top:0">Tick the days you work and set your hours. Customers can only pick dates that fall on these days. Book holidays separately under <a href="/provider/">Holidays &amp; time off</a>.</p>
+            <div class="table-scroll"><table id="avail-table">
+              <thead><tr><th></th><th>Day</th><th>From</th><th>Until</th></tr></thead>
+              <tbody></tbody>
+            </table></div>
+          </div>
+
+          <div id="form-msg"></div>
+          <button class="btn btn-primary" type="submit" style="margin-top:20px">Save profile</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { requireAuth, esc, money } from '../../lib/supabase.js';
+
+    const SERVICES = ['Regular home clean', 'Deep clean', 'End of tenancy', 'Oven clean', 'Ironing', 'Office / commercial'];
+    const DAYROWS = [['1','Monday'],['2','Tuesday'],['3','Wednesday'],['4','Thursday'],['5','Friday'],['6','Saturday'],['0','Sunday']];
+    let ctx, photos = [], feePct = 20;
+
+    function buildForm() {
+      document.getElementById('services-boxes').innerHTML = SERVICES.map((s) =>
+        `<label style="font-weight:400;margin:4px 0;display:flex;align-items:center"><input type="checkbox" name="services" value="${esc(s)}" style="width:auto;margin-right:8px" />${esc(s)}</label>`).join('');
+      document.querySelector('#avail-table tbody').innerHTML = DAYROWS.map(([v, name]) => `
+        <tr>
+          <td><input type="checkbox" data-day-on="${v}" style="width:auto" aria-label="Available ${name}" /></td>
+          <td style="font-weight:600">${name}</td>
+          <td><input type="time" data-day-start="${v}" value="09:00" style="min-width:100px" /></td>
+          <td><input type="time" data-day-end="${v}" value="17:00" style="min-width:100px" /></td>
+        </tr>`).join('');
+    }
+
+    function drawPhotos() {
+      document.getElementById('photo-list').innerHTML = photos.length
+        ? '<div class="photo-strip">' + photos.map((p, i) => `
+            <div style="position:relative;flex:none">
+              <img src="${esc(p)}" alt="" />
+              <button type="button" data-rm="${i}" style="position:absolute;top:4px;right:4px;background:#fff;border:1px solid var(--line);border-radius:50%;width:22px;height:22px;cursor:pointer;line-height:1">×</button>
+            </div>`).join('') + '</div>'
+        : '<p class="hint">No photos yet.</p>';
+      document.querySelectorAll('[data-rm]').forEach((b) =>
+        b.addEventListener('click', () => { photos.splice(Number(b.dataset.rm), 1); drawPhotos(); })
+      );
+    }
+
+    function ratePreview() {
+      const r = Number(document.getElementById('hourly_rate').value);
+      const box = document.getElementById('rate-preview');
+      if (!r) { box.classList.add('hidden'); return; }
+      box.classList.remove('hidden');
+      box.innerHTML = `You receive <strong>${money(r)}/hr</strong>. Customers see <strong>${money(r * (1 + feePct / 100))}/hr</strong> — your rate plus our ${feePct}% service charge.`;
+    }
+
+    async function fill() {
+      const { client, session } = ctx;
+      const { data: st } = await client.from('platform_settings').select('fee_pct').single();
+      if (st) feePct = Number(st.fee_pct);
+
+      const { data: det } = await client.from('cleaner_details').select('*').eq('profile_id', session.user.id).single();
+      if (det) {
+        for (const k of ['bio','service_area','insurer_name','policy_number','policy_expiry','payment_details','contact_email','contact_phone','avatar_url','insurance_doc_url','hourly_rate','years_experience']) {
+          if (det[k] !== null && det[k] !== undefined && document.getElementById(k)) document.getElementById(k).value = det[k];
+        }
+        photos = Array.isArray(det.photos) ? [...det.photos] : [];
+        (det.services || []).forEach((s) => {
+          const box = document.querySelector(`input[name="services"][value="${CSS.escape(s)}"]`);
+          if (box) box.checked = true;
+        });
+      }
+      drawPhotos();
+      ratePreview();
+
+      const { data: avail } = await client.from('availability').select('*').eq('cleaner_id', session.user.id);
+      (avail || []).forEach((slot) => {
+        const on = document.querySelector(`[data-day-on="${slot.weekday}"]`);
+        if (on) {
+          on.checked = true;
+          document.querySelector(`[data-day-start="${slot.weekday}"]`).value = slot.start_time.slice(0, 5);
+          document.querySelector(`[data-day-end="${slot.weekday}"]`).value = slot.end_time.slice(0, 5);
+        }
+      });
+    }
+
+    async function save(e) {
+      e.preventDefault();
+      const { client, session } = ctx;
+      const msg = document.getElementById('form-msg');
+      const btn = e.target.querySelector('button[type=submit]');
+      btn.disabled = true;
+
+      const val = (id) => document.getElementById(id).value || null;
+      const det = {
+        profile_id: session.user.id,
+        bio: document.getElementById('bio').value,
+        service_area: document.getElementById('service_area').value,
+        services: [...document.querySelectorAll('input[name="services"]:checked')].map((b) => b.value),
+        hourly_rate: val('hourly_rate') ? Number(val('hourly_rate')) : null,
+        years_experience: val('years_experience') ? Number(val('years_experience')) : null,
+        photos,
+        avatar_url: val('avatar_url'),
+        insurer_name: val('insurer_name'),
+        policy_number: val('policy_number'),
+        policy_expiry: val('policy_expiry'),
+        insurance_doc_url: val('insurance_doc_url'),
+        contact_email: val('contact_email'),
+        contact_phone: val('contact_phone'),
+        payment_details: val('payment_details'),
+      };
+      const { error } = await client.from('cleaner_details').upsert(det);
+      if (error) { msg.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>'; btn.disabled = false; return; }
+
+      await client.from('availability').delete().eq('cleaner_id', session.user.id);
+      const slots = DAYROWS.filter(([v]) => document.querySelector(`[data-day-on="${v}"]`).checked).map(([v]) => ({
+        cleaner_id: session.user.id,
+        weekday: Number(v),
+        start_time: document.querySelector(`[data-day-start="${v}"]`).value,
+        end_time: document.querySelector(`[data-day-end="${v}"]`).value,
+      }));
+      if (slots.length) {
+        const { error: e2 } = await client.from('availability').insert(slots);
+        if (e2) { msg.innerHTML = '<div class="notice notice-error">' + esc(e2.message) + '</div>'; btn.disabled = false; return; }
+      }
+      msg.innerHTML = '<div class="notice notice-info"><strong>Saved.</strong> Your profile is live on <a href="/find-a-cleaner/">the board</a>.</div>';
+      btn.disabled = false;
+    }
+
+    async function init() {
+      ctx = await requireAuth('cleaner');
+      if (!ctx) return;
+      buildForm();
+      await fill();
+      document.getElementById('hourly_rate').addEventListener('input', ratePreview);
+      document.getElementById('add-photo').addEventListener('click', () => {
+        const u = document.getElementById('photo-url').value.trim();
+        if (!u) return;
+        photos.push(u);
+        document.getElementById('photo-url').value = '';
+        drawPhotos();
+      });
+      document.getElementById('profile-form').addEventListener('submit', save);
+    }
+    init();
+  </script>
+</Base>

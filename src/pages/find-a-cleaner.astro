@@ -4,15 +4,15 @@ import Base from '../layouts/Base.astro';
 <Base title="Find a cleaner — CanYouDo?">
   <section class="section" style="padding-top:52px">
     <div class="wrap">
-      <p class="kicker">Directory</p>
+      <p class="kicker">The board</p>
       <h1 style="font-size:2.2rem">Find your cleaner</h1>
-      <p style="color:var(--ink-600);max-width:44em">Every cleaner sets their own availability, holds their own public liability insurance, and is rated on facts: punctuality and finishing what was asked. £20/hour all-in — £15 direct to them, £5 introduction fee.</p>
+      <p style="color:var(--ink-600);max-width:46em">Every provider is an independent business: they set their own hourly rate, control their own calendar and carry their own independent insurance. The total shown includes our service charge, so there are no surprises.</p>
 
       <div class="card" style="margin:22px 0;padding:18px 22px">
-        <div class="field-row" style="grid-template-columns:2fr 1fr auto;align-items:end;gap:14px">
+        <div class="field-row" style="grid-template-columns:2fr 1fr 1fr auto;align-items:end;gap:14px">
           <div>
-            <label for="q" style="margin-top:0">Search area or name</label>
-            <input id="q" placeholder="e.g. Manchester, M1, Sam…" />
+            <label for="q" style="margin-top:0">Search area, name or service</label>
+            <input id="q" placeholder="e.g. Manchester, M1, deep clean…" />
           </div>
           <div>
             <label for="day" style="margin-top:0">Available on</label>
@@ -24,209 +24,134 @@ import Base from '../layouts/Base.astro';
               <option value="0">Sunday</option>
             </select>
           </div>
+          <div>
+            <label for="grade" style="margin-top:0">Minimum grading</label>
+            <select id="grade">
+              <option value="">Any grading</option>
+              <option value="Rising Star">Rising Star +</option>
+              <option value="Trusted">Trusted +</option>
+              <option value="Elite">Elite +</option>
+              <option value="Superstar">Superstar</option>
+            </select>
+          </div>
           <button class="btn btn-primary" id="filter-btn" type="button">Search</button>
         </div>
+        <p class="hint" style="margin-top:10px"><label style="display:inline-flex;align-items:center;font-weight:500;margin:0"><input type="checkbox" id="favs-only" style="width:auto;margin-right:7px" />Show only my favourites</label></p>
       </div>
 
-      <div id="app"><p class="hint">Loading cleaners…</p></div>
+      <div id="app"><p class="hint">Loading providers…</p></div>
     </div>
   </section>
 
-  <!-- booking dialog -->
-  <dialog id="book-dialog" style="border:none;border-radius:var(--radius);max-width:560px;width:92vw;padding:0;box-shadow:var(--shadow)">
-    <div style="padding:26px">
-      <h2 id="book-title" style="font-size:1.35rem">Book</h2>
-      <form id="book-form">
-        <div class="field-row">
-          <div>
-            <label for="booking_date">Date</label>
-            <input id="booking_date" name="booking_date" type="date" required />
-          </div>
-          <div>
-            <label for="start_time">Start time</label>
-            <input id="start_time" name="start_time" type="time" required min="07:00" max="20:00" />
-          </div>
-        </div>
-        <label for="hours">Hours (1–8)</label>
-        <input id="hours" name="hours" type="number" min="1" max="8" step="0.5" value="2" required />
-        <p class="hint" id="price-line">2 hours = £30 to your cleaner (on the day) + £10 introduction fee (now)</p>
-
-        <label for="address">Address of the clean</label>
-        <input id="address" name="address" required autocomplete="street-address" />
-        <div class="field-row">
-          <div>
-            <label for="postcode">Postcode</label>
-            <input id="postcode" name="postcode" required />
-          </div>
-          <div></div>
-        </div>
-
-        <label for="areas_requested">Which areas should be cleaned?</label>
-        <textarea id="areas_requested" name="areas_requested" rows="3" required placeholder="e.g. Kitchen (incl. oven), bathroom, lounge, hallway floors"></textarea>
-        <p class="hint">Be specific — your rating later asks "did they clean the areas requested?", and that drives their bonus.</p>
-
-        <label for="notes">Notes for your cleaner (access, pets, products)</label>
-        <textarea id="notes" name="notes" rows="2" placeholder="Products are under the sink. Key safe code sent via message."></textarea>
-        <p class="hint">Remember: you provide all cleaning products and equipment.</p>
-
-        <div id="avail-warn"></div>
-        <div id="book-msg"></div>
-        <div style="display:flex;gap:12px;margin-top:20px">
-          <button class="btn btn-primary" type="submit">Book &amp; pay intro fee</button>
-          <button class="btn btn-secondary" type="button" id="book-cancel">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </dialog>
-
   <script>
-    import { getClient, requireBackend, getProfile, esc, api, RATES } from '../lib/supabase.js';
+    import { getClient, requireBackend, getProfile, esc, gradingBadge, stars, money, GRADINGS, DAYS } from '../lib/supabase.js';
 
-    const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    let cleaners = [];
-    let selected = null;
+    let providers = [], favs = new Set(), me = null;
 
     function availabilityLine(av) {
       if (!av || !av.length) return '<span class="hint">Availability not set yet</span>';
-      return av
-        .sort((a, b) => a.weekday - b.weekday)
-        .map((s) => `${DAYS[s.weekday].slice(0, 3)} ${s.start_time.slice(0, 5)}–${s.end_time.slice(0, 5)}`)
-        .join(' · ');
+      return av.map((s) => `${DAYS[s.weekday].slice(0, 3)} ${s.start_time.slice(0, 5)}–${s.end_time.slice(0, 5)}`).join(' · ');
+    }
+
+    function card(c) {
+      const initials = (c.display_name || '?').split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+      const isFav = favs.has(c.profile_id);
+      return `
+      <div class="card">
+        <div class="provider-head">
+          ${c.avatar_url
+            ? `<img class="avatar" src="${esc(c.avatar_url)}" alt="" />`
+            : `<div class="avatar avatar-fallback">${esc(initials)}</div>`}
+          <div style="flex:1;min-width:0">
+            <div class="booking-head">
+              <h3 style="margin:0"><a href="/p/?id=${c.profile_id}" style="text-decoration:none;color:inherit">${esc(c.display_name)}</a></h3>
+              <button class="fav-btn ${isFav ? 'on' : ''}" data-fav="${c.profile_id}" title="${isFav ? 'Remove from favourites' : 'Add to favourites'}" aria-label="Favourite">${isFav ? '♥' : '♡'}</button>
+            </div>
+            <p style="margin:2px 0 6px">${gradingBadge(c.grading)} ${c.insurance_on_file ? '<span class="badge badge-green">Insurance on file</span>' : ''}</p>
+            <p class="hint" style="margin:0">${esc(c.service_area || 'Area not set')}${c.years_experience ? ' · ' + c.years_experience + ' yrs experience' : ''}</p>
+          </div>
+        </div>
+        <p style="font-size:0.93rem;margin-top:10px">${esc((c.bio || '').slice(0, 180))}${(c.bio || '').length > 180 ? '…' : ''}</p>
+        ${(c.photos || []).length ? `<div class="photo-strip">${c.photos.slice(0, 4).map((p) => `<img src="${esc(p)}" alt="Example of their work" loading="lazy" />`).join('')}</div>` : ''}
+        <p style="font-size:0.85rem;margin:8px 0 0">${(c.services || []).map((s) => `<span class="badge badge-amber" style="margin:0 5px 5px 0">${esc(s)}</span>`).join('')}</p>
+        <p style="font-size:0.86rem;color:var(--ink-600);margin:6px 0">
+          ${c.jobs_done > 0
+            ? `${stars(c.avg_rating)} ${Number(c.avg_rating).toFixed(1)} · ⏱ ${Math.round(c.on_time_pct)}% on time · ✅ ${Math.round(c.areas_pct)}% areas done · ${c.jobs_done} rated job${c.jobs_done === 1 ? '' : 's'}`
+            : '<em>New to the board — no reviews yet</em>'}
+        </p>
+        <p class="hint" style="font-size:0.8rem;margin:0">${availabilityLine(c.availability)}</p>
+        ${(c.blocked_dates || []).length ? `<p class="hint" style="font-size:0.78rem;margin:2px 0 0">🏖️ Away: ${c.blocked_dates.map((b) => b.start_date === b.end_date ? b.start_date : `${b.start_date} → ${b.end_date}`).join(', ')}</p>` : ''}
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:12px;flex-wrap:wrap">
+          <div class="rate-line">
+            ${c.customer_total_rate !== null ? money(c.customer_total_rate) + '/hr' : 'Rate not set'}
+            ${c.customer_total_rate !== null ? `<small>${money(c.hourly_rate)} to them + ${Number(c.fee_pct)}% service charge</small>` : '<small>ask them for a quote</small>'}
+          </div>
+          <a class="btn btn-primary btn-sm" href="/p/?id=${c.profile_id}">View &amp; book</a>
+        </div>
+      </div>`;
     }
 
     function render(list) {
       const app = document.getElementById('app');
       if (!list.length) {
-        app.innerHTML = '<div class="notice notice-info">No cleaners match that search yet. We\'re growing — check back soon, or <a href="/signup/?role=cleaner">join as a cleaner</a>.</div>';
+        app.innerHTML = '<div class="notice notice-info">No providers match that search yet. The board is growing — check back soon, or <a href="/signup/?role=cleaner">offer your own services</a>.</div>';
         return;
       }
-      app.innerHTML = '<div class="grid-2">' + list.map((c) => `
-        <div class="card">
-          <div class="booking-head">
-            <h3 style="margin:0">${esc(c.display_name)}</h3>
-            ${c.insured ? '<span class="badge badge-green">✓ Insured</span>' : '<span class="badge badge-grey">Insurance pending</span>'}
-          </div>
-          <p class="hint" style="margin:4px 0 8px">${esc(c.service_area || 'Area not set')}</p>
-          <p style="font-size:0.93rem">${esc(c.bio || '')}</p>
-          <p style="font-size:0.85rem">${(c.services || []).map((s) => `<span class="badge badge-amber" style="margin:0 5px 5px 0">${esc(s)}</span>`).join('')}</p>
-          <p style="font-size:0.85rem;color:var(--ink-600)">
-            ${c.jobs_done > 0
-              ? `⭐ ${Number(c.avg_rating).toFixed(1)} · ⏱ ${Math.round(c.on_time_pct)}% on time · ✅ ${Math.round(c.areas_pct)}% areas completed · ${c.jobs_done} rated job${c.jobs_done === 1 ? '' : 's'}`
-              : 'New to CanYouDo? — be their first review'}
-          </p>
-          <p class="hint" style="font-size:0.8rem">${availabilityLine(c.availability)}</p>
-          <button class="btn btn-primary btn-sm" data-book="${c.profile_id}" style="margin-top:8px">Book ${esc(c.display_name.split(' ')[0])} · £${RATES.customer}/hr</button>
-        </div>`).join('') + '</div>';
+      app.innerHTML = '<div class="grid-2">' + list.map(card).join('') + '</div>';
+      app.querySelectorAll('[data-fav]').forEach((b) => b.addEventListener('click', () => toggleFav(b.dataset.fav)));
+    }
 
-      app.querySelectorAll('[data-book]').forEach((btn) =>
-        btn.addEventListener('click', () => openBooking(btn.dataset.book))
-      );
+    async function toggleFav(id) {
+      if (!me) { window.location.href = '/login/?next=' + encodeURIComponent('/find-a-cleaner/'); return; }
+      const c = getClient();
+      if (favs.has(id)) {
+        await c.from('favourites').delete().eq('customer_id', me.id).eq('cleaner_id', id);
+        favs.delete(id);
+      } else {
+        await c.from('favourites').insert({ customer_id: me.id, cleaner_id: id });
+        favs.add(id);
+      }
+      applyFilter();
     }
 
     function applyFilter() {
       const q = document.getElementById('q').value.trim().toLowerCase();
       const day = document.getElementById('day').value;
-      render(cleaners.filter((c) => {
-        const hay = `${c.display_name} ${c.service_area || ''} ${(c.services || []).join(' ')}`.toLowerCase();
+      const grade = document.getElementById('grade').value;
+      const favsOnly = document.getElementById('favs-only').checked;
+      const minIdx = grade ? GRADINGS.indexOf(grade) : -1;
+      render(providers.filter((c) => {
+        const hay = `${c.display_name} ${c.service_area || ''} ${(c.services || []).join(' ')} ${c.bio || ''}`.toLowerCase();
         if (q && !hay.includes(q)) return false;
         if (day !== '' && !(c.availability || []).some((s) => s.weekday === Number(day))) return false;
+        if (minIdx >= 0 && GRADINGS.indexOf(c.grading) < minIdx) return false;
+        if (favsOnly && !favs.has(c.profile_id)) return false;
         return true;
       }));
-    }
-
-    async function openBooking(id) {
-      const client = getClient();
-      const { session, profile } = await getProfile(client);
-      if (!session) {
-        window.location.href = '/login/?next=' + encodeURIComponent('/find-a-cleaner/');
-        return;
-      }
-      if (profile?.role !== 'customer') {
-        alert('Cleaner accounts can\'t make bookings — please sign up separately as a customer.');
-        return;
-      }
-      selected = cleaners.find((c) => c.profile_id === id);
-      document.getElementById('book-title').textContent = 'Book ' + selected.display_name;
-      document.getElementById('postcode').value = profile.postcode || '';
-      document.getElementById('booking_date').min = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-      document.getElementById('book-dialog').showModal();
-    }
-
-    function updatePrice() {
-      const h = Number(document.getElementById('hours').value) || 0;
-      document.getElementById('price-line').textContent =
-        `${h} hour${h === 1 ? '' : 's'} = £${(h * RATES.cleaner).toFixed(2).replace(/\.00$/, '')} to your cleaner (on the day) + £${(h * RATES.fee).toFixed(2).replace(/\.00$/, '')} introduction fee (now)`;
-    }
-
-    function checkAvailability() {
-      const warn = document.getElementById('avail-warn');
-      const d = document.getElementById('booking_date').value;
-      warn.innerHTML = '';
-      if (!d || !selected) return;
-      const weekday = new Date(d + 'T00:00').getDay();
-      const av = selected.availability || [];
-      if (av.length && !av.some((s) => s.weekday === weekday)) {
-        warn.innerHTML = `<div class="notice notice-warn">Heads up: ${esc(selected.display_name.split(' ')[0])} hasn't listed ${DAYS[weekday]} in their availability. You can still request it — they may decline.</div>`;
-      }
     }
 
     async function init() {
       if (!requireBackend('app')) return;
       const client = getClient();
+      const { session, profile } = await getProfile(client);
+      if (session && profile?.role === 'customer') {
+        me = session.user;
+        const { data } = await client.from('favourites').select('cleaner_id').eq('customer_id', me.id);
+        favs = new Set((data || []).map((f) => f.cleaner_id));
+      }
       const { data, error } = await client.from('cleaner_directory').select('*');
       if (error) {
-        document.getElementById('app').innerHTML = '<div class="notice notice-error">Couldn\'t load cleaners: ' + esc(error.message) + '</div>';
+        document.getElementById('app').innerHTML = '<div class="notice notice-error">Couldn\'t load providers: ' + esc(error.message) + '</div>';
         return;
       }
-      cleaners = data || [];
-      render(cleaners);
+      providers = data || [];
+      render(providers);
 
       document.getElementById('filter-btn').addEventListener('click', applyFilter);
       document.getElementById('q').addEventListener('keydown', (e) => e.key === 'Enter' && applyFilter());
       document.getElementById('day').addEventListener('change', applyFilter);
-      document.getElementById('hours').addEventListener('input', updatePrice);
-      document.getElementById('booking_date').addEventListener('change', checkAvailability);
-      document.getElementById('book-cancel').addEventListener('click', () => document.getElementById('book-dialog').close());
-
-      document.getElementById('book-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const f = new FormData(e.target);
-        const msg = document.getElementById('book-msg');
-        const btn = e.target.querySelector('button[type=submit]');
-        btn.disabled = true;
-        const { data: { session } } = await client.auth.getSession();
-        const { data: booking, error } = await client.from('bookings').insert({
-          customer_id: session.user.id,
-          cleaner_id: selected.profile_id,
-          booking_date: f.get('booking_date'),
-          start_time: f.get('start_time'),
-          hours: Number(f.get('hours')),
-          address: f.get('address'),
-          postcode: (f.get('postcode') || '').toUpperCase().trim(),
-          areas_requested: f.get('areas_requested'),
-          notes: f.get('notes') || '',
-        }).select().single();
-        if (error) {
-          msg.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>';
-          btn.disabled = false;
-          return;
-        }
-        // Kick off notifications + AI review; both are fire-and-forget.
-        api('notify', { type: 'booking_created', booking_id: booking.id });
-        api('ai-assist', { action: 'review_booking', booking_id: booking.id });
-
-        const pay = await api('create-checkout', { booking_id: booking.id, origin: window.location.origin });
-        if (pay && pay.url) {
-          window.location.href = pay.url;
-          return;
-        }
-        msg.innerHTML = '<div class="notice notice-info"><strong>Booking requested!</strong> ' +
-          (pay && pay.error === 'payments_not_configured'
-            ? 'Online fee payment isn\'t live yet — we\'ll invoice the introduction fee separately. '
-            : '') +
-          'Your cleaner has been notified and you can track everything in <a href="/customer/">your bookings</a>.</div>';
-        btn.disabled = false;
-      });
+      document.getElementById('grade').addEventListener('change', applyFilter);
+      document.getElementById('favs-only').addEventListener('change', applyFilter);
     }
     init();
   </script>

@@ -1,6 +1,6 @@
-// Creates a Stripe Checkout session for the CanYouDo? introduction fee
-// (£5 per booked hour). The cleaner's £15/hour is paid directly by the
-// customer and never passes through the platform.
+// Stripe Checkout for the CanYouDo? service charge only.
+// The provider's own hourly rate (plus any short-notice uplift) is paid to
+// them directly and never passes through the platform.
 
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
@@ -21,6 +21,13 @@ async function sbFetch(path, init = {}) {
   return res.ok ? res.json().catch(() => null) : null;
 }
 
+/** Service charge = fee% of (provider rate x hours, plus any urgent uplift). */
+export function serviceCharge(b) {
+  const base = Number(b.provider_hourly_rate) * Number(b.hours);
+  const providerTotal = base * (1 + Number(b.urgent_uplift_pct || 0) / 100);
+  return providerTotal * (Number(b.platform_fee_pct) / 100);
+}
+
 export default async (req) => {
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
   const stripeKey = process.env.STRIPE_SECRET_KEY;
@@ -29,20 +36,26 @@ export default async (req) => {
   const { booking_id, origin } = await req.json().catch(() => ({}));
   if (!booking_id) return json({ error: 'missing_booking_id' }, 400);
 
-  const rows = await sbFetch(`bookings?id=eq.${encodeURIComponent(booking_id)}&select=id,hours,hourly_rate_fee,fee_paid,booking_date`);
+  const rows = await sbFetch(
+    `bookings?id=eq.${encodeURIComponent(booking_id)}&select=id,hours,provider_hourly_rate,platform_fee_pct,urgent_uplift_pct,fee_paid,booking_date`
+  );
   const booking = rows && rows[0];
   if (!booking) return json({ error: 'booking_not_found' }, 404);
   if (booking.fee_paid) return json({ error: 'already_paid' }, 400);
 
-  const pence = Math.round(Number(booking.hours) * Number(booking.hourly_rate_fee) * 100);
-  const site = process.env.SITE_URL || origin || 'https://canyoudo.uk';
+  const pence = Math.round(serviceCharge(booking) * 100);
+  if (pence < 30) return json({ error: 'amount_too_small' }, 400); // Stripe minimum
 
+  const site = process.env.SITE_URL || origin || 'https://canyoudo.uk';
   const params = new URLSearchParams({
     mode: 'payment',
     'line_items[0][quantity]': '1',
     'line_items[0][price_data][currency]': 'gbp',
     'line_items[0][price_data][unit_amount]': String(pence),
-    'line_items[0][price_data][product_data][name]': `CanYouDo? introduction fee — ${booking.hours}h clean on ${booking.booking_date}`,
+    'line_items[0][price_data][product_data][name]':
+      `CanYouDo? service charge — ${booking.hours}h clean on ${booking.booking_date}`,
+    'line_items[0][price_data][product_data][description]':
+      'Our service charge only. Your provider is paid their own hourly rate directly.',
     'metadata[booking_id]': booking.id,
     success_url: `${site}/customer/?paid=${booking.id}`,
     cancel_url: `${site}/customer/`,

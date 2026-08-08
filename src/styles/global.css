@@ -170,3 +170,51 @@ td { padding: 11px 12px; border-bottom: 1px solid var(--line); vertical-align: t
 .check-list { list-style: none; padding: 0; margin: 0 0 1em; }
 .check-list li { padding-left: 30px; position: relative; margin-bottom: 10px; }
 .check-list li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--green-600); font-weight: 800; }
+
+/* ---------- gradings, stars, favourites ---------- */
+.badge-star { background: linear-gradient(135deg, #f5a524, #f7c76a); color: #4a3208; }
+.stars { color: var(--amber-500); letter-spacing: 1px; }
+.stars .dim { color: #d9d3c6; }
+.fav-btn { background: none; border: none; cursor: pointer; font-size: 1.35rem; line-height: 1; color: #cfc8ba; padding: 0 2px; }
+.fav-btn.on { color: #e0245e; }
+
+/* ---------- provider cards & galleries ---------- */
+.provider-head { display: flex; gap: 14px; align-items: flex-start; }
+.avatar { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; background: var(--green-100); flex: none; }
+.avatar-fallback { display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-weight: 700; color: var(--green-700); font-size: 1.2rem; }
+.photo-strip { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0; }
+.photo-strip img { height: 92px; width: 122px; object-fit: cover; border-radius: var(--radius-sm); flex: none; }
+.rate-line { font-family: var(--font-head); font-weight: 700; font-size: 1.1rem; color: var(--green-700); }
+.rate-line small { font-weight: 500; font-size: 0.78rem; color: var(--ink-400); display: block; }
+
+/* ---------- calendar ---------- */
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal .dow { font-size: 0.7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-400); text-align: center; font-weight: 700; padding-bottom: 4px; }
+.cal button { aspect-ratio: 1; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; font: inherit; font-size: 0.85rem; cursor: pointer; padding: 0; }
+.cal button:hover:not(:disabled) { border-color: var(--green-600); }
+.cal button.sel { background: var(--green-700); color: #fff; border-color: var(--green-700); font-weight: 700; }
+.cal button.blocked { background: #f3efe6; color: #bdb5a6; text-decoration: line-through; cursor: not-allowed; }
+.cal button.empty { border: none; background: none; cursor: default; }
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cal-head strong { font-family: var(--font-head); }
+
+/* ---------- review list ---------- */
+.review { border-top: 1px solid var(--line); padding: 14px 0; }
+.review:first-child { border-top: none; }
+.review-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.review-meta { font-size: 0.78rem; color: var(--ink-400); }
+.chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.chip { font-size: 0.74rem; padding: 2px 9px; border-radius: 999px; background: var(--green-50); color: var(--green-900); border: 1px solid var(--green-100); }
+.chip.no { background: var(--danger-bg); color: var(--danger); border-color: #f2c4c0; }
+
+/* ---------- tabs ---------- */
+.tabs { display: flex; gap: 4px; border-bottom: 2px solid var(--line); margin: 22px 0 20px; overflow-x: auto; }
+.tabs button { background: none; border: none; border-bottom: 3px solid transparent; margin-bottom: -2px; padding: 10px 16px; font: inherit; font-family: var(--font-head); font-weight: 600; font-size: 0.92rem; color: var(--ink-400); cursor: pointer; white-space: nowrap; }
+.tabs button.on { color: var(--green-700); border-bottom-color: var(--green-700); }
+
+/* ---------- google button ---------- */
+.btn-google { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: #fff; color: #3c4043; border: 1.5px solid var(--line); padding: 11px; border-radius: 999px; font-family: var(--font-head); font-weight: 600; font-size: 0.95rem; cursor: pointer; }
+.btn-google:hover { background: #f7f5ef; }
+.btn-google svg { width: 18px; height: 18px; }
+.divider { display: flex; align-items: center; gap: 12px; color: var(--ink-400); font-size: 0.82rem; margin: 18px 0; }
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }

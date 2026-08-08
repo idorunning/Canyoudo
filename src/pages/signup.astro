@@ -8,14 +8,20 @@ import Base from '../layouts/Base.astro';
       <h1 style="font-size:2rem">Create your account</h1>
       <div id="app">
         <div class="card" style="margin-top:20px">
-          <form id="signup-form">
-            <label>I want to…</label>
-            <div class="grid-2" style="gap:12px">
-              <label class="role-pick" style="margin:0"><input type="radio" name="role" value="customer" checked style="width:auto;margin-right:8px" />Book a cleaner</label>
-              <label class="role-pick" style="margin:0"><input type="radio" name="role" value="cleaner" style="width:auto;margin-right:8px" />Work as a cleaner</label>
-            </div>
-            <p class="hint" id="role-hint">Customers pay £20/hour all-in: £15 to the cleaner, £5 introduction fee.</p>
+          <label style="margin-top:0">I want to…</label>
+          <div class="grid-2" style="gap:12px">
+            <label class="role-pick" style="margin:0"><input type="radio" name="role" value="customer" checked style="width:auto;margin-right:8px" />Book a cleaner</label>
+            <label class="role-pick" style="margin:0"><input type="radio" name="role" value="cleaner" style="width:auto;margin-right:8px" />Offer my services</label>
+          </div>
+          <p class="hint" id="role-hint">Post what you need, browse local cleaners, and see each one's rate plus our service charge upfront.</p>
 
+          <button type="button" class="btn-google" id="google-btn" style="margin-top:18px">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Continue with Google
+          </button>
+          <div class="divider">or sign up with email</div>
+
+          <form id="signup-form">
             <label for="full_name">Full name</label>
             <input id="full_name" name="full_name" required autocomplete="name" />
 
@@ -28,13 +34,13 @@ import Base from '../layouts/Base.astro';
             <label for="postcode">Postcode</label>
             <input id="postcode" name="postcode" required autocomplete="postal-code" placeholder="e.g. M1 2AB" />
 
-            <label for="password">Password</label>
+            <label for="password">Create a password</label>
             <input id="password" name="password" type="password" required minlength="8" autocomplete="new-password" />
-            <p class="hint">At least 8 characters.</p>
+            <p class="hint">At least 8 characters. We'll email you a link to confirm your address.</p>
 
             <div id="form-msg"></div>
             <button class="btn btn-primary" type="submit" style="margin-top:18px;width:100%">Create account</button>
-            <p class="hint" style="margin-top:12px">By signing up you agree to our <a href="/terms/">terms</a>. Cleaners are independent providers responsible for their own insurance and tax.</p>
+            <p class="hint" style="margin-top:12px">By signing up you agree to our <a href="/terms/">terms</a>. Service providers are independent businesses responsible for their own insurance, tax and working arrangements — CanYouDo? does not provide or arrange insurance.</p>
           </form>
         </div>
         <p style="margin-top:18px;text-align:center">Already have an account? <a href="/login/">Log in</a></p>
@@ -43,23 +49,33 @@ import Base from '../layouts/Base.astro';
   </section>
 
   <script>
-    import { getClient, requireBackend } from '../lib/supabase.js';
+    import { getClient, requireBackend, signInWithGoogle, esc } from '../lib/supabase.js';
 
     const params = new URLSearchParams(window.location.search);
     if (params.get('role') === 'cleaner') {
       document.querySelector('input[name="role"][value="cleaner"]').checked = true;
     }
+    const roleOf = () => document.querySelector('input[name="role"]:checked').value;
     const hint = document.getElementById('role-hint');
     document.querySelectorAll('input[name="role"]').forEach((r) =>
       r.addEventListener('change', () => {
-        hint.textContent = r.value === 'cleaner' && r.checked
-          ? 'You keep £15 of every £20 hour, paid directly to you — plus monthly quality bonuses.'
-          : 'Customers pay £20/hour all-in: £15 to the cleaner, £5 introduction fee.';
+        hint.textContent = roleOf() === 'cleaner'
+          ? 'Set your own hourly rate and keep all of it — our service charge is added on top, paid separately by the customer.'
+          : 'Post what you need, browse local cleaners, and see each one\'s rate plus our service charge upfront.';
       })
     );
 
     if (requireBackend('app')) {
       const client = getClient();
+
+      document.getElementById('google-btn').addEventListener('click', async () => {
+        const err = await signInWithGoogle(roleOf());
+        if (err) {
+          document.getElementById('form-msg').innerHTML =
+            '<div class="notice notice-error">Google sign-in isn\'t enabled yet: ' + esc(err.message) + '</div>';
+        }
+      });
+
       document.getElementById('signup-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const f = new FormData(e.target);
@@ -70,8 +86,9 @@ import Base from '../layouts/Base.astro';
           email: f.get('email'),
           password: f.get('password'),
           options: {
+            emailRedirectTo: window.location.origin + '/auth/callback/',
             data: {
-              role: f.get('role'),
+              role: roleOf(),
               full_name: f.get('full_name'),
               phone: f.get('phone') || '',
               postcode: (f.get('postcode') || '').toUpperCase().trim(),
@@ -79,12 +96,14 @@ import Base from '../layouts/Base.astro';
           },
         });
         if (error) {
-          msg.innerHTML = '<div class="notice notice-error">' + error.message + '</div>';
+          msg.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>';
           btn.disabled = false;
           return;
         }
-        msg.innerHTML = '<div class="notice notice-info"><strong>Check your inbox.</strong> We\'ve sent a confirmation email — click the link, then log in. ' +
-          (f.get('role') === 'cleaner' ? 'Once you\'re in, complete your profile (services, availability and insurance) so customers can find you.' : 'Then find your first cleaner!') + '</div>';
+        msg.innerHTML = '<div class="notice notice-info"><strong>Check your inbox.</strong> We\'ve emailed you a confirmation link — click it, then log in. ' +
+          (roleOf() === 'cleaner'
+            ? 'Then complete your profile: your hourly rate, availability, photos and insurance details.'
+            : 'Then post what you need or browse local cleaners.') + '</div>';
         e.target.reset();
         btn.disabled = false;
       });

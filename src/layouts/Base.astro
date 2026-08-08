@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-const { title = 'CanYouDo? — Fair-pay cleaning, done properly', description = 'CanYouDo? connects customers with well-paid, insured, independent cleaners across the UK. Cleaners earn £15/hour plus performance bonuses. Customers pay a transparent £20/hour.' } = Astro.props;
+const { title = 'CanYouDo? — Fair-pay cleaning, done properly', description = 'CanYouDo? is a digital notice board connecting customers with independent local cleaners. Providers set their own hourly rate and keep it in full; a clear service charge is added on top.' } = Astro.props;
 const path = Astro.url.pathname;
 const active = (p) => (path === p || path === p + '/' ? 'active' : '');
 ---
@@ -52,18 +52,18 @@ const active = (p) => (path === p || path === p + '/' ? 'active' : '');
       <div class="footer-grid">
         <div>
           <strong style="font-family:var(--font-head);font-size:1.15rem;color:#fff">CanYouDo?</strong>
-          <p style="margin-top:10px;max-width:420px">An online introduction service connecting customers with independent, insured, fairly paid cleaners across the UK. Cleaners keep £15 of every £20 hour — plus bonuses for great, measurable work.</p>
+          <p style="margin-top:10px;max-width:420px">A digital notice board connecting customers with independent local cleaners. Providers set their own hourly rate and keep every penny of it — our service charge is added on top, in plain sight.</p>
         </div>
         <div>
           <strong style="color:#fff">Explore</strong>
-          <p style="margin-top:10px;line-height:2"><a href="/how-it-works/">How it works</a><br /><a href="/pricing/">Pricing</a><br /><a href="/find-a-cleaner/">Find a cleaner</a><br /><a href="/signup/?role=cleaner">Become a cleaner</a></p>
+          <p style="margin-top:10px;line-height:2"><a href="/how-it-works/">How it works</a><br /><a href="/pricing/">Pricing</a><br /><a href="/find-a-cleaner/">Find a cleaner</a><br /><a href="/signup/?role=cleaner">Offer your services</a></p>
         </div>
         <div>
           <strong style="color:#fff">Company</strong>
           <p style="margin-top:10px;line-height:2"><a href="/about/">Our promise</a><br /><a href="/terms/">Terms of service</a><br /><a href="/privacy/">Privacy</a><br /><a href="mailto:hello@canyoudo.uk">Contact us</a></p>
         </div>
       </div>
-      <p class="footer-small">CanYouDo? is an online introduction service (a notice board connecting independent cleaners and customers). We are not a cleaning company, employer, or agency. Cleaners are independent service providers responsible for their own public liability insurance, tax, and working arrangements. Customers and cleaners contract directly with each other. © {new Date().getFullYear()} CanYouDo? · canyoudo.uk</p>
+      <p class="footer-small">CanYouDo? is a digital notice board that introduces independent cleaners to customers. We are not a cleaning company, employer or agency, and we do not provide, arrange or verify insurance. Service providers are independent businesses responsible for their own independent insurance, tax and working arrangements; insurance is a matter for the provider and customer to discuss and agree directly. Customers and providers contract with each other. © {new Date().getFullYear()} CanYouDo? · canyoudo.uk</p>
     </div>
   </footer>
 

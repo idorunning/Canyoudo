@@ -1,0 +1,270 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Provider portal — CanYouDo?">
+  <section class="section" style="padding-top:44px">
+    <div class="wrap" style="max-width:880px">
+      <div class="app-title">
+        <div>
+          <p class="kicker" style="margin-bottom:2px">Service provider</p>
+          <h1 style="font-size:1.9rem;margin:0" id="hello">My work</h1>
+        </div>
+        <a class="btn btn-secondary" href="/provider/profile/">Edit profile &amp; rate</a>
+      </div>
+
+      <div id="profile-warn"></div>
+      <div class="stat-row" id="stats"></div>
+
+      <div class="tabs" id="tabs">
+        <button data-tab="bookings" class="on">My bookings</button>
+        <button data-tab="board">Open requests</button>
+        <button data-tab="calendar">Holidays &amp; time off</button>
+        <button data-tab="performance">Performance</button>
+      </div>
+
+      <div id="app"><p class="hint">Loading…</p></div>
+    </div>
+  </section>
+
+  <dialog id="block-dialog" style="border:none;border-radius:var(--radius);max-width:460px;width:92vw;padding:0;box-shadow:var(--shadow)">
+    <div style="padding:26px">
+      <h2 style="font-size:1.25rem">Block out dates</h2>
+      <p class="hint">Customers won't be able to pick these dates when booking you.</p>
+      <form id="block-form">
+        <div class="field-row">
+          <div><label for="start_date">From</label><input id="start_date" name="start_date" type="date" required /></div>
+          <div><label for="end_date">Until</label><input id="end_date" name="end_date" type="date" required /></div>
+        </div>
+        <label for="reason">Reason (just for you)</label>
+        <input id="reason" name="reason" placeholder="e.g. Holiday" />
+        <div id="block-msg"></div>
+        <div style="display:flex;gap:12px;margin-top:18px">
+          <button class="btn btn-primary" type="submit">Block these dates</button>
+          <button class="btn btn-secondary" type="button" id="block-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script>
+    import { requireAuth, esc, fmtDate, api, money, stars, gradingBadge, bookingTotals, DAYS } from '../../lib/supabase.js';
+
+    const STATUS_BADGE = {
+      pending: '<span class="badge badge-amber">New request</span>',
+      confirmed: '<span class="badge badge-green">Confirmed</span>',
+      completed: '<span class="badge badge-grey">Completed</span>',
+      declined: '<span class="badge badge-red">Declined</span>',
+      cancelled: '<span class="badge badge-red">Cancelled</span>',
+    };
+    let ctx, dir = null;
+
+    async function loadBookings() {
+      const { client } = ctx;
+      const { data: bookings, error } = await client
+        .from('bookings')
+        .select('*, customer:profiles!bookings_customer_id_fkey(full_name)')
+        .order('booking_date', { ascending: false });
+      const app = document.getElementById('app');
+      if (error) { app.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>'; return; }
+      if (!bookings.length) {
+        app.innerHTML = '<div class="notice notice-info">No bookings yet. Make sure your <a href="/provider/profile/">profile, rate and availability</a> are complete — then check the <strong>Open requests</strong> tab for customers looking for help now.</div>';
+        return;
+      }
+      app.innerHTML = bookings.map((b) => {
+        const t = bookingTotals(b);
+        return `
+        <div class="card booking-card" data-id="${b.id}">
+          <div class="booking-head">
+            <strong style="font-family:var(--font-head)">${fmtDate(b.booking_date)} · ${b.start_time.slice(0,5)} · ${b.hours}h for ${esc(b.customer?.full_name || 'customer')}</strong>
+            ${STATUS_BADGE[b.status] || ''}
+          </div>
+          <p style="margin:0;font-size:0.92rem;color:var(--ink-600)">${esc(b.address)}, ${esc(b.postcode)}</p>
+          <p style="margin:0;font-size:0.92rem"><strong>Areas:</strong> ${esc(b.areas_requested)}</p>
+          ${b.notes ? `<p style="margin:0;font-size:0.9rem"><strong>Notes:</strong> ${esc(b.notes)}</p>` : ''}
+          ${b.urgent ? '<p style="margin:0"><span class="badge badge-amber">Urgent — includes a ' + Number(b.urgent_uplift_pct) + '% uplift to you</span></p>' : ''}
+          ${b.booking_type === 'rolling' ? `<p style="margin:0"><span class="badge badge-green">Regular · ${esc(b.recurrence || '')}</span></p>` : ''}
+          ${b.ai_summary ? `<p class="hint" style="margin:0">🤖 ${esc(b.ai_summary)}</p>` : ''}
+          <p style="margin:0;font-size:0.9rem">You'll be paid <strong>${money(t.providerTotal)}</strong> directly by the customer.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+            ${b.status === 'pending' ? '<button class="btn btn-primary btn-sm" data-act="confirm">Accept</button><button class="btn btn-secondary btn-sm" data-act="decline" style="color:var(--danger);border-color:var(--danger)">Decline</button>' : ''}
+            ${b.status === 'confirmed' ? '<button class="btn btn-primary btn-sm" data-act="complete">Mark completed</button>' : ''}
+            ${['pending','confirmed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="msg">Messages</button>' : ''}
+          </div>
+          <div class="msg-panel hidden" id="msgs-${b.id}">
+            <div class="msg-list" id="msglist-${b.id}"></div>
+            <form data-msgform="${b.id}" style="display:flex;gap:8px;margin-top:8px">
+              <input name="body" placeholder="Message your customer…" required style="flex:1" />
+              <button class="btn btn-primary btn-sm" type="submit">Send</button>
+            </form>
+          </div>
+        </div>`;
+      }).join('');
+
+      app.querySelectorAll('[data-act]').forEach((btn) => {
+        const b = bookings.find((x) => x.id === btn.closest('[data-id]').dataset.id);
+        btn.addEventListener('click', () => actions[btn.dataset.act](b));
+      });
+      app.querySelectorAll('[data-msgform]').forEach((form) =>
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const body = new FormData(form).get('body');
+          form.reset();
+          await ctx.client.from('messages').insert({ booking_id: form.dataset.msgform, sender_id: ctx.session.user.id, body });
+          loadMessages(form.dataset.msgform);
+        })
+      );
+    }
+
+    async function loadMessages(bid) {
+      const { data } = await ctx.client.from('messages').select('*').eq('booking_id', bid).order('created_at');
+      document.getElementById('msglist-' + bid).innerHTML = (data || []).map((m) => `
+        <div class="msg ${m.sender_id === ctx.session.user.id ? 'msg-mine' : 'msg-theirs'}">${esc(m.body)}
+          <time>${new Date(m.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</time>
+        </div>`).join('') || '<p class="hint">No messages yet.</p>';
+    }
+
+    async function setStatus(b, status, notifyType) {
+      await ctx.client.from('bookings').update({ status }).eq('id', b.id);
+      api('notify', { type: notifyType, booking_id: b.id });
+      loadBookings();
+    }
+    const actions = {
+      confirm: (b) => setStatus(b, 'confirmed', 'booking_confirmed'),
+      decline: (b) => confirm('Decline this booking?') && setStatus(b, 'declined', 'booking_declined'),
+      complete: (b) => setStatus(b, 'completed', 'booking_completed'),
+      msg: (b) => { document.getElementById('msgs-' + b.id).classList.toggle('hidden'); loadMessages(b.id); },
+    };
+
+    async function loadBoard() {
+      const { data, error } = await ctx.client.from('customer_requests').select('*').eq('status', 'open').order('created_at', { ascending: false });
+      const app = document.getElementById('app');
+      if (error) { app.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>'; return; }
+      if (!(data || []).length) {
+        app.innerHTML = '<div class="notice notice-info">Nothing on the board right now. Customers post regular slots and one-off jobs here — check back soon.</div>';
+        return;
+      }
+      app.innerHTML = `<p class="hint">Customers looking for help. Only their postcode is shown — get in touch to discuss the details, including insurance arrangements.</p>` +
+        data.map((r) => `
+        <div class="card booking-card">
+          <div class="booking-head">
+            <strong style="font-family:var(--font-head)">
+              ${r.request_type === 'rolling' ? `Every ${esc(r.recurrence || '')} on ${DAYS[r.weekday]}` : fmtDate(r.preferred_date)}
+              ${r.start_time ? ' · ' + r.start_time.slice(0,5) : ''} · ${r.hours}h
+            </strong>
+            ${r.urgent ? '<span class="badge badge-amber">Urgent</span>' : '<span class="badge badge-green">Open</span>'}
+          </div>
+          <p style="margin:0;font-size:0.92rem;color:var(--ink-600)"><strong>${esc(r.postcode)}</strong> — ${esc(r.areas_requested)}</p>
+          ${r.notes ? `<p class="hint" style="margin:0">${esc(r.notes)}</p>` : ''}
+          <p style="margin:4px 0 0;font-size:0.88rem">At your rate that's about <strong>${dir && dir.hourly_rate ? money(Number(dir.hourly_rate) * Number(r.hours) * (r.urgent ? 1.25 : 1)) : 'set your rate to see'}</strong> to you${r.urgent ? ' (including the short-notice uplift)' : ''}.</p>
+          <p class="hint" style="margin:6px 0 0">Posted ${new Date(r.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</p>
+        </div>`).join('');
+    }
+
+    async function loadCalendar() {
+      const { data } = await ctx.client.from('provider_unavailability').select('*').order('start_date');
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+          <div><strong style="font-family:var(--font-head)">Time off</strong>
+            <p class="hint" style="margin:2px 0 0">Block holidays or any dates you're not available. Customers see these as unavailable.</p></div>
+          <button class="btn btn-primary" id="new-block">+ Block dates</button>
+        </div>
+        ${(data || []).length ? data.map((u) => `
+          <div class="card booking-card" style="margin-top:14px">
+            <div class="booking-head">
+              <strong style="font-family:var(--font-head)">${fmtDate(u.start_date)}${u.end_date !== u.start_date ? ' → ' + fmtDate(u.end_date) : ''}</strong>
+              <button class="btn btn-secondary btn-sm" data-unblock="${u.id}" style="color:var(--danger);border-color:var(--danger)">Remove</button>
+            </div>
+            ${u.reason ? `<p class="hint" style="margin:0">${esc(u.reason)}</p>` : ''}
+          </div>`).join('') : '<div class="notice notice-info" style="margin-top:14px">No time off booked.</div>'}`;
+      document.getElementById('new-block').addEventListener('click', () => document.getElementById('block-dialog').showModal());
+      app.querySelectorAll('[data-unblock]').forEach((b) => b.addEventListener('click', async () => {
+        await ctx.client.from('provider_unavailability').delete().eq('id', b.dataset.unblock);
+        loadCalendar();
+      }));
+    }
+
+    async function loadPerformance() {
+      const { data } = await ctx.client.from('cleaner_monthly_stats').select('*').order('month', { ascending: false }).limit(12);
+      const app = document.getElementById('app');
+      const grading = dir ? gradingBadge(dir.grading) : '';
+      app.innerHTML = `
+        <div class="card">
+          <h3 style="margin-bottom:6px">Your grading ${grading}</h3>
+          <p class="hint" style="margin:0">Gradings run New → Rising Star → Trusted → Elite → Superstar, and are earned from your reviews: turning up on time, cleaning everything asked for, and happy customers.</p>
+          ${dir && dir.jobs_done ? `<p style="margin-top:10px">${stars(dir.avg_rating)} <strong>${Number(dir.avg_rating).toFixed(1)}</strong> from ${dir.jobs_done} rated job${dir.jobs_done === 1 ? '' : 's'} · ⏱ ${Math.round(dir.on_time_pct)}% on time · ✅ ${Math.round(dir.areas_pct)}% areas done</p>` : '<p class="hint" style="margin-top:10px">No rated jobs yet.</p>'}
+        </div>
+        <div class="card table-scroll" style="margin-top:16px">
+          <h3>Month by month</h3>
+          ${(data || []).length ? `<table>
+            <thead><tr><th>Month</th><th>Rated jobs</th><th>On time</th><th>Areas done</th><th>Avg ★</th><th>Quality bonus</th></tr></thead>
+            <tbody>${data.map((r) => `
+              <tr>
+                <td>${new Date(r.month).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</td>
+                <td>${r.jobs}</td><td>${Math.round(r.on_time_pct)}%</td><td>${Math.round(r.areas_pct)}%</td>
+                <td>${Number(r.avg_overall).toFixed(1)}</td>
+                <td>${r.bonus_qualified ? '<span class="badge badge-green">Qualified</span>' : '<span class="hint">—</span>'}</td>
+              </tr>`).join('')}</tbody></table>`
+            : '<p class="hint">No rated jobs yet — your monthly performance will appear here.</p>'}
+        </div>`;
+    }
+
+    function show(t) {
+      document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
+      document.getElementById('app').innerHTML = '<p class="hint">Loading…</p>';
+      ({ bookings: loadBookings, board: loadBoard, calendar: loadCalendar, performance: loadPerformance })[t]();
+    }
+
+    async function init() {
+      ctx = await requireAuth('cleaner');
+      if (!ctx) return;
+      document.getElementById('hello').textContent = 'Hello, ' + (ctx.profile.full_name || 'there').split(' ')[0] + ' 👋';
+
+      const [{ data: det }, { data: d }] = await Promise.all([
+        ctx.client.from('cleaner_details').select('*').eq('profile_id', ctx.session.user.id).single(),
+        ctx.client.from('cleaner_directory').select('*').eq('profile_id', ctx.session.user.id).single(),
+      ]);
+      dir = d;
+
+      const warns = [];
+      if (det && det.hourly_rate === null) warns.push('<strong>Set your hourly rate</strong> so customers can book you.');
+      if (det && (!det.insurer_name || !det.policy_number)) warns.push('<strong>Add your insurance details.</strong> You arrange your own independent cover — recording the details here shows customers they are on file, and insurance remains something for you and each customer to agree directly.');
+      if (warns.length) {
+        document.getElementById('profile-warn').innerHTML =
+          '<div class="notice notice-warn">' + warns.join('<br />') + ' <a href="/provider/profile/">Complete your profile →</a></div>';
+      }
+
+      const { data: bookings } = await ctx.client.from('bookings').select('status, hours, booking_date, provider_hourly_rate, urgent_uplift_pct, platform_fee_pct');
+      const list = bookings || [];
+      const month = new Date().toISOString().slice(0, 7);
+      const monthly = list.filter((b) => !['cancelled','declined'].includes(b.status) && b.booking_date.slice(0,7) === month);
+      const hours = monthly.reduce((s, b) => s + Number(b.hours), 0);
+      const earnings = monthly.reduce((s, b) => s + bookingTotals(b).providerTotal, 0);
+      document.getElementById('stats').innerHTML = `
+        <div class="stat"><div class="num">${list.filter((b) => ['pending','confirmed'].includes(b.status)).length}</div><div class="lbl">Upcoming</div></div>
+        <div class="stat"><div class="num">${list.filter((b) => b.status === 'pending').length}</div><div class="lbl">Awaiting your reply</div></div>
+        <div class="stat"><div class="num">${hours}</div><div class="lbl">Hours this month</div></div>
+        <div class="stat"><div class="num">${money(earnings)}</div><div class="lbl">Earnings this month</div></div>`;
+
+      document.querySelectorAll('#tabs button').forEach((b) => b.addEventListener('click', () => show(b.dataset.tab)));
+      show('bookings');
+
+      document.getElementById('block-cancel').addEventListener('click', () => document.getElementById('block-dialog').close());
+      document.getElementById('block-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const f = new FormData(e.target);
+        const { error } = await ctx.client.from('provider_unavailability').insert({
+          cleaner_id: ctx.session.user.id,
+          start_date: f.get('start_date'),
+          end_date: f.get('end_date'),
+          reason: f.get('reason') || '',
+        });
+        if (error) { document.getElementById('block-msg').innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>'; return; }
+        document.getElementById('block-dialog').close();
+        e.target.reset();
+        show('calendar');
+      });
+    }
+    init();
+  </script>
+</Base>
