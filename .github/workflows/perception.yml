@@ -105,7 +105,7 @@ jobs:
             echo "No Guardian raw for ${{ matrix.year }} — skipping BBC."; exit 0
           fi
           node scripts/perception/fetch-bbc-dataset.mjs --year ${{ matrix.year }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: raw-${{ matrix.year }}
