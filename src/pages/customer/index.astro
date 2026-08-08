@@ -1,0 +1,199 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="My bookings — CanYouDo?">
+  <section class="section" style="padding-top:44px">
+    <div class="wrap" style="max-width:860px">
+      <div class="app-title">
+        <div>
+          <p class="kicker" style="margin-bottom:2px">Customer portal</p>
+          <h1 style="font-size:1.9rem;margin:0">My bookings</h1>
+        </div>
+        <a class="btn btn-primary" href="/find-a-cleaner/">+ New booking</a>
+      </div>
+      <div id="app"><p class="hint">Loading…</p></div>
+    </div>
+  </section>
+
+  <!-- rating dialog -->
+  <dialog id="rate-dialog" style="border:none;border-radius:var(--radius);max-width:520px;width:92vw;padding:0;box-shadow:var(--shadow)">
+    <div style="padding:26px">
+      <h2 style="font-size:1.3rem">Rate this clean</h2>
+      <p class="hint">Factual answers, please — these scores decide your cleaner's monthly bonus.</p>
+      <form id="rate-form">
+        <div id="rate-questions"></div>
+        <label for="overall">Overall rating</label>
+        <select id="overall" name="overall" required>
+          <option value="5">★★★★★ Excellent</option>
+          <option value="4">★★★★ Good</option>
+          <option value="3">★★★ OK</option>
+          <option value="2">★★ Poor</option>
+          <option value="1">★ Very poor</option>
+        </select>
+        <label for="comment">Comment (optional)</label>
+        <textarea id="comment" name="comment" rows="2"></textarea>
+        <div id="rate-msg"></div>
+        <div style="display:flex;gap:12px;margin-top:18px">
+          <button class="btn btn-primary" type="submit">Submit rating</button>
+          <button class="btn btn-secondary" type="button" id="rate-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script>
+    import { requireAuth, esc, fmtDate, api, RATES } from '../../lib/supabase.js';
+
+    const QUESTIONS = [
+      ['arrived_on_time', 'Did your cleaner arrive on time?'],
+      ['completed_requested_areas', 'Did they clean all the areas you asked for?'],
+      ['followed_instructions', 'Did they follow your instructions?'],
+      ['friendly_professional', 'Were they friendly and professional?'],
+    ];
+    const STATUS_BADGE = {
+      pending: '<span class="badge badge-amber">Awaiting cleaner</span>',
+      confirmed: '<span class="badge badge-green">Confirmed</span>',
+      completed: '<span class="badge badge-grey">Completed</span>',
+      declined: '<span class="badge badge-red">Declined</span>',
+      cancelled: '<span class="badge badge-red">Cancelled</span>',
+    };
+
+    let ctx, ratingBooking = null;
+
+    async function load() {
+      const { client } = ctx;
+      const { data: bookings, error } = await client
+        .from('bookings')
+        .select('*, cleaner:profiles!bookings_cleaner_id_fkey(full_name), rating:ratings(booking_id)')
+        .order('booking_date', { ascending: false });
+      const app = document.getElementById('app');
+      if (error) {
+        app.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>';
+        return;
+      }
+      if (new URLSearchParams(window.location.search).get('paid')) {
+        history.replaceState(null, '', '/customer/');
+        app.insertAdjacentHTML('beforebegin', '<div class="notice notice-info"><strong>Thanks!</strong> Your introduction fee payment is being confirmed.</div>');
+      }
+      if (!bookings.length) {
+        app.innerHTML = '<div class="notice notice-info">No bookings yet. <a href="/find-a-cleaner/">Find your first cleaner →</a></div>';
+        return;
+      }
+      app.innerHTML = bookings.map((b) => {
+        const first = (b.cleaner?.full_name || 'your cleaner').split(' ')[0];
+        const cleanerPay = (b.hours * RATES.cleaner).toFixed(2).replace(/\.00$/, '');
+        const fee = (b.hours * RATES.fee).toFixed(2).replace(/\.00$/, '');
+        const rated = b.rating && b.rating.length > 0;
+        return `
+        <div class="card booking-card" data-id="${b.id}">
+          <div class="booking-head">
+            <strong style="font-family:var(--font-head)">${fmtDate(b.booking_date)} · ${b.start_time.slice(0, 5)} · ${b.hours}h with ${esc(b.cleaner?.full_name || '—')}</strong>
+            ${STATUS_BADGE[b.status] || ''}
+          </div>
+          <p style="margin:0;font-size:0.92rem;color:var(--ink-600)">${esc(b.address)}, ${esc(b.postcode)} — ${esc(b.areas_requested)}</p>
+          ${b.ai_summary ? `<p class="hint" style="margin:0">🤖 ${esc(b.ai_summary)}</p>` : ''}
+          <p style="margin:0;font-size:0.9rem">
+            <strong>£${cleanerPay}</strong> to ${esc(first)} on the day · <strong>£${fee}</strong> intro fee ${b.fee_paid ? '<span class="badge badge-green">paid</span>' : '<span class="badge badge-amber">unpaid</span>'}
+          </p>
+          <div id="paydetails-${b.id}"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+            ${!b.fee_paid && ['pending', 'confirmed'].includes(b.status) ? `<button class="btn btn-amber btn-sm" data-act="pay">Pay £${fee} intro fee</button>` : ''}
+            ${['confirmed', 'completed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="paydetails">How to pay ' + esc(first) + '</button>' : ''}
+            ${b.status === 'completed' && !rated ? '<button class="btn btn-primary btn-sm" data-act="rate">Rate this clean</button>' : ''}
+            ${rated ? '<span class="badge badge-green" style="align-self:center">✓ Rated — thank you</span>' : ''}
+            ${['pending', 'confirmed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="msg">Messages</button>' : ''}
+            ${['pending', 'confirmed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="cancel" style="color:var(--danger);border-color:var(--danger)">Cancel</button>' : ''}
+          </div>
+          <div class="msg-panel hidden" id="msgs-${b.id}">
+            <div class="msg-list" id="msglist-${b.id}"></div>
+            <form data-msgform="${b.id}" style="display:flex;gap:8px;margin-top:8px">
+              <input name="body" placeholder="Message ${esc(first)}…" required style="flex:1" />
+              <button class="btn btn-primary btn-sm" type="submit">Send</button>
+            </form>
+          </div>
+        </div>`;
+      }).join('');
+
+      app.querySelectorAll('[data-act]').forEach((btn) => {
+        const card = btn.closest('[data-id]');
+        const b = bookings.find((x) => x.id === card.dataset.id);
+        btn.addEventListener('click', () => actions[btn.dataset.act](b, card));
+      });
+      app.querySelectorAll('[data-msgform]').forEach((form) =>
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const body = new FormData(form).get('body');
+          form.reset();
+          await ctx.client.from('messages').insert({ booking_id: form.dataset.msgform, sender_id: ctx.session.user.id, body });
+          loadMessages(form.dataset.msgform);
+        })
+      );
+    }
+
+    async function loadMessages(bid) {
+      const { data } = await ctx.client.from('messages').select('*').eq('booking_id', bid).order('created_at');
+      document.getElementById('msglist-' + bid).innerHTML = (data || []).map((m) => `
+        <div class="msg ${m.sender_id === ctx.session.user.id ? 'msg-mine' : 'msg-theirs'}">${esc(m.body)}
+          <time>${new Date(m.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</time>
+        </div>`).join('') || '<p class="hint">No messages yet — say hello!</p>';
+    }
+
+    const actions = {
+      pay: async (b) => {
+        const pay = await api('create-checkout', { booking_id: b.id, origin: window.location.origin });
+        if (pay && pay.url) window.location.href = pay.url;
+        else alert('Online payment isn\'t live yet — the introduction fee will be invoiced separately.');
+      },
+      paydetails: async (b) => {
+        const el = document.getElementById('paydetails-' + b.id);
+        const { data, error } = await ctx.client.rpc('get_cleaner_payment_details', { bid: b.id });
+        el.innerHTML = error || !data
+          ? '<div class="notice notice-warn">Payment details aren\'t available yet — ask via messages.</div>'
+          : '<div class="notice notice-info"><strong>Pay your cleaner directly:</strong> ' + esc(data) + '</div>';
+      },
+      msg: async (b) => {
+        document.getElementById('msgs-' + b.id).classList.toggle('hidden');
+        loadMessages(b.id);
+      },
+      cancel: async (b) => {
+        if (!confirm('Cancel this booking?')) return;
+        await ctx.client.from('bookings').update({ status: 'cancelled' }).eq('id', b.id);
+        api('notify', { type: 'booking_cancelled', booking_id: b.id });
+        load();
+      },
+      rate: (b) => {
+        ratingBooking = b;
+        document.getElementById('rate-questions').innerHTML = QUESTIONS.map(([k, q]) => `
+          <label style="margin-top:14px">${q}</label>
+          <div style="display:flex;gap:16px">
+            <label style="font-weight:400;margin:0"><input type="radio" name="${k}" value="true" required style="width:auto;margin-right:6px" />Yes</label>
+            <label style="font-weight:400;margin:0"><input type="radio" name="${k}" value="false" style="width:auto;margin-right:6px" />No</label>
+          </div>`).join('');
+        document.getElementById('rate-dialog').showModal();
+      },
+    };
+
+    async function init() {
+      ctx = await requireAuth('customer');
+      if (!ctx) return;
+      await load();
+
+      document.getElementById('rate-cancel').addEventListener('click', () => document.getElementById('rate-dialog').close());
+      document.getElementById('rate-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const f = new FormData(e.target);
+        const row = { booking_id: ratingBooking.id, cleaner_id: ratingBooking.cleaner_id, customer_id: ctx.session.user.id, overall: Number(f.get('overall')), comment: f.get('comment') || '' };
+        for (const [k] of QUESTIONS) row[k] = f.get(k) === 'true';
+        const { error } = await ctx.client.from('ratings').insert(row);
+        if (error) {
+          document.getElementById('rate-msg').innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>';
+          return;
+        }
+        document.getElementById('rate-dialog').close();
+        e.target.reset();
+        load();
+      });
+    }
+    init();
+  </script>
+</Base>

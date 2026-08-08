@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base>
+  <section class="section" style="padding-top:84px">
+    <div class="wrap" style="display:grid;grid-template-columns:1.15fr 1fr;gap:48px;align-items:center">
+      <div>
+        <p class="kicker">Fair-pay cleaning · UK</p>
+        <h1>A cleaner who's paid properly cleans properly.</h1>
+        <p style="font-size:1.15rem;color:var(--ink-600);max-width:34em">
+          CanYouDo? introduces you to independent, insured local cleaners who keep
+          <strong>£15 of every £20 hour</strong> — plus bonuses for turning up on time and
+          doing exactly what was asked. Happy cleaner, spotless home. That's the whole idea.
+        </p>
+        <p style="display:flex;gap:14px;flex-wrap:wrap;margin-top:26px">
+          <a class="btn btn-primary" href="/find-a-cleaner/">Find a cleaner</a>
+          <a class="btn btn-secondary" href="/signup/?role=cleaner">Earn £15/hr cleaning</a>
+        </p>
+      </div>
+      <div>
+        <div class="card">
+          <h3 style="margin-bottom:14px">Where your £20/hour goes</h3>
+          <div class="price-split" role="img" aria-label="Of the £20 hourly rate, £15 goes to your cleaner and £5 to CanYouDo">
+            <div class="part worker"><span class="amount">£15</span><span class="who">straight to your cleaner</span></div>
+            <div class="part platform"><span class="amount">£5</span><span class="who">to CanYouDo?</span></div>
+          </div>
+          <p class="hint" style="margin-top:14px">
+            No hidden margins. The £5 covers the booking system, messaging, ratings and the
+            bonus pot that rewards brilliant cleaners. You pay your cleaner their £15/hour directly.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-green">
+    <div class="wrap">
+      <p class="kicker">Why it works</p>
+      <h2>Most platforms squeeze the worker.<br />We built one that backs them.</h2>
+      <div class="grid-3" style="margin-top:34px">
+        <div>
+          <h3 style="color:#fff">💷 Real pay, kept simple</h3>
+          <p>£15/hour to the cleaner, every hour, no commission clawbacks. Cleaners are independent — they keep what they earn and build their own client base.</p>
+        </div>
+        <div>
+          <h3 style="color:#fff">📏 Bonuses you can measure</h3>
+          <p>Customers rate the things that actually matter: on time? Cleaned the areas asked? Followed instructions? Consistently great cleaners earn monthly cash bonuses on top.</p>
+        </div>
+        <div>
+          <h3 style="color:#fff">✨ You feel the difference</h3>
+          <p>A cleaner who is respected, paid fairly and rewarded for quality shows up on time, cares about the details, and sticks around. That's better for your home too.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="kicker">Simple by design</p>
+      <h2>How a booking happens</h2>
+      <div class="grid-3" style="margin-top:30px">
+        <div class="card">
+          <span class="badge badge-amber">Step 1</span>
+          <h3 style="margin-top:12px">Pick your cleaner</h3>
+          <p>Browse insured local cleaners, see their availability, services and measurable track record — punctuality and completion rates, not just stars.</p>
+        </div>
+        <div class="card">
+          <span class="badge badge-amber">Step 2</span>
+          <h3 style="margin-top:12px">Book &amp; pay the intro fee</h3>
+          <p>Choose a date and time, tell them exactly which areas to clean, and pay CanYouDo? the £5/hour introduction fee. Our AI-monitored booking system confirms everything by email.</p>
+        </div>
+        <div class="card">
+          <span class="badge badge-amber">Step 3</span>
+          <h3 style="margin-top:12px">Pay your cleaner directly</h3>
+          <p>You provide the cleaning products; your cleaner provides the elbow grease. Pay them £15/hour directly on the day, then rate the visit — your ratings fund their bonus.</p>
+        </div>
+      </div>
+      <p style="margin-top:26px"><a href="/how-it-works/">See the full details →</a></p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap">
+      <div class="card" style="display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center">
+        <div>
+          <h2 style="font-size:1.4rem">Cleaners: keep 75% and get rewarded for being brilliant</h2>
+          <p style="margin:0;color:var(--ink-600)">Set your own availability, message clients from your portal, and earn measurable bonuses. You stay independent — we just bring the customers and the bookings.</p>
+        </div>
+        <a class="btn btn-amber" href="/signup/?role=cleaner">Become a cleaner</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-tight" style="padding-bottom:70px">
+    <div class="wrap-narrow" style="text-align:center">
+      <p class="hint">CanYouDo? is an online introduction service — a notice board connecting independent cleaners with customers. Cleaners hold their own public liability insurance and work for themselves. <a href="/terms/">Read our terms</a>.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  @media (max-width: 900px) {
+    .section .wrap[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+    .card[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+  }
+</style>

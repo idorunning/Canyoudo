@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Privacy policy — CanYouDo?">
+  <section class="section">
+    <div class="wrap-narrow">
+      <p class="kicker">Legal</p>
+      <h1>Privacy policy</h1>
+      <p class="hint">Last updated: 8 August 2026</p>
+
+      <h2 style="margin-top:36px">What we collect</h2>
+      <ul>
+        <li><strong>Account details</strong> — name, email, phone, postcode, and password (stored as a secure hash).</li>
+        <li><strong>Cleaner profile details</strong> — services offered, availability, bio, and insurance details (insurer, policy number, expiry).</li>
+        <li><strong>Booking data</strong> — dates, addresses, requested areas, notes, messages between customer and cleaner, and ratings.</li>
+        <li><strong>Payment data</strong> — introduction fee payments are processed by Stripe; we never see or store full card details.</li>
+      </ul>
+
+      <h2 style="margin-top:32px">How we use it</h2>
+      <ul>
+        <li>To run the introduction service: matching, bookings, notifications, messaging and ratings.</li>
+        <li>To send transactional emails (booking confirmations, reminders, changes). We don't send marketing without consent.</li>
+        <li>To calculate cleaner bonuses from rating data.</li>
+        <li>Automated (AI-assisted) checks may review booking details to flag errors or misuse; a human reviews anything flagged.</li>
+      </ul>
+
+      <h2 style="margin-top:32px">Who sees what</h2>
+      <ul>
+        <li>Customers see a cleaner's public profile: name, area, services, insured status and aggregate ratings — never the policy number itself.</li>
+        <li>A cleaner sees the booking details a customer provides: name, address, requested areas and messages.</li>
+        <li>Cleaner bank details for direct payment are shown only to customers with a confirmed booking with that cleaner.</li>
+      </ul>
+
+      <h2 style="margin-top:32px">Where it lives</h2>
+      <p>Data is stored with Supabase (hosted in the EU/UK region) and the site is served by Netlify with Cloudflare DNS. Emails are sent via Resend. Payments are processed by Stripe.</p>
+
+      <h2 style="margin-top:32px">Your rights</h2>
+      <p>Under UK GDPR you can request access to, correction of, or deletion of your personal data at any time. Email <a href="mailto:hello@canyoudo.uk">hello@canyoudo.uk</a> and we'll act within 30 days. Deleting your account removes your profile; booking records needed for legal/accounting purposes are kept only as long as required.</p>
+
+      <h2 style="margin-top:32px">Cookies</h2>
+      <p>We use only the strictly necessary session storage needed to keep you signed in. No advertising trackers.</p>
+    </div>
+  </section>
+</Base>

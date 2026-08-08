@@ -1,0 +1,89 @@
+---
+import '../styles/global.css';
+const { title = 'CanYouDo? — Fair-pay cleaning, done properly', description = 'CanYouDo? connects customers with well-paid, insured, independent cleaners across the UK. Cleaners earn £15/hour plus performance bonuses. Customers pay a transparent £20/hour.' } = Astro.props;
+const path = Astro.url.pathname;
+const active = (p) => (path === p || path === p + '/' ? 'active' : '');
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a href="/" class="logo" aria-label="CanYouDo? home">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0f6b4f"/><path d="M20 33.5 28.5 42 45 24" fill="none" stroke="#faf7f0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="47" cy="45" r="4.5" fill="#f5a524"/></svg>
+        CanYouDo<span class="q">?</span>
+      </a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" onclick="const n=document.querySelector('.nav-links');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰</button>
+      <nav class="nav-links">
+        <a href="/how-it-works/" class={active('/how-it-works')}>How it works</a>
+        <a href="/pricing/" class={active('/pricing')}>Pricing</a>
+        <a href="/find-a-cleaner/" class={active('/find-a-cleaner')}>Find a cleaner</a>
+        <a href="/about/" class={active('/about')}>Our promise</a>
+        <span id="nav-auth">
+          <a href="/login/" class="btn btn-secondary btn-sm" data-auth="out">Log in</a>
+          <a href="/signup/" class="btn btn-primary btn-sm" data-auth="out">Sign up</a>
+          <a href="#" class="btn btn-primary btn-sm hidden" data-auth="in" id="nav-portal">My portal</a>
+          <a href="#" class="btn btn-secondary btn-sm hidden" data-auth="in" id="nav-logout">Log out</a>
+        </span>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <strong style="font-family:var(--font-head);font-size:1.15rem;color:#fff">CanYouDo?</strong>
+          <p style="margin-top:10px;max-width:420px">An online introduction service connecting customers with independent, insured, fairly paid cleaners across the UK. Cleaners keep £15 of every £20 hour — plus bonuses for great, measurable work.</p>
+        </div>
+        <div>
+          <strong style="color:#fff">Explore</strong>
+          <p style="margin-top:10px;line-height:2"><a href="/how-it-works/">How it works</a><br /><a href="/pricing/">Pricing</a><br /><a href="/find-a-cleaner/">Find a cleaner</a><br /><a href="/signup/?role=cleaner">Become a cleaner</a></p>
+        </div>
+        <div>
+          <strong style="color:#fff">Company</strong>
+          <p style="margin-top:10px;line-height:2"><a href="/about/">Our promise</a><br /><a href="/terms/">Terms of service</a><br /><a href="/privacy/">Privacy</a><br /><a href="mailto:hello@canyoudo.uk">Contact us</a></p>
+        </div>
+      </div>
+      <p class="footer-small">CanYouDo? is an online introduction service (a notice board connecting independent cleaners and customers). We are not a cleaning company, employer, or agency. Cleaners are independent service providers responsible for their own public liability insurance, tax, and working arrangements. Customers and cleaners contract directly with each other. © {new Date().getFullYear()} CanYouDo? · canyoudo.uk</p>
+    </div>
+  </footer>
+
+  <script>
+    import { getClient, portalPathFor } from '../lib/supabase.js';
+    const client = getClient();
+    if (client) {
+      client.auth.getSession().then(async ({ data: { session } }) => {
+        if (!session) return;
+        document.querySelectorAll('[data-auth="out"]').forEach((el) => el.classList.add('hidden'));
+        document.querySelectorAll('[data-auth="in"]').forEach((el) => el.classList.remove('hidden'));
+        const portal = document.getElementById('nav-portal');
+        portal.href = await portalPathFor(client, session.user);
+        document.getElementById('nav-logout').addEventListener('click', async (e) => {
+          e.preventDefault();
+          await client.auth.signOut();
+          window.location.href = '/';
+        });
+      });
+    }
+  </script>
+</body>
+</html>

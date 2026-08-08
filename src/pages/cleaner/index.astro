@@ -1,0 +1,161 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+<Base title="Cleaner portal — CanYouDo?">
+  <section class="section" style="padding-top:44px">
+    <div class="wrap" style="max-width:860px">
+      <div class="app-title">
+        <div>
+          <p class="kicker" style="margin-bottom:2px">Cleaner portal</p>
+          <h1 style="font-size:1.9rem;margin:0" id="hello">My work</h1>
+        </div>
+        <a class="btn btn-secondary" href="/cleaner/profile/">Edit profile &amp; availability</a>
+      </div>
+
+      <div id="profile-warn"></div>
+      <div class="stat-row" id="stats"></div>
+
+      <h2 style="font-size:1.3rem;margin-top:8px">Bookings</h2>
+      <div id="app"><p class="hint">Loading…</p></div>
+
+      <h2 style="font-size:1.3rem;margin-top:38px">Monthly performance &amp; bonuses</h2>
+      <p class="hint">Bonuses need at least 4 rated jobs in a month: 100% on-time = £20 · 95%+ areas completed = £20 · 4.5★+ average = £10.</p>
+      <div class="card table-scroll" id="bonus-table" style="padding:10px 16px"><p class="hint">Loading…</p></div>
+    </div>
+  </section>
+
+  <script>
+    import { requireAuth, esc, fmtDate, api, RATES } from '../../lib/supabase.js';
+
+    const STATUS_BADGE = {
+      pending: '<span class="badge badge-amber">New request</span>',
+      confirmed: '<span class="badge badge-green">Confirmed</span>',
+      completed: '<span class="badge badge-grey">Completed</span>',
+      declined: '<span class="badge badge-red">Declined</span>',
+      cancelled: '<span class="badge badge-red">Cancelled</span>',
+    };
+    let ctx;
+
+    async function load() {
+      const { client } = ctx;
+      const { data: bookings, error } = await client
+        .from('bookings')
+        .select('*, customer:profiles!bookings_customer_id_fkey(full_name)')
+        .order('booking_date', { ascending: false });
+      const app = document.getElementById('app');
+      if (error) {
+        app.innerHTML = '<div class="notice notice-error">' + esc(error.message) + '</div>';
+        return;
+      }
+
+      const upcoming = bookings.filter((b) => ['pending', 'confirmed'].includes(b.status));
+      const hoursThisMonth = bookings
+        .filter((b) => b.status !== 'cancelled' && b.status !== 'declined' && b.booking_date.slice(0, 7) === new Date().toISOString().slice(0, 7))
+        .reduce((s, b) => s + Number(b.hours), 0);
+      document.getElementById('stats').innerHTML = `
+        <div class="stat"><div class="num">${upcoming.length}</div><div class="lbl">Upcoming bookings</div></div>
+        <div class="stat"><div class="num">${bookings.filter((b) => b.status === 'pending').length}</div><div class="lbl">Awaiting your reply</div></div>
+        <div class="stat"><div class="num">${hoursThisMonth}</div><div class="lbl">Hours this month</div></div>
+        <div class="stat"><div class="num">£${(hoursThisMonth * RATES.cleaner).toFixed(0)}</div><div class="lbl">Earnings this month</div></div>`;
+
+      if (!bookings.length) {
+        app.innerHTML = '<div class="notice notice-info">No bookings yet. Make sure your <a href="/cleaner/profile/">profile, availability and insurance details</a> are complete so customers can find and book you.</div>';
+        return;
+      }
+      app.innerHTML = bookings.map((b) => `
+        <div class="card booking-card" data-id="${b.id}">
+          <div class="booking-head">
+            <strong style="font-family:var(--font-head)">${fmtDate(b.booking_date)} · ${b.start_time.slice(0, 5)} · ${b.hours}h for ${esc(b.customer?.full_name || 'customer')}</strong>
+            ${STATUS_BADGE[b.status] || ''}
+          </div>
+          <p style="margin:0;font-size:0.92rem;color:var(--ink-600)">${esc(b.address)}, ${esc(b.postcode)}</p>
+          <p style="margin:0;font-size:0.92rem"><strong>Areas:</strong> ${esc(b.areas_requested)}</p>
+          ${b.notes ? `<p style="margin:0;font-size:0.9rem"><strong>Notes:</strong> ${esc(b.notes)}</p>` : ''}
+          ${b.ai_summary ? `<p class="hint" style="margin:0">🤖 ${esc(b.ai_summary)}</p>` : ''}
+          <p style="margin:0;font-size:0.9rem">You'll be paid <strong>£${(b.hours * RATES.cleaner).toFixed(2).replace(/\.00$/, '')}</strong> directly by the customer on the day (customer provides all products).</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+            ${b.status === 'pending' ? '<button class="btn btn-primary btn-sm" data-act="confirm">Accept booking</button><button class="btn btn-secondary btn-sm" data-act="decline" style="color:var(--danger);border-color:var(--danger)">Decline</button>' : ''}
+            ${b.status === 'confirmed' ? '<button class="btn btn-primary btn-sm" data-act="complete">Mark completed</button>' : ''}
+            ${['pending', 'confirmed'].includes(b.status) ? '<button class="btn btn-secondary btn-sm" data-act="msg">Messages</button>' : ''}
+          </div>
+          <div class="msg-panel hidden" id="msgs-${b.id}">
+            <div class="msg-list" id="msglist-${b.id}"></div>
+            <form data-msgform="${b.id}" style="display:flex;gap:8px;margin-top:8px">
+              <input name="body" placeholder="Message your customer…" required style="flex:1" />
+              <button class="btn btn-primary btn-sm" type="submit">Send</button>
+            </form>
+          </div>
+        </div>`).join('');
+
+      app.querySelectorAll('[data-act]').forEach((btn) => {
+        const card = btn.closest('[data-id]');
+        const b = bookings.find((x) => x.id === card.dataset.id);
+        btn.addEventListener('click', () => actions[btn.dataset.act](b));
+      });
+      app.querySelectorAll('[data-msgform]').forEach((form) =>
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const body = new FormData(form).get('body');
+          form.reset();
+          await ctx.client.from('messages').insert({ booking_id: form.dataset.msgform, sender_id: ctx.session.user.id, body });
+          loadMessages(form.dataset.msgform);
+        })
+      );
+    }
+
+    async function loadMessages(bid) {
+      const { data } = await ctx.client.from('messages').select('*').eq('booking_id', bid).order('created_at');
+      document.getElementById('msglist-' + bid).innerHTML = (data || []).map((m) => `
+        <div class="msg ${m.sender_id === ctx.session.user.id ? 'msg-mine' : 'msg-theirs'}">${esc(m.body)}
+          <time>${new Date(m.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</time>
+        </div>`).join('') || '<p class="hint">No messages yet.</p>';
+    }
+
+    async function setStatus(b, status, notifyType) {
+      await ctx.client.from('bookings').update({ status }).eq('id', b.id);
+      api('notify', { type: notifyType, booking_id: b.id });
+      load();
+    }
+    const actions = {
+      confirm: (b) => setStatus(b, 'confirmed', 'booking_confirmed'),
+      decline: (b) => confirm('Decline this booking?') && setStatus(b, 'declined', 'booking_declined'),
+      complete: (b) => setStatus(b, 'completed', 'booking_completed'),
+      msg: (b) => { document.getElementById('msgs-' + b.id).classList.toggle('hidden'); loadMessages(b.id); },
+    };
+
+    async function loadBonuses() {
+      const { data, error } = await ctx.client.from('cleaner_monthly_stats').select('*').order('month', { ascending: false }).limit(12);
+      const el = document.getElementById('bonus-table');
+      if (error || !data || !data.length) {
+        el.innerHTML = '<p class="hint" style="padding:8px 0">No rated jobs yet — bonuses appear here once customers start rating your completed cleans.</p>';
+        return;
+      }
+      el.innerHTML = `<table>
+        <thead><tr><th>Month</th><th>Rated jobs</th><th>On time</th><th>Areas done</th><th>Avg ★</th><th>Bonus</th></tr></thead>
+        <tbody>${data.map((r) => `
+          <tr>
+            <td>${new Date(r.month).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</td>
+            <td>${r.jobs}</td>
+            <td>${Math.round(r.on_time_pct)}%</td>
+            <td>${Math.round(r.areas_pct)}%</td>
+            <td>${Number(r.avg_overall).toFixed(1)}</td>
+            <td><strong>£${r.bonus_total}</strong>${r.jobs < 4 ? ' <span class="hint">(needs 4+ jobs)</span>' : ''}</td>
+          </tr>`).join('')}</tbody></table>`;
+    }
+
+    async function init() {
+      ctx = await requireAuth('cleaner');
+      if (!ctx) return;
+      document.getElementById('hello').textContent = 'Hello, ' + (ctx.profile.full_name || '').split(' ')[0] + ' 👋';
+
+      const { data: det } = await ctx.client.from('cleaner_details').select('*').eq('profile_id', ctx.session.user.id).single();
+      if (det && (!det.insurer_name || !det.policy_number)) {
+        document.getElementById('profile-warn').innerHTML =
+          '<div class="notice notice-warn"><strong>Add your insurance details.</strong> Customers see an "Insured" badge once your public liability insurer and policy number are on your <a href="/cleaner/profile/">profile</a>. As an independent provider this cover is your responsibility.</div>';
+      }
+      await load();
+      await loadBonuses();
+    }
+    init();
+  </script>
+</Base>
