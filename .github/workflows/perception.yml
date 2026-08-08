@@ -139,7 +139,7 @@ jobs:
       # tolerates a year that produced no artifact.
       - name: Collect raw sources
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with: { pattern: raw-*, path: scripts/perception/raw, merge-multiple: true }
 
       - name: Show collected raw
