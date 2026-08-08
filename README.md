@@ -35,26 +35,26 @@ Everything fails soft: with no keys configured the site still builds and shows a
 
 ## Launch checklist
 
-### 1. Supabase (auth + database)
-1. Create a project at [database.new](https://database.new) (region: **eu-west-2 London**), name `canyoudo`.
-2. Run `supabase/migrations/0001_init.sql` in the SQL editor (or `supabase db push`).
-3. In **Auth → URL Configuration** set Site URL to `https://canyoudo.uk`.
-4. Copy the project URL and publishable (anon) key into Netlify env vars (below).
+### 1. Supabase (auth + database) — ✅ DONE
+- Project `canyoudo` (ref `gksbjshaljexlrevgedh`), region **eu-west-2 (London)**.
+- URL: `https://gksbjshaljexlrevgedh.supabase.co`
+- `supabase/migrations/0001_init.sql` is applied; the signup trigger is tested (a cleaner signup creates the profile + `cleaner_details` rows).
+- **Still to do by hand:** in **Auth → URL Configuration**, set Site URL to your live domain so confirmation links point to the right place.
 
-### 2. Netlify (hosting)
-1. New site → import this GitHub repo (`idorunning/Canyoudo`). Build command and publish dir come from `netlify.toml`.
-2. Environment variables (Site settings → Environment):
-   - `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY` — from step 1 (safe to expose)
-   - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` — service role key (secret! functions only)
-   - `SITE_URL` = `https://canyoudo.uk`
-   - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` — see step 4
-   - `RESEND_API_KEY`, `EMAIL_FROM` — see step 5
-   - `ANTHROPIC_API_KEY` — see step 6
-3. Add custom domain `canyoudo.uk` (Netlify will show the DNS records needed).
+### 2. Netlify (hosting) — ✅ DEPLOYED
+- Live at **https://canyoudo-web.netlify.app** (Netlify project `canyoudo-web`).
+- Already set: `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_URL`, `SITE_URL`.
+- **Still to add** (Site settings → Environment variables):
+  - `SUPABASE_SERVICE_ROLE_KEY` — the secret key from Supabase → Project Settings → API. Needed by the serverless functions (emails, Stripe, AI). Never expose this to the browser.
+  - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` — see step 4
+  - `RESEND_API_KEY`, `EMAIL_FROM` — see step 5
+  - `ANTHROPIC_API_KEY` — see step 6
+- **Connect the GitHub repo** (Site configuration → Build & deploy → link repository) so pushes to `main` deploy automatically.
+- Update `SITE_URL` to `https://canyoudo.uk` once DNS is live.
 
 ### 3. Cloudflare (DNS for canyoudo.uk)
 In the Cloudflare dashboard for canyoudo.uk → DNS:
-- `CNAME` `www` → `<your-site>.netlify.app` (proxy **off**/grey cloud, per Netlify's guidance)
+- `CNAME` `www` → `canyoudo-web.netlify.app` (proxy **off**/grey cloud, per Netlify's guidance)
 - `CNAME` (or `ALIAS`/flattened `CNAME`) `@` → `apex-loadbalancer.netlify.com`
 - In Netlify → Domain management, add `canyoudo.uk` + `www.canyoudo.uk` and let Netlify provision HTTPS.
 
